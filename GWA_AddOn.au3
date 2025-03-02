@@ -1225,6 +1225,11 @@ Func WaitMapLoading($aMapID = -1, $aInstanceType = -1)
 		Sleep(250)
 	Until GetAgentPtr(-2) <> 0 And GetAgentArraySize() <> 0 And GetSkillbarPtr() <> 0 And GetPartyContextPtr() <> 0 And ($aInstanceType = -1 Or GetInstanceInfo("Type") = $aInstanceType) And ($aMapID = -1 Or GetMapID() = $aMapID)
 EndFunc
+
+;~ Description: Returns current MapID
+Func GetMapID()
+    Return GetCharacterInfo("MapID")
+EndFunc   ;==>GetMapID
 #EndRegion Travel
 
 #Region Misc
