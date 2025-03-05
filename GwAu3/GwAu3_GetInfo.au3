@@ -1,26 +1,5 @@
 #include-once
 
-;~ Description: Returns current morale.
-Func GetMorale($aHeroNumber = 0)
-;~ 	Local $lAgentID = GetHeroInfo($aHeroNumber, "AgentID")
-	Local $lAgentID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
-	Local $lOffset[4]
-	$lOffset[0] = 0
-	$lOffset[1] = 0x18
-	$lOffset[2] = 0x2C
-	$lOffset[3] = 0x638
-	Local $lIndex = MemoryReadPtr($mBasePointer, $lOffset)
-	ReDim $lOffset[6]
-	$lOffset[0] = 0
-	$lOffset[1] = 0x18
-	$lOffset[2] = 0x2C
-	$lOffset[3] = 0x62C
-	$lOffset[4] = 8 + 0xC * BitAND($lAgentID, $lIndex[1])
-	$lOffset[5] = 0x18
-	Local $lReturn = MemoryReadPtr($mBasePointer, $lOffset)
-	Return $lReturn[1] - 100
-EndFunc   ;==>GetMorale
-
 ;~ Description: Internal use for BuyItem()
 Func GetMerchantItemsBase()
 	Local $lOffset[4] = [0, 0x18, 0x2C, 0x24]
@@ -1218,75 +1197,27 @@ Func GetWorldInfo($aInfo = "")
     Switch $aInfo
 		Case "AccountInfo"
 			Return MemoryRead($lPtr, "ptr")
-		Case "MessageBuffArray" ;--> To check
+		Case "MessageBuffArray" ;--> To check <Useless ??>
 			Return MemoryRead($lPtr + 0x4, "ptr")
-		Case "DialogBuffArray" ;--> To check
+		Case "DialogBuffArray" ;--> To check <Useless ??>
 			Return MemoryRead($lPtr + 0x14, "ptr")
 		Case "MerchItemArray" ;--> To check
 			Return MemoryRead($lPtr + 0x24, "ptr")
-		Case "MerchItemArraySize"
+		Case "MerchItemArraySize" ;--> To check
 			Return MemoryRead($lPtr + 0x24 + 0x4, "dword")
 		Case "MerchItemArray2" ;--> To check
 			Return MemoryRead($lPtr + 0x34, "ptr")
 		Case "MerchItemArray2Size" ;--> To check
 			Return MemoryRead($lPtr + 0x34 + 0x4, "dword")
-		Case "MapAgentArray" ;--> To check
-			Return MemoryRead($lPtr + 0x7C, "ptr")
-		Case "PartyAllyArray" ;--> To check
+		Case "PartyAllyArray" ;--> To check <Useless ??>
 			Return MemoryRead($lPtr + 0x8C, "ptr")
 		Case "FlagAll"
 			Local $lFlags[3] = [MemoryRead($lPtr + 0x9C, "float"), _
 								MemoryRead($lPtr + 0xA0, "float"), _
 								MemoryRead($lPtr + 0xA4, "float")]
 			Return $lFlags
-		Case "PartyAttributeArray"
-			Return MemoryRead($lPtr + 0xAC, "ptr")
-		Case "PartyAttributeArraySize"
-			Return MemoryRead($lPtr + 0xAC + 0x8, "long")
-
-		Case "AgentEffectsArray"
-			Return MemoryRead($lPtr + 0x508, "ptr")
-		Case "AgentEffectsArraySize"
-			Return MemoryRead($lPtr + 0x508 + 0x8, "long")
-
 		Case "ActiveQuestID"
 			Return MemoryRead($lPtr + 0x528, "dword")
-
-		Case "QuestLog"
-			Return MemoryRead($lPtr + 0x52C, "ptr")
-		Case "QuestLogSize"
-			Return MemoryRead($lPtr + 0x52C + 0x8, "long")
-
-		Case "MissionObjectiveArray" ;--> To check
-			Return MemoryRead($lPtr + 0x564, "ptr")
-		Case "HenchmanIDArray" ;--> To check
-			Return MemoryRead($lPtr + 0x574, "ptr")
-
-		Case "HeroFlagArray"
-			Return MemoryRead($lPtr + 0x584, "ptr")
-		Case "HeroFlagArraySize"
-			Return MemoryRead($lPtr + 0x584 + 0x8, "long")
-		Case "HeroInfoArray"
-			Return MemoryRead($lPtr + 0x594, "ptr")
-		Case "HeroInfoArraySize"
-			Return MemoryRead($lPtr + 0x594 + 0x8, "long")
-
-		Case "ControlledMinionsArray" ;--> To check
-			Return MemoryRead($lPtr + 0x5BC, "ptr")
-		Case "MissionsCompletedArray" ;--> To check
-			Return MemoryRead($lPtr + 0x5CC, "ptr")
-        Case "MissionsBonusArray" ;--> To check
-			Return MemoryRead($lPtr + 0x5DC, "ptr")
-        Case "MissionsCompletedHMArray" ;--> To check
-			Return MemoryRead($lPtr + 0x5EC, "ptr")
-        Case "MissionsBonusHMArray" ;--> To check
-			Return MemoryRead($lPtr + 0x5FC, "ptr")
-        Case "UnlockedMapArray" ;--> To check
-			Return MemoryRead($lPtr + 0x60C, "ptr")
-		Case "PlayerMoraleInfo" ;--> To check
-			Return MemoryRead($lPtr + 0x624, "ptr")
-		Case "PartyMoraleInfo" ;--> To check
-			Return MemoryRead($lPtr + 0x62C, "ptr")
 		Case "PlayerNumber"
 			Return MemoryRead($lPtr + 0x67C, "dword")
 		Case "MyID"
@@ -1298,24 +1229,6 @@ Func GetWorldInfo($aInfo = "")
 			Return MemoryRead($lPtr + 0x690, "dword")
 		Case "PlayerTeamToken"
 			Return MemoryRead($lPtr + 0x6A8, "dword")
-
-		Case "PetInfoArray"
-			Return MemoryRead($lPtr + 0x6AC, "ptr")
-		Case "PetInfoArraySize"
-			Return MemoryRead($lPtr + 0x6AC + 0x8, "long")
-
-		Case "PartyProfessionArray" ;--> To check
-			Return MemoryRead($lPtr + 0x6BC, "ptr")
-
-		Case "SkillbarArray"
-			Return MemoryRead($lPtr + 0x6F0, "ptr")
-		Case "SkillbarArraySize"
-			Return MemoryRead($lPtr + 0x6F0 + 0x8, "long")
-
-		Case "LearnableSkillsArray" ;--> To check
-			Return MemoryRead($lPtr + 0x700, "ptr")
-		Case "UnlockedSkills" ;--> To check
-			Return MemoryRead($lPtr + 0x710, "ptr")
 		Case "Experience"
 			Return MemoryRead($lPtr + 0x740, "dword")
 		Case "CurrentKurzick"
@@ -1352,29 +1265,323 @@ Func GetWorldInfo($aInfo = "")
 			Return MemoryRead($lPtr + 0x7C4, "dword")
 		Case "EquipmentStatus"
 			Return MemoryRead($lPtr + 0x7C8, "dword")
-		Case "AgentInfoArray" ;--> To check (name_enc)
-			Return MemoryRead($lPtr + 0x7CC, "ptr")
-		Case "NPCArray" ;--> To check
-			Return MemoryRead($lPtr + 0x7FC, "ptr")
-		Case "PlayerArray" ;--> To check
-			Return MemoryRead($lPtr + 0x80C, "ptr")
+		Case "FoesKilled"
+			Return MemoryRead($lPtr + 0x84C, "dword")
+		Case "FoeToKill"
+			Return MemoryRead($lPtr + 0x850, "dword")
 
+		;Map Agent Array <Useless ??>
+		Case "MapAgentArray" ;--> To check
+			Return MemoryRead($lPtr + 0x7C, "ptr")
+		Case "MapAgentArraySize" ;--> To check
+			Return MemoryRead($lPtr + 0x7C + 0x8, "long")
+
+		;Party Attribute Array
+		Case "PartyAttributeArray"
+			Return MemoryRead($lPtr + 0xAC, "ptr")
+		Case "PartyAttributeArraySize"
+			Return MemoryRead($lPtr + 0xAC + 0x8, "long")
+
+		;Agent Effect Array
+		Case "AgentEffectsArray"
+			Return MemoryRead($lPtr + 0x508, "ptr")
+		Case "AgentEffectsArraySize"
+			Return MemoryRead($lPtr + 0x508 + 0x8, "long")
+
+		;Quest Array
+		Case "QuestLog"
+			Return MemoryRead($lPtr + 0x52C, "ptr")
+		Case "QuestLogSize"
+			Return MemoryRead($lPtr + 0x52C + 0x8, "long")
+
+		;Mission Objective <Useless ??>
+		Case "MissionObjectiveArray" ;--> To check
+			Return MemoryRead($lPtr + 0x564, "ptr")
+		Case "MissionObjectiveArraySize" ;--> To check
+			Return MemoryRead($lPtr + 0x564 + 0x8, "long")
+
+		;Hero Array
+		Case "HeroFlagArray"
+			Return MemoryRead($lPtr + 0x584, "ptr")
+		Case "HeroFlagArraySize"
+			Return MemoryRead($lPtr + 0x584 + 0x8, "long")
+		Case "HeroInfoArray"
+			Return MemoryRead($lPtr + 0x594, "ptr")
+		Case "HeroInfoArraySize"
+			Return MemoryRead($lPtr + 0x594 + 0x8, "long")
+
+		;Minion Array
+		Case "ControlledMinionsArray"
+			Return MemoryRead($lPtr + 0x5BC, "ptr")
+		Case "ControlledMinionsArraySize"
+			Return MemoryRead($lPtr + 0x5BC + 0x8, "long")
+
+		;Morale Array
+		Case "PlayerMoraleInfo"
+			Return MemoryRead($lPtr + 0x624, "ptr")
+		Case "PlayerMoraleInfoSize"
+			Return MemoryRead($lPtr + 0x624 + 0x8, "long")
+		Case "PartyMoraleInfo"
+			Return MemoryRead($lPtr + 0x62C, "ptr")
+		Case "PartyMoraleInfoSize"
+			Return MemoryRead($lPtr + 0x62C + 0x8, "long")
+
+		;Pet Array
+		Case "PetInfoArray"
+			Return MemoryRead($lPtr + 0x6AC, "ptr")
+		Case "PetInfoArraySize"
+			Return MemoryRead($lPtr + 0x6AC + 0x8, "long")
+
+		;Party Profession Array
+		Case "PartyProfessionArray"
+			Return MemoryRead($lPtr + 0x6BC, "ptr")
+		Case "PartyProfessionArraySize"
+			Return MemoryRead($lPtr + 0x6BC + 0x8, "long")
+
+		;Skill Array
+		Case "SkillbarArray"
+			Return MemoryRead($lPtr + 0x6F0, "ptr")
+		Case "SkillbarArraySize"
+			Return MemoryRead($lPtr + 0x6F0 + 0x8, "long")
+
+		;Agent Info Array (name only)
+		Case "AgentInfoArray" ;--> To check (name_enc) <Useless for GwAu3>
+			Return MemoryRead($lPtr + 0x7CC, "ptr")
+
+		;NPC Array
+		Case "NPCArray"
+			Return MemoryRead($lPtr + 0x7FC, "ptr")
+		Case "NPCArraySize"
+			Return MemoryRead($lPtr + 0x7FC, "ptr")
+
+		;Player Array
+		Case "PlayerArray"
+			Return MemoryRead($lPtr + 0x80C, "ptr")
+		Case "PlayerArraySize"
+			Return MemoryRead($lPtr + 0x80C + 0x8, "long")
+
+		;Title Array
 		Case "TitleArray"
 			Return MemoryRead($lPtr + 0x81C, "ptr")
 		Case "TitleArraySize"
 			Return MemoryRead($lPtr + 0x81C, "ptr")
 
+		;Special array
 		Case "VanquishedAreasArray" ;--> To check
 			Return MemoryRead($lPtr + 0x83C, "ptr")
-		Case "FoesKilled"
-			Return MemoryRead($lPtr + 0x84C, "dword")
-		Case "FoeToKill"
-			Return MemoryRead($lPtr + 0x850, "dword")
+		Case "VanquishedAreasArraySize" ;--> To check
+			Return MemoryRead($lPtr + 0x83C + 0x8, "long")
+		Case "MissionsCompletedArray" ;--> To check
+			Return MemoryRead($lPtr + 0x5CC, "ptr")
+        Case "MissionsBonusArray" ;--> To check
+			Return MemoryRead($lPtr + 0x5DC, "ptr")
+        Case "MissionsCompletedHMArray" ;--> To check
+			Return MemoryRead($lPtr + 0x5EC, "ptr")
+        Case "MissionsBonusHMArray" ;--> To check
+			Return MemoryRead($lPtr + 0x5FC, "ptr")
+		Case "LearnableSkillsArray" ;--> To check
+			Return MemoryRead($lPtr + 0x700, "ptr")
+		Case "UnlockedSkillsArray" ;--> To check
+			Return MemoryRead($lPtr + 0x710, "ptr")
+		Case "UnlockedMapArray" ;--> To check
+			Return MemoryRead($lPtr + 0x60C, "ptr")
+		Case "HenchmanIDArray" ;--> To check
+			Return MemoryRead($lPtr + 0x574, "ptr")
 	EndSwitch
 
 	Return 0
 EndFunc
 #EndRegion World Context
+
+#Region Party Morale Related
+Func GetMoraleInfo($aAgentID = -2, $aInfo = "")
+    Local $lAgentID = ConvertID($aAgentID)
+
+    Local $lOffset[4] = [0, 0x18, 0x2C, 0x638]
+    Local $lIndex = MemoryReadPtr($mBasePointer, $lOffset)
+
+    ReDim $lOffset[6]
+    $lOffset[3] = 0x62C
+    $lOffset[4] = 8 + 0xC * BitAND($lAgentID, $lIndex[1])
+    $lOffset[5] = 0x18
+    Local $lReturn = MemoryReadPtr($mBasePointer, $lOffset)
+
+    If Not IsArray($lReturn) Or $lReturn[0] = 0 Then Return 0
+
+    Switch $aInfo
+        Case "Morale"
+            Return $lReturn[1] - 100
+        Case "RawMorale"
+            Return $lReturn[1]
+        Case "IsMaxMorale"
+            Return ($lReturn[1] >= 110)
+		Case "IsMinMorale"
+            Return ($lReturn[1] <= 40)
+        Case "IsMoraleBoost"
+            Return ($lReturn[1] > 100)
+        Case "IsMoralePenalty"
+            Return ($lReturn[1] < 100)
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+
+#EndRegion  Party Morale Related
+
+#Region Party Profession Related
+Func GetPartyProfessionInfo($aAgentID = 0, $aInfo = "")
+	Local $lPtr = GetWorldInfo("PartyProfessionArray")
+	Local $lSize = GetWorldInfo("PartyProfessionArraySize")
+	Local $lAgentPtr = 0
+
+	For $i = 0 To $lSize
+        Local $lAgentEffectsPtr = $lPtr + ($i * 0x14)
+        If MemoryRead($lAgentEffectsPtr, "dword") = ConvertID($aAgentID) Then
+            $lAgentPtr = $lAgentEffectsPtr
+            ExitLoop
+        EndIf
+    Next
+
+	If $lAgentPtr = 0 Then Return 0
+
+	Switch $aInfo
+        Case "AgentID"
+            Return MemoryRead($lAgentPtr, "dword")
+        Case "Primary"
+            Return MemoryRead($lAgentPtr + 0x4, "dword")
+		Case "Secondary"
+            Return MemoryRead($lAgentPtr + 0x8, "dword")
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+
+#EndRegion  Party Profession Related
+
+#Region Related NPC Info
+;~ TIPS: $aModelFileID = Player number of an npc
+Func GetNpcInfo($aModelFileID = 0, $aInfo = "")
+	Local $lPtr = GetWorldInfo("NpcArray")
+	Local $lSize = GetWorldInfo("NpcArraySize")
+	Local $lAgentPtr = 0
+
+	For $i = 0 To $lSize
+        Local $lAgentEffectsPtr = $lPtr + ($i * 0x30)
+        If MemoryRead($lAgentEffectsPtr, "dword") = $aModelFileID Then
+            $lAgentPtr = $lAgentEffectsPtr
+            ExitLoop
+        EndIf
+    Next
+
+	If $lAgentPtr = 0 Then Return 0
+
+	Switch $aInfo
+		Case "ModelFileID"
+            Return MemoryRead($lAgentPtr, "dword")
+        Case "Scale"
+            Return MemoryRead($lAgentPtr + 0x8, "dword")
+		Case "Sex"
+            Return MemoryRead($lAgentPtr + 0xC, "dword")
+		Case "NpcFlags"
+            Return MemoryRead($lAgentPtr + 0x10, "dword")
+		Case "Primary"
+            Return MemoryRead($lAgentPtr + 0x14, "dword")
+		Case "DefaultLevel", "Level"
+            Return MemoryRead($lAgentPtr + 0x1C, "byte")
+		Case "IsHenchman"
+			Local $flags = MemoryRead($lAgentPtr + 0x10, "dword")
+            Return BitAND($flags, 0x10) <> 0
+		Case "IsHero"
+			Local $flags = MemoryRead($lAgentPtr + 0x10, "dword")
+            Return BitAND($flags, 0x20) <> 0
+		Case "IsSpirit"
+			Local $flags = MemoryRead($lAgentPtr + 0x10, "dword")
+            Return BitAND($flags, 0x4000) <> 0
+		Case "IsMinion"
+			Local $flags = MemoryRead($lAgentPtr + 0x10, "dword")
+            Return BitAND($flags, 0x100) <> 0
+		Case "IsPet"
+			Local $flags = MemoryRead($lAgentPtr + 0x10, "dword")
+            Return BitAND($flags, 0xD) <> 0
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+
+#EndRegion
+
+#Region Related Player Info
+Func GetPlayerInfo($aAgentID = 0, $aInfo = "")
+	Local $lPtr = GetWorldInfo("PlayerArray")
+	Local $lSize = GetWorldInfo("PlayerArraySize")
+	Local $lAgentPtr = 0
+
+	For $i = 0 To $lSize
+        Local $lAgentEffectsPtr = $lPtr + ($i * 0x4C)
+        If MemoryRead($lAgentEffectsPtr, "dword") = ConvertID($aAgentID) Then
+            $lAgentPtr = $lAgentEffectsPtr
+            ExitLoop
+        EndIf
+    Next
+
+	If $lAgentPtr = 0 Then Return 0
+
+	Switch $aInfo
+        Case "AgentID"
+            Return MemoryRead($lAgentPtr, "dword")
+        Case "AppearanceBitmap"
+            Return MemoryRead($lAgentPtr + 0x10, "dword")
+		Case "Flags"
+            Return MemoryRead($lAgentPtr + 0x14, "dword")
+		Case "Primary"
+            Return MemoryRead($lAgentPtr + 0x18, "dword")
+		Case "Secondary"
+            Return MemoryRead($lAgentPtr + 0x1C, "dword")
+		Case "Name"
+;~             Return MemoryRead($lAgentPtr + 0x24, "wchar[20]")
+			Local $lName = MemoryRead($lAgentPtr + 0x24, "ptr")
+			Return MemoryRead($lName, "wchar[20]")
+		Case "PartLeaderPlayerNumber"
+            Return MemoryRead($lAgentPtr + 0x2C, "dword")
+		Case "ActiveTitle"
+            Return MemoryRead($lAgentPtr + 0x30, "dword")
+		Case "PlayerNumber"
+            Return MemoryRead($lAgentPtr + 0x34, "dword")
+		Case "PartySize"
+            Return MemoryRead($lAgentPtr + 0x38, "dword")
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+#EndRegion Related Player Info
+
+#Region Controlled Minion Related
+Func GetControlledMinionsInfo($aAgentID = 0, $aInfo = "")
+	Local $lPtr = GetWorldInfo("ControlledMinionsArray")
+	Local $lSize = GetWorldInfo("ControlledMinionsArraySize")
+	Local $lAgentPtr = 0
+
+	For $i = 0 To $lSize
+        Local $lAgentEffectsPtr = $lPtr + ($i * 0x8)
+        If MemoryRead($lAgentEffectsPtr, "dword") = ConvertID($aAgentID) Then
+            $lAgentPtr = $lAgentEffectsPtr
+            ExitLoop
+        EndIf
+    Next
+
+	If $lAgentPtr = 0 Then Return 0
+
+	Switch $aInfo
+        Case "AgentID"
+            Return MemoryRead($lAgentPtr, "dword")
+        Case "MinionCount"
+            Return MemoryRead($lAgentPtr + 0x4, "dword")
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+
+#EndRegion
 
 #Region Title Related
 Global Enum $TitleID_Hero, $TitleID_TyrianCarto, $TitleID_CanthanCarto, $TitleID_Gladiator, $TitleID_Champion, $TitleID_Kurzick, $TitleID_Luxon, $TitleID_Drunkard, _
@@ -1763,7 +1970,6 @@ Func GetAgentEffectArrayInfo($aAgentID = -2, $aInfo = "")
 
     For $i = 0 To $lSize
         Local $lAgentEffectsPtr = $lPtr + ($i * 0x24)
-        If MemoryRead($lAgentEffectsPtr, "dword") = 0 Then ContinueLoop
         If MemoryRead($lAgentEffectsPtr, "dword") = ConvertID($aAgentID) Then
             $lAgentPtr = $lAgentEffectsPtr
             ExitLoop
