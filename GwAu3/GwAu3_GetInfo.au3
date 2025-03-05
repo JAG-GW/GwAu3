@@ -2,7 +2,8 @@
 
 ;~ Description: Returns current morale.
 Func GetMorale($aHeroNumber = 0)
-	Local $lAgentID = GetHeroInfo($aHeroNumber, "AgentID")
+;~ 	Local $lAgentID = GetHeroInfo($aHeroNumber, "AgentID")
+	Local $lAgentID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
 	Local $lOffset[4]
 	$lOffset[0] = 0
 	$lOffset[1] = 0x18
@@ -40,8 +41,10 @@ Func GetPing()
 EndFunc   ;==>GetPing
 
 Func GetSkillTimer()
-	Return MemoryRead($mSkillTimer, "long")
-EndFunc   ;==>GetSkillTimer
+	Static Local $lExeStart = MemoryRead($mSkillTimer, 'dword')
+	Local $lTickCount = DllCall($mKernelHandle, 'dword', 'GetTickCount')[0]
+	Return Int($lTickCount + $lExeStart, 1)
+EndFunc
 
 ;~ Description: Returns your characters name.
 Func GetCharname()
@@ -112,7 +115,7 @@ EndFunc
 #Region Game Context Related
 Func GetGameContextPtr()
     Local $lOffset[2] = [0, 0x18]
-    Local $lGamePtr = MemoryReadPtr($mBasePointer, $lOffset)
+    Local $lGamePtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
     Return $lGamePtr[1]
 EndFunc
 
@@ -170,7 +173,7 @@ EndFunc
 #Region Character Context Related
 Func GetCharacterContextPtr()
     Local $lOffset[3] = [0, 0x18, 0x44]
-    Local $lCharPtr = MemoryReadPtr($mBasePointer, $lOffset)
+    Local $lCharPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
     Return $lCharPtr[1]
 EndFunc
 
@@ -225,21 +228,14 @@ EndFunc
 
 #Region Observer Match Related
 Func GetObserverMatchPtr($aMatchNumber = 0)
-    Local $lPtr = GetCharacterContextPtr()
-    If $lPtr = 0 Then Return 0
-
-    Local $arrayPtr = $lPtr + 0x24C
-    Local $dataPtr = MemoryRead($arrayPtr, "ptr")
-    If $dataPtr = 0 Then Return 0
-
-    Local $count = MemoryRead($arrayPtr + 0x8, "long")
-    If $aMatchNumber >= $count Then Return 0
-
-    Return MemoryRead($dataPtr + ($aMatchNumber * 4), "ptr")
+    Local $lOffset[4] = [0, 0x18, 0x44, 0x24C]
+    Local $lMatchPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
+    Local $lPtr = $lMatchPtr[1]
+    Return MemoryRead($lPtr + ($aMatchNumber * 4), "ptr")
 EndFunc
 
 Func GetObserverMatchInfo($aMatchNumber = 0, $aInfo = "")
-    Local $lPtr = GetObserverMatchPtr($aMatchNumber)
+	Local $lPtr = GetObserverMatchPtr($aMatchNumber)
     If $lPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
@@ -283,28 +279,35 @@ Func GetObserverMatchInfo($aMatchNumber = 0, $aInfo = "")
             Return MemoryRead($lPtr + 0x48, "ptr")
         Case "Team1Name"
             Local $teamNamesPtr = MemoryRead($lPtr + 0x48, "ptr")
-            Return MemoryRead($teamNamesPtr, "wchar[256]")
+            Return CleanTeamName(MemoryRead($teamNamesPtr, "wchar[256]"))
         Case "TeamNames2Ptr"
             Return MemoryRead($lPtr + 0x74, "ptr")
         Case "Team2Name"
             Local $teamNames2Ptr = MemoryRead($lPtr + 0x74, "ptr")
-            Return MemoryRead($teamNames2Ptr, "wchar[256]")
+            Return CleanTeamName(MemoryRead($teamNames2Ptr, "wchar[256]"))
 
     EndSwitch
 
     Return 0
+EndFunc
+
+Func CleanTeamName($name)
+    $name = StringRegExpReplace($name, "^[\x{0100}-\x{024F}\x{0B00}-\x{0B7F}]+", "")
+    $name = StringRegExpReplace($name, "[\x00-\x1F]+", "")
+    $name = StringStripWS($name, $STR_STRIPLEADING + $STR_STRIPTRAILING)
+    Return $name
 EndFunc
 #EndRegion Observer Match Related
 
 #Region Trade Context Related
 Func GetTradePtr()
     Local $lOffset[3] = [0, 0x18, 0x58]
-    Local $lTradePtr = MemoryReadPtr($mBasePointer, $lOffset)
+    Local $lTradePtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
     Return $lTradePtr[1]
 EndFunc
 
 Func GetTradeInfo($aInfo = "")
-    Local $lPtr = GetTradePtr()
+	Local $lPtr = GetTradePtr()
     If $lPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
@@ -326,7 +329,6 @@ Func GetTradeInfo($aInfo = "")
             Local $flags = MemoryRead($lPtr, "long")
             Return BitAND($flags, 7) <> 0
 
-
         Case "PlayerGold"
             Return MemoryRead($lPtr + 0x10, "long")
 		Case "PlayerItemsPtr"
@@ -346,15 +348,12 @@ Func GetTradeInfo($aInfo = "")
     Return 0
 EndFunc
 
-Func GetPlayerTradeItemsInfo($aTradeSlot = -1, $aInfo = "")
-	$aTradeSlot = $aTradeSlot - 1
-    If $aTradeSlot = -1 Or $aInfo = "" Then Return 0
+Func GetPlayerTradeItemsInfo($aTradeSlot = 0, $aInfo = "")
+	Local $itemsPtr = GetTradeInfo("PlayerItemsPtr")
+    If $itemsPtr = 0 Or $aInfo = "" Then Return 0
 
-    Local $itemCount = GetTradeInfo("PlayerItemCount")
+	Local $itemCount = GetTradeInfo("PlayerItemCount")
     If $itemCount = 0 Or $aTradeSlot >= $itemCount Then Return 0
-
-    Local $itemsPtr = GetTradeInfo("PlayerItemsPtr")
-    If $itemsPtr = 0 Then Return 0
 
     Local $itemPtr = $itemsPtr + ($aTradeSlot * 8)
     Local $itemID = MemoryRead($itemPtr, "long")
@@ -371,15 +370,12 @@ Func GetPlayerTradeItemsInfo($aTradeSlot = -1, $aInfo = "")
     Return 0
 EndFunc
 
-Func GetPartnerTradeItemsInfo($aTradeSlot = -1, $aInfo = "")
-	$aTradeSlot = $aTradeSlot - 1
-    If $aTradeSlot = -1 Or $aInfo = "" Then Return 0
+Func GetPartnerTradeItemsInfo($aTradeSlot = 0, $aInfo = "")
+	Local $itemsPtr = GetTradeInfo("PartnerItemsPtr")
+    If $itemsPtr = 0 Or $aInfo = "" Then Return 0
 
-    Local $itemCount = GetTradeInfo("PartnerItemCount")
+	Local $itemCount = GetTradeInfo("PartnerItemCount")
     If $itemCount = 0 Or $aTradeSlot >= $itemCount Then Return 0
-
-    Local $itemsPtr = GetTradeInfo("PartnerItemsPtr")
-    If $itemsPtr = 0 Then Return 0
 
     Local $itemPtr = $itemsPtr + ($aTradeSlot * 8)
     Local $itemID = MemoryRead($itemPtr, "long")
@@ -397,7 +393,8 @@ Func GetPartnerTradeItemsInfo($aTradeSlot = -1, $aInfo = "")
 EndFunc
 
 Func GetArrayPlayerTradeItems()
-    Local $itemCount = GetTradeInfo("PlayerItemCount")
+	Local $itemCount = GetTradeInfo("PlayerItemCount")
+
     If $itemCount = 0 Then
         Local $items[1] = [0]
         Return $items
@@ -406,7 +403,7 @@ Func GetArrayPlayerTradeItems()
     Local $items[$itemCount + 1][2]
     $items[0][0] = $itemCount
 
-    Local $itemsPtr = GetTradeInfo("PlayerItemsPtr")
+	Local $itemsPtr = GetTradeInfo("PlayerItemsPtr")
     If $itemsPtr = 0 Then Return $items
 
     For $i = 0 To $itemCount - 1
@@ -420,7 +417,8 @@ Func GetArrayPlayerTradeItems()
 EndFunc
 
 Func GetArrayPartnerTradeItems()
-    Local $itemCount = GetTradeInfo("PartnerItemCount")
+	Local $itemCount = GetTradeInfo("PartnerItemCount")
+
     If $itemCount = 0 Then
         Local $items[1] = [0]
         Return $items
@@ -429,7 +427,7 @@ Func GetArrayPartnerTradeItems()
     Local $items[$itemCount + 1][2]
     $items[0][0] = $itemCount
 
-    Local $itemsPtr = GetTradeInfo("PartnerItemsPtr")
+	Local $itemsPtr = GetTradeInfo("PartnerItemsPtr")
     If $itemsPtr = 0 Then Return $items
 
     For $i = 0 To $itemCount - 1
@@ -446,7 +444,7 @@ EndFunc
 #Region Guild Context
 Func GetGuildContextPtr()
     Local $lOffset[3] = [0, 0x18, 0x3C]
-    Local $lGuildPtr = MemoryReadPtr($mBasePointer, $lOffset)
+    Local $lGuildPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
     Return $lGuildPtr[1]
 EndFunc
 
@@ -457,58 +455,46 @@ Func GetMyGuildInfo($aInfo = "")
     Switch $aInfo
         Case "PlayerName"
             Return MemoryRead($lPtr + 0x34, "wchar[20]")
-
         Case "PlayerGuildIndex"
             Return MemoryRead($lPtr + 0x60, "long")
-
         Case "PlayerGuildRank"
             Return MemoryRead($lPtr + 0x2A0, "long")
-
         Case "Announcement"
             Return MemoryRead($lPtr + 0x78, "wchar[256]")
-
         Case "AnnouncementAuthor"
             Return MemoryRead($lPtr + 0x278, "wchar[20]")
 
+		Case "TownAlliance"
+			Return MemoryRead($lPtr + 0x2A8, "ptr")
+		Case "TownAllianceSize"
+			Return MemoryRead($lPtr + 0x2A8 + 0x8, "long")
+
         Case "KurzickTownCount"
             Return MemoryRead($lPtr + 0x2B8, "long")
-
         Case "LuxonTownCount"
             Return MemoryRead($lPtr + 0x2BC, "long")
 
-        Case "GuildRosterPtr"
-            Return $lPtr + 0x358
-
+		Case "GuildRosterPtr"
+			Return MemoryRead($lPtr + 0x358, "ptr")
         Case "GuildRosterSize"
-            Return MemoryRead($lPtr + 0x358 + 0x4, "long")
-
-        Case "GuildRosterDataPtr"
-            Return MemoryRead($lPtr + 0x358, "ptr")
+            Return MemoryRead($lPtr + 0x358 + 0x8, "long")
 
         Case "GuildArrayPtr"
-            Return $lPtr + 0x2F8
-
-        Case "GuildArraySize"
-            Return MemoryRead($lPtr + 0x2F8 + 0x4, "long")
-
-        Case "GuildArrayDataPtr"
             Return MemoryRead($lPtr + 0x2F8, "ptr")
+        Case "GuildArraySize"
+            Return MemoryRead($lPtr + 0x2F8 + 0x8, "long")
 
         Case "GuildHistoryPtr"
-            Return $lPtr + 0x2CC
-
-        Case "GuildHistorySize"
-            Return MemoryRead($lPtr + 0x2CC + 0x4, "long")
-
-        Case "GuildHistoryDataPtr"
             Return MemoryRead($lPtr + 0x2CC, "ptr")
+        Case "GuildHistorySize"
+            Return MemoryRead($lPtr + 0x2CC + 0x8, "long")
     EndSwitch
 
     Return 0
 EndFunc
 
 Func GetGuildPlayerInfo($aPlayerIndex, $aInfo = "")
-    Local $rosterDataPtr = GetMyGuildInfo("GuildRosterDataPtr")
+    Local $rosterDataPtr = GetMyGuildInfo("GuildRosterPtr")
     Local $rosterSize = GetMyGuildInfo("GuildRosterSize")
 
     If $rosterDataPtr = 0 Or $aPlayerIndex < 0 Or $aPlayerIndex >= $rosterSize Then Return 0
@@ -546,12 +532,12 @@ Func GetGuildPlayerInfo($aPlayerIndex, $aInfo = "")
 EndFunc
 
 Func GetGuildHistoryEvent($aEventIndex, $aInfo = "")
-    Local $historyDataPtr = GetMyGuildInfo("GuildHistoryDataPtr")
-    Local $historySize = GetMyGuildInfo("GuildHistorySize")
+    Local $HistoryDataPtr = GetMyGuildInfo("GuildHistoryPtr")
+    Local $HistorySize = GetMyGuildInfo("GuildHistorySize")
 
-    If $historyDataPtr = 0 Or $aEventIndex < 0 Or $aEventIndex >= $historySize Then Return 0
+    If $HistoryDataPtr = 0 Or $aEventIndex < 0 Or $aEventIndex >= $HistorySize Then Return 0
 
-    Local $eventPtr = MemoryRead($historyDataPtr + ($aEventIndex * 4), "ptr")
+    Local $eventPtr = MemoryRead($HistoryDataPtr + ($aEventIndex * 4), "ptr")
     If $eventPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
@@ -569,103 +555,41 @@ Func GetGuildHistoryEvent($aEventIndex, $aInfo = "")
 EndFunc
 
 Func GetTownAllianceInfo($aAllianceIndex, $aInfo = "")
-    Local $lPtr = GetGuildContextPtr()
-    If $lPtr = 0 Or $aInfo = "" Then Return 0
+	Local $townAlliancesPtr = GetMyGuildInfo("TownAlliance")
+    Local $townAlliancesSize = GetMyGuildInfo("TownAllianceSize")
 
-    Local $townAlliancesPtr = $lPtr + 0x2A8
-    Local $townAlliancesSize = MemoryRead($townAlliancesPtr + 0x4, "long")
-    Local $townAlliancesDataPtr = MemoryRead($townAlliancesPtr, "ptr")
+	If $townAlliancesPtr = 0 Or $aAllianceIndex < 0 Or $aAllianceIndex >= $townAlliancesSize Then Return 0
 
-    If $townAlliancesDataPtr = 0 Or $aAllianceIndex < 0 Or $aAllianceIndex >= $townAlliancesSize Then Return 0
-
-    Local $alliancePtr = MemoryRead($townAlliancesDataPtr + ($aAllianceIndex * 4), "ptr")
-    If $alliancePtr = 0 Then Return 0
+    Local $alliancePtr = MemoryRead($townAlliancesPtr + ($aAllianceIndex * 4), "ptr")
+    If $alliancePtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
         Case "Rank"
             Return MemoryRead($alliancePtr, "long")
-
         Case "Allegiance"
             Return MemoryRead($alliancePtr + 0x4, "long")
-
         Case "Faction"
             Return MemoryRead($alliancePtr + 0x8, "long")
-
         Case "Name"
             Return MemoryRead($alliancePtr + 0xC, "wchar[32]")
-
         Case "Tag"
             Return MemoryRead($alliancePtr + 0x4C, "wchar[5]")
-
         Case "CapeBackgroundColor"
             Return MemoryRead($alliancePtr + 0x58, "long")
-
         Case "CapeDetailColor"
             Return MemoryRead($alliancePtr + 0x5C, "long")
-
         Case "CapeEmblemColor"
             Return MemoryRead($alliancePtr + 0x60, "long")
-
         Case "CapeShape"
             Return MemoryRead($alliancePtr + 0x64, "long")
-
         Case "CapeDetail"
             Return MemoryRead($alliancePtr + 0x68, "long")
-
         Case "CapeEmblem"
             Return MemoryRead($alliancePtr + 0x6C, "long")
-
         Case "CapeTrim"
             Return MemoryRead($alliancePtr + 0x70, "long")
-
         Case "MapID"
             Return MemoryRead($alliancePtr + 0x74, "long")
-    EndSwitch
-
-    Return 0
-EndFunc
-
-Func GetGuildAgentInfo($aAgentID = -2, $aInfo = "")
-	Local $lGuildID = GetAgentInfo($aAgentID, "Tags")
-    If $lGuildID = 0 Or $aInfo = "" Then Return 0
-
-	Local $lOffset[3] = [0, 0x18, 0x3C]
-    $lGuildPtr = MemoryReadPtr($mBasePointer, $lOffset)
-    $lPtr = $lGuildPtr[1] + (0xAC * $lGuildID)
-
-    Switch $aInfo
-        Case "Index"
-            Return MemoryRead($guildPtr + 0x24, "long")
-        Case "Rank"
-            Return MemoryRead($guildPtr + 0x28, "long")
-        Case "Features"
-            Return MemoryRead($guildPtr + 0x2C, "long")
-        Case "Name"
-            Return MemoryRead($guildPtr + 0x30, "wchar[32]")
-        Case "Rating"
-            Return MemoryRead($guildPtr + 0x70, "long")
-        Case "Faction"
-            Return MemoryRead($guildPtr + 0x74, "long")
-        Case "FactionPoints"
-            Return MemoryRead($guildPtr + 0x78, "long")
-        Case "QualifierPoints"
-            Return MemoryRead($guildPtr + 0x7C, "long")
-        Case "Tag"
-            Return MemoryRead($guildPtr + 0x80, "wchar[8]")
-        Case "CapeBackgroundColor"
-            Return MemoryRead($guildPtr + 0x90, "long")
-        Case "CapeDetailColor"
-            Return MemoryRead($guildPtr + 0x94, "long")
-        Case "CapeEmblemColor"
-            Return MemoryRead($guildPtr + 0x98, "long")
-        Case "CapeShape"
-            Return MemoryRead($guildPtr + 0x9C, "long")
-        Case "CapeDetail"
-            Return MemoryRead($guildPtr + 0xA0, "long")
-        Case "CapeEmblem"
-            Return MemoryRead($guildPtr + 0xA4, "long")
-        Case "CapeTrim"
-            Return MemoryRead($guildPtr + 0xA8, "long")
     EndSwitch
 
     Return 0
@@ -675,13 +599,13 @@ EndFunc
 #Region Item Context
 Func GetItemContextPtr()
     Local $lOffset[3] = [0, 0x18, 0x40]
-    Local $lItemContextPtr = MemoryReadPtr($mBasePointer, $lOffset)
+    Local $lItemContextPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
     Return $lItemContextPtr[1]
 EndFunc
 
 Func GetInventoryPtr()
-    Local $lItemContextPtr = GetItemContextPtr()
-    If $lItemContextPtr = 0 Then Return 0
+	Local $lOffset[4] = [0, 0x18, 0x40, 0xF8]
+    Local $lItemContextPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
     Return MemoryRead($lItemContextPtr + 0xF8, "ptr")
 EndFunc
 
@@ -1114,7 +1038,7 @@ Func GetPartyContextPtr()
     Return $lPartyPtr[1]
 EndFunc
 
-Func GetPartyInfo($aInfo = "")
+Func GetPartyContextInfo($aInfo = "")
     Local $lPtr = GetPartyContextPtr()
     If $lPtr = 0 Or $aInfo = "" Then Return 0
 
@@ -1135,60 +1059,78 @@ Func GetPartyInfo($aInfo = "")
             Return BitAND($flags, 0x8) <> 0
 
 
-        Case "PlayerPartyPtr"
+        Case "MyPartyPtr"
             Return MemoryRead($lPtr + 0x54, "ptr")
 
-        Case "PlayerPartyID"
-            Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
-            Return MemoryRead($partyPtr, "long")
+;~         Case "PlayerPartyID"
+;~             Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
+;~             Return MemoryRead($partyPtr, "long")
 
-        Case "PlayerCount"
-            Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
-            Return MemoryRead($partyPtr + 0xC, "long")
+;~         Case "PlayerCount"
+;~             Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
+;~             Return MemoryRead($partyPtr + 0xC, "long")
 
-        Case "HenchmenCount"
-            Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
-            Return MemoryRead($partyPtr + 0x1C, "long")
+;~         Case "HenchmenCount"
+;~             Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
+;~             Return MemoryRead($partyPtr + 0x1C, "long")
 
-        Case "HeroCount"
-            Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
-            Return MemoryRead($partyPtr + 0x2C, "long")
+;~         Case "HeroCount"
+;~             Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
+;~             Return MemoryRead($partyPtr + 0x2C, "long")
 
-        Case "OtherCount" ; Spirit, Minions, Pets (not the Spirits and Minions of heroes, only your character)
-            Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
-            Return MemoryRead($partyPtr + 0x3C, "long")
+;~         Case "OtherCount" ; Spirit, Minions, Pets (not the Spirits and Minions of heroes, only your character)
+;~             Local $partyPtr = MemoryRead($lPtr + 0x54, "ptr")
+;~             Return MemoryRead($partyPtr + 0x3C, "long")
 
-        Case "TotalPartySize"
-            Local $playerCount = GetPartyInfo("PlayerCount")
-            Local $henchmenCount = GetPartyInfo("HenchmenCount")
-            Local $heroCount = GetPartyInfo("HeroCount")
-            Return $playerCount + $henchmenCount + $heroCount
+;~         Case "TotalPartySize"
+;~             Local $playerCount = GetPartyInfo("PlayerCount")
+;~             Local $henchmenCount = GetPartyInfo("HenchmenCount")
+;~             Local $heroCount = GetMyPartyInfo("ArrayHeroPartyMemberSize")
+;~             Return $playerCount + $henchmenCount + $heroCount
 
     EndSwitch
     Return 0
 EndFunc
 
-Func GetPartyPlayerInfo($aLoginPlayer, $aInfo = "")
-    Local $partyPtr = GetPartyInfo("PlayerPartyPtr")
+Func GetMyPartyInfo($aInfo = "")
+    Local $partyPtr = GetPartyContextInfo("MyPartyPtr")
     If $partyPtr = 0 Or $aInfo = "" Then Return 0
 
-    Local $playerCount = MemoryRead($partyPtr + 0x8, "long")
-    Local $playersArrayPtr = MemoryRead($partyPtr + 0x4, "ptr")
+	Switch $aInfo
+		Case "PartyID"
+			Return MemoryRead($partyPtr, "long")
+		Case "ArrayPlayerPartyMember"
+			Return MemoryRead($partyPtr + 0x4, "ptr")
+		Case "ArrayPlayerPartyMemberSize"
+			Return MemoryRead($partyPtr + 0xC, "long")
 
-    If $playersArrayPtr = 0 Then Return 0
+		Case "ArrayHenchmanPartyMember"
+			Return MemoryRead($partyPtr + 0x14, "ptr")
+		Case "ArrayHenchmanPartyMemberSize"
+			Return MemoryRead($partyPtr + 0x1C, "long")
 
-    Local $playerPtr = 0
-    For $i = 0 To $playerCount - 1
-        Local $memberPtr = $playersArrayPtr + ($i * 12)
-        Local $loginID = MemoryRead($memberPtr, "long")
+		Case "ArrayHeroPartyMember"
+			Return MemoryRead($partyPtr + 0x24, "ptr")
+		Case "ArrayHeroPartyMemberSize"
+			Return MemoryRead($partyPtr + 0x2C, "long")
 
-        If $loginID = $aLoginPlayer Then
-            $playerPtr = $memberPtr
-            ExitLoop
-        EndIf
-    Next
+		Case "ArrayOthersPartyMember"
+			Return MemoryRead($partyPtr + 0x34, "ptr")
+		Case "ArrayOthersPartyMemberSize"
+			Return MemoryRead($partyPtr + 0x3C, "long")
+	EndSwitch
 
-    If $playerPtr = 0 Then Return 0
+	Return 0
+EndFunc
+
+Func GetMyPartyPlayerMemberInfo($aPartyMemberNumber = 1, $aInfo = "")
+    Local $lPlayerPartyPtr = GetMyPartyInfo("ArrayPlayerPartyMember")
+	Local $lPlayerPartySize = GetMyPartyInfo("ArrayPlayerPartyMember")
+	$aPartyMemberNumber = $aPartyMemberNumber - 1
+	If $lPlayerPartyPtr = 0 Or $aPartyMemberNumber < 0 Or $aPartyMemberNumber >= $lPlayerPartySize Then Return 0
+
+    Local $playerPtr = $lPlayerPartyPtr + ($aPartyMemberNumber * 0xC)
+    If $playerPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
         Case "LoginNumber"
@@ -1212,33 +1154,20 @@ Func GetPartyPlayerInfo($aLoginPlayer, $aInfo = "")
     Return 0
 EndFunc
 
-Func GetPartyHeroInfo($aHeroID, $aInfo = "")
-    Local $partyPtr = GetPartyInfo("PlayerPartyPtr")
-    If $partyPtr = 0 Or $aInfo = "" Then Return 0
+Func GetMyPartyHeroInfo($aHeroNumber = 1, $aInfo = "")
+    Local $lPlayerPartyPtr = GetMyPartyInfo("ArrayHeroPartyMember")
+	Local $lPlayerPartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
+	$aHeroNumber = $aHeroNumber - 1
+	If $lPlayerPartyPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lPlayerPartySize Then Return 0
 
-    Local $heroCount = MemoryRead($partyPtr + 0x28, "long")
-    Local $heroesArrayPtr = MemoryRead($partyPtr + 0x24, "ptr")
-
-    If $heroesArrayPtr = 0 Then Return 0
-
-    Local $heroPtr = 0
-    For $i = 0 To $heroCount - 1
-        Local $memberPtr = $heroesArrayPtr + ($i * 24)
-        Local $heroID = MemoryRead($memberPtr + 0x8, "long") ; hero_id
-
-        If $heroID = $aHeroID Then
-            $heroPtr = $memberPtr
-            ExitLoop
-        EndIf
-    Next
-
-    If $heroPtr = 0 Then Return 0
+    Local $heroPtr = $lPlayerPartyPtr + ($aHeroNumber * 0x18)
+    If $heroPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
 		Case "AgentID"
 			Return MemoryRead($heroPtr, "long")
 
-        Case "OwnerPlayerID"
+        Case "OwnerPlayerNumber"
             Return MemoryRead($heroPtr + 0x4, "long")
 
         Case "HeroID"
@@ -1251,27 +1180,14 @@ Func GetPartyHeroInfo($aHeroID, $aInfo = "")
     Return 0
 EndFunc
 
-Func GetPartyHenchmanInfo($aAgentID, $aInfo = "")
-    Local $partyPtr = GetPartyInfo("PlayerPartyPtr")
-    If $partyPtr = 0 Or $aInfo = "" Then Return 0
+Func GetMyPartyHenchmanInfo($aHenchmanNumber = 1, $aInfo = "")
+    Local $lPlayerPartyPtr = GetMyPartyInfo("ArrayHenchmanPartyMember")
+	Local $lPlayerPartySize = GetMyPartyInfo("ArrayHenchmanPartyMemberSize")
+	$aHenchmanNumber = $aHenchmanNumber - 1
+	If $lPlayerPartyPtr = 0 Or $aHenchmanNumber < 0 Or $aHenchmanNumber >= $lPlayerPartySize Then Return 0
 
-    Local $henchmenCount = MemoryRead($partyPtr + 0x18, "long")
-    Local $henchmenArrayPtr = MemoryRead($partyPtr + 0x14, "ptr")
-
-    If $henchmenArrayPtr = 0 Then Return 0
-
-    Local $henchmanPtr = 0
-    For $i = 0 To $henchmenCount - 1
-        Local $memberPtr = $henchmenArrayPtr + ($i * 52)
-        Local $agentID = MemoryRead($memberPtr, "long") ; agent_id
-
-        If $agentID = $aAgentID Then
-            $henchmanPtr = $memberPtr
-            ExitLoop
-        EndIf
-    Next
-
-    If $henchmanPtr = 0 Then Return 0
+    Local $henchmanPtr = $lPlayerPartyPtr + ($aHenchmanNumber * 0x34)
+    If $henchmanPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
         Case "AgentID"
@@ -1323,22 +1239,38 @@ Func GetWorldInfo($aInfo = "")
 								MemoryRead($lPtr + 0xA0, "float"), _
 								MemoryRead($lPtr + 0xA4, "float")]
 			Return $lFlags
-		Case "PartyAttributeArray" ;--> To Try
+		Case "PartyAttributeArray"
 			Return MemoryRead($lPtr + 0xAC, "ptr")
-		Case "AgentEffectsArray" ;--> To Try
+		Case "PartyAttributeArraySize"
+			Return MemoryRead($lPtr + 0xAC + 0x8, "long")
+
+		Case "AgentEffectsArray"
 			Return MemoryRead($lPtr + 0x508, "ptr")
+		Case "AgentEffectsArraySize"
+			Return MemoryRead($lPtr + 0x508 + 0x8, "long")
+
 		Case "ActiveQuestID"
 			Return MemoryRead($lPtr + 0x528, "dword")
+
 		Case "QuestLog"
 			Return MemoryRead($lPtr + 0x52C, "ptr")
+		Case "QuestLogSize"
+			Return MemoryRead($lPtr + 0x52C + 0x8, "long")
+
 		Case "MissionObjectiveArray" ;--> To check
 			Return MemoryRead($lPtr + 0x564, "ptr")
 		Case "HenchmanIDArray" ;--> To check
 			Return MemoryRead($lPtr + 0x574, "ptr")
+
 		Case "HeroFlagArray"
 			Return MemoryRead($lPtr + 0x584, "ptr")
+		Case "HeroFlagArraySize"
+			Return MemoryRead($lPtr + 0x584 + 0x8, "long")
 		Case "HeroInfoArray"
 			Return MemoryRead($lPtr + 0x594, "ptr")
+		Case "HeroInfoArraySize"
+			Return MemoryRead($lPtr + 0x594 + 0x8, "long")
+
 		Case "ControlledMinionsArray" ;--> To check
 			Return MemoryRead($lPtr + 0x5BC, "ptr")
 		Case "MissionsCompletedArray" ;--> To check
@@ -1366,12 +1298,20 @@ Func GetWorldInfo($aInfo = "")
 			Return MemoryRead($lPtr + 0x690, "dword")
 		Case "PlayerTeamToken"
 			Return MemoryRead($lPtr + 0x6A8, "dword")
-		Case "PetInfoArray" ;--> To Try
+
+		Case "PetInfoArray"
 			Return MemoryRead($lPtr + 0x6AC, "ptr")
+		Case "PetInfoArraySize"
+			Return MemoryRead($lPtr + 0x6AC + 0x8, "long")
+
 		Case "PartyProfessionArray" ;--> To check
 			Return MemoryRead($lPtr + 0x6BC, "ptr")
+
 		Case "SkillbarArray"
 			Return MemoryRead($lPtr + 0x6F0, "ptr")
+		Case "SkillbarArraySize"
+			Return MemoryRead($lPtr + 0x6F0 + 0x8, "long")
+
 		Case "LearnableSkillsArray" ;--> To check
 			Return MemoryRead($lPtr + 0x700, "ptr")
 		Case "UnlockedSkills" ;--> To check
@@ -1437,7 +1377,7 @@ EndFunc
 #Region Title Related
 Func GetTitleArrayPtr()
     Local $lOffset[4] = [0, 0x18, 0x2C, 0x81C]
-    Local $lTitleInfoArrayPtr = MemoryReadPtr($mBasePointer, $lOffset)
+    Local $lTitleInfoArrayPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
     Return $lTitleInfoArrayPtr[1]
 EndFunc   ;==>GetTitleArrayPtr
 
@@ -1490,38 +1430,16 @@ EndFunc
 #EndRegion Title Related
 
 #Region Pet Related
-Func GetPetInfoArrayPtr()
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x6AC]
-    Local $lPetInfoArrayPtr = MemoryReadPtr($mBasePointer, $lOffset)
-    Return $lPetInfoArrayPtr[1]
-EndFunc   ;==>GetPetInfoArrayPtr
+Func GetPetInfo($aPetNumber = 0, $aInfo = "")
+	Local $lPetPtr = GetWorldInfo("PetInfoArray")
+	Local $lPetSize = GetWorldInfo("PetInfoArraySize")
+	$aPetNumber = $aPetNumber - 1
+	If $lPetPtr = 0 Or $aPetNumber < 0 Or $aPetNumber >= $lPetSize Then Return 0
 
-Func GetPetInfoPtr($aIndex = 0)
-    Local $lBasePtr = GetPetInfoArrayPtr()
-    If $lBasePtr = 0 Then Return 0
+    $lPetPtr = $lPetPtr + ($aPetNumber * 0x1C)
+    If $lPetPtr = 0 Or $aInfo = "" Then Return 0
 
-    Return $lBasePtr + ($aIndex * 0x1C)
-EndFunc   ;==>GetPetInfoPtr
-
-Func GetPetInfoByOwnerID($aOwnerAgentID, $aInfo = "")
-    Local $lOwnerID = ConvertID($aOwnerAgentID)
-    Local $lPetPtr = 0
-
-    For $i = 0 To 15
-        Local $petPtr = GetPetInfoPtr($i)
-        Local $ownerID = MemoryRead($petPtr + 0x4, "dword")
-        Local $agentID = MemoryRead($petPtr, "dword")
-
-        If $ownerID = $lOwnerID And $agentID > 0 And $agentID < 1000 Then
-            $lPetPtr = $petPtr
-            ExitLoop
-        EndIf
-    Next
-
-    If $lPetPtr = 0 Then Return 0
-    If $aInfo = "" Then Return $lPetPtr
-
-    Switch $aInfo
+	Switch $aInfo
         Case "AgentID"
             Return MemoryRead($lPetPtr, "dword")
         Case "OwnerAgentID"
@@ -1551,86 +1469,60 @@ Func GetPetInfoByOwnerID($aOwnerAgentID, $aInfo = "")
             Return MemoryRead($lPetPtr + 0x14, "dword") = 2
         Case "HasLockedTarget"
             Return MemoryRead($lPetPtr + 0x18, "dword") <> 0
-        Case "HasPet"
-            Return True
         Case Else
             Return 0
     EndSwitch
-EndFunc   ;==>GetPetInfoByOwnerID
+EndFunc
 #EndRegion Pet Related
 
 #Region Attribute Related
-Func GetHeroAttributeArrayPtr($aHeroNumber = 0)
-;~     Local $lAgentID = GetHeroID($aHeroNumber)
-	Local $lAgentID = GetHeroInfo($aHeroNumber, "AgentID")
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0xAC]
-    Local $lAttributeArrayPtr = MemoryReadPtr($mBasePointer, $lOffset)
+Func GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo = "")
+	Local $lPartyAttributesPtr = GetWorldInfo("PartyAttributeArray")
+	Local $lPartyAttributesSize = GetWorldInfo("PartyAttributeArraySize")
 
-    For $i = 0 To GetPartyInfo("HeroCount")
-        Local $lHeroAttributeEntryPtr = $lAttributeArrayPtr[1] + (0x43C * $i)
-        Local $lCurrentAgentID = MemoryRead($lHeroAttributeEntryPtr, "dword")
+	If $lPartyAttributesPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lPartyAttributesSize Then Return 0
 
-        If $lCurrentAgentID = $lAgentID Then
-            Return $lHeroAttributeEntryPtr
-        EndIf
-    Next
 
-    Return 0
-EndFunc   ;==>GetHeroAttributeArrayPtr
+	$lPartyAttributesPtr = $lPartyAttributesPtr + ($aHeroNumber * 0x43C)
+	Local $lHeroAttributePtr = $lPartyAttributesPtr + 0x4 + (0x14 * $aAttributeID)
 
-Func GetHeroAttributePtr($aAttributeID, $aHeroNumber = 0)
-    Local $lHeroAttributeArrayPtr = GetHeroAttributeArrayPtr($aHeroNumber)
-    If $lHeroAttributeArrayPtr = 0 Then Return 0
-
-    Local $lAttributePtr = $lHeroAttributeArrayPtr + 0x4 + (0x14 * $aAttributeID)
-    Return $lAttributePtr
-EndFunc   ;==>GetHeroAttributePtr
-
-Func GetHeroAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo = "")
-    Local $lAttributePtr = GetHeroAttributePtr($aAttributeID, $aHeroNumber)
-    If $lAttributePtr = 0 Then Return 0
-
-    If $aInfo = "" Then Return $lAttributePtr
-
-    Switch $aInfo
+	Switch $aInfo
         Case "ID"
-            Return MemoryRead($lAttributePtr, "dword")
+            Return MemoryRead($lHeroAttributePtr, "dword")
         Case "BaseLevel", "LevelBase"
-            Return MemoryRead($lAttributePtr + 0x4, "dword")
+            Return MemoryRead($lHeroAttributePtr + 0x4, "dword")
         Case "Level", "CurrentLevel"
-            Return MemoryRead($lAttributePtr + 0x8, "dword")
+            Return MemoryRead($lHeroAttributePtr + 0x8, "dword")
         Case "DecrementPoints"
-            Return MemoryRead($lAttributePtr + 0xC, "dword")
+            Return MemoryRead($lHeroAttributePtr + 0xC, "dword")
         Case "IncrementPoints"
-            Return MemoryRead($lAttributePtr + 0x10, "dword")
+            Return MemoryRead($lHeroAttributePtr + 0x10, "dword")
         Case "HasAttribute"
-            Return MemoryRead($lAttributePtr, "dword") <> 0
+            Return MemoryRead($lHeroAttributePtr, "dword") <> 0
         Case "BonusLevel"
-            Local $baseLevel = MemoryRead($lAttributePtr + 0x4, "dword")
-            Local $currentLevel = MemoryRead($lAttributePtr + 0x8, "dword")
+            Local $baseLevel = MemoryRead($lHeroAttributePtr + 0x4, "dword")
+            Local $currentLevel = MemoryRead($lHeroAttributePtr + 0x8, "dword")
             Return $currentLevel - $baseLevel
         Case "IsMaxed"
             ; Vérifier si l'attribut est au niveau maximum (12)
-            Return MemoryRead($lAttributePtr + 0x8, "dword") >= 12
+            Return MemoryRead($lHeroAttributePtr + 0x8, "dword") >= 12
         Case "IsRaisable"
             ; Vérifier si on peut augmenter le niveau de l'attribut
-            Local $incrementPoints = MemoryRead($lAttributePtr + 0x10, "dword")
+            Local $incrementPoints = MemoryRead($lHeroAttributePtr + 0x10, "dword")
             Return $incrementPoints > 0
         Case "IsDecreasable"
             ; Vérifier si on peut diminuer le niveau de l'attribut
-            Local $decrementPoints = MemoryRead($lAttributePtr + 0xC, "dword")
+            Local $decrementPoints = MemoryRead($lHeroAttributePtr + 0xC, "dword")
             Return $decrementPoints > 0
         Case Else
             Return 0
     EndSwitch
-EndFunc   ;==>GetHeroAttributeInfo
+EndFunc
 #EndRegion Attribute Related
 
 #Region Account Related
 Func GetAccountInfo($aInfo = "")
-	Local $lOffset[4] = [0, 0x18, 0x2C, 0]
-    Local $lWorldContextPtr = MemoryReadPtr($mBasePointer, $lOffset)
-    Local $lPtr = $lWorldContextPtr[1]
+    Local $lPtr = GetWorldInfo("AccountInfo")
     If $lPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
@@ -1656,24 +1548,15 @@ EndFunc
 #EndRegion Account Related
 
 #Region Quest Related
-Func GetQuestPtr($aQuestID)
-	Local $lOffsetQuestSize[4] = [0, 0x18, 0x2C, 0x534]
-	$lQuestLogSize = MemoryReadPtr($mBasePointer, $lOffsetQuestSize)
-
-	Local $lOffsetQuestLog[5] = [0, 0x18, 0x2C, 0x52C, 0x0]
-
-	For $i = 0 To $lQuestLogSize[1]
-		$lOffsetQuestLog[4] = 0x34 * $i
-		$lQuestPtr = MemoryReadPtr($mBasePointer, $lOffsetQuestLog, "long")
-		If $lQuestPtr[1] = $aQuestID Then Return Ptr($lQuestPtr[0])
-	Next
-
-	Return 0
-EndFunc   ;==>GetQuestPtr
-
 Func GetQuestInfo($aQuestID, $aInfo = "")
-	Local $lPtr = GetQuestPtr($aQuestID)
-    If $lPtr = 0 Or $aInfo = "" Then Return 0
+	Local $lSize = GetWorldInfo("QuestLogSize")
+	If $lSize = 0 Or $aInfo = "" Then Return 0
+
+	For $i = 0 To $lSize
+		Local $lOffsetQuestLog[5] = [0, 0x18, 0x2C, 0x52C, 0x34 * $i]
+		Local $lQuestPtr = MemoryReadPtr($mBasePointer, $lOffsetQuestLog, "long")
+		If $lQuestPtr[1] = $aQuestID Then $lPtr = Ptr($lQuestPtr[0])
+	Next
 
     Switch $aInfo
 		Case "QuestID"
@@ -1738,21 +1621,17 @@ Func GetQuestInfo($aQuestID, $aInfo = "")
 
 	Return 0
 EndFunc
-
 #EndRegion Quest Related
 
 #Region Hero Related
-Func GetHeroFlagPtr()
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x584]
-    $lHeroPtr = MemoryReadPtr($mBasePointer, $lOffset)
-    Return $lHeroPtr[1]
-EndFunc
-
-Func GetHeroFlagInfo($aHeroNumber, $aInfo = "")
-	Local $lPtr = GetHeroFlagPtr()
-    If $lPtr = 0 Or $aInfo = "" Then Return 0
+Func GetHeroFlagInfo($aHeroNumber = 1, $aInfo = "")
+	Local $lPtr = GetWorldInfo("HeroFlagArray")
+	Local $lSize = GetWorldInfo("HeroFlagArraySize")
 	$aHeroNumber = $aHeroNumber - 1
-	$lPtr = $lPtr + ($aHeroNumber * 0x24)
+	If $lPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lSize Then Return 0
+
+    $lPtr = $lPtr + ($aHeroNumber * 0x24)
+    If $lPtr = 0 Or $aInfo = "" Then Return 0
 
 	Switch $aInfo
 		Case "HeroID"
@@ -1774,17 +1653,15 @@ Func GetHeroFlagInfo($aHeroNumber, $aInfo = "")
 	Return 0
 EndFunc
 
-Func GetHeroInfoPtr()
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x594]
-    $lHeroPtr = MemoryReadPtr($mBasePointer, $lOffset)
-    Return $lHeroPtr[1]
-EndFunc
-
+;~ CAREFUL: This is related to your UNLOCKED Hero, HeroID is Different from GetMyPartyHeroInfo - "HeroID"
 Func GetHeroInfo($aHeroNumber, $aInfo = "")
-    Local $lPtr = GetHeroInfoPtr()
+	Local $lPtr = GetWorldInfo("HeroInfoArray")
+	Local $lSize = GetWorldInfo("HeroInfoArraySize")
+	$aHeroNumber = $aHeroNumber - 1
+	If $lPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lSize Then Return 0
+
+    $lPtr = $lPtr + ($aHeroNumber * 0x78)
     If $lPtr = 0 Or $aInfo = "" Then Return 0
-    $aHeroNumber = $aHeroNumber - 1
-	$lPtr = $lPtr + ($aHeroNumber * 0x78)
 
     Switch $aInfo
         Case "HeroID"
@@ -1802,31 +1679,24 @@ Func GetHeroInfo($aHeroNumber, $aInfo = "")
         Case "ModelFileID"
             Return MemoryRead($lPtr + 0x18, "dword")
         Case "Name"
-            Return MemoryRead($lPtr + 0x50, "wchar[20]")
+;~ 			Local $lname = MemoryRead($lPtr + 0x50, "ptr")
+;~ 			Return MemoryRead($lname, "char[20]")
+            Return MemoryRead($lPtr + 0x50, "wchar[24]")
     EndSwitch
 
     Return 0
 EndFunc
-
 #EndRegion Hero Related
 
 #Region Skillbar Related
-Func GetSkillbarPtr($aHeroNumber = 0)
-	Local $lOffset[5] = [0, 24, 76, 84, 44]
-	Local $lHeroCount = MemoryReadPtr($mBasePointer, $lOffset)
-	Local $lOffset[5] = [0, 24, 44, 1776]
-	For $i = 0 To $lHeroCount[1]
-		$lOffset[4] = $i * 188
-		Local $lSkillbarStructAddress = MemoryReadPtr($mBasePointer, $lOffset)
-;~ 		If $lSkillbarStructAddress[1] = GetHeroID($aHeroNumber) Then Return $lSkillbarStructAddress[0]
-		If $lSkillbarStructAddress[1] = GetHeroInfo($aHeroNumber, "AgentID") Then Return $lSkillbarStructAddress[0]
-	Next
-EndFunc   ;==>GetSkillbarPtr
-
 Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
-    Local $lSkillbarPtr = GetSkillbarPtr($aHeroNumber)
-    If $lSkillbarPtr = 0 Then Return 0
-    If $aInfo = "" Then Return $lSkillbarPtr
+	Local $lPtr = GetWorldInfo("SkillbarArray")
+	Local $lSize = GetWorldInfo("SkillbarArraySize")
+
+	If $lPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lSize Then Return 0
+
+    $lSkillbarPtr = $lPtr + ($aHeroNumber * 0xBC)
+    If $lSkillbarPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
         Case "AgentID"
@@ -1847,8 +1717,8 @@ Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
         Case "IsRecharged"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Local $lTimestamp = MemoryRead($lSkillbarPtr + 0xC + (($aSkillSlot - 1) * 0x14), "dword")
-            If $lTimestamp = 0 Then Return 0
-            Return $lTimestamp - GetSkillTimer()
+            If $lTimestamp = 0 Then Return True
+            Return ($lTimestamp - GetSkillTimer()) = 0
 
         Case "RawRecharged"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
@@ -1857,6 +1727,10 @@ Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
         Case "Adrenaline"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Return MemoryRead($lSkillbarPtr + 0x4 + (($aSkillSlot - 1) * 0x14), "dword")
+
+		Case "AdrenalineB"
+            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
+            Return MemoryRead($lSkillbarPtr + 0x8 + (($aSkillSlot - 1) * 0x14), "dword")
 
         Case "Event"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
@@ -1888,336 +1762,52 @@ Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
 EndFunc   ;==>GetSkillbarInfo
 #EndRegion Skillbar Related
 
-#Region Buff Related
-Func BuffID($aBuff)
-    If IsPtr($aBuff) Then
-        Return MemoryRead($aBuff + 0x8, "long")
-    ElseIf IsDllStruct($aBuff) Then
-        Return DllStructGetData($aBuff, "BuffId")
-    Else
-        Return $aBuff
-    EndIf
-EndFunc   ;==>BuffID
-
-Func GetBuffPtr($aBuffID)
-    If IsPtr($aBuffID) Then Return $aBuffID
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x508]
-    Local $lAgentEffectsBasePtr = MemoryReadPtr($mBasePointer, $lOffset)
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x510]
-    Local $lAgentEffectsCount = MemoryReadPtr($mBasePointer, $lOffset)
-
-    If $lAgentEffectsBasePtr[1] = 0 Or $lAgentEffectsCount[1] <= 0 Then Return 0
-
-    For $i = 0 To $lAgentEffectsCount[1] - 1
-        Local $lAgentEffectsPtr = $lAgentEffectsBasePtr[1] + ($i * 0x24)
-        Local $lAgentID = MemoryRead($lAgentEffectsPtr, "dword")
-
-        If $lAgentID <> 0 Then
-            Local $lBuffArrayPtr = $lAgentEffectsPtr + 0x4
-            Local $lBuffDataPtr = MemoryRead($lBuffArrayPtr, "ptr")
-            Local $lBuffCount = MemoryRead($lBuffArrayPtr + 0x8, "long")
-
-            If $lBuffDataPtr <> 0 And $lBuffCount > 0 Then
-                For $j = 0 To $lBuffCount - 1
-                    Local $lBuffPtr = $lBuffDataPtr + ($j * 0x10)
-                    Local $lCurrentBuffID = MemoryRead($lBuffPtr + 0x8, "long")
-
-                    If $lCurrentBuffID = BuffID($aBuffID) Then
-                        Return $lBuffPtr
-                    EndIf
-                Next
-            EndIf
-        EndIf
-    Next
-
-    Return 0
-EndFunc   ;==>GetBuffPtr
-
-Func GetBuffInfo($aBuffID, $aInfo = "")
-    Local $lBuffPtr = GetBuffPtr($aBuffID)
-    If $lBuffPtr = 0 Or $aInfo = "" Then Return 0
-
-    Switch $aInfo
-        Case "SkillID"
-            Return MemoryRead($lBuffPtr, "long")
-        Case "h0004"
-            Return MemoryRead($lBuffPtr + 0x4, "dword")
-        Case "BuffID"
-            Return MemoryRead($lBuffPtr + 0x8, "long")
-        Case "TargetAgentID"
-            Return MemoryRead($lBuffPtr + 0xC, "dword")
-        Case Else
-            Return 0
-    EndSwitch
-EndFunc   ;==>GetBuffInfo
-
-Func GetBuffArray()
-    Local $aBuffArray[1] = [0]
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x508]
-    Local $lAgentEffectsBasePtr = MemoryReadPtr($mBasePointer, $lOffset)
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x510]
-    Local $lAgentEffectsCount = MemoryReadPtr($mBasePointer, $lOffset)
-
-    If $lAgentEffectsBasePtr[1] = 0 Or $lAgentEffectsCount[1] <= 0 Then Return $aBuffArray
-
-    For $i = 0 To $lAgentEffectsCount[1] - 1
-        Local $lAgentEffectsPtr = $lAgentEffectsBasePtr[1] + ($i * 0x24)
-        Local $lAgentID = MemoryRead($lAgentEffectsPtr, "dword")
-
-        If $lAgentID <> 0 Then
-            Local $lBuffArrayPtr = $lAgentEffectsPtr + 0x4
-            Local $lBuffDataPtr = MemoryRead($lBuffArrayPtr, "ptr")
-            Local $lBuffCount = MemoryRead($lBuffArrayPtr + 0x8, "long")
-
-            If $lBuffDataPtr <> 0 And $lBuffCount > 0 Then
-                For $j = 0 To $lBuffCount - 1
-                    Local $lBuffPtr = $lBuffDataPtr + ($j * 0x10)
-
-                    $aBuffArray[0] += 1
-                    ReDim $aBuffArray[$aBuffArray[0] + 1]
-                    $aBuffArray[$aBuffArray[0]] = $lBuffPtr
-                Next
-            EndIf
-        EndIf
-    Next
-
-    Return $aBuffArray
-EndFunc   ;==>GetBuffArray
-
-Func GetAgentBuffArray($aAgentID = -2)
-    Local $aBuffArray[1] = [0]
-    Local $lAgentID = ConvertID($aAgentID)
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x508]
-    Local $lAgentEffectsBasePtr = MemoryReadPtr($mBasePointer, $lOffset)
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x510]
-    Local $lAgentEffectsCount = MemoryReadPtr($mBasePointer, $lOffset)
-
-    If $lAgentEffectsBasePtr[1] = 0 Or $lAgentEffectsCount[1] <= 0 Then Return $aBuffArray
-
-    For $i = 0 To $lAgentEffectsCount[1] - 1
-        Local $lAgentEffectsPtr = $lAgentEffectsBasePtr[1] + ($i * 0x24)
-        Local $lCurrentAgentID = MemoryRead($lAgentEffectsPtr, "dword")
-
-        If $lCurrentAgentID = $lAgentID Then
-            Local $lBuffArrayPtr = $lAgentEffectsPtr + 0x4
-            Local $lBuffDataPtr = MemoryRead($lBuffArrayPtr, "ptr")
-            Local $lBuffCount = MemoryRead($lBuffArrayPtr + 0x8, "long")
-
-            If $lBuffDataPtr <> 0 And $lBuffCount > 0 Then
-                For $j = 0 To $lBuffCount - 1
-                    Local $lBuffPtr = $lBuffDataPtr + ($j * 0x10)
-
-                    $aBuffArray[0] += 1
-                    ReDim $aBuffArray[$aBuffArray[0] + 1]
-                    $aBuffArray[$aBuffArray[0]] = $lBuffPtr
-                Next
-            EndIf
-
-            ExitLoop
-        EndIf
-    Next
-
-    Return $aBuffArray
-EndFunc   ;==>GetAgentBuffArray
-
-Func GetAgentBuffInfo($aAgentID, $aSkillID, $aInfo = "")
-    Local $lAgentID = ConvertID($aAgentID)
-    Local $lBuffs = GetAgentBuffArray($lAgentID)
-    Local $lBuffPtr = 0
-
-    For $i = 1 To $lBuffs[0]
-        Local $lPtr = $lBuffs[$i]
-        Local $lSkillID = MemoryRead($lPtr, "long")
-
-        If $lSkillID = $aSkillID Then
-            $lBuffPtr = $lPtr
-            ExitLoop
-        EndIf
-    Next
-
-    If $lBuffPtr = 0 Then Return 0
-    If $aInfo = "" Then Return $lBuffPtr
-
-    Switch $aInfo
-        Case "SkillID"
-            Return MemoryRead($lBuffPtr, "long")
-        Case "h0004"
-            Return MemoryRead($lBuffPtr + 0x4, "dword")
-        Case "BuffID"
-            Return MemoryRead($lBuffPtr + 0x8, "long")
-        Case "TargetAgentID"
-            Return MemoryRead($lBuffPtr + 0xC, "dword")
-        Case "HasBuff"
-            Return True
-        Case Else
-            Return 0
-    EndSwitch
-EndFunc   ;==>GetAgentBuffInfo
-
-Func GetBuffOnAgentInfo($aTargetID, $aSkillID, $aInfo = "")
-    Local $lTargetID = ConvertID($aTargetID)
-    Local $lBuffs = GetBuffsOnAgent($lTargetID)
-    Local $lBuffPtr = 0
-
-    For $i = 1 To $lBuffs[0]
-        Local $lPtr = $lBuffs[$i]
-        Local $lSkillID = MemoryRead($lPtr, "long")
-
-        If $lSkillID = $aSkillID Then
-            $lBuffPtr = $lPtr
-            ExitLoop
-        EndIf
-    Next
-
-    If $lBuffPtr = 0 Then Return 0
-    If $aInfo = "" Then Return $lBuffPtr
-
-    Switch $aInfo
-        Case "SkillID"
-            Return MemoryRead($lBuffPtr, "long")
-        Case "h0004"
-            Return MemoryRead($lBuffPtr + 0x4, "dword")
-        Case "BuffID"
-            Return MemoryRead($lBuffPtr + 0x8, "long")
-        Case "TargetAgentID"
-            Return MemoryRead($lBuffPtr + 0xC, "dword")
-        Case "HasBuff"
-            Return True
-        Case Else
-            Return 0
-    EndSwitch
-EndFunc   ;==>GetBuffOnAgentInfo
-#EndRegion Buff Related
-
 #Region Effect Related
-Func EffectID($aEffect)
-    If IsPtr($aEffect) Then
-        Return MemoryRead($aEffect + 0x8, "long")
-    ElseIf IsDllStruct($aEffect) Then
-        Return DllStructGetData($aEffect, "EffectId")
-    Else
-        Return $aEffect
-    EndIf
-EndFunc   ;==>EffectID
+Func GetAgentEffectArrayInfo($aAgentID = -2, $aInfo = "")
+    Local $lPtr = GetWorldInfo("AgentEffectsArray")
+    Local $lSize = GetWorldInfo("AgentEffectsArraySize")
+    Local $lAgentPtr = 0
 
-Func GetEffectPtr($aEffectID)
-    If IsPtr($aEffectID) Then Return $aEffectID
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x508]
-    Local $lAgentEffectsBasePtr = MemoryReadPtr($mBasePointer, $lOffset)
-
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x510]
-    Local $lAgentEffectsCount = MemoryReadPtr($mBasePointer, $lOffset)
-
-    If $lAgentEffectsBasePtr[1] = 0 Or $lAgentEffectsCount[1] <= 0 Then Return 0
-
-    For $i = 0 To $lAgentEffectsCount[1] - 1
-        Local $lAgentEffectsPtr = $lAgentEffectsBasePtr[1] + ($i * 0x24)
-        Local $lAgentID = MemoryRead($lAgentEffectsPtr, "dword")
-
-        If $lAgentID <> 0 Then
-            Local $lEffectArrayPtr = $lAgentEffectsPtr + 0x14
-            Local $lEffectDataPtr = MemoryRead($lEffectArrayPtr, "ptr")
-            Local $lEffectCount = MemoryRead($lEffectArrayPtr + 0x8, "long")
-
-            If $lEffectDataPtr <> 0 And $lEffectCount > 0 Then
-                For $j = 0 To $lEffectCount - 1
-                    Local $lEffectPtr = $lEffectDataPtr + ($j * 0x18)
-                    Local $lCurrentEffectID = MemoryRead($lEffectPtr + 0x8, "long")
-
-                    If $lCurrentEffectID = EffectID($aEffectID) Then
-                        Return $lEffectPtr
-                    EndIf
-                Next
-            EndIf
+    For $i = 0 To $lSize
+        Local $lAgentEffectsPtr = $lPtr + ($i * 0x24)
+        If MemoryRead($lAgentEffectsPtr, "dword") = 0 Then ContinueLoop
+        If MemoryRead($lAgentEffectsPtr, "dword") = ConvertID($aAgentID) Then
+            $lAgentPtr = $lAgentEffectsPtr
+            ExitLoop
         EndIf
     Next
 
-    Return 0
-EndFunc   ;==>GetEffectPtr
-
-Func GetEffectInfo($aEffectID, $aInfo = "")
-    Local $lEffectPtr = GetEffectPtr($aEffectID)
-    If $lEffectPtr = 0 Or $aInfo = "" Then Return 0
+    If $lAgentPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
-        Case "SkillID"
-            Return MemoryRead($lEffectPtr, "long")
-        Case "AttributeLevel"
-            Return MemoryRead($lEffectPtr + 0x4, "dword")
-        Case "EffectID"
-            Return MemoryRead($lEffectPtr + 0x8, "long")
-        Case "CasterID"
-            Return MemoryRead($lEffectPtr + 0xC, "dword")
-        Case "Duration"
-            Return MemoryRead($lEffectPtr + 0x10, "float")
-        Case "Timestamp"
-            Return MemoryRead($lEffectPtr + 0x14, "dword")
-		Case "TimeElapsed"
-			Local $lTimestamp = MemoryRead($lEffectPtr + 0x14, "dword")
-			Return GetSkillTimer() - $lTimestamp
-		Case "TimeRemaining"
-			Local $lTimestamp = MemoryRead($lEffectPtr + 0x14, "dword")
-			Local $lDuration = MemoryRead($lEffectPtr + 0x10, "float")
-			Local $lTimeElapsed = GetSkillTimer() - $lTimestamp
-			Return Floor($lDuration * 1000) - $lTimeElapsed
+        Case "AgentID"
+            Return MemoryRead($lAgentPtr, "dword")
+        Case "BuffArray"
+            Return MemoryRead($lAgentPtr + 0x4, "ptr")
+        Case "BuffArraySize"
+            Return MemoryRead($lAgentPtr + 0x4 + 0x8, "long")
+        Case "EffectArray"
+            Return MemoryRead($lAgentPtr + 0x14, "ptr")
+        Case "EffectArraySize"
+            Return MemoryRead($lAgentPtr + 0x14 + 0x8, "long")
         Case Else
             Return 0
     EndSwitch
-EndFunc   ;==>GetEffectInfo
+EndFunc
 
-Func GetEffectArray()
-    Local $aEffectArray[1] = [0]
+Func GetAgentEffectInfo($aAgentID = -2, $aSkillID = 0, $aInfo = "")
+    Local $lEffectArrayPtr = GetAgentEffectArrayInfo($aAgentID, "EffectArray")
+    Local $lEffectCount = GetAgentEffectArrayInfo($aAgentID, "EffectArraySize")
 
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x508]
-    Local $lAgentEffectsBasePtr = MemoryReadPtr($mBasePointer, $lOffset)
+    If $lEffectArrayPtr = 0 Or $lEffectCount = 0 Then Return 0
 
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x510]
-    Local $lAgentEffectsCount = MemoryReadPtr($mBasePointer, $lOffset)
-
-    If $lAgentEffectsBasePtr[1] = 0 Or $lAgentEffectsCount[1] <= 0 Then Return $aEffectArray
-
-    For $i = 0 To $lAgentEffectsCount[1] - 1
-        Local $lAgentEffectsPtr = $lAgentEffectsBasePtr[1] + ($i * 0x24)
-        Local $lAgentID = MemoryRead($lAgentEffectsPtr, "dword")
-
-        If $lAgentID <> 0 Then
-            Local $lEffectArrayPtr = $lAgentEffectsPtr + 0x14
-            Local $lEffectDataPtr = MemoryRead($lEffectArrayPtr, "ptr")
-            Local $lEffectCount = MemoryRead($lEffectArrayPtr + 0x8, "long")
-
-            If $lEffectDataPtr <> 0 And $lEffectCount > 0 Then
-                For $j = 0 To $lEffectCount - 1
-                    Local $lEffectPtr = $lEffectDataPtr + ($j * 0x18)
-
-                    $aEffectArray[0] += 1
-                    ReDim $aEffectArray[$aEffectArray[0] + 1]
-                    $aEffectArray[$aEffectArray[0]] = $lEffectPtr
-                Next
-            EndIf
-        EndIf
-    Next
-
-    Return $aEffectArray
-EndFunc   ;==>GetEffectArray
-
-Func GetAgentEffectInfo($aAgentID, $aSkillID, $aInfo = "")
-    Local $lAgentID = ConvertID($aAgentID)
-    Local $lEffects = GetAgentEffectArray($lAgentID)
     Local $lEffectPtr = 0
+    For $j = 0 To $lEffectCount - 1
+        Local $lCurrentPtr = $lEffectArrayPtr + ($j * 0x18)
+        Local $lCurrentSkillID = MemoryRead($lCurrentPtr, "long")
 
-    For $i = 1 To $lEffects[0]
-        Local $lPtr = $lEffects[$i]
-        Local $lSkillID = MemoryRead($lPtr, "long")
-
-        If $lSkillID = $aSkillID Then
-            $lEffectPtr = $lPtr
+        If $lCurrentSkillID = $aSkillID Then
+            $lEffectPtr = $lCurrentPtr
             ExitLoop
         EndIf
     Next
@@ -2226,13 +1816,13 @@ Func GetAgentEffectInfo($aAgentID, $aSkillID, $aInfo = "")
     If $aInfo = "" Then Return $lEffectPtr
 
     Switch $aInfo
-        Case "SkillID"
-            Return MemoryRead($lEffectPtr, "long")
+;~         Case "SkillID"
+;~             Return MemoryRead($lEffectPtr, "long")
         Case "AttributeLevel"
             Return MemoryRead($lEffectPtr + 0x4, "dword")
         Case "EffectID"
             Return MemoryRead($lEffectPtr + 0x8, "long")
-        Case "CasterID" ;maintained enchantment
+        Case "CasterID" ; maintained enchantment
             Return MemoryRead($lEffectPtr + 0xC, "dword")
         Case "Duration"
             Return MemoryRead($lEffectPtr + 0x10, "float")
@@ -2244,53 +1834,50 @@ Func GetAgentEffectInfo($aAgentID, $aSkillID, $aInfo = "")
         Case "TimeRemaining"
             Local $lTimestamp = MemoryRead($lEffectPtr + 0x14, "dword")
             Local $lDuration = MemoryRead($lEffectPtr + 0x10, "float")
-            Local $lTimeElapsed = GetSkillTimer() - $lTimestamp
-            Return Floor($lDuration * 1000) - $lTimeElapsed
+            Return $lDuration * 1000 - (GetSkillTimer() - $lTimestamp)
         Case "HasEffect"
             Return True
         Case Else
             Return 0
     EndSwitch
-EndFunc   ;==>GetAgentEffectInfo
+EndFunc
 
-Func GetAgentEffectArray($aAgentID)
-    Local $aEffectArray[1] = [0]
-    Local $lAgentID = ConvertID($aAgentID)
+Func GetAgentBuffInfo($aAgentID = -2, $aSkillID = 0, $aInfo = "")
+    Local $lBuffArrayPtr = GetAgentEffectArrayInfo($aAgentID, "BuffArray")
+    Local $lBuffCount = GetAgentEffectArrayInfo($aAgentID, "BuffArraySize")
 
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x508]
-    Local $lAgentEffectsBasePtr = MemoryReadPtr($mBasePointer, $lOffset)
+    If $lBuffArrayPtr = 0 Or $lBuffCount = 0 Then Return 0
 
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x510]
-    Local $lAgentEffectsCount = MemoryReadPtr($mBasePointer, $lOffset)
+    Local $lBuffPtr = 0
+    For $j = 0 To $lBuffCount - 1
+        Local $lCurrentPtr = $lBuffArrayPtr + ($j * 0x10)
+        Local $lCurrentSkillID = MemoryRead($lCurrentPtr, "long")
 
-    If $lAgentEffectsBasePtr[1] = 0 Or $lAgentEffectsCount[1] <= 0 Then Return $aEffectArray
-
-    For $i = 0 To $lAgentEffectsCount[1] - 1
-        Local $lAgentEffectsPtr = $lAgentEffectsBasePtr[1] + ($i * 0x24)
-        Local $lCurrentAgentID = MemoryRead($lAgentEffectsPtr, "dword")
-
-        If $lCurrentAgentID = $lAgentID Then
-            Local $lEffectArrayPtr = $lAgentEffectsPtr + 0x14
-            Local $lEffectDataPtr = MemoryRead($lEffectArrayPtr, "ptr")
-            Local $lEffectCount = MemoryRead($lEffectArrayPtr + 0x8, "long")
-
-            If $lEffectDataPtr <> 0 And $lEffectCount > 0 Then
-                For $j = 0 To $lEffectCount - 1
-                    Local $lEffectPtr = $lEffectDataPtr + ($j * 0x18)
-
-                    $aEffectArray[0] += 1
-                    ReDim $aEffectArray[$aEffectArray[0] + 1]
-                    $aEffectArray[$aEffectArray[0]] = $lEffectPtr
-                Next
-            EndIf
-
+        If $lCurrentSkillID = $aSkillID Then
+            $lBuffPtr = $lCurrentPtr
             ExitLoop
         EndIf
     Next
 
-    Return $aEffectArray
-EndFunc   ;==>GetAgentEffectArray
-#EndRegion Effect Related
+    If $lBuffPtr = 0 Then Return 0
+    If $aInfo = "" Then Return $lBuffPtr
+
+    Switch $aInfo
+;~         Case "SkillID"
+;~             Return MemoryRead($lBuffPtr, "long")
+        Case "h0004"
+            Return MemoryRead($lBuffPtr + 0x4, "dword")
+        Case "BuffID"
+            Return MemoryRead($lBuffPtr + 0x8, "long")
+        Case "TargetAgentID"
+            Return MemoryRead($lBuffPtr + 0xC, "dword")
+        Case "HasBuff"
+            Return True
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+#EndRegion
 
 #Region Outside Context Info
 #Region Agent Related
@@ -2419,10 +2006,6 @@ Func GetAgentInfo($aAgentID = -2, $aInfo = "")
             Return MemoryRead($lAgentPtr + 0xA0, "float")
         Case "MoveY"
             Return MemoryRead($lAgentPtr + 0xA4, "float")
-		Case "IsMoving"
-			If MemoryRead($lAgentPtr + 0xA0, "float") <> 0 Or MemoryRead($lAgentPtr + 0xA4, "float") <> 0 Then Return True
-			Return False
-
         Case "h00A8"
             Return MemoryRead($lAgentPtr + 0xA8, "dword")
         Case "RotationCos2"
@@ -2491,7 +2074,7 @@ Func GetAgentInfo($aAgentID = -2, $aInfo = "")
         Case "MaxEnergy"
             Return MemoryRead($lAgentPtr + 0x120, "dword")
 		Case "CurrentEnergy"
-			MemoryRead($lAgentPtr + 0x11C, "float") * MemoryRead($lAgentPtr + 0x120, "dword")
+			Return MemoryRead($lAgentPtr + 0x11C, "float") * MemoryRead($lAgentPtr + 0x120, "dword")
         Case "h0124"
             Return MemoryRead($lAgentPtr + 0x124, "dword")
         Case "HPPips"
@@ -2894,6 +2477,11 @@ Func GetAgentArray($aType = 0)
 
     Return $lAgentArray
 EndFunc
+
+;~ Func GetAgentArray()
+;~     Local $lAgentArray = MemoryReadArray($mAgentBase, 0x8)
+;~     Return $lAgentArray
+;~ EndFunc
 #EndRegion Agent Related
 
 #Region Camera Related
@@ -3065,7 +2653,7 @@ Func GetSkillInfo($aSkillID, $aInfo = "")
         Case "Overcast"
             Return MemoryRead($lPtr + 0x34, "byte")
         Case "EnergyCost"
-			Local $lEnergyCost = GetSkillInfo($aSkillID, "EnergyCost")
+			Local $lEnergyCost = MemoryRead($lPtr + 0x35, "byte")
 			Select
 				Case $lEnergyCost = 11
 					Return 15
@@ -3146,7 +2734,7 @@ Func GetAttributePtr($aAttributeID)
 	Return Ptr($lAttributeStructAddress)
 EndFunc
 
-Func GetAttributeInfo($aAttributeID)
+Func GetAttributeInfo($aAttributeID, $aInfo = "")
     Local $lPtr = GetAttributePtr($aAttributeID)
     If $lPtr = 0 Or $aInfo = "" Then Return 0
 

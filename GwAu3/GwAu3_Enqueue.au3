@@ -266,7 +266,7 @@ EndFunc   ;==>TraderSell
 #Region H&H Enqueue
 ;~ Description: Order a hero to use a skill.
 Func UseHeroSkill($aHeroNumber, $aSkillSlot, $aTarget = -2)
-	DllStructSetData($mUseHeroSkill, 2, GetHeroInfo($aHeroNumber, "AgentID"))
+	DllStructSetData($mUseHeroSkill, 2, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
 	DllStructSetData($mUseHeroSkill, 3, ConvertID($aTarget))
 	DllStructSetData($mUseHeroSkill, 4, $aSkillSlot - 1)
 	Enqueue($mUseHeroSkillPtr, 16)
@@ -301,14 +301,14 @@ EndFunc   ;==>UseSkill
 ;~ Description: Increase attribute by 1
 Func IncreaseAttribute($aAttributeID, $aHeroNumber = 0)
 	DllStructSetData($mIncreaseAttribute, 2, $aAttributeID)
-	DllStructSetData($mIncreaseAttribute, 3, GetHeroInfo($aHeroNumber, "AgentID"))
+	DllStructSetData($mIncreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
 	Enqueue($mIncreaseAttributePtr, 12)
 EndFunc   ;==>IncreaseAttribute
 
 ;~ Description: Decrease attribute by 1
 Func DecreaseAttribute($aAttributeID, $aHeroNumber = 0)
 	DllStructSetData($mDecreaseAttribute, 2, $aAttributeID)
-	DllStructSetData($mDecreaseAttribute, 3, GetHeroInfo($aHeroNumber, "AgentID"))
+	DllStructSetData($mDecreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
 	Enqueue($mDecreaseAttributePtr, 12)
 EndFunc   ;==>DecreaseAttribute
 #EndRegion Fighting Enqueue

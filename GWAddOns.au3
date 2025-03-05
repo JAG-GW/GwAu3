@@ -1214,7 +1214,7 @@ EndFunc   ;==>GoToSignpost
 #Region Travel
 ;~ Description: Map travel to an outpost.
 Func TravelTo($aMapID, $aRegion = GetCharacterInfo("Region"), $aDistrict = GetCharacterInfo("District"), $aDis = GetCharacterInfo("Language"))
-	If GetMapID() = $aMapID And $aDis = 0 And GetInstanceInfo("IsOutpost") Then Return True
+	If GetCharacterInfo("MapID") = $aMapID And $aDis = 0 And GetInstanceInfo("IsOutpost") Then Return True
 	MoveMap($aMapID, $aRegion, $aDistrict, $aDis)
 	Return WaitMapLoading($aMapID)
 EndFunc   ;==>TravelTo
@@ -1223,7 +1223,7 @@ EndFunc   ;==>TravelTo
 Func WaitMapLoading($aMapID = -1, $aInstanceType = -1)
 	Do
 		Sleep(250)
-	Until GetAgentPtr(-2) <> 0 And GetAgentArraySize() <> 0 And GetSkillbarPtr() <> 0 And GetPartyContextPtr() <> 0 And ($aInstanceType = -1 Or GetInstanceInfo("Type") = $aInstanceType) And ($aMapID = -1 Or GetMapID() = $aMapID)
+	Until GetAgentPtr(-2) <> 0 And GetAgentArraySize() <> 0 And GetSkillbarPtr() <> 0 And GetPartyContextPtr() <> 0 And ($aInstanceType = -1 Or GetInstanceInfo("Type") = $aInstanceType) And ($aMapID = -1 Or GetCharacterInfo("MapID") = $aMapID)
 EndFunc
 
 ;~ Description: Returns current MapID

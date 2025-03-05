@@ -207,6 +207,40 @@ Func MemoryReadPtr($aAddress, $aOffset, $aType = 'dword')
 EndFunc   ;==>MemoryReadPtr
 
 ;~ Description: Internal use only.
+Func MemoryReadArray($aAddress, $aSizeOffset = 0x0)
+    Local $lArraySize = MemoryRead($aAddress + $aSizeOffset, "dword")
+    Local $lArrayBasePtr = MemoryRead($aAddress, "ptr")
+    Local $lArray[$lArraySize + 1]
+    Local $lBuffer = DllStructCreate("ptr[" & $lArraySize & "]")
+	Local $lValue
+
+    DllCall($mKernelHandle, "bool", "ReadProcessMemory", "handle", $mGWProcHandle, _
+            "ptr", $lArrayBasePtr, "struct*", $lBuffer, _
+            "ulong_ptr", 4 * $lArraySize, "ulong_ptr*", 0)
+
+	$lArray[0] = 0
+    For $i = 1 To $lArraySize
+        $lValue = DllStructGetData($lBuffer, 1, $i)
+        If $lValue = 0 Then ContinueLoop
+
+        $lArray[0] += 1
+        $lArray[$lArray[0]] = $lValue
+    Next
+
+    If $lArray[0] < $lArraySize Then
+        ReDim $lArray[$lArray[0] + 1]
+    EndIf
+
+    Return $lArray
+EndFunc   ;==>MemoryReadArray
+
+;~ Description: Internal use only.
+Func MemoryReadArrayPtr($aAddress, $aOffset, $aSizeOffset)
+    Local $lAddress = MemoryReadPtr($aAddress, $aOffset, 'ptr')
+    Return MemoryReadArray($lAddress[0], $aSizeOffset)
+EndFunc   ;==>MemoryReadArrayPtr
+
+;~ Description: Internal use only.
 Func SwapEndian($aHex)
 	Return StringMid($aHex, 7, 2) & StringMid($aHex, 5, 2) & StringMid($aHex, 3, 2) & StringMid($aHex, 1, 2)
 EndFunc   ;==>SwapEndian

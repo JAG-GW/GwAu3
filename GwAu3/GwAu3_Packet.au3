@@ -196,7 +196,7 @@ EndFunc   ;==>MoveItem
 
 ;~ Description: Accepts unclaimed items after a mission.
 Func AcceptAllItems()
-	Return SendPacket(0x8, $HEADER_ITEMS_ACCEPT_UNCLAIMED, DllStructGetData(GetBag(7), 'ID'))
+	Return SendPacket(0x8, $HEADER_ITEMS_ACCEPT_UNCLAIMED, GetBagInfo(7, "ID"))
 EndFunc   ;==>AcceptAllItems
 
 ;~ Description: Drop gold on the ground.
@@ -246,7 +246,7 @@ EndFunc   ;==>KickNpc
 
 ;~ Description: Clear the position flag from a hero.
 Func CancelHero($aHeroNumber)
-	Local $lAgentID = GetHeroInfo($aHeroNumber, "AgentID")
+	Local $lAgentID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
 	Return SendPacket(0x14, $HEADER_HERO_FLAG_SINGLE, $lAgentID, 0x7F800000, 0x7F800000, 0)
 EndFunc   ;==>CancelHero
 
@@ -257,7 +257,7 @@ EndFunc   ;==>CancelAll
 
 ;~ Description: Place a hero's position flag.
 Func CommandHero($aHeroNumber, $aX, $aY)
-	Return SendPacket(0x14, $HEADER_HERO_FLAG_SINGLE, GetHeroInfo($aHeroNumber, "AgentID"), FloatToInt($aX), FloatToInt($aY), 0)
+	Return SendPacket(0x14, $HEADER_HERO_FLAG_SINGLE, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), FloatToInt($aX), FloatToInt($aY), 0)
 EndFunc   ;==>CommandHero
 
 ;~ Description: Place the full-party position flag.
@@ -267,19 +267,17 @@ EndFunc   ;==>CommandAll
 
 ;~ Description: Lock a hero onto a target.
 Func LockHeroTarget($aHeroNumber, $aAgentID = 0) ;$aAgentID=0 Cancels Lock
-	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
-	Return SendPacket(0xC, $HEADER_HERO_LOCK_TARGET, $lHeroID, $aAgentID)
+	Return SendPacket(0xC, $HEADER_HERO_LOCK_TARGET, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), $aAgentID)
 EndFunc   ;==>LockHeroTarget
 
 ;~ Description: Change a hero's aggression level.
 Func SetHeroAggression($aHeroNumber, $aAggression) ;0=Fight, 1=Guard, 2=Avoid
-	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
-	Return SendPacket(0xC, $HEADER_HERO_BEHAVIOR, $lHeroID, $aAggression)
+	Return SendPacket(0xC, $HEADER_HERO_BEHAVIOR, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), $aAggression)
 EndFunc   ;==>SetHeroAggression
 
 ;~ Description: Internal use for enabling or disabling hero skills
 Func ChangeHeroSkillSlotState($aHeroNumber, $aSkillSlot)
-	Return SendPacket(0xC, $HEADER_HERO_SKILL_TOGGLE, GetHeroInfo($aHeroNumber, "AgentID"), $aSkillSlot - 1)
+	Return SendPacket(0xC, $HEADER_HERO_SKILL_TOGGLE, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), $aSkillSlot - 1)
 EndFunc   ;==>ChangeHeroSkillSlotState
 #EndRegion H&H SendPacket
 
@@ -316,58 +314,8 @@ EndFunc   ;==>CancelAction
 
 ;~ Description: Drop a buff with specific skill ID targeting a specific agent
 Func DropBuff($aSkillID, $aAgentID, $aHeroNumber = 0)
-    Local $lTargetID = ConvertID($aAgentID)
-
-    Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
-
-    Local $lBuffs = GetAgentBuffArray($lHeroID)
-    If $lBuffs[0] = 0 Then Return False
-
-    For $i = 1 To $lBuffs[0]
-        Local $lBuffPtr = $lBuffs[$i]
-
-        Local $lCurrentSkillID = GetBuffInfo($lBuffPtr, "SkillID")
-        Local $lCurrentTargetID = GetBuffInfo($lBuffPtr, "TargetAgentID")
-        Local $lCurrentBuffID = GetBuffInfo($lBuffPtr, "BuffID")
-
-        If $lCurrentSkillID = $aSkillID And $lCurrentTargetID = $lTargetID Then
-            Return SendPacket(0x8, $HEADER_BUFF_DROP, $lCurrentBuffID)
-        EndIf
-    Next
-
-    Return False
+	Return SendPacket(0x8, $HEADER_BUFF_DROP, GetAgentBuffInfo(ConvertID($aAgentID), $aSkillID, "BuffID"))
 EndFunc   ;==>DropBuff
-
-;~ Description: Drop a buff using its buff ID
-Func DropBuffByBuffID($aBuffID)
-    Local $lBuffPtr = GetBuffPtr($aBuffID)
-    If $lBuffPtr = 0 Then Return False
-
-    Local $lBuffID = GetBuffInfo($lBuffPtr, "BuffID")
-
-    Return SendPacket(0x8, $HEADER_BUFF_DROP, $lBuffID)
-EndFunc   ;==>DropBuffByBuffID
-
-;~ Description: Drop all buffs on a specific agent
-Func DropAllAgentBuffs($aAgentID)
-    Local $lAgentID = ConvertID($aAgentID)
-
-    Local $lBuffs = GetAgentBuffArray($lAgentID)
-    Local $lDropped = 0
-
-    For $i = 1 To $lBuffs[0]
-        Local $lBuffPtr = $lBuffs[$i]
-        Local $lBuffID = GetBuffInfo($lBuffPtr, "BuffID")
-
-        If SendPacket(0x8, $HEADER_BUFF_DROP, $lBuffID) Then
-            $lDropped += 1
-        EndIf
-
-        Sleep(16)
-    Next
-
-    Return $lDropped
-EndFunc   ;==>DropAllAgentBuffs
 
 ;~ Description: Leave your party.
 Func LeaveGroup($aKickHeroes = True)
@@ -377,17 +325,17 @@ EndFunc   ;==>LeaveGroup
 
 ;~ Description: Change a skill on the skillbar.
 Func SetSkillbarSkill($aSlot, $aSkillID, $aHeroNumber = 0)
-	Return SendPacket(0x14, $HEADER_SKILLBAR_SKILL_SET, GetHeroInfo($aHeroNumber, "AgentID"), $aSlot - 1, $aSkillID, 0)
+	Return SendPacket(0x14, $HEADER_SKILLBAR_SKILL_SET, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), $aSlot - 1, $aSkillID, 0)
 EndFunc   ;==>SetSkillbarSkill
 
 ;~ Description: Load all skills onto a skillbar simultaneously.
 Func LoadSkillBar($aSkill1 = 0, $aSkill2 = 0, $aSkill3 = 0, $aSkill4 = 0, $aSkill5 = 0, $aSkill6 = 0, $aSkill7 = 0, $aSkill8 = 0, $aHeroNumber = 0)
-	SendPacket(0x2C, $HEADER_SKILLBAR_LOAD, GetHeroInfo($aHeroNumber, "AgentID"), 8, $aSkill1, $aSkill2, $aSkill3, $aSkill4, $aSkill5, $aSkill6, $aSkill7, $aSkill8)
+	SendPacket(0x2C, $HEADER_SKILLBAR_LOAD, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), 8, $aSkill1, $aSkill2, $aSkill3, $aSkill4, $aSkill5, $aSkill6, $aSkill7, $aSkill8)
 EndFunc   ;==>LoadSkillBar
 
 ;~ Description: Change your secondary profession.
 Func ChangeSecondProfession($aProfession, $aHeroNumber = 0)
-	Return SendPacket(0xC, $HEADER_PROFESSION_CHANGE, GetHeroInfo($aHeroNumber, "AgentID"), $aProfession)
+	Return SendPacket(0xC, $HEADER_PROFESSION_CHANGE, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), $aProfession)
 EndFunc   ;==>ChangeSecondProfession
 #EndRegion Movement & Combat SendPacket
 
