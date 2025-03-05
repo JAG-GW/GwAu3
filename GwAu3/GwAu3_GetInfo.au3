@@ -1358,10 +1358,12 @@ Func GetWorldInfo($aInfo = "")
 			Return MemoryRead($lPtr + 0x7FC, "ptr")
 		Case "PlayerArray" ;--> To check
 			Return MemoryRead($lPtr + 0x80C, "ptr")
-		Case "TitleArray" ;--> To try
+
+		Case "TitleArray"
 			Return MemoryRead($lPtr + 0x81C, "ptr")
-		Case "TitleTiersArray" ;--> To check
-			Return MemoryRead($lPtr + 0x82C, "ptr")
+		Case "TitleArraySize"
+			Return MemoryRead($lPtr + 0x81C, "ptr")
+
 		Case "VanquishedAreasArray" ;--> To check
 			Return MemoryRead($lPtr + 0x83C, "ptr")
 		Case "FoesKilled"
@@ -1375,19 +1377,6 @@ EndFunc
 #EndRegion World Context
 
 #Region Title Related
-Func GetTitleArrayPtr()
-    Local $lOffset[4] = [0, 0x18, 0x2C, 0x81C]
-    Local $lTitleInfoArrayPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
-    Return $lTitleInfoArrayPtr[1]
-EndFunc   ;==>GetTitleArrayPtr
-
-Func GetTitleInfoPtr($aIndex = 0)
-    Local $lBasePtr = GetTitleArrayPtr()
-    If $lBasePtr = 0 Then Return 0
-
-    Return $lBasePtr + ($aIndex * 0x28)
-EndFunc   ;==>GetTitleInfoPtr
-
 Global Enum $TitleID_Hero, $TitleID_TyrianCarto, $TitleID_CanthanCarto, $TitleID_Gladiator, $TitleID_Champion, $TitleID_Kurzick, $TitleID_Luxon, $TitleID_Drunkard, _
     $TitleID_Deprecated_SkillHunter, _ ; Pre hard mode update version
     $TitleID_Survivor, $TitleID_KoaBD, _
@@ -1403,7 +1392,11 @@ Global Enum $TitleID_Hero, $TitleID_TyrianCarto, $TitleID_CanthanCarto, $TitleID
     $TitleID_Party, $TitleID_Zaishen, $TitleID_TreasureHunter, $TitleID_Wisdom, $TitleID_Codex, $TitleID_None = 0xff
 
 Func GetTitleInfo($aTitle = 0, $aInfo = "")
-	Local $lPtr = GetTitleInfoPtr($aTitle)
+	Local $lPtr = GetWorldInfo("TitleArray")
+	Local $lSize = GetWorldInfo("TitleArraySize")
+	If $lPtr = 0 Or $aTitle < 0 Or $aTitle >= $lSize Then Return 0
+
+    $lPtr = $lPtr + ($aTitle * 0x28)
     If $lPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
