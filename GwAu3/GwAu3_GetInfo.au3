@@ -343,7 +343,7 @@ Func GetPlayerTradeItemsInfo($aTradeSlot = 0, $aInfo = "")
         Case "Quantity"
             Return MemoryRead($itemPtr + 4, "long")
         Case "ModelID"
-            Return GetItemInfo($itemID, "ModelID")
+            Return GetItemInfoByPtr($itemID, "ModelID")
     EndSwitch
 
     Return 0
@@ -365,7 +365,7 @@ Func GetPartnerTradeItemsInfo($aTradeSlot = 0, $aInfo = "")
         Case "Quantity"
             Return MemoryRead($itemPtr + 4, "long")
         Case "ModelID"
-            Return GetItemInfo($itemID, "ModelID")
+            Return GetItemInfoByPtr($itemID, "ModelID")
     EndSwitch
 
     Return 0
@@ -387,7 +387,7 @@ Func GetArrayPlayerTradeItems()
 
     For $i = 0 To $itemCount - 1
         ; Read ModelID
-        $items[$i + 1][0] = GetItemInfo(MemoryRead($itemsPtr + ($i * 8), "long"), "ModelID")
+        $items[$i + 1][0] = GetItemInfoByPtr(MemoryRead($itemsPtr + ($i * 8), "long"), "ModelID")
         ; Read item quantity
         $items[$i + 1][1] = MemoryRead($itemsPtr + ($i * 8) + 4, "long")
     Next
@@ -411,7 +411,7 @@ Func GetArrayPartnerTradeItems()
 
     For $i = 0 To $itemCount - 1
         ; Read ModelID
-        $items[$i + 1][0] = GetItemInfo(MemoryRead($itemsPtr + ($i * 8), "long"), "ModelID")
+        $items[$i + 1][0] = GetItemInfoByPtr(MemoryRead($itemsPtr + ($i * 8), "long"), "ModelID")
         ; Read item quantity
         $items[$i + 1][1] = MemoryRead($itemsPtr + ($i * 8) + 4, "long")
     Next
@@ -2771,7 +2771,7 @@ Func GetAreaInfo($aMapID, $aInfo = "")
 
         Case "FileID1"
             Local $fileID = MemoryRead($lPtr + 0x68, "long")
-            Return (($fileID - 1) Mod 0xFF00) + 0x100
+            Return Mod(($fileID - 1), 0xFF00) + 0x100
         Case "FileID2"
             Local $fileID = MemoryRead($lPtr + 0x68, "long")
             Return Int(($fileID - 1) / 0xFF00) + 0x100
