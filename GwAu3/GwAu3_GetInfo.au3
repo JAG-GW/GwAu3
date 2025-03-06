@@ -1267,7 +1267,7 @@ Func GetWorldInfo($aInfo = "")
 			Return MemoryRead($lPtr + 0x7C8, "dword")
 		Case "FoesKilled"
 			Return MemoryRead($lPtr + 0x84C, "dword")
-		Case "FoeToKill"
+		Case "FoesToKill"
 			Return MemoryRead($lPtr + 0x850, "dword")
 
 		;Map Agent Array <Useless ??>
