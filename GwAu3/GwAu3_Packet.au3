@@ -365,13 +365,13 @@ Func TravelGH()
 	Local $lOffset[3] = [0, 0x18, 0x3C]
 	Local $lGH = MemoryReadPtr($mBasePointer, $lOffset)
 	SendPacket(0x18, $HEADER_PARTY_ENTER_GUILD_HALL, MemoryRead($lGH[1] + 0x64), MemoryRead($lGH[1] + 0x68), MemoryRead($lGH[1] + 0x6C), MemoryRead($lGH[1] + 0x70), 1)
-	Return WaitMapLoading()
+	;~ Return WaitMapLoading()
 EndFunc   ;==>TravelGH
 
 ;~ Description: Leave your guild hall.
 Func LeaveGH()
 	SendPacket(0x8, $HEADER_PARTY_LEAVE_GUILD_HALL, 1)
-	Return WaitMapLoading()
+	;~ Return WaitMapLoading()
 EndFunc   ;==>LeaveGH
 
 ;~ Description: Switches to/from Hard Mode.

@@ -82,74 +82,74 @@ EndFunc   ;==>BuyItem
 ;~ $myMaterials[2][0] = 922  ; Material ModelID 3
 ;~ $myMaterials[2][1] = 2    ; Quantity Material 3
 ;~ Local $result = CraftItemEx(2507, 1, 250, $myMaterials)
-Func CraftItemEx($aModelID, $aQuantity, $aGold, ByRef $aMatsArray)
-	Local $pSrcItem = GetInventoryItemPtrByModelId($aMatsArray[0][0])
-	If ((Not $pSrcItem) Or (MemoryRead($pSrcItem + 0x4B) < $aMatsArray[0][1])) Then Return 0
-	Local $pDstItem = MemoryRead(GetMerchantItemPtrByModelId($aModelID))
-	If (Not $pDstItem) Then Return 0
-	Local $lMatString = ''
-	Local $lMatCount = 0
-	If IsArray($aMatsArray) = 0 Then Return 0 ; mats are not in an array
-	Local $lMatsArraySize = UBound($aMatsArray) - 1
-	For $i = $lMatsArraySize To 0 Step -1
-		$lCheckQuantity = CountItemInBagsByModelID($aMatsArray[$i][0])
-		If $aMatsArray[$i][1] * $aQuantity > $lCheckQuantity Then ; not enough mats in inventory
-			Return SetExtended($aMatsArray[$i][1] * $aQuantity - $lCheckQuantity, $aMatsArray[$i][0]) ; amount of missing mats in @extended
-		EndIf
-	Next
-	$lCheckGold = GetInventoryInfo("GoldCharacter")
-;~ 	out($lMatsArraySize)
+;~ Func CraftItemEx($aModelID, $aQuantity, $aGold, ByRef $aMatsArray)
+;~ 	Local $pSrcItem = GetInventoryItemPtrByModelId($aMatsArray[0][0])
+;~ 	If ((Not $pSrcItem) Or (MemoryRead($pSrcItem + 0x4B) < $aMatsArray[0][1])) Then Return 0
+;~ 	Local $pDstItem = MemoryRead(GetMerchantItemPtrByModelId($aModelID))
+;~ 	If (Not $pDstItem) Then Return 0
+;~ 	Local $lMatString = ''
+;~ 	Local $lMatCount = 0
+;~ 	If IsArray($aMatsArray) = 0 Then Return 0 ; mats are not in an array
+;~ 	Local $lMatsArraySize = UBound($aMatsArray) - 1
+;~ 	For $i = $lMatsArraySize To 0 Step -1
+;~ 		$lCheckQuantity = CountItemInBagsByModelID($aMatsArray[$i][0])
+;~ 		If $aMatsArray[$i][1] * $aQuantity > $lCheckQuantity Then ; not enough mats in inventory
+;~ 			Return SetExtended($aMatsArray[$i][1] * $aQuantity - $lCheckQuantity, $aMatsArray[$i][0]) ; amount of missing mats in @extended
+;~ 		EndIf
+;~ 	Next
+;~ 	$lCheckGold = GetInventoryInfo("GoldCharacter")
+;~ ;~ 	out($lMatsArraySize)
 
-	For $i = 0 To $lMatsArraySize
-		$lMatString &= GetItemIDfromMobelID($aMatsArray[$i][0]) & ';' ;GetCraftMatsString($aMatsArray[$i][0], $aQuantity * $aMatsArray[$i][1])
-;~ 		out($lMatString)
-		$lMatCount += 1 ;@extended
-;~ 		out($lMatCount)
-	Next
+;~ 	For $i = 0 To $lMatsArraySize
+;~ 		$lMatString &= GetItemIDfromMobelID($aMatsArray[$i][0]) & ';' ;GetCraftMatsString($aMatsArray[$i][0], $aQuantity * $aMatsArray[$i][1])
+;~ ;~ 		out($lMatString)
+;~ 		$lMatCount += 1 ;@extended
+;~ ;~ 		out($lMatCount)
+;~ 	Next
 
-	$CraftMatsType = 'dword'
-	For $i = 1 To $lMatCount - 1
-		$CraftMatsType &= ';dword'
-	Next
-	$CraftMatsBuffer = DllStructCreate($CraftMatsType)
-	$CraftMatsPointer = DllStructGetPtr($CraftMatsBuffer)
-	For $i = 1 To $lMatCount
-		$lSize = StringInStr($lMatString, ';')
-;~ 		out("Mat: " & StringLeft($lMatString, $lSize - 1))
-		DllStructSetData($CraftMatsBuffer, $i, StringLeft($lMatString, $lSize - 1))
-		$lMatString = StringTrimLeft($lMatString, $lSize)
-	Next
-	Local $lMemSize = $lMatCount * 4
-	Local $lBufferMemory = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $lMemSize, 'dword', 0x1000, 'dword', 0x40)
-	If $lBufferMemory = 0 Then Return 0 ; couldnt allocate enough memory
-	Local $lBuffer = DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'int', $lBufferMemory[0], 'ptr', $CraftMatsPointer, 'int', $lMemSize, 'int', '')
-	If $lBuffer = 0 Then Return
-;~ 	Out($lBuffer[0] & " " & $lBuffer[1] & " " & $lBuffer[2] & " " & $lBuffer[3] & " " & $lBuffer[4] & " " & $lBuffer[5])
-	DllStructSetData($mCraftItemEx, 1, GetValue('CommandCraftItemEx'))
-	DllStructSetData($mCraftItemEx, 2, $aQuantity)
-;~ 	Out($aQuantity)
-;~ 	Sleep(3000)
-	DllStructSetData($mCraftItemEx, 3, $pDstItem)
-;~ 	Out($pDstItem)
-;~ 	Sleep(3000)
-	DllStructSetData($mCraftItemEx, 4, $lBufferMemory[0])
-;~ 	Out($lBufferMemory[0])
-;~ 	Sleep(3000)
-	DllStructSetData($mCraftItemEx, 5, $lMatCount)
-;~ 	Out($lMatCount)
-;~ 	Sleep(3000)
-	DllStructSetData($mCraftItemEx, 6, $aQuantity * $aGold)
-;~ 	Out($aQuantity * $aGold)
-;~ 	Sleep(3000)
-	Enqueue($mCraftItemExPtr, 24)
-	$lDeadlock = TimerInit()
-	Do
-		Sleep(250)
-		$lCurrentQuantity = CountItemInBagsByModelID($aMatsArray[0][0])
-	Until $lCurrentQuantity <> $lCheckQuantity Or $lCheckGold <> GetInventoryInfo("GoldCharacter") Or TimerDiff($lDeadlock) > 5000
-	DllCall($mKernelHandle, 'ptr', 'VirtualFreeEx', 'handle', $mGWProcHandle, 'ptr', $lBufferMemory[0], 'int', 0, 'dword', 0x8000)
-	Return SetExtended($lCheckQuantity - $lCurrentQuantity - $aMatsArray[0][1] * $aQuantity, True) ; should be zero if items were successfully crafter
-EndFunc   ;==>CraftItemEx
+;~ 	$CraftMatsType = 'dword'
+;~ 	For $i = 1 To $lMatCount - 1
+;~ 		$CraftMatsType &= ';dword'
+;~ 	Next
+;~ 	$CraftMatsBuffer = DllStructCreate($CraftMatsType)
+;~ 	$CraftMatsPointer = DllStructGetPtr($CraftMatsBuffer)
+;~ 	For $i = 1 To $lMatCount
+;~ 		$lSize = StringInStr($lMatString, ';')
+;~ ;~ 		out("Mat: " & StringLeft($lMatString, $lSize - 1))
+;~ 		DllStructSetData($CraftMatsBuffer, $i, StringLeft($lMatString, $lSize - 1))
+;~ 		$lMatString = StringTrimLeft($lMatString, $lSize)
+;~ 	Next
+;~ 	Local $lMemSize = $lMatCount * 4
+;~ 	Local $lBufferMemory = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $lMemSize, 'dword', 0x1000, 'dword', 0x40)
+;~ 	If $lBufferMemory = 0 Then Return 0 ; couldnt allocate enough memory
+;~ 	Local $lBuffer = DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'int', $lBufferMemory[0], 'ptr', $CraftMatsPointer, 'int', $lMemSize, 'int', '')
+;~ 	If $lBuffer = 0 Then Return
+;~ ;~ 	Out($lBuffer[0] & " " & $lBuffer[1] & " " & $lBuffer[2] & " " & $lBuffer[3] & " " & $lBuffer[4] & " " & $lBuffer[5])
+;~ 	DllStructSetData($mCraftItemEx, 1, GetValue('CommandCraftItemEx'))
+;~ 	DllStructSetData($mCraftItemEx, 2, $aQuantity)
+;~ ;~ 	Out($aQuantity)
+;~ ;~ 	Sleep(3000)
+;~ 	DllStructSetData($mCraftItemEx, 3, $pDstItem)
+;~ ;~ 	Out($pDstItem)
+;~ ;~ 	Sleep(3000)
+;~ 	DllStructSetData($mCraftItemEx, 4, $lBufferMemory[0])
+;~ ;~ 	Out($lBufferMemory[0])
+;~ ;~ 	Sleep(3000)
+;~ 	DllStructSetData($mCraftItemEx, 5, $lMatCount)
+;~ ;~ 	Out($lMatCount)
+;~ ;~ 	Sleep(3000)
+;~ 	DllStructSetData($mCraftItemEx, 6, $aQuantity * $aGold)
+;~ ;~ 	Out($aQuantity * $aGold)
+;~ ;~ 	Sleep(3000)
+;~ 	Enqueue($mCraftItemExPtr, 24)
+;~ 	$lDeadlock = TimerInit()
+;~ 	Do
+;~ 		Sleep(250)
+;~ 		$lCurrentQuantity = CountItemInBagsByModelID($aMatsArray[0][0])
+;~ 	Until $lCurrentQuantity <> $lCheckQuantity Or $lCheckGold <> GetInventoryInfo("GoldCharacter") Or TimerDiff($lDeadlock) > 5000
+;~ 	DllCall($mKernelHandle, 'ptr', 'VirtualFreeEx', 'handle', $mGWProcHandle, 'ptr', $lBufferMemory[0], 'int', 0, 'dword', 0x8000)
+;~ 	Return SetExtended($lCheckQuantity - $lCurrentQuantity - $aMatsArray[0][1] * $aQuantity, True) ; should be zero if items were successfully crafter
+;~ EndFunc   ;==>CraftItemEx
 
 ;~ Local $materialCount = 3
 ;~ Local $modelID = 2507
@@ -157,17 +157,17 @@ EndFunc   ;==>CraftItemEx
 ;~ Local $quantity = 1
 ;~ Local $gold = 250
 ;~ Local $itemNumber = 1
-Func CraftItemEx2($aMatCount, $aModelID, $aTradeWindowID, $aQuantity, $aGold, $aItemNumber)
-	Local $aDstItem = MemoryRead(GetMerchantItemPtrByModelId($aModelID))
-	If (Not $aDstItem) Then Return 0x0
-	DllStructSetData($mCraftItemEx, 0x1, GetValue("CommandCraftItemEx"))
-	DllStructSetData($mCraftItemEx, 0x2, $aMatCount)
-	DllStructSetData($mCraftItemEx, 0x3, $aDstItem)
-	DllStructSetData($mCraftItemEx, 0x4, $aTradeWindowID)
-	DllStructSetData($mCraftItemEx, 0x5, $aQuantity * $aGold)
-	DllStructSetData($mCraftItemEx, 0x6, $aItemNumber)
-	Enqueue($mCraftItemExPtr, 0x18)
-EndFunc   ;==>CraftItemEx
+;~ Func CraftItemEx2($aMatCount, $aModelID, $aTradeWindowID, $aQuantity, $aGold, $aItemNumber)
+;~ 	Local $aDstItem = MemoryRead(GetMerchantItemPtrByModelId($aModelID))
+;~ 	If (Not $aDstItem) Then Return 0x0
+;~ 	DllStructSetData($mCraftItemEx, 0x1, GetValue("CommandCraftItemEx"))
+;~ 	DllStructSetData($mCraftItemEx, 0x2, $aMatCount)
+;~ 	DllStructSetData($mCraftItemEx, 0x3, $aDstItem)
+;~ 	DllStructSetData($mCraftItemEx, 0x4, $aTradeWindowID)
+;~ 	DllStructSetData($mCraftItemEx, 0x5, $aQuantity * $aGold)
+;~ 	DllStructSetData($mCraftItemEx, 0x6, $aItemNumber)
+;~ 	Enqueue($mCraftItemExPtr, 0x18)
+;~ EndFunc   ;==>CraftItemEx
 
 ;~ Description: Request a quote to buy an item from a trader. Returns true if successful.
 Func TraderRequest($aModelID, $aExtraID = -1)
