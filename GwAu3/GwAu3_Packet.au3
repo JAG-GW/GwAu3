@@ -182,12 +182,11 @@ EndFunc   ;==>PickUpItem
 
 ;~ Description: Drops an item.
 Func DropItem($aItem, $aAmount = 0)
-    Local $lItemID = ItemID($aItem)
-    If $aAmount = 0 Then
-        $aAmount = GetItemInfoByItemID($lItemID, "Quantity")
-    EndIf
+	Local $lItemID = ItemID($aItem)
+	Local $lQuantity = GetItemInfoByItemID($aItem, "Quantity")
+    If $aAmount = 0 Or $aAmount > $lQuantity Then $aAmount = $lQuantity
     Return SendPacket(0xC, $HEADER_DROP_ITEM, $lItemID, $aAmount)
-EndFunc
+EndFunc ;==>DropItem
 
 ;~ Description: Moves an item.
 Func MoveItem($aItem, $aBagNumber, $aSlot)
@@ -201,15 +200,9 @@ EndFunc   ;==>AcceptAllItems
 
 ;~ Description: Drop gold on the ground.
 Func DropGold($aAmount = 0)
-	Local $lAmount
-
-	If $aAmount > 0 Then
-		$lAmount = $aAmount
-	Else
-		$lAmount = GetInventoryInfo("GoldCharacter")
-	EndIf
-
-	Return SendPacket(0x8, $HEADER_DROP_GOLD, $lAmount)
+	Local $lAmount = GetInventoryInfo("GoldCharacter")
+	If $aAmount = 0 Or $aAmount > $lAmount Then $aAmount = $lAmount
+	Return SendPacket(0x8, $HEADER_DROP_GOLD, $aAmount)
 EndFunc   ;==>DropGold
 
 ;~ Description: Internal use for moving gold.

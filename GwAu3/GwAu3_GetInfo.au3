@@ -37,11 +37,7 @@ EndFunc   ;==>GetLoggedIn
 
 ;~ Returns how long the current instance has been active, in milliseconds.
 Func GetInstanceUpTime()
-	Local $lOffset[4]
-	$lOffset[0] = 0
-	$lOffset[1] = 0x18
-	$lOffset[2] = 0x8
-	$lOffset[3] = 0x1AC
+	Local $lOffset[4] = [0, 0x18, 0x8, 0x1AC]
 	Local $lTimer = MemoryReadPtr($mBasePointer, $lOffset)
 	Return $lTimer[1]
 EndFunc   ;==>GetInstanceUpTime
@@ -698,6 +694,7 @@ Global Enum $INVENTORY_unused_bag, $INVENTORY_backpack, $INVENTORY_belt_pouch, $
 			$INVENTORY_storage8, $INVENTORY_storage9, $INVENTORY_storage10, $INVENTORY_storage11, $INVENTORY_storage12, $INVENTORY_storage13, $INVENTORY_storage14, $INVENTORY_equipped_items
 
 Func GetBagPtr($aBagNumber)
+    If IsPtr($aBagNumber) Then Return $aBagNumber
 	Local $lOffset[5] = [0, 0x18, 0x40, 0xF8, 0x4 * $aBagNumber]
 	Local $lItemStructAddress = MemoryReadPtr($mBasePointer, $lOffset, 'ptr')
 	Return $lItemStructAddress[1]
@@ -1267,7 +1264,7 @@ Func GetWorldInfo($aInfo = "")
 			Return MemoryRead($lPtr + 0x7C8, "dword")
 		Case "FoesKilled"
 			Return MemoryRead($lPtr + 0x84C, "dword")
-		Case "FoeToKill"
+		Case "FoesToKill"
 			Return MemoryRead($lPtr + 0x850, "dword")
 
 		;Map Agent Array <Useless ??>

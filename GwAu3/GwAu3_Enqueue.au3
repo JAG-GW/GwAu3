@@ -276,7 +276,6 @@ EndFunc   ;==>UseHeroSkill
 #Region Movement Enqueue
 ;~ Description: Move to a location.
 Func Move($aX, $aY, $aRandom = 50)
-	;returns true if successful
 	DllStructSetData($mMove, 2, $aX + Random(-$aRandom, $aRandom))
 	DllStructSetData($mMove, 3, $aY + Random(-$aRandom, $aRandom))
 	Enqueue($mMovePtr, 16)
@@ -291,7 +290,7 @@ Func ChangeTarget($aAgent)
 EndFunc   ;==>ChangeTarget
 
 ;~ Description: Use a skill.
-Func UseSkill($aSkillSlot, $aTarget, $aCallTarget = False)
+Func UseSkill($aSkillSlot, $aTarget = -2, $aCallTarget = False)
 	DllStructSetData($mUseSkill, 2, $aSkillSlot)
 	DllStructSetData($mUseSkill, 3, ConvertID($aTarget))
 	DllStructSetData($mUseSkill, 4, $aCallTarget)
