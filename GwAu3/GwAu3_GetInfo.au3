@@ -2802,6 +2802,7 @@ EndFunc   ;==>GetAreaInfo
 
 #Region Skill Related
 Func GetSkillPtr($aSkillID)
+    If IsPtr($aSkillID) Then Return $aSkillID
 	Local $Skillptr = $mSkillBase + 0xA0 * $aSkillID
 	Return Ptr($Skillptr)
 EndFunc   ;==>GetSkillPtr
