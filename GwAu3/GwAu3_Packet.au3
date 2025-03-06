@@ -200,15 +200,9 @@ EndFunc   ;==>AcceptAllItems
 
 ;~ Description: Drop gold on the ground.
 Func DropGold($aAmount = 0)
-	Local $lAmount
-
-	If $aAmount > 0 Then
-		$lAmount = $aAmount
-	Else
-		$lAmount = GetInventoryInfo("GoldCharacter")
-	EndIf
-
-	Return SendPacket(0x8, $HEADER_DROP_GOLD, $lAmount)
+	Local $lAmount = GetInventoryInfo("GoldCharacter")
+	If $aAmount = 0 Or $aAmount > $lAmount Then $aAmount = $lAmount
+	Return SendPacket(0x8, $HEADER_DROP_GOLD, $aAmount)
 EndFunc   ;==>DropGold
 
 ;~ Description: Internal use for moving gold.
