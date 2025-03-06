@@ -17,175 +17,175 @@ Func PingSleep($msExtra = 0)
 EndFunc   ;==>PingSleep
 
 #Region Loading build
-;~ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
-;~ 	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
-;~ 	Local $lSplitTemplate = StringSplit($aTemplate, '')
+Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
+	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
+	Local $lSplitTemplate = StringSplit($aTemplate, '')
 
-;~ 	Local $lTemplateType ; 4 Bits
-;~ 	Local $lVersionNumber ; 4 Bits
-;~ 	Local $lProfBits ; 2 Bits -> P
-;~ 	Local $lProfPrimary ; P Bits
-;~ 	Local $lProfSecondary ; P Bits
-;~ 	Local $lAttributesCount ; 4 Bits
-	;~ Local $lAttributesBits ; 4 Bits -> A
-	;~ Local $lAttributes[1][2] ; A Bits + 4 Bits (for each Attribute)
-	;~ Local $lSkillsBits ; 4 Bits -> S
-	;~ Local $lSkills[8] ; S Bits * 8
-	;~ Local $lOpTail ; 1 Bit
+	Local $lTemplateType ; 4 Bits
+	Local $lVersionNumber ; 4 Bits
+	Local $lProfBits ; 2 Bits -> P
+	Local $lProfPrimary ; P Bits
+	Local $lProfSecondary ; P Bits
+	Local $lAttributesCount ; 4 Bits
+	Local $lAttributesBits ; 4 Bits -> A
+	Local $lAttributes[1][2] ; A Bits + 4 Bits (for each Attribute)
+	Local $lSkillsBits ; 4 Bits -> S
+	Local $lSkills[8] ; S Bits * 8
+	Local $lOpTail ; 1 Bit
 
-	;~ $aTemplate = ''
-	;~ For $i = 1 To $lSplitTemplate[0]
-	;~ 	$aTemplate &= Base64ToBin64($lSplitTemplate[$i])
-	;~ Next
+	$aTemplate = ''
+	For $i = 1 To $lSplitTemplate[0]
+		$aTemplate &= Base64ToBin64($lSplitTemplate[$i])
+	Next
 
-	;~ $lTemplateType = Bin64ToDec(StringLeft($aTemplate, 4))
-	;~ $aTemplate = StringTrimLeft($aTemplate, 4)
-	;~ If $lTemplateType <> 14 Then Return False
+	$lTemplateType = Bin64ToDec(StringLeft($aTemplate, 4))
+	$aTemplate = StringTrimLeft($aTemplate, 4)
+	If $lTemplateType <> 14 Then Return False
 
-	;~ $lVersionNumber = Bin64ToDec(StringLeft($aTemplate, 4))
-	;~ $aTemplate = StringTrimLeft($aTemplate, 4)
+	$lVersionNumber = Bin64ToDec(StringLeft($aTemplate, 4))
+	$aTemplate = StringTrimLeft($aTemplate, 4)
 
-	;~ $lProfBits = Bin64ToDec(StringLeft($aTemplate, 2)) * 2 + 4
-	;~ $aTemplate = StringTrimLeft($aTemplate, 2)
+	$lProfBits = Bin64ToDec(StringLeft($aTemplate, 2)) * 2 + 4
+	$aTemplate = StringTrimLeft($aTemplate, 2)
 
-	;~ $lProfPrimary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
-	;~ $aTemplate = StringTrimLeft($aTemplate, $lProfBits)
-	;~ If $lProfPrimary <> GetHeroInfo($aHeroNumber, "Primary") Then Return False
+	$lProfPrimary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
+	$aTemplate = StringTrimLeft($aTemplate, $lProfBits)
+	If $lProfPrimary <> GetHeroInfo($aHeroNumber, "Primary") Then Return False
 
-	;~ $lProfSecondary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
-	;~ $aTemplate = StringTrimLeft($aTemplate, $lProfBits)
+	$lProfSecondary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
+	$aTemplate = StringTrimLeft($aTemplate, $lProfBits)
 
-	;~ $lAttributesCount = Bin64ToDec(StringLeft($aTemplate, 4))
-	;~ $aTemplate = StringTrimLeft($aTemplate, 4)
+	$lAttributesCount = Bin64ToDec(StringLeft($aTemplate, 4))
+	$aTemplate = StringTrimLeft($aTemplate, 4)
 
-	;~ $lAttributesBits = Bin64ToDec(StringLeft($aTemplate, 4)) + 4
-	;~ $aTemplate = StringTrimLeft($aTemplate, 4)
+	$lAttributesBits = Bin64ToDec(StringLeft($aTemplate, 4)) + 4
+	$aTemplate = StringTrimLeft($aTemplate, 4)
 
-	;~ $lAttributes[0][0] = $lAttributesCount
-	;~ For $i = 1 To $lAttributesCount
-	;~ 	If Bin64ToDec(StringLeft($aTemplate, $lAttributesBits)) == GetProfPrimaryAttribute($lProfPrimary) Then
-	;~ 		$aTemplate = StringTrimLeft($aTemplate, $lAttributesBits)
-;~ 			$lAttributes[0][1] = Bin64ToDec(StringLeft($aTemplate, 4))
-;~ 			$aTemplate = StringTrimLeft($aTemplate, 4)
-;~ 			ContinueLoop
-;~ 		EndIf
-;~ 		$lAttributes[0][0] += 1
-;~ 		ReDim $lAttributes[$lAttributes[0][0] + 1][2]
-;~ 		$lAttributes[$i][0] = Bin64ToDec(StringLeft($aTemplate, $lAttributesBits))
-;~ 		$aTemplate = StringTrimLeft($aTemplate, $lAttributesBits)
-;~ 		$lAttributes[$i][1] = Bin64ToDec(StringLeft($aTemplate, 4))
-;~ 		$aTemplate = StringTrimLeft($aTemplate, 4)
-;~ 	Next
+	$lAttributes[0][0] = $lAttributesCount
+	For $i = 1 To $lAttributesCount
+		If Bin64ToDec(StringLeft($aTemplate, $lAttributesBits)) == GetProfPrimaryAttribute($lProfPrimary) Then
+			$aTemplate = StringTrimLeft($aTemplate, $lAttributesBits)
+			$lAttributes[0][1] = Bin64ToDec(StringLeft($aTemplate, 4))
+			$aTemplate = StringTrimLeft($aTemplate, 4)
+			ContinueLoop
+		EndIf
+		$lAttributes[0][0] += 1
+		ReDim $lAttributes[$lAttributes[0][0] + 1][2]
+		$lAttributes[$i][0] = Bin64ToDec(StringLeft($aTemplate, $lAttributesBits))
+		$aTemplate = StringTrimLeft($aTemplate, $lAttributesBits)
+		$lAttributes[$i][1] = Bin64ToDec(StringLeft($aTemplate, 4))
+		$aTemplate = StringTrimLeft($aTemplate, 4)
+	Next
 
-;~ 	$lSkillsBits = Bin64ToDec(StringLeft($aTemplate, 4)) + 8
-;~ 	$aTemplate = StringTrimLeft($aTemplate, 4)
+	$lSkillsBits = Bin64ToDec(StringLeft($aTemplate, 4)) + 8
+	$aTemplate = StringTrimLeft($aTemplate, 4)
 
-;~ 	For $i = 0 To 7
-;~ 		$lSkills[$i] = Bin64ToDec(StringLeft($aTemplate, $lSkillsBits))
-;~ 		$aTemplate = StringTrimLeft($aTemplate, $lSkillsBits)
-;~ 	Next
+	For $i = 0 To 7
+		$lSkills[$i] = Bin64ToDec(StringLeft($aTemplate, $lSkillsBits))
+		$aTemplate = StringTrimLeft($aTemplate, $lSkillsBits)
+	Next
 
-;~ 	$lOpTail = Bin64ToDec($aTemplate)
+	$lOpTail = Bin64ToDec($aTemplate)
 
-;~ 	$lAttributes[0][0] = $lProfSecondary
-;~ 	LoadAttributes($lAttributes, $aHeroNumber)
-;~ 	LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber)
-;~ EndFunc   ;==>LoadSkillTemplate
+	$lAttributes[0][0] = $lProfSecondary
+	LoadAttributes($lAttributes, $aHeroNumber)
+	LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber)
+EndFunc   ;==>LoadSkillTemplate
 
-;~ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
-;~ 	Local $lPrimaryAttribute
-;~ 	Local $lDeadlock = 0
-;~ 	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
-;~ 	Local $lLevel
-;~ 	Local $TestTimer = 0
+Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
+	Local $lPrimaryAttribute
+	Local $lDeadlock = 0
+	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
+	Local $lLevel
+	Local $TestTimer = 0
 
-;~ 	$lPrimaryAttribute = GetProfPrimaryAttribute(GetHeroInfo($aHeroNumber, "Primary"))
+	$lPrimaryAttribute = GetProfPrimaryAttribute(GetHeroInfo($aHeroNumber, "Primary"))
 
-;~ 	If $aAttributesArray[0][0] <> 0 And GetHeroInfo($aHeroNumber, "Secondary") <> $aAttributesArray[0][0] And GetHeroInfo($aHeroNumber, "Primary") <> $aAttributesArray[0][0] Then
-;~ 		Do
-;~ 			$lDeadlock = TimerInit()
-;~ 			ChangeSecondProfession($aAttributesArray[0][0], $aHeroNumber)
-;~ 			Do
-;~ 				Sleep(16)
-;~ 			Until GetHeroInfo($aHeroNumber, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 5000
-;~ 		Until GetHeroInfo($aHeroNumber, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 10000
-;~ 	EndIf
+	If $aAttributesArray[0][0] <> 0 And GetHeroInfo($aHeroNumber, "Secondary") <> $aAttributesArray[0][0] And GetHeroInfo($aHeroNumber, "Primary") <> $aAttributesArray[0][0] Then
+		Do
+			$lDeadlock = TimerInit()
+			ChangeSecondProfession($aAttributesArray[0][0], $aHeroNumber)
+			Do
+				Sleep(16)
+			Until GetHeroInfo($aHeroNumber, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 5000
+		Until GetHeroInfo($aHeroNumber, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 10000
+	EndIf
 
-;~ 	$aAttributesArray[0][0] = $lPrimaryAttribute
-;~ 	For $i = 0 To UBound($aAttributesArray) - 1
-;~ 		If $aAttributesArray[$i][1] > 12 Then $aAttributesArray[$i][1] = 12
-;~ 		If $aAttributesArray[$i][1] < 0 Then $aAttributesArray[$i][1] = 0
-;~ 	Next
+	$aAttributesArray[0][0] = $lPrimaryAttribute
+	For $i = 0 To UBound($aAttributesArray) - 1
+		If $aAttributesArray[$i][1] > 12 Then $aAttributesArray[$i][1] = 12
+		If $aAttributesArray[$i][1] < 0 Then $aAttributesArray[$i][1] = 0
+	Next
 
-;~ 	While GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $aAttributesArray[0][1]
-;~ 		$lLevel = GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
-;~ 		$lDeadlock = TimerInit()
-;~ 		DecreaseAttribute($lPrimaryAttribute, $aHeroNumber)
-;~ 		Do
-;~ 			Sleep(16)
-;~ 		Until GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
-;~ 		Sleep(16)
-;~ 	WEnd
-;~ 	For $i = 1 To UBound($aAttributesArray) - 1
+	While GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $aAttributesArray[0][1]
+		$lLevel = GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
+		$lDeadlock = TimerInit()
+		DecreaseAttribute($lPrimaryAttribute, $aHeroNumber)
+		Do
+			Sleep(16)
+		Until GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
+		Sleep(16)
+	WEnd
+	For $i = 1 To UBound($aAttributesArray) - 1
 
-;~ 		While GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $aAttributesArray[$i][1]
-;~ 			$lLevel = GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
-;~ 			$lDeadlock = TimerInit()
-;~ 			DecreaseAttribute($aAttributesArray[$i][0], $aHeroNumber)
-;~ 			Do
-;~ 				Sleep(16)
-;~ 			Until GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
-;~ 			Sleep(16)
-;~ 		WEnd
-;~ 	Next
-;~ 	For $i = 0 To 44
+		While GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $aAttributesArray[$i][1]
+			$lLevel = GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
+			$lDeadlock = TimerInit()
+			DecreaseAttribute($aAttributesArray[$i][0], $aHeroNumber)
+			Do
+				Sleep(16)
+			Until GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
+			Sleep(16)
+		WEnd
+	Next
+	For $i = 0 To 44
 
-;~ 		If GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
-;~ 			If $i = $lPrimaryAttribute Then ContinueLoop
-;~ 			For $J = 1 To UBound($aAttributesArray) - 1
-;~ 				If $i = $aAttributesArray[$J][0] Then ContinueLoop 2
-;~ 			Next
-;~ 			While GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0
-;~ 				$lLevel = GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel")
-;~ 				$lDeadlock = TimerInit()
-;~ 				DecreaseAttribute($i, $aHeroNumber)
-;~ 				Do
-;~ 					Sleep(16)
-;~ 				Until GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
-;~ 				Sleep(16)
-;~ 			WEnd
-;~ 		EndIf
-;~ 	Next
+		If GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
+			If $i = $lPrimaryAttribute Then ContinueLoop
+			For $J = 1 To UBound($aAttributesArray) - 1
+				If $i = $aAttributesArray[$J][0] Then ContinueLoop 2
+			Next
+			While GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0
+				$lLevel = GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel")
+				$lDeadlock = TimerInit()
+				DecreaseAttribute($i, $aHeroNumber)
+				Do
+					Sleep(16)
+				Until GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
+				Sleep(16)
+			WEnd
+		EndIf
+	Next
 
-;~ 	$TestTimer = 0
+	$TestTimer = 0
 
-;~ 	While GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
-;~ 		$lLevel = GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
-;~ 		$lDeadlock = TimerInit()
-;~ 		IncreaseAttribute($lPrimaryAttribute, $aHeroNumber)
-;~ 		Do
-;~ 			Sleep(16)
-;~ 			$TestTimer = $TestTimer + 1
-;~ 		Until GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
-;~ 		Sleep(16)
-;~ 		If $TestTimer > 225 Then ExitLoop
-;~ 	WEnd
-;~ 	For $i = 1 To UBound($aAttributesArray) - 1
-;~ 		$TestTimer = 0
+	While GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
+		$lLevel = GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
+		$lDeadlock = TimerInit()
+		IncreaseAttribute($lPrimaryAttribute, $aHeroNumber)
+		Do
+			Sleep(16)
+			$TestTimer = $TestTimer + 1
+		Until GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
+		Sleep(16)
+		If $TestTimer > 225 Then ExitLoop
+	WEnd
+	For $i = 1 To UBound($aAttributesArray) - 1
+		$TestTimer = 0
 
-;~ 		While GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $aAttributesArray[$i][1]
-;~ 			$lLevel = GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
-;~ 			$lDeadlock = TimerInit()
-;~ 			IncreaseAttribute($aAttributesArray[$i][0], $aHeroNumber)
-;~ 			Do
-;~ 				Sleep(16)
-;~ 				$TestTimer = $TestTimer + 1
-;~ 			Until GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
-;~ 			Sleep(16)
-;~ 			If $TestTimer > 225 Then ExitLoop
-;~ 		WEnd
-;~ 	Next
-;~ EndFunc   ;==>LoadAttributes
+		While GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $aAttributesArray[$i][1]
+			$lLevel = GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
+			$lDeadlock = TimerInit()
+			IncreaseAttribute($aAttributesArray[$i][0], $aHeroNumber)
+			Do
+				Sleep(16)
+				$TestTimer = $TestTimer + 1
+			Until GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
+			Sleep(16)
+			If $TestTimer > 225 Then ExitLoop
+		WEnd
+	Next
+EndFunc   ;==>LoadAttributes
 
 Func GetProfPrimaryAttribute($aProfession)
 	Switch $aProfession
