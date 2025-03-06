@@ -860,9 +860,6 @@ Func GetItemInfoByPtr($lItemPtr, $aInfo)
 
         Case "ModStruct"
             Return MemoryRead($lItemPtr + 0x10, "ptr")
-		Case ""
-			Local $lPtr = MemoryRead($lItemPtr + 0x10, "ptr")
-			Return MemoryRead($lPtr, "ptr")
         Case "ModStructSize"
             Return MemoryRead($lItemPtr + 0x14, "dword")
 
@@ -888,27 +885,17 @@ Func GetItemInfoByPtr($lItemPtr, $aInfo)
         Case "h0026"
             Return MemoryRead($lItemPtr + 0x26, "Short")
 
-
         Case "Interaction"
             Return MemoryRead($lItemPtr + 0x28, "dword")
-		Case "IsIdentified"
-			Local $lIdent = MemoryRead($lItemPtr + 0x28, "dword")
-            Return BitAND($lIdent, 0x1) > 0
-		Case "IsCommonMaterial"
-			Local $lIdent = MemoryRead($lItemPtr + 0x28, "dword")
-            Return BitAND($lIdent, 0x20) <> 0
-
-
-
-
-        Case "IsStackable"
-            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x80000) <> 0
-        Case "IsInscribable"
-            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x08000000) <> 0
-        Case "IsCommonMaterial"
-            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x20) <> 0
         Case "IsIdentified"
-            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 1) > 0
+            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x1) > 0
+        Case "IsCommonMaterial"
+            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x20) > 0
+        Case "IsStackable"
+            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x80000) > 0
+        Case "IsInscribable"
+            Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x08000000) > 0
+        
         Case "ModelID"
             Return MemoryRead($lItemPtr + 0x2C, "dword")
         Case "InfoString"
