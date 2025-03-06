@@ -335,16 +335,6 @@ Func SendChat($aMessage, $aChannel = '!')
 
 	If StringLen($aMessage) > 120 Then SendChat(StringTrimLeft($aMessage, 120), $aChannel)
 EndFunc   ;==>SendChat
-
-;~ Description: Invite a player to the party.
-Func InvitePlayer($aPlayerName)
-	SendChat('invite ' & $aPlayerName, '/')
-EndFunc   ;==>InvitePlayer
-
-;~ Description: Resign.
-Func Resign()
-	SendChat('resign', '/')
-EndFunc   ;==>Resign
 #EndRegion Chat
 
 #Region Item
@@ -446,55 +436,6 @@ Func GetMapID()
 EndFunc   ;==>GetMapID
 #EndRegion Travel
 
-#Region Queries
-#Region Item
-;~ Description: Returns a weapon or shield's minimum required attribute.
-Func GetItemReq($aItem)
-	Local $lMod = GetModByIdentifier($aItem, "9827")
-	Return $lMod[0]
-EndFunc   ;==>GetItemReq
-
-;~ Description: Returns a weapon or shield's required attribute.
-Func GetItemAttribute($aItem)
-	Local $lMod = GetModByIdentifier($aItem, "9827")
-	Return $lMod[1]
-EndFunc   ;==>GetItemAttribute
-
-;~ Description: Returns an array of a the requested mod.
-Func GetModByIdentifier($aItem, $aIdentifier)
-	$aItem = ItemID($aItem)
-	Local $lReturn[2]
-	Local $lString = StringTrimLeft(GetModStruct($aItem), 2)
-	For $i = 0 To StringLen($lString) / 8 - 2
-		If StringMid($lString, 8 * $i + 5, 4) == $aIdentifier Then
-			$lReturn[0] = Int("0x" & StringMid($lString, 8 * $i + 1, 2))
-			$lReturn[1] = Int("0x" & StringMid($lString, 8 * $i + 3, 2))
-			ExitLoop
-		EndIf
-	Next
-	Return $lReturn
-EndFunc   ;==>GetModByIdentifier
-
-;~ Description: Returns modstruct of an item.
-Func GetModStruct($aItem)
-	Local $lItemPtr = 0
-
-    If IsPtr($aItem) Then
-        $lItemPtr = $aItem
-    Else
-        $lItemPtr = GetItemPtr($aItem)
-    EndIf
-	If $lItemPtr = 0 Then Return 0
-
-	Local $lModStructPtr = GetItemInfoByPtr($lItemPtr, "ModStruct")
-    If $lModStructPtr = 0 Then Return 0
-
-	Local $lModStructSize = GetItemInfoByPtr($lItemPtr, "ModStructSize")
-    If $lModStructSize = 0 Then Return 0
-
-	Return MemoryRead($lModStructPtr, 'Byte[' & $lModStructSize * 4 & ']')
-EndFunc   ;==>GetModStruct
-
 Func CheckArea($aX, $aY, $range = 1320)
 	$ret = False
 	$pX = GetAgentInfo(-2, "X")
@@ -505,52 +446,6 @@ Func CheckArea($aX, $aY, $range = 1320)
 	EndIf
 	Return $ret
 EndFunc   ;==>CheckAreaRange
-
-Func Disconnected()
-	Local $lCheck = False
-	Local $lDeadlock = TimerInit()
-	Do
-		Sleep(20)
-		$lCheck = GetInstanceInfo("Type") <> 2 And GetAgentExists(-2)
-	Until $lCheck Or TimerDiff($lDeadlock) > 5000
-	If $lCheck = False Then
-;~ 		Out("Disconnected!")
-;~ 		Out("Attempting to reconnect.")
-		ControlSend($mGWWindowHandle, "", "", "{Enter}")
-		$lDeadlock = TimerInit()
-		Do
-			Sleep(20)
-			$lCheck = GetInstanceInfo("Type") <> 2 And GetAgentExists(-2)
-		Until $lCheck Or TimerDiff($lDeadlock) > 60000
-		If $lCheck = False Then
-;~ 			Out("Failed to Reconnect 1!")
-;~ 			Out("Retrying.")
-			ControlSend($mGWWindowHandle, "", "", "{Enter}")
-			$lDeadlock = TimerInit()
-			Do
-				Sleep(20)
-				$lCheck = GetInstanceInfo("Type") <> 2 And GetAgentExists(-2)
-			Until $lCheck Or TimerDiff($lDeadlock) > 60000
-			If $lCheck = False Then
-;~ 				Out("Failed to Reconnect 2!")
-;~ 				Out("Retrying.")
-				ControlSend($mGWWindowHandle, "", "", "{Enter}")
-				$lDeadlock = TimerInit()
-				Do
-					Sleep(20)
-					$lCheck = GetInstanceInfo("Type") <> 2 And GetAgentExists(-2)
-				Until $lCheck Or TimerDiff($lDeadlock) > 60000
-				If $lCheck = False Then
-;~ 					Out("Could not reconnect!")
-;~ 					Out("Exiting.")
-					EnableRendering()
-					Exit 1
-				EndIf
-			EndIf
-		EndIf
-	EndIf
-	Sleep(5000)
-EndFunc   ;==>Disconnected
 
 Func GetBestTarget($aRange = 1320)
 	Local $lBestTarget, $lDistance, $lLowestSum = 100000000

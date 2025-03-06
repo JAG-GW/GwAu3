@@ -290,7 +290,7 @@ Func ChangeTarget($aAgent)
 EndFunc   ;==>ChangeTarget
 
 ;~ Description: Use a skill.
-Func UseSkill($aSkillSlot, $aTarget, $aCallTarget = False)
+Func UseSkill($aSkillSlot, $aTarget = -2, $aCallTarget = False)
 	DllStructSetData($mUseSkill, 2, $aSkillSlot)
 	DllStructSetData($mUseSkill, 3, ConvertID($aTarget))
 	DllStructSetData($mUseSkill, 4, $aCallTarget)
