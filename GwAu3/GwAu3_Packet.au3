@@ -356,9 +356,9 @@ Func EnterChallenge()
 EndFunc   ;==>EnterChallenge
 
 ;~ Description: Enter a foreign challenge mission/pvp.
-Func EnterChallengeForeign()
-	Return SendPacket(0x8, $HEADER_PARTY_ENTER_FOREIGN_CHALLENGE, 0)
-EndFunc   ;==>EnterChallengeForeign
+;~ Func EnterChallengeForeign()
+;~ 	Return SendPacket(0x8, $HEADER_PARTY_ENTER_FOREIGN_CHALLENGE, 0)
+;~ EndFunc   ;==>EnterChallengeForeign
 
 ;~ Description: Travel to your guild hall.
 Func TravelGH()
@@ -402,7 +402,7 @@ Func SetDisplayedTitle($aTitle = 0)
 	If $aTitle <> 0 Then
 		Return SendPacket(0x8, $HEADER_TITLE_DISPLAY, $aTitle)
 	Else
-		Return SendPacket(0x4, $HEADER_TITLE_CLEAR)
+		Return SendPacket(0x4, $HEADER_TITLE_HIDE)
 	EndIf
 EndFunc   ;==>SetDisplayedTitle
 #EndRegion Misc SendPacket

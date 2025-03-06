@@ -499,7 +499,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    DllStructSetData($mUseHeroSkill, 1, GetValue('CommandUseHeroSkill'))
    DllStructSetData($mBuyItem, 1, GetValue('CommandBuyItem'))
    DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
-   DllStructSetData($mSendChat, 2, $HEADER_SEND_CHAT_MESSAGE)
+   DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
    DllStructSetData($mWriteChat, 1, GetValue('CommandWriteChat'))
    DllStructSetData($mRequestQuote, 1, GetValue('CommandRequestQuote'))
    DllStructSetData($mRequestQuoteSell, 1, GetValue('CommandRequestQuoteSell'))
