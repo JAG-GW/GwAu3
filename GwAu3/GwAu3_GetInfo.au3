@@ -37,11 +37,7 @@ EndFunc   ;==>GetLoggedIn
 
 ;~ Returns how long the current instance has been active, in milliseconds.
 Func GetInstanceUpTime()
-	Local $lOffset[4]
-	$lOffset[0] = 0
-	$lOffset[1] = 0x18
-	$lOffset[2] = 0x8
-	$lOffset[3] = 0x1AC
+	Local $lOffset[4] = [0, 0x18, 0x8, 0x1AC]
 	Local $lTimer = MemoryReadPtr($mBasePointer, $lOffset)
 	Return $lTimer[1]
 EndFunc   ;==>GetInstanceUpTime

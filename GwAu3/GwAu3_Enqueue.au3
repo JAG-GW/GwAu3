@@ -276,7 +276,6 @@ EndFunc   ;==>UseHeroSkill
 #Region Movement Enqueue
 ;~ Description: Move to a location.
 Func Move($aX, $aY, $aRandom = 50)
-	;returns true if successful
 	DllStructSetData($mMove, 2, $aX + Random(-$aRandom, $aRandom))
 	DllStructSetData($mMove, 3, $aY + Random(-$aRandom, $aRandom))
 	Enqueue($mMovePtr, 16)

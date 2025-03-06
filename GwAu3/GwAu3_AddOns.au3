@@ -418,13 +418,18 @@ Func TravelTo($aMapID, $aLanguage = GetCharacterInfo("Language"), $aRegion = Get
 EndFunc   ;==>TravelTo
 
 ;~ 	Waits $aDeadlock for load to start, and $aDeadLock for agent to load after map is loaded.
-Func WaitMapLoading($aMapID = 0, $aDeadlock = 10000, $skipcinematic = False)
+Func WaitMapLoading($aMapID = 0, $aDeadlock = 10000, $aSkipCinematic = False)
 	Local $Timer = TimerInit(), $lTypeMap
 	Do
 		Sleep(100)
 		$lTypeMap = MemoryRead(GetAgentPtr(-2) + 0x158, 'long')
 	Until Not BitAND($lTypeMap, 0x400000) Or TimerDiff($Timer) > $aDeadlock
-	If $skipcinematic Then SkipCinematic()
+
+	If $aSkipCinematic Then
+		Sleep(2500)
+		SkipCinematic()
+	EndIf
+
 	$Timer = TimerInit()
 	Do
 		$lTypeMap = MemoryRead(GetAgentPtr(-2) + 0x158, 'long')
