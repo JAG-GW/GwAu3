@@ -410,11 +410,30 @@ EndFunc   ;==>WithdrawGold
 
 #Region Travel
 ;~ Description: Map travel to an outpost.
-Func TravelTo($aMapID, $aRegion = GetCharacterInfo("Region"), $aDistrict = GetCharacterInfo("District"), $aDis = GetCharacterInfo("Language"))
-	If GetCharacterInfo("MapID") = $aMapID And $aDis = 0 And GetInstanceInfo("IsOutpost") Then Return True
-	MoveMap($aMapID, $aRegion, $aDistrict, $aDis)
-	;~ Return WaitMapLoading($aMapID)
+Func TravelTo($aMapID, $aLanguage = GetCharacterInfo("Language"), $aRegion = GetCharacterInfo("Region"), $aDistrict = 0)
+	If	GetCharacterInfo("MapID") = $aMapID And GetInstanceInfo("IsOutpost") _
+		And $aLanguage = GetCharacterInfo("Language") And $aRegion = GetCharacterInfo("Region")  Then Return True
+	MoveMap($aMapID, $aRegion, $aDistrict, $aLanguage)
+	Return WaitMapLoading($aMapID)
 EndFunc   ;==>TravelTo
+
+;~ 	Waits $aDeadlock for load to start, and $aDeadLock for agent to load after map is loaded.
+Func WaitMapLoading($aMapID = 0, $aDeadlock = 10000, $skipcinematic = False)
+	Local $Timer = TimerInit(), $lTypeMap
+	Do
+		Sleep(100)
+		$lTypeMap = MemoryRead(GetAgentPtr(-2) + 0x158, 'long')
+	Until Not BitAND($lTypeMap, 0x400000) Or TimerDiff($Timer) > $aDeadlock
+	If $skipcinematic Then SkipCinematic()
+	$Timer = TimerInit()
+	Do
+		$lTypeMap = MemoryRead(GetAgentPtr(-2) + 0x158, 'long')
+		Sleep(200)
+	Until BitAND($lTypeMap, 0x400000) And (GetMapID() = $aMapID Or $aMapID = 0) Or TimerDiff($Timer) > $aDeadlock
+	Sleep(3000)
+	If TimerDiff($Timer) < $aDeadlock + 3000 Then Return True
+	Return False
+EndFunc   ;==>WaitMapLoading
 
 ;~ Description: Returns current MapID
 Func GetMapID()
