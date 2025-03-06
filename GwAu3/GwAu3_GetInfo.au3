@@ -2638,7 +2638,8 @@ Func GetAgentVisibleEffectInfo($aAgentID = -2, $aInfo = "")
     If $lAgentPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
-
+        Case "" ; dummy case to avoid syntax error
+            Sleep(100)
 	EndSwitch
 
 	Return 0
