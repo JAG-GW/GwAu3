@@ -298,6 +298,11 @@ Func GetHwnd($aProc)
 	Next
 EndFunc   ;==>GetHwnd
 
+;~ Description: Returns window handle of Guild Wars.
+Func GetWindowHandle()
+	Return $mGWWindowHandle
+EndFunc   ;==>GetWindowHandle
+
 ;~ Description: Injects GWA² into the game client.
 Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSystem = True)
    ; Initialize variables
