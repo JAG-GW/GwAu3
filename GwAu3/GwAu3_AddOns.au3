@@ -117,41 +117,41 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 		If $aAttributesArray[$i][1] < 0 Then $aAttributesArray[$i][1] = 0
 	Next
 
-	While GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $aAttributesArray[0][1]
-		$lLevel = GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
+	While GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $aAttributesArray[0][1]
+		$lLevel = GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
 		$lDeadlock = TimerInit()
 		DecreaseAttribute($lPrimaryAttribute, $aHeroNumber)
 		Do
 			Sleep(16)
-		Until GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
+		Until GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
 		Sleep(16)
 	WEnd
 	For $i = 1 To UBound($aAttributesArray) - 1
 
-		While GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $aAttributesArray[$i][1]
-			$lLevel = GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
+		While GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $aAttributesArray[$i][1]
+			$lLevel = GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
 			$lDeadlock = TimerInit()
 			DecreaseAttribute($aAttributesArray[$i][0], $aHeroNumber)
 			Do
 				Sleep(16)
-			Until GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
+			Until GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
 			Sleep(16)
 		WEnd
 	Next
 	For $i = 0 To 44
 
-		If GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
+		If GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
 			If $i = $lPrimaryAttribute Then ContinueLoop
 			For $J = 1 To UBound($aAttributesArray) - 1
 				If $i = $aAttributesArray[$J][0] Then ContinueLoop 2
 			Next
-			While GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0
-				$lLevel = GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel")
+			While GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0
+				$lLevel = GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel")
 				$lDeadlock = TimerInit()
 				DecreaseAttribute($i, $aHeroNumber)
 				Do
 					Sleep(16)
-				Until GetHeroAttributeInfo($i, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
+				Until GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
 				Sleep(16)
 			WEnd
 		EndIf
@@ -159,28 +159,28 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 
 	$TestTimer = 0
 
-	While GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
-		$lLevel = GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
+	While GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
+		$lLevel = GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
 		$lDeadlock = TimerInit()
 		IncreaseAttribute($lPrimaryAttribute, $aHeroNumber)
 		Do
 			Sleep(16)
 			$TestTimer = $TestTimer + 1
-		Until GetHeroAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
+		Until GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
 		Sleep(16)
 		If $TestTimer > 225 Then ExitLoop
 	WEnd
 	For $i = 1 To UBound($aAttributesArray) - 1
 		$TestTimer = 0
 
-		While GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $aAttributesArray[$i][1]
-			$lLevel = GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
+		While GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") < $aAttributesArray[$i][1]
+			$lLevel = GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel")
 			$lDeadlock = TimerInit()
 			IncreaseAttribute($aAttributesArray[$i][0], $aHeroNumber)
 			Do
 				Sleep(16)
 				$TestTimer = $TestTimer + 1
-			Until GetHeroAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
+			Until GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > 5000
 			Sleep(16)
 			If $TestTimer > 225 Then ExitLoop
 		WEnd
