@@ -430,6 +430,17 @@ Func WaitMapLoading($aMapID = 0, $aDeadlock = 10000, $aSkipCinematic = False)
 	Return False
 EndFunc   ;==>WaitMapLoading
 
+Func WaitMapLoadingEx($aMapID = -1, $aInstanceType = -1)
+	Do
+		Sleep(250)
+		If GetGameInfo("IsCinematic") Then
+			SkipCinematic()
+			Sleep(1000)
+		EndIf
+	Until GetAgentPtr(-2) <> 0 And GetAgentArraySize() <> 0 And GetSkillbarPtr() <> 0 And GetPartyContextPtr() <> 0, _
+	And ($aInstanceType = -1 Or GetInstanceInfo("Type") = $aInstanceType) And ($aMapID = -1 Or GetMapID() = $aMapID) And Not GetGameInfo("IsCinematic")
+EndFunc
+
 ;~ Description: Returns current MapID
 Func GetMapID()
     Return GetCharacterInfo("MapID")

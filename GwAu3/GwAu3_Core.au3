@@ -202,7 +202,7 @@ Func MemoryReadPtr($aAddress, $aOffset, $aType = 'dword')
 	$aAddress += $aOffset[$lPointerCount + 1]
 	$lBuffer = DllStructCreate($aType)
 	DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'int', $aAddress, 'ptr', DllStructGetPtr($lBuffer), 'int', DllStructGetSize($lBuffer), 'int', '')
-	Local $lData[2] = [$aAddress, DllStructGetData($lBuffer, 1)]
+	Local $lData[2] = [Ptr($aAddress), DllStructGetData($lBuffer, 1)]
 	Return $lData
 EndFunc   ;==>MemoryReadPtr
 
@@ -345,6 +345,9 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('AgentBase', Ptr($mAgentBase))
    $mMaxAgents = $mAgentBase + 0x8
    SetValue('MaxAgents', Ptr($mMaxAgents))
+
+   $mMyID = MemoryRead(GetScannedAddress('ScanMyID', -3))
+   SetValue('MyID', Ptr($mMyID))
 
    $mCurrentTarget = MemoryRead(GetScannedAddress('ScanCurrentTarget', -0xE))
 
@@ -563,6 +566,9 @@ Func Scan()
 
 	_('ScanCurrentTarget:')
 	AddPattern('83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCC55') ;UPDATED 23.12.24
+
+	_('ScanMyID:')
+	AddPattern('83EC08568BF13B15') ; STILL WORKING 23.12.24
 
 	_('ScanEngine:')
 	AddPattern('568B3085F67478EB038D4900D9460C') ; UPDATED 23.12.24 NEEDS TO GET UPDATED EACH PATCH
