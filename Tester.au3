@@ -19,7 +19,7 @@
 #include <ColorConstants.au3>
 #include <WinAPITheme.au3> ; <<<<<<<<<<<<<<<<<<
 #include <WinAPIDiag.au3>
-#include "GWA_AddOn.au3"
+#include "_GwAu3.au3"
 
 Global Const $doLoadLoggedChars = True
 Opt("GUIOnEventMode", True)
@@ -71,13 +71,13 @@ Func GuiButtonHandler()
             Out("Initializing")
             Local $charName = GUICtrlRead($GUINameCombo)
             If $charName=="" Then
-                If Initialize(ProcessExists("gw.exe"), True, True, True) = 0 Then
+                If Initialize(ProcessExists("gw.exe"), True, False, False) = 0 Then
                     MsgBox(0, "Error", "Guild Wars is not running.")
                     _Exit()
                 EndIf
             ElseIf $ProcessID Then
                 $proc_id_int = Number($ProcessID, 2)
-                If Initialize($proc_id_int, True, True, True) = 0 Then
+                If Initialize($proc_id_int, True, False, False) = 0 Then
                     MsgBox(0, "Error", "Could not Find a ProcessID or somewhat '"&$proc_id_int&"'  "&VarGetType($proc_id_int)&"'")
                     _Exit()
                     If ProcessExists($proc_id_int) Then
@@ -86,7 +86,7 @@ Func GuiButtonHandler()
                     Exit
                 EndIf
             Else
-                If Initialize($CharName, True, True, True) = 0 Then
+                If Initialize($CharName, True, False, False) = 0 Then
                     MsgBox(0, "Error", "Could not Find a Guild Wars client with a Character named '"&$CharName&"'")
                     _Exit()
                 EndIf
@@ -120,7 +120,8 @@ WEnd
 
 While $BotRunning
 	Sleep(500)
-
+	UseSkill(1, -2)
+;~ 	Move(0, 0)
 	Sleep(5000)
 WEnd
 
