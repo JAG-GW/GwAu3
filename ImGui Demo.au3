@@ -18,7 +18,6 @@ _ImGui_SetWindowTitleAlign(0.5, 0.5)
 _ImGui_EnableDocking()
 
 TraySetToolTip($s_GUI_Script_Name)
-
 AdlibRegister("_GUI_Handle", 30)
 
 Func _GUI_Handle()
