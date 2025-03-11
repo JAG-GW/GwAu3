@@ -236,23 +236,16 @@ EndFunc   ;==>TraderRequestBuy
 
 ;~ Description: Request a quote to sell an item to the trader
 Func TraderRequestSell($aItem)
-    Local $lFound = False
-    Local $lQuoteID = MemoryRead($mTraderQuoteID)
-
-    Local $lItemID = ItemID($aItem)
-
-    DllStructSetData($mRequestQuoteSell, 1, $HEADER_REQUEST_QUOTE)
-    DllStructSetData($mRequestQuoteSell, 2, $lItemID)
-
-    Enqueue($mRequestQuoteSellPtr, 8)
-
-    Local $lDeadlock = TimerInit()
-    Do
-        Sleep(16)
-        $lFound = MemoryRead($mTraderQuoteID) <> $lQuoteID
-    Until $lFound Or TimerDiff($lDeadlock) > GetPing() + 2500
-
-    Return $lFound
+	Local $lFound = False
+	Local $lQuoteID = MemoryRead($mTraderQuoteID)
+	DllStructSetData($mRequestQuoteSell, 2, ItemID($aItem))
+	Enqueue($mRequestQuoteSellPtr, 8)
+	Local $lDeadlock = TimerInit()
+	Do
+		Sleep(16)
+		$lFound = MemoryRead($mTraderQuoteID) <> $lQuoteID
+	Until $lFound Or TimerDiff($lDeadlock) > GetPing() + 5000
+	Return $lFound
 EndFunc   ;==>TraderRequestSell
 
 ;~ Description: ID of the item item being sold.
