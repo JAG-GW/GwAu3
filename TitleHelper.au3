@@ -356,16 +356,47 @@ Func Out($text)
     _GUICtrlEdit_Scroll($GUIActionsEdit, $SB_SCROLLCARET)
 EndFunc
 
-Func IDofItem($bagid, $slotid)
-    Return GetItemBySlot($bagid, $slotid)
-EndFunc
+Func DrinkAlcohol()
+    If Not $BotInitialized Then
+        GUICtrlSetState($alcohol, $GUI_UNCHECKED)
+        Return
+    EndIf
 
-Func IDofModel($bagid, $slotid)
-    Return GetItemInfoByPtr(GetItemBySlot($bagid, $slotid), "ModelID")
-EndFunc
+    Out("Drinking alcohol...")
 
-Func QuantityofItem($bagid, $slotid)
-    Return GetItemInfoByPtr(GetItemBySlot($bagid, $slotid), "Quantity")
+    For $alcoholtype = 0 to UBound($AlcoholModelID) - 1
+        For $bagIndex = 1 to $bags
+            $bagItems = GetBagItemArray($bagIndex)
+
+            For $i = 1 to $bagItems[0]
+                $itemPtr = $bagItems[$i]
+                If MemoryRead($itemPtr + 0x2C, "dword") = $AlcoholModelID[$alcoholtype] Then
+                    $itemQuantity = MemoryRead($itemPtr + 0x4C, "short")
+
+                    For $u = 1 to $itemQuantity
+                        If Not BitAND(GUICtrlRead($alcohol), $GUI_CHECKED) Then
+                            ExitLoop 4
+                        EndIf
+
+                        UpdateTitleDisplays()
+                        If $drunkard >= 10000 Then
+                            Out("Drunkard title maxed")
+                            GUICtrlSetState($alcohol, $GUI_UNCHECKED)
+                            ExitLoop 4
+                        EndIf
+
+                        UseItem(MemoryRead($itemPtr, "dword"))
+                        Out("Used alcohol (ID: " & MemoryRead($itemPtr, "dword") & ")")
+                        Sleep(16)
+                        UpdateTitleDisplays()
+                    Next
+                EndIf
+            Next
+        Next
+    Next
+
+    GUICtrlSetState($alcohol, $GUI_UNCHECKED)
+    Out("Finished drinking alcohol")
 EndFunc
 
 Func DrinkTonic()
@@ -380,28 +411,31 @@ Func DrinkTonic()
         DrinkTonicChangeDistrict()
     Else
         For $tonictype = 0 to UBound($TonicModelID) - 1
-            For $i = 1 to $bags
-                For $j = 0 to $slots
-                    $itemmodel = IDofModel($i, $j)
-                    If $itemmodel = $TonicModelID[$tonictype] Then
-                        $itemquantity = QuantityofItem($i, $j)
-                        For $u = 1 to $itemquantity
-                            If BitAND(GUICtrlRead($tonics), $GUI_CHECKED) Then
-                                UpdateTitleDisplays()
-                                If $party < 10000 Then
-                                    $itemID = IDofItem($i, $j)
-                                    UseItem($itemID)
-                                    Out("Used a tonic (ID: " & $itemID & ")")
-                                    Sleep(5500)
-                                    UpdateTitleDisplays()
-                                Else
-                                    Out("Party Animal title maxed")
-                                    GUICtrlSetState($tonics, $GUI_UNCHECKED)
-                                    ExitLoop 4
-                                EndIf
-                            Else
+            For $bagIndex = 1 to $bags
+                $bagItems = GetBagItemArray($bagIndex)
+
+                For $i = 1 to $bagItems[0]
+                    $itemPtr = $bagItems[$i]
+                    If MemoryRead($itemPtr + 0x2C, "dword") = $TonicModelID[$tonictype] Then
+                        $itemQuantity = MemoryRead($itemPtr + 0x4C, "short")
+
+                        For $u = 1 to $itemQuantity
+                            If Not BitAND(GUICtrlRead($tonics), $GUI_CHECKED) Then
                                 ExitLoop 4
                             EndIf
+
+                            UpdateTitleDisplays()
+                            If $party >= 10000 Then
+                                Out("Party Animal title maxed")
+                                GUICtrlSetState($tonics, $GUI_UNCHECKED)
+                                ExitLoop 4
+                            EndIf
+
+                            $itemID = MemoryRead($itemPtr, "dword")
+                            UseItem($itemID)
+                            Out("Used a tonic (ID: " & $itemID & ")")
+                            Sleep(5500)
+                            UpdateTitleDisplays()
                         Next
                     EndIf
                 Next
@@ -413,47 +447,6 @@ Func DrinkTonic()
     Out("Finished drinking tonics")
 EndFunc
 
-Func DrinkAlcohol()
-    If Not $BotInitialized Then
-        GUICtrlSetState($alcohol, $GUI_UNCHECKED)
-        Return
-    EndIf
-
-    Out("Drinking alcohol...")
-
-    For $alcoholtype = 0 to UBound($AlcoholModelID) - 1
-        For $i = 1 to $bags
-            For $j = 0 to $slots
-                $itemmodel = IDofModel($i, $j)
-                If $itemmodel = $AlcoholModelID[$alcoholtype] Then
-                    $itemquantity = QuantityofItem($i, $j)
-                    For $u = 1 to $itemquantity
-                        If BitAND(GUICtrlRead($alcohol), $GUI_CHECKED) Then
-                            UpdateTitleDisplays()
-                            If $drunkard < 10000 Then
-                                $itemID = IDofItem($i, $j)
-                                UseItem($itemID)
-                                Out("Used alcohol (ID: " & $itemID & ")")
-                                Sleep(16)
-                                UpdateTitleDisplays()
-                            Else
-                                Out("Drunkard title maxed")
-                                GUICtrlSetState($alcohol, $GUI_UNCHECKED)
-                                ExitLoop 4
-                            EndIf
-                        Else
-                            ExitLoop 4
-                        EndIf
-                    Next
-                EndIf
-            Next
-        Next
-    Next
-
-    GUICtrlSetState($alcohol, $GUI_UNCHECKED)
-    Out("Finished drinking alcohol")
-EndFunc
-
 Func UseParty()
     If Not $BotInitialized Then
         GUICtrlSetState($partys, $GUI_UNCHECKED)
@@ -463,28 +456,31 @@ Func UseParty()
     Out("Using party items...")
 
     For $partytype = 0 to UBound($PartyModelID) - 1
-        For $i = 1 to $bags
-            For $j = 0 to $slots
-                $itemmodel = IDofModel($i, $j)
-                If $itemmodel = $PartyModelID[$partytype] Then
-                    $itemquantity = QuantityofItem($i, $j)
-                    For $u = 1 to $itemquantity
-                        If BitAND(GUICtrlRead($partys), $GUI_CHECKED) Then
-                            UpdateTitleDisplays()
-                            If $party < 10000 Then
-                                $itemID = IDofItem($i, $j)
-                                UseItem($itemID)
-                                Out("Used party item (ID: " & $itemID & ")")
-                                Sleep(16)
-                                UpdateTitleDisplays()
-                            Else
-                                Out("Party Animal title maxed")
-                                GUICtrlSetState($partys, $GUI_UNCHECKED)
-                                ExitLoop 4
-                            EndIf
-                        Else
+        For $bagIndex = 1 to $bags
+            $bagItems = GetBagItemArray($bagIndex)
+
+            For $i = 1 to $bagItems[0]
+                $itemPtr = $bagItems[$i]
+                If MemoryRead($itemPtr + 0x2C, "dword") = $PartyModelID[$partytype] Then
+                    $itemQuantity = MemoryRead($itemPtr + 0x4C, "short")
+
+                    For $u = 1 to $itemQuantity
+                        If Not BitAND(GUICtrlRead($partys), $GUI_CHECKED) Then
                             ExitLoop 4
                         EndIf
+
+                        UpdateTitleDisplays()
+                        If $party >= 10000 Then
+                            Out("Party Animal title maxed")
+                            GUICtrlSetState($partys, $GUI_UNCHECKED)
+                            ExitLoop 4
+                        EndIf
+
+                        $itemID = MemoryRead($itemPtr, "dword")
+                        UseItem($itemID)
+                        Out("Used party item (ID: " & $itemID & ")")
+                        Sleep(16)
+                        UpdateTitleDisplays()
                     Next
                 EndIf
             Next
@@ -504,28 +500,31 @@ Func EatSweets()
     Out("Eating sweets...")
 
     For $sweettype = 0 to UBound($SweetModelID) - 1
-        For $i = 1 to $bags
-            For $j = 0 to $slots
-                $itemmodel = IDofModel($i, $j)
-                If $itemmodel = $SweetModelID[$sweettype] Then
-                    $itemquantity = QuantityofItem($i, $j)
-                    For $u = 1 to $itemquantity
-                        If BitAND(GUICtrlRead($sweets), $GUI_CHECKED) Then
-                            UpdateTitleDisplays()
-                            If $sweet < 10000 Then
-                                $itemID = IDofItem($i, $j)
-                                UseItem($itemID)
-                                Out("Ate sweet (ID: " & $itemID & ")")
-                                Sleep(16)
-                                UpdateTitleDisplays()
-                            Else
-                                Out("Sweet Tooth title maxed")
-                                GUICtrlSetState($sweets, $GUI_UNCHECKED)
-                                ExitLoop 4
-                            EndIf
-                        Else
+        For $bagIndex = 1 to $bags
+            $bagItems = GetBagItemArray($bagIndex)
+
+            For $i = 1 to $bagItems[0]
+                $itemPtr = $bagItems[$i]
+                If MemoryRead($itemPtr + 0x2C, "dword") = $SweetModelID[$sweettype] Then
+                    $itemQuantity = MemoryRead($itemPtr + 0x4C, "short")
+
+                    For $u = 1 to $itemQuantity
+                        If Not BitAND(GUICtrlRead($sweets), $GUI_CHECKED) Then
                             ExitLoop 4
                         EndIf
+
+                        UpdateTitleDisplays()
+                        If $sweet >= 10000 Then
+                            Out("Sweet Tooth title maxed")
+                            GUICtrlSetState($sweets, $GUI_UNCHECKED)
+                            ExitLoop 4
+                        EndIf
+
+                        $itemID = MemoryRead($itemPtr, "dword")
+                        UseItem($itemID)
+                        Out("Ate sweet (ID: " & $itemID & ")")
+                        Sleep(16)
+                        UpdateTitleDisplays()
                     Next
                 EndIf
             Next
@@ -544,21 +543,24 @@ Func Opengifts()
 
     Out("Opening gifts...")
 
-    For $gifts = 0 to UBound($giftsModelID) - 1
-        For $i = 1 to $bags
-            For $j = 0 to $slots
-                $itemmodel = IDofModel($i, $j)
-                If $itemmodel = $giftsModelID[$gifts] Then
-                    $itemquantity = QuantityofItem($i, $j)
-                    For $u = 1 to $itemquantity
-                        If BitAND(GUICtrlRead($giftcheckbox), $GUI_CHECKED) Then
-                            $itemID = IDofItem($i, $j)
-                            UseItem($itemID)
-                            Out("Opened gift (ID: " & $itemID & ")")
-                            Sleep(16)
-                        Else
+    For $gifttype = 0 to UBound($giftsModelID) - 1
+        For $bagIndex = 1 to $bags
+            $bagItems = GetBagItemArray($bagIndex)
+
+            For $i = 1 to $bagItems[0]
+                $itemPtr = $bagItems[$i]
+                If MemoryRead($itemPtr + 0x2C, "dword") = $giftsModelID[$gifttype] Then
+                    $itemQuantity = MemoryRead($itemPtr + 0x4C, "short")
+
+                    For $u = 1 to $itemQuantity
+                        If Not BitAND(GUICtrlRead($giftcheckbox), $GUI_CHECKED) Then
                             ExitLoop 4
                         EndIf
+
+                        $itemID = MemoryRead($itemPtr, "dword")
+                        UseItem($itemID)
+                        Out("Opened gift (ID: " & $itemID & ")")
+                        Sleep(16)
                     Next
                 EndIf
             Next
@@ -578,51 +580,45 @@ Func DrinkTonicChangeDistrict()
     Out("Drinking tonics with district change...")
 
     For $tonictype = 0 to UBound($TonicModelID) - 1
-        For $i = 1 to $bags
-            For $j = 0 to $slots
-                $itemmodel = IDofModel($i, $j)
-                If $itemmodel = $TonicModelID[$tonictype] Then
-                    $itemquantity = QuantityofItem($i, $j)
-                    For $u = 1 to $itemquantity
-                        If BitAND(GUICtrlRead($tonics), $GUI_CHECKED) Then
-                            UpdateTitleDisplays()
-                            If $party < 10000 Then
-                                $lang = GetCharacterInfo("Language")
-                                $itemID = IDofItem($i, $j)
-                                $random = Random(0, 2, 1)
+        For $bagIndex = 1 to $bags
+            $bagItems = GetBagItemArray($bagIndex)
 
-                                If $lang = $lang1 And $itemmodel <> 0 Then
-                                    UseItem($itemID)
-                                    Out("Used tonic (ID: " & $itemID & ")")
-                                    If $random = 1 Or $random = 2 Then
-                                        Sleep(Random(150, 300))
-                                        UseItem($itemID)
-                                        Out("Used second tonic")
-                                    EndIf
-                                    Sleep(Random(1500, 3000))
-                                    UpdateTitleDisplays()
-                                    Out("Changing district...")
-                                    DistrictChange2()
-                                ElseIf $itemmodel <> 0 Then
-                                    UseItem($itemID)
-                                    Out("Used tonic (ID: " & $itemID & ")")
-                                    If $random = 1 Or $random = 2 Then
-                                        Sleep(Random(150, 300))
-                                        UseItem($itemID)
-                                        Out("Used second tonic")
-                                    EndIf
-                                    Sleep(Random(1500, 3000))
-                                    UpdateTitleDisplays()
-                                    Out("Changing district...")
-                                    DistrictChange2()
-                                Else
-                                    ExitLoop 4
-                                EndIf
-                            Else
-                                Out("Party Animal title maxed")
-                                GUICtrlSetState($tonics, $GUI_UNCHECKED)
-                                ExitLoop 4
+            For $i = 1 to $bagItems[0]
+                $itemPtr = $bagItems[$i]
+                If MemoryRead($itemPtr + 0x2C, "dword") = $TonicModelID[$tonictype] Then
+                    $itemQuantity = MemoryRead($itemPtr + 0x4C, "short")
+                    $itemModelID = MemoryRead($itemPtr + 0x2C, "dword")
+
+                    For $u = 1 to $itemQuantity
+                        If Not BitAND(GUICtrlRead($tonics), $GUI_CHECKED) Then
+                            ExitLoop 4
+                        EndIf
+
+                        UpdateTitleDisplays()
+                        If $party >= 10000 Then
+                            Out("Party Animal title maxed")
+                            GUICtrlSetState($tonics, $GUI_UNCHECKED)
+                            ExitLoop 4
+                        EndIf
+
+                        $lang = GetCharacterInfo("Language")
+                        $itemID = MemoryRead($itemPtr, "dword")
+                        $random = Random(0, 2, 1)
+
+                        If ($lang = $lang1 And $itemModelID <> 0) Or ($itemModelID <> 0) Then
+                            UseItem($itemID)
+                            Out("Used tonic (ID: " & $itemID & ")")
+
+                            If $random = 1 Or $random = 2 Then
+                                Sleep(Random(150, 300))
+                                UseItem($itemID)
+                                Out("Used second tonic")
                             EndIf
+
+                            Sleep(Random(1500, 3000))
+                            UpdateTitleDisplays()
+                            Out("Changing district...")
+                            DistrictChange()
                         Else
                             ExitLoop 4
                         EndIf
@@ -696,9 +692,9 @@ Func OpenZchest()
     For $zkeytype = 0 to 0
         For $i = 1 to $bags
             For $j = 0 to $slots
-                $itemmodel = IDofModel($i, $j)
+                $itemmodel = GetItemInfoByPtr(GetItemBySlot($i, $j), "ModelID")
                 If $itemmodel = $ZkeyModeID[$zkeytype] Then
-                    $itemquantity = QuantityofItem($i, $j)
+                    $itemquantity = GetItemInfoByPtr(GetItemBySlot($i, $j), "Quantity")
                     For $u = 1 to $itemquantity
                         If BitAND(GUICtrlRead($zaishencheckbox), $GUI_CHECKED) Then
                             UpdateTitleDisplays()
@@ -724,40 +720,7 @@ Func OpenZchest()
     Out("Finished opening Zaishen chest")
 EndFunc
 
-Func CheckforLoad()
-    Local $timer = TimerInit()
-    Out("Waiting for loading...")
-
-    Do
-        Sleep(200)
-    Until GetInstanceType() = 0 OR TimerDiff($timer) > 10000
-
-    Out("Loading complete")
-EndFunc
-
-Func DistrictChange($townID)
-    Local $region[12] = [4, 3, 1, 0, 2, 2, 2, 2, 2, 2, 2]
-    Local $language[12] = [0, 0, 0, 0, 0, 2, 3, 4, 5, 9, 10]
-    Local $random = Random(0, 10, 1)
-    Local $old_region, $old_language
-
-    $old_region = GetCharacterInfo("Region")
-    $old_language = GetCharacterInfo("Language")
-
-    While ($old_region = $region[$random])
-        $random = Random(0, 10, 1)
-    WEnd
-
-    $region = $region[$random]
-    $language = $language[$random]
-
-    Out("Changing district to town ID " & $townID & " (Region: " & $region & ", Lang: " & $language & ")")
-    MoveMap($townID, $region, 0, $language)
-
-    Return WaitMapLoading($townID)
-EndFunc
-
-Func DistrictChange2()
+Func DistrictChange()
     Local $region[11] = [4, 3, 1, 0, 2, 2, 2, 2, 2, 2, 2]
     Local $language[11] = [0, 0, 0, 0, 0, 2, 3, 4, 5, 9, 10]
     Local $random = Random(0, 10, 1)
