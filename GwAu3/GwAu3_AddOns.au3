@@ -437,7 +437,7 @@ Func WaitMapLoadingEx($aMapID = -1, $aInstanceType = -1)
 			SkipCinematic()
 			Sleep(1000)
 		EndIf
-	Until GetAgentPtr(-2) <> 0 And GetAgentArraySize() <> 0 And GetSkillbarPtr() <> 0 And GetPartyContextPtr() <> 0, _
+	Until GetAgentPtr(-2) <> 0 And GetAgentArraySize() <> 0 And GetWorldInfo("SkillbarArray") <> 0 And GetPartyContextPtr() <> 0 _
 	And ($aInstanceType = -1 Or GetInstanceInfo("Type") = $aInstanceType) And ($aMapID = -1 Or GetMapID() = $aMapID) And Not GetGameInfo("IsCinematic")
 EndFunc
 
