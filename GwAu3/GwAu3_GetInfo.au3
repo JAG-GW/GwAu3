@@ -895,7 +895,7 @@ Func GetItemInfoByPtr($lItemPtr, $aInfo)
             Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x80000) > 0
         Case "IsInscribable"
             Return BitAND(MemoryRead($lItemPtr + 0x28, "dword"), 0x08000000) > 0
-        
+
         Case "ModelID"
             Return MemoryRead($lItemPtr + 0x2C, "dword")
         Case "InfoString"
@@ -1906,7 +1906,9 @@ Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
 
         Case "RawRecharged"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
-            Return MemoryRead($lSkillbarPtr + 0xC + (($aSkillSlot - 1) * 0x14), "dword")
+            Local $lTimestamp = MemoryRead($lSkillbarPtr + 0xC + (($aSkillSlot - 1) * 0x14), "dword")
+			Local $lSkillID = MemoryRead($lSkillbarPtr + 0x10 + (($aSkillSlot - 1) * 0x14), "dword")
+			Return GetSkillInfo($lSkillID, "Recharge") - (GetSkillTimer() - $lTimestamp)
 
         Case "Adrenaline"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
