@@ -15,6 +15,70 @@ Func PingSleep($msExtra = 0)
 	Sleep(GetPing() + $msExtra)
 EndFunc   ;==>PingSleep
 
+#Region Rendering
+;~ Description: Enable graphics rendering.
+Func EnableRendering()
+    If GetRenderEnabled() Then Return 1
+	MemoryWrite($mDisableRendering, 0)
+EndFunc ;==>EnableRendering
+
+;~ Description: Disable graphics rendering.
+Func DisableRendering()
+	If GetRenderDisabled() Then Return 1
+	MemoryWrite($mDisableRendering, 1)
+EndFunc ;==>DisableRendering
+
+;~ Description: Checks if Rendering is disabled
+Func GetRenderDisabled()
+	Return MemoryRead($mDisableRendering) = 1
+EndFunc ;==>GetRenderDisabled
+
+;~ Description: Checks if Rendering is enabled
+Func GetRenderEnabled()
+	Return MemoryRead($mDisableRendering) = 0
+EndFunc ;==>GetRenderEnabled
+
+;~ Description: Toggle Rendering *and* Window State
+Func ToggleRendering()
+	If GetRenderDisabled() Then
+		EnableRendering()
+		WinSetState(GetWindowHandle(), "", @SW_SHOW)
+	Else
+		DisableRendering()
+		WinSetState(GetWindowHandle(), "", @SW_HIDE)
+		ClearMemory()
+	EndIf
+EndFunc ;==>ToggleRendering
+
+;~ Description: Enable Rendering for duration $aTime(ms), then Disable Rendering again.
+;~ 				Also toggles Window State
+Func PurgeHook($aTime = 10000)
+	If GetRenderEnabled() Then Return 1
+	ToggleRendering()
+	Sleep($aTime)
+	ToggleRendering()
+EndFunc ;==>PurgeHook
+
+;~ Description: Toggle Rendering (the GW window will stay hidden)
+Func ToggleRendering_()
+	If GetRenderDisabled() Then
+        EnableRendering()
+		ClearMemory()
+	Else
+		DisableRendering()
+		ClearMemory()
+	EndIf
+EndFunc ;==>ToggleRendering_
+
+;~ Description: Enable Rendering for duration $aTime(ms), then Disable Rendering again.
+Func PurgeHook_($aTime = 10000)
+	If GetRenderEnabled() Then Return 1
+    ToggleRendering_()
+    Sleep($aTime)
+    ToggleRendering_()
+EndFunc ;==PurgeHook_
+#EndRegion Rendering
+
 #Region Loading build
 Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
 	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
