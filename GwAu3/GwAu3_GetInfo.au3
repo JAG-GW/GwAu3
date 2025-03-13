@@ -581,7 +581,7 @@ EndFunc
 Func GetInventoryPtr()
 	Local $lOffset[4] = [0, 0x18, 0x40, 0xF8]
     Local $lItemContextPtr = MemoryReadPtr($mBasePointer, $lOffset, "ptr")
-    Return MemoryRead($lItemContextPtr + 0xF8, "ptr")
+    Return $lItemContextPtr[1]
 EndFunc
 
 Func GetInventoryInfo($aInfo = "")
@@ -2432,6 +2432,9 @@ Func GetAgentInfo($aAgentID = -2, $aInfo = "")
             Return MemoryRead($lAgentPtr + 0x1BA, "short")
         Case "OffhandItemId"
             Return MemoryRead($lAgentPtr + 0x1BC, "short")
+
+		Case "Name"
+			Return 0 ;in progress
 		Case Else
 			Return 0
 	EndSwitch
@@ -2946,3 +2949,4 @@ EndFunc   ;==>GetAttributeInfo
 #EndRegion Title Client Data Related
 
 #EndRegion Static Infos
+

@@ -1,4 +1,5 @@
 #include-once
+#Region Sleep
 ;~ Description: Sleep a random amount of time.
 Func RndSleep($aAmount, $aRandom = 0.05)
 	Local $lRandom = $aAmount * $aRandom
@@ -14,6 +15,7 @@ EndFunc   ;==>TolSleep
 Func PingSleep($msExtra = 0)
 	Sleep(GetPing() + $msExtra)
 EndFunc   ;==>PingSleep
+#EndRegion
 
 #Region Rendering
 ;~ Description: Enable graphics rendering.
@@ -348,6 +350,7 @@ Func SendChat($aMessage, $aChannel = '!')
 EndFunc   ;==>SendChat
 #EndRegion Chat
 
+#Region gold
 ;~ Description: Deposit gold into storage.
 Func DepositGold($aAmount = 0)
 	Local $lAmount
@@ -381,6 +384,7 @@ Func WithdrawGold($aAmount = 0)
 
 	ChangeGold($lCharacter + $lAmount, $lStorage - $lAmount)
 EndFunc   ;==>WithdrawGold
+#EndRegion
 
 #Region Travel
 ;~ Description: Map travel to an outpost.
@@ -431,6 +435,7 @@ Func GetMapID()
 EndFunc   ;==>GetMapID
 #EndRegion Travel
 
+#Region Other
 Func GetBestTarget($aRange = 1320)
 	Local $lBestTarget, $lDistance, $lLowestSum = 100000000
 	Local $lAgentArray = GetAgentArray(0xDB)
@@ -455,3 +460,4 @@ Func GetBestTarget($aRange = 1320)
 	Next
 	Return $lBestTarget
 EndFunc   ;==>GetBestTarget
+#EndRegion
