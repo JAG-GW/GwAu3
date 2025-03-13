@@ -1,5 +1,4 @@
 #include-once
-
 ;~ Description: Sleep a random amount of time.
 Func RndSleep($aAmount, $aRandom = 0.05)
 	Local $lRandom = $aAmount * $aRandom
@@ -213,58 +212,6 @@ Func GetProfPrimaryAttribute($aProfession)
 EndFunc   ;==>GetProfPrimaryAttribute
 #EndRegion Loading Build
 
-#Region Rendering
-;~ Description: Enable graphics rendering.
-Func EnableRendering($aShowWindow = True)
-	Local $lWindowHandle = $mGWWindowHandle, $lPrevGWState = WinGetState($lWindowHandle), $lPrevWindow = WinGetHandle("[ACTIVE]", ""), $lPrevWindowState = WinGetState($lPrevWindow)
-	If $aShowWindow And $lPrevGWState Then
-		If BitAND($lPrevGWState, 16) Then
-			WinSetState($lWindowHandle, "", @SW_RESTORE)
-		ElseIf Not BitAND($lPrevGWState, 2) Then
-			WinSetState($lWindowHandle, "", @SW_SHOW)
-		EndIf
-		If $lWindowHandle <> $lPrevWindow And $lPrevWindow Then RestoreWindowState($lPrevWindow, $lPrevWindowState)
-	EndIf
-	If Not GetIsRendering() Then
-		$mRendering = True
-		If Not MemoryWrite($mDisableRendering, 0) Then Return SetError(@error, False)
-		Sleep(250)
-	EndIf
-	Return 1
-EndFunc   ;==>EnableRendering
-
-;~ Description: Disable graphics rendering.
-Func DisableRendering($aHideWindow = True)
-	Local $lWindowHandle = $mGWWindowHandle
-	If $aHideWindow And WinGetState($lWindowHandle) Then WinSetState($lWindowHandle, "", @SW_HIDE)
-	If GetIsRendering() Then
-		$mRendering = True
-		If Not MemoryWrite($mDisableRendering, 1) Then Return SetError(@error, False)
-		Sleep(250)
-	EndIf
-	Return 1
-EndFunc   ;==>DisableRendering
-
-;Toggles graphics rendering
-Func ToggleRendering()
-	Return GetIsRendering() ? DisableRendering() : EnableRendering()
-EndFunc   ;==>ToggleRendering
-
-Func GetIsRendering()
-	Return MemoryRead($mDisableRendering) <> 1
-EndFunc   ;==>GetIsRendering
-
-;Internally used - restores a window to previous state.
-Func RestoreWindowState($aWindowHandle, $aPreviousWindowState)
-	If Not $aWindowHandle Or Not $aPreviousWindowState Then Return 0
-
-	Local $lStates[6] = [1, 2, 4, 8, 16, 32], $lCurrentWindowState = WinGetState($aWindowHandle)
-	For $i = 0 To UBound($lStates) - 1
-		If BitAND($aPreviousWindowState, $lStates[$i]) And Not BitAND($lCurrentWindowState, $lStates[$i]) Then WinSetState($aWindowHandle, "", $lStates[$i])
-	Next
-EndFunc   ;==>RestoreWindowState
-#EndRegion Rendering
-
 #Region Chat
 ;~ Description: Write a message in chat (can only be seen by botter).
 Func WriteChat($aMessage, $aSender = 'GwAu3')
@@ -337,32 +284,6 @@ Func SendChat($aMessage, $aChannel = '!')
 EndFunc   ;==>SendChat
 #EndRegion Chat
 
-#Region Item
-;~ Description: Identifies all items in a bag.
-Func IdentifyBag($aBagNumber, $aGolds = True, $aPurples = False, $aBlue = False, $aWhites = False)
-	Local $aItemID
-	$aBag = GetBagPtr($aBagNumber)
-	For $i = 1 To GetBagInfo($aBagNumber, "Slots")
-		$aItemID = GetItemBySlot($aBagNumber, $i)
-		If ItemID($aItemID) == 0 Then ContinueLoop
-
-		Switch GetItemInfoByItemID($aItemID, "Rarity")
-			Case 2624 ;gold
-				If $aGolds == False Then ContinueLoop
-				IdentifyItem($aItemID)
-			Case 2626 ;purple
-				If $aPurples == False Then ContinueLoop
-				IdentifyItem($aItemID)
-			Case 2623 ;blue
-				If $aBlue == False Then ContinueLoop
-				IdentifyItem($aItemID)
-			Case 2621 ;white
-				If $aWhites == False Then ContinueLoop
-				IdentifyItem($aItemID)
-		EndSwitch
-	Next
-EndFunc   ;==>IdentifyBag
-
 ;~ Description: Deposit gold into storage.
 Func DepositGold($aAmount = 0)
 	Local $lAmount
@@ -396,7 +317,6 @@ Func WithdrawGold($aAmount = 0)
 
 	ChangeGold($lCharacter + $lAmount, $lStorage - $lAmount)
 EndFunc   ;==>WithdrawGold
-#EndRegion Item
 
 #Region Travel
 ;~ Description: Map travel to an outpost.
@@ -446,17 +366,6 @@ Func GetMapID()
     Return GetCharacterInfo("MapID")
 EndFunc   ;==>GetMapID
 #EndRegion Travel
-
-Func CheckArea($aX, $aY, $range = 1320)
-	$ret = False
-	$pX = GetAgentInfo(-2, "X")
-    $pY = GetAgentInfo(-2, "Y")
-
-	If ($pX < $aX + $range) And ($pX > $aX - $range) And ($pY < $aY + $range) And ($pY > $aY - $range) Then
-		$ret = True
-	EndIf
-	Return $ret
-EndFunc   ;==>CheckAreaRange
 
 Func GetBestTarget($aRange = 1320)
 	Local $lBestTarget, $lDistance, $lLowestSum = 100000000
