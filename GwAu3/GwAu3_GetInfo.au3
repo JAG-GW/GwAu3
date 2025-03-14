@@ -1331,12 +1331,14 @@ Func GetWorldInfo($aInfo = "")
 		;Agent Info Array (name only)
 		Case "AgentInfoArray" ;--> To check (name_enc) <Useless for GwAu3>
 			Return MemoryRead($lPtr + 0x7CC, "ptr")
+		Case "AgentInfoArraySize" ;--> To check (name_enc) <Useless for GwAu3>
+			Return MemoryRead($lPtr + 0x7CC + 0x8, "long")
 
 		;NPC Array
 		Case "NPCArray"
 			Return MemoryRead($lPtr + 0x7FC, "ptr")
 		Case "NPCArraySize"
-			Return MemoryRead($lPtr + 0x7FC, "ptr")
+			Return MemoryRead($lPtr + 0x7FC + 0x8, "long")
 
 		;Player Array
 		Case "PlayerArray"
