@@ -1088,7 +1088,7 @@ EndFunc
 
 Func GetMyPartyPlayerMemberInfo($aPartyMemberNumber = 1, $aInfo = "")
     Local $lPlayerPartyPtr = GetMyPartyInfo("ArrayPlayerPartyMember")
-	Local $lPlayerPartySize = GetMyPartyInfo("ArrayPlayerPartyMember")
+	Local $lPlayerPartySize = GetMyPartyInfo("ArrayPlayerPartyMemberSize")
 	$aPartyMemberNumber = $aPartyMemberNumber - 1
 	If $lPlayerPartyPtr = 0 Or $aPartyMemberNumber < 0 Or $aPartyMemberNumber >= $lPlayerPartySize Then Return 0
 
@@ -1663,46 +1663,76 @@ EndFunc
 
 #Region Attribute Related
 Func GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo = "")
-	Local $lPartyAttributesPtr = GetWorldInfo("PartyAttributeArray")
-	Local $lPartyAttributesSize = GetWorldInfo("PartyAttributeArraySize")
+	Local $lAgentID
+	If $aHeroNumber <> 0 Then
+		$lAgentID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lAgentID = GetWorldInfo("MyID")
+	EndIf
+    Local $lBuffer
+    Local $lOffset[5]
+    $lOffset[0] = 0
+    $lOffset[1] = 0x18
+    $lOffset[2] = 0x2C
+    $lOffset[3] = 0xAC
 
-	If $lPartyAttributesPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lPartyAttributesSize Then Return 0
+    For $i = 0 To GetWorldInfo("PartyAttributeArraySize")
+        $lOffset[4] = 0x43C * $i
+        $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
 
+        If $lBuffer[1] == $lAgentID Then
+            ; Base pour l'attribut trouvé
+            Local $lBaseAttrOffset = 0x43C * $i + 0x14 * $aAttributeID + 0x4
 
-	$lPartyAttributesPtr = $lPartyAttributesPtr + ($aHeroNumber * 0x43C)
-	Local $lHeroAttributePtr = $lPartyAttributesPtr + 0x4 + (0x14 * $aAttributeID)
-
-	Switch $aInfo
-        Case "ID"
-            Return MemoryRead($lHeroAttributePtr, "dword")
-        Case "BaseLevel", "LevelBase"
-            Return MemoryRead($lHeroAttributePtr + 0x4, "dword")
-        Case "Level", "CurrentLevel"
-            Return MemoryRead($lHeroAttributePtr + 0x8, "dword")
-        Case "DecrementPoints"
-            Return MemoryRead($lHeroAttributePtr + 0xC, "dword")
-        Case "IncrementPoints"
-            Return MemoryRead($lHeroAttributePtr + 0x10, "dword")
-        Case "HasAttribute"
-            Return MemoryRead($lHeroAttributePtr, "dword") <> 0
-        Case "BonusLevel"
-            Local $baseLevel = MemoryRead($lHeroAttributePtr + 0x4, "dword")
-            Local $currentLevel = MemoryRead($lHeroAttributePtr + 0x8, "dword")
-            Return $currentLevel - $baseLevel
-        Case "IsMaxed"
-            ; Vérifier si l'attribut est au niveau maximum (12)
-            Return MemoryRead($lHeroAttributePtr + 0x8, "dword") >= 12
-        Case "IsRaisable"
-            ; Vérifier si on peut augmenter le niveau de l'attribut
-            Local $incrementPoints = MemoryRead($lHeroAttributePtr + 0x10, "dword")
-            Return $incrementPoints > 0
-        Case "IsDecreasable"
-            ; Vérifier si on peut diminuer le niveau de l'attribut
-            Local $decrementPoints = MemoryRead($lHeroAttributePtr + 0xC, "dword")
-            Return $decrementPoints > 0
-        Case Else
-            Return 0
-    EndSwitch
+            Switch $aInfo
+                Case "ID"
+                    $lOffset[4] = $lBaseAttrOffset
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1]
+                Case "BaseLevel", "LevelBase"
+                    $lOffset[4] = $lBaseAttrOffset + 0x4
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1]
+                Case "Level", "CurrentLevel"
+                    $lOffset[4] = $lBaseAttrOffset + 0x8
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1]
+                Case "DecrementPoints"
+                    $lOffset[4] = $lBaseAttrOffset + 0xC
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1]
+                Case "IncrementPoints"
+                    $lOffset[4] = $lBaseAttrOffset + 0x10
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1]
+                Case "HasAttribute"
+                    $lOffset[4] = $lBaseAttrOffset
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1] <> 0
+                Case "BonusLevel"
+                    $lOffset[4] = $lBaseAttrOffset + 0x4
+                    Local $baseLevel = MemoryReadPtr($mBasePointer, $lOffset)[1]
+                    $lOffset[4] = $lBaseAttrOffset + 0x8
+                    Local $currentLevel = MemoryReadPtr($mBasePointer, $lOffset)[1]
+                    Return $currentLevel - $baseLevel
+                Case "IsMaxed"
+                    $lOffset[4] = $lBaseAttrOffset + 0x8
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1] >= 12
+                Case "IsRaisable"
+                    $lOffset[4] = $lBaseAttrOffset + 0x10
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1] > 0
+                Case "IsDecreasable"
+                    $lOffset[4] = $lBaseAttrOffset + 0xC
+                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    Return $lBuffer[1] > 0
+                Case Else
+                    Return 0
+            EndSwitch
+        EndIf
+    Next
+    Return 0
 EndFunc
 #EndRegion Attribute Related
 

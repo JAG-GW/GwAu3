@@ -83,7 +83,13 @@ EndFunc ;==PurgeHook_
 
 #Region Loading build
 Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
-	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
+	Out("Start LoadSkillTemplate")
+	Local $lHeroID
+	If $aHeroNumber <> 0 Then
+		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lHeroID = GetWorldInfo("MyID")
+	EndIf
 	Local $lSplitTemplate = StringSplit($aTemplate, '')
 
 	Local $lTemplateType ; 4 Bits
@@ -115,7 +121,7 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
 
 	$lProfPrimary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
 	$aTemplate = StringTrimLeft($aTemplate, $lProfBits)
-	If $lProfPrimary <> GetHeroInfo($aHeroNumber, "Primary") Then Return False
+	If $lProfPrimary <> GetPartyProfessionInfo($lHeroID, "Primary") Then Return False
 
 	$lProfSecondary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
 	$aTemplate = StringTrimLeft($aTemplate, $lProfBits)
@@ -153,28 +159,36 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
 	$lOpTail = Bin64ToDec($aTemplate)
 
 	$lAttributes[0][0] = $lProfSecondary
+	Out("Start LoadAttributes")
 	LoadAttributes($lAttributes, $aHeroNumber)
+	Out("Start LoadSkillBar")
 	LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber)
 EndFunc   ;==>LoadSkillTemplate
 
 Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 	Local $lPrimaryAttribute
 	Local $lDeadlock = 0
-	Local $lHeroID = GetHeroInfo($aHeroNumber, "AgentID")
+	Local $lHeroID
+	If $aHeroNumber <> 0 Then
+		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lHeroID = GetWorldInfo("MyID")
+	EndIf
 	Local $lLevel
 	Local $TestTimer = 0
 
-	$lPrimaryAttribute = GetProfPrimaryAttribute(GetHeroInfo($aHeroNumber, "Primary"))
+	$lPrimaryAttribute = GetProfPrimaryAttribute(GetPartyProfessionInfo($lHeroID, "Primary"))
 
-	If $aAttributesArray[0][0] <> 0 And GetHeroInfo($aHeroNumber, "Secondary") <> $aAttributesArray[0][0] And GetHeroInfo($aHeroNumber, "Primary") <> $aAttributesArray[0][0] Then
+	If $aAttributesArray[0][0] <> 0 And GetPartyProfessionInfo($lHeroID, "Secondary") <> $aAttributesArray[0][0] And GetPartyProfessionInfo($lHeroID, "Primary") <> $aAttributesArray[0][0] Then
 		Do
 			$lDeadlock = TimerInit()
 			ChangeSecondProfession($aAttributesArray[0][0], $aHeroNumber)
 			Do
 				Sleep(16)
-			Until GetHeroInfo($aHeroNumber, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 5000
-		Until GetHeroInfo($aHeroNumber, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 10000
+			Until GetPartyProfessionInfo($lHeroID, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 5000
+		Until GetPartyProfessionInfo($lHeroID, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 10000
 	EndIf
+	Out("ok 1")
 
 	$aAttributesArray[0][0] = $lPrimaryAttribute
 	For $i = 0 To UBound($aAttributesArray) - 1
@@ -191,6 +205,7 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 		Until GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
 		Sleep(16)
 	WEnd
+	Out("ok 2")
 	For $i = 1 To UBound($aAttributesArray) - 1
 
 		While GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $aAttributesArray[$i][1]
@@ -203,6 +218,7 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 			Sleep(16)
 		WEnd
 	Next
+	Out("ok 3")
 	For $i = 0 To 44
 
 		If GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
@@ -221,7 +237,7 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 			WEnd
 		EndIf
 	Next
-
+	Out("ok 4")
 	$TestTimer = 0
 
 	While GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
@@ -235,6 +251,7 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 		Sleep(16)
 		If $TestTimer > 225 Then ExitLoop
 	WEnd
+	Out("ok 5")
 	For $i = 1 To UBound($aAttributesArray) - 1
 		$TestTimer = 0
 
@@ -250,6 +267,7 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 			If $TestTimer > 225 Then ExitLoop
 		WEnd
 	Next
+	Out("ok end")
 EndFunc   ;==>LoadAttributes
 
 Func GetProfPrimaryAttribute($aProfession)
