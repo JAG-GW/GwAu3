@@ -299,15 +299,27 @@ EndFunc   ;==>UseSkill
 
 ;~ Description: Increase attribute by 1
 Func IncreaseAttribute($aAttributeID, $aHeroNumber = 0)
+	Local $lHeroID
+	If $aHeroNumber <> 0 Then
+		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lHeroID = GetWorldInfo("MyID")
+	EndIf
 	DllStructSetData($mIncreaseAttribute, 2, $aAttributeID)
-	DllStructSetData($mIncreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
+	DllStructSetData($mIncreaseAttribute, 3, $lHeroID)
 	Enqueue($mIncreaseAttributePtr, 12)
 EndFunc   ;==>IncreaseAttribute
 
 ;~ Description: Decrease attribute by 1
 Func DecreaseAttribute($aAttributeID, $aHeroNumber = 0)
+	Local $lHeroID
+	If $aHeroNumber <> 0 Then
+		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lHeroID = GetWorldInfo("MyID")
+	EndIf
 	DllStructSetData($mDecreaseAttribute, 2, $aAttributeID)
-	DllStructSetData($mDecreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
+	DllStructSetData($mDecreaseAttribute, 3, $lHeroID)
 	Enqueue($mDecreaseAttributePtr, 12)
 EndFunc   ;==>DecreaseAttribute
 #EndRegion Fighting Enqueue

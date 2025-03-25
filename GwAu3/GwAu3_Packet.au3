@@ -318,17 +318,35 @@ EndFunc   ;==>LeaveGroup
 
 ;~ Description: Change a skill on the skillbar.
 Func SetSkillbarSkill($aSlot, $aSkillID, $aHeroNumber = 0)
-	Return SendPacket(0x14, $HEADER_SKILLBAR_SKILL_SET, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), $aSlot - 1, $aSkillID, 0)
+	Local $lHeroID
+	If $aHeroNumber <> 0 Then
+		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lHeroID = GetWorldInfo("MyID")
+	EndIf
+	Return SendPacket(0x14, $HEADER_SKILLBAR_SKILL_SET, $lHeroID, $aSlot - 1, $aSkillID, 0)
 EndFunc   ;==>SetSkillbarSkill
 
 ;~ Description: Load all skills onto a skillbar simultaneously.
 Func LoadSkillBar($aSkill1 = 0, $aSkill2 = 0, $aSkill3 = 0, $aSkill4 = 0, $aSkill5 = 0, $aSkill6 = 0, $aSkill7 = 0, $aSkill8 = 0, $aHeroNumber = 0)
-	SendPacket(0x2C, $HEADER_SKILLBAR_LOAD, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), 8, $aSkill1, $aSkill2, $aSkill3, $aSkill4, $aSkill5, $aSkill6, $aSkill7, $aSkill8)
+	Local $lHeroID
+	If $aHeroNumber <> 0 Then
+		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lHeroID = GetWorldInfo("MyID")
+	EndIf
+	Return SendPacket(0x2C, $HEADER_SKILLBAR_LOAD, $lHeroID, 8, $aSkill1, $aSkill2, $aSkill3, $aSkill4, $aSkill5, $aSkill6, $aSkill7, $aSkill8)
 EndFunc   ;==>LoadSkillBar
 
 ;~ Description: Change your secondary profession.
 Func ChangeSecondProfession($aProfession, $aHeroNumber = 0)
-	Return SendPacket(0xC, $HEADER_PROFESSION_CHANGE, GetMyPartyHeroInfo($aHeroNumber, "AgentID"), $aProfession)
+	Local $lHeroID
+	If $aHeroNumber <> 0 Then
+		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Else
+		$lHeroID = GetWorldInfo("MyID")
+	EndIf
+	Return SendPacket(0xC, $HEADER_PROFESSION_CHANGE, $lHeroID, $aProfession)
 EndFunc   ;==>ChangeSecondProfession
 #EndRegion Movement & Combat SendPacket
 

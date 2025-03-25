@@ -120,25 +120,8 @@ WEnd
 
 While $BotRunning
 	Sleep(500)
-;~ 	to try
-;~ 	CommandRequestQuote
-;~ CommandRequestQuoteSell
-;~ CommandTraderBuy
-;~ CommandTraderSell
-
-;~ TraderRequest(21233) ; Lightbringer scroll
-;~ PingSleep(250)
-;~ TraderBuy()
-
-;~ TraderRequestBuy($aItem)
-;~ TraderBuy()
-
-	Out(GetItemBySlot(1, 8))
-	Local $lItemID = ItemID(GetItemBySlot(1, 8))
-	Out($lItemID)
-	TraderRequestSell(GetItemBySlot(1, 8))
-	PingSleep(250)
-	TraderSell()
+	LoadSkillTemplate("OQGjUplIKPpbb88+q0jrwubeCA")
+	LoadSkillTemplate("OQGjUplIKPpbb88+q0jrwubeCA", 1)
 	Sleep(5000)
 WEnd
 

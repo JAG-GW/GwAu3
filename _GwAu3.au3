@@ -1,7 +1,6 @@
 #include-once
 #RequireAdmin
 
-
 #include "GwAu3/GwAu3_Core.au3"
 #include "GwAu3/GwAu3_GetInfo.au3"
 #include "GwAu3/GwAu3_ExtraInfo.au3"
