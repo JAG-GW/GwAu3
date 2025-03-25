@@ -170,7 +170,9 @@ EndFunc   ;==>BuyItem
 ;~ EndFunc   ;==>CraftItemEx
 
 ;~ Description: Request a quote to buy an item from a trader. Returns true if successful.
-Func TraderRequest($aModelID, $aExtraID = -1)
+;~ Put ModString as $aModString parameter if buying Runes
+;~ Put ExtraID as $aExtraID parameter if buying Dye, put "" as $aModString (don't buy and sell black dye)
+Func TraderRequest($aModelID, $aModString = "", $aExtraID = -1)
     Local $lItemPtr = 0
     Local $lFound = False
     Local $lQuoteID = MemoryRead($mTraderQuoteID)
@@ -182,29 +184,34 @@ Func TraderRequest($aModelID, $aExtraID = -1)
         $lItemPtr = GetItemPtr($lItemID)
         If $lItemPtr = 0 Then ContinueLoop
 
-        If MemoryRead($lItemPtr + 0x2C, 'dword') = $aModelID Then
-            If MemoryRead($lItemPtr + 0xC, 'ptr') = 0 And MemoryRead($lItemPtr + 0x4, 'dword') = 0 Then
-                If $aExtraID = -1 Or MemoryRead($lItemPtr + 0x22, 'short') = $aExtraID Then
-                    $lFound = True
-                    ExitLoop
-                EndIf
-            EndIf
-        EndIf
+        If MemoryRead($lItemPtr + 0x2C, 'dword') <> $aModelID Then ContinueLoop
+		If MemoryRead($lItemPtr + 0xC, 'ptr') <> 0 Or MemoryRead($lItemPtr + 0x4, 'dword') <> 0 Then ContinueLoop ;0xC=BagPtr 0x4=AgentID
+		
+		If $aModString == "" And $aExtraID = -1 Then
+			$lFound = True
+			ExitLoop
+		ElseIf $aExtraID <> -1 And MemoryRead($lItemPtr + 0x22, 'short') = $aExtraID Then
+			$lFound = True
+			ExitLoop
+		ElseIf $aModstring <> "" And StringInStr(GetModstruct($lItemPtr), $aModString) > 0 Then
+			$lFound = True
+			ExitLoop
+		EndIf
     Next
 
     If Not $lFound Then Return False
 
     DllStructSetData($mRequestQuote, 2, ItemID($lItemPtr))
-    If Not Enqueue($mRequestQuotePtr, 8) Then Return False
+    Enqueue($mRequestQuotePtr, 8)
 
     Local $lDeadlock = TimerInit()
     Do
-        Sleep(16)
+        Sleep(50)
         $lFound = MemoryRead($mTraderQuoteID) <> $lQuoteID
     Until $lFound Or TimerDiff($lDeadlock) > GetPing() + 5000
 
     Return $lFound
-EndFunc   ;==>TraderRequest
+EndFunc ;==>TraderRequest
 
 ;~ Description: Buy the requested item.
 Func TraderBuy()
