@@ -339,7 +339,7 @@ Func GetPlayerTradeItemsInfo($aTradeSlot = 0, $aInfo = "")
         Case "Quantity"
             Return MemoryRead($itemPtr + 4, "long")
         Case "ModelID"
-            Return GetItemInfoByPtr($itemID, "ModelID")
+            Return GetItemInfoByPtr($itemPtr, "ModelID")
     EndSwitch
 
     Return 0
@@ -361,7 +361,7 @@ Func GetPartnerTradeItemsInfo($aTradeSlot = 0, $aInfo = "")
         Case "Quantity"
             Return MemoryRead($itemPtr + 4, "long")
         Case "ModelID"
-            Return GetItemInfoByPtr($itemID, "ModelID")
+            Return GetItemInfoByPtr($itemPtr, "ModelID")
     EndSwitch
 
     Return 0
@@ -836,7 +836,8 @@ Func GetItemInfoByAgentID($aAgentID, $aInfo = "")
     If $lItemID = 0 Then Return 0
 
     If $aInfo = "" Then Return $lItemID
-    Return GetItemInfoByPtr($lItemID, $aInfo)
+	Local $lItemPtr = GetItemPtr($lItemID)
+    Return GetItemInfoByPtr($lItemPtr, $aInfo)
 EndFunc   ;==>GetItemInfoByAgentID
 
 Func GetItemInfoByModelID($aModelID, $aInfo = "")
@@ -844,7 +845,8 @@ Func GetItemInfoByModelID($aModelID, $aInfo = "")
     If $lItemID = 0 Then Return 0
 
     If $aInfo = "" Then Return $lItemID
-    Return GetItemInfoByPtr($lItemID, $aInfo)
+	Local $lItemPtr = GetItemPtr($lItemID)
+    Return GetItemInfoByPtr($lItemPtr, $aInfo)
 EndFunc   ;==>GetItemInfoByModelID
 
 Func GetItemInfoByPtr($lItemPtr, $aInfo)
@@ -904,7 +906,7 @@ Func GetItemInfoByPtr($lItemPtr, $aInfo)
         Case "NameEnc"
             Return MemoryRead($lItemPtr + 0x34, "ptr")
 		Case "Rarity"
-			Local $lRarityPtr = MemoryRead($lItemPtr + 0x34, "ptr")
+			Local $lRarityPtr = MemoryRead($lItemPtr + 0x38, "ptr")
 			Return MemoryRead($lRarityPtr, 'ushort')
 
         Case "CompleteNameEnc"

@@ -16,76 +16,79 @@ EndFunc
 ;~   $aReturnMode = 0=Count only, 1=Return closest, 2=Return farthest, 3=Return distance
 ;~   $aCustomFilter = Optional callback function for custom filtering
 Func GetAgents($aAgentID = -2, $aRange = 1320, $aType = 0, $aReturnMode = 0, $aCustomFilter = "")
-    ; Variables for tracking
+    ; Variables pour le suivi
     Local $lCount = 0
     Local $lClosestAgent = 0
-    Local $lClosestDistance = $aRange * $aRange  ; Squared distance for performance
+    Local $lClosestDistance = 999999
     Local $lFarthestAgent = 0
-    Local $lFarthestDistance = 0  ; Start with 0 to find the farthest
+    Local $lFarthestDistance = 0
 
-    ; Get reference agent info
-    Local $lRefID = GetAgentInfo($aAgentID, 'ID')
-    Local $lRefX = GetAgentInfo($aAgentID, 'X')
-    Local $lRefY = GetAgentInfo($aAgentID, 'Y')
+    ; Obtenir les coordonnées de l'agent de référence
+    Local $lRefID = ConvertID($aAgentID)
+    Local $lRefX = GetAgentInfo($aAgentID, "X")
+    Local $lRefY = GetAgentInfo($aAgentID, "Y")
 
-    ; Get agent array based on type
-    Local $lAgentPtrArray = ($aType > 0) ? GetAgentArray($aType) : GetAgentArray()
+    ; Obtenir le tableau d'agents en fonction du type
+    Local $lAgentArray
+    If $aType > 0 Then
+        $lAgentArray = GetAgentArray($aType)
+    Else
+        $lAgentArray = GetAgentArray()
+    EndIf
 
-    ; Process each agent
-    For $i = 1 To $lAgentPtrArray[0]
-        Local $lAgentPtr = $lAgentPtrArray[$i]
-        Local $lAgentID = GetAgentInfo($lAgentPtr, 'ID')
+    ; Si aucun agent trouvé, retourner 0
+    If Not IsArray($lAgentArray) Or $lAgentArray[0] = 0 Then
+        Return 0
+    EndIf
 
-        ; Skip self
-        If $lAgentID == $lRefID Then ContinueLoop
+    ; Traiter chaque agent
+    For $i = 1 To $lAgentArray[0]
+        Local $lAgentPtr = $lAgentArray[$i]
+        Local $lAgentID = MemoryRead($lAgentPtr + 0x2C, "long");GetAgentInfo($lAgentPtr, "ID")
 
-        ; Calculate squared distance (faster than sqrt)
-        Local $lAgentX = GetAgentInfo($lAgentPtr, 'X')
-        Local $lAgentY = GetAgentInfo($lAgentPtr, 'Y')
-        Local $lDistance = ($lRefX - $lAgentX) ^ 2 + ($lRefY - $lAgentY) ^ 2
+        ; Ignorer l'agent de référence
+        If $lAgentID = $lRefID Then ContinueLoop
 
-        ; Skip if outside range
-        If $lDistance > ($aRange * $aRange) Then ContinueLoop
+        ; Calculer la distance par rapport à l'agent de référence (pas par rapport au joueur)
+        Local $lAgentX = MemoryRead($lAgentPtr + 0x74, "float");GetAgentInfo($lAgentPtr, "X")
+        Local $lAgentY = MemoryRead($lAgentPtr + 0x78, "float");GetAgentInfo($lAgentPtr, "Y")
+        Local $lDistance = Sqrt(($lAgentX - $lRefX) ^ 2 + ($lAgentY - $lRefY) ^ 2)
 
-        ; Default match = true
-        Local $lMatches = True
+        ; Ignorer si en dehors de la portée de l'agent de référence
+        If $lDistance > $aRange Then ContinueLoop
 
-        ; Apply custom filter if provided
-        If $aCustomFilter <> "" And IsFunc($aCustomFilter) Then
-            $lMatches = Execute($aCustomFilter & "(" & $lAgentPtr & ")")
+        ; Appliquer le filtre personnalisé
+		If $aCustomFilter <> "" Then
+            Local $lResult = Call($aCustomFilter, $lAgentPtr)
+            If Not $lResult Then ContinueLoop
         EndIf
 
-        ; Process matching agent
-        If $lMatches Then
-            $lCount += 1
+        ; Incrémenter le compteur
+        $lCount += 1
 
-            ; Track closest if needed
-            If ($aReturnMode == 1 Or $aReturnMode == 3) And $lDistance < $lClosestDistance Then
-                $lClosestAgent = $lAgentPtr
-                $lClosestDistance = $lDistance
-            EndIf
+        ; Mettre à jour l'agent le plus proche
+        If $lDistance < $lClosestDistance Then
+            $lClosestDistance = $lDistance
+            $lClosestAgent = $lAgentPtr
+        EndIf
 
-            ; Track farthest if needed
-            If $aReturnMode == 2 And $lDistance > $lFarthestDistance Then
-                $lFarthestAgent = $lAgentPtr
-                $lFarthestDistance = $lDistance
-            EndIf
+        ; Mettre à jour l'agent le plus éloigné
+        If $lDistance > $lFarthestDistance Then
+            $lFarthestDistance = $lDistance
+            $lFarthestAgent = $lAgentPtr
         EndIf
     Next
 
-    ; Return appropriate result based on mode
+    ; Retourner le résultat en fonction du mode
     Switch $aReturnMode
-        Case 0 ; Count only
+        Case 0 ; Nombre d'agents
             Return $lCount
-
-        Case 1 ; Closest agent
+        Case 1 ; Agent le plus proche
             Return $lClosestAgent
-
-        Case 2 ; Farthest agent (within range)
+        Case 2 ; Agent le plus éloigné
             Return $lFarthestAgent
-
-        Case 3 ; Distance to closest agent
-            Return Sqrt($lClosestDistance)
+        Case 3 ; Distance à l'agent le plus proche
+            Return $lClosestDistance
     EndSwitch
 EndFunc
 
@@ -98,67 +101,70 @@ EndFunc
 ;~   $aReturnMode = 0=Count only, 1=Return closest, 2=Return farthest, 3=Return distance
 ;~   $aCustomFilter = Optional callback function for custom filtering
 Func GetXY($aX, $aY, $aRange = 1320, $aType = 0, $aReturnMode = 0, $aCustomFilter = "")
-    ; Variables for tracking
+    ; Variables pour le suivi
     Local $lCount = 0
     Local $lClosestAgent = 0
-    Local $lClosestDistance = $aRange * $aRange  ; Squared distance for performance
+    Local $lClosestDistance = 999999
     Local $lFarthestAgent = 0
-    Local $lFarthestDistance = 0  ; Start with 0 to find the farthest
+    Local $lFarthestDistance = 0
 
-    ; Get agent array based on type
-    Local $lAgentPtrArray = ($aType > 0) ? GetAgentArray($aType) : GetAgentArray()
+    ; Obtenir le tableau d'agents en fonction du type
+    Local $lAgentArray
+    If $aType > 0 Then
+        $lAgentArray = GetAgentArray($aType)
+    Else
+        $lAgentArray = GetAgentArray()
+    EndIf
 
-    ; Process each agent
-    For $i = 1 To $lAgentPtrArray[0]
-        Local $lAgentPtr = $lAgentPtrArray[$i]
+    ; Si aucun agent trouvé, retourner 0
+    If Not IsArray($lAgentArray) Or $lAgentArray[0] = 0 Then
+        Return 0
+    EndIf
 
-        ; Calculate squared distance (faster than sqrt)
-        Local $lAgentX = GetAgentInfo($lAgentPtr, 'X')
-        Local $lAgentY = GetAgentInfo($lAgentPtr, 'Y')
-        Local $lDistance = ($aX - $lAgentX) ^ 2 + ($aY - $lAgentY) ^ 2
+    ; Traiter chaque agent
+    For $i = 1 To $lAgentArray[0]
+        Local $lAgentPtr = $lAgentArray[$i]
 
-        ; Skip if outside range
-        If $lDistance > ($aRange * $aRange) Then ContinueLoop
+        ; Calculer la distance par rapport aux coordonnées spécifiées
+        Local $lAgentX = GetAgentInfo($lAgentPtr, "X")
+        Local $lAgentY = GetAgentInfo($lAgentPtr, "Y")
+        Local $lDistance = Sqrt(($lAgentX - $aX) ^ 2 + ($lAgentY - $aY) ^ 2)
 
-        ; Default match = true
-        Local $lMatches = True
+        ; Ignorer si en dehors de la portée spécifiée
+        If $lDistance > $aRange Then ContinueLoop
 
-        ; Apply custom filter if provided
-        If $aCustomFilter <> "" And IsFunc($aCustomFilter) Then
-            $lMatches = Execute($aCustomFilter & "(" & $lAgentPtr & ")")
+        ; Appliquer le filtre personnalisé
+        If $aCustomFilter <> "" Then
+            Local $lResult = Call($aCustomFilter, $lAgentPtr)
+            If Not $lResult Then ContinueLoop
         EndIf
 
-        ; Process matching agent
-        If $lMatches Then
-            $lCount += 1
+        ; Incrémenter le compteur
+        $lCount += 1
 
-            ; Track closest if needed
-            If ($aReturnMode == 1 Or $aReturnMode == 3) And $lDistance < $lClosestDistance Then
-                $lClosestAgent = $lAgentPtr
-                $lClosestDistance = $lDistance
-            EndIf
+        ; Mettre à jour l'agent le plus proche
+        If $lDistance < $lClosestDistance Then
+            $lClosestDistance = $lDistance
+            $lClosestAgent = $lAgentPtr
+        EndIf
 
-            ; Track farthest if needed
-            If $aReturnMode == 2 And $lDistance > $lFarthestDistance Then
-                $lFarthestAgent = $lAgentPtr
-                $lFarthestDistance = $lDistance
-            EndIf
+        ; Mettre à jour l'agent le plus éloigné
+        If $lDistance > $lFarthestDistance Then
+            $lFarthestDistance = $lDistance
+            $lFarthestAgent = $lAgentPtr
         EndIf
     Next
 
-    ; Return appropriate result based on mode
+    ; Retourner le résultat en fonction du mode
     Switch $aReturnMode
-        Case 0 ; Count only
+        Case 0 ; Nombre d'agents
             Return $lCount
-
-        Case 1 ; Closest agent
+        Case 1 ; Agent le plus proche
             Return $lClosestAgent
-
-        Case 2 ; Farthest agent (within range)
+        Case 2 ; Agent le plus éloigné
             Return $lFarthestAgent
-
-        Case 3 ; Distance to closest agent
-            Return Sqrt($lClosestDistance)
+        Case 3 ; Distance à l'agent le plus proche
+            Return $lClosestDistance
     EndSwitch
 EndFunc
 

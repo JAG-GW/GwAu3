@@ -83,7 +83,6 @@ EndFunc ;==PurgeHook_
 
 #Region Loading build
 Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
-	Out("Start LoadSkillTemplate")
 	Local $lHeroID
 	If $aHeroNumber <> 0 Then
 		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
@@ -159,9 +158,7 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
 	$lOpTail = Bin64ToDec($aTemplate)
 
 	$lAttributes[0][0] = $lProfSecondary
-	Out("Start LoadAttributes")
 	LoadAttributes($lAttributes, $aHeroNumber)
-	Out("Start LoadSkillBar")
 	LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber)
 EndFunc   ;==>LoadSkillTemplate
 
@@ -188,7 +185,6 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 			Until GetPartyProfessionInfo($lHeroID, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 5000
 		Until GetPartyProfessionInfo($lHeroID, "Secondary") == $aAttributesArray[0][0] Or TimerDiff($lDeadlock) > 10000
 	EndIf
-	Out("ok 1")
 
 	$aAttributesArray[0][0] = $lPrimaryAttribute
 	For $i = 0 To UBound($aAttributesArray) - 1
@@ -205,7 +201,6 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 		Until GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > 5000
 		Sleep(16)
 	WEnd
-	Out("ok 2")
 	For $i = 1 To UBound($aAttributesArray) - 1
 
 		While GetPartyAttributeInfo($aAttributesArray[$i][0], $aHeroNumber, "BaseLevel") > $aAttributesArray[$i][1]
@@ -218,7 +213,6 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 			Sleep(16)
 		WEnd
 	Next
-	Out("ok 3")
 	For $i = 0 To 44
 
 		If GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
@@ -237,7 +231,6 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 			WEnd
 		EndIf
 	Next
-	Out("ok 4")
 	$TestTimer = 0
 
 	While GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
@@ -251,7 +244,6 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 		Sleep(16)
 		If $TestTimer > 225 Then ExitLoop
 	WEnd
-	Out("ok 5")
 	For $i = 1 To UBound($aAttributesArray) - 1
 		$TestTimer = 0
 
@@ -267,7 +259,6 @@ Func LoadAttributes($aAttributesArray, $aHeroNumber = 0)
 			If $TestTimer > 225 Then ExitLoop
 		WEnd
 	Next
-	Out("ok end")
 EndFunc   ;==>LoadAttributes
 
 Func GetProfPrimaryAttribute($aProfession)

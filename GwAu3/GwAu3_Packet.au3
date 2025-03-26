@@ -113,6 +113,7 @@ Global Const $HEADER_UPGRADE = 0x86 ;used by gwapi. is it even useful? NOT TESTE
 Global Const $HEADER_UPGRADE_ARMOR_1 = 0x83 ;used by gwapi. is it even useful? NOT TESTED
 Global Const $HEADER_UPGRADE_ARMOR_2 = 0x86 ;used by gwapi. is it even useful? NOT TESTED
 Global Const $HEADER_EQUIP_BAG = 0x70
+Global Const $HEADER_SWITCH_SET = 0x31
 
 #Region Item SendPacket
 ;~ Description: Salvage the materials out of an item.
@@ -476,3 +477,7 @@ EndFunc   ;==>OpenChestNoLockpick
 Func OpenChest()
 	Return SendPacket(0x8, $HEADER_CHEST_OPEN, 2)
 EndFunc   ;==>OpenChest
+
+Func SwitchWeaponSet($aWeaponSet)
+    Return SendPacket(0x8, $HEADER_SWITCH_SET, $aWeaponSet)
+EndFunc   ;==>SwitchWeaponSet
