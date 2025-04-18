@@ -885,7 +885,11 @@ Func GetItemInfoByPtr($lItemPtr, $aInfo)
             Return MemoryRead($lItemPtr + 0x22, "byte")
         Case "Dye3"
             Return MemoryRead($lItemPtr + 0x23, "byte")
-        Case "Value"
+        
+        Case "ExtraID"
+            Return MemoryRead($lItemPtr + 0x22, "byte")
+        
+         Case "Value"
             Return MemoryRead($lItemPtr + 0x24, "Short")
         Case "h0026"
             Return MemoryRead($lItemPtr + 0x26, "Short")
