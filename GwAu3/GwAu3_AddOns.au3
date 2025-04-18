@@ -1,4 +1,10 @@
 #include-once
+
+#include "GwAu3_Core.au3"
+#include "GwAu3_Enqueue.au3"
+#include "GwAu3_GetInfo.au3"
+#include "GwAu3_Packet.au3"
+
 #Region Sleep
 ;~ Description: Sleep a random amount of time.
 Func RndSleep($aAmount, $aRandom = 0.05)
@@ -469,4 +475,10 @@ Func GetBestTarget($aRange = 1320)
 	Next
 	Return $lBestTarget
 EndFunc   ;==>GetBestTarget
+
+;~ Description: Returns modstruct of an item.
+Func GetModStruct($aItem)
+	If GetItemInfoByItemID($aItem, "ModStruct") = 0 Then Return
+	Return MemoryRead(GetItemInfoByItemID($aItem, "ModStruct"), 'Byte[' & GetItemInfoByItemID($aItem, "ModStructSize") * 4 & ']')
+EndFunc   ;==>GetModStruct
 #EndRegion

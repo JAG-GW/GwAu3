@@ -1,5 +1,8 @@
 #include-once
 
+#include 'GwAu3_Core.au3'
+#include 'GwAu3_GetInfo.au3'
+
 #Region PerformAction
 Global Const $ControlAction_None = 0x00
 Global Const $ControlAction_Interact = 0x80
