@@ -18,7 +18,7 @@ EndIf
 
 #Region Declarations
 ; General settings and handles
-Global $mKernelHandle, $mGWProcHandle, $mMemory
+Global $mKernelHandle, $mGWProcHandle, $mMemory, $mGWProcessId
 Global $mBase = 0x00C50000
 Global $mASMString, $mASMSize, $mASMCodeOffset
 Global $SecondInject
@@ -41,8 +41,8 @@ Global $mEnsureEnglish
 Global $mCurrentTarget
 Global $packetlocation
 Global $mAgentBase, $mBasePointer
-Global $mRegion;, $mLanguage
-Global $mPing, $mCharname;, $mMapID
+Global $mRegion ;, $mLanguage
+Global $mPing, $mCharname, $mMyID ;, $mMapID
 Global $mMaxAgents, $mMapLoading, $mMapIsLoaded, $mLoggedIn
 Global $mStringHandlerPtr, $mWriteChatSender
 Global $mTraderQuoteID, $mTraderCostID, $mTraderCostValue
@@ -56,6 +56,7 @@ Global $mCharslots
 Global $mInstanceInfo, $mAreaInfo
 Global $mAttributeInfo
 Global $mWorldConst
+Global $mSkillActivate, $mSkillCancel, $mSkillComplete, $mChatReceive, $mLoadFinished
 #EndRegion Declarations
 
 #Region CommandStructs
@@ -306,7 +307,6 @@ EndFunc   ;==>GetWindowHandle
 ;~ Description: Injects GWA² into the game client.
 Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSystem = True)
    ; Initialize variables
-   Local $lWinList, $lWinList2, $mGWProcessId
    $mUseStringLog = $aUseStringLog
    $mUseEventSystem = $aUseEventSystem
 

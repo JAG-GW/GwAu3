@@ -1,5 +1,10 @@
 #include-once
 
+#include "GwAu3_AddOns.au3"
+#include "GwAu3_Core.au3"
+#include "GwAu3_GetInfo.au3"
+#include "GwAu3_Packet.au3"
+
 #Region Item Enqueue
 Func StartSalvage($aItem, $aSalvageKit = "Expert Salvage Kit")
 	Local $lOffset[4] = [0, 0x18, 0x2C, 0x690]

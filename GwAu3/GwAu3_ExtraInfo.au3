@@ -1,5 +1,7 @@
 #include-once
 
+#include 'GwAu3_GetInfo.au3'
+
 Func MyCustomEnemyFilter($aAgentPtr)
 
     If GetAgentInfo($aAgentPtr, 'Allegiance') <> 3 Then Return False

@@ -1,5 +1,8 @@
 #include-once
 
+#include <StringConstants.au3>
+#include 'GwAu3_Core.au3'
+
 ;~ Description: Internal use for BuyItem()
 Func GetMerchantItemsBase()
 	Local $lOffset[4] = [0, 0x18, 0x2C, 0x24]
@@ -1767,7 +1770,8 @@ EndFunc
 
 #Region Quest Related
 Func GetQuestInfo($aQuestID, $aInfo = "")
-	Local $lSize = GetWorldInfo("QuestLogSize")
+	Local $lPtr
+    Local $lSize = GetWorldInfo("QuestLogSize")
 	If $lSize = 0 Or $aInfo = "" Then Return 0
 
 	For $i = 0 To $lSize
@@ -1913,7 +1917,7 @@ Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
 
 	If $lPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lSize Then Return 0
 
-    $lSkillbarPtr = $lPtr + ($aHeroNumber * 0xBC)
+    Local $lSkillbarPtr = $lPtr + ($aHeroNumber * 0xBC)
     If $lSkillbarPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo

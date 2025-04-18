@@ -1,5 +1,8 @@
 #include-once
 
+#include 'GwAu3_Core.au3'
+#include 'GwAu3_GetInfo.au3'
+
 ; Trading operations
 Global Const $HEADER_TRADE_CANCEL = 0x0001          ; Cancel the current trade.
 Global Const $HEADER_TRADE_ADD_ITEM = 0x0002        ; Add an item to the trade offer.
