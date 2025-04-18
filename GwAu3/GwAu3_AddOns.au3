@@ -445,6 +445,16 @@ EndFunc   ;==>GetMapID
 #EndRegion Travel
 
 #Region Other
+;~ Description: Returns the distance between two agents.
+Func GetDistance($aAgentID1 = -1, $aAgentID2 = -2)
+	Return ComputeDistance(GetAgentInfo($aAgentID1, 'X'), GetAgentInfo($aAgentID1, 'Y'), GetAgentInfo($aAgentID2, 'X'), GetAgentInfo($aAgentID2, 'Y'))
+EndFunc   ;==>GetDistance
+
+;~ Description: Returns the distance between two coordinate pairs.
+Func ComputeDistance($aX1, $aY1, $aX2, $aY2)
+	Return Sqrt(($aX1 - $aX2) ^ 2 + ($aY1 - $aY2) ^ 2)
+EndFunc   ;==>ComputeDistance
+
 Func GetBestTarget($aRange = 1320)
 	Local $lBestTarget, $lDistance, $lLowestSum = 100000000
 	Local $lAgentArray = GetAgentArray(0xDB)
