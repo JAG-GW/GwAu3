@@ -1,9 +1,9 @@
 #include-once
 
-#include "GwAu3_Core.au3"
-#include "GwAu3_Enqueue.au3"
-#include "GwAu3_GetInfo.au3"
-#include "GwAu3_Packet.au3"
+#include "../GwAu3_Core.au3"
+#include "../Commands/GwAu3_Enqueue.au3"
+#include "../Queries/GwAu3_GetInfo.au3"
+#include "../Commands/GwAu3_Packet.au3"
 
 #Region Sleep
 ;~ Description: Sleep a random amount of time.

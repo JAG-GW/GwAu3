@@ -1,9 +1,9 @@
 #include-once
 
-#include "GwAu3_AddOns.au3"
-#include "GwAu3_Core.au3"
-#include "GwAu3_GetInfo.au3"
-#include "GwAu3_Packet.au3"
+#include "../AddOns/GwAu3_AddOns.au3"
+#include "../GwAu3_Core.au3"
+#include "../Queries/GwAu3_GetInfo.au3"
+#include "../Commands/GwAu3_Packet.au3"
 
 #Region Item Enqueue
 Func StartSalvage($aItem, $aSalvageKit = "Expert Salvage Kit")
@@ -191,7 +191,7 @@ Func TraderRequest($aModelID, $aModString = "", $aExtraID = -1)
 
         If MemoryRead($lItemPtr + 0x2C, 'dword') <> $aModelID Then ContinueLoop
 		If MemoryRead($lItemPtr + 0xC, 'ptr') <> 0 Or MemoryRead($lItemPtr + 0x4, 'dword') <> 0 Then ContinueLoop ;0xC=BagPtr 0x4=AgentID
-		
+
 		If $aModString == "" And $aExtraID = -1 Then
 			$lFound = True
 			ExitLoop

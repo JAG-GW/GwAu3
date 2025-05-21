@@ -17,16 +17,15 @@
 #include <WinAPIFiles.au3>
 #include <GuiSlider.au3>
 #include <ColorConstants.au3>
-#include <WinAPITheme.au3> ; <<<<<<<<<<<<<<<<<<
+#include <WinAPITheme.au3>
 #include <WinAPIDiag.au3>
+#include <RichEditConstants.au3>
+#include <GuiRichEdit.au3>
 #include "_GwAu3.au3"
 
 Global Const $doLoadLoggedChars = True
 Opt("GUIOnEventMode", True)
 Opt("GUICloseOnESC", False)
-
-GUIRegisterMsg(0x501, "OnPacket")
-
 Opt("ExpandVarStrings", 1)
 
 #Region Declarations
@@ -56,10 +55,9 @@ $GUIStartButton = GUICtrlCreateButton("Start", 24, 72, 75, 25)
 GUICtrlSetOnEvent($GUIStartButton, "GuiButtonHandler")
 $gOnTopCheckbox = GUICtrlCreateCheckbox("On Top", 232, 31, 81, 24)
 GUICtrlSetState(-1, $GUI_CHECKED)
-$GUIActionsEdit = GUICtrlCreateEdit("", 16, 104, 297, 161)
-GUICtrlSetData(-1, "")
-GUICtrlSetColor(-1, 0x99B2FF)
-GUICtrlSetBkColor(-1, 0x23272A)
+$GUIEdit = _GUICtrlRichEdit_Create($MainGui, "", 16, 104, 297, 161, BitOR($ES_AUTOVSCROLL, $ES_MULTILINE, $WS_VSCROLL, $ES_READONLY))
+_GUICtrlRichEdit_SetBkColor($GUIEdit, $COLOR_WHITE) ; Couleur de fond
+
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUISetOnEvent($GUI_EVENT_CLOSE, "_Exit")
 GUISetState(@SW_SHOW)
@@ -67,8 +65,9 @@ GUISetState(@SW_SHOW)
 
 Func GuiButtonHandler()
     Switch @GUI_CtrlId
-        Case $GUIStartButton
-            Out("Initializing")
+		Case $GUIStartButton
+			_Log_SetDebugMode(True)
+			_Log_Info("Initializing...", "GwAu3", $GUIEdit)
             Local $charName = GUICtrlRead($GUINameCombo)
             If $charName=="" Then
                 If Initialize(ProcessExists("gw.exe"), True, False, False) = 0 Then
@@ -93,7 +92,7 @@ Func GuiButtonHandler()
             EndIf
             GUICtrlSetState($GUIStartButton, $GUI_Disable)
 			GUICtrlSetState($GUIRefreshButton, $GUI_Disable)
-            GUICtrlSetState($GUINameCombo, $GUI_Disable)
+            GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
             WinSetTitle($MainGui, "", GetCharname() & " - Bot for test")
             $BotRunning = True
             $BotInitialized = True
@@ -116,6 +115,7 @@ EndFunc
 
 While Not $BotRunning
     Sleep(100)
+
 WEnd
 
 While $BotRunning
@@ -124,13 +124,12 @@ While $BotRunning
 	Sleep(5000)
 WEnd
 
-Func Out($TEXT)
-    Local $TIME = "[" & @HOUR & ":" & @MIN & ":" & @SEC & "] - "
-    Local $TEXTLEN = StringLen($TEXT)
-    Local $CONSOLELEN = _GUICtrlEdit_GetTextLen($GUIActionsEdit)
-    If $TEXTLEN + $CONSOLELEN > 30000 Then GUICtrlSetData($GUIActionsEdit, StringRight(_GUICtrlEdit_GetText($GUIActionsEdit), 30000 - $TEXTLEN - 1000))
-    _GUICtrlEdit_AppendText($GUIActionsEdit, @CRLF & $TIME & $TEXT)
-    _GUICtrlEdit_Scroll($GUIActionsEdit, 1)
+Func GetChecked($GUICtrl)
+	If BitAND(GUICtrlRead($GUICtrl), $GUI_CHECKED) = $GUI_CHECKED then
+		Return  True;$GUI_Checked
+	Else
+		Return False;$GUI_UNCHECKED
+	EndIf
 EndFunc
 
 Func _Exit()

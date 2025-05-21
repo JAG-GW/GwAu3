@@ -1,8 +1,5 @@
 #include-once
 
-#include <StringConstants.au3>
-#include 'GwAu3_Core.au3'
-
 ;~ Description: Internal use for BuyItem()
 Func GetMerchantItemsBase()
 	Local $lOffset[4] = [0, 0x18, 0x2C, 0x24]
@@ -885,10 +882,10 @@ Func GetItemInfoByPtr($lItemPtr, $aInfo)
             Return MemoryRead($lItemPtr + 0x22, "byte")
         Case "Dye3"
             Return MemoryRead($lItemPtr + 0x23, "byte")
-        
+
         Case "ExtraID"
             Return MemoryRead($lItemPtr + 0x22, "byte")
-        
+
          Case "Value"
             Return MemoryRead($lItemPtr + 0x24, "Short")
         Case "h0026"
