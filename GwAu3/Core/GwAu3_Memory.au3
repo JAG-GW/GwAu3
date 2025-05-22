@@ -1,4 +1,5 @@
 #include-once
+#include "GwAu3_Constants_Core.au3"
 
 ; #FUNCTION# ;===============================================================================
 ; Name...........: MemoryOpen

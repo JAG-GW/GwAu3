@@ -1,4 +1,5 @@
 #include-once
+#include "GwAu3_Constants_Core.au3"
 
 ; #FUNCTION# ;===============================================================================
 ; Name...........: SetEvent
@@ -11,7 +12,7 @@
 ;                  $aLoadFinished  - [optional] Function to call when map loading is finished (default: '')
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - If $mUseEventSystem is False, this function does nothing
 ;                  - For each event type, if a callback function is provided, a detour is created
 ;                  - If no callback is provided, original code is restored
@@ -76,7 +77,7 @@ EndFunc   ;==>SetEvent
 ;                  $lparam  - Additional message-specific information (event type)
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - This function is registered as a message handler for the GwAu3 GUI
 ;                  - It handles different event types based on the $lparam value:
 ;                    * 0x1-0x3: Skill events (activate, cancel, complete)
@@ -111,7 +112,7 @@ EndFunc   ;==>Event
 ;                  $skillLogStruct - DllStruct containing skill event data
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Extracts data from the skill log structure
 ;                  - Different event types have different parameter signatures:
 ;                    * Skill Activate: skillID, target ID, energy cost, activation time
@@ -145,7 +146,7 @@ EndFunc   ;==>HandleSkillEvent
 ; Parameters ....: $chatLogStruct - DllStruct containing chat message data
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Extracts message type, content, channel, and sender from the chat structure
 ;                  - Identifies the channel based on the message type (Alliance, Guild, Team, etc.)
 ;                  - Extracts sender name and message content from the HTML-formatted message
@@ -209,7 +210,7 @@ EndFunc   ;==>ProcessChatMessage
 ; Parameters ....: None
 ; Return values .: True if registration successful, False otherwise
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Must be called after the GwAu3 GUI is created
 ;                  - Sets up the communication channel between Guild Wars and AutoIt
 ;                  - Uses Windows message 0x501 (1281) for callback events
@@ -227,7 +228,7 @@ EndFunc   ;==>RegisterCallbackHandler
 ; Parameters ....: None
 ; Return values .: True if unregistration successful, False otherwise
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Should be called when closing the application
 ;                  - Prevents memory leaks and potential crashes
 ;                  - Removes the message handler for the 0x501 callback message

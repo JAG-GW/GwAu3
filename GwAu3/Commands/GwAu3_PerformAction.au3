@@ -1,5 +1,4 @@
 #include-once
-
 #include '../GwAu3_Core.au3'
 #include '../Queries/GwAu3_GetInfo.au3'
 

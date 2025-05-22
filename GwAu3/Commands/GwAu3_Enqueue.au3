@@ -1,5 +1,4 @@
 #include-once
-
 #include "../AddOns/GwAu3_AddOns.au3"
 #include "../GwAu3_Core.au3"
 #include "../Queries/GwAu3_GetInfo.au3"
@@ -268,16 +267,6 @@ Func TraderSell()
 EndFunc   ;==>TraderSell
 #EndRegion Item Enqueue
 
-#Region H&H Enqueue
-;~ Description: Order a hero to use a skill.
-Func UseHeroSkill($aHeroNumber, $aSkillSlot, $aTarget = -2)
-	DllStructSetData($mUseHeroSkill, 2, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
-	DllStructSetData($mUseHeroSkill, 3, ConvertID($aTarget))
-	DllStructSetData($mUseHeroSkill, 4, $aSkillSlot - 1)
-	Enqueue($mUseHeroSkillPtr, 16)
-EndFunc   ;==>UseHeroSkill
-#EndRegion H&H Enqueue
-
 #Region Movement Enqueue
 ;~ Description: Move to a location.
 Func Move($aX, $aY, $aRandom = 50)
@@ -293,40 +282,6 @@ Func ChangeTarget($aAgent)
 	DllStructSetData($mChangeTarget, 2, ConvertID($aAgent))
 	Enqueue($mChangeTargetPtr, 8)
 EndFunc   ;==>ChangeTarget
-
-;~ Description: Use a skill.
-Func UseSkill($aSkillSlot, $aTarget = -2, $aCallTarget = False)
-	DllStructSetData($mUseSkill, 2, $aSkillSlot)
-	DllStructSetData($mUseSkill, 3, ConvertID($aTarget))
-	DllStructSetData($mUseSkill, 4, $aCallTarget)
-	Enqueue($mUseSkillPtr, 16)
-EndFunc   ;==>UseSkill
-
-;~ Description: Increase attribute by 1
-Func IncreaseAttribute($aAttributeID, $aHeroNumber = 0)
-	Local $lHeroID
-	If $aHeroNumber <> 0 Then
-		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
-	Else
-		$lHeroID = GetWorldInfo("MyID")
-	EndIf
-	DllStructSetData($mIncreaseAttribute, 2, $aAttributeID)
-	DllStructSetData($mIncreaseAttribute, 3, $lHeroID)
-	Enqueue($mIncreaseAttributePtr, 12)
-EndFunc   ;==>IncreaseAttribute
-
-;~ Description: Decrease attribute by 1
-Func DecreaseAttribute($aAttributeID, $aHeroNumber = 0)
-	Local $lHeroID
-	If $aHeroNumber <> 0 Then
-		$lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
-	Else
-		$lHeroID = GetWorldInfo("MyID")
-	EndIf
-	DllStructSetData($mDecreaseAttribute, 2, $aAttributeID)
-	DllStructSetData($mDecreaseAttribute, 3, $lHeroID)
-	Enqueue($mDecreaseAttributePtr, 12)
-EndFunc   ;==>DecreaseAttribute
 #EndRegion Fighting Enqueue
 
 #Region Misc Enqueue

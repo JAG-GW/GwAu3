@@ -39,9 +39,9 @@ Global Const $BotTitle = "Tester"
 #EndRegion Declaration
 
 #Region ### START Koda GUI section ### Form=
-$MainGui = GUICreate($BotTitle, 336, 285, -1, -1, -1, BitOR($WS_EX_TOPMOST,$WS_EX_WINDOWEDGE))
+$MainGui = GUICreate($BotTitle, 500, 350, -1, -1, -1, BitOR($WS_EX_TOPMOST,$WS_EX_WINDOWEDGE))
 GUISetBkColor(0xEAEAEA, $MainGui)
-$Group1 = GUICtrlCreateGroup("Select Your Character", 8, 8, 313, 265)
+$Group1 = GUICtrlCreateGroup("Select Your Character", 8, 8, 475, 325)
 Global $GUINameCombo
 If $doLoadLoggedChars Then
     $GUINameCombo = GUICtrlCreateCombo($charName, 24, 32, 145, 25, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL))
@@ -49,13 +49,17 @@ If $doLoadLoggedChars Then
 Else
     $GUINameCombo = GUICtrlCreateInput("Character name", 24, 32, 145, 25)
 EndIf
-$GUIRefreshButton = GUICtrlCreateButton("Refresh", 176, 34, 51, 17)
-GUICtrlSetOnEvent($GUIRefreshButton, "GuiButtonHandler")
+$gOnTopCheckbox = GUICtrlCreateCheckbox("On Top", 200, 31, 60, 24)
+GUICtrlSetState($gOnTopCheckbox, $GUI_CHECKED)
+GUICtrlSetOnEvent($gOnTopCheckbox, "GuiButtonHandler")
+$gDebugCheckbox = GUICtrlCreateCheckbox("Debug Mode", 260, 31, 80, 24)
+GUICtrlSetState($gDebugCheckbox, $GUI_CHECKED)
+GUICtrlSetOnEvent($gDebugCheckbox, "GuiButtonHandler")
 $GUIStartButton = GUICtrlCreateButton("Start", 24, 72, 75, 25)
 GUICtrlSetOnEvent($GUIStartButton, "GuiButtonHandler")
-$gOnTopCheckbox = GUICtrlCreateCheckbox("On Top", 232, 31, 81, 24)
-GUICtrlSetState(-1, $GUI_CHECKED)
-$GUIEdit = _GUICtrlRichEdit_Create($MainGui, "", 16, 104, 297, 161, BitOR($ES_AUTOVSCROLL, $ES_MULTILINE, $WS_VSCROLL, $ES_READONLY))
+$GUIRefreshButton = GUICtrlCreateButton("Refresh", 110, 72, 75, 25)
+GUICtrlSetOnEvent($GUIRefreshButton, "GuiButtonHandler")
+$GUIEdit = _GUICtrlRichEdit_Create($MainGui, "", 16, 104, 458, 222, BitOR($ES_AUTOVSCROLL, $ES_MULTILINE, $WS_VSCROLL, $ES_READONLY))
 _GUICtrlRichEdit_SetBkColor($GUIEdit, $COLOR_WHITE) ; Couleur de fond
 
 GUICtrlCreateGroup("", -99, -99, 1, 1)
@@ -66,7 +70,6 @@ GUISetState(@SW_SHOW)
 Func GuiButtonHandler()
     Switch @GUI_CtrlId
 		Case $GUIStartButton
-			_Log_SetDebugMode(True)
 			_Log_Info("Initializing...", "GwAu3", $GUIEdit)
             Local $charName = GUICtrlRead($GUINameCombo)
             If $charName=="" Then
@@ -108,10 +111,26 @@ Func GuiButtonHandler()
                 WinSetOnTop($BotTitle, "", 0)
             EndIf
 
+		Case $gDebugCheckbox
+            If GetChecked($gDebugCheckbox) Then
+                _Log_SetDebugMode(True)
+            Else
+                _Log_SetDebugMode(False)
+            EndIf
+
         Case $GUI_EVENT_CLOSE
             Exit
     EndSwitch
 EndFunc
+
+Out("Based on GWA2")
+Out("GWA2 - Created by: " & $GWA2_CREATOR)
+Out("GWA2 - Build date: " & $GWA2_BUILD_DATE & @CRLF)
+
+Out("GwAu3 - Created by: " & $GWAU3_UPDATOR)
+Out("GwAu3 - Build date: " & $GWAU3_BUILD_DATE)
+Out("GwAu3 - Version: " & $GWAU3_VERSION)
+Out("GwAu3 - Last Update: " & $GWAU3_LAST_UPDATE & @CRLF)
 
 While Not $BotRunning
     Sleep(100)
@@ -120,9 +139,17 @@ WEnd
 
 While $BotRunning
 	Sleep(500)
-
+	LoadSkillTemplate("OwAC08HDDBv6So+Xkuo9w6D", 1)
 	Sleep(5000)
 WEnd
+
+Func Out($TEXT)
+    Local $TEXTLEN = StringLen($TEXT)
+    Local $CONSOLELEN = _GUICtrlEdit_GetTextLen($GUIEdit)
+    If $TEXTLEN + $CONSOLELEN > 30000 Then GUICtrlSetData($GUIEdit, StringRight(_GUICtrlEdit_GetText($GUIEdit), 30000 - $TEXTLEN - 1000))
+    _GUICtrlEdit_AppendText($GUIEdit, @CRLF & $TEXT)
+    _GUICtrlEdit_Scroll($GUIEdit, 1)
+EndFunc
 
 Func GetChecked($GUICtrl)
 	If BitAND(GUICtrlRead($GUICtrl), $GUI_CHECKED) = $GUI_CHECKED then

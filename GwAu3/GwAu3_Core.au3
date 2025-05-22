@@ -1,5 +1,4 @@
 #include-once
-#RequireAdmin
 #include "Core/GwAu3_Constants_Core.au3"
 #include "Core/GwAu3_Memory.au3"
 #include "Core/GwAu3_Assembler.au3"
@@ -7,6 +6,12 @@
 #include "Core/GwAu3_Commands.au3"
 #include "Core/GwAu3_Utils.au3"
 #include "Core/GwAu3_LogMessages.au3"
+#include "Modules/Skills/SkillMod_Initialize.au3"
+#include "Modules/Skills/SkillMod_Data.au3"
+#include "Modules/Skills/SkillMod_Commands.au3"
+#include "Modules/Attributes/AttributeMod_Initialize.au3"
+#include "Modules/Attributes/AttributeMod_Data.au3"
+#include "Modules/Attributes/AttributeMod_Commands.au3"
 
 If @AutoItX64 Then
     MsgBox(16, "Error!", "Please run all bots in 32-bit (x86) mode.")
@@ -16,9 +21,6 @@ EndIf
 #Region CommandStructs
 Global $mInviteGuild = DllStructCreate('ptr;dword;dword header;dword counter;wchar name[32];dword type')
 Global $mInviteGuildPtr = DllStructGetPtr($mInviteGuild)
-
-Global $mUseSkill = DllStructCreate('ptr;dword;dword;dword')
-Global $mUseSkillPtr = DllStructGetPtr($mUseSkill)
 
 Global $mMove = DllStructCreate('ptr;float;float;float')
 Global $mMovePtr = DllStructGetPtr($mMove)
@@ -34,9 +36,6 @@ Global $mSellItemPtr = DllStructGetPtr($mSellItem)
 
 Global $mToggleLanguage = DllStructCreate('ptr;dword')
 Global $mToggleLanguagePtr = DllStructGetPtr($mToggleLanguage)
-
-Global $mUseHeroSkill = DllStructCreate('ptr;dword;dword;dword')
-Global $mUseHeroSkillPtr = DllStructGetPtr($mUseHeroSkill)
 
 Global $mBuyItem = DllStructCreate('ptr;dword;dword;dword;dword')
 Global $mBuyItemPtr = DllStructGetPtr($mBuyItem)
@@ -61,18 +60,6 @@ Global $mTraderSellPtr = DllStructGetPtr($mTraderSell)
 
 Global $mSalvage = DllStructCreate('ptr;dword;dword;dword')
 Global $mSalvagePtr = DllStructGetPtr($mSalvage)
-
-Global $mIncreaseAttribute = DllStructCreate('ptr;dword;dword')
-Global $mIncreaseAttributePtr = DllStructGetPtr($mIncreaseAttribute)
-
-Global $mDecreaseAttribute = DllStructCreate('ptr;dword;dword')
-Global $mDecreaseAttributePtr = DllStructGetPtr($mDecreaseAttribute)
-
-Global $mMaxAttributes = DllStructCreate("ptr;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword")
-Global $mMaxAttributesPtr = DllStructGetPtr($mMaxAttributes)
-
-Global $mSetAttributes = DllStructCreate("ptr;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword")
-Global $mSetAttributesPtr = DllStructGetPtr($mSetAttributes)
 
 Global $mMakeAgentArray = DllStructCreate('ptr;dword')
 Global $mMakeAgentArrayPtr = DllStructGetPtr($mMakeAgentArray)
@@ -261,12 +248,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mRegion = MemoryRead(GetScannedAddress('ScanRegion', -0x3))
    _Log_Debug("Region: " & Ptr($mRegion), "Initialize", $GUIEdit)
 
-   $mSkillBase = MemoryRead(GetScannedAddress('ScanSkillBase', 0x8))
-   _Log_Debug("SkillBase: " & Ptr($mSkillBase), "Initialize", $GUIEdit)
-
-   $mSkillTimer = MemoryRead(GetScannedAddress('ScanSkillTimer', -0x3))
-   _Log_Debug("SkillTimer: " & Ptr($mSkillTimer), "Initialize", $GUIEdit)
-
    $mZoomStill = GetScannedAddress("ScanZoomStill", 0x33)
    _Log_Debug("ZoomStill: " & Ptr($mZoomStill), "Initialize", $GUIEdit)
 
@@ -285,11 +266,11 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mAreaInfo = MemoryRead(GetScannedAddress('ScanAreaInfo', 0x6))
    _Log_Debug("AreaInfo: " & Ptr($mAreaInfo), "Initialize", $GUIEdit)
 
-   $mAttributeInfo = MemoryRead(GetScannedAddress('ScanAttributeInfo', -0x3))
-   _Log_Debug("AttributeInfo: " & Ptr($mAttributeInfo), "Initialize", $GUIEdit)
-
    $mWorldConst = MemoryRead(GetScannedAddress('ScanWorldConst', 0x8))
    _Log_Debug("WorldConst: " & Ptr($mWorldConst), "Initialize", $GUIEdit)
+
+   _SkillMod_Initialize()
+   _AttributeMod_Initialize()
 
    $lTemp = GetScannedAddress('ScanEngine', -0x22)
    SetValue('MainStart', Ptr($lTemp))
@@ -302,18 +283,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $lTemp = GetScannedAddress('ScanTargetLog', 0x1)
    SetValue('TargetLogStart', Ptr($lTemp))
    SetValue('TargetLogReturn', Ptr($lTemp + 0x5))
-
-   $lTemp = GetScannedAddress('ScanSkillLog', 0x1)
-   SetValue('SkillLogStart', Ptr($lTemp))
-   SetValue('SkillLogReturn', Ptr($lTemp + 0x5))
-
-   $lTemp = GetScannedAddress('ScanSkillCompleteLog', -0x4)
-   SetValue('SkillCompleteLogStart', Ptr($lTemp))
-   SetValue('SkillCompleteLogReturn', Ptr($lTemp + 0x5))
-
-   $lTemp = GetScannedAddress('ScanSkillCancelLog', 0x5)
-   SetValue('SkillCancelLogStart', Ptr($lTemp))
-   SetValue('SkillCancelLogReturn', Ptr($lTemp + 0x6))
 
    $lTemp = GetScannedAddress('ScanChatLog', 0x12)
    SetValue('ChatLogStart', Ptr($lTemp))
@@ -346,11 +315,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('SalvageFunction', Ptr(GetScannedAddress('ScanSalvageFunction', -0xA)))
    SetValue('SalvageGlobal', Ptr(MemoryRead(GetScannedAddress('ScanSalvageGlobal', 1) - 0x4)))
 
-   SetValue('IncreaseAttributeFunction', Ptr(GetScannedAddress('ScanIncreaseAttributeFunction', -0x5A)))
-   SetValue("DecreaseAttributeFunction", Ptr(GetScannedAddress("ScanDecreaseAttributeFunction", 0x19)))
-
    SetValue('MoveFunction', Ptr(GetScannedAddress('ScanMoveFunction', 0x1)))
-   SetValue('UseSkillFunction', Ptr(GetScannedAddress('ScanUseSkillFunction', -0x125)))
 
   ;SetValue('ChangeTargetFunction', Ptr(GetScannedAddress('ScanChangeTargetFunction', -0x0089) + 1, 8))
    SetValue('ChangeTargetFunction', Ptr(GetScannedAddress('ScanChangeTargetFunction', -0x0086) + 1))
@@ -361,8 +326,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    SetValue('ActionBase', Ptr(MemoryRead(GetScannedAddress('ScanActionBase', -0x3))))
    SetValue('ActionFunction', Ptr(GetScannedAddress('ScanActionFunction', -0x3)))
-
-   SetValue('UseHeroSkillFunction', Ptr(GetScannedAddress('ScanUseHeroSkillFunction', -0x59)))
 
    SetValue('BuyItemBase', Ptr(MemoryRead(GetScannedAddress('ScanBuyItemBase', 0xF))))
 
@@ -375,7 +338,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('ChangeStatusFunction', Ptr(GetScannedAddress("ScanChangeStatusFunction", 0x1)))
 
    SetValue('QueueSize', '0x00000010')
-   SetValue('SkillLogSize', '0x00000010')
    SetValue('ChatLogSize', '0x00000010')
    SetValue('TargetLogSize', '0x00000200')
    SetValue('StringLogSize', '0x00000200')
@@ -407,14 +369,12 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    DllStructSetData($mInviteGuild, 1, GetValue('CommandPacketSend'))
    DllStructSetData($mInviteGuild, 2, 0x4C)
-   DllStructSetData($mUseSkill, 1, GetValue('CommandUseSkill'))
    DllStructSetData($mMove, 1, GetValue('CommandMove'))
    DllStructSetData($mChangeTarget, 1, GetValue('CommandChangeTarget'))
    DllStructSetData($mPacket, 1, GetValue('CommandPacketSend'))
    DllStructSetData($mSellItem, 1, GetValue('CommandSellItem'))
    DllStructSetData($mAction, 1, GetValue('CommandAction'))
    DllStructSetData($mToggleLanguage, 1, GetValue('CommandToggleLanguage'))
-   DllStructSetData($mUseHeroSkill, 1, GetValue('CommandUseHeroSkill'))
    DllStructSetData($mBuyItem, 1, GetValue('CommandBuyItem'))
    DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
    DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
@@ -424,10 +384,10 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    DllStructSetData($mTraderBuy, 1, GetValue('CommandTraderBuy'))
    DllStructSetData($mTraderSell, 1, GetValue('CommandTraderSell'))
    DllStructSetData($mSalvage, 1, GetValue('CommandSalvage'))
-   DllStructSetData($mIncreaseAttribute, 1, GetValue('CommandIncreaseAttribute'))
-   DllStructSetData($mDecreaseAttribute, 1, GetValue('CommandDecreaseAttribute'))
    DllStructSetData($mMakeAgentArray, 1, GetValue('CommandMakeAgentArray'))
    DllStructSetData($mChangeStatus, 1, GetValue('CommandChangeStatus'))
+   _SkillMod_SetupStructures()
+   _AttributeMod_SetupStructures()
 
    If $bChangeTitle Then
       WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
@@ -518,9 +478,6 @@ Func Scan()
 ;~ 	_('ScanLanguage:')
 ;~ 	AddPattern('C38B75FC8B04B5') ; COULD NOT UPDATE! 23.12.24
 
-	_('ScanUseSkillFunction:')
-	AddPattern('85F6745B83FE1174') ; STILL WORKING 23.12.24, 558BEC83EC1053568BD9578BF2895DF0
-
 	_('ScanPacketSendFunction:')
 	AddPattern('C747540000000081E6') ;UPDATED 28.12.24 old: F7D9C74754010000001BC981, 558BEC83EC2C5356578BF985
 
@@ -529,15 +486,6 @@ Func Scan()
 
 	_('ScanWriteChatFunction:')
 	AddPattern('8D85E0FEFFFF50681C01') ;STILL WORKING 23.12.24, 558BEC5153894DFC8B4D0856578B
-
-	_('ScanSkillLog:')
-	AddPattern('408946105E5B5D') ; COULD NOT UPDATE! 23.12.24
-
-	_('ScanSkillCompleteLog:')
-	AddPattern('741D6A006A40') ; COULD NOT UPDATE! 23.12.24
-
-	_('ScanSkillCancelLog:')
-	AddPattern('741D6A006A48') ; COULD NOT UPDATE! 23.12.24
 
 	_('ScanChatLog:')
 	AddPattern('8B45F48B138B4DEC50') ; COULD NOT UPDATE! 23.12.24
@@ -559,12 +507,6 @@ Func Scan()
 
 	_('ScanActionBase:')
 	AddPattern('8D1C87899DF4') ; UPDATED 24.12.24, OLD: 8D1C87899DF4FEFFFF8BC32BC7C1F802, 8B4208A80175418B4A08
-
-	_('ScanSkillBase:')
-	AddPattern('8D04B6C1E00505') ;STILL WORKING 23.12.24 ;8D 04 B6 C1 E0 05 05
-
-	_('ScanUseHeroSkillFunction:')
-	AddPattern('BA02000000B954080000') ;STILL WORKING 23.12.24
 
 	_('ScanTransactionFunction:')
 	AddPattern('85FF741D8B4D14EB08') ;STILL WORKING 23.12.24 ;558BEC81ECC000000053568B75085783FE108BFA8BD97614
@@ -595,15 +537,6 @@ Func Scan()
 	_('ScanSalvageGlobal:')
 	AddPattern('8B4A04538945F48B4208') ; UPDATED 24.12.24, OLD: 8B5104538945F48B4108568945E88B410C578945EC8B4110528955E48945F0
 	;AddPattern('8B018B4904A3')
-
-	_('ScanIncreaseAttributeFunction:')
-	AddPattern('8B7D088B702C8B1F3B9E00050000') ;STILL WORKING 23.12.24, 8B702C8B3B8B86
-
-	_("ScanDecreaseAttributeFunction:")
-	AddPattern("8B8AA800000089480C5DC3CC") ;STILL WORKING 23.12.24, 8B402C8BCE059C0000008B1089118B50
-
-	_('ScanSkillTimer:')
-	AddPattern('FFD68B4DF08BD88B4708') ;STILL WORKING 23.12.24, 85c974158bd62bd183fa64
 
 	_('ScanClickToMoveFix:')
 	AddPattern('3DD301000074') ;STILL WORKING 23.12.24,
@@ -638,11 +571,11 @@ Func Scan()
 	_("ScanAreaInfo:")
 	AddPattern("6BC67C5E05") ;Added by Greg76 to get Area Info
 
-	_("ScanAttributeInfo:")
-	AddPattern("BA3300000089088d4004") ;Added by Greg76 to get Attribute Info
-
 	_("ScanWorldConst:")
 	AddPattern("8D0476C1E00405") ;Added by Greg76 to get World Info
+
+	_SkillMod_DefinePatterns()
+	_AttributeMod_DefinePatterns()
 
 	_('ScanProc:') ; Label for the scan procedure
 	_('pushad') ; Push all general-purpose registers onto the stack to save their values

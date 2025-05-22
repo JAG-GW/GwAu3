@@ -1,4 +1,5 @@
 #include-once
+#include "GwAu3_Constants_Core.au3"
 
 ;===================================================================================================
 ; GwAu3_Globals.au3
@@ -9,8 +10,13 @@
 
 #Region Version Information
 ; Version identifiers for the GwAu3 library
-Global Const $GWAU3_VERSION = "3.0"         ; Current version of GwAu3 library
+Global Const $GWA2_CREATOR = "GameRevision Community" ; Creator
+Global Const $GWA2_BUILD_DATE = "approximately 2007" ; Build date of the gwa2 library
+
+Global Const $GWAU3_VERSION = "1.0"         ; Current version of GwAu3 library
 Global Const $GWAU3_BUILD_DATE = "2025-05-21" ; Build date of the library
+Global Const $GWAU3_LAST_UPDATE = "2025-05-22" ; Last update of the library
+Global Const $GWAU3_UPDATOR = "Greg76" ; Updator
 #EndRegion Version Information
 
 #Region GUI Elements
@@ -54,8 +60,6 @@ Global $mMyID                                ; Player's agent ID
 Global $mCurrentTarget                       ; Current target agent ID
 Global $mRegion                              ; Game region code (1=America, 2=Asia, 3=Europe)
 Global $mPacketLocation                      ; Pointer to packet handler
-Global $mSkillBase                           ; Pointer to skill data array
-Global $mSkillTimer                          ; Pointer to skill timer
 Global $mTargetLogBase                       ; Base address of target log
 Global $mStringLogBase                       ; Base address of string log
 Global $mEnsureEnglish                       ; Flag to ensure English language
@@ -66,7 +70,6 @@ Global $mZoomMoving                          ; Camera zoom level when moving
 Global $mLastDialogID                        ; ID of the last dialog
 Global $mInstanceInfo                        ; Pointer to instance information
 Global $mAreaInfo                            ; Pointer to area information
-Global $mAttributeInfo                       ; Pointer to attribute information
 Global $mWorldConst                          ; Pointer to world constants
 #EndRegion Game Data Pointers
 

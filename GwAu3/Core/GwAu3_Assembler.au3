@@ -1,4 +1,5 @@
 #include-once
+#include "GwAu3_Constants_Core.au3"
 
 ; #FUNCTION# ;===============================================================================
 ; Name...........: _
@@ -7,7 +8,7 @@
 ; Parameters ....: $aASM - Assembly instruction to convert
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Core function of the assembler, processes each assembly instruction
 ;                  - Updates global variables $mASMString and $mASMSize with processed code
 ;                  - Handles various instruction types: jumps, moves, comparisons, etc.
@@ -864,7 +865,6 @@ EndFunc
 ;                  - Supports wildcards in patterns (00 bytes are treated as wildcards)
 ; Related .......: Scan
 ;============================================================================================
-
 Func AddPattern($aPattern)
     Local $lSize = Int(0.5 * StringLen($aPattern))
     Local $pattern_header = "00000000" & _
@@ -925,7 +925,7 @@ EndFunc
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Allocates space for variables, counters, and buffers
 ;                  - Creates all necessary data structures for the ASM code
 ;                  - Must be called before creating any functional code sections
@@ -965,7 +965,7 @@ EndFunc
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Generates the main entry point for the injected code
 ;                  - Handles command queue processing and dispatching
 ;                  - Implements the core execution loop that processes commands
@@ -1024,9 +1024,9 @@ Func CreateMain()
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
-; Name...........: CreateTargetLog, CreateSkillLog, CreateSkillCancelLog, CreateSkillCompleteLog, CreateChatLog
+; Name...........: CreateTargetLog, CreateChatLog
 ; Description ...: Creates various logging functions in assembly
-; Syntax.........: CreateTargetLog(), CreateSkillLog(), etc.
+; Syntax.........: CreateTargetLog(), etc.
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........:
@@ -1065,118 +1065,6 @@ Func CreateTargetLog()
 	_('push edi')
 	_('mov edi,edx')
 	_('ljmp TargetLogReturn')
-EndFunc
-
-Func CreateSkillLog()
-	_('SkillLogProc:')
-	_('pushad')
-
-	_('mov eax,dword[SkillLogCounter]')
-	_('push eax')
-	_('shl eax,4')
-	_('add eax,SkillLogBase')
-
-	_('mov ecx,dword[edi]')
-	_('mov dword[eax],ecx')
-	_('mov ecx,dword[ecx*4+TargetLogBase]')
-	_('mov dword[eax+4],ecx')
-	_('mov ecx,dword[edi+4]')
-	_('mov dword[eax+8],ecx')
-	_('mov ecx,dword[edi+8]')
-	_('mov dword[eax+c],ecx')
-
-	_('push 1')
-	_('push eax')
-	_('push CallbackEvent')
-	_('push dword[CallbackHandle]')
-	_('call dword[PostMessage]')
-
-	_('pop eax')
-	_('inc eax')
-	_('cmp eax,SkillLogSize')
-	_('jnz SkillLogSkipReset')
-	_('xor eax,eax')
-	_('SkillLogSkipReset:')
-	_('mov dword[SkillLogCounter],eax')
-
-	_('popad')
-	_('inc eax')
-	_('mov dword[esi+10],eax')
-	_('pop esi')
-	_('ljmp SkillLogReturn')
-EndFunc
-
-Func CreateSkillCancelLog()
-	_('SkillCancelLogProc:')
-	_('pushad')
-
-	_('mov eax,dword[SkillLogCounter]')
-	_('push eax')
-	_('shl eax,4')
-	_('add eax,SkillLogBase')
-
-	_('mov ecx,dword[edi]')
-	_('mov dword[eax],ecx')
-	_('mov ecx,dword[ecx*4+TargetLogBase]')
-	_('mov dword[eax+4],ecx')
-	_('mov ecx,dword[edi+4]')
-	_('mov dword[eax+8],ecx')
-
-	_('push 2')
-	_('push eax')
-	_('push CallbackEvent')
-	_('push dword[CallbackHandle]')
-	_('call dword[PostMessage]')
-
-	_('pop eax')
-	_('inc eax')
-	_('cmp eax,SkillLogSize')
-	_('jnz SkillCancelLogSkipReset')
-	_('xor eax,eax')
-	_('SkillCancelLogSkipReset:')
-	_('mov dword[SkillLogCounter],eax')
-
-	_('popad')
-	_('push 0')
-	_('push 48')
-	_('mov ecx,esi')
-	_('ljmp SkillCancelLogReturn')
-EndFunc
-
-Func CreateSkillCompleteLog()
-	_('SkillCompleteLogProc:')
-	_('pushad')
-
-	_('mov eax,dword[SkillLogCounter]')
-	_('push eax')
-	_('shl eax,4')
-	_('add eax,SkillLogBase')
-
-	_('mov ecx,dword[edi]')
-	_('mov dword[eax],ecx')
-	_('mov ecx,dword[ecx*4+TargetLogBase]')
-	_('mov dword[eax+4],ecx')
-	_('mov ecx,dword[edi+4]')
-	_('mov dword[eax+8],ecx')
-
-	_('push 3')
-	_('push eax')
-	_('push CallbackEvent')
-	_('push dword[CallbackHandle]')
-	_('call dword[PostMessage]')
-
-	_('pop eax')
-	_('inc eax')
-	_('cmp eax,SkillLogSize')
-	_('jnz SkillCompleteLogSkipReset')
-	_('xor eax,eax')
-	_('SkillCompleteLogSkipReset:')
-	_('mov dword[SkillLogCounter],eax')
-
-	_('popad')
-	_('mov eax,dword[edi+4]')
-	_('test eax,eax')
-	_('ljmp SkillCompleteLogReturn')
 EndFunc
 
 Func CreateChatLog()
@@ -1447,32 +1335,15 @@ EndFunc
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Generates assembly code for all supported game commands
-;                  - Each command has a specific handler (UseSkill, Move, etc.)
+;                  - Each command has a specific handler (Move, etc.)
 ;                  - Implements the interface between AutoIt and the game client
 ;                  - Comprehensive set of functions for game interaction
 ;                  - All commands route through the command queue system
 ; Related .......: ModifyMemory, PerformAction, SendPacket
 ;============================================================================================
 Func CreateCommands()
-	_('CommandUseSkill:')
-	_('mov ecx,dword[eax+C]')
-	_('push ecx')
-	_('mov ebx,dword[eax+8]')
-	_('push ebx')
-	_('mov edx,dword[eax+4]')
-	_('dec edx')
-	_('push edx')
-	_('mov eax,dword[MyID]')
-	_('push eax')
-	_('call UseSkillFunction')
-	_('pop eax')
-	_('pop edx')
-	_('pop ebx')
-	_('pop ecx')
-	_('ljmp CommandReturn')
-
 	_('CommandMove:')
 	_('lea eax,dword[eax+4]')
 	_('push eax')
@@ -1593,17 +1464,6 @@ Func CreateCommands()
 	_("mov edx,0")
 	_("call ActionFunction")
 	_("ljmp CommandReturn")
-
-	_('CommandUseHeroSkill:')
-	_('mov ecx,dword[eax+8]')
-	_('push ecx')
-	_('mov ecx,dword[eax+c]')
-	_('push ecx')
-	_('mov ecx,dword[eax+4]')
-	_('push ecx')
-	_('call UseHeroSkillFunction')
-	_('add esp,C')
-	_('ljmp CommandReturn')
 
 ;~ 	_('CommandToggleLanguage:')
 ;~ 	_('mov ecx,dword[ActionBase]')
@@ -1766,26 +1626,6 @@ Func CreateCommands()
 	_("mov dword[TraderCostID],0")
 	_("ljmp CommandReturn")
 
-	_('CommandIncreaseAttribute:')
-	_('mov edx,dword[eax+4]')
-	_('push edx')
-	_('mov ecx,dword[eax+8]')
-	_('push ecx')
-	_('call IncreaseAttributeFunction')
-	_('pop ecx')
-	_('pop edx')
-	_('ljmp CommandReturn')
-
-	_('CommandDecreaseAttribute:')
-	_('mov edx,dword[eax+4]')
-	_('push edx')
-	_('mov ecx,dword[eax+8]')
-	_('push ecx')
-	_('call DecreaseAttributeFunction')
-	_('pop ecx')
-	_('pop edx')
-	_('ljmp CommandReturn')
-
 	_('CommandMakeAgentArray:')
 	_('mov eax,dword[eax+4]')
 	_('xor ebx,ebx')
@@ -1839,7 +1679,7 @@ EndFunc
 ; Parameters ....: None
 ; Return values .: None
 ; Author ........:
-; Modified.......:
+; Modified.......: Greg76
 ; Remarks .......: - Central function that orchestrates all memory modifications
 ;                  - Initializes ASM variables and structures
 ;                  - Calls all Create* functions to build the complete code injection
@@ -1855,9 +1695,6 @@ Func ModifyMemory()
 	CreateData()
 	CreateMain()
 ;~ 	CreateTargetLog()
-;~ 	CreateSkillLog()
-;~ 	CreateSkillCancelLog()
-;~ 	CreateSkillCompleteLog()
 ;~ 	CreateChatLog()
 	CreateTraderHook()
 ;~ 	CreateLoadFinished()
@@ -1866,6 +1703,9 @@ Func ModifyMemory()
 ;~ 	CreateStringFilter2()
 	CreateRenderingMod()
 	CreateCommands()
+	_SkillMod_CreateCommands() ; _SkillMod_UseSkill & _SkillMod_UseHeroSkill
+;~ 	_SkillMod_CreateSkillLogFunctions()
+	_AttributeMod_CreateCommands()
 	CreateDialogHook()
 	$mMemory = MemoryRead(MemoryRead($mBase), 'ptr')
 
