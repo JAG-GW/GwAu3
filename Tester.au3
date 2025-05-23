@@ -13,7 +13,6 @@
 #include <ScrollBarsConstants.au3>
 #include <Array.au3>
 #Include <WinAPIEx.au3>
-#include <GuiEdit.au3>
 #include <WinAPIFiles.au3>
 #include <GuiSlider.au3>
 #include <ColorConstants.au3>
@@ -21,6 +20,7 @@
 #include <WinAPIDiag.au3>
 #include <RichEditConstants.au3>
 #include <GuiRichEdit.au3>
+#include <GuiEdit.au3>
 #include "_GwAu3.au3"
 
 Global Const $doLoadLoggedChars = True
@@ -139,7 +139,9 @@ WEnd
 
 While $BotRunning
 	Sleep(500)
-	LoadSkillTemplate("OwAC08HDDBv6So+Xkuo9w6D", 1)
+	_SkillMod_UseSkill(2, -2, True)
+;~ 	Sleep(5000)
+	_SkillMod_UseHeroSkill(1, 2, -2)
 	Sleep(5000)
 WEnd
 

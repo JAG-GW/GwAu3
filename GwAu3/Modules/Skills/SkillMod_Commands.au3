@@ -26,17 +26,25 @@ Func _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
         Return False
     EndIf
 
-    DllStructSetData($g_mUseSkill, 2, $iSkillSlot)
-    DllStructSetData($g_mUseSkill, 3, ConvertID($iTargetID))
-    DllStructSetData($g_mUseSkill, 4, $iCallTarget)
+	Local $iAgentID = ConvertID($iTargetID)
+    If $iAgentID = 0 Then
+        _Log_Error("Target not found: " & $iAgentID, "SkillMod", $GUIEdit)
+        Return False
+    EndIf
 
-    Enqueue($g_mUseSkillPtr, 16)
+    $iSkillSlot = $iSkillSlot - 1
 
-    ; Record for tracking
-    $g_iLastSkillUsed = $iSkillSlot
+    DllStructSetData($g_mUseSkill, 2, GetWorldInfo("MyID"))
+    DllStructSetData($g_mUseSkill, 3, $iSkillSlot)
+    DllStructSetData($g_mUseSkill, 4, $iAgentID)
+    DllStructSetData($g_mUseSkill, 5, $iCallTarget)
+
+    Enqueue($g_mUseSkillPtr, 20)
+
+    $g_iLastSkillUsed = $iSkillSlot + 1
     $g_iLastSkillTarget = ConvertID($iTargetID)
 
-    _Log_Debug("Used skill slot: " & $iSkillSlot & " on target: " & ConvertID($iTargetID), "SkillMod", $GUIEdit)
+    _Log_Debug("Used skill slot: " & ($iSkillSlot + 1) & " on target: " & ConvertID($iTargetID), "SkillMod", $GUIEdit)
     Return True
 EndFunc
 
@@ -70,12 +78,26 @@ Func _SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
         Return False
     EndIf
 
-    DllStructSetData($g_mUseHeroSkill, 2, GetMyPartyHeroInfo($iHeroIndex, "AgentID"))
-	DllStructSetData($g_mUseHeroSkill, 3, ConvertID($iTargetID))
-    DllStructSetData($g_mUseHeroSkill, 4, $iSkillSlot -1)
+    Local $iHeroAgentID = GetMyPartyHeroInfo($iHeroIndex, "AgentID")
+    If $iHeroAgentID = 0 Then
+        _Log_Error("Hero not found or not in party: " & $iHeroIndex, "SkillMod", $GUIEdit)
+        Return False
+    EndIf
+
+	Local $iAgentID = ConvertID($iTargetID)
+    If $iAgentID = 0 Then
+        _Log_Error("Target not found: " & $iAgentID, "SkillMod", $GUIEdit)
+        Return False
+    EndIf
+
+    $iSkillSlot = $iSkillSlot - 1
+
+    DllStructSetData($g_mUseHeroSkill, 2, $iHeroAgentID)
+    DllStructSetData($g_mUseHeroSkill, 3, $iSkillSlot)
+	DllStructSetData($g_mUseHeroSkill, 4, $iAgentID)
 
     Enqueue($g_mUseHeroSkillPtr, 16)
 
-    _Log_Debug("Hero " & $iHeroIndex & " used skill " & $iSkillSlot & " on target: " & ConvertID($iTargetID), "SkillMod", $GUIEdit)
+    _Log_Debug("Hero " & $iHeroIndex & " used skill " & ($iSkillSlot + 1) & " on target: " & ConvertID($iTargetID), "SkillMod", $GUIEdit)
     Return True
 EndFunc

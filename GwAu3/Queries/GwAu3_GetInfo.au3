@@ -1860,13 +1860,13 @@ Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Local $lTimestamp = MemoryRead($lSkillbarPtr + 0xC + (($aSkillSlot - 1) * 0x14), "dword")
             If $lTimestamp = 0 Then Return True
-            Return ($lTimestamp - GetSkillTimer()) = 0
+            Return ($lTimestamp - _SkillMod_GetSkillTimer()) = 0
 
         Case "RawRecharged"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Local $lTimestamp = MemoryRead($lSkillbarPtr + 0xC + (($aSkillSlot - 1) * 0x14), "dword")
 			Local $lSkillID = MemoryRead($lSkillbarPtr + 0x10 + (($aSkillSlot - 1) * 0x14), "dword")
-			Return GetSkillInfo($lSkillID, "Recharge") - (GetSkillTimer() - $lTimestamp)
+			Return _SkillMod_GetSkillInfo($lSkillID, "Recharge") - (_SkillMod_GetSkillTimer() - $lTimestamp)
 
         Case "Adrenaline"
             If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
@@ -1973,11 +1973,11 @@ Func GetAgentEffectInfo($aAgentID = -2, $aSkillID = 0, $aInfo = "")
             Return MemoryRead($lEffectPtr + 0x14, "dword")
         Case "TimeElapsed"
             Local $lTimestamp = MemoryRead($lEffectPtr + 0x14, "dword")
-            Return GetSkillTimer() - $lTimestamp
+            Return _SkillMod_GetSkillTimer() - $lTimestamp
         Case "TimeRemaining"
             Local $lTimestamp = MemoryRead($lEffectPtr + 0x14, "dword")
             Local $lDuration = MemoryRead($lEffectPtr + 0x10, "float")
-            Return $lDuration * 1000 - (GetSkillTimer() - $lTimestamp)
+            Return $lDuration * 1000 - (_SkillMod_GetSkillTimer() - $lTimestamp)
         Case "HasEffect"
             Return True
         Case Else

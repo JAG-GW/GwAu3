@@ -73,13 +73,6 @@ Global $mAreaInfo                            ; Pointer to area information
 Global $mWorldConst                          ; Pointer to world constants
 #EndRegion Game Data Pointers
 
-#Region Trading Data
-; Variables related to trading functionality
-Global $mTraderQuoteID                       ; ID of current trade quote
-Global $mTraderCostID                        ; ID of item cost
-Global $mTraderCostValue                     ; Value of item cost
-#EndRegion Trading Data
-
 #Region Agent Copy
 ; Variables for agent array copying
 Global $mAgentCopyCount                      ; Count of copied agents

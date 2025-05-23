@@ -12,6 +12,9 @@
 #include "Modules/Attributes/AttributeMod_Initialize.au3"
 #include "Modules/Attributes/AttributeMod_Data.au3"
 #include "Modules/Attributes/AttributeMod_Commands.au3"
+#include "Modules/Trade/TradeMod_Initialize.au3"
+#include "Modules/Trade/TradeMod_Data.au3"
+#include "Modules/Trade/TradeMod_Commands.au3"
 
 If @AutoItX64 Then
     MsgBox(16, "Error!", "Please run all bots in 32-bit (x86) mode.")
@@ -31,35 +34,11 @@ Global $mChangeTargetPtr = DllStructGetPtr($mChangeTarget)
 Global $mWriteChat = DllStructCreate('ptr')
 Global $mWriteChatPtr = DllStructGetPtr($mWriteChat)
 
-Global $mSellItem = DllStructCreate('ptr;dword;dword;dword')
-Global $mSellItemPtr = DllStructGetPtr($mSellItem)
-
 Global $mToggleLanguage = DllStructCreate('ptr;dword')
 Global $mToggleLanguagePtr = DllStructGetPtr($mToggleLanguage)
 
-Global $mBuyItem = DllStructCreate('ptr;dword;dword;dword;dword')
-Global $mBuyItemPtr = DllStructGetPtr($mBuyItem)
-
-Global $mCraftItemEx = DllStructCreate('ptr;dword;dword;ptr;dword;dword')
-Global $mCraftItemExPtr = DllStructGetPtr($mCraftItemEx)
-
 Global $mSendChat = DllStructCreate('ptr;dword')
 Global $mSendChatPtr = DllStructGetPtr($mSendChat)
-
-Global $mRequestQuote = DllStructCreate('ptr;dword')
-Global $mRequestQuotePtr = DllStructGetPtr($mRequestQuote)
-
-Global $mRequestQuoteSell = DllStructCreate('ptr;dword')
-Global $mRequestQuoteSellPtr = DllStructGetPtr($mRequestQuoteSell)
-
-Global $mTraderBuy = DllStructCreate('ptr')
-Global $mTraderBuyPtr = DllStructGetPtr($mTraderBuy)
-
-Global $mTraderSell = DllStructCreate('ptr')
-Global $mTraderSellPtr = DllStructGetPtr($mTraderSell)
-
-Global $mSalvage = DllStructCreate('ptr;dword;dword;dword')
-Global $mSalvagePtr = DllStructGetPtr($mSalvage)
 
 Global $mMakeAgentArray = DllStructCreate('ptr;dword')
 Global $mMakeAgentArrayPtr = DllStructGetPtr($mMakeAgentArray)
@@ -271,6 +250,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    _SkillMod_Initialize()
    _AttributeMod_Initialize()
+   _TradeMod_Initialize()
 
    $lTemp = GetScannedAddress('ScanEngine', -0x22)
    SetValue('MainStart', Ptr($lTemp))
@@ -312,7 +292,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('PostMessage', Ptr(MemoryRead(GetScannedAddress('ScanPostMessage', 0xB))))
    SetValue('Sleep', MemoryRead(MemoryRead(GetValue('ScanSleep') + 0x8) + 0x3))
 
-   SetValue('SalvageFunction', Ptr(GetScannedAddress('ScanSalvageFunction', -0xA)))
    SetValue('SalvageGlobal', Ptr(MemoryRead(GetScannedAddress('ScanSalvageGlobal', 1) - 0x4)))
 
    SetValue('MoveFunction', Ptr(GetScannedAddress('ScanMoveFunction', 0x1)))
@@ -321,7 +300,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('ChangeTargetFunction', Ptr(GetScannedAddress('ScanChangeTargetFunction', -0x0086) + 1))
    SetValue('WriteChatFunction', Ptr(GetScannedAddress('ScanWriteChatFunction', -0x3D)))
 
-   SetValue('SellItemFunction', Ptr(GetScannedAddress('ScanSellItemFunction', -0x55)))
    SetValue('PacketSendFunction', Ptr(GetScannedAddress('ScanPacketSendFunction', -0x50)))
 
    SetValue('ActionBase', Ptr(MemoryRead(GetScannedAddress('ScanActionBase', -0x3))))
@@ -329,10 +307,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    SetValue('BuyItemBase', Ptr(MemoryRead(GetScannedAddress('ScanBuyItemBase', 0xF))))
 
-   SetValue('TransactionFunction', Ptr(GetScannedAddress('ScanTransactionFunction', -0x7E)))
-   SetValue('RequestQuoteFunction', Ptr(GetScannedAddress('ScanRequestQuoteFunction', -0x34)))
-
-   SetValue('TraderFunction', Ptr(GetScannedAddress('ScanTraderFunction', -0x1E)))
    SetValue('ClickToMoveFix', Ptr(GetScannedAddress("ScanClickToMoveFix", 0x1)))
 
    SetValue('ChangeStatusFunction', Ptr(GetScannedAddress("ScanChangeStatusFunction", 0x1)))
@@ -372,22 +346,16 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    DllStructSetData($mMove, 1, GetValue('CommandMove'))
    DllStructSetData($mChangeTarget, 1, GetValue('CommandChangeTarget'))
    DllStructSetData($mPacket, 1, GetValue('CommandPacketSend'))
-   DllStructSetData($mSellItem, 1, GetValue('CommandSellItem'))
    DllStructSetData($mAction, 1, GetValue('CommandAction'))
    DllStructSetData($mToggleLanguage, 1, GetValue('CommandToggleLanguage'))
-   DllStructSetData($mBuyItem, 1, GetValue('CommandBuyItem'))
    DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
    DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
    DllStructSetData($mWriteChat, 1, GetValue('CommandWriteChat'))
-   DllStructSetData($mRequestQuote, 1, GetValue('CommandRequestQuote'))
-   DllStructSetData($mRequestQuoteSell, 1, GetValue('CommandRequestQuoteSell'))
-   DllStructSetData($mTraderBuy, 1, GetValue('CommandTraderBuy'))
-   DllStructSetData($mTraderSell, 1, GetValue('CommandTraderSell'))
-   DllStructSetData($mSalvage, 1, GetValue('CommandSalvage'))
    DllStructSetData($mMakeAgentArray, 1, GetValue('CommandMakeAgentArray'))
    DllStructSetData($mChangeStatus, 1, GetValue('CommandChangeStatus'))
    _SkillMod_SetupStructures()
    _AttributeMod_SetupStructures()
+   _TradeMod_SetupStructures()
 
    If $bChangeTitle Then
       WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
@@ -490,9 +458,6 @@ Func Scan()
 	_('ScanChatLog:')
 	AddPattern('8B45F48B138B4DEC50') ; COULD NOT UPDATE! 23.12.24
 
-	_('ScanSellItemFunction:')
-	AddPattern('8B4D2085C90F858E') ; COULD NOT UPDATE! 23.12.24
-
 	_('ScanStringLog:')
 	AddPattern('893E8B7D10895E04397E08') ; COULD NOT UPDATE! 23.12.24
 
@@ -508,31 +473,17 @@ Func Scan()
 	_('ScanActionBase:')
 	AddPattern('8D1C87899DF4') ; UPDATED 24.12.24, OLD: 8D1C87899DF4FEFFFF8BC32BC7C1F802, 8B4208A80175418B4A08
 
-	_('ScanTransactionFunction:')
-	AddPattern('85FF741D8B4D14EB08') ;STILL WORKING 23.12.24 ;558BEC81ECC000000053568B75085783FE108BFA8BD97614
-
 	_('ScanBuyItemFunction:') ; Still in use? (16/06-2023)
 	AddPattern('D9EED9580CC74004') ;STILL WORKING 23.12.24 ; Still in use? (16/06-2023)
 
 	_('ScanBuyItemBase:')
 	AddPattern('D9EED9580CC74004') ;STILL WORKING 23.12.24
 
-	_('ScanRequestQuoteFunction:')
-	AddPattern('8B752083FE107614')  ;STILL WORKING 23.12.24;8B750C5783FE107614 ;53568B750C5783FE10
-
-	_('ScanTraderFunction:')
-	;AddPattern('8B45188B551085') ;83FF10761468
-	AddPattern('83FF10761468D2210000') ;STILL WORKING 23.12.24
-
 	_('ScanTraderHook:')
 	AddPattern('50516A466A06')
 
 	_('ScanSleep:')
 	AddPattern('6A0057FF15D8408A006860EA0000') ; UPDATED 24.12.24, OLD:5F5E5B741A6860EA0000
-
-	_('ScanSalvageFunction:')
-	AddPattern('33C58945FC8B45088945F08B450C8945F48B45108945F88D45EC506A10C745EC76') ; UPDATED 24.12.24 OLD:33C58945FC8B45088945F08B450C8945F48B45108945F88D45EC506A10C745EC75
-	;AddPattern('8BFA8BD9897DF0895DF4')
 
 	_('ScanSalvageGlobal:')
 	AddPattern('8B4A04538945F48B4208') ; UPDATED 24.12.24, OLD: 8B5104538945F48B4108568945E88B410C578945EC8B4110528955E48945F0
@@ -576,6 +527,7 @@ Func Scan()
 
 	_SkillMod_DefinePatterns()
 	_AttributeMod_DefinePatterns()
+	_TradeMod_DefinePatterns()
 
 	_('ScanProc:') ; Label for the scan procedure
 	_('pushad') ; Push all general-purpose registers onto the stack to save their values

@@ -240,7 +240,7 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     EndIf
 
     ; Load skill bar
-    LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber) Then
+    LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber)
 
     _Log_Info("Template loaded successfully", "LoadTemplate", $GUIEdit)
     Return True

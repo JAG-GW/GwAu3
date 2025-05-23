@@ -1,4 +1,7 @@
 #include-once
+#include <RichEditConstants.au3>
+#include <GuiRichEdit.au3>
+#include <GuiEdit.au3>
 #include "GwAu3_Constants_Core.au3"
 
 ; #FUNCTION# ;===============================================================================
