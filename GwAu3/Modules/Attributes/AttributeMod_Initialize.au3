@@ -3,6 +3,7 @@
 #include "../../Core/GwAu3_Assembler.au3"
 #include "../../Core/GwAu3_Utils.au3"
 #include "../../Core/GwAu3_LogMessages.au3"
+#include "../../Core/GwAu3_CommandGenerator.au3"
 
 #Region Module Constants
 ; Attribute module specific constants
@@ -115,15 +116,19 @@ Global $g_aAttributeNames[45] = [ _
 ; Modified.......: Greg76
 ; Remarks .......: - Must be called after main initialization
 ;                  - Sets up all necessary data for the module
+;                  - Initializes the command generator system
 ; Related .......: _AttributeMod_Cleanup
 ;============================================================================================
 Func _AttributeMod_Initialize()
     If $g_bAttributeModuleInitialized Then
-        _Log_Warning("AttributeMgr module already initialized", "AttributeMgr", $GUIEdit)
+        _Log_Warning("AttributeMod module already initialized", "AttributeMod", $GUIEdit)
         Return True
     EndIf
 
-    _Log_Info("Initializing AttributeMgr module...", "AttributeMgr", $GUIEdit)
+    _Log_Info("Initializing AttributeMod module...", "AttributeMod", $GUIEdit)
+
+    ; Initialize command generator
+    _CmdGen_Initialize($GUIEdit)
 
     ; Initialize attribute data
     _AttributeMod_InitializeData()
@@ -132,7 +137,7 @@ Func _AttributeMod_Initialize()
     _AttributeMod_InitializeCommands()
 
     $g_bAttributeModuleInitialized = True
-    _Log_Info("AttributeMgr module initialized successfully", "AttributeMgr", $GUIEdit)
+    _Log_Info("AttributeMod module initialized successfully", "AttributeMod", $GUIEdit)
     Return True
 EndFunc
 
@@ -150,9 +155,9 @@ EndFunc
 Func _AttributeMod_InitializeData()
     ; Read attribute info address
     $g_mAttributeInfo = MemoryRead(GetScannedAddress('ScanAttributeInfo', -0x3))
-    If $g_mAttributeInfo = 0 Then _Log_Error("Invalid AttributeInfo address", "SkillMod", $GUIEdit)
+    If $g_mAttributeInfo = 0 Then _Log_Error("Invalid AttributeInfo address", "AttributeMod", $GUIEdit)
     SetValue('AttributeInfo', Ptr($g_mAttributeInfo))
-    _Log_Debug("AttributeInfo: " & Ptr($g_mAttributeInfo), "AttributeMgr", $GUIEdit)
+    _Log_Debug("AttributeInfo: " & Ptr($g_mAttributeInfo), "AttributeMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -171,8 +176,8 @@ Func _AttributeMod_InitializeCommands()
     SetValue('IncreaseAttributeFunction', Ptr(GetScannedAddress('ScanIncreaseAttributeFunction', -0x5A)))
     SetValue("DecreaseAttributeFunction", Ptr(GetScannedAddress("ScanDecreaseAttributeFunction", 0x19)))
 
-    _Log_Debug("IncreaseAttributeFunction: " & GetValue('IncreaseAttributeFunction'), "AttributeMgr", $GUIEdit)
-    _Log_Debug("DecreaseAttributeFunction: " & GetValue('DecreaseAttributeFunction'), "AttributeMgr", $GUIEdit)
+    _Log_Debug("IncreaseAttributeFunction: " & GetValue('IncreaseAttributeFunction'), "AttributeMod", $GUIEdit)
+    _Log_Debug("DecreaseAttributeFunction: " & GetValue('DecreaseAttributeFunction'), "AttributeMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -189,14 +194,14 @@ EndFunc
 Func _AttributeMod_Cleanup()
     If Not $g_bAttributeModuleInitialized Then Return
 
-    _Log_Info("Cleaning up AttributeMgr module...", "AttributeMgr", $GUIEdit)
+    _Log_Info("Cleaning up AttributeMod module...", "AttributeMod", $GUIEdit)
 
     ; Reset state variables
     $g_iLastAttributeModified = -1
     $g_iLastAttributeValue = 0
     $g_bAttributeModuleInitialized = False
 
-    _Log_Info("AttributeMgr module cleanup completed", "AttributeMgr", $GUIEdit)
+    _Log_Info("AttributeMod module cleanup completed", "AttributeMod", $GUIEdit)
 EndFunc
 #EndRegion Initialize Functions
 
@@ -213,7 +218,7 @@ EndFunc
 ; Related .......: _AttributeMod_CreateCommands
 ;============================================================================================
 Func _AttributeMod_DefinePatterns()
-    _Log_Debug("Defining attribute-related scan patterns...", "AttributeMgr", $GUIEdit)
+    _Log_Debug("Defining attribute-related scan patterns...", "AttributeMod", $GUIEdit)
 
     _('ScanAttributeInfo:')
     AddPattern("BA3300000089088d4004") ; Added by Greg76 to get Attribute Info
@@ -224,7 +229,7 @@ Func _AttributeMod_DefinePatterns()
     _("ScanDecreaseAttributeFunction:")
     AddPattern("8B8AA800000089480C5DC3CC") ; STILL WORKING 23.12.24
 
-    _Log_Debug("Attribute patterns defined successfully", "AttributeMgr", $GUIEdit)
+    _Log_Debug("Attribute patterns defined successfully", "AttributeMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -245,77 +250,31 @@ Func _AttributeMod_SetupStructures()
 ;~     DllStructSetData($g_mMaxAttributes, 1, GetValue('CommandMaxAttributes'))
 ;~     DllStructSetData($g_mSetAttributes, 1, GetValue('CommandSetAttributes'))
 
-    _Log_Debug("Attribute structures configured successfully", "AttributeMgr", $GUIEdit)
+    _Log_Debug("Attribute structures configured successfully", "AttributeMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_CreateIncreaseAttributeCommand
-; Description ...: Creates ASM command for increasing an attribute
-; Syntax.........: _AttributeMod_CreateIncreaseAttributeCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _AttributeMod_CreateCommands
-;============================================================================================
-Func _AttributeMod_CreateIncreaseAttributeCommand()
-    _('CommandIncreaseAttribute:')
-    _('mov edx,dword[eax+4]')
-    _('push edx')
-    _('mov ecx,dword[eax+8]')
-    _('push ecx')
-    _('call IncreaseAttributeFunction')
-    _('pop ecx')
-    _('pop edx')
-    _('ljmp CommandReturn')
-EndFunc
-
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_CreateDecreaseAttributeCommand
-; Description ...: Creates ASM command for decreasing an attribute
-; Syntax.........: _AttributeMod_CreateDecreaseAttributeCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _AttributeMod_CreateCommands
-;============================================================================================
-Func _AttributeMod_CreateDecreaseAttributeCommand()
-    _('CommandDecreaseAttribute:')
-    _('mov edx,dword[eax+4]')
-    _('push edx')
-    _('mov ecx,dword[eax+8]')
-    _('push ecx')
-    _('call DecreaseAttributeFunction')
-    _('pop ecx')
-    _('pop edx')
-    _('ljmp CommandReturn')
-EndFunc
-#EndRegion Pattern, Structure & Assembly Code Generation
-
-#Region Internal Functions
 ; #FUNCTION# ;===============================================================================
 ; Name...........: _AttributeMod_CreateCommands
-; Description ...: Creates ASM commands for attribute operations
+; Description ...: Creates ASM commands for attribute operations using CommandGenerator
 ; Syntax.........: _AttributeMod_CreateCommands()
 ; Parameters ....: None
 ; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Called during ASM command creation phase
+; Author ........: Greg76
+; Modified.......:
+; Remarks .......: - Uses the centralized command generation system
+;                  - All injection logic is now handled by CommandGenerator
 ; Related .......: _AttributeMod_DefinePatterns
 ;============================================================================================
 Func _AttributeMod_CreateCommands()
-    _Log_Debug("Creating attribute-related ASM commands...", "AttributeMgr", $GUIEdit)
+    _Log_Debug("Creating attribute-related commands using CommandGenerator...", "AttributeMod", $GUIEdit)
 
-    ; Command for increasing an attribute
-    _AttributeMod_CreateIncreaseAttributeCommand()
+    Local $sAttributeTemplate = _CmdGen_AddAttributeTemplate()
+    _CmdGen_RegisterCommand("IncreaseAttribute", $CMD_TYPE_CUSTOM, "dword,dword", "IncreaseAttributeFunction", $sAttributeTemplate)
+    _CmdGen_RegisterCommand("DecreaseAttribute", $CMD_TYPE_CUSTOM, "dword,dword", "DecreaseAttributeFunction", $sAttributeTemplate)
 
-    ; Command for decreasing an attribute
-    _AttributeMod_CreateDecreaseAttributeCommand()
+    ; Generate and inject all registered commands
+    _CmdGen_GenerateAndInject()
 
-    _Log_Debug("Attribute commands created successfully", "AttributeMgr", $GUIEdit)
+    _Log_Debug("Attribute commands created and injected successfully", "AttributeMod", $GUIEdit)
 EndFunc
-#EndRegion Internal Functions
+#EndRegion Pattern, Structure & Assembly Code Generation

@@ -41,7 +41,7 @@ Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
         Enqueue($g_mIncreaseAttributePtr, 12)
 
         ; Small delay between increases to avoid issues
-        If $i < $iAmount Then Sleep(16)
+        If $i < $iAmount Then Sleep(32)
     Next
 
     ; Record for tracking
@@ -93,7 +93,7 @@ Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
         Enqueue($g_mDecreaseAttributePtr, 12)
 
         ; Small delay between decreases to avoid issues
-        If $i < $iAmount Then Sleep(16)
+        If $i < $iAmount Then Sleep(32)
     Next
 
     ; Record for tracking
@@ -301,7 +301,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             ChangeSecondProfession($aSecondaryProfession, $aHeroNumber)
 
             Do
-                Sleep(16)
+                Sleep(32)
             Until GetPartyProfessionInfo($lHeroID, "Secondary") = $aSecondaryProfession Or TimerDiff($lDeadlock) > $lTimeout
 
             $lRetryCount += 1
@@ -334,7 +334,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         EndIf
 
         Do
-            Sleep(16)
+            Sleep(32)
         Until _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
         If TimerDiff($lDeadlock) > $lTimeout Then
@@ -360,7 +360,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             EndIf
 
             Do
-                Sleep(16)
+                Sleep(32)
             Until _AttributeMod_GetPartyAttributeInfo($lAttrID, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
             If TimerDiff($lDeadlock) > $lTimeout Then
@@ -399,7 +399,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
                 EndIf
 
                 Do
-                    Sleep(16)
+                    Sleep(32)
                 Until _AttributeMod_GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
                 If TimerDiff($lDeadlock) > $lTimeout Then
@@ -424,7 +424,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         EndIf
 
         Do
-            Sleep(16)
+            Sleep(32)
             $lTestTimer += 1
         Until _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
@@ -452,7 +452,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             EndIf
 
             Do
-                Sleep(16)
+                Sleep(32)
                 $lTestTimer += 1
             Until _AttributeMod_GetPartyAttributeInfo($lAttrID, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 

@@ -139,9 +139,8 @@ WEnd
 
 While $BotRunning
 	Sleep(500)
-	_SkillMod_UseSkill(2, -2, True)
-;~ 	Sleep(5000)
-	_SkillMod_UseHeroSkill(1, 2, -2)
+	LoadSkillTemplate("OQGjUhlKKTPYn19YAhXF8ExgcFA")
+	LoadSkillTemplate("OwAT043A5hhgXdJU/LSX0eY9BA", 1)
 	Sleep(5000)
 WEnd
 

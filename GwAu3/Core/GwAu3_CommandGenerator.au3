@@ -2,13 +2,13 @@
 
 #Region Command Generation System
 ; Supported command types
-Global Enum $CMD_TYPE_SIMPLE_CALL = 0, $CMD_TYPE_STRUCT2_CALL = 1, $CMD_TYPE_STRUCT3_CALL = 2, $CMD_TYPE_STRUCT4_CALL = 3, $CMD_TYPE_PACKET_SEND = 4, $CMD_TYPE_CUSTOM = 5
+Global Enum $CMD_TYPE_SIMPLE_CALL = 0, $CMD_TYPE_STRUCT2_CALL = 1, $CMD_TYPE_STRUCT3_CALL = 2, $CMD_TYPE_STRUCT4_CALL = 3, $CMD_TYPE_CUSTOM = 4
 
 ; Structure to store command definitions
 Global $g_aCommandDefinitions[0][5]
 
 ; Predefined assembler templates
-Global $g_aASMTemplates[6]
+Global $g_aASMTemplates[5]
 
 ; Configuration variables
 Global $g_bGeneratorInitialized = False
@@ -70,19 +70,6 @@ Func _CmdGen_InitializeTemplates()
         "call {FUNCTION}" & @CRLF & _
         "add esp,10"
 
-    ; Template for packet sending
-    $g_aASMTemplates[$CMD_TYPE_PACKET_SEND] = _
-        "lea edx,dword[eax+8]" & @CRLF & _
-        "push edx" & @CRLF & _
-        "mov ebx,dword[eax+4]" & @CRLF & _
-        "push ebx" & @CRLF & _
-        "mov eax,dword[PacketLocation]" & @CRLF & _
-        "push eax" & @CRLF & _
-        "call {FUNCTION}" & @CRLF & _
-        "pop eax" & @CRLF & _
-        "pop ebx" & @CRLF & _
-        "pop edx"
-
     ; Custom template (empty by default)
     $g_aASMTemplates[$CMD_TYPE_CUSTOM] = "{CUSTOM_CODE}"
 
@@ -119,7 +106,7 @@ Func _CmdGen_RegisterCommand($sName, $iType, $sParams, $sFunction, $sCustomTempl
         Return SetError(1, 0, False)
     EndIf
 
-    If $iType < 0 Or $iType > 3 Then
+    If $iType < 0 Or $iType > 4 Then
         _Log_Error("Invalid command type: " & $iType, "CmdGen", $GUIEdit)
         Return SetError(2, 0, False)
     EndIf
@@ -335,8 +322,7 @@ Func _CmdGen_AddAttributeTemplate()
         "mov ecx,dword[eax+8]" & @CRLF & _
         "push ecx" & @CRLF & _
         "call {FUNCTION}" & @CRLF & _
-        "pop ecx" & @CRLF & _
-        "pop edx"
+        "add esp,8"
 
     Return $sTemplate
 EndFunc
@@ -370,6 +356,22 @@ Func _CmdGen_AddTradeTemplate()
         "push B" & @CRLF & _
         "call {FUNCTION}" & @CRLF & _
         "add esp,24"
+
+    Return $sTemplate
+EndFunc
+
+Func _CmdGen_AddSendPacketTemplate()
+    Local $sTemplate = _
+		"lea edx,dword[eax+8]" & @CRLF & _
+        "push edx" & @CRLF & _
+        "mov ebx,dword[eax+4]" & @CRLF & _
+        "push ebx" & @CRLF & _
+        "mov eax,dword[PacketLocation]" & @CRLF & _
+        "push eax" & @CRLF & _
+        "call {FUNCTION}" & @CRLF & _
+        "pop eax" & @CRLF & _
+        "pop ebx" & @CRLF & _
+        "pop edx"
 
     Return $sTemplate
 EndFunc
@@ -434,8 +436,7 @@ Func _CmdGen_GetStats()
     $aStats[2] = 0 ; STRUCT2_CALL commands
     $aStats[3] = 0 ; STRUCT3_CALL commands
     $aStats[4] = 0 ; STRUCT4_CALL commands
-    $aStats[5] = 0 ; PACKET_SEND commands
-    $aStats[6] = 0 ; CUSTOM commands
+    $aStats[5] = 0 ; CUSTOM commands
 
     ; Check if array is empty
     If UBound($g_aCommandDefinitions) = 0 Then
@@ -452,10 +453,8 @@ Func _CmdGen_GetStats()
                 $aStats[3] += 1
             Case $CMD_TYPE_STRUCT4_CALL
                 $aStats[4] += 1
-            Case $CMD_TYPE_PACKET_SEND
-                $aStats[5] += 1
             Case $CMD_TYPE_CUSTOM
-                $aStats[6] += 1
+                $aStats[5] += 1
         EndSwitch
     Next
 
