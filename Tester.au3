@@ -139,8 +139,8 @@ WEnd
 
 While $BotRunning
 	Sleep(500)
-	LoadSkillTemplate("OQGjUhlKKTPYn19YAhXF8ExgcFA")
-	LoadSkillTemplate("OwAT043A5hhgXdJU/LSX0eY9BA", 1)
+;~ 	LoadSkillTemplate("OQGjUhlKKTPYn19YAhXF8ExgcFA")
+;~ 	LoadSkillTemplate("OwAT043A5hhgXdJU/LSX0eY9BA", 1)
 	Sleep(5000)
 WEnd
 

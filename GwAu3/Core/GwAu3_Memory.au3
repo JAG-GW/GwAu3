@@ -132,6 +132,11 @@ Func MemoryReadPtr($aAddress, $aOffset, $aType = 'dword')
 	Return $lData
 EndFunc
 
+;~ Description: Internal use only.
+Func MemoryReadToStruct($aAddress, ByRef $aStructure)
+	Return DllCall($mKernelHandle, "int", "ReadProcessMemory", "int", $mGWProcHandle, "int", $aAddress, "ptr", DllStructGetPtr($aStructure), "int", DllStructGetSize($aStructure), "int", "")[0]
+EndFunc   ;==>MemoryReadToStruct
+
 ; #FUNCTION# ;===============================================================================
 ; Name...........: MemoryReadArray
 ; Description ...: Reads an array of values from memory

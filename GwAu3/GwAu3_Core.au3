@@ -12,9 +12,9 @@
 #include "Modules/Attributes/AttributeMod_Initialize.au3"
 #include "Modules/Attributes/AttributeMod_Data.au3"
 #include "Modules/Attributes/AttributeMod_Commands.au3"
-#include "Modules/Trade/TradeMod_Initialize.au3"
-#include "Modules/Trade/TradeMod_Data.au3"
-#include "Modules/Trade/TradeMod_Commands.au3"
+#include "Modules/Trades/TradeMod_Initialize.au3"
+#include "Modules/Trades/TradeMod_Data.au3"
+#include "Modules/Trades/TradeMod_Commands.au3"
 
 If @AutoItX64 Then
     MsgBox(16, "Error!", "Please run all bots in 32-bit (x86) mode.")
@@ -292,8 +292,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('PostMessage', Ptr(MemoryRead(GetScannedAddress('ScanPostMessage', 0xB))))
    SetValue('Sleep', MemoryRead(MemoryRead(GetValue('ScanSleep') + 0x8) + 0x3))
 
-   SetValue('SalvageGlobal', Ptr(MemoryRead(GetScannedAddress('ScanSalvageGlobal', 1) - 0x4)))
-
    SetValue('MoveFunction', Ptr(GetScannedAddress('ScanMoveFunction', 0x1)))
 
   ;SetValue('ChangeTargetFunction', Ptr(GetScannedAddress('ScanChangeTargetFunction', -0x0089) + 1, 8))
@@ -304,8 +302,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    SetValue('ActionBase', Ptr(MemoryRead(GetScannedAddress('ScanActionBase', -0x3))))
    SetValue('ActionFunction', Ptr(GetScannedAddress('ScanActionFunction', -0x3)))
-
-   SetValue('BuyItemBase', Ptr(MemoryRead(GetScannedAddress('ScanBuyItemBase', 0xF))))
 
    SetValue('ClickToMoveFix', Ptr(GetScannedAddress("ScanClickToMoveFix", 0x1)))
 
@@ -476,18 +472,11 @@ Func Scan()
 	_('ScanBuyItemFunction:') ; Still in use? (16/06-2023)
 	AddPattern('D9EED9580CC74004') ;STILL WORKING 23.12.24 ; Still in use? (16/06-2023)
 
-	_('ScanBuyItemBase:')
-	AddPattern('D9EED9580CC74004') ;STILL WORKING 23.12.24
-
 	_('ScanTraderHook:')
 	AddPattern('50516A466A06')
 
 	_('ScanSleep:')
 	AddPattern('6A0057FF15D8408A006860EA0000') ; UPDATED 24.12.24, OLD:5F5E5B741A6860EA0000
-
-	_('ScanSalvageGlobal:')
-	AddPattern('8B4A04538945F48B4208') ; UPDATED 24.12.24, OLD: 8B5104538945F48B4108568945E88B410C578945EC8B4110528955E48945F0
-	;AddPattern('8B018B4904A3')
 
 	_('ScanClickToMoveFix:')
 	AddPattern('3DD301000074') ;STILL WORKING 23.12.24,
