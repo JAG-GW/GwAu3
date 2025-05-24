@@ -6,6 +6,7 @@
 #include "Core/GwAu3_Commands.au3"
 #include "Core/GwAu3_Utils.au3"
 #include "Core/GwAu3_LogMessages.au3"
+#include "Core/FindAssertion.au3"
 #include "Modules/Skills/SkillMod_Initialize.au3"
 #include "Modules/Skills/SkillMod_Data.au3"
 #include "Modules/Skills/SkillMod_Commands.au3"
@@ -47,6 +48,8 @@ Global $mChangeStatus = DllStructCreate('ptr;dword')
 Global $mChangeStatusPtr = DllStructGetPtr($mChangeStatus)
 
 Global $MTradeHackAddress
+Global $mPreGameContextAddr
+Global $mFrameArray
 #EndRegion CommandStructs
 
 #Region Initialisation
@@ -192,6 +195,9 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
       ScanForCharname()
    EndIf
 
+	$mGWBaseAdress = GetGWBaseAddress()
+	InitializeSections($mGWBaseAdress)
+
    Scan()
 
    ; Read Memory Values for Game Data
@@ -247,6 +253,12 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    $mWorldConst = MemoryRead(GetScannedAddress('ScanWorldConst', 0x8))
    _Log_Debug("WorldConst: " & Ptr($mWorldConst), "Initialize", $GUIEdit)
+
+	$mPreGameContextAddr = MemoryRead(GetScannedAddress('ScanPreGameContextAddr', 0x35))
+	_Log_Debug("PreGameContextAddr: " & Ptr($mPreGameContextAddr), "Initialize", $GUIEdit)
+
+   	$mFrameArray = MemoryRead(GetScannedAddress('ScanFrameArray', -0x13))
+	_Log_Debug("FrameArray: " & Ptr($mFrameArray), "Initialize", $GUIEdit)
 
    _SkillMod_Initialize()
    _AttributeMod_Initialize()
@@ -517,6 +529,12 @@ Func Scan()
 	_SkillMod_DefinePatterns()
 	_AttributeMod_DefinePatterns()
 	_TradeMod_DefinePatterns()
+
+	_('ScanPreGameContextAddr:')
+	AddPattern(GetAssertionPattern("P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene"))
+
+	_('ScanFrameArray:')
+	AddPattern(GetAssertionPattern("P:\Code\Engine\Frame\FrMsg.cpp", "frame"))
 
 	_('ScanProc:') ; Label for the scan procedure
 	_('pushad') ; Push all general-purpose registers onto the stack to save their values
