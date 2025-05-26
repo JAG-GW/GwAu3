@@ -125,8 +125,6 @@ Func _AttributeMod_Initialize()
         Return True
     EndIf
 
-    _Log_Info("Initializing AttributeMod module...", "AttributeMod", $GUIEdit)
-
     ; Initialize command generator
     _CmdGen_Initialize($GUIEdit)
 
@@ -137,7 +135,6 @@ Func _AttributeMod_Initialize()
     _AttributeMod_InitializeCommands()
 
     $g_bAttributeModuleInitialized = True
-    _Log_Info("AttributeMod module initialized successfully", "AttributeMod", $GUIEdit)
     Return True
 EndFunc
 
@@ -194,14 +191,10 @@ EndFunc
 Func _AttributeMod_Cleanup()
     If Not $g_bAttributeModuleInitialized Then Return
 
-    _Log_Info("Cleaning up AttributeMod module...", "AttributeMod", $GUIEdit)
-
     ; Reset state variables
     $g_iLastAttributeModified = -1
     $g_iLastAttributeValue = 0
     $g_bAttributeModuleInitialized = False
-
-    _Log_Info("AttributeMod module cleanup completed", "AttributeMod", $GUIEdit)
 EndFunc
 #EndRegion Initialize Functions
 
@@ -218,8 +211,6 @@ EndFunc
 ; Related .......: _AttributeMod_CreateCommands
 ;============================================================================================
 Func _AttributeMod_DefinePatterns()
-    _Log_Debug("Defining attribute-related scan patterns...", "AttributeMod", $GUIEdit)
-
     _('ScanAttributeInfo:')
     AddPattern("BA3300000089088d4004") ; Added by Greg76 to get Attribute Info
 
@@ -228,8 +219,6 @@ Func _AttributeMod_DefinePatterns()
 
     _("ScanDecreaseAttributeFunction:")
     AddPattern("8B8AA800000089480C5DC3CC") ; STILL WORKING 23.12.24
-
-    _Log_Debug("Attribute patterns defined successfully", "AttributeMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -249,8 +238,6 @@ Func _AttributeMod_SetupStructures()
     DllStructSetData($g_mDecreaseAttribute, 1, GetValue('CommandDecreaseAttribute'))
 ;~     DllStructSetData($g_mMaxAttributes, 1, GetValue('CommandMaxAttributes'))
 ;~     DllStructSetData($g_mSetAttributes, 1, GetValue('CommandSetAttributes'))
-
-    _Log_Debug("Attribute structures configured successfully", "AttributeMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -266,15 +253,11 @@ EndFunc
 ; Related .......: _AttributeMod_DefinePatterns
 ;============================================================================================
 Func _AttributeMod_CreateCommands()
-    _Log_Debug("Creating attribute-related commands using CommandGenerator...", "AttributeMod", $GUIEdit)
-
     Local $sAttributeTemplate = _CmdGen_AddAttributeTemplate()
     _CmdGen_RegisterCommand("IncreaseAttribute", $CMD_TYPE_CUSTOM, "dword,dword", "IncreaseAttributeFunction", $sAttributeTemplate)
     _CmdGen_RegisterCommand("DecreaseAttribute", $CMD_TYPE_CUSTOM, "dword,dword", "DecreaseAttributeFunction", $sAttributeTemplate)
 
     ; Generate and inject all registered commands
     _CmdGen_GenerateAndInject()
-
-    _Log_Debug("Attribute commands created and injected successfully", "AttributeMod", $GUIEdit)
 EndFunc
 #EndRegion Pattern, Structure & Assembly Code Generation

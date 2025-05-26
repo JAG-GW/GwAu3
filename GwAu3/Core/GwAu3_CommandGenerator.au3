@@ -72,8 +72,6 @@ Func _CmdGen_InitializeTemplates()
 
     ; Custom template (empty by default)
     $g_aASMTemplates[$CMD_TYPE_CUSTOM] = "{CUSTOM_CODE}"
-
-    _Log_Debug("ASM Templates initialized successfully", "CmdGen", $GUIEdit)
 EndFunc
 
 #EndRegion Template Definitions
@@ -133,7 +131,6 @@ Func _CmdGen_RegisterCommand($sName, $iType, $sParams, $sFunction, $sCustomTempl
     $g_aCommandDefinitions[$iIndex][3] = $sFunction
     $g_aCommandDefinitions[$iIndex][4] = $sCustomTemplate
 
-    _Log_Info("Command registered: " & $sName & " -> " & $sFunction, "CmdGen", $GUIEdit)
     Return True
 EndFunc
 
@@ -227,7 +224,6 @@ Func _CmdGen_GenerateCommand($sName)
     $sCode &= $sTemplate & @CRLF
     $sCode &= "ljmp CommandReturn"
 
-    _Log_Debug("Generated command code for: " & $sName, "CmdGen", $GUIEdit)
     Return $sCode
 EndFunc
 
@@ -245,8 +241,6 @@ EndFunc
 ; Related .......: _CmdGen_GenerateAllCommands
 ;============================================================================================
 Func _CmdGen_InjectIntoAssembler($sCode)
-    _Log_Debug("Injecting generated code into assembler", "CmdGen", $GUIEdit)
-
     Local $aLines = StringSplit($sCode, @CRLF, 1)
     For $i = 1 To $aLines[0]
         If StringStripWS($aLines[$i], 3) <> "" Then
@@ -278,8 +272,6 @@ Func _CmdGen_GenerateAllCommands($funcInject = "_CmdGen_InjectIntoAssembler")
         Return True
     EndIf
 
-    _Log_Info("Generating " & $iTotal & " commands...", "CmdGen", $GUIEdit)
-
     For $i = 0 To $iTotal - 1
         Local $sName = $g_aCommandDefinitions[$i][0]
         Local $sCode = _CmdGen_GenerateCommand($sName)
@@ -295,7 +287,6 @@ Func _CmdGen_GenerateAllCommands($funcInject = "_CmdGen_InjectIntoAssembler")
         EndIf
     Next
 
-    _Log_Info("Generated " & $iSuccess & "/" & $iTotal & " commands successfully", "CmdGen", $GUIEdit)
     Return ($iSuccess = $iTotal)
 EndFunc
 
@@ -394,8 +385,6 @@ EndFunc
 ; Related .......: _CmdGen_InitializeTemplates
 ;============================================================================================
 Func _CmdGen_Initialize($hGUIEdit = 0)
-    _Log_Info("Initializing Command Generator System...", "CmdGen", $GUIEdit)
-
     ; Initialize global variable for logs
     $GUIEdit = $hGUIEdit
 
@@ -406,100 +395,7 @@ Func _CmdGen_Initialize($hGUIEdit = 0)
     _CmdGen_InitializeTemplates()
 
     $g_bGeneratorInitialized = True
-    _Log_Info("Command Generator System initialized successfully", "CmdGen", $GUIEdit)
     Return True
-EndFunc
-
-; #FUNCTION# ;===============================================================================
-; Name...........: _CmdGen_GetStats
-; Description ...: Returns statistics about registered commands
-; Syntax.........: _CmdGen_GetStats()
-; Parameters ....: None
-; Return values .: Array[7] containing command statistics
-;                  [0] = Total number of commands
-;                  [1] = SIMPLE_CALL commands
-;                  [2] = STRUCT2_CALL commands
-;                  [3] = STRUCT3_CALL commands
-;                  [4] = STRUCT4_CALL commands
-;                  [5] = PACKET_SEND commands
-;                  [6] = CUSTOM commands
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Useful for debugging and monitoring
-;                  - Returns zeros if no commands registered
-; Related .......: _CmdGen_RegisterCommand
-;============================================================================================
-Func _CmdGen_GetStats()
-    Local $aStats[7]
-    $aStats[0] = UBound($g_aCommandDefinitions) ; Total number of commands
-    $aStats[1] = 0 ; SIMPLE_CALL commands
-    $aStats[2] = 0 ; STRUCT2_CALL commands
-    $aStats[3] = 0 ; STRUCT3_CALL commands
-    $aStats[4] = 0 ; STRUCT4_CALL commands
-    $aStats[5] = 0 ; CUSTOM commands
-
-    ; Check if array is empty
-    If UBound($g_aCommandDefinitions) = 0 Then
-        Return $aStats ; Return empty stats
-    EndIf
-
-    For $i = 0 To UBound($g_aCommandDefinitions) - 1
-        Switch $g_aCommandDefinitions[$i][1]
-            Case $CMD_TYPE_SIMPLE_CALL
-                $aStats[1] += 1
-            Case $CMD_TYPE_STRUCT2_CALL
-                $aStats[2] += 1
-            Case $CMD_TYPE_STRUCT3_CALL
-                $aStats[3] += 1
-            Case $CMD_TYPE_STRUCT4_CALL
-                $aStats[4] += 1
-            Case $CMD_TYPE_CUSTOM
-                $aStats[5] += 1
-        EndSwitch
-    Next
-
-    Return $aStats
-EndFunc
-
-; #FUNCTION# ;===============================================================================
-; Name...........: _CmdGen_ValidateCommand
-; Description ...: Validates generated code against expected output
-; Syntax.........: _CmdGen_ValidateCommand($sCommandName, $sExpectedCode)
-; Parameters ....: $sCommandName - Command name to validate
-;                  $sExpectedCode - Expected assembly code output
-; Return values .: Success - True if generated code matches expected
-;                  Failure - False if validation fails
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Helper function for testing
-;                  - Normalizes whitespace before comparison
-;                  - Logs detailed error information on failure
-; Related .......: _CmdGen_GenerateCommand
-;============================================================================================
-Func _CmdGen_ValidateCommand($sCommandName, $sExpectedCode)
-    Local $sGeneratedCode = _CmdGen_GenerateCommand($sCommandName)
-
-    If $sGeneratedCode = "" Then
-        _Log_Error("Failed to generate code for validation: " & $sCommandName, "CmdGen", $GUIEdit)
-        Return False
-    EndIf
-
-    ; Normalize strings (spaces, line breaks)
-    Local $sGenNormalized = StringRegExpReplace($sGeneratedCode, '\s+', ' ')
-    Local $sExpNormalized = StringRegExpReplace($sExpectedCode, '\s+', ' ')
-
-    $sGenNormalized = StringStripWS($sGenNormalized, 3)
-    $sExpNormalized = StringStripWS($sExpNormalized, 3)
-
-    If $sGenNormalized = $sExpNormalized Then
-        _Log_Info("VALIDATION SUCCESS: " & $sCommandName & " code matches expected", "CmdGen", $GUIEdit)
-        Return True
-    Else
-        _Log_Error("VALIDATION FAILED: " & $sCommandName & " code differs", "CmdGen", $GUIEdit)
-        _Log_Debug("Generated: " & $sGenNormalized, "CmdGen", $GUIEdit)
-        _Log_Debug("Expected:  " & $sExpNormalized, "CmdGen", $GUIEdit)
-        Return False
-    EndIf
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
