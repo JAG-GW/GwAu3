@@ -6,7 +6,7 @@
 #include "Core/GwAu3_Commands.au3"
 #include "Core/GwAu3_Utils.au3"
 #include "Core/GwAu3_LogMessages.au3"
-#include "Core/FindAssertion.au3"
+#include "Core/GwAu3_FindAssertion.au3"
 #include "Modules/Skills/SkillMod_Initialize.au3"
 #include "Modules/Skills/SkillMod_Data.au3"
 #include "Modules/Skills/SkillMod_Commands.au3"
@@ -194,9 +194,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
       MemoryOpen($aGW)
       ScanForCharname()
    EndIf
-
-	$mGWBaseAdress = GetGWBaseAddress()
-	InitializeSections($mGWBaseAdress)
 
    Scan()
 
@@ -395,140 +392,130 @@ Func Scan()
 
 	_('MainModPtr/4')
 
-	; Scan patterns
+	; Regular patterns
 	_('ScanBasePointer:')
-	AddPattern('506A0F6A00FF35') ;85C0750F8BCE CHECKED ; STILL UPDATED 23.12.24
+	AddPattern('506A0F6A00FF35')
 
-	_('ScanAgentBase:') ; Still in use? (16/06-2023)
-	;AddPattern('FF50104783C6043BFB75E1') ; Still in use? (16/06-2023)
-	AddPattern('FF501083C6043BF775E2') ; UPDATED 23.12.24
+	_('ScanAgentBase:')
+	AddPattern('FF501083C6043BF775E2')
 
 	_('ScanAgentArray:')
 	AddPattern('8B0C9085C97419')
 
 	_('ScanCurrentTarget:')
-	AddPattern('83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCC55') ;UPDATED 23.12.24
+	AddPattern('83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCC55')
 
 	_('ScanMyID:')
-	AddPattern('83EC08568BF13B15') ; STILL WORKING 23.12.24
+	AddPattern('83EC08568BF13B15')
 
 	_('ScanEngine:')
-	AddPattern('568B3085F67478EB038D4900D9460C') ; UPDATED 23.12.24 NEEDS TO GET UPDATED EACH PATCH
+	AddPattern('568B3085F67478EB038D4900D9460C')
 
 	_('ScanRenderFunc:')
-	AddPattern('F6C401741C68B1010000BA') ; STILL WORKING 23.12.24
+	AddPattern('F6C401741C68B1010000BA')
 
 	_('ScanLoadFinished:')
-	AddPattern('8B561C8BCF52E8') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('8B561C8BCF52E8')
 
 	_('ScanPostMessage:')
-	AddPattern('6A00680080000051FF15') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('6A00680080000051FF15')
 
 	_('ScanTargetLog:')
-	AddPattern('5356578BFA894DF4E8') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('5356578BFA894DF4E8')
 
 	_('ScanChangeTargetFunction:')
-	AddPattern('3BDF0F95') ; STILL WORKING 23.12.24, 33C03BDA0F95C033
+	AddPattern('3BDF0F95')
 
 	_('ScanMoveFunction:')
-	AddPattern('558BEC83EC208D45F0') ; STILL WORKING 23.12.24, 558BEC83EC2056578BF98D4DF0
+	AddPattern('558BEC83EC208D45F0')
 
 	_('ScanPing:')
-	AddPattern('E874651600') ; UPDATED 23.12.24
-
-;~ 	_('ScanMapID:')
-;~ 	AddPattern('558BEC8B450885C074078B') ;STILL WORKING 23.12.24, B07F8D55
-
-;~ 	_('ScanMapLoading:')
-;~ 	AddPattern('2480ED0000000000') ; UPDATED 25.12.24, 6A2C50E8
+	AddPattern('E874651600')
 
 	_('ScanLoggedIn:')
-	AddPattern('C705ACDE740000000000C3CCCCCCCC') ; UPDATED 26.12.24, NEED TO GET UPDATED EACH PATCH OLD:BFFFC70580 85C07411B807
+	AddPattern('C705ACDE740000000000C3CCCCCCCC')
 
 	_('ScanRegion:')
-	AddPattern('6A548D46248908') ; STILL WORKING 23.12.24
-
-;~ 	_('ScanMapInfo:')
-;~ 	AddPattern('8BF0EB038B750C3B') ; STILL WORKING 23.12.24, 83F9FD7406
-
-;~ 	_('ScanLanguage:')
-;~ 	AddPattern('C38B75FC8B04B5') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('6A548D46248908')
 
 	_('ScanPacketSendFunction:')
-	AddPattern('C747540000000081E6') ;UPDATED 28.12.24 old: F7D9C74754010000001BC981, 558BEC83EC2C5356578BF985
+	AddPattern('C747540000000081E6')
 
 	_('ScanBaseOffset:')
-	AddPattern('83C40433C08BE55DC3A1') ; STILL WORKING 23.12.24, 5633F63BCE740E5633D2
+	AddPattern('83C40433C08BE55DC3A1')
 
 	_('ScanWriteChatFunction:')
-	AddPattern('8D85E0FEFFFF50681C01') ;STILL WORKING 23.12.24, 558BEC5153894DFC8B4D0856578B
+	AddPattern('8D85E0FEFFFF50681C01')
 
 	_('ScanChatLog:')
-	AddPattern('8B45F48B138B4DEC50') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('8B45F48B138B4DEC50')
 
 	_('ScanStringLog:')
-	AddPattern('893E8B7D10895E04397E08') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('893E8B7D10895E04397E08')
 
 	_('ScanStringFilter1:')
-	AddPattern('8B368B4F2C6A006A008B06') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('8B368B4F2C6A006A008B06')
 
 	_('ScanStringFilter2:')
-	AddPattern('515356578BF933D28B4F2C') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('515356578BF933D28B4F2C')
 
 	_('ScanActionFunction:')
-	AddPattern('8B7508578BF983FE09750C6876') ;STILL WORKING 23.12.24, ;8B7D0883FF098BF175116876010000
+	AddPattern('8B7508578BF983FE09750C6876')
 
 	_('ScanActionBase:')
-	AddPattern('8D1C87899DF4') ; UPDATED 24.12.24, OLD: 8D1C87899DF4FEFFFF8BC32BC7C1F802, 8B4208A80175418B4A08
+	AddPattern('8D1C87899DF4')
 
-	_('ScanBuyItemFunction:') ; Still in use? (16/06-2023)
-	AddPattern('D9EED9580CC74004') ;STILL WORKING 23.12.24 ; Still in use? (16/06-2023)
+	_('ScanBuyItemFunction:')
+	AddPattern('D9EED9580CC74004')
 
 	_('ScanTraderHook:')
 	AddPattern('50516A466A06')
 
 	_('ScanSleep:')
-	AddPattern('6A0057FF15D8408A006860EA0000') ; UPDATED 24.12.24, OLD:5F5E5B741A6860EA0000
+	AddPattern('6A0057FF15D8408A006860EA0000')
 
 	_('ScanClickToMoveFix:')
-	AddPattern('3DD301000074') ;STILL WORKING 23.12.24,
+	AddPattern('3DD301000074')
 
 	_('ScanZoomStill:')
-	AddPattern('558BEC8B41085685C0') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('558BEC8B41085685C0')
 
 	_('ScanZoomMoving:')
-	AddPattern('EB358B4304') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('EB358B4304')
 
 	_('ScanChangeStatusFunction:')
-	AddPattern('558BEC568B750883FE047C14') ;STILL WORKING 23.12.24, 568BF183FE047C14682F020000
+	AddPattern('558BEC568B750883FE047C14')
 
 	_('ScanCharslots:')
-	AddPattern('8B551041897E38897E3C897E34897E48897E4C890D') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('8B551041897E38897E3C897E34897E48897E4C890D')
 
 	_('ScanReadChatFunction:')
-	AddPattern('A128B6EB00') ; COULD NOT UPDATE! 23.12.24
+	AddPattern('A128B6EB00')
 
 	_('ScanDialogLog:')
-	AddPattern('8B45088945FC8D45F8506A08C745F841') ;STILL WORKING 23.12.24, 558BEC83EC285356578BF28BD9
+	AddPattern('8B45088945FC8D45F8506A08C745F841')
 
 	_("ScanTradeHack:")
-	AddPattern("8BEC8B450883F846") ;STILL WORKING 23.12.24
+	AddPattern("8BEC8B450883F846")
 
 	_("ScanClickCoords:")
-	AddPattern("8B451C85C0741CD945F8") ;STILL WORKING 23.12.24
+	AddPattern("8B451C85C0741CD945F8")
 
 	_("ScanInstanceInfo:")
-	AddPattern("6A2C50E80000000083C408C7") ;Added by Greg76 to get Instance Info
+	AddPattern("6A2C50E80000000083C408C7")
 
 	_("ScanAreaInfo:")
-	AddPattern("6BC67C5E05") ;Added by Greg76 to get Area Info
+	AddPattern("6BC67C5E05")
 
 	_("ScanWorldConst:")
-	AddPattern("8D0476C1E00405") ;Added by Greg76 to get World Info
+	AddPattern("8D0476C1E00405")
 
 	_SkillMod_DefinePatterns()
 	_AttributeMod_DefinePatterns()
 	_TradeMod_DefinePatterns()
+
+	; Add assertion patterns using the optimized system
+	_Log_Debug("Adding assertion patterns...", "Scan", $GUIEdit)
 
 	_('ScanPreGameContextAddr:')
 	AddPattern(GetAssertionPattern("P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene"))
@@ -536,115 +523,98 @@ Func Scan()
 	_('ScanFrameArray:')
 	AddPattern(GetAssertionPattern("P:\Code\Engine\Frame\FrMsg.cpp", "frame"))
 
-	_('ScanProc:') ; Label for the scan procedure
-	_('pushad') ; Push all general-purpose registers onto the stack to save their values
-	_('mov ecx,' & Hex($lGwBase, 8)) ; Move the base address of the Guild Wars process into the ECX register
-	_('mov esi,ScanProc') ; Move the address of the ScanProc label into the ESI register
-	_('ScanLoop:') ; Label for the scan loop
-	_('inc ecx') ; Increment the value in the ECX register by 1
-	_('mov al,byte[ecx]') ; Move the byte value at the address stored in ECX into the AL register
-	_('mov edx,ScanBasePointer') ; Move the address of the ScanBasePointer into the EDX register
+	; Original ScanProc (unchanged)
+	_('ScanProc:')
+	_('pushad')
+	_('mov ecx,' & Hex($lGwBase, 8))
+	_('mov esi,ScanProc')
+	_('ScanLoop:')
+	_('inc ecx')
+	_('mov al,byte[ecx]')
+	_('mov edx,ScanBasePointer')
 
+	_('ScanInnerLoop:')
+	_('mov ebx,dword[edx]')
+	_('cmp ebx,-1')
+	_('jnz ScanContinue')
+	_('add edx,50')
+	_('cmp edx,esi')
+	_('jnz ScanInnerLoop')
+	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+	_('jnz ScanLoop')
+	_('jmp ScanExit')
 
-	_('ScanInnerLoop:') ; Label for the inner scan loop
-	_('mov ebx,dword[edx]') ; Move the 4-byte value at the address stored in EDX into the EBX register
-	_('cmp ebx,-1') ; Compare the value in EBX to -1
-	_('jnz ScanContinue') ; Jump to the ScanContinue label if the comparison is not zero
-	_('add edx,50') ; Add 50 to the value in the EDX register
-	_('cmp edx,esi') ; Compare the value in EDX to the value in ESI
-	_('jnz ScanInnerLoop') ; Jump to the ScanInnerLoop label if the comparison is not zero
-	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8))) ; Compare the value in ECX to a specific address (+4FF000)
-	_('jnz ScanLoop') ; Jump to the ScanLoop label if the comparison is not zero
-	_('jmp ScanExit') ; Jump to the ScanExit label
+	_('ScanContinue:')
+	_('lea edi,dword[edx+ebx]')
+	_('add edi,C')
+	_('mov ah,byte[edi]')
+	_('cmp al,ah')
+	_('jz ScanMatched')
+	_('cmp ah,00')
+	_('jz ScanMatched')
+	_('mov dword[edx],0')
+	_('add edx,50')
+	_('cmp edx,esi')
+	_('jnz ScanInnerLoop')
+	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+	_('jnz ScanLoop')
+	_('jmp ScanExit')
 
+	_('ScanMatched:')
+	_('inc ebx')
+	_('mov edi,dword[edx+4]')
+	_('cmp ebx,edi')
+	_('jz ScanFound')
+	_('mov dword[edx],ebx')
+	_('add edx,50')
+	_('cmp edx,esi')
+	_('jnz ScanInnerLoop')
+	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+	_('jnz ScanLoop')
+	_('jmp ScanExit')
 
-	_('ScanContinue:') ; Label for the scan continue section
-	_('lea edi,dword[edx+ebx]') ; Load the effective address of the value at EDX + EBX into the EDI register
-	_('add edi,C') ; Add the value of C to the address in EDI
-	_('mov ah,byte[edi]') ; Move the byte value at the address stored in EDI into the AH register
-	_('cmp al,ah') ; Compare the value in AL to the value in AH
-	_('jz ScanMatched') ; Jump to the ScanMatched label if the comparison is zero (i.e., the values match)
-	_('cmp ah,00')    ;Added by Greg76 for scan wildcards
-	_('jz ScanMatched')    ;Added by Greg76 for scan wildcards
-	_('mov dword[edx],0') ; Move the value 0 into the 4-byte location at the address stored in EDX
-	_('add edx,50') ; Add 50 to the value in the EDX register
-	_('cmp edx,esi') ; Compare the value in EDX to the value in ESI
-	_('jnz ScanInnerLoop') ; Jump to the ScanInnerLoop label if the comparison is not zero
-	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8))) ; Compare the value in ECX to a specific address (+4FF000)
-	_('jnz ScanLoop') ; Jump to the ScanLoop label if the comparison is not zero
-	_('jmp ScanExit') ; Jump to the ScanExit label
+	_('ScanFound:')
+	_('lea edi,dword[edx+8]')
+	_('mov dword[edi],ecx')
+	_('mov dword[edx],-1')
+	_('add edx,50')
+	_('cmp edx,esi')
+	_('jnz ScanInnerLoop')
+	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+	_('jnz ScanLoop')
 
+	_('ScanExit:')
+	_('popad')
+	_('retn')
 
-	_('ScanMatched:') ; Label for the scan matched section
-	_('inc ebx') ; Increment the value in the EBX register by 1
-	_('mov edi,dword[edx+4]') ; Move the 4-byte value at the address EDX + 4 into the EDI register
-	_('cmp ebx,edi') ; Compare the value in EBX to the value in EDI
-	_('jz ScanFound') ; Jump to the ScanFound label if the comparison is zero (i.e., the values match)
-	_('mov dword[edx],ebx') ; Move the value in EBX into the 4-byte location at the address stored in EDX
-	_('add edx,50') ; Add 50 to the value in the EDX register
-	_('cmp edx,esi') ; Compare the value in EDX to the value in ESI
-	_('jnz ScanInnerLoop') ; Jump to the ScanInnerLoop label if the comparison is not zero
-	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8))) ; Compare the value in ECX to a specific address (+4FF000)
-	_('jnz ScanLoop') ; Jump to the ScanLoop label if the comparison is not zero
-	_('jmp ScanExit') ; Jump to the ScanExit label
-
-
-	_('ScanFound:') ; Label for the scan found section
-	_('lea edi,dword[edx+8]') ; Load the effective address of the value at EDX + 8 into the EDI register
-	_('mov dword[edi],ecx') ; Move the value in ECX into the 4-byte location at the address stored in EDI
-	_('mov dword[edx],-1') ; Move the value -1 into the 4-byte location at the address stored in EDX (mark as found)
-	_('add edx,50') ; Add 50 to the value in the EDX register
-	_('cmp edx,esi') ; Compare the value in EDX to the value in ESI
-	_('jnz ScanInnerLoop') ; Jump to the ScanInnerLoop label if the comparison is not zero
-	_('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8))) ; Compare the value in ECX to a specific address (+4FF000)
-	_('jnz ScanLoop') ; Jump to the ScanLoop label if the comparison is not zero
-
-	_('ScanExit:') ; Label for the scan exit section
-	_('popad') ; Pop all general-purpose registers from the stack to restore their original values
-	_('retn') ; Return from the current function (exit the scan routine)
-
-
+	; Continue with the rest
 	$mBase = $lGwBase + 0x9DF000
 	Local $lScanMemory = MemoryRead($mBase, 'ptr')
 
-	; Check if the scan memory address is empty (no previous injection)
 	If $lScanMemory = 0 Then
-		; Allocate a new block of memory for the scan routine
 		$mMemory = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $mASMSize, 'dword', 0x1000, 'dword', 0x40)
-		$mMemory = $mMemory[0] ; Get the allocated memory address
-
-		; Write the allocated memory address to the scan memory location
+		$mMemory = $mMemory[0]
 		MemoryWrite($mBase, $mMemory)
-
-;~ out("First Inject: " & $mMemory)
 	Else
-		; If the scan memory address is not empty, use the existing memory address
 		$mMemory = $lScanMemory
 	EndIf
 
-
-	; Complete the assembly code for the scan routine
 	CompleteASMCode()
 
-	; Check if this is the first injection (no previous scan memory address)
 	If $lScanMemory = 0 Then
-		; Write the assembly code to the allocated memory address
 		WriteBinary($mASMString, $mMemory + $mASMCodeOffset)
 
-		; Create a new thread in the target process to execute the scan routine
 		Local $lThread = DllCall($mKernelHandle, 'int', 'CreateRemoteThread', 'int', $mGWProcHandle, 'ptr', 0, 'int', 0, 'int', GetLabelInfo('ScanProc'), 'ptr', 0, 'int', 0, 'int', 0)
-		$lThread = $lThread[0] ; Get the thread ID
+		$lThread = $lThread[0]
 
-		; Wait for the thread to finish executing
 		Local $lResult
 		Do
-			; Wait for up to 50ms for the thread to finish
 			$lResult = DllCall($mKernelHandle, 'int', 'WaitForSingleObject', 'int', $lThread, 'int', 50)
-		Until $lResult[0] <> 258 ; Wait until the thread is no longer waiting (258 is the WAIT_TIMEOUT constant)
+		Until $lResult[0] <> 258
 
-		; Close the thread handle to free up system resources
 		DllCall($mKernelHandle, 'int', 'CloseHandle', 'int', $lThread)
 	EndIf
+
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -759,3 +729,58 @@ Func GetGWBase()
 EndFunc
 
 #EndRegion Initialisation
+
+Func AddAssertionPattern($aFile, $aMsg, $aOffset)
+	; First, we need to find the strings in .rdata
+	Local $file_rdata = 0
+	Local $msg_rdata = 0
+
+	; Initialize sections if not already done
+	If $sections[$SECTION_RDATA][0] = 0 Then
+		InitializeSections(GetGWBaseAddress())
+	EndIf
+
+	; Find file string in .rdata
+	If $aFile <> "" Then
+		Local $file_bytes = _StringToBytes($aFile)
+		Local $file_mask = ""
+		For $i = 1 To BinaryLen($file_bytes)
+			$file_mask &= "x"
+		Next
+		$file_rdata = Find($file_bytes, $file_mask, 0, $SECTION_RDATA)
+		If $file_rdata = 0 Then
+			_Log_Error("File string not found in .rdata: " & $aFile, "Scan", $GUIEdit)
+			Return ; String not found
+		EndIf
+	EndIf
+
+	; Find message string in .rdata
+	If $aMsg <> "" Then
+		Local $msg_bytes = _StringToBytes($aMsg)
+		Local $msg_mask = ""
+		For $i = 1 To BinaryLen($msg_bytes)
+			$msg_mask &= "x"
+		Next
+		$msg_rdata = Find($msg_bytes, $msg_mask, 0, $SECTION_RDATA)
+		If $msg_rdata = 0 Then
+			_Log_Error("Message string not found in .rdata: " & $aMsg, "Scan", $GUIEdit)
+			Return ; String not found
+		EndIf
+	EndIf
+
+	; Create the pattern with assertion marker
+	Local $pattern = "AA000000" ; Marker for assertion pattern (at offset 12)
+	$pattern &= SwapEndian(Hex($file_rdata, 8)) ; File address (offset 13-16)
+	$pattern &= "00" ; Padding (offset 17)
+	$pattern &= SwapEndian(Hex($msg_rdata, 8)) ; Msg address (offset 18-21)
+	$pattern &= SwapEndian(Hex($aOffset, 8)) ; Offset (offset 22-25)
+
+	; Pad to 68 bytes
+	Local $padding_count = 68 - 14
+	For $i = 1 To $padding_count
+		$pattern &= "00"
+	Next
+
+	$mASMString &= "00000000" & SwapEndian(Hex(10, 8)) & $pattern
+	$mASMSize += 80
+EndFunc

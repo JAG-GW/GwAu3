@@ -10,6 +10,7 @@ Global Const $SECTION_RELOC = 4
 ; Array to store section address ranges
 Global $sections[5][2]  ; [section][0=start, 1=end]
 Global Const $BLOCK_SIZE = 131072 ; 128 Ko
+Global $g_AssertionCache[0][3] ; [file, msg, pattern]
 
 ; #FUNCTION# ;===============================================================================
 ; Name...........: GetGWBaseAddress
@@ -25,13 +26,17 @@ Global Const $BLOCK_SIZE = 131072 ; 128 Ko
 ; Related .......: InitializeSections
 ;============================================================================================
 Func GetGWBaseAddress()
-    If $mGWProcHandle = 0 Then Return 0
+    If $mGWProcHandle = 0 Then
+        _Log_Error("Invalid process handle", "Memory", $GUIEdit)
+        Return 0
+    EndIf
 
     Local $aModules = DllStructCreate("ptr[1024]")
     Local $cbNeeded = DllStructCreate("dword")
 
     Local $hPSAPI = DllOpen("psapi.dll")
     If @error Then
+        _Log_Error("Failed to open psapi.dll", "Memory", $GUIEdit)
         Return 0
     EndIf
 
@@ -42,6 +47,7 @@ Func GetGWBaseAddress()
         "ptr", DllStructGetPtr($cbNeeded))
 
     If @error Or Not $success[0] Then
+        _Log_Error("EnumProcessModules failed", "Memory", $GUIEdit)
         DllClose($hPSAPI)
         Return 0
     EndIf
@@ -59,8 +65,8 @@ Func GetGWBaseAddress()
         EndIf
     Next
 
+    _Log_Error("Gw.exe module not found", "Memory", $GUIEdit)
     DllClose($hPSAPI)
-
     Return 0
 EndFunc
 
@@ -79,13 +85,16 @@ EndFunc
 ; Related .......: GetGWBaseAddress, Find
 ;============================================================================================
 Func InitializeSections($baseAddress)
+
     Local $dosHeader = DllStructCreate("struct;word e_magic;byte[58];dword e_lfanew;endstruct")
     Local $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress, DllStructGetPtr($dosHeader), DllStructGetSize($dosHeader), 0)
     If Not $success Then
+        _Log_Error("Failed to read DOS header", "Sections", $GUIEdit)
         Return False
     EndIf
 
     If DllStructGetData($dosHeader, "e_magic") <> 0x5A4D Then ; 'MZ'
+        _Log_Error("Invalid DOS signature", "Sections", $GUIEdit)
         Return False
     EndIf
 
@@ -94,16 +103,24 @@ Func InitializeSections($baseAddress)
     Local $ntHeaders = DllStructCreate("struct;dword Signature;word Machine;word NumberOfSections;dword TimeDateStamp;dword PointerToSymbolTable;dword NumberOfSymbols;word SizeOfOptionalHeader;word Characteristics;endstruct")
     $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress + $e_lfanew, DllStructGetPtr($ntHeaders), DllStructGetSize($ntHeaders), 0)
     If Not $success Then
+        _Log_Error("Failed to read NT headers", "Sections", $GUIEdit)
         Return False
     EndIf
 
     If DllStructGetData($ntHeaders, "Signature") <> 0x4550 Then ; 'PE\0\0'
+        _Log_Error("Invalid PE signature", "Sections", $GUIEdit)
         Return False
     EndIf
 
     Local $numberOfSections = DllStructGetData($ntHeaders, "NumberOfSections")
     Local $sizeOfOptionalHeader = DllStructGetData($ntHeaders, "SizeOfOptionalHeader")
     Local $sectionHeaderOffset = $e_lfanew + 24 + $sizeOfOptionalHeader
+
+    ; Clear sections array
+    For $i = 0 To 4
+        $sections[$i][0] = 0
+        $sections[$i][1] = 0
+    Next
 
     Local $sectionHeader = DllStructCreate("struct;" & _
         "char Name[8];" & _
@@ -120,74 +137,60 @@ Func InitializeSections($baseAddress)
 
     For $i = 0 To $numberOfSections - 1
         $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress + $sectionHeaderOffset + ($i * 40), DllStructGetPtr($sectionHeader), DllStructGetSize($sectionHeader), 0)
-        If Not $success Then ContinueLoop
+        If Not $success Then
+            _Log_Warning("Failed to read section header " & $i, "Sections", $GUIEdit)
+            ContinueLoop
+        EndIf
 
         Local $sectionName = StringStripWS(DllStructGetData($sectionHeader, "Name"), 8)
         Local $virtualAddress = DllStructGetData($sectionHeader, "VirtualAddress")
         Local $virtualSize = DllStructGetData($sectionHeader, "VirtualSize")
-		Local $SizeRawData = DllStructGetData($sectionHeader, "SizeOfRawData")
-
-		_Log_Message("======== " & $sectionName & " ========", $c_Log_Msg_Type_Debug, "Gwa²")
+        Local $SizeRawData = DllStructGetData($sectionHeader, "SizeOfRawData")
 
         Switch $sectionName
             Case ".text"
                 $sections[$SECTION_TEXT][0] = $baseAddress + $virtualAddress
                 $sections[$SECTION_TEXT][1] = $sections[$SECTION_TEXT][0] + $virtualSize
-				_Log_Message(".text Start: " & $sections[$SECTION_TEXT][0], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".text End: " & $sections[$SECTION_TEXT][1], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".text Size: " & $virtualSize, $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".text Raw Size: " & $SizeRawData, $c_Log_Msg_Type_Debug, "Gwa²")
-
+                _Log_Info(".text section: 0x" & Hex($sections[$SECTION_TEXT][0]) & " - 0x" & Hex($sections[$SECTION_TEXT][1]), "Sections", $GUIEdit)
 
             Case ".rdata"
                 $sections[$SECTION_RDATA][0] = $baseAddress + $virtualAddress
                 $sections[$SECTION_RDATA][1] = $sections[$SECTION_RDATA][0] + $virtualSize
-				_Log_Message(".rdata Start: " & $sections[$SECTION_RDATA][0], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".rdata End: " & $sections[$SECTION_RDATA][1], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".rdata Size: " & $virtualSize, $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".rdata Raw Size: " & $SizeRawData, $c_Log_Msg_Type_Debug, "Gwa²")
+                _Log_Info(".rdata section: 0x" & Hex($sections[$SECTION_RDATA][0]) & " - 0x" & Hex($sections[$SECTION_RDATA][1]), "Sections", $GUIEdit)
 
             Case ".data"
                 $sections[$SECTION_DATA][0] = $baseAddress + $virtualAddress
                 $sections[$SECTION_DATA][1] = $sections[$SECTION_DATA][0] + $virtualSize
-				_Log_Message(".data Start: " & $sections[$SECTION_DATA][0], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".data End: " & $sections[$SECTION_DATA][1], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".data Size: " & $virtualSize, $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".data Raw Size: " & $SizeRawData, $c_Log_Msg_Type_Debug, "Gwa²")
+                _Log_Info(".data section: 0x" & Hex($sections[$SECTION_DATA][0]) & " - 0x" & Hex($sections[$SECTION_DATA][1]), "Sections", $GUIEdit)
 
-			Case ".rsrc"
+            Case ".rsrc"
                 $sections[$SECTION_RSRC][0] = $baseAddress + $virtualAddress
                 $sections[$SECTION_RSRC][1] = $sections[$SECTION_RSRC][0] + $virtualSize
-				_Log_Message(".rsrc Start: " & $sections[$SECTION_RSRC][0], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".rsrc End: " & $sections[$SECTION_RSRC][1], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".rsrc Size: " & $virtualSize, $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".rsrc Raw Size: " & $SizeRawData, $c_Log_Msg_Type_Debug, "Gwa²")
 
-			Case ".reloc"
+            Case ".reloc"
                 $sections[$SECTION_RELOC][0] = $baseAddress + $virtualAddress
                 $sections[$SECTION_RELOC][1] = $sections[$SECTION_RELOC][0] + $virtualSize
-				_Log_Message(".reloc Start: " & $sections[$SECTION_RELOC][0], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".reloc End: " & $sections[$SECTION_RELOC][1], $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".reloc Size: " & $virtualSize, $c_Log_Msg_Type_Debug, "Gwa²")
-				_Log_Message(".reloc Raw Size: " & $SizeRawData, $c_Log_Msg_Type_Debug, "Gwa²")
-		EndSwitch
-
-		_Log_Message("=======================", $c_Log_Msg_Type_Debug, "Gwa²")
+        EndSwitch
     Next
 
     If $sections[$SECTION_TEXT][0] = 0 Then
+        _Log_Error("Failed to find .text section", "Sections", $GUIEdit)
         Return False
     EndIf
 
-	$sections[$SECTION_TEXT][1] = ($sections[$SECTION_RDATA][0] - $sections[$SECTION_TEXT][0]) + $sections[$SECTION_TEXT][0]
-	$sections[$SECTION_RDATA][1] = ($sections[$SECTION_DATA][0] - $sections[$SECTION_RDATA][0]) + $sections[$SECTION_RDATA][0]
-	$sections[$SECTION_DATA][1] = ($sections[$SECTION_RSRC][0] - $sections[$SECTION_DATA][0]) + $sections[$SECTION_DATA][0]
-	$sections[$SECTION_RSRC][1] = ($sections[$SECTION_RELOC][0] - $sections[$SECTION_RSRC][0]) + $sections[$SECTION_RSRC][0]
-	_Log_Message(".text Ajusted End: " &  $sections[$SECTION_TEXT][1], $c_Log_Msg_Type_Debug, "Gwa²")
-	_Log_Message(".rdata Ajusted End: " & $sections[$SECTION_RDATA][1], $c_Log_Msg_Type_Debug, "Gwa²")
-	_Log_Message(".data Ajusted End: " & $sections[$SECTION_DATA][1], $c_Log_Msg_Type_Debug, "Gwa²")
-	_Log_Message(".rsrc Ajusted End: " & $sections[$SECTION_RSRC][1], $c_Log_Msg_Type_Debug, "Gwa²")
-;~ 	_Log_Message(".reloc Ajusted End: " & , $c_Log_Msg_Type_Debug, "Gwa²")
+    ; Adjust section ends
+    If $sections[$SECTION_TEXT][0] > 0 And $sections[$SECTION_RDATA][0] > 0 Then
+        $sections[$SECTION_TEXT][1] = $sections[$SECTION_RDATA][0]
+    EndIf
+    If $sections[$SECTION_RDATA][0] > 0 And $sections[$SECTION_DATA][0] > 0 Then
+        $sections[$SECTION_RDATA][1] = $sections[$SECTION_DATA][0]
+    EndIf
+    If $sections[$SECTION_DATA][0] > 0 And $sections[$SECTION_RSRC][0] > 0 Then
+        $sections[$SECTION_DATA][1] = $sections[$SECTION_RSRC][0]
+    EndIf
+    If $sections[$SECTION_RSRC][0] > 0 And $sections[$SECTION_RELOC][0] > 0 Then
+        $sections[$SECTION_RSRC][1] = $sections[$SECTION_RELOC][0]
+    EndIf
 
     Return True
 EndFunc
@@ -357,6 +360,12 @@ EndFunc
 Func Find($pattern, $mask, $offset = 0, $section = $SECTION_TEXT)
     Local $start = $sections[$section][0]
     Local $end = $sections[$section][1]
+
+    If $start = 0 Or $end = 0 Then
+        _Log_Error("Invalid section boundaries", "Find", $GUIEdit)
+        Return 0
+    EndIf
+
     Local $buffer = DllStructCreate("byte[" & $BLOCK_SIZE & "]")
     Local $patternLen = StringLen($mask)
 
@@ -366,7 +375,13 @@ Func Find($pattern, $mask, $offset = 0, $section = $SECTION_TEXT)
         $end -= $offset
     EndIf
 
+    Local $blocksSearched = 0
     For $currentAddr = $start To $end - $patternLen Step $BLOCK_SIZE - $patternLen
+        $blocksSearched += 1
+        If Mod($blocksSearched, 100) = 0 Then
+            _Log_Debug("Searched " & $blocksSearched & " blocks...", "Find", $GUIEdit)
+        EndIf
+
         Local $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $currentAddr, DllStructGetPtr($buffer), $BLOCK_SIZE, 0)
         If Not $success Then ContinueLoop
 
@@ -382,7 +397,8 @@ Func Find($pattern, $mask, $offset = 0, $section = $SECTION_TEXT)
             Next
 
             If $found Then
-                Return $currentAddr + $i + $offset
+                Local $foundAddr = $currentAddr + $i + $offset
+                Return $foundAddr
             EndIf
         Next
     Next
@@ -619,10 +635,23 @@ EndFunc
 ; Related .......: FindAssertion, Find
 ;============================================================================================
 Func GetAssertionPattern($assertion_file, $assertion_msg)
+
+    ; Check cache first
+    For $i = 0 To UBound($g_AssertionCache) - 1
+        If $g_AssertionCache[$i][0] = $assertion_file And $g_AssertionCache[$i][1] = $assertion_msg Then
+            Return $g_AssertionCache[$i][2]
+        EndIf
+    Next
+
+    ; Initialize sections if needed
+    If $sections[$SECTION_RDATA][0] = 0 Then
+        InitializeSections(GetGWBaseAddress())
+    EndIf
+
     Local $file_rdata = 0
     Local $msg_rdata = 0
 
-    ; First search for strings in RDATA
+    ; Search for file string
     If $assertion_file <> "" Then
         Local $file_bytes = _StringToBytes($assertion_file)
         Local $file_mask = ""
@@ -630,8 +659,13 @@ Func GetAssertionPattern($assertion_file, $assertion_msg)
             $file_mask &= "x"
         Next
         $file_rdata = Find($file_bytes, $file_mask, 0, $SECTION_RDATA)
+        If $file_rdata = 0 Then
+            _Log_Error("File string not found in .rdata", "Scan", $GUIEdit)
+            Return ""
+        EndIf
     EndIf
 
+    ; Search for message string
     If $assertion_msg <> "" Then
         Local $msg_bytes = _StringToBytes($assertion_msg)
         Local $msg_mask = ""
@@ -639,20 +673,24 @@ Func GetAssertionPattern($assertion_file, $assertion_msg)
             $msg_mask &= "x"
         Next
         $msg_rdata = Find($msg_bytes, $msg_mask, 0, $SECTION_RDATA)
+        If $msg_rdata = 0 Then
+            _Log_Error("Message string not found in .rdata", "Scan", $GUIEdit)
+            Return ""
+        EndIf
     EndIf
 
-    ; Generate pattern in little-endian format
+    ; Generate pattern: BA <file_addr> B9 <msg_addr>
     Local $pattern = "BA" ; mov edx
-
-    ; Convert $file_rdata to little-endian
-    Local $file_bytes = SwapEndian(Hex($file_rdata, 8))
-    $pattern &= $file_bytes
-
+    $pattern &= SwapEndian(Hex($file_rdata, 8))
     $pattern &= "B9" ; mov ecx
+    $pattern &= SwapEndian(Hex($msg_rdata, 8))
 
-    ; Convert $msg_rdata to little-endian
-    Local $msg_bytes = SwapEndian(Hex($msg_rdata, 8))
-    $pattern &= $msg_bytes
+    ; Add to cache
+    Local $idx = UBound($g_AssertionCache)
+    ReDim $g_AssertionCache[$idx + 1][3]
+    $g_AssertionCache[$idx][0] = $assertion_file
+    $g_AssertionCache[$idx][1] = $assertion_msg
+    $g_AssertionCache[$idx][2] = $pattern
 
     Return $pattern
 EndFunc

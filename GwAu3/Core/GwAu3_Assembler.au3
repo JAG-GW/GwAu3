@@ -737,7 +737,41 @@ Func _($aASM)
 					$lOpCode = '8B89F4000000'      ; this was added for crafting
 				Case 'cmp ah,00' ;Added by Greg76 for scan wildcards
 					$lOpCode = '80FC00'
+
+				Case 'mov eax,edx'
+					$lOpCode = '8BC2'
+				Case 'mov esi,edx'
+					$lOpCode = '8BF2'
+				Case 'mov edi,edx'
+					$lOpCode = '8BFA'
+				Case 'add esi,D'
+					$lOpCode = '83C60D'
+				Case 'add esi,12'
+					$lOpCode = '83C612'
+				Case 'add edi,8'
+					$lOpCode = '83C708'
+				Case 'cmp bl,AA'
+					$lOpCode = '80FBAA'
+				Case 'cmp bl,B9'
+					$lOpCode = '80FBB9'
+				Case 'cmp al,BA'
+					$lOpCode = '3CBA'
+				Case 'mov bl,byte[eax]'
+					$lOpCode = '8A18'
+				Case 'mov bl,byte[ecx+5]'
+					$lOpCode = '8A5905'
+				Case 'mov ebx,dword[ecx+1]'
+					$lOpCode = '8B5901'
+				Case 'mov ebx,dword[ecx+6]'
+					$lOpCode = '8B5906'
+				Case 'mov edi,dword[esi]'
+					$lOpCode = '8B3E'
+				Case 'cmp ebx,esi'
+					$lOpCode = '3BDE'
+				Case 'pop edi'
+					$lOpCode = '5F'
 				Case Else
+					_Log_Error("Could not assemble: " & $aASM, "ASM", $GUIEdit)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $aASM)
 					Exit
 			EndSwitch
