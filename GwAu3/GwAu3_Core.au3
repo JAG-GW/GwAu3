@@ -514,16 +514,18 @@ Func Scan()
 	_AttributeMod_DefinePatterns()
 	_TradeMod_DefinePatterns()
 
-	; Add assertion patterns using the optimized system
-	_Log_Debug("Adding assertion patterns...", "Scan", $GUIEdit)
-
+	; Define all assertions
+	Local $assertions[2][2] = [ _
+		["P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene"], _
+		["P:\Code\Engine\Frame\FrMsg.cpp", "frame"] _
+	]
+	; Get all patterns in one search
+	Local $assertionPatterns = GetMultipleAssertionPatterns($assertions)
 	_('ScanPreGameContextAddr:')
-	AddPattern(GetAssertionPattern("P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene"))
-
+	AddPattern($assertionPatterns[0])
 	_('ScanFrameArray:')
-	AddPattern(GetAssertionPattern("P:\Code\Engine\Frame\FrMsg.cpp", "frame"))
+	AddPattern($assertionPatterns[1])
 
-	; Original ScanProc (unchanged)
 	_('ScanProc:')
 	_('pushad')
 	_('mov ecx,' & Hex($lGwBase, 8))
@@ -587,7 +589,6 @@ Func Scan()
 	_('popad')
 	_('retn')
 
-	; Continue with the rest
 	$mBase = $lGwBase + 0x9DF000
 	Local $lScanMemory = MemoryRead($mBase, 'ptr')
 
@@ -703,84 +704,4 @@ Func ScanForCharname()
 	WEnd
 	Return ''
 EndFunc
-
-; #FUNCTION# ;===============================================================================
-; Name...........: GetGWBase
-; Description ...: Gets the base address of Guild Wars process
-; Syntax.........: GetGWBase()
-; Parameters ....: None
-; Return values .: Base address as pointer
-; Author ........:
-; Modified.......:
-; Remarks .......: - Returns the memory base address of Guild Wars
-;                  - Adjusts raw address by subtracting 4096
-;                  - Formats as pointer
-; Related .......: ScanForProcess
-;============================================================================================
-Func GetGWBase()
-	; **Scan for Guild Wars Process and Get Base Address**
-	Local $lGwBase = ScanForProcess() - 4096 ; Subtract 4096 from the process address to get the base address
-
-	; **Convert Base Address to Hexadecimal String**
-	$lGwBase = Ptr($lGwBase) ; Prefix the hexadecimal value with "0x"
-
-	; **Return Base Address as Hexadecimal String**
-	Return $lGwBase
-EndFunc
-
 #EndRegion Initialisation
-
-Func AddAssertionPattern($aFile, $aMsg, $aOffset)
-	; First, we need to find the strings in .rdata
-	Local $file_rdata = 0
-	Local $msg_rdata = 0
-
-	; Initialize sections if not already done
-	If $sections[$SECTION_RDATA][0] = 0 Then
-		InitializeSections(GetGWBaseAddress())
-	EndIf
-
-	; Find file string in .rdata
-	If $aFile <> "" Then
-		Local $file_bytes = _StringToBytes($aFile)
-		Local $file_mask = ""
-		For $i = 1 To BinaryLen($file_bytes)
-			$file_mask &= "x"
-		Next
-		$file_rdata = Find($file_bytes, $file_mask, 0, $SECTION_RDATA)
-		If $file_rdata = 0 Then
-			_Log_Error("File string not found in .rdata: " & $aFile, "Scan", $GUIEdit)
-			Return ; String not found
-		EndIf
-	EndIf
-
-	; Find message string in .rdata
-	If $aMsg <> "" Then
-		Local $msg_bytes = _StringToBytes($aMsg)
-		Local $msg_mask = ""
-		For $i = 1 To BinaryLen($msg_bytes)
-			$msg_mask &= "x"
-		Next
-		$msg_rdata = Find($msg_bytes, $msg_mask, 0, $SECTION_RDATA)
-		If $msg_rdata = 0 Then
-			_Log_Error("Message string not found in .rdata: " & $aMsg, "Scan", $GUIEdit)
-			Return ; String not found
-		EndIf
-	EndIf
-
-	; Create the pattern with assertion marker
-	Local $pattern = "AA000000" ; Marker for assertion pattern (at offset 12)
-	$pattern &= SwapEndian(Hex($file_rdata, 8)) ; File address (offset 13-16)
-	$pattern &= "00" ; Padding (offset 17)
-	$pattern &= SwapEndian(Hex($msg_rdata, 8)) ; Msg address (offset 18-21)
-	$pattern &= SwapEndian(Hex($aOffset, 8)) ; Offset (offset 22-25)
-
-	; Pad to 68 bytes
-	Local $padding_count = 68 - 14
-	For $i = 1 To $padding_count
-		$pattern &= "00"
-	Next
-
-	$mASMString &= "00000000" & SwapEndian(Hex(10, 8)) & $pattern
-	$mASMSize += 80
-EndFunc
