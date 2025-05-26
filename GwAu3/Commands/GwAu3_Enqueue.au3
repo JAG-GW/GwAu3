@@ -13,14 +13,6 @@ Func Move($aX, $aY, $aRandom = 50)
 EndFunc   ;==>Move
 #EndRegion Movement Enqueue
 
-#Region Fighting Enqueue
-;~ Description: Target an agent.
-Func ChangeTarget($aAgent)
-	DllStructSetData($mChangeTarget, 2, ConvertID($aAgent))
-	Enqueue($mChangeTargetPtr, 8)
-EndFunc   ;==>ChangeTarget
-#EndRegion Fighting Enqueue
-
 #Region Misc Enqueue
 ;~ Description: Change game language.
 Func ToggleLanguage()

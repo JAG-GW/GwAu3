@@ -3,7 +3,6 @@
 #include "../../Core/GwAu3_Assembler.au3"
 #include "../../Core/GwAu3_Utils.au3"
 #include "../../Core/GwAu3_LogMessages.au3"
-#include "../../Core/GwAu3_CommandGenerator.au3"
 
 #Region Module Constants
 ; Skill module specific constants
@@ -50,7 +49,6 @@ Func _SkillMod_Initialize()
         Return True
     EndIf
 
-    _CmdGen_Initialize($GUIEdit)
     _SkillMod_InitializeData()
     _SkillMod_InitializeCommands()
     $g_bSkillModuleInitialized = True
@@ -73,10 +71,12 @@ Func _SkillMod_InitializeData()
 	$g_mSkillBase = MemoryRead(GetScannedAddress('ScanSkillBase', 0x8))
 	If $g_mSkillBase = 0 Then _Log_Error("Invalid SkillBase address", "SkillMod", $GUIEdit)
 	SetValue('SkillBase', Ptr($g_mSkillBase))
+	_Log_Debug("SkillBase: " & Ptr($g_mSkillBase), "SkillMod", $GUIEdit)
 
 	$g_mSkillTimer = MemoryRead(GetScannedAddress('ScanSkillTimer', -0x3))
 	If $g_mSkillTimer = 0 Then _Log_Error("Invalid SkillTimer address", "SkillMod", $GUIEdit)
 	SetValue('SkillTimer', Ptr($g_mSkillTimer))
+	_Log_Debug("SkillTimer: " & Ptr($g_mSkillTimer), "SkillMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -92,7 +92,10 @@ EndFunc
 ;============================================================================================
 Func _SkillMod_InitializeCommands()
 	SetValue('UseSkillFunction', Ptr(GetScannedAddress('ScanUseSkillFunction', -0x125)))
+	_Log_Debug("UseSkillFunction: " & GetValue('UseSkillFunction'), "SkillMod", $GUIEdit)
+
 	SetValue('UseHeroSkillFunction', Ptr(GetScannedAddress('ScanUseHeroSkillFunction', -0x59)))
+	_Log_Debug("UseHeroSkillFunction: " & GetValue('UseHeroSkillFunction'), "SkillMod", $GUIEdit)
 
 	Local $lTemp
 	$lTemp = GetScannedAddress('ScanSkillLog', 0x1)
@@ -194,10 +197,29 @@ EndFunc
 ; Related .......: _SkillMod_DefinePatterns
 ;============================================================================================
 Func _SkillMod_CreateCommands()
-    _CmdGen_RegisterCommand("UseSkill", $CMD_TYPE_STRUCT4_CALL, "int,int,int,bool", "UseSkillFunction")
-    _CmdGen_RegisterCommand("UseHeroSkill", $CMD_TYPE_STRUCT3_CALL, "int,int,int", "UseHeroSkillFunction")
+	_('CommandUseSkill:')
+	_('mov ecx,dword[eax+10]')
+	_('push ecx')
+	_('mov ebx,dword[eax+C]')
+	_('push ebx')
+	_('mov edx,dword[eax+8]')
+	_('push edx')
+	_('mov ecx,dword[eax+4]')
+	_('push ecx')
+	_('call UseSkillFunction')
+	_('add esp,10')
+	_('ljmp CommandReturn')
 
-    _CmdGen_GenerateAndInject()
+	_('CommandUseHeroSkill:')
+    _('mov ecx,dword[eax+8]')
+    _('push ecx')
+    _('mov ecx,dword[eax+c]')
+    _('push ecx')
+    _('mov ecx,dword[eax+4]')
+    _('push ecx')
+    _('call UseHeroSkillFunction')
+    _('add esp,C')
+    _('ljmp CommandReturn')
 EndFunc
 
 ; #FUNCTION# ;===============================================================================

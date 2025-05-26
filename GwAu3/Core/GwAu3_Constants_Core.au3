@@ -54,10 +54,7 @@ Global $lTemp                                ; Temporary variable for various op
 #Region Game Data Pointers
 ; Pointers to important game data structures
 Global $mBasePointer                         ; Pointer to game base structure
-Global $mAgentBase                           ; Pointer to agent array base
-Global $mMaxAgents                           ; Maximum number of agents
 Global $mMyID                                ; Player's agent ID
-Global $mCurrentTarget                       ; Current target agent ID
 Global $mRegion                              ; Game region code (1=America, 2=Asia, 3=Europe)
 Global $mPacketLocation                      ; Pointer to packet handler
 Global $mTargetLogBase                       ; Base address of target log
@@ -72,12 +69,6 @@ Global $mInstanceInfo                        ; Pointer to instance information
 Global $mAreaInfo                            ; Pointer to area information
 Global $mWorldConst                          ; Pointer to world constants
 #EndRegion Game Data Pointers
-
-#Region Agent Copy
-; Variables for agent array copying
-Global $mAgentCopyCount                      ; Count of copied agents
-Global $mAgentCopyBase                       ; Base address of agent copy array
-#EndRegion Agent Copy
 
 #Region Assembler Variables
 ; Variables for assembler functionality

@@ -84,8 +84,6 @@ Func _TradeMod_Initialize()
         Return True
     EndIf
 
-    _Log_Info("Initializing TradeMod module...", "TradeMod", $GUIEdit)
-
     ; Initialize merchant data
     _TradeMod_InitializeData()
 
@@ -93,7 +91,6 @@ Func _TradeMod_Initialize()
     _TradeMod_InitializeCommands()
 
     $g_bTradeModuleInitialized = True
-    _Log_Info("TradeMod module initialized successfully", "TradeMod", $GUIEdit)
     Return True
 EndFunc
 
@@ -170,16 +167,12 @@ EndFunc
 Func _TradeMod_Cleanup()
     If Not $g_bTradeModuleInitialized Then Return
 
-    _Log_Info("Cleaning up TradeMod module...", "TradeMod", $GUIEdit)
-
     ; Reset state variables
     $g_iLastTransactionType = -1
     $g_iLastItemID = 0
     $g_iLastQuantity = 0
     $g_iLastPrice = 0
     $g_bTradeModuleInitialized = False
-
-    _Log_Info("TradeMod module cleanup completed", "TradeMod", $GUIEdit)
 EndFunc
 #EndRegion Initialize Functions
 
@@ -196,8 +189,6 @@ EndFunc
 ; Related .......: _TradeMod_CreateCommands
 ;============================================================================================
 Func _TradeMod_DefinePatterns()
-    _Log_Debug("Defining merchant-related scan patterns...", "TradeMod", $GUIEdit)
-
     _('ScanSellItemFunction:')
 	AddPattern('8B4D2085C90F858E') ; COULD NOT UPDATE! 23.12.24
     _('ScanTransactionFunction:')
@@ -212,8 +203,6 @@ Func _TradeMod_DefinePatterns()
 	AddPattern('33C58945FC8B45088945F08B450C8945F48B45108945F88D45EC506A10C745EC76') ; UPDATED 24.12.24
     _('ScanSalvageGlobal:')
 	AddPattern('8B4A04538945F48B4208') ; UPDATED 24.12.24
-
-    _Log_Debug("Merchant patterns defined successfully", "TradeMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -236,8 +225,6 @@ Func _TradeMod_SetupStructures()
     DllStructSetData($g_mTraderBuy, 1, GetValue('CommandTraderBuy'))
     DllStructSetData($g_mTraderSell, 1, GetValue('CommandTraderSell'))
     DllStructSetData($g_mSalvage, 1, GetValue('CommandSalvage'))
-
-    _Log_Debug("Merchant structures configured successfully", "TradeMod", $GUIEdit)
 EndFunc
 
 ; #FUNCTION# ;===============================================================================
@@ -512,8 +499,6 @@ EndFunc
 ; Related .......: _TradeMod_DefinePatterns
 ;============================================================================================
 Func _TradeMod_CreateCommands()
-    _Log_Debug("Creating merchant-related ASM commands...", "TradeMod", $GUIEdit)
-
     ; Command for selling an item
     _TradeMod_CreateSellItemCommand()
 
@@ -537,7 +522,5 @@ Func _TradeMod_CreateCommands()
 
     ; Command for salvaging
     _TradeMod_CreateSalvageCommand()
-
-    _Log_Debug("Merchant commands created successfully", "TradeMod", $GUIEdit)
 EndFunc
 #EndRegion Internal Functions

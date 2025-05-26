@@ -16,6 +16,9 @@
 #include "Modules/Trades/TradeMod_Initialize.au3"
 #include "Modules/Trades/TradeMod_Data.au3"
 #include "Modules/Trades/TradeMod_Commands.au3"
+#include "Modules/Agents/AgentMod_Initialize.au3"
+#include "Modules/Agents/AgentMod_Data.au3"
+#include "Modules/Agents/AgentMod_Commands.au3"
 
 If @AutoItX64 Then
     MsgBox(16, "Error!", "Please run all bots in 32-bit (x86) mode.")
@@ -29,9 +32,6 @@ Global $mInviteGuildPtr = DllStructGetPtr($mInviteGuild)
 Global $mMove = DllStructCreate('ptr;float;float;float')
 Global $mMovePtr = DllStructGetPtr($mMove)
 
-Global $mChangeTarget = DllStructCreate('ptr;dword')
-Global $mChangeTargetPtr = DllStructGetPtr($mChangeTarget)
-
 Global $mWriteChat = DllStructCreate('ptr')
 Global $mWriteChatPtr = DllStructGetPtr($mWriteChat)
 
@@ -40,9 +40,6 @@ Global $mToggleLanguagePtr = DllStructGetPtr($mToggleLanguage)
 
 Global $mSendChat = DllStructCreate('ptr;dword')
 Global $mSendChatPtr = DllStructGetPtr($mSendChat)
-
-Global $mMakeAgentArray = DllStructCreate('ptr;dword')
-Global $mMakeAgentArrayPtr = DllStructGetPtr($mMakeAgentArray)
 
 Global $mChangeStatus = DllStructCreate('ptr;dword')
 Global $mChangeStatusPtr = DllStructGetPtr($mChangeStatus)
@@ -170,6 +167,8 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mUseStringLog = $aUseStringLog
    $mUseEventSystem = $aUseEventSystem
 
+   _Log_Info("Initializing...", "GwAu3", $GUIEdit)
+
    ; Check if $aGW is a string or a process ID
    If IsString($aGW) Then
       ; Find the process ID of the game client
@@ -201,21 +200,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mBasePointer = MemoryRead(GetScannedAddress('ScanBasePointer', 0x8))
    SetValue('BasePointer', Ptr($mBasePointer))
    _Log_Debug("BasePointer: " & Ptr($mBasePointer), "Initialize", $GUIEdit)
-
-   $mAgentBase = MemoryRead(GetScannedAddress('ScanAgentArray', -0x3))
-   SetValue('AgentBase', Ptr($mAgentBase))
-   _Log_Debug("AgentBase: " & Ptr($mAgentBase), "Initialize", $GUIEdit)
-
-   $mMaxAgents = $mAgentBase + 0x8
-   SetValue('MaxAgents', Ptr($mMaxAgents))
-   _Log_Debug("MaxAgents: " & Ptr($mMaxAgents), "Initialize", $GUIEdit)
-
-   $mMyID = MemoryRead(GetScannedAddress('ScanMyID', -3))
-   SetValue('MyID', Ptr($mMyID))
-   _Log_Debug("MyID: " & Ptr($mMyID), "Initialize", $GUIEdit)
-
-   $mCurrentTarget = MemoryRead(GetScannedAddress('ScanCurrentTarget', -0xE))
-   _Log_Debug("CurrentTarget: " & Ptr($mCurrentTarget), "Initialize", $GUIEdit)
 
    $mPacketLocation = Ptr(MemoryRead(GetScannedAddress('ScanBaseOffset', 0xB)))
    SetValue('PacketLocation', $mPacketLocation)
@@ -260,6 +244,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    _SkillMod_Initialize()
    _AttributeMod_Initialize()
    _TradeMod_Initialize()
+   _AgentMod_Initialize()
 
    $lTemp = GetScannedAddress('ScanEngine', -0x22)
    SetValue('MainStart', Ptr($lTemp))
@@ -303,8 +288,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    SetValue('MoveFunction', Ptr(GetScannedAddress('ScanMoveFunction', 0x1)))
 
-  ;SetValue('ChangeTargetFunction', Ptr(GetScannedAddress('ScanChangeTargetFunction', -0x0089) + 1, 8))
-   SetValue('ChangeTargetFunction', Ptr(GetScannedAddress('ScanChangeTargetFunction', -0x0086) + 1))
    SetValue('WriteChatFunction', Ptr(GetScannedAddress('ScanWriteChatFunction', -0x3D)))
 
    SetValue('PacketSendFunction', Ptr(GetScannedAddress('ScanPacketSendFunction', -0x50)))
@@ -336,8 +319,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mTraderCostID = GetValue('TraderCostID')
    $mTraderCostValue = GetValue('TraderCostValue')
    $mDisableRendering = GetValue('DisableRendering')
-   $mAgentCopyCount = GetValue('AgentCopyCount')
-   $mAgentCopyBase = GetValue('AgentCopyBase')
    $mLastDialogID = GetValue('LastDialogID')
 
 	If $mUseEventSystem Then
@@ -349,23 +330,24 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    DllStructSetData($mInviteGuild, 1, GetValue('CommandPacketSend'))
    DllStructSetData($mInviteGuild, 2, 0x4C)
    DllStructSetData($mMove, 1, GetValue('CommandMove'))
-   DllStructSetData($mChangeTarget, 1, GetValue('CommandChangeTarget'))
    DllStructSetData($mPacket, 1, GetValue('CommandPacketSend'))
    DllStructSetData($mAction, 1, GetValue('CommandAction'))
    DllStructSetData($mToggleLanguage, 1, GetValue('CommandToggleLanguage'))
    DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
    DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
    DllStructSetData($mWriteChat, 1, GetValue('CommandWriteChat'))
-   DllStructSetData($mMakeAgentArray, 1, GetValue('CommandMakeAgentArray'))
    DllStructSetData($mChangeStatus, 1, GetValue('CommandChangeStatus'))
    _SkillMod_SetupStructures()
    _AttributeMod_SetupStructures()
    _TradeMod_SetupStructures()
+   _AgentMod_SetupStructures()
 
    If $bChangeTitle Then
       WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
    EndIf
    SetMaxMemory()
+
+   _Log_Info("End of Initialization.", "GwAu3", $GUIEdit)
 
    Return $mGWWindowHandle
 EndFunc
@@ -396,18 +378,6 @@ Func Scan()
 	_('ScanBasePointer:')
 	AddPattern('506A0F6A00FF35')
 
-	_('ScanAgentBase:')
-	AddPattern('FF501083C6043BF775E2')
-
-	_('ScanAgentArray:')
-	AddPattern('8B0C9085C97419')
-
-	_('ScanCurrentTarget:')
-	AddPattern('83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCC55')
-
-	_('ScanMyID:')
-	AddPattern('83EC08568BF13B15')
-
 	_('ScanEngine:')
 	AddPattern('568B3085F67478EB038D4900D9460C')
 
@@ -422,9 +392,6 @@ Func Scan()
 
 	_('ScanTargetLog:')
 	AddPattern('5356578BFA894DF4E8')
-
-	_('ScanChangeTargetFunction:')
-	AddPattern('3BDF0F95')
 
 	_('ScanMoveFunction:')
 	AddPattern('558BEC83EC208D45F0')
@@ -513,6 +480,7 @@ Func Scan()
 	_SkillMod_DefinePatterns()
 	_AttributeMod_DefinePatterns()
 	_TradeMod_DefinePatterns()
+	_AgentMod_DefinePatterns()
 
 	; Define all assertions
 	Local $assertions[2][2] = [ _

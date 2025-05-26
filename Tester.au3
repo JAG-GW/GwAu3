@@ -70,7 +70,6 @@ GUISetState(@SW_SHOW)
 Func GuiButtonHandler()
     Switch @GUI_CtrlId
 		Case $GUIStartButton
-			_Log_Info("Initializing...", "GwAu3", $GUIEdit)
             Local $charName = GUICtrlRead($GUINameCombo)
             If $charName=="" Then
                 If Initialize(ProcessExists("gw.exe"), True, False, False) = 0 Then
@@ -140,8 +139,11 @@ WEnd
 While $BotRunning
 	Sleep(500)
 	Out("Ready")
-	LoadSkillTemplate("OQGjUhlKKTPYn19YAhXF8ExgcFA")
+;~ 	LoadSkillTemplate("OQGjUhlKKTPYn19YAhXF8ExgcFA")
 ;~ 	LoadSkillTemplate("OwAT043A5hhgXdJU/LSX0eY9BA", 1)
+	_AgentMod_ChangeTarget(25)
+	Sleep(5000)
+	_AgentMod_ClearTarget()
 	Sleep(5000)
 WEnd
 
@@ -149,6 +151,7 @@ Func Out($TEXT)
     Local $TEXTLEN = StringLen($TEXT)
     Local $CONSOLELEN = _GUICtrlEdit_GetTextLen($GUIEdit)
     If $TEXTLEN + $CONSOLELEN > 30000 Then GUICtrlSetData($GUIEdit, StringRight(_GUICtrlEdit_GetText($GUIEdit), 30000 - $TEXTLEN - 1000))
+	_GUICtrlRichEdit_SetCharColor($GUIEdit, $COLOR_BLACK)
     _GUICtrlEdit_AppendText($GUIEdit, @CRLF & $TEXT)
     _GUICtrlEdit_Scroll($GUIEdit, 1)
 EndFunc

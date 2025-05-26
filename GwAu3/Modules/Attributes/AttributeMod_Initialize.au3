@@ -3,7 +3,6 @@
 #include "../../Core/GwAu3_Assembler.au3"
 #include "../../Core/GwAu3_Utils.au3"
 #include "../../Core/GwAu3_LogMessages.au3"
-#include "../../Core/GwAu3_CommandGenerator.au3"
 
 #Region Module Constants
 ; Attribute module specific constants
@@ -124,9 +123,6 @@ Func _AttributeMod_Initialize()
         _Log_Warning("AttributeMod module already initialized", "AttributeMod", $GUIEdit)
         Return True
     EndIf
-
-    ; Initialize command generator
-    _CmdGen_Initialize($GUIEdit)
 
     ; Initialize attribute data
     _AttributeMod_InitializeData()
@@ -253,11 +249,22 @@ EndFunc
 ; Related .......: _AttributeMod_DefinePatterns
 ;============================================================================================
 Func _AttributeMod_CreateCommands()
-    Local $sAttributeTemplate = _CmdGen_AddAttributeTemplate()
-    _CmdGen_RegisterCommand("IncreaseAttribute", $CMD_TYPE_CUSTOM, "dword,dword", "IncreaseAttributeFunction", $sAttributeTemplate)
-    _CmdGen_RegisterCommand("DecreaseAttribute", $CMD_TYPE_CUSTOM, "dword,dword", "DecreaseAttributeFunction", $sAttributeTemplate)
+    _('CommandIncreaseAttribute:')
+    _('mov edx,dword[eax+4]')
+    _('push edx')
+    _('mov ecx,dword[eax+8]')
+    _('push ecx')
+    _('call IncreaseAttributeFunction')
+    _('add esp,8')
+    _('ljmp CommandReturn')
 
-    ; Generate and inject all registered commands
-    _CmdGen_GenerateAndInject()
+	_('CommandDecreaseAttribute:')
+    _('mov edx,dword[eax+4]')
+    _('push edx')
+    _('mov ecx,dword[eax+8]')
+    _('push ecx')
+    _('call DecreaseAttributeFunction')
+    _('add esp,8')
+    _('ljmp CommandReturn')
 EndFunc
 #EndRegion Pattern, Structure & Assembly Code Generation
