@@ -19,6 +19,9 @@
 #include "Modules/Agents/AgentMod_Initialize.au3"
 #include "Modules/Agents/AgentMod_Data.au3"
 #include "Modules/Agents/AgentMod_Commands.au3"
+#include "Modules/Maps/MapMod_Initialize.au3"
+#include "Modules/Maps/MapMod_Data.au3"
+#include "Modules/Maps/MapMod_Commands.au3"
 
 If @AutoItX64 Then
     MsgBox(16, "Error!", "Please run all bots in 32-bit (x86) mode.")
@@ -130,14 +133,8 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mPing = MemoryRead(GetScannedAddress('ScanPing', -0x14))
    _Log_Debug("Ping: " & Ptr($mPing), "Initialize", $GUIEdit)
 
-   $mLoggedIn = MemoryRead(GetScannedAddress('ScanLoggedIn', 0x3))
-   _Log_Debug("LoggedIn: " & Ptr($mLoggedIn), "Initialize", $GUIEdit)
-
    $mCurrentStatus = MemoryRead(GetScannedAddress('ScanChangeStatusFunction', 0x23))
    _Log_Debug("CurrentStatus: " & Ptr($mCurrentStatus), "Initialize", $GUIEdit)
-
-   $mCharslots = MemoryRead(GetScannedAddress('ScanCharslots', 0x16))
-   _Log_Debug("Charslots: " & Ptr($mCharslots), "Initialize", $GUIEdit)
 
 	$mPreGameContextAddr = MemoryRead(GetScannedAddress('ScanPreGameContextAddr', 0x35))
 	_Log_Debug("PreGameContextAddr: " & Ptr($mPreGameContextAddr), "Initialize", $GUIEdit)
@@ -281,9 +278,6 @@ Func Scan()
 	_('ScanPing:')
 	AddPattern('E874651600')
 
-	_('ScanLoggedIn:')
-	AddPattern('C705ACDE740000000000C3CCCCCCCC')
-
 	_('ScanPacketSendFunction:')
 	AddPattern('C747540000000081E6')
 
@@ -322,9 +316,6 @@ Func Scan()
 
 	_('ScanChangeStatusFunction:')
 	AddPattern('558BEC568B750883FE047C14')
-
-	_('ScanCharslots:')
-	AddPattern('8B551041897E38897E3C897E34897E48897E4C890D')
 
 	_('ScanReadChatFunction:')
 	AddPattern('A128B6EB00')
