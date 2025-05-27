@@ -44,7 +44,6 @@ Global $mSendChatPtr = DllStructGetPtr($mSendChat)
 Global $mChangeStatus = DllStructCreate('ptr;dword')
 Global $mChangeStatusPtr = DllStructGetPtr($mChangeStatus)
 
-Global $MTradeHackAddress
 Global $mPreGameContextAddr
 Global $mFrameArray
 #EndRegion CommandStructs
@@ -93,130 +92,97 @@ Func ScanGW()
 	Return $lReturnArray
 EndFunc
 
-Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSystem = True)
-   $mUseStringLog = $aUseStringLog
-   $mUseEventSystem = $aUseEventSystem
+Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
+	$mUseEventSystem = $aUseEventSystem
 
-   _Log_Info("Initializing...", "GwAu3", $GUIEdit)
+	_Log_Info("Initializing...", "GwAu3", $GUIEdit)
 
-   If IsString($aGW) Then
-      Local $lProcessList = ProcessList("gw.exe")
-      For $i = 1 To $lProcessList[0][0]
-        $mGWProcessId = $lProcessList[$i][1]
-        $mGWWindowHandle = GetHwnd($mGWProcessId)
-        MemoryOpen($mGWProcessId)
-        If $mGWProcHandle Then
-           If StringRegExp(ScanForCharname(), $aGW) = 1 Then
-              ExitLoop
-           EndIf
-        EndIf
-        MemoryClose()
-        $mGWProcHandle = 0
-      Next
-   Else
-      $mGWProcessId = $aGW
-      $mGWWindowHandle = GetHwnd($mGWProcessId)
-      MemoryOpen($aGW)
-      ScanForCharname()
-   EndIf
+	If IsString($aGW) Then
+		Local $lProcessList = ProcessList("gw.exe")
+		For $i = 1 To $lProcessList[0][0]
+			$mGWProcessId = $lProcessList[$i][1]
+			$mGWWindowHandle = GetHwnd($mGWProcessId)
+			MemoryOpen($mGWProcessId)
+			If $mGWProcHandle Then
+				If StringRegExp(ScanForCharname(), $aGW) = 1 Then
+					ExitLoop
+				EndIf
+			EndIf
+			MemoryClose()
+			$mGWProcHandle = 0
+		Next
+	Else
+		$mGWProcessId = $aGW
+		$mGWWindowHandle = GetHwnd($mGWProcessId)
+		MemoryOpen($aGW)
+		ScanForCharname()
+	EndIf
 
-   Scan()
+	Scan()
 
-   $mBasePointer = MemoryRead(GetScannedAddress('ScanBasePointer', 0x8))
-   SetValue('BasePointer', Ptr($mBasePointer))
-   _Log_Debug("BasePointer: " & Ptr($mBasePointer), "Initialize", $GUIEdit)
+	$mBasePointer = MemoryRead(GetScannedAddress('ScanBasePointer', 0x8))
+	SetValue('BasePointer', Ptr($mBasePointer))
+	_Log_Debug("BasePointer: " & Ptr($mBasePointer), "Initialize", $GUIEdit)
 
-   $mPacketLocation = Ptr(MemoryRead(GetScannedAddress('ScanBaseOffset', 0xB)))
-   SetValue('PacketLocation', $mPacketLocation)
-   _Log_Debug("PacketLocation: " & $mPacketLocation, "Initialize", $GUIEdit)
+	$mPacketLocation = Ptr(MemoryRead(GetScannedAddress('ScanBaseOffset', 0xB)))
+	SetValue('PacketLocation', $mPacketLocation)
+	_Log_Debug("PacketLocation: " & $mPacketLocation, "Initialize", $GUIEdit)
 
-   $mPing = MemoryRead(GetScannedAddress('ScanPing', -0x14))
-   _Log_Debug("Ping: " & Ptr($mPing), "Initialize", $GUIEdit)
+	$mPing = MemoryRead(GetScannedAddress('ScanPing', -0x14))
+	_Log_Debug("Ping: " & Ptr($mPing), "Initialize", $GUIEdit)
 
-   $mCurrentStatus = MemoryRead(GetScannedAddress('ScanChangeStatusFunction', 0x23))
-   _Log_Debug("CurrentStatus: " & Ptr($mCurrentStatus), "Initialize", $GUIEdit)
+	$mCurrentStatus = MemoryRead(GetScannedAddress('ScanChangeStatusFunction', 0x23))
+	_Log_Debug("CurrentStatus: " & Ptr($mCurrentStatus), "Initialize", $GUIEdit)
 
 	$mPreGameContextAddr = MemoryRead(GetScannedAddress('ScanPreGameContextAddr', 0x35))
 	_Log_Debug("PreGameContextAddr: " & Ptr($mPreGameContextAddr), "Initialize", $GUIEdit)
 
-   	$mFrameArray = MemoryRead(GetScannedAddress('ScanFrameArray', -0x13))
+	$mFrameArray = MemoryRead(GetScannedAddress('ScanFrameArray', -0x13))
 	_Log_Debug("FrameArray: " & Ptr($mFrameArray), "Initialize", $GUIEdit)
 
-   _SkillMod_Initialize()
-   _AttributeMod_Initialize()
-   _TradeMod_Initialize()
-   _AgentMod_Initialize()
+	_SkillMod_Initialize()
+	_AttributeMod_Initialize()
+	_TradeMod_Initialize()
+	_AgentMod_Initialize()
 
-   $lTemp = GetScannedAddress('ScanEngine', -0x22)
-   SetValue('MainStart', Ptr($lTemp))
-   SetValue('MainReturn', Ptr($lTemp + 0x5))
+	$lTemp = GetScannedAddress('ScanEngine', -0x22)
+	SetValue('MainStart', Ptr($lTemp))
+	SetValue('MainReturn', Ptr($lTemp + 0x5))
 
-   $lTemp = GetScannedAddress('ScanRenderFunc', -0x67)
-   	SetValue('RenderingMod', Ptr($lTemp))
+	$lTemp = GetScannedAddress('ScanRenderFunc', -0x67)
+	SetValue('RenderingMod', Ptr($lTemp))
 	SetValue('RenderingModReturn', Ptr($lTemp + 0xA))
 
-   $lTemp = GetScannedAddress('ScanTargetLog', 0x1)
-   SetValue('TargetLogStart', Ptr($lTemp))
-   SetValue('TargetLogReturn', Ptr($lTemp + 0x5))
+	$lTemp = GetScannedAddress('ScanTraderHook', -0x2F)
+	SetValue('TraderHookStart', Ptr($lTemp))
+	SetValue('TraderHookReturn', Ptr($lTemp + 0x5))
 
-   $lTemp = GetScannedAddress('ScanChatLog', 0x12)
-   SetValue('ChatLogStart', Ptr($lTemp))
-   SetValue('ChatLogReturn', Ptr($lTemp + 0x6))
-
-   $lTemp = GetScannedAddress('ScanTraderHook', -0x2F)
-   SetValue('TraderHookStart', Ptr($lTemp))
-   SetValue('TraderHookReturn', Ptr($lTemp + 0x5))
-
-   $lTemp = GetScannedAddress('ScanDialogLog', -0x4)
-   SetValue('DialogLogStart', Ptr($lTemp))
-   SetValue('DialogLogReturn', Ptr($lTemp + 0x5))
-
-   $lTemp = GetScannedAddress('ScanStringFilter1', -0x5)
-   SetValue('StringFilter1Start', Ptr($lTemp))
-   SetValue('StringFilter1Return', Ptr($lTemp + 0x5))
-
-   $lTemp = GetScannedAddress('ScanStringFilter2', 0x16)
-   SetValue('StringFilter2Start', Ptr($lTemp))
-   SetValue('StringFilter2Return', Ptr($lTemp + 0x5))
-
-   SetValue('StringLogStart', Ptr(GetScannedAddress('ScanStringLog', 0x16)))
-
-   SetValue('LoadFinishedStart', Ptr(GetScannedAddress('ScanLoadFinished', 0x1)))
-   SetValue('LoadFinishedReturn', Ptr(GetScannedAddress('ScanLoadFinished', 0x6)))
-
-   SetValue('PostMessage', Ptr(MemoryRead(GetScannedAddress('ScanPostMessage', 0xB))))
+	SetValue('PostMessage', Ptr(MemoryRead(GetScannedAddress('ScanPostMessage', 0xB))))
 
 	SetValue('Sleep', MemoryRead(MemoryRead(GetValue('ScanSleep') + 0x8) + 0x3))
 
-   SetValue('WriteChatFunction', Ptr(GetScannedAddress('ScanWriteChatFunction', -0x3D)))
+	SetValue('WriteChatFunction', Ptr(GetScannedAddress('ScanWriteChatFunction', -0x3D)))
 
-   SetValue('PacketSendFunction', Ptr(GetScannedAddress('ScanPacketSendFunction', -0x50)))
+	SetValue('PacketSendFunction', Ptr(GetScannedAddress('ScanPacketSendFunction', -0x50)))
 
-   SetValue('ActionBase', Ptr(MemoryRead(GetScannedAddress('ScanActionBase', -0x3))))
-   SetValue('ActionFunction', Ptr(GetScannedAddress('ScanActionFunction', -0x3)))
+	SetValue('ActionBase', Ptr(MemoryRead(GetScannedAddress('ScanActionBase', -0x3))))
+	SetValue('ActionFunction', Ptr(GetScannedAddress('ScanActionFunction', -0x3)))
 
-   SetValue('ChangeStatusFunction', Ptr(GetScannedAddress("ScanChangeStatusFunction", 0x1)))
+	SetValue('ChangeStatusFunction', Ptr(GetScannedAddress("ScanChangeStatusFunction", 0x1)))
 
-   SetValue('QueueSize', '0x00000010')
-   SetValue('ChatLogSize', '0x00000010')
-   SetValue('TargetLogSize', '0x00000200')
-   SetValue('StringLogSize', '0x00000200')
-   SetValue('CallbackEvent', '0x00000501')
-   $MTradeHackAddress = GetScannedAddress("ScanTradeHack", 0)
+	SetValue('QueueSize', '0x00000010')
+	SetValue('CallbackEvent', '0x00000501')
 
-   ModifyMemory()
+	ModifyMemory()
 
-   $mQueueCounter = MemoryRead(GetValue('QueueCounter'))
-   $mQueueSize = GetValue('QueueSize') - 1
-   $mQueueBase = GetValue('QueueBase')
-   $mTargetLogBase = GetValue('TargetLogBase')
-   $mStringLogBase = GetValue('StringLogBase')
-   $mEnsureEnglish = GetValue('EnsureEnglish')
-   $mTraderQuoteID = GetValue('TraderQuoteID')
-   $mTraderCostID = GetValue('TraderCostID')
-   $mTraderCostValue = GetValue('TraderCostValue')
-   $mDisableRendering = GetValue('DisableRendering')
-   $mLastDialogID = GetValue('LastDialogID')
+	$mQueueCounter = MemoryRead(GetValue('QueueCounter'))
+	$mQueueSize = GetValue('QueueSize') - 1
+	$mQueueBase = GetValue('QueueBase')
+	$mEnsureEnglish = GetValue('EnsureEnglish')
+	$mTraderQuoteID = GetValue('TraderQuoteID')
+	$mTraderCostID = GetValue('TraderCostID')
+	$mTraderCostValue = GetValue('TraderCostValue')
+	$mDisableRendering = GetValue('DisableRendering')
 
 	If $mUseEventSystem Then
 		$mGUI = GUICreate('GwAu3')
@@ -224,29 +190,29 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 		MemoryWrite(GetValue('CallbackHandle'), $mGUI)
 	EndIf
 
-   DllStructSetData($mInviteGuild, 1, GetValue('CommandPacketSend'))
-   DllStructSetData($mInviteGuild, 2, 0x4C)
-   DllStructSetData($mPacket, 1, GetValue('CommandPacketSend'))
-   DllStructSetData($mAction, 1, GetValue('CommandAction'))
-   DllStructSetData($mToggleLanguage, 1, GetValue('CommandToggleLanguage'))
-   DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
-   DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
-   DllStructSetData($mWriteChat, 1, GetValue('CommandWriteChat'))
-   DllStructSetData($mChangeStatus, 1, GetValue('CommandChangeStatus'))
-   _SkillMod_SetupStructures()
-   _AttributeMod_SetupStructures()
-   _TradeMod_SetupStructures()
-   _AgentMod_SetupStructures()
-   _MapMod_SetupStructures()
+	DllStructSetData($mInviteGuild, 1, GetValue('CommandPacketSend'))
+	DllStructSetData($mInviteGuild, 2, 0x4C)
+	DllStructSetData($mPacket, 1, GetValue('CommandPacketSend'))
+	DllStructSetData($mAction, 1, GetValue('CommandAction'))
+	DllStructSetData($mToggleLanguage, 1, GetValue('CommandToggleLanguage'))
+	DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
+	DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
+	DllStructSetData($mWriteChat, 1, GetValue('CommandWriteChat'))
+	DllStructSetData($mChangeStatus, 1, GetValue('CommandChangeStatus'))
+	_SkillMod_SetupStructures()
+	_AttributeMod_SetupStructures()
+	_TradeMod_SetupStructures()
+	_AgentMod_SetupStructures()
+	_MapMod_SetupStructures()
 
-   If $bChangeTitle Then
-      WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
-   EndIf
-   SetMaxMemory()
+	If $bChangeTitle Then
+		WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
+	EndIf
+	SetMaxMemory()
 
-   _Log_Info("End of Initialization.", "GwAu3", $GUIEdit)
+	_Log_Info("End of Initialization.", "GwAu3", $GUIEdit)
 
-   Return $mGWWindowHandle
+	Return $mGWWindowHandle
 EndFunc
 
 Func Scan()
@@ -266,14 +232,8 @@ Func Scan()
 	_('ScanRenderFunc:')
 	AddPattern('F6C401741C68B1010000BA')
 
-	_('ScanLoadFinished:')
-	AddPattern('8B561C8BCF52E8')
-
 	_('ScanPostMessage:')
 	AddPattern('6A00680080000051FF15')
-
-	_('ScanTargetLog:')
-	AddPattern('5356578BFA894DF4E8')
 
 	_('ScanPing:')
 	AddPattern('E874651600')
@@ -286,18 +246,6 @@ Func Scan()
 
 	_('ScanWriteChatFunction:')
 	AddPattern('8D85E0FEFFFF50681C01')
-
-	_('ScanChatLog:')
-	AddPattern('8B45F48B138B4DEC50')
-
-	_('ScanStringLog:')
-	AddPattern('893E8B7D10895E04397E08')
-
-	_('ScanStringFilter1:')
-	AddPattern('8B368B4F2C6A006A008B06')
-
-	_('ScanStringFilter2:')
-	AddPattern('515356578BF933D28B4F2C')
 
 	_('ScanActionFunction:')
 	AddPattern('8B7508578BF983FE09750C6876')
@@ -316,15 +264,6 @@ Func Scan()
 
 	_('ScanChangeStatusFunction:')
 	AddPattern('558BEC568B750883FE047C14')
-
-	_('ScanReadChatFunction:')
-	AddPattern('A128B6EB00')
-
-	_('ScanDialogLog:')
-	AddPattern('8B45088945FC8D45F8506A08C745F841')
-
-	_("ScanTradeHack:")
-	AddPattern("8BEC8B450883F846")
 
 	_SkillMod_DefinePatterns()
 	_AttributeMod_DefinePatterns()

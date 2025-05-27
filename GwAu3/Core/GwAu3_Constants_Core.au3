@@ -42,7 +42,6 @@ Global $mCharname                            ; Character name
 Global $mPing                                ; Current ping to server in milliseconds
 Global $mCurrentStatus                       ; Current status of the character (idle, moving, etc.)
 Global $mUseEventSystem                      ; Flag to enable/disable event system
-Global $mUseStringLog                        ; Flag to enable/disable string logging
 Global $mDisableRendering                    ; Flag to enable/disable game rendering
 Global $lTemp                                ; Temporary variable for various operations
 #EndRegion Game State
@@ -52,12 +51,8 @@ Global $lTemp                                ; Temporary variable for various op
 Global $mBasePointer                         ; Pointer to game base structure
 Global $mMyID                                ; Player's agent ID
 Global $mPacketLocation                      ; Pointer to packet handler
-Global $mTargetLogBase                       ; Base address of target log
-Global $mStringLogBase                       ; Base address of string log
 Global $mEnsureEnglish                       ; Flag to ensure English language
-Global $mStringHandlerPtr                    ; Pointer to string handler
 Global $mWriteChatSender                     ; Pointer to chat sender
-Global $mLastDialogID                        ; ID of the last dialog
 #EndRegion Game Data Pointers
 
 #Region Assembler Variables
@@ -92,37 +87,6 @@ Global $mPacketPtr = DllStructGetPtr($mPacket)
 #EndRegion Command Processing
 
 #Region Event System
-; Event callback functions
-Global $mSkillActivate                       ; Function to call when a skill is activated
-Global $mSkillCancel                         ; Function to call when a skill is canceled
-Global $mSkillComplete                       ; Function to call when a skill completes
-Global $mChatReceive                         ; Function to call when a chat message is received
-Global $mLoadFinished                        ; Function to call when map loading is complete
-
-; Structures for event data
-Global $mSkillLogStruct = DllStructCreate('dword;dword;dword;float')
-Global $mSkillLogStructPtr = DllStructGetPtr($mSkillLogStruct)
-Global $mChatLogStruct = DllStructCreate('dword;wchar[256]')
-Global $mChatLogStructPtr = DllStructGetPtr($mChatLogStruct)
-
-; Event type constants
-Global Const $GWAU3_EVENT_SKILL_ACTIVATE = 0x1  ; Skill activation event
-Global Const $GWAU3_EVENT_SKILL_CANCEL = 0x2    ; Skill cancellation event
-Global Const $GWAU3_EVENT_SKILL_COMPLETE = 0x3  ; Skill completion event
-Global Const $GWAU3_EVENT_CHAT_RECEIVE = 0x4    ; Chat message event
-Global Const $GWAU3_EVENT_LOAD_FINISHED = 0x5   ; Map loading finished event
-
-; Chat channel constants
-Global Const $GWAU3_CHAT_ALLIANCE = 0           ; Alliance chat channel
-Global Const $GWAU3_CHAT_ALL = 3                ; All chat channel (local area)
-Global Const $GWAU3_CHAT_GUILD = 9              ; Guild chat channel
-Global Const $GWAU3_CHAT_TEAM = 11              ; Team chat channel
-Global Const $GWAU3_CHAT_TRADE = 12             ; Trade chat channel
-Global Const $GWAU3_CHAT_GLOBAL = 10            ; Global chat channel
-Global Const $GWAU3_CHAT_ADVISORY = 13          ; Advisory/system messages channel
-Global Const $GWAU3_CHAT_WHISPER = 14           ; Whisper/private messages channel
-#EndRegion Event System
-
 #Region Logging System
 ; Logging related constants and variables
 Global $g_iDebugMode = True                     ; Debug mode flag for logging
