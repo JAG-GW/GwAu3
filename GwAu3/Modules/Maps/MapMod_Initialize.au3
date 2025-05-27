@@ -11,6 +11,7 @@ Global $g_mMapLoading       ; Flag indicating if map is loading
 Global $g_mInstanceInfo     ; Pointer to instance information
 Global $g_mAreaInfo         ; Pointer to area information
 Global $g_mWorldConst       ; Pointer to world constants
+Global $g_mRegion
 
 ; Map command structures
 Global $g_mMove = DllStructCreate('ptr;float;float;float')
@@ -57,6 +58,9 @@ Func _MapMod_InitializeData()
 
 	$g_mClickCoordsY = MemoryRead(GetScannedAddress("ScanClickCoords", 22))
 	_Log_Debug("ClickCoordsY: " & Ptr($g_mClickCoordsY), "MapMod", $GUIEdit)
+
+	$g_mRegion = MemoryRead(GetScannedAddress('ScanRegion', -0x3))
+   _Log_Debug("Region: " & Ptr($g_mRegion), "Initialize", $GUIEdit)
 EndFunc
 
 Func _MapMod_InitializeCommands()
@@ -101,6 +105,9 @@ Func _MapMod_DefinePatterns()
 
 	_("ScanWorldConst:")
 	AddPattern("8D0476C1E00405")
+
+	_('ScanRegion:')
+	AddPattern('6A548D46248908')
 EndFunc
 
 Func _MapMod_SetupStructures()

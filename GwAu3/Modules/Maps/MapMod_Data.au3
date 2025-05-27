@@ -1,6 +1,10 @@
 #include-once
 #include "MapMod_Initialize.au3"
 
+Func _MapMod_GetRegion()
+	Return MemoryRead($g_mRegion)
+EndFunc
+
 Func _MapMod_GetLastMoveCoords()
     Local $aCoords[2] = [$g_fLastMoveX, $g_fLastMoveY]
     Return $aCoords

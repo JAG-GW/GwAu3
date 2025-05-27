@@ -38,7 +38,6 @@ Global $SecondInject                         ; Address of secondary code injecti
 
 #Region Game State
 ; Variables related to game state
-Global $mLoggedIn                            ; Flag indicating if character is logged in
 Global $mCharname                            ; Character name
 Global $mCharslots                           ; Number of character slots available
 Global $mPing                                ; Current ping to server in milliseconds
@@ -53,15 +52,12 @@ Global $lTemp                                ; Temporary variable for various op
 ; Pointers to important game data structures
 Global $mBasePointer                         ; Pointer to game base structure
 Global $mMyID                                ; Player's agent ID
-Global $mRegion                              ; Game region code (1=America, 2=Asia, 3=Europe)
 Global $mPacketLocation                      ; Pointer to packet handler
 Global $mTargetLogBase                       ; Base address of target log
 Global $mStringLogBase                       ; Base address of string log
 Global $mEnsureEnglish                       ; Flag to ensure English language
 Global $mStringHandlerPtr                    ; Pointer to string handler
 Global $mWriteChatSender                     ; Pointer to chat sender
-Global $mZoomStill                           ; Camera zoom level when still
-Global $mZoomMoving                          ; Camera zoom level when moving
 Global $mLastDialogID                        ; ID of the last dialog
 #EndRegion Game Data Pointers
 

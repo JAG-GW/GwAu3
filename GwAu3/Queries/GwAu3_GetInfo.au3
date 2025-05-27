@@ -24,11 +24,6 @@ Func GetCharname()
 	Return MemoryRead($mCharname, 'wchar[30]')
 EndFunc   ;==>GetCharname
 
-;~ Description: Returns if you're logged in.
-Func GetLoggedIn()
-	Return MemoryRead($mLoggedIn)
-EndFunc   ;==>GetLoggedIn
-
 ;~ Returns how long the current instance has been active, in milliseconds.
 Func GetInstanceUpTime()
 	Local $lOffset[4] = [0, 0x18, 0x8, 0x1AC]

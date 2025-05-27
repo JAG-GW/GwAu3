@@ -133,15 +133,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mLoggedIn = MemoryRead(GetScannedAddress('ScanLoggedIn', 0x3))
    _Log_Debug("LoggedIn: " & Ptr($mLoggedIn), "Initialize", $GUIEdit)
 
-   $mRegion = MemoryRead(GetScannedAddress('ScanRegion', -0x3))
-   _Log_Debug("Region: " & Ptr($mRegion), "Initialize", $GUIEdit)
-
-   $mZoomStill = GetScannedAddress("ScanZoomStill", 0x33)
-   _Log_Debug("ZoomStill: " & Ptr($mZoomStill), "Initialize", $GUIEdit)
-
-   $mZoomMoving = GetScannedAddress("ScanZoomMoving", 0x21)
-	_Log_Debug("ZoomMoving: " & Ptr($mZoomMoving), "Initialize", $GUIEdit)
-
    $mCurrentStatus = MemoryRead(GetScannedAddress('ScanChangeStatusFunction', 0x23))
    _Log_Debug("CurrentStatus: " & Ptr($mCurrentStatus), "Initialize", $GUIEdit)
 
@@ -197,7 +188,8 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('LoadFinishedReturn', Ptr(GetScannedAddress('ScanLoadFinished', 0x6)))
 
    SetValue('PostMessage', Ptr(MemoryRead(GetScannedAddress('ScanPostMessage', 0xB))))
-   SetValue('Sleep', MemoryRead(MemoryRead(GetValue('ScanSleep') + 0x8) + 0x3))
+
+	SetValue('Sleep', MemoryRead(MemoryRead(GetValue('ScanSleep') + 0x8) + 0x3))
 
    SetValue('WriteChatFunction', Ptr(GetScannedAddress('ScanWriteChatFunction', -0x3D)))
 
@@ -292,9 +284,6 @@ Func Scan()
 	_('ScanLoggedIn:')
 	AddPattern('C705ACDE740000000000C3CCCCCCCC')
 
-	_('ScanRegion:')
-	AddPattern('6A548D46248908')
-
 	_('ScanPacketSendFunction:')
 	AddPattern('C747540000000081E6')
 
@@ -330,12 +319,6 @@ Func Scan()
 
 	_('ScanSleep:')
 	AddPattern('6A0057FF15D8408A006860EA0000')
-
-	_('ScanZoomStill:')
-	AddPattern('558BEC8B41085685C0')
-
-	_('ScanZoomMoving:')
-	AddPattern('EB358B4304')
 
 	_('ScanChangeStatusFunction:')
 	AddPattern('558BEC568B750883FE047C14')
