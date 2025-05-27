@@ -66,9 +66,6 @@ EndFunc
 Func _MapMod_InitializeCommands()
     SetValue('MoveFunction', Ptr(GetScannedAddress('ScanMoveFunction', 0x1)))
 	_Log_Debug("MoveFunction: " & GetValue('MoveFunction'), "MapMod", $GUIEdit)
-
-;~ 	SetValue('ClickToMoveFix', Ptr(GetScannedAddress("ScanClickToMoveFix", 0x1)))
-;~ 	_Log_Debug("ClickToMoveFix: " & GetValue('ClickToMoveFix'), "MapMod", $GUIEdit)
 EndFunc
 
 Func _MapMod_Cleanup()
@@ -90,9 +87,6 @@ EndFunc
 Func _MapMod_DefinePatterns()
 	_('ScanMoveFunction:')
 	AddPattern('558BEC83EC208D45F0')
-
-;~ 	_('ScanClickToMoveFix:')
-;~ 	AddPattern('3DD301000074')
 
 	_("ScanClickCoords:")
 	AddPattern("8B451C85C0741CD945F8")

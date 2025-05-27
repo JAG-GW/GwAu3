@@ -72,13 +72,13 @@ Func GuiButtonHandler()
 		Case $GUIStartButton
             Local $charName = GUICtrlRead($GUINameCombo)
             If $charName=="" Then
-                If Initialize(ProcessExists("gw.exe"), True, False, False) = 0 Then
+                If Initialize(ProcessExists("gw.exe"), True, False) = 0 Then
                     MsgBox(0, "Error", "Guild Wars is not running.")
                     _Exit()
                 EndIf
             ElseIf $ProcessID Then
                 $proc_id_int = Number($ProcessID, 2)
-                If Initialize($proc_id_int, True, False, False) = 0 Then
+                If Initialize($proc_id_int, True, False) = 0 Then
                     MsgBox(0, "Error", "Could not Find a ProcessID or somewhat '"&$proc_id_int&"'  "&VarGetType($proc_id_int)&"'")
                     _Exit()
                     If ProcessExists($proc_id_int) Then
@@ -87,7 +87,7 @@ Func GuiButtonHandler()
                     Exit
                 EndIf
             Else
-                If Initialize($CharName, True, False, False) = 0 Then
+                If Initialize($CharName, True, False) = 0 Then
                     MsgBox(0, "Error", "Could not Find a Guild Wars client with a Character named '"&$CharName&"'")
                     _Exit()
                 EndIf
@@ -138,11 +138,6 @@ WEnd
 While $BotRunning
 	Sleep(500)
 	Out("Ready")
-;~ 	LoadSkillTemplate("OQGjUhlKKTPYn19YAhXF8ExgcFA")
-;~ 	LoadSkillTemplate("OwAT043A5hhgXdJU/LSX0eY9BA", 1)
-	_AgentMod_ChangeTarget(25)
-	Sleep(5000)
-	_AgentMod_ClearTarget()
 	Sleep(5000)
 WEnd
 

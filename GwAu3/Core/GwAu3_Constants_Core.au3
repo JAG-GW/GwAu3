@@ -49,7 +49,6 @@ Global $lTemp                                ; Temporary variable for various op
 #Region Game Data Pointers
 ; Pointers to important game data structures
 Global $mBasePointer                         ; Pointer to game base structure
-Global $mMyID                                ; Player's agent ID
 Global $mPacketLocation                      ; Pointer to packet handler
 Global $mEnsureEnglish                       ; Flag to ensure English language
 Global $mWriteChatSender                     ; Pointer to chat sender
