@@ -1,19 +1,6 @@
 #include-once
 #include "GwAu3_Constants_Core.au3"
 
-; #FUNCTION# ;===============================================================================
-; Name...........: FloatToInt
-; Description ...: Converts a floating-point value to its integer representation
-; Syntax.........: FloatToInt($nFloat)
-; Parameters ....: $nFloat  - The floating-point value to convert
-; Return values .: The integer representation of the float (bit pattern, not rounded value)
-; Author ........:
-; Modified.......:
-; Remarks .......: - Uses DllStructCreate to reinterpret the float's memory representation as an integer
-;                  - This function doesn't round the number; it converts the actual IEEE-754 representation
-;                  - Useful for working with memory addresses where float values are stored
-; Related .......: IntToFloat
-;============================================================================================
 Func FloatToInt($nFloat)
 	Local $tFloat = DllStructCreate("float")
 	Local $tInt = DllStructCreate("int", DllStructGetPtr($tFloat))
@@ -21,19 +8,6 @@ Func FloatToInt($nFloat)
 	Return DllStructGetData($tInt, 1)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: IntToFloat
-; Description ...: Converts an integer value to its floating-point representation
-; Syntax.........: IntToFloat($fInt)
-; Parameters ....: $fInt    - The integer value to convert
-; Return values .: The floating-point representation of the integer (bit pattern)
-; Author ........:
-; Modified.......:
-; Remarks .......: - Uses DllStructCreate to reinterpret the integer's memory representation as a float
-;                  - This function doesn't perform normal integer-to-float conversion; it converts the bit pattern
-;                  - Useful for working with memory addresses where integer values need to be treated as floats
-; Related .......: FloatToInt
-;============================================================================================
 Func IntToFloat($fInt)
 	Local $tFloat, $tInt
 	$tInt = DllStructCreate("int")
@@ -42,20 +16,6 @@ Func IntToFloat($fInt)
 	Return DllStructGetData($tFloat, 1)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: Bin64ToDec
-; Description ...: Converts a binary string to its decimal equivalent
-; Syntax.........: Bin64ToDec($aBinary)
-; Parameters ....: $aBinary - String representation of a binary number (e.g., "1001")
-; Return values .: The decimal (base-10) equivalent of the binary value
-; Author ........:
-; Modified.......:
-; Remarks .......: - Converts bit by bit, from least significant bit (rightmost) to most significant bit
-;                  - Each '1' bit contributes 2^position to the total value
-;                  - Works with binary strings of any length
-;                  - Used primarily in Guild Wars memory manipulation for parsing binary data
-; Related .......: Base64ToBin64
-;============================================================================================
 Func Bin64ToDec($aBinary)
 	Local $lReturn = 0
 	For $i = 1 To StringLen($aBinary)
@@ -64,20 +24,6 @@ Func Bin64ToDec($aBinary)
 	Return $lReturn
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: Base64ToBin64
-; Description ...: Converts a Base64 character to its 6-bit binary representation
-; Syntax.........: Base64ToBin64($aCharacter)
-; Parameters ....: $aCharacter - A single character from the Base64 alphabet
-; Return values .: The 6-bit binary string representation of the character
-; Author ........:
-; Modified.......:
-; Remarks .......: - Each Base64 character represents 6 bits of data
-;                  - The full Base64 alphabet is [A-Za-z0-9+/]
-;                  - Used primarily for encoding/decoding data in Guild Wars memory operations
-;                  - Returns a 6-character string of '0's and '1's
-; Related .......: Bin64ToDec
-;============================================================================================
 Func Base64ToBin64($aCharacter)
 	Select
 		Case $aCharacter == 'A'
@@ -211,20 +157,6 @@ Func Base64ToBin64($aCharacter)
 	EndSelect
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: GetValue
-; Description ...: Retrieves a value from the global labels array by key
-; Syntax.........: GetValue($aKey)
-; Parameters ....: $aKey    - The identifier/key to search for in the labels array
-; Return values .: The value associated with the key, or -1 if the key is not found
-; Author ........:
-; Modified.......:
-; Remarks .......: - Used to retrieve stored memory addresses, offsets, and other values
-;                  - Searches the global $mLabels array for the matching key
-;                  - Essential for memory address management in the Guild Wars API
-;                  - Returns -1 if the key doesn't exist
-; Related .......: SetValue
-;============================================================================================
 Func GetValue($aKey)
 	For $i = 1 To $mLabels[0][0]
 		If $mLabels[$i][0] = $aKey Then Return $mLabels[$i][1]
@@ -232,21 +164,6 @@ Func GetValue($aKey)
 	Return -1
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: SetValue
-; Description ...: Stores a key-value pair in the global labels array
-; Syntax.........: SetValue($aKey, $aValue)
-; Parameters ....: $aKey    - The identifier/key to store
-;                  $aValue  - The value to associate with the key
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Used to store memory addresses, offsets, and other important values
-;                  - Increases the size of the global $mLabels array with each new entry
-;                  - Essential for memory address management in the Guild Wars API
-;                  - No validation is performed to prevent duplicate keys
-; Related .......: GetValue
-;============================================================================================
 Func SetValue($aKey, $aValue)
 	$mLabels[0][0] += 1
 	ReDim $mLabels[$mLabels[0][0] + 1][2]

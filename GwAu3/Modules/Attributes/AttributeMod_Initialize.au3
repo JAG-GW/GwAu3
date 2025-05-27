@@ -105,19 +105,6 @@ Global $g_aAttributeNames[45] = [ _
 #EndRegion Module Global Variables
 
 #Region Initialize Functions
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_Initialize
-; Description ...: Initializes the attribute management module
-; Syntax.........: _AttributeMod_Initialize()
-; Parameters ....: None
-; Return values .: True if initialization succeeds, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Must be called after main initialization
-;                  - Sets up all necessary data for the module
-;                  - Initializes the command generator system
-; Related .......: _AttributeMod_Cleanup
-;============================================================================================
 Func _AttributeMod_Initialize()
     If $g_bAttributeModuleInitialized Then
         _Log_Warning("AttributeMod module already initialized", "AttributeMod", $GUIEdit)
@@ -134,17 +121,6 @@ Func _AttributeMod_Initialize()
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_InitializeData
-; Description ...: Initializes attribute base data
-; Syntax.........: _AttributeMod_InitializeData()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _AttributeMod_Initialize
-;============================================================================================
 Func _AttributeMod_InitializeData()
     ; Read attribute info address
     $g_mAttributeInfo = MemoryRead(GetScannedAddress('ScanAttributeInfo', -0x3))
@@ -153,17 +129,6 @@ Func _AttributeMod_InitializeData()
     _Log_Debug("AttributeInfo: " & Ptr($g_mAttributeInfo), "AttributeMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_InitializeCommands
-; Description ...: Initializes command and function addresses
-; Syntax.........: _AttributeMod_InitializeCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _AttributeMod_Initialize
-;============================================================================================
 Func _AttributeMod_InitializeCommands()
     ; Setup attribute functions
     SetValue('IncreaseAttributeFunction', Ptr(GetScannedAddress('ScanIncreaseAttributeFunction', -0x5A)))
@@ -173,17 +138,6 @@ Func _AttributeMod_InitializeCommands()
     _Log_Debug("DecreaseAttributeFunction: " & GetValue('DecreaseAttributeFunction'), "AttributeMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_Cleanup
-; Description ...: Cleans up module resources
-; Syntax.........: _AttributeMod_Cleanup()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Should be called when closing the application
-; Related .......: _AttributeMod_Initialize
-;============================================================================================
 Func _AttributeMod_Cleanup()
     If Not $g_bAttributeModuleInitialized Then Return
 
@@ -195,17 +149,6 @@ EndFunc
 #EndRegion Initialize Functions
 
 #Region Pattern, Structure & Assembly Code Generation
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_DefinePatterns
-; Description ...: Defines scan patterns for attribute-related functions
-; Syntax.........: _AttributeMod_DefinePatterns()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Called during the scan phase of initialization
-; Related .......: _AttributeMod_CreateCommands
-;============================================================================================
 Func _AttributeMod_DefinePatterns()
     _('ScanAttributeInfo:')
     AddPattern("BA3300000089088d4004") ; Added by Greg76 to get Attribute Info
@@ -217,18 +160,6 @@ Func _AttributeMod_DefinePatterns()
     AddPattern("8B8AA800000089480C5DC3CC") ; STILL WORKING 23.12.24
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_SetupStructures
-; Description ...: Configures data structures for commands
-; Syntax.........: _AttributeMod_SetupStructures()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Called after command creation to setup structure pointers
-;                  - Must be called before using attribute commands
-; Related .......: _AttributeMod_Initialize
-;============================================================================================
 Func _AttributeMod_SetupStructures()
     DllStructSetData($g_mIncreaseAttribute, 1, GetValue('CommandIncreaseAttribute'))
     DllStructSetData($g_mDecreaseAttribute, 1, GetValue('CommandDecreaseAttribute'))
@@ -236,18 +167,6 @@ Func _AttributeMod_SetupStructures()
 ;~     DllStructSetData($g_mSetAttributes, 1, GetValue('CommandSetAttributes'))
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_CreateCommands
-; Description ...: Creates ASM commands for attribute operations using CommandGenerator
-; Syntax.........: _AttributeMod_CreateCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Uses the centralized command generation system
-;                  - All injection logic is now handled by CommandGenerator
-; Related .......: _AttributeMod_DefinePatterns
-;============================================================================================
 Func _AttributeMod_CreateCommands()
     _('CommandIncreaseAttribute:')
     _('mov edx,dword[eax+4]')

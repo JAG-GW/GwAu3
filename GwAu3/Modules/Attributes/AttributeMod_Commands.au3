@@ -1,19 +1,6 @@
 #include-once
 #include "AttributeMod_Initialize.au3"
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_IncreaseAttribute
-; Description ...: Increases an attribute by one point
-; Syntax.........: _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1)
-; Parameters ....: $iAttributeID - ID of the attribute to increase (0-25)
-;                  $iAmount      - [optional] Amount to increase (default: 1)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Attribute must have available points to spend
-;                  - Does not validate current attribute values or available points
-; Related .......: _AttributeMod_DecreaseAttribute, _AttributeMod_GetAttributeValue
-;============================================================================================
 Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
         _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $GUIEdit)
@@ -53,19 +40,6 @@ Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AttributeMod_DecreaseAttribute
-; Description ...: Decreases an attribute by one point
-; Syntax.........: _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1)
-; Parameters ....: $iAttributeID - ID of the attribute to decrease (0-25)
-;                  $iAmount      - [optional] Amount to decrease (default: 1)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Attribute must have points allocated to decrease
-;                  - Does not validate current attribute values
-; Related .......: _AttributeMod_IncreaseAttribute, _AttributeMod_GetAttributeValue
-;============================================================================================
 Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
         _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $GUIEdit)
@@ -105,20 +79,6 @@ Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: LoadSkillTemplate
-; Description ...: Loads a Guild Wars skill template for player or hero
-; Syntax.........: LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
-; Parameters ....: $aTemplate   - Base64 encoded skill template string
-;                  $aHeroNumber - [optional] Hero number (0 for player, 1-8 for heroes)
-; Return values .: True if successful, False otherwise
-; Author ........: Greg76
-; Modified.......: 2025-05-22
-; Remarks .......: - Decodes the template and applies attributes and skills
-;                  - Validates primary profession matches current character/hero
-;                  - Automatically changes secondary profession if needed
-; Related .......: LoadAttributes, LoadSkillBar
-;============================================================================================
 Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
         _Log_Error("AttributeMod module not initialized", "LoadTemplate", $GUIEdit)
@@ -244,24 +204,8 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
 
     _Log_Info("Template loaded successfully", "LoadTemplate", $GUIEdit)
     Return True
-EndFunc   ;==>LoadSkillTemplate
+EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: LoadAttributes
-; Description ...: Loads attribute configuration for player or hero
-; Syntax.........: LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
-; Parameters ....: $aAttributesArray     - 2D array of attributes [ID][Level]
-;                  $aSecondaryProfession - Secondary profession ID
-;                  $aHeroNumber          - [optional] Hero number (0 for player, 1-8 for heroes)
-; Return values .: True if successful, False otherwise
-; Author ........: Greg76
-; Modified.......: 2025-05-22
-; Remarks .......: - Changes secondary profession if needed
-;                  - Resets all attributes then applies new configuration
-;                  - Uses proper parameter order for attribute functions
-;                  - Includes comprehensive error handling and timeouts
-; Related .......: LoadSkillTemplate, _AttributeMod_IncreaseAttribute, _AttributeMod_DecreaseAttribute
-;============================================================================================
 Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
         _Log_Error("AttributeMod module not initialized", "LoadAttributes", $GUIEdit)
@@ -465,4 +409,4 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
 
     _Log_Info("Attribute loading completed", "LoadAttributes", $GUIEdit)
     Return True
-EndFunc   ;==>LoadAttributes
+EndFunc

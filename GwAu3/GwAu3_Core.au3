@@ -29,9 +29,6 @@ EndIf
 Global $mInviteGuild = DllStructCreate('ptr;dword;dword header;dword counter;wchar name[32];dword type')
 Global $mInviteGuildPtr = DllStructGetPtr($mInviteGuild)
 
-Global $mMove = DllStructCreate('ptr;float;float;float')
-Global $mMovePtr = DllStructGetPtr($mMove)
-
 Global $mWriteChat = DllStructCreate('ptr')
 Global $mWriteChatPtr = DllStructGetPtr($mWriteChat)
 
@@ -50,19 +47,6 @@ Global $mFrameArray
 #EndRegion CommandStructs
 
 #Region Initialisation
-; #FUNCTION# ;===============================================================================
-; Name...........: GetHwnd
-; Description ...: Returns a window handle from a process ID
-; Syntax.........: GetHwnd($aProc)
-; Parameters ....: $aProc - Process ID to find window handle for
-; Return values .: Window handle as integer, 0 if not found
-; Author ........:
-; Modified.......:
-; Remarks .......: - Internal helper function
-;                  - Finds the main window for a specified process ID
-;                  - Checks if window is visible before returning
-; Related .......: Initialize
-;============================================================================================
 Func GetHwnd($aProc)
 	Local $wins = WinList()
 	For $i = 1 To UBound($wins) - 1
@@ -70,58 +54,20 @@ Func GetHwnd($aProc)
 	Next
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: GetWindowHandle
-; Description ...: Returns the window handle of the Guild Wars client
-; Syntax.........: GetWindowHandle()
-; Parameters ....: None
-; Return values .: Window handle as integer
-; Author ........:
-; Modified.......:
-; Remarks .......: - Must be called after Initialize()
-;                  - Used for window manipulation functions
-; Related .......: Initialize
-;============================================================================================
 Func GetWindowHandle()
 	Return $mGWWindowHandle
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: GetLoggedCharNames
-; Description ...: Returns a list of logged-in character names
-; Syntax.........: GetLoggedCharNames()
-; Parameters ....: None
-; Return values .: Pipe-delimited string of character names
-; Author ........:
-; Modified.......:
-; Remarks .......: - Can be called before Initialize() to find character names
-;                  - Returns empty string if no characters are logged in
-;                  - Format: "CharName1|CharName2|CharName3"
-; Related .......: ScanGW, ScanForCharname
-;============================================================================================
 Func GetLoggedCharNames()
 	Local $array = ScanGW()
-	If $array[0] == 0 Then Return '' ; No characters logged
-	Local $ret = $array[1] ; Start with the first character name
-	For $i = 2 To $array[0] ; Concatenate remaining names, if any
+	If $array[0] == 0 Then Return ''
+	Local $ret = $array[1]
+	For $i = 2 To $array[0]
 		$ret &= "|" & $array[$i]
 	Next
 	Return $ret
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: ScanGW
-; Description ...: Scans for all running Guild Wars processes
-; Syntax.........: ScanGW()
-; Parameters ....: None
-; Return values .: Array with character names, [0] contains count
-; Author ........:
-; Modified.......:
-; Remarks .......: - Internal function used by GetLoggedCharNames
-;                  - Searches all running processes for Guild Wars clients
-;                  - Returns an array where [0] is the count and [1..n] are character names
-; Related .......: GetLoggedCharNames, ScanForCharname
-;============================================================================================
 Func ScanGW()
 	Local $lProcessList = ProcessList("gw.exe")
 	Local $lReturnArray[1] = [0]
@@ -144,41 +90,19 @@ Func ScanGW()
 	Return $lReturnArray
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: Initialize
-; Description ...: Initializes the GwAu3 library and injects code into Guild Wars
-; Syntax.........: Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSystem = True)
-; Parameters ....: $aGW           - Character name or process ID of Guild Wars client
-;                  $bChangeTitle  - [optional] Whether to change window title with character name (default: True)
-;                  $aUseStringLog - [optional] Whether to enable string logging (default: False)
-;                  $aUseEventSystem - [optional] Whether to enable event system (default: True)
-; Return values .: Window handle of the Guild Wars client
-; Author ........:
-; Modified.......:
-; Remarks .......: - Must be called before any other GwAu3 functions
-;                  - Searches for Guild Wars process by character name or uses provided PID
-;                  - Injects code into the game client to enable API functionality
-;                  - Sets up memory locations and command structures
-;                  - Creates callback system if event system is enabled
-; Related .......: GetWindowHandle, GetLoggedCharNames
-;============================================================================================
 Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSystem = True)
-   ; Initialize variables
    $mUseStringLog = $aUseStringLog
    $mUseEventSystem = $aUseEventSystem
 
    _Log_Info("Initializing...", "GwAu3", $GUIEdit)
 
-   ; Check if $aGW is a string or a process ID
    If IsString($aGW) Then
-      ; Find the process ID of the game client
       Local $lProcessList = ProcessList("gw.exe")
       For $i = 1 To $lProcessList[0][0]
         $mGWProcessId = $lProcessList[$i][1]
         $mGWWindowHandle = GetHwnd($mGWProcessId)
         MemoryOpen($mGWProcessId)
         If $mGWProcHandle Then
-           ; Check if the character name matches
            If StringRegExp(ScanForCharname(), $aGW) = 1 Then
               ExitLoop
            EndIf
@@ -187,7 +111,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
         $mGWProcHandle = 0
       Next
    Else
-      ; Use the provided process ID
       $mGWProcessId = $aGW
       $mGWWindowHandle = GetHwnd($mGWProcessId)
       MemoryOpen($aGW)
@@ -196,7 +119,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    Scan()
 
-   ; Read Memory Values for Game Data
    $mBasePointer = MemoryRead(GetScannedAddress('ScanBasePointer', 0x8))
    SetValue('BasePointer', Ptr($mBasePointer))
    _Log_Debug("BasePointer: " & Ptr($mBasePointer), "Initialize", $GUIEdit)
@@ -225,15 +147,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    $mCharslots = MemoryRead(GetScannedAddress('ScanCharslots', 0x16))
    _Log_Debug("Charslots: " & Ptr($mCharslots), "Initialize", $GUIEdit)
-
-   $mInstanceInfo = MemoryRead(GetScannedAddress('ScanInstanceInfo', 0xE))
-   _Log_Debug("InstanceInfo: " & Ptr($mInstanceInfo), "Initialize", $GUIEdit)
-
-   $mAreaInfo = MemoryRead(GetScannedAddress('ScanAreaInfo', 0x6))
-   _Log_Debug("AreaInfo: " & Ptr($mAreaInfo), "Initialize", $GUIEdit)
-
-   $mWorldConst = MemoryRead(GetScannedAddress('ScanWorldConst', 0x8))
-   _Log_Debug("WorldConst: " & Ptr($mWorldConst), "Initialize", $GUIEdit)
 
 	$mPreGameContextAddr = MemoryRead(GetScannedAddress('ScanPreGameContextAddr', 0x35))
 	_Log_Debug("PreGameContextAddr: " & Ptr($mPreGameContextAddr), "Initialize", $GUIEdit)
@@ -286,16 +199,12 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    SetValue('PostMessage', Ptr(MemoryRead(GetScannedAddress('ScanPostMessage', 0xB))))
    SetValue('Sleep', MemoryRead(MemoryRead(GetValue('ScanSleep') + 0x8) + 0x3))
 
-   SetValue('MoveFunction', Ptr(GetScannedAddress('ScanMoveFunction', 0x1)))
-
    SetValue('WriteChatFunction', Ptr(GetScannedAddress('ScanWriteChatFunction', -0x3D)))
 
    SetValue('PacketSendFunction', Ptr(GetScannedAddress('ScanPacketSendFunction', -0x50)))
 
    SetValue('ActionBase', Ptr(MemoryRead(GetScannedAddress('ScanActionBase', -0x3))))
    SetValue('ActionFunction', Ptr(GetScannedAddress('ScanActionFunction', -0x3)))
-
-   SetValue('ClickToMoveFix', Ptr(GetScannedAddress("ScanClickToMoveFix", 0x1)))
 
    SetValue('ChangeStatusFunction', Ptr(GetScannedAddress("ScanChangeStatusFunction", 0x1)))
 
@@ -313,7 +222,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    $mQueueBase = GetValue('QueueBase')
    $mTargetLogBase = GetValue('TargetLogBase')
    $mStringLogBase = GetValue('StringLogBase')
-   $mMapIsLoaded = GetValue('MapIsLoaded')
    $mEnsureEnglish = GetValue('EnsureEnglish')
    $mTraderQuoteID = GetValue('TraderQuoteID')
    $mTraderCostID = GetValue('TraderCostID')
@@ -329,7 +237,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
 
    DllStructSetData($mInviteGuild, 1, GetValue('CommandPacketSend'))
    DllStructSetData($mInviteGuild, 2, 0x4C)
-   DllStructSetData($mMove, 1, GetValue('CommandMove'))
    DllStructSetData($mPacket, 1, GetValue('CommandPacketSend'))
    DllStructSetData($mAction, 1, GetValue('CommandAction'))
    DllStructSetData($mToggleLanguage, 1, GetValue('CommandToggleLanguage'))
@@ -341,6 +248,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    _AttributeMod_SetupStructures()
    _TradeMod_SetupStructures()
    _AgentMod_SetupStructures()
+   _MapMod_SetupStructures()
 
    If $bChangeTitle Then
       WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
@@ -352,20 +260,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseStringLog = False, $aUseEventSy
    Return $mGWWindowHandle
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: Scan
-; Description ...: Scans memory for Guild Wars functions and data
-; Syntax.........: Scan()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Core scanning function that finds all needed memory addresses
-;                  - Sets up patterns for all game functions and data structures
-;                  - Creates and injects scanning code into the game
-;                  - This is the heart of the memory scanning system
-; Related .......: Initialize, AddPattern, GetScannedAddress
-;============================================================================================
 Func Scan()
 	Local $lGwBase = ScanForProcess()
 	$mASMSize = 0
@@ -374,7 +268,6 @@ Func Scan()
 
 	_('MainModPtr/4')
 
-	; Regular patterns
 	_('ScanBasePointer:')
 	AddPattern('506A0F6A00FF35')
 
@@ -392,9 +285,6 @@ Func Scan()
 
 	_('ScanTargetLog:')
 	AddPattern('5356578BFA894DF4E8')
-
-	_('ScanMoveFunction:')
-	AddPattern('558BEC83EC208D45F0')
 
 	_('ScanPing:')
 	AddPattern('E874651600')
@@ -441,9 +331,6 @@ Func Scan()
 	_('ScanSleep:')
 	AddPattern('6A0057FF15D8408A006860EA0000')
 
-	_('ScanClickToMoveFix:')
-	AddPattern('3DD301000074')
-
 	_('ScanZoomStill:')
 	AddPattern('558BEC8B41085685C0')
 
@@ -465,29 +352,16 @@ Func Scan()
 	_("ScanTradeHack:")
 	AddPattern("8BEC8B450883F846")
 
-	_("ScanClickCoords:")
-	AddPattern("8B451C85C0741CD945F8")
-
-	_("ScanInstanceInfo:")
-	AddPattern("6A2C50E80000000083C408C7")
-
-	_("ScanAreaInfo:")
-	AddPattern("6BC67C5E05")
-
-	_("ScanWorldConst:")
-	AddPattern("8D0476C1E00405")
-
 	_SkillMod_DefinePatterns()
 	_AttributeMod_DefinePatterns()
 	_TradeMod_DefinePatterns()
 	_AgentMod_DefinePatterns()
+	_MapMod_DefinePatterns()
 
-	; Define all assertions
 	Local $assertions[2][2] = [ _
 		["P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene"], _
 		["P:\Code\Engine\Frame\FrMsg.cpp", "frame"] _
 	]
-	; Get all patterns in one search
 	Local $assertionPatterns = GetMultipleAssertionPatterns($assertions)
 	_('ScanPreGameContextAddr:')
 	AddPattern($assertionPatterns[0])
@@ -586,19 +460,6 @@ Func Scan()
 
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: ScanForProcess
-; Description ...: Finds the memory address of the Guild Wars process
-; Syntax.........: ScanForProcess()
-; Parameters ....: None
-; Return values .: Base memory address of Guild Wars process
-; Author ........:
-; Modified.......:
-; Remarks .......: - Internal function used during initialization
-;                  - Scans memory for Guild Wars signature patterns
-;                  - Returns the memory base address of the process
-; Related .......: Initialize, Scan
-;============================================================================================
 Func ScanForProcess()
 	Local $lCharNameCode = BinaryToString('0x558BEC83EC105356578B7D0833F63BFE')
 	Local $lCurrentSearchAddress = 0x00000000
@@ -628,22 +489,9 @@ Func ScanForProcess()
 	Return ''
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: ScanForCharname
-; Description ...: Scans Guild Wars memory for character name
-; Syntax.........: ScanForCharname()
-; Parameters ....: None
-; Return values .: Character name as string
-; Author ........:
-; Modified.......:
-; Remarks .......: - Internal function used during initialization
-;                  - Searches memory for character name pattern
-;                  - Sets $mCharname variable and returns the name
-; Related .......: Initialize, GetCharname
-;============================================================================================
 Func ScanForCharname()
-	Local $lCharNameCode = BinaryToString('0x6A14FF751868') ;0x90909066C705
-	Local $lCurrentSearchAddress = 0x00000000 ;0x00401000
+	Local $lCharNameCode = BinaryToString('0x6A14FF751868')
+	Local $lCurrentSearchAddress = 0x00000000
 	Local $lMBI[7], $lMBIBuffer = DllStructCreate('dword;dword;dword;dword;dword;dword;dword')
 	Local $lSearch, $lTmpMemData, $lTmpAddress, $lTmpBuffer = DllStructCreate('ptr'), $i
 

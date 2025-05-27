@@ -1,21 +1,6 @@
 #include-once
 #include "TradeMod_Initialize.au3"
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_SellItem
-; Description ...: Sells an item to a merchant
-; Syntax.........: _TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
-; Parameters ....: $iItemID     - ID of the item to sell
-;                  $iQuantity   - [optional] Quantity to sell (default: 1)
-;                  $iMerchantID - [optional] ID of the merchant (default: 0)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Item must be in inventory
-;                  - Merchant must be in range and available
-;                  - Does not validate item ownership or merchant availability
-; Related .......: _TradeMod_BuyItem, _TradeMod_RequestQuoteSell
-;============================================================================================
 Func _TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
@@ -47,22 +32,6 @@ Func _TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_BuyItem
-; Description ...: Buys an item from a merchant
-; Syntax.........: _TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID = 0)
-; Parameters ....: $iItemID     - ID of the item to buy
-;                  $iQuantity   - [optional] Quantity to buy (default: 1)
-;                  $iPrice      - [optional] Price to pay (default: 0)
-;                  $iMerchantID - [optional] ID of the merchant (default: 0)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Merchant must have the item in stock
-;                  - Player must have enough gold
-;                  - Does not validate gold amount or item availability
-; Related .......: _TradeMod_SellItem, _TradeMod_RequestQuote
-;============================================================================================
 Func _TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID = 0)
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
@@ -101,23 +70,6 @@ Func _TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID = 0)
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CraftItem
-; Description ...: Crafts an item using materials
-; Syntax.........: _TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCrafterID = 0, $iFlags = 0)
-; Parameters ....: $iRecipeID   - ID of the recipe to craft
-;                  $iQuantity   - [optional] Quantity to craft (default: 1)
-;                  $aMaterials  - [optional] Array of material IDs (default: 0)
-;                  $iCrafterID  - [optional] ID of the crafter NPC (default: 0)
-;                  $iFlags      - [optional] Crafting flags (default: 0)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Player must have required materials
-;                  - Crafter must be in range and available
-;                  - Does not validate material availability
-; Related .......: _TradeMod_BuyItem, _TradeMod_SellItem
-;============================================================================================
 Func _TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCrafterID = 0, $iFlags = 0)
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
@@ -158,18 +110,6 @@ Func _TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCrafterI
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_RequestQuote
-; Description ...: Requests a price quote for buying an item
-; Syntax.........: _TradeMod_RequestQuote($iItemID)
-; Parameters ....: $iItemID - ID of the item to get a quote for
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Used to get current market price for an item
-;                  - Quote response is handled by trader hook system
-; Related .......: _TradeMod_RequestQuoteSell, _TradeMod_BuyItem
-;============================================================================================
 Func _TradeMod_RequestQuote($iItemID)
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
@@ -193,18 +133,6 @@ Func _TradeMod_RequestQuote($iItemID)
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_RequestQuoteSell
-; Description ...: Requests a price quote for selling an item
-; Syntax.........: _TradeMod_RequestQuoteSell($iItemID)
-; Parameters ....: $iItemID - ID of the item to get a sell quote for
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Used to get current sell price for an item
-;                  - Quote response is handled by trader hook system
-; Related .......: _TradeMod_RequestQuote, _TradeMod_SellItem
-;============================================================================================
 Func _TradeMod_RequestQuoteSell($iItemID)
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
@@ -228,19 +156,6 @@ Func _TradeMod_RequestQuoteSell($iItemID)
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_TraderBuy
-; Description ...: Executes a trader buy operation
-; Syntax.........: _TradeMod_TraderBuy()
-; Parameters ....: None
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Uses current trader quote data
-;                  - Must have previously requested a quote
-;                  - Completes the purchase at the quoted price
-; Related .......: _TradeMod_RequestQuote, _TradeMod_TraderSell
-;============================================================================================
 Func _TradeMod_TraderBuy()
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
@@ -267,19 +182,6 @@ Func _TradeMod_TraderBuy()
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_TraderSell
-; Description ...: Executes a trader sell operation
-; Syntax.........: _TradeMod_TraderSell()
-; Parameters ....: None
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Uses current trader quote data
-;                  - Must have previously requested a sell quote
-;                  - Completes the sale at the quoted price
-; Related .......: _TradeMod_RequestQuoteSell, _TradeMod_TraderBuy
-;============================================================================================
 Func _TradeMod_TraderSell()
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
@@ -306,21 +208,6 @@ Func _TradeMod_TraderSell()
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_SalvageItem
-; Description ...: Salvages an item for materials
-; Syntax.........: _TradeMod_SalvageItem($iItemID, $iSalvageKitID, $iSalvageType = $SALVAGE_TYPE_NORMAL)
-; Parameters ....: $iItemID       - ID of the item to salvage
-;                  $iSalvageKitID - ID of the salvage kit to use
-;                  $iSalvageType  - [optional] Type of salvage operation (default: normal)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Item must be salvageable
-;                  - Salvage kit must have uses remaining
-;                  - Does not validate item or kit availability
-; Related .......: _TradeMod_SellItem
-;============================================================================================
 Func _TradeMod_SalvageItem($iItemID, $iSalvageKitID, $iSalvageType = $SALVAGE_TYPE_NORMAL)
     If Not $g_bTradeModuleInitialized Then
         _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)

@@ -4,15 +4,6 @@
 #include "../Queries/GwAu3_GetInfo.au3"
 #include "../Commands/GwAu3_Packet.au3"
 
-#Region Movement Enqueue
-;~ Description: Move to a location.
-Func Move($aX, $aY, $aRandom = 50)
-	DllStructSetData($mMove, 2, $aX + Random(-$aRandom, $aRandom))
-	DllStructSetData($mMove, 3, $aY + Random(-$aRandom, $aRandom))
-	Enqueue($mMovePtr, 16)
-EndFunc   ;==>Move
-#EndRegion Movement Enqueue
-
 #Region Misc Enqueue
 ;~ Description: Change game language.
 Func ToggleLanguage()

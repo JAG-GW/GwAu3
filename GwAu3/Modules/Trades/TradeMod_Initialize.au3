@@ -66,18 +66,6 @@ Global $g_iLastPrice = 0
 #EndRegion Module Global Variables
 
 #Region Initialize Functions
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_Initialize
-; Description ...: Initializes the merchant management module
-; Syntax.........: _TradeMod_Initialize()
-; Parameters ....: None
-; Return values .: True if initialization succeeds, False otherwise
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Must be called after main initialization
-;                  - Sets up all necessary data for trading operations
-; Related .......: _TradeMod_Cleanup
-;============================================================================================
 Func _TradeMod_Initialize()
     If $g_bTradeModuleInitialized Then
         _Log_Warning("TradeMod module already initialized", "TradeMod", $GUIEdit)
@@ -94,17 +82,6 @@ Func _TradeMod_Initialize()
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_InitializeData
-; Description ...: Initializes merchant base data
-; Syntax.........: _TradeMod_InitializeData()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_Initialize
-;============================================================================================
 Func _TradeMod_InitializeData()
     ; Read buy item base address
     $g_mBuyItemBase = MemoryRead(GetScannedAddress('ScanBuyItemBase', 0xF))
@@ -127,17 +104,6 @@ Func _TradeMod_InitializeData()
     _Log_Debug("SalvageGlobal: " & Ptr($g_mSalvageGlobal), "TradeMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_InitializeCommands
-; Description ...: Initializes command and function addresses
-; Syntax.........: _TradeMod_InitializeCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_Initialize
-;============================================================================================
 Func _TradeMod_InitializeCommands()
     ; Setup merchant functions
     SetValue('SellItemFunction', Ptr(GetScannedAddress('ScanSellItemFunction', -0x55)))
@@ -153,17 +119,6 @@ Func _TradeMod_InitializeCommands()
     _Log_Debug("SalvageFunction: " & GetValue('SalvageFunction'), "TradeMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_Cleanup
-; Description ...: Cleans up module resources
-; Syntax.........: _TradeMod_Cleanup()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Should be called when closing the application
-; Related .......: _TradeMod_Initialize
-;============================================================================================
 Func _TradeMod_Cleanup()
     If Not $g_bTradeModuleInitialized Then Return
 
@@ -177,17 +132,6 @@ EndFunc
 #EndRegion Initialize Functions
 
 #Region Pattern, Structure & Assembly Code Generation
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_DefinePatterns
-; Description ...: Defines scan patterns for merchant-related functions
-; Syntax.........: _TradeMod_DefinePatterns()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Called during the scan phase of initialization
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_DefinePatterns()
     _('ScanSellItemFunction:')
 	AddPattern('8B4D2085C90F858E') ; COULD NOT UPDATE! 23.12.24
@@ -205,17 +149,6 @@ Func _TradeMod_DefinePatterns()
 	AddPattern('8B4A04538945F48B4208') ; UPDATED 24.12.24
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_SetupStructures
-; Description ...: Configures data structures for commands
-; Syntax.........: _TradeMod_SetupStructures()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_Initialize
-;============================================================================================
 Func _TradeMod_SetupStructures()
     DllStructSetData($g_mSellItem, 1, GetValue('CommandSellItem'))
     DllStructSetData($g_mBuyItem, 1, GetValue('CommandBuyItem'))
@@ -227,17 +160,6 @@ Func _TradeMod_SetupStructures()
     DllStructSetData($g_mSalvage, 1, GetValue('CommandSalvage'))
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateSellItemCommand
-; Description ...: Creates ASM command for selling an item
-; Syntax.........: _TradeMod_CreateSellItemCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateSellItemCommand()
     _('CommandSellItem:')
     _('mov esi,eax')
@@ -257,17 +179,6 @@ Func _TradeMod_CreateSellItemCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateBuyItemCommand
-; Description ...: Creates ASM command for buying an item
-; Syntax.........: _TradeMod_CreateBuyItemCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateBuyItemCommand()
     _('CommandBuyItem:')
     _('mov esi,eax')
@@ -291,17 +202,6 @@ Func _TradeMod_CreateBuyItemCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateCraftItemExCommand
-; Description ...: Creates ASM command for crafting an item
-; Syntax.........: _TradeMod_CreateCraftItemExCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateCraftItemExCommand()
     _('CommandCraftItemEx:')
     _('add eax,4')
@@ -325,17 +225,6 @@ Func _TradeMod_CreateCraftItemExCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateRequestQuoteCommand
-; Description ...: Creates ASM command for requesting a quote
-; Syntax.........: _TradeMod_CreateRequestQuoteCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateRequestQuoteCommand()
     _('CommandRequestQuote:')
     _('mov dword[TraderCostID],0')
@@ -357,17 +246,6 @@ Func _TradeMod_CreateRequestQuoteCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateRequestQuoteSellCommand
-; Description ...: Creates ASM command for requesting a sell quote
-; Syntax.........: _TradeMod_CreateRequestQuoteSellCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateRequestQuoteSellCommand()
     _('CommandRequestQuoteSell:')
     _('mov dword[TraderCostID],0')
@@ -387,17 +265,6 @@ Func _TradeMod_CreateRequestQuoteSellCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateTraderBuyCommand
-; Description ...: Creates ASM command for trader buy operation
-; Syntax.........: _TradeMod_CreateTraderBuyCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateTraderBuyCommand()
     _('CommandTraderBuy:')
     _('push 0')
@@ -418,17 +285,6 @@ Func _TradeMod_CreateTraderBuyCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateTraderSellCommand
-; Description ...: Creates ASM command for trader sell operation
-; Syntax.........: _TradeMod_CreateTraderSellCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateTraderSellCommand()
     _('CommandTraderSell:')
     _('push 0')
@@ -449,17 +305,6 @@ Func _TradeMod_CreateTraderSellCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateSalvageCommand
-; Description ...: Creates ASM command for salvaging an item
-; Syntax.........: _TradeMod_CreateSalvageCommand()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _TradeMod_CreateCommands
-;============================================================================================
 Func _TradeMod_CreateSalvageCommand()
     _('CommandSalvage:')
     _('push eax')
@@ -487,17 +332,6 @@ EndFunc
 #EndRegion Pattern, Structure & Assembly Code Generation
 
 #Region Internal Functions
-; #FUNCTION# ;===============================================================================
-; Name...........: _TradeMod_CreateCommands
-; Description ...: Creates ASM commands for merchant operations
-; Syntax.........: _TradeMod_CreateCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Called during ASM command creation phase
-; Related .......: _TradeMod_DefinePatterns
-;============================================================================================
 Func _TradeMod_CreateCommands()
     ; Command for selling an item
     _TradeMod_CreateSellItemCommand()

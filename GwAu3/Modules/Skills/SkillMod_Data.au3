@@ -1,94 +1,26 @@
 #include-once
 #include "SkillMod_Initialize.au3"
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_GetLastUsedSkill
-; Description ...: Returns the ID of the last skill used
-; Syntax.........: _SkillMod_GetLastUsedSkill()
-; Parameters ....: None
-; Return values .: ID of the last skill used, 0 if none
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Useful for tracking and debugging
-; Related .......: _SkillMod_UseSkill
-;============================================================================================
 Func _SkillMod_GetLastUsedSkill()
     Return $g_iLastSkillUsed
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_GetLastTarget
-; Description ...: Returns the ID of the last target
-; Syntax.........: _SkillMod_GetLastTarget()
-; Parameters ....: None
-; Return values .: ID of the last target, 0 if none
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Useful for tracking and debugging
-; Related .......: _SkillMod_UseSkill
-;============================================================================================
 Func _SkillMod_GetLastTarget()
     Return $g_iLastSkillTarget
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_GetSkillTimer
-; Description ...: Returns the current skill timer value
-; Syntax.........: _SkillMod_GetSkillTimer()
-; Parameters ....: None
-; Return values .: Current skill timer value in milliseconds
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Returns system tick count plus execution start time
-;                  - Used for timing skill activation and cooldowns
-; Related .......: _SkillMod_GetSkillInfo
-;============================================================================================
 Func _SkillMod_GetSkillTimer()
 	Local $lExeStart = MemoryRead($g_mSkillTimer, 'dword')
 	Local $lTickCount = DllCall($mKernelHandle, 'dword', 'GetTickCount')[0]
 	Return Int($lTickCount + $lExeStart, 1)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_GetSkillPtr
-; Description ...: Returns a pointer to skill data structure
-; Syntax.........: _SkillMod_GetSkillPtr($aSkillID)
-; Parameters ....: $aSkillID - Skill ID or existing pointer
-; Return values .: Pointer to skill data structure
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - If $aSkillID is already a pointer, returns it unchanged
-;                  - Calculates pointer based on skill base address and ID
-;                  - Each skill structure is 0xA0 bytes in size
-; Related .......: _SkillMod_GetSkillInfo
-;============================================================================================
 Func _SkillMod_GetSkillPtr($aSkillID)
     If IsPtr($aSkillID) Then Return $aSkillID
 	Local $Skillptr = $g_mSkillBase + 0xA0 * $aSkillID
 	Return Ptr($Skillptr)
-EndFunc   ;==>_SkillMod_GetSkillPtr
+EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_GetSkillInfo
-; Description ...: Retrieves specific information about a skill
-; Syntax.........: _SkillMod_GetSkillInfo($aSkillID, $aInfo = "")
-; Parameters ....: $aSkillID - ID of the skill to query
-;                  $aInfo    - Information type to retrieve (see remarks)
-; Return values .: The requested skill information, 0 if invalid
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Available info types: "SkillID", "Campaign", "SkillType", "Special",
-;                    "ComboReq", "Effect1", "Condition", "Effect2", "WeaponReq", "Profession",
-;                    "Attribute", "Title", "SkillIDPvP", "Combo", "Target", "SkillEquipType",
-;                    "Overcast", "EnergyCost", "HealthCost", "Adrenaline", "Activation",
-;                    "Aftercast", "Duration0", "Duration15", "Recharge", "SkillArguments",
-;                    "Scale0", "Scale15", "BonusScale0", "BonusScale15", "AoeRange", "ConstEffect",
-;                    "CasterOverheadAnimationID", "CasterBodyAnimationID", "TargetBodyAnimationID",
-;                    "TargetOverheadAnimationID", "ProjectileAnimation1ID", "ProjectileAnimation2ID",
-;                    "IconFileID", "IconFileID2", "Name", "Concise", "Description"
-;                  - Special handling for EnergyCost: converts values 11->15, 12->25
-; Related .......: _SkillMod_GetSkillPtr
-;============================================================================================
 Func _SkillMod_GetSkillInfo($aSkillID, $aInfo = "")
     Local $lPtr = _SkillMod_GetSkillPtr($aSkillID)
     If $lPtr = 0 Or $aInfo = "" Then Return 0

@@ -39,8 +39,6 @@ Global $SecondInject                         ; Address of secondary code injecti
 #Region Game State
 ; Variables related to game state
 Global $mLoggedIn                            ; Flag indicating if character is logged in
-Global $mMapIsLoaded                         ; Flag indicating if map is loaded
-Global $mMapLoading                          ; Flag indicating if map is currently loading
 Global $mCharname                            ; Character name
 Global $mCharslots                           ; Number of character slots available
 Global $mPing                                ; Current ping to server in milliseconds
@@ -65,9 +63,6 @@ Global $mWriteChatSender                     ; Pointer to chat sender
 Global $mZoomStill                           ; Camera zoom level when still
 Global $mZoomMoving                          ; Camera zoom level when moving
 Global $mLastDialogID                        ; ID of the last dialog
-Global $mInstanceInfo                        ; Pointer to instance information
-Global $mAreaInfo                            ; Pointer to area information
-Global $mWorldConst                          ; Pointer to world constants
 #EndRegion Game Data Pointers
 
 #Region Assembler Variables

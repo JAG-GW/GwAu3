@@ -14,49 +14,16 @@ Func ConvertID($aID)
 		Case Else
 			Return $aID
 	EndSelect
-EndFunc   ;==>ConvertID
+EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetAgentBase
-; Description ...: Returns the base address of the agent array
-; Syntax.........: _AgentMod_GetAgentBase()
-; Parameters ....: None
-; Return values .: Pointer to agent array base
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Used for direct memory access to agent data
-; Related .......: _AgentMod_GetMaxAgents
-;============================================================================================
 Func _AgentMod_GetAgentBase()
     Return $g_mAgentBase
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetMaxAgents
-; Description ...: Returns the maximum number of agents
-; Syntax.........: _AgentMod_GetMaxAgents()
-; Parameters ....: None
-; Return values .: Maximum number of agents
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Used to determine array bounds when iterating agents
-; Related .......: _AgentMod_GetAgentBase
-;============================================================================================
 Func _AgentMod_GetMaxAgents()
     Return MemoryRead($g_mMaxAgents, 'dword')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetMyID
-; Description ...: Returns the player's agent ID
-; Syntax.........: _AgentMod_GetMyID()
-; Parameters ....: None
-; Return values .: Player's agent ID
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Essential for identifying the player agent
-; Related .......: _AgentMod_GetCurrentTarget
-;============================================================================================
 Func _AgentMod_GetMyID()
     Return MemoryRead($g_mMyID, 'dword')
 EndFunc
@@ -65,90 +32,32 @@ Func GetMyID()
 	Local $lOffset[5] = [0, 0x18, 0x2C, 0x680, 0x14]
 	Local $lReturn = MemoryReadPtr($mBasePointer, $lOffset)
 	Return $lReturn[1]
-EndFunc   ;==>GetMyID
+EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetCurrentTarget
-; Description ...: Returns the current target agent ID
-; Syntax.........: _AgentMod_GetCurrentTarget()
-; Parameters ....: None
-; Return values .: Current target agent ID, 0 if no target
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Updates when player changes target
-; Related .......: _AgentMod_GetMyID, _AgentMod_ChangeTarget
-;============================================================================================
 Func _AgentMod_GetCurrentTarget()
     Return MemoryRead($g_mCurrentTarget, 'dword')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetAgentCopyCount
-; Description ...: Returns the number of agents in the copy array
-; Syntax.........: _AgentMod_GetAgentCopyCount()
-; Parameters ....: None
-; Return values .: Number of copied agents
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Updated after calling MakeAgentArray
-; Related .......: _AgentMod_GetAgentCopyBase, _AgentMod_MakeAgentArray
-;============================================================================================
 Func _AgentMod_GetAgentCopyCount()
     Return MemoryRead($g_mAgentCopyCount, 'dword')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetAgentCopyBase
-; Description ...: Returns the base address of the agent copy array
-; Syntax.........: _AgentMod_GetAgentCopyBase()
-; Parameters ....: None
-; Return values .: Pointer to agent copy array base
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Contains snapshot of agent data
-;                  - Updated by MakeAgentArray command
-; Related .......: _AgentMod_GetAgentCopyCount, _AgentMod_MakeAgentArray
-;============================================================================================
 Func _AgentMod_GetAgentCopyBase()
     Return $g_mAgentCopyBase
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetLastTarget
-; Description ...: Returns the last target ID set
-; Syntax.........: _AgentMod_GetLastTarget()
-; Parameters ....: None
-; Return values .: Last target agent ID
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Useful for tracking target changes
-; Related .......: _AgentMod_ChangeTarget
-;============================================================================================
 Func _AgentMod_GetLastTarget()
     Return $g_iLastTargetID
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetAgentPtr
-; Description ...: Returns a pointer to an agent's data structure
-; Syntax.........: _AgentMod_GetAgentPtr($aAgentID)
-; Parameters ....: $aAgentID - ID of the agent
-; Return values .: Pointer to agent data structure, 0 if invalid
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Calculates pointer from agent base and ID
-;                  - Each agent structure is indexed in the array
-; Related .......: _AgentMod_GetAgentInfo
-;============================================================================================
 Func GetAgentPtr($aAgentID = -2)
 	If IsPtr($aAgentID) Then Return $aAgentID
 	Local $lOffset[3] = [0, 4 * ConvertID($aAgentID), 0]
 	Local $lAgentStructAddress = MemoryReadPtr($g_mAgentBase, $lOffset)
 	Return $lAgentStructAddress[0]
-EndFunc   ;==>GetAgentPtr
+EndFunc
 
 #Region Agent Related
-
 Func GetAgentInfo($aAgentID = -2, $aInfo = "")
     Local $lAgentPtr = GetAgentPtr($aAgentID)
     If $lAgentPtr = 0 Or $aInfo = "" Then Return 0
@@ -720,19 +629,6 @@ EndFunc
 ;~ EndFunc
 #EndRegion Agent Related
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_GetDistance
-; Description ...: Calculates distance between two agents
-; Syntax.........: _AgentMod_GetDistance($aAgent1ID, $aAgent2ID = 0)
-; Parameters ....: $aAgent1ID - First agent ID
-;                  $aAgent2ID - [optional] Second agent ID (default: player)
-; Return values .: Distance between agents
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - If second agent is 0, uses player position
-;                  - Returns straight-line distance
-; Related .......: _AgentMod_GetAgentInfo, _AgentMod_GetMyID
-;============================================================================================
 Func _AgentMod_GetDistance($aAgent1ID, $aAgent2ID = 0)
     If $aAgent2ID = 0 Then $aAgent2ID = _AgentMod_GetMyID()
 

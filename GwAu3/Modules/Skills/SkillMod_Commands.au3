@@ -1,20 +1,6 @@
 #include-once
 #include "SkillMod_Initialize.au3"
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_UseSkill
-; Description ...: Uses a skill
-; Syntax.........: _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = 0)
-; Parameters ....: $iSkillSlot    - ID of the skill to use (1-8)
-;                  $iTargetID   - [optional] Target ID (default: 0)
-;                  $iCallTarget - [optional] Call Target (default: False)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Skill must be available on the skill bar
-;                  - Cooldown is not checked by this function
-; Related .......: _SkillMod_UseHeroSkill, _SkillMod_GetSkillRecharge
-;============================================================================================
 Func _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
     If Not $g_bSkillModuleInitialized Then
         _Log_Error("SkillMod module not initialized", "SkillMod", $GUIEdit)
@@ -48,20 +34,6 @@ Func _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_UseHeroSkill
-; Description ...: Makes a hero use a skill
-; Syntax.........: _SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
-; Parameters ....: $iHeroIndex - Hero index (1-8 for heroes)
-;                  $iSkillSlot   - Skill slot position (1-8)
-;                  $iTargetID  - [optional] Target ID (default: 0)
-; Return values .: True if command is sent successfully, False otherwise
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Hero must be in the party
-;                  - Skill must be available on the hero's skill bar
-; Related .......: _SkillMod_UseSkill
-;============================================================================================
 Func _SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
     If Not $g_bSkillModuleInitialized Then
         _Log_Error("SkillMod module not initialized", "SkillMod", $GUIEdit)

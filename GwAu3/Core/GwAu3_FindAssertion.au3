@@ -12,19 +12,6 @@ Global $sections[5][2]  ; [section][0=start, 1=end]
 Global Const $BLOCK_SIZE = 131072 ; 128 Ko
 Global $g_AssertionCache[0][3] ; [file, msg, pattern]
 
-; #FUNCTION# ;===============================================================================
-; Name...........: GetGWBaseAddress
-; Description ...: Gets the base address of Guild Wars process
-; Syntax.........: GetGWBaseAddress()
-; Parameters ....: None
-; Return values .: Success - Base address of GW.exe module
-;                  Failure - 0
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Uses EnumProcessModules to find GW.exe in process modules
-;                  - Requires psapi.dll
-; Related .......: InitializeSections
-;============================================================================================
 Func GetGWBaseAddress()
     If $mGWProcHandle = 0 Then
         _Log_Error("Invalid process handle", "Memory", $GUIEdit)
@@ -70,20 +57,6 @@ Func GetGWBaseAddress()
     Return 0
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: InitializeSections
-; Description ...: Initializes memory sections from PE headers
-; Syntax.........: InitializeSections()
-; Parameters ....: None
-; Return values .: Success - True
-;                  Failure - False
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Reads PE headers to determine section addresses
-;                  - Must be called before using Find functions
-;                  - Sets up $g_aSections array with section boundaries
-; Related .......: GetGWBaseAddress, Find
-;============================================================================================
 Func InitializeSections($baseAddress)
 
     Local $dosHeader = DllStructCreate("struct;word e_magic;byte[58];dword e_lfanew;endstruct")
@@ -192,18 +165,6 @@ Func InitializeSections($baseAddress)
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _StringToBytes
-; Description ...: Converts a string to binary with null terminator
-; Syntax.........: _StringToBytes($str)
-; Parameters ....: $str - String to convert
-; Return values .: Binary data
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Adds null terminator at the end
-;                  - Used for pattern creation
-; Related .......: FindAssertion
-;============================================================================================
 Func _StringToBytes($str)
     Local $result = Binary("")
     For $i = 1 To StringLen($str)
@@ -219,19 +180,6 @@ Func _StringToBytes($str)
     Return $result
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: FindMultipleStrings
-; Description ...: Finds multiple strings in memory in a single pass
-; Syntax.........: FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
-; Parameters ....: $aStrings - Array of strings to search for
-;                  $section  - Memory section to search (default: RDATA)
-; Return values .: Array with same size as input, containing addresses (0 if not found)
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Much faster than searching strings one by one
-;                  - Searches all strings in parallel during single memory scan
-; Related .......: Find, FindStringInIndex
-;============================================================================================
 Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
     Local $stringCount = UBound($aStrings)
     Local $results[$stringCount]
@@ -240,13 +188,11 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
     Local $masks[$stringCount]
     Local $lengths[$stringCount]
 
-    ; Initialize results
     For $i = 0 To $stringCount - 1
         $results[$i] = 0
         $found[$i] = False
     Next
 
-    ; Convert strings to byte patterns
     For $i = 0 To $stringCount - 1
         $patterns[$i] = _StringToBytes($aStrings[$i])
         $lengths[$i] = BinaryLen($patterns[$i])
@@ -263,8 +209,8 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
     Local $startTime = TimerInit()
     Local $blocksSearched = 0
 
-    For $currentAddr = $start To $end Step $BLOCK_SIZE - 255 ; Overlap to handle edge cases
-        If $totalFound = $stringCount Then ExitLoop ; All found
+    For $currentAddr = $start To $end Step $BLOCK_SIZE - 255
+        If $totalFound = $stringCount Then ExitLoop
 
         Local $readSize = $BLOCK_SIZE
         If $currentAddr + $readSize > $end Then
@@ -276,15 +222,13 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
 
         $blocksSearched += 1
 
-        ; Search for all patterns in this block
         For $patternIdx = 0 To $stringCount - 1
-            If $found[$patternIdx] Then ContinueLoop ; Already found
+            If $found[$patternIdx] Then ContinueLoop
 
             Local $patternLen = $lengths[$patternIdx]
             For $i = 0 To $readSize - $patternLen
                 Local $match = True
 
-                ; Check if pattern matches at this position
                 For $j = 0 To $patternLen - 1
                     If DllStructGetData($buffer, 1, $i + $j + 1) <> BinaryMid($patterns[$patternIdx], $j + 1, 1) Then
                         $match = False
@@ -301,7 +245,6 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
             Next
         Next
 
-        ; Progress logging
         If Mod($blocksSearched, 100) = 0 Then
         EndIf
     Next
@@ -309,27 +252,13 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
     Return $results
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: GetMultipleAssertionPatterns
-; Description ...: Gets multiple assertion patterns in one optimized search
-; Syntax.........: GetMultipleAssertionPatterns($aAssertions)
-; Parameters ....: $aAssertions - 2D array: [n][2] where [n][0]=file, [n][1]=msg
-; Return values .: Array of patterns (empty string if not found)
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Searches all strings in one pass
-;                  - Extremely efficient for multiple assertions
-; Related .......: FindMultipleStrings
-;============================================================================================
 Func GetMultipleAssertionPatterns($aAssertions)
     Local $assertionCount = UBound($aAssertions)
     Local $patterns[$assertionCount]
     Local $allStrings[0]
-    Local $stringMap[0][3] ; [assertion_index, is_file (0/1), string]
+    Local $stringMap[0][3]
 
-    ; Build list of unique strings to search
     For $i = 0 To $assertionCount - 1
-        ; Check cache first
         Local $cached = False
         For $j = 0 To UBound($g_AssertionCache) - 1
             If $g_AssertionCache[$j][0] = $aAssertions[$i][0] And $g_AssertionCache[$j][1] = $aAssertions[$i][1] Then
@@ -340,51 +269,44 @@ Func GetMultipleAssertionPatterns($aAssertions)
         Next
 
         If Not $cached Then
-            ; Add file string
             Local $idx = UBound($allStrings)
             ReDim $allStrings[$idx + 1]
             $allStrings[$idx] = $aAssertions[$i][0]
 
             ReDim $stringMap[UBound($stringMap) + 1][3]
             $stringMap[UBound($stringMap) - 1][0] = $i
-            $stringMap[UBound($stringMap) - 1][1] = 0 ; file
+            $stringMap[UBound($stringMap) - 1][1] = 0
             $stringMap[UBound($stringMap) - 1][2] = $aAssertions[$i][0]
 
-            ; Add msg string
             $idx = UBound($allStrings)
             ReDim $allStrings[$idx + 1]
             $allStrings[$idx] = $aAssertions[$i][1]
 
             ReDim $stringMap[UBound($stringMap) + 1][3]
             $stringMap[UBound($stringMap) - 1][0] = $i
-            $stringMap[UBound($stringMap) - 1][1] = 1 ; msg
+            $stringMap[UBound($stringMap) - 1][1] = 1
             $stringMap[UBound($stringMap) - 1][2] = $aAssertions[$i][1]
         EndIf
     Next
 
-    ; Search all strings in one pass
     If UBound($allStrings) > 0 Then
 
-        ; Initialize sections if needed
         If $sections[$SECTION_RDATA][0] = 0 Then
             InitializeSections(GetGWBaseAddress())
         EndIf
 
         Local $addresses = FindMultipleStrings($allStrings)
 
-        ; Build patterns from results
-        Local $tempResults[$assertionCount][2] ; [file_addr, msg_addr]
+        Local $tempResults[$assertionCount][2]
         For $i = 0 To $assertionCount - 1
             $tempResults[$i][0] = 0
             $tempResults[$i][1] = 0
         Next
 
-        ; Map addresses back to assertions
         For $i = 0 To UBound($stringMap) - 1
             Local $assertIdx = $stringMap[$i][0]
             Local $isMsg = $stringMap[$i][1]
 
-            ; Find which string index this maps to
             For $j = 0 To UBound($allStrings) - 1
                 If $allStrings[$j] = $stringMap[$i][2] Then
                     If $isMsg Then
@@ -397,13 +319,11 @@ Func GetMultipleAssertionPatterns($aAssertions)
             Next
         Next
 
-        ; Generate patterns
         For $i = 0 To $assertionCount - 1
-            If $patterns[$i] = "" Then ; Not cached
+            If $patterns[$i] = "" Then
                 If $tempResults[$i][0] > 0 And $tempResults[$i][1] > 0 Then
                     $patterns[$i] = "BA" & SwapEndian(Hex($tempResults[$i][0], 8)) & "B9" & SwapEndian(Hex($tempResults[$i][1], 8))
 
-                    ; Add to cache
                     Local $idx = UBound($g_AssertionCache)
                     ReDim $g_AssertionCache[$idx + 1][3]
                     $g_AssertionCache[$idx][0] = $aAssertions[$i][0]
@@ -417,4 +337,110 @@ Func GetMultipleAssertionPatterns($aAssertions)
     EndIf
 
     Return $patterns
+EndFunc
+
+Func FunctionFromNearCall($call_instruction_address)
+    Local $opcode = MemoryRead($call_instruction_address, "byte")
+    Local $function_address = 0
+
+    Switch $opcode
+        Case 0xE8, 0xE9
+            Local $near_address = MemoryRead($call_instruction_address + 1, "dword")
+            If $near_address > 0x7FFFFFFF Then
+                $near_address -= 0x100000000
+            EndIf
+            $function_address = $near_address + ($call_instruction_address + 5)
+
+        Case 0xEB
+            Local $near_address = MemoryRead($call_instruction_address + 1, "byte")
+            If BitAND($near_address, 0x80) Then
+                $near_address = -((BitNOT($near_address) + 1) And 0xFF)
+            EndIf
+            $function_address = $near_address + ($call_instruction_address + 2)
+
+        Case Else
+            Return 0
+    EndSwitch
+
+    Local $nested_call = FunctionFromNearCall($function_address)
+    If $nested_call <> 0 Then
+        Return $nested_call
+    EndIf
+
+    Return $function_address
+EndFunc
+
+Func FindInRange($pattern, $mask, $offset, $start, $end)
+    Local $patternBytes = StringToByteArray($pattern)
+    Local $patternLength = UBound($patternBytes)
+    Local $found = False
+
+    $end = BitAND($end, 0xFFFFFFFF)
+    $end -= $patternLength
+
+    If $start > $end Then
+        Local $i = $start
+        While $i >= $end
+            If MemoryRead($i, 'byte') <> $patternBytes[0] Then
+                $i -= 1
+                ContinueLoop
+            EndIf
+
+            $found = True
+            For $idx = 0 To $patternLength - 1
+                If (Not $mask Or StringMid($mask, $idx + 1, 1) = "x") And _
+                   MemoryRead($i + $idx, 'byte') <> $patternBytes[$idx] Then
+                    $found = False
+                    ExitLoop
+                EndIf
+            Next
+
+            If $found Then
+                Return BitAND($i + $offset, 0xFFFFFFFF)
+            EndIf
+            $i -= 1
+        WEnd
+    Else
+       Local $i = $start
+       While _UnsignedCompare($i, $end) < 0
+           If MemoryRead($i, 'byte') <> $patternBytes[0] Then
+               $i = BitAND($i + 1, 0xFFFFFFFF)
+               ContinueLoop
+           EndIf
+
+           $found = True
+           For $idx = 0 To $patternLength - 1
+               If (Not $mask Or StringMid($mask, $idx + 1, 1) = "x") And _
+                  MemoryRead($i + $idx, 'byte') <> $patternBytes[$idx] Then
+                   $found = False
+                   ExitLoop
+               EndIf
+           Next
+
+           If $found Then
+               Return $i + $offset
+           EndIf
+           $i = BitAND($i + 1, 0xFFFFFFFF)
+       WEnd
+   EndIf
+   Return 0
+EndFunc
+
+Func _UnsignedCompare($a, $b)
+   $a = BitAND($a, 0xFFFFFFFF)
+   $b = BitAND($b, 0xFFFFFFFF)
+   If $a = $b Then Return 0
+   Return ($a > $b And $a - $b < 0x80000000) Or ($b > $a And $b - $a > 0x80000000) ? 1 : -1
+EndFunc
+
+Func StringToByteArray($hexString)
+   Local $length = StringLen($hexString) / 2
+   Local $bytes[$length]
+
+   For $i = 0 To $length - 1
+       Local $hexByte = StringMid($hexString, ($i * 2) + 1, 2)
+       $bytes[$i] = "0x" & $hexByte
+   Next
+
+   Return $bytes
 EndFunc

@@ -133,7 +133,6 @@ Out("GwAu3 - Last Update: " & $GWAU3_LAST_UPDATE & @CRLF)
 
 While Not $BotRunning
     Sleep(100)
-
 WEnd
 
 While $BotRunning

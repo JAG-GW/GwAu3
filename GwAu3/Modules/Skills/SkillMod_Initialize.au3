@@ -30,19 +30,6 @@ Global $g_iLastSkillTarget = 0
 #EndRegion Module Global Variables
 
 #Region Initialize Functions
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_Initialize
-; Description ...: Initializes the skill management module
-; Syntax.........: _SkillMod_Initialize()
-; Parameters ....: None
-; Return values .: True if initialization succeeds, False otherwise
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Must be called after main initialization
-;                  - Sets up all necessary data for the module
-;                  - Initializes the command generator system
-; Related .......: _SkillMod_Cleanup
-;============================================================================================
 Func _SkillMod_Initialize()
     If $g_bSkillModuleInitialized Then
         _Log_Warning("SkillMod module already initialized", "SkillMod", $GUIEdit)
@@ -56,17 +43,6 @@ Func _SkillMod_Initialize()
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_InitializeData
-; Description ...: Initializes skill base data
-; Syntax.........: _SkillMod_InitializeData()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _SkillMod_Initialize
-;============================================================================================
 Func _SkillMod_InitializeData()
 	$g_mSkillBase = MemoryRead(GetScannedAddress('ScanSkillBase', 0x8))
 	If $g_mSkillBase = 0 Then _Log_Error("Invalid SkillBase address", "SkillMod", $GUIEdit)
@@ -79,17 +55,6 @@ Func _SkillMod_InitializeData()
 	_Log_Debug("SkillTimer: " & Ptr($g_mSkillTimer), "SkillMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_InitializeCommands
-; Description ...: Initializes command and function addresses
-; Syntax.........: _SkillMod_InitializeCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _SkillMod_Initialize
-;============================================================================================
 Func _SkillMod_InitializeCommands()
 	SetValue('UseSkillFunction', Ptr(GetScannedAddress('ScanUseSkillFunction', -0x125)))
 	_Log_Debug("UseSkillFunction: " & GetValue('UseSkillFunction'), "SkillMod", $GUIEdit)
@@ -113,17 +78,6 @@ Func _SkillMod_InitializeCommands()
 	SetValue('SkillLogSize', $SKILL_LOG_SIZE)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_Cleanup
-; Description ...: Cleans up module resources
-; Syntax.........: _SkillMod_Cleanup()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Should be called when closing the application
-; Related .......: _SkillMod_Initialize
-;============================================================================================
 Func _SkillMod_Cleanup()
     If Not $g_bSkillModuleInitialized Then Return
 
@@ -134,17 +88,6 @@ EndFunc
 #EndRegion Initialize Functions
 
 #Region Pattern, Structure & Assembly Code Generation
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_DefinePatterns
-; Description ...: Defines scan patterns for skill-related functions
-; Syntax.........: _SkillMod_DefinePatterns()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Called during the scan phase of initialization
-; Related .......: _SkillMod_CreateCommands
-;============================================================================================
 Func _SkillMod_DefinePatterns()
     _('ScanSkillBase:')
     AddPattern('8D04B6C1E00505') ; STILL WORKING 23.12.24
@@ -168,34 +111,11 @@ Func _SkillMod_DefinePatterns()
     AddPattern('741D6A006A48') ; COULD NOT UPDATE! 23.12.24
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_SetupStructures
-; Description ...: Configures data structures for commands
-; Syntax.........: _SkillMod_SetupStructures()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _SkillMod_Initialize
-;============================================================================================
 Func _SkillMod_SetupStructures()
     DllStructSetData($g_mUseSkill, 1, GetValue('CommandUseSkill'))
     DllStructSetData($g_mUseHeroSkill, 1, GetValue('CommandUseHeroSkill'))
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_CreateCommands
-; Description ...: Creates ASM commands for skill operations
-; Syntax.........: _SkillMod_CreateCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Uses the centralized command generation system
-;                  - All injection logic is now handled by CommandGenerator
-; Related .......: _SkillMod_DefinePatterns
-;============================================================================================
 Func _SkillMod_CreateCommands()
 	_('CommandUseSkill:')
 	_('mov ecx,dword[eax+10]')
@@ -222,17 +142,6 @@ Func _SkillMod_CreateCommands()
     _('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_CreateSkillLog
-; Description ...: Creates skill activation logging function
-; Syntax.........: _SkillMod_CreateSkillLog()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _SkillMod_CreateLogFunctions
-;============================================================================================
 Func _SkillMod_CreateSkillLog()
     _('SkillLogProc:')
     _('pushad')
@@ -272,17 +181,6 @@ Func _SkillMod_CreateSkillLog()
     _('ljmp SkillLogReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_CreateSkillCancelLog
-; Description ...: Creates skill cancellation logging function
-; Syntax.........: _SkillMod_CreateSkillCancelLog()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _SkillMod_CreateLogFunctions
-;============================================================================================
 Func _SkillMod_CreateSkillCancelLog()
     _('SkillCancelLogProc:')
     _('pushad')
@@ -320,17 +218,6 @@ Func _SkillMod_CreateSkillCancelLog()
     _('ljmp SkillCancelLogReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_CreateSkillCompleteLog
-; Description ...: Creates skill completion logging function
-; Syntax.........: _SkillMod_CreateSkillCompleteLog()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Internal module function
-; Related .......: _SkillMod_CreateLogFunctions
-;============================================================================================
 Func _SkillMod_CreateSkillCompleteLog()
     _('SkillCompleteLogProc:')
     _('pushad')
@@ -369,17 +256,6 @@ EndFunc
 #EndRegion Pattern, Structure & Assembly Code Generation
 
 #Region Internal Functions
-; #FUNCTION# ;===============================================================================
-; Name...........: _SkillMod_CreateSkillLogFunctions
-; Description ...: Creates logging functions for skill events
-; Syntax.........: _SkillMod_CreateSkillLogFunctions()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Called during ASM log function creation phase
-; Related .......: _SkillMod_CreateCommands
-;============================================================================================
 Func _SkillMod_CreateSkillLogFunctions()
     _SkillMod_CreateSkillLog()
     _SkillMod_CreateSkillCancelLog()

@@ -1,21 +1,6 @@
 #include-once
 #include "GwAu3_Constants_Core.au3"
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _
-; Description ...: Converts assembly language instructions to machine code
-; Syntax.........: _($aASM)
-; Parameters ....: $aASM - Assembly instruction to convert
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Core function of the assembler, processes each assembly instruction
-;                  - Updates global variables $mASMString and $mASMSize with processed code
-;                  - Handles various instruction types: jumps, moves, comparisons, etc.
-;                  - Supports special syntax for labels, detours, and inline code
-;                  - Generates appropriate x86 machine code for each instruction
-; Related .......: CompleteASMCode, ASMNumber, GetLabelInfo
-;============================================================================================
 Func _($aASM)
 	Local $lBuffer
 	Local $lOpCode
@@ -297,10 +282,10 @@ Func _($aASM)
 					$lOpCode = '61'
 				Case 'mov ebx,dword[eax]'
 					$lOpCode = '8B18'
-				Case 'mov ebx,dword[ecx]'            ; added
-					$lOpCode = '8B19'                ; added
-				Case 'mov ecx,dword[ebx+ecx]'        ; added
-					$lOpCode = '8B0C0B'                ; added
+				Case 'mov ebx,dword[ecx]'
+					$lOpCode = '8B19'
+				Case 'mov ecx,dword[ebx+ecx]'
+					$lOpCode = '8B0C0B'
 				Case 'test eax,eax'
 					$lOpCode = '85C0'
 				Case 'test ebx,ebx'
@@ -621,8 +606,6 @@ Func _($aASM)
 					$lOpCode = '8B4140'
 				Case 'mov ecx,dword[ecx+4]'
 					$lOpCode = '8B4904'
-					;			Case 'mov ecx,dword[ecx+Ñ]'		; Removed following April update
-					;				$lOpCode = '8B490C'			; Removed following April update
 				Case 'mov ecx,dword[ecx+8]'
 					$lOpCode = '8B4908'
 				Case 'mov ecx,dword[ecx+34]'
@@ -639,8 +622,8 @@ Func _($aASM)
 					$lOpCode = '8B494C'
 				Case 'mov ecx,dword[ecx+50]'
 					$lOpCode = '8B4950'
-				Case 'mov ecx,dword[ecx+148]'    ; this was added following April update
-					$lOpCode = '8B8948010000'    ; this was added following April update
+				Case 'mov ecx,dword[ecx+148]'
+					$lOpCode = '8B8948010000'
 				Case 'mov ecx,dword[ecx+170]'
 					$lOpCode = '8B8970010000'
 				Case 'mov ecx,dword[ecx+194]'
@@ -711,33 +694,32 @@ Func _($aASM)
 					$lOpCode = '8D0C49'
 				Case 'lea ecx,dword[ebx+ecx*4]'
 					$lOpCode = '8D0C8B'
-				Case 'lea ecx,dword[ecx+18]'    ; this was added for crafting
-					$lOpCode = '8D4918'            ; this was added for crafting
+				Case 'lea ecx,dword[ecx+18]'
+					$lOpCode = '8D4918'
 				Case 'mov ecx,dword[ecx+edx]'
 					$lOpCode = '8B0C11'
 				Case 'push dword[ebp+8]'
 					$lOpCode = 'FF7508'
 				Case 'mov dword[eax],edi'
 					$lOpCode = '8938'
-				Case 'mov [eax+8],ecx'             ; this was added for crafting
-					$lOpCode = '894808'            ; this was added for crafting
-				Case 'mov [eax+C],ecx'             ; this was added for crafting
-					$lOpCode = '89480C'            ; this was added for crafting
-				Case 'mov ebx,dword[ecx-C]'        ; this was added
-					$lOpCode = '8B59F4'            ; this was added
-				Case 'mov [eax+!],ebx'             ; this was added
-					$lOpCode = '89580C'            ; this was added
-				Case 'mov ecx,[eax+8]'             ; this was added
-					$lOpCode = '8B4808'            ; this was added
-				Case 'lea ecx,dword[ebx+18]'       ; this was added
-					$lOpCode = '8D4B18'            ; this was added
-				Case 'mov ebx,dword[ebx+18]'       ; this was added
-					$lOpCode = '8B5B18'            ; this was added
-				Case 'mov ecx,dword[ecx+0xF4]'     ; this was added for crafting
-					$lOpCode = '8B89F4000000'      ; this was added for crafting
-				Case 'cmp ah,00' ;Added by Greg76 for scan wildcards
+				Case 'mov [eax+8],ecx'
+					$lOpCode = '894808'
+				Case 'mov [eax+C],ecx'
+					$lOpCode = '89480C'
+				Case 'mov ebx,dword[ecx-C]'
+					$lOpCode = '8B59F4'
+				Case 'mov [eax+!],ebx'
+					$lOpCode = '89580C'
+				Case 'mov ecx,[eax+8]'
+					$lOpCode = '8B4808'
+				Case 'lea ecx,dword[ebx+18]'
+					$lOpCode = '8D4B18'
+				Case 'mov ebx,dword[ebx+18]'
+					$lOpCode = '8B5B18'
+				Case 'mov ecx,dword[ecx+0xF4]'
+					$lOpCode = '8B89F4000000'
+				Case 'cmp ah,00'
 					$lOpCode = '80FC00'
-
 				Case 'mov eax,edx'
 					$lOpCode = '8BC2'
 				Case 'mov esi,edx'
@@ -780,20 +762,6 @@ Func _($aASM)
 	EndSelect
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CompleteASMCode
-; Description ...: Finalizes the ASM code by resolving all labels and references
-; Syntax.........: CompleteASMCode()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Processes the temporary ASM code string and resolves all label references
-;                  - Calculates offsets for jump and call instructions
-;                  - Handles various expression types using brackets: (), [], {}
-;                  - Must be called after all ASM instructions are added and before writing to memory
-; Related .......: _, GetLabelInfo
-;============================================================================================
 Func CompleteASMCode()
 	Local $lInExpression = False
 	Local $lExpression
@@ -840,22 +808,6 @@ Func CompleteASMCode()
 	Next
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: ASMNumber
-; Description ...: Converts a decimal or hex number to the appropriate ASM format
-; Syntax.........: ASMNumber($aNumber, $aSmall = False)
-; Parameters ....: $aNumber - Number to convert
-;                  $aSmall  - [optional] If True, try to represent as a small (1-byte) value
-; Return values .: The converted number as a hex string
-;                  @extended is set to 1 if using small format, 0 otherwise
-; Author ........:
-; Modified.......:
-; Remarks .......: - Small numbers (-128 to 127) can be represented in 1 byte if $aSmall is True
-;                  - Otherwise, numbers are represented as 4-byte values (DWORD)
-;                  - Handles both positive and negative values
-;                  - Used for immediate values in assembly instructions
-; Related .......: SwapEndian
-;============================================================================================
 Func ASMNumber($aNumber, $aSmall = False)
 	If $aNumber >= 0 Then
 		$aNumber = Dec($aNumber)
@@ -867,38 +819,11 @@ Func ASMNumber($aNumber, $aSmall = False)
 	EndIf
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: GetLabelInfo
-; Description ...: Retrieves the memory address for a label
-; Syntax.........: GetLabelInfo($aLab)
-; Parameters ....: $aLab - Label name to look up
-; Return values .: Memory address associated with the label
-; Author ........:
-; Modified.......:
-; Remarks .......: - Uses GetValue to retrieve the label's value from the global labels array
-;                  - Essential for jump and call instructions that reference labels
-;                  - Returns -1 if the label does not exist
-; Related .......: GetValue, CompleteASMCode
-;============================================================================================
 Func GetLabelInfo($aLab)
 	Local Const $lVal = GetValue($aLab)
 	Return $lVal
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: AddPattern
-; Description ...: Adds a pattern to the ASM code for memory scanning
-; Syntax.........: AddPattern($aPattern)
-; Parameters ....: $aPattern - Hex string pattern to add
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76 (for scan wildcards)
-; Remarks .......: - Creates a pattern header with size information
-;                  - Adds padding to align to 68-byte boundaries
-;                  - Used for scanning memory to find specific code patterns
-;                  - Supports wildcards in patterns (00 bytes are treated as wildcards)
-; Related .......: Scan
-;============================================================================================
 Func AddPattern($aPattern)
     Local $lSize = Int(0.5 * StringLen($aPattern))
     Local $pattern_header = "00000000" & _
@@ -915,57 +840,14 @@ Func AddPattern($aPattern)
     Next
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: GetScannedAddress
-; Description ...: Retrieves a memory address based on a scan label and offset
-; Syntax.........: GetScannedAddress($aLabel, $aOffset)
-; Parameters ....: $aLabel  - Label name for the scanned pattern
-;                  $aOffset - Offset to add to the scanned address
-; Return values .: Final calculated memory address
-; Author ........:
-; Modified.......:
-; Remarks .......: - Calculates the address by reading from the label's info in memory
-;                  - Adds the specified offset to the base address
-;                  - Used to find specific memory locations in the Guild Wars process
-; Related .......: GetLabelInfo
-;============================================================================================
 Func GetScannedAddress($aLabel, $aOffset)
 	Return MemoryRead(GetLabelInfo($aLabel) + 8) - MemoryRead(GetLabelInfo($aLabel) + 4) + $aOffset
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: WriteDetour
-; Description ...: Creates a jump detour from one memory location to another
-; Syntax.........: WriteDetour($aFrom, $aTo)
-; Parameters ....: $aFrom - Source label name
-;                  $aTo   - Destination label name
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Writes a jump instruction (E9) to redirect execution flow
-;                  - Calculates the relative offset between source and destination
-;                  - Used to hook Guild Wars functions for custom functionality
-;                  - Essential for implementing event callbacks and function overrides
-; Related .......: WriteBinary, GetLabelInfo
-;============================================================================================
 Func WriteDetour($aFrom, $aTo)
 	WriteBinary('E9' & SwapEndian(Hex(GetLabelInfo($aTo) - GetLabelInfo($aFrom) - 5)), GetLabelInfo($aFrom))
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CreateData
-; Description ...: Creates the data section in assembly memory
-; Syntax.........: CreateData()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Allocates space for variables, counters, and buffers
-;                  - Creates all necessary data structures for the ASM code
-;                  - Must be called before creating any functional code sections
-;                  - Defines the memory layout for the injection
-; Related .......: ModifyMemory
-;============================================================================================
 Func CreateData()
 	_('CallbackHandle/4')
 	_('QueueCounter/4')
@@ -992,20 +874,6 @@ Func CreateData()
 	_('AgentCopyBase/' & 0x1C0 * 256)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CreateMain
-; Description ...: Creates the main procedure in assembly
-; Syntax.........: CreateMain()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Generates the main entry point for the injected code
-;                  - Handles command queue processing and dispatching
-;                  - Implements the core execution loop that processes commands
-;                  - Essential for the operation of all GwAu3 functionality
-; Related .......: ModifyMemory
-;============================================================================================
 Func CreateMain()
 	_('MainProc:')
 	_('nop x')
@@ -1057,20 +925,6 @@ Func CreateMain()
 	_('ljmp MainReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CreateTargetLog, CreateChatLog
-; Description ...: Creates various logging functions in assembly
-; Syntax.........: CreateTargetLog(), etc.
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Each function creates a specific event logging procedure
-;                  - Handles intercepting and recording game events
-;                  - Stores data for later retrieval by callback functions
-;                  - Sends Windows messages to notify AutoIt code of events
-; Related .......: ModifyMemory, Event
-;============================================================================================
 Func CreateTargetLog()
 	_('TargetLogProc:')
 	_('cmp ecx,4')
@@ -1148,24 +1002,8 @@ Func CreateChatLog()
 	_('add edi,E')
 	_('cmp eax,B')
 	_('ljmp ChatLogReturn')
-EndFunc   ;==>CreateChatLog
+EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CreateTraderHook, CreateDialogHook, CreateLoadFinished, CreateStringLog
-; Description ...: Creates various hook functions in assembly
-; Syntax.........: CreateTraderHook(), CreateDialogHook(), etc.
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Each function creates a specific hook for a game function
-;                  - Intercepts game operations to modify or record data
-;                  - TraderHook monitors trading operations
-;                  - DialogHook tracks dialog interactions
-;                  - LoadFinished detects map loading completion
-;                  - StringLog captures game text strings
-; Related .......: ModifyMemory
-;============================================================================================
 Func CreateTraderHook()
 	_('TraderHookProc:')
 	_('push eax')
@@ -1238,7 +1076,7 @@ Func CreateLoadFinished()
 	_('mov edx,dword[esi+1C]')
 	_('mov ecx,edi')
 	_('ljmp LoadFinishedReturn')
-EndFunc   ;==>CreateLoadFinished
+EndFunc
 
 Func CreateStringLog()
 	_('StringLogProc:')
@@ -1286,20 +1124,6 @@ Func CreateStringLog()
 	_('retn 10')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CreateStringFilter1, CreateStringFilter2
-; Description ...: Creates string filtering procedures in assembly
-; Syntax.........: CreateStringFilter1(), CreateStringFilter2()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Filters string data from the game client
-;                  - Sets up flags to capture specific types of strings
-;                  - Used in conjunction with StringLog to capture text data
-;                  - Essential for monitoring chat, descriptions, and other text
-; Related .......: CreateStringLog, ModifyMemory
-;============================================================================================
 Func CreateStringFilter1()
 	_('StringFilter1Proc:')
 	_('mov dword[NextStringType],1')
@@ -1322,20 +1146,6 @@ Func CreateStringFilter2()
 	_('ljmp StringFilter2Return')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CreateRenderingMod
-; Description ...: Creates the rendering modification procedure in assembly
-; Syntax.........: CreateRenderingMod()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......:
-; Remarks .......: - Modifies the game's rendering pipeline
-;                  - Can enable/disable rendering for performance optimization
-;                  - Allows for custom rendering modifications
-;                  - Current implementation primarily controls rendering toggle
-; Related .......: ModifyMemory
-;============================================================================================
 Func CreateRenderingMod()
 ;~ 	_('RenderingModProc:')
 ;~ 	_('cmp dword[DisableRendering],1')
@@ -1362,28 +1172,7 @@ Func CreateRenderingMod()
 	_("ljmp RenderingModReturn")
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: CreateCommands
-; Description ...: Creates all command handling procedures in assembly
-; Syntax.........: CreateCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Generates assembly code for all supported game commands
-;                  - Each command has a specific handler (Move, etc.)
-;                  - Implements the interface between AutoIt and the game client
-;                  - Comprehensive set of functions for game interaction
-;                  - All commands route through the command queue system
-; Related .......: ModifyMemory, PerformAction, SendPacket
-;============================================================================================
 Func CreateCommands()
-	_('CommandMove:')
-	_('lea eax,dword[eax+4]')
-	_('push eax')
-	_('call MoveFunction')
-	_('pop eax')
-	_('ljmp CommandReturn')
 
 	_('CommandPacketSend:')
 	_('lea edx,dword[eax+8]')
@@ -1408,16 +1197,16 @@ Func CreateCommands()
 	_('ljmp CommandReturn')
 
 	_("CommandWriteChat:")
-	_("push 0")    ; new from April update
+	_("push 0")
 	_("add eax,4")
 	_("push eax")
 	_("call WriteChatFunction")
-	_("add esp,8")                ; was _('pop eax') before April change
+	_("add esp,8")
 	_("ljmp CommandReturn")
 
 	_("CommandAction:")
 	_("mov ecx,dword[ActionBase]")
-	_("mov ecx,dword[ecx+c]")    ; was _("mov ecx,dword[ecx+!]")
+	_("mov ecx,dword[ecx+c]")
 	_("add ecx,A0")
 	_("push 0")
 	_("add eax,4")
@@ -1454,22 +1243,6 @@ Func CreateCommands()
 	_('ljmp CommandReturn')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: ModifyMemory
-; Description ...: Main function to modify Guild Wars memory with custom code
-; Syntax.........: ModifyMemory()
-; Parameters ....: None
-; Return values .: None
-; Author ........:
-; Modified.......: Greg76
-; Remarks .......: - Central function that orchestrates all memory modifications
-;                  - Initializes ASM variables and structures
-;                  - Calls all Create* functions to build the complete code injection
-;                  - Allocates memory if needed or uses existing allocation
-;                  - Sets up all detours to redirect game functions
-;                  - Must be called after Initialize() to take effect
-; Related .......: CompleteASMCode, WriteBinary, WriteDetour
-;============================================================================================
 Func ModifyMemory()
 	$mASMSize = 0
 	$mASMCodeOffset = 0
@@ -1485,7 +1258,7 @@ Func ModifyMemory()
 ;~ 	CreateStringFilter2()
 	CreateRenderingMod()
 	CreateCommands()
-	_SkillMod_CreateCommands() ; _SkillMod_UseSkill & _SkillMod_UseHeroSkill
+	_SkillMod_CreateCommands()
 ;~ 	_SkillMod_CreateSkillLogFunctions()
 	_AttributeMod_CreateCommands()
 	_TradeMod_CreateCommands()
