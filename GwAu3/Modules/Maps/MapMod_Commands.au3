@@ -18,6 +18,7 @@ Func _MapMod_Move($fX, $fY, $fRandomize = 50)
     $g_fLastMoveY = $fY
 
     ; Set move data
+	DllStructSetData($g_mMove, 1, GetValue('CommandMove'))
     DllStructSetData($g_mMove, 2, $fX)
     DllStructSetData($g_mMove, 3, $fY)
     DllStructSetData($g_mMove, 4, 0)  ; Z coordinate (usually 0)

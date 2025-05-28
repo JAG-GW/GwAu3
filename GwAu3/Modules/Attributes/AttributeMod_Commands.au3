@@ -19,6 +19,7 @@ Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
 
     ; Increase attribute one point at a time (Guild Wars limitation)
     For $i = 1 To $iAmount
+		DllStructSetData($g_mIncreaseAttribute, 1, GetValue('CommandIncreaseAttribute'))
         DllStructSetData($g_mIncreaseAttribute, 2, $iAttributeID)
 		If $aHeroNumber <> 0 Then
 			DllStructSetData($g_mIncreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
@@ -58,6 +59,7 @@ Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
 
     ; Decrease attribute one point at a time (Guild Wars limitation)
     For $i = 1 To $iAmount
+		DllStructSetData($g_mDecreaseAttribute, 1, GetValue('CommandDecreaseAttribute'))
         DllStructSetData($g_mDecreaseAttribute, 2, $iAttributeID)
         If $aHeroNumber <> 0 Then
 			DllStructSetData($g_mDecreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))

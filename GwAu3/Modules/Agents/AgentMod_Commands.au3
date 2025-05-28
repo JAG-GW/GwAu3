@@ -14,6 +14,7 @@ Func _AgentMod_ChangeTarget($iAgentID)
         Return False
     EndIf
 
+	DllStructSetData($g_mChangeTarget, 1, GetValue('CommandChangeTarget'))
     DllStructSetData($g_mChangeTarget, 2, $iAgentID)
     Enqueue($g_mChangeTargetPtr, 8)
 
@@ -34,6 +35,7 @@ Func _AgentMod_MakeAgentArray($iType = 0)
         Return False
     EndIf
 
+	DllStructSetData($g_mMakeAgentArray, 1, GetValue('CommandMakeAgentArray'))
     DllStructSetData($g_mMakeAgentArray, 2, $iType)
     Enqueue($g_mMakeAgentArrayPtr, 8)
 

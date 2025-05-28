@@ -111,11 +111,6 @@ Func _SkillMod_DefinePatterns()
     AddPattern('741D6A006A48') ; COULD NOT UPDATE! 23.12.24
 EndFunc
 
-Func _SkillMod_SetupStructures()
-    DllStructSetData($g_mUseSkill, 1, GetValue('CommandUseSkill'))
-    DllStructSetData($g_mUseHeroSkill, 1, GetValue('CommandUseHeroSkill'))
-EndFunc
-
 Func _SkillMod_CreateCommands()
 	_('CommandUseSkill:')
 	_('mov ecx,dword[eax+10]')

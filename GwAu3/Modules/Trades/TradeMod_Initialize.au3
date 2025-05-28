@@ -89,14 +89,6 @@ Func _TradeMod_InitializeData()
     SetValue('BuyItemBase', Ptr($g_mBuyItemBase))
     _Log_Debug("BuyItemBase: " & Ptr($g_mBuyItemBase), "TradeMod", $GUIEdit)
 
-    ; Read trader data addresses
-    $g_mTraderQuoteID = GetValue('TraderQuoteID')
-    $g_mTraderCostID = GetValue('TraderCostID')
-    $g_mTraderCostValue = GetValue('TraderCostValue')
-    _Log_Debug("TraderQuoteID: " & Ptr($g_mTraderQuoteID), "TradeMod", $GUIEdit)
-    _Log_Debug("TraderCostID: " & Ptr($g_mTraderCostID), "TradeMod", $GUIEdit)
-    _Log_Debug("TraderCostValue: " & Ptr($g_mTraderCostValue), "TradeMod", $GUIEdit)
-
     ; Read salvage global address
     $g_mSalvageGlobal = MemoryRead(GetScannedAddress('ScanSalvageGlobal', 1) - 0x4)
     If $g_mSalvageGlobal = 0 Then _Log_Error("Invalid SalvageGlobal address", "TradeMod", $GUIEdit)
@@ -147,17 +139,6 @@ Func _TradeMod_DefinePatterns()
 	AddPattern('33C58945FC8B45088945F08B450C8945F48B45108945F88D45EC506A10C745EC76') ; UPDATED 24.12.24
     _('ScanSalvageGlobal:')
 	AddPattern('8B4A04538945F48B4208') ; UPDATED 24.12.24
-EndFunc
-
-Func _TradeMod_SetupStructures()
-    DllStructSetData($g_mSellItem, 1, GetValue('CommandSellItem'))
-    DllStructSetData($g_mBuyItem, 1, GetValue('CommandBuyItem'))
-    DllStructSetData($g_mCraftItemEx, 1, GetValue('CommandCraftItemEx'))
-    DllStructSetData($g_mRequestQuote, 1, GetValue('CommandRequestQuote'))
-    DllStructSetData($g_mRequestQuoteSell, 1, GetValue('CommandRequestQuoteSell'))
-    DllStructSetData($g_mTraderBuy, 1, GetValue('CommandTraderBuy'))
-    DllStructSetData($g_mTraderSell, 1, GetValue('CommandTraderSell'))
-    DllStructSetData($g_mSalvage, 1, GetValue('CommandSalvage'))
 EndFunc
 
 Func _TradeMod_CreateSellItemCommand()

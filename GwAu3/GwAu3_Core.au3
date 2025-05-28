@@ -32,18 +32,23 @@ EndIf
 Global $mInviteGuild = DllStructCreate('ptr;dword;dword header;dword counter;wchar name[32];dword type')
 Global $mInviteGuildPtr = DllStructGetPtr($mInviteGuild)
 
-Global $mWriteChat = DllStructCreate('ptr')
-Global $mWriteChatPtr = DllStructGetPtr($mWriteChat)
-
-Global $mToggleLanguage = DllStructCreate('ptr;dword')
-Global $mToggleLanguagePtr = DllStructGetPtr($mToggleLanguage)
-
 Global $mSendChat = DllStructCreate('ptr;dword')
 Global $mSendChatPtr = DllStructGetPtr($mSendChat)
 
 Global $mChangeStatus = DllStructCreate('ptr;dword')
 Global $mChangeStatusPtr = DllStructGetPtr($mChangeStatus)
 
+Global $mAction = DllStructCreate('ptr;dword;dword;')
+Global $mActionPtr = DllStructGetPtr($mAction)
+
+Global $mPacket = DllStructCreate('ptr;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword')
+Global $mPacketPtr = DllStructGetPtr($mPacket)
+
+Global $mBasePointer
+Global $mPacketLocation
+Global $mQueueCounter
+Global $mQueueSize
+Global $mQueueBase
 Global $mPreGameContextAddr
 Global $mFrameArray
 #EndRegion CommandStructs
@@ -124,7 +129,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	SetValue('BasePointer', Ptr($mBasePointer))
 	_Log_Debug("BasePointer: " & Ptr($mBasePointer), "Initialize", $GUIEdit)
 
-	$mPacketLocation = Ptr(MemoryRead(GetScannedAddress('ScanBaseOffset', 0xB)))
+	$mPacketLocation = Ptr(MemoryRead(GetScannedAddress('ScanPacketLocation', 0xB)))
 	SetValue('PacketLocation', $mPacketLocation)
 	_Log_Debug("PacketLocation: " & $mPacketLocation, "Initialize", $GUIEdit)
 
@@ -144,6 +149,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	_AttributeMod_Initialize()
 	_TradeMod_Initialize()
 	_AgentMod_Initialize()
+	_MapMod_Initialize()
 
 	$lTemp = GetScannedAddress('ScanEngine', -0x22)
 	SetValue('MainStart', Ptr($lTemp))
@@ -156,12 +162,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	$lTemp = GetScannedAddress('ScanTraderHook', -0x2F)
 	SetValue('TraderHookStart', Ptr($lTemp))
 	SetValue('TraderHookReturn', Ptr($lTemp + 0x5))
-
-	SetValue('PostMessage', Ptr(MemoryRead(GetScannedAddress('ScanPostMessage', 0xB))))
-
-	SetValue('Sleep', MemoryRead(MemoryRead(GetValue('ScanSleep') + 0x8) + 0x3))
-
-	SetValue('WriteChatFunction', Ptr(GetScannedAddress('ScanWriteChatFunction', -0x3D)))
 
 	SetValue('PacketSendFunction', Ptr(GetScannedAddress('ScanPacketSendFunction', -0x50)))
 
@@ -178,10 +178,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	$mQueueCounter = MemoryRead(GetValue('QueueCounter'))
 	$mQueueSize = GetValue('QueueSize') - 1
 	$mQueueBase = GetValue('QueueBase')
-	$mEnsureEnglish = GetValue('EnsureEnglish')
-	$mTraderQuoteID = GetValue('TraderQuoteID')
-	$mTraderCostID = GetValue('TraderCostID')
-	$mTraderCostValue = GetValue('TraderCostValue')
 	$mDisableRendering = GetValue('DisableRendering')
 
 	If $mUseEventSystem Then
@@ -194,16 +190,15 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	DllStructSetData($mInviteGuild, 2, 0x4C)
 	DllStructSetData($mPacket, 1, GetValue('CommandPacketSend'))
 	DllStructSetData($mAction, 1, GetValue('CommandAction'))
-	DllStructSetData($mToggleLanguage, 1, GetValue('CommandToggleLanguage'))
 	DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
 	DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
-	DllStructSetData($mWriteChat, 1, GetValue('CommandWriteChat'))
 	DllStructSetData($mChangeStatus, 1, GetValue('CommandChangeStatus'))
-	_SkillMod_SetupStructures()
-	_AttributeMod_SetupStructures()
-	_TradeMod_SetupStructures()
-	_AgentMod_SetupStructures()
-	_MapMod_SetupStructures()
+
+	$g_mAgentCopyCount = GetValue('AgentCopyCount')
+	$g_mAgentCopyBase = GetValue('AgentCopyBase')
+	$g_mTraderQuoteID = GetValue('TraderQuoteID')
+    $g_mTraderCostID = GetValue('TraderCostID')
+    $g_mTraderCostValue = GetValue('TraderCostValue')
 
 	If $bChangeTitle Then
 		WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
@@ -232,20 +227,14 @@ Func Scan()
 	_('ScanRenderFunc:')
 	AddPattern('F6C401741C68B1010000BA')
 
-	_('ScanPostMessage:')
-	AddPattern('6A00680080000051FF15')
-
 	_('ScanPing:')
 	AddPattern('E874651600')
 
 	_('ScanPacketSendFunction:')
 	AddPattern('C747540000000081E6')
 
-	_('ScanBaseOffset:')
+	_('ScanPacketLocation:')
 	AddPattern('83C40433C08BE55DC3A1')
-
-	_('ScanWriteChatFunction:')
-	AddPattern('8D85E0FEFFFF50681C01')
 
 	_('ScanActionFunction:')
 	AddPattern('8B7508578BF983FE09750C6876')
@@ -253,14 +242,8 @@ Func Scan()
 	_('ScanActionBase:')
 	AddPattern('8D1C87899DF4')
 
-	_('ScanBuyItemFunction:')
-	AddPattern('D9EED9580CC74004')
-
 	_('ScanTraderHook:')
 	AddPattern('50516A466A06')
-
-	_('ScanSleep:')
-	AddPattern('6A0057FF15D8408A006860EA0000')
 
 	_('ScanChangeStatusFunction:')
 	AddPattern('558BEC568B750883FE047C14')

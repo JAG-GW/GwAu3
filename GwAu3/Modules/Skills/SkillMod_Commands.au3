@@ -20,6 +20,7 @@ Func _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
 
     $iSkillSlot = $iSkillSlot - 1
 
+	DllStructSetData($g_mUseSkill, 1, GetValue('CommandUseSkill'))
     DllStructSetData($g_mUseSkill, 2, GetWorldInfo("MyID"))
     DllStructSetData($g_mUseSkill, 3, $iSkillSlot)
     DllStructSetData($g_mUseSkill, 4, $iAgentID)
@@ -50,26 +51,27 @@ Func _SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
         Return False
     EndIf
 
-    Local $iHeroAgentID = GetMyPartyHeroInfo($iHeroIndex, "AgentID")
-    If $iHeroAgentID = 0 Then
+    $iHeroIndex = GetMyPartyHeroInfo($iHeroIndex, "AgentID")
+    If $iHeroIndex = 0 Then
         _Log_Error("Hero not found or not in party: " & $iHeroIndex, "SkillMod", $GUIEdit)
         Return False
     EndIf
 
-	Local $iAgentID = ConvertID($iTargetID)
-    If $iAgentID = 0 Then
-        _Log_Error("Target not found: " & $iAgentID, "SkillMod", $GUIEdit)
+	$iTargetID = ConvertID($iTargetID)
+    If $iTargetID = 0 Then
+        _Log_Error("Target not found: " & $iTargetID, "SkillMod", $GUIEdit)
         Return False
     EndIf
 
     $iSkillSlot = $iSkillSlot - 1
 
-    DllStructSetData($g_mUseHeroSkill, 2, $iHeroAgentID)
-    DllStructSetData($g_mUseHeroSkill, 3, $iSkillSlot)
-	DllStructSetData($g_mUseHeroSkill, 4, $iAgentID)
+	DllStructSetData($g_mUseHeroSkill, 1, GetValue('CommandUseHeroSkill'))
+    DllStructSetData($g_mUseHeroSkill, 2, $iHeroIndex)
+	DllStructSetData($g_mUseHeroSkill, 3, $iTargetID)
+    DllStructSetData($g_mUseHeroSkill, 4, $iSkillSlot)
 
     Enqueue($g_mUseHeroSkillPtr, 16)
 
-    _Log_Debug("Hero " & $iHeroIndex & " used skill " & ($iSkillSlot + 1) & " on target: " & ConvertID($iTargetID), "SkillMod", $GUIEdit)
+    _Log_Debug("Hero " & $iHeroIndex & " used skill " & ($iSkillSlot + 1) & " on target: " & $iTargetID, "SkillMod", $GUIEdit)
     Return True
 EndFunc

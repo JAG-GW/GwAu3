@@ -60,7 +60,7 @@ Func _MapMod_InitializeData()
 	_Log_Debug("ClickCoordsY: " & Ptr($g_mClickCoordsY), "MapMod", $GUIEdit)
 
 	$g_mRegion = MemoryRead(GetScannedAddress('ScanRegion', -0x3))
-   _Log_Debug("Region: " & Ptr($g_mRegion), "Initialize", $GUIEdit)
+   _Log_Debug("Region: " & Ptr($g_mRegion), "MapMod", $GUIEdit)
 EndFunc
 
 Func _MapMod_InitializeCommands()
@@ -102,10 +102,6 @@ Func _MapMod_DefinePatterns()
 
 	_('ScanRegion:')
 	AddPattern('6A548D46248908')
-EndFunc
-
-Func _MapMod_SetupStructures()
-    DllStructSetData($g_mMove, 1, GetValue('CommandMove'))
 EndFunc
 
 Func _MapMod_CreateCommands()

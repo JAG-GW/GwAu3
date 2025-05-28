@@ -135,6 +135,7 @@ Func SendWhisper($aReceiver, $aMessage)
 EndFunc   ;==>SendWhisper
 
 ;~ Description: Send a message to chat.
+;~ '!' = All, '@' = Guild, '#' = Team, '$' = Trade, '%' = Alliance, '"' = Whisper
 Func SendChat($aMessage, $aChannel = '!')
 	Local $lMessage
 	Local $lAddress = 256 * $mQueueCounter + $mQueueBase

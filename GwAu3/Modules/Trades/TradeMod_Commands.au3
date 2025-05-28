@@ -17,6 +17,7 @@ Func _TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
         Return False
     EndIf
 
+	DllStructSetData($g_mSellItem, 1, GetValue('CommandSellItem'))
     DllStructSetData($g_mSellItem, 2, $iItemID)
     DllStructSetData($g_mSellItem, 3, $iQuantity)
     DllStructSetData($g_mSellItem, 4, $iMerchantID)
@@ -53,6 +54,7 @@ Func _TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID = 0)
         Return False
     EndIf
 
+	DllStructSetData($g_mBuyItem, 1, GetValue('CommandBuyItem'))
     DllStructSetData($g_mBuyItem, 2, $iItemID)
     DllStructSetData($g_mBuyItem, 3, $iQuantity)
     DllStructSetData($g_mBuyItem, 4, $iPrice)
@@ -93,6 +95,7 @@ Func _TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCrafterI
         $pMaterialsPtr = Ptr($aMaterials)
     EndIf
 
+	DllStructSetData($g_mCraftItemEx, 1, GetValue('CommandCraftItemEx'))
     DllStructSetData($g_mCraftItemEx, 2, $iRecipeID)
     DllStructSetData($g_mCraftItemEx, 3, $iQuantity)
     DllStructSetData($g_mCraftItemEx, 4, $pMaterialsPtr)
@@ -121,6 +124,7 @@ Func _TradeMod_RequestQuote($iItemID)
         Return False
     EndIf
 
+	DllStructSetData($g_mRequestQuote, 1, GetValue('CommandRequestQuote'))
     DllStructSetData($g_mRequestQuote, 2, $iItemID)
 
     Enqueue($g_mRequestQuotePtr, 8)
@@ -144,6 +148,7 @@ Func _TradeMod_RequestQuoteSell($iItemID)
         Return False
     EndIf
 
+	DllStructSetData($g_mRequestQuoteSell, 1, GetValue('CommandRequestQuoteSell'))
     DllStructSetData($g_mRequestQuoteSell, 2, $iItemID)
 
     Enqueue($g_mRequestQuoteSellPtr, 8)
@@ -171,6 +176,7 @@ Func _TradeMod_TraderBuy()
         Return False
     EndIf
 
+	DllStructSetData($g_mTraderBuy, 1, GetValue('CommandTraderBuy'))
     Enqueue($g_mTraderBuyPtr, 4)
 
     ; Record for tracking
@@ -197,6 +203,7 @@ Func _TradeMod_TraderSell()
         Return False
     EndIf
 
+	DllStructSetData($g_mTraderSell, 1, GetValue('CommandTraderSell'))
     Enqueue($g_mTraderSellPtr, 4)
 
     ; Record for tracking
@@ -229,6 +236,7 @@ Func _TradeMod_SalvageItem($iItemID, $iSalvageKitID, $iSalvageType = $SALVAGE_TY
         Return False
     EndIf
 
+	DllStructSetData($g_mSalvage, 1, GetValue('CommandSalvage'))
     DllStructSetData($g_mSalvage, 2, $iItemID)
     DllStructSetData($g_mSalvage, 3, $iSalvageKitID)
     DllStructSetData($g_mSalvage, 4, $iSalvageType)

@@ -37,18 +37,6 @@ Global $g_iLastTargetID = 0
 #EndRegion Module Global Variables
 
 #Region Initialize Functions
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_Initialize
-; Description ...: Initializes the agent management module
-; Syntax.........: _AgentMod_Initialize()
-; Parameters ....: None
-; Return values .: True if initialization succeeds, False otherwise
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Must be called after main initialization
-;                  - Sets up all necessary data for agent operations
-; Related .......: _AgentMod_Cleanup
-;============================================================================================
 Func _AgentMod_Initialize()
     If $g_bAgentModuleInitialized Then
         _Log_Warning("AgentMod module already initialized", "AgentMod", $GUIEdit)
@@ -65,17 +53,6 @@ Func _AgentMod_Initialize()
     Return True
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_InitializeData
-; Description ...: Initializes agent base data
-; Syntax.........: _AgentMod_InitializeData()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Internal module function
-; Related .......: _AgentMod_Initialize
-;============================================================================================
 Func _AgentMod_InitializeData()
    $g_mAgentBase = MemoryRead(GetScannedAddress('ScanAgentArray', -0x3))
    SetValue('AgentBase', Ptr($g_mAgentBase))
@@ -93,33 +70,11 @@ Func _AgentMod_InitializeData()
    _Log_Debug("CurrentTarget: " & Ptr($g_mCurrentTarget), "AgentMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_InitializeCommands
-; Description ...: Initializes command and function addresses
-; Syntax.........: _AgentMod_InitializeCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Internal module function
-; Related .......: _AgentMod_Initialize
-;============================================================================================
 Func _AgentMod_InitializeCommands()
     SetValue('ChangeTargetFunction', Ptr(GetScannedAddress('ScanChangeTargetFunction', -0x0086) + 1))
 	_Log_Debug("ChangeTargetFunction: " & GetValue('ChangeTargetFunction'), "AgentMod", $GUIEdit)
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_Cleanup
-; Description ...: Cleans up module resources
-; Syntax.........: _AgentMod_Cleanup()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Should be called when closing the application
-; Related .......: _AgentMod_Initialize
-;============================================================================================
 Func _AgentMod_Cleanup()
     If Not $g_bAgentModuleInitialized Then Return
 
@@ -130,18 +85,6 @@ EndFunc
 #EndRegion Initialize Functions
 
 #Region Pattern, Structure & Assembly Code Generation
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_DefinePatterns
-; Description ...: Defines scan patterns for agent-related functions
-; Syntax.........: _AgentMod_DefinePatterns()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Called during the scan phase of initialization
-;                  - Note: Most agent patterns are defined in main scan
-; Related .......: _AgentMod_CreateCommands
-;============================================================================================
 Func _AgentMod_DefinePatterns()
 	_('ScanAgentBase:')
 	AddPattern('FF501083C6043BF775E2')
@@ -159,37 +102,6 @@ Func _AgentMod_DefinePatterns()
 	AddPattern('83EC08568BF13B15')
 EndFunc
 
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_SetupStructures
-; Description ...: Configures data structures for commands
-; Syntax.........: _AgentMod_SetupStructures()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Called after command creation to setup structure pointers
-; Related .......: _AgentMod_Initialize
-;============================================================================================
-Func _AgentMod_SetupStructures()
-	$g_mAgentCopyCount = GetValue('AgentCopyCount')
-	$g_mAgentCopyBase = GetValue('AgentCopyBase')
-
-    DllStructSetData($g_mChangeTarget, 1, GetValue('CommandChangeTarget'))
-    DllStructSetData($g_mMakeAgentArray, 1, GetValue('CommandMakeAgentArray'))
-EndFunc
-
-; #FUNCTION# ;===============================================================================
-; Name...........: _AgentMod_CreateCommands
-; Description ...: Creates ASM commands for agent operations
-; Syntax.........: _AgentMod_CreateCommands()
-; Parameters ....: None
-; Return values .: None
-; Author ........: Greg76
-; Modified.......:
-; Remarks .......: - Note: Agent commands are created in main CreateCommands()
-;                  - This function is kept for module consistency
-; Related .......: _AgentMod_DefinePatterns
-;============================================================================================
 Func _AgentMod_CreateCommands()
 	_("CommandChangeTarget:")
 	_("xor edx,edx")

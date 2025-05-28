@@ -160,13 +160,6 @@ Func _AttributeMod_DefinePatterns()
     AddPattern("8B8AA800000089480C5DC3CC") ; STILL WORKING 23.12.24
 EndFunc
 
-Func _AttributeMod_SetupStructures()
-    DllStructSetData($g_mIncreaseAttribute, 1, GetValue('CommandIncreaseAttribute'))
-    DllStructSetData($g_mDecreaseAttribute, 1, GetValue('CommandDecreaseAttribute'))
-;~     DllStructSetData($g_mMaxAttributes, 1, GetValue('CommandMaxAttributes'))
-;~     DllStructSetData($g_mSetAttributes, 1, GetValue('CommandSetAttributes'))
-EndFunc
-
 Func _AttributeMod_CreateCommands()
     _('CommandIncreaseAttribute:')
     _('mov edx,dword[eax+4]')

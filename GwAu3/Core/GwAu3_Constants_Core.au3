@@ -15,7 +15,7 @@ Global Const $GWA2_BUILD_DATE = "approximately 2007" ; Build date of the gwa2 li
 
 Global Const $GWAU3_VERSION = "1.0"         ; Current version of GwAu3 library
 Global Const $GWAU3_BUILD_DATE = "2025-05-21" ; Build date of the library
-Global Const $GWAU3_LAST_UPDATE = "2025-05-22" ; Last update of the library
+Global Const $GWAU3_LAST_UPDATE = "2025-05-28" ; Last update of the library
 Global Const $GWAU3_UPDATOR = "Greg76" ; Updator
 #EndRegion Version Information
 
@@ -46,14 +46,6 @@ Global $mDisableRendering                    ; Flag to enable/disable game rende
 Global $lTemp                                ; Temporary variable for various operations
 #EndRegion Game State
 
-#Region Game Data Pointers
-; Pointers to important game data structures
-Global $mBasePointer                         ; Pointer to game base structure
-Global $mPacketLocation                      ; Pointer to packet handler
-Global $mEnsureEnglish                       ; Flag to ensure English language
-Global $mWriteChatSender                     ; Pointer to chat sender
-#EndRegion Game Data Pointers
-
 #Region Assembler Variables
 ; Variables for assembler functionality
 Global $mASMString                           ; String containing assembled ASM code
@@ -70,22 +62,6 @@ Global Const $ASM_DWORD = 0x04               ; 4-byte data size (double word)
 Global Const $ASM_QWORD = 0x08               ; 8-byte data size (quad word)
 #EndRegion Assembler Constants
 
-#Region Command Processing
-; Variables related to command queue processing
-Global $mQueueCounter                        ; Current position in command queue
-Global $mQueueSize                           ; Size of command queue
-Global $mQueueBase                           ; Base address of command queue
-
-; Action command structure
-Global $mAction = DllStructCreate('ptr;dword;dword;')
-Global $mActionPtr = DllStructGetPtr($mAction)
-
-; Packet command structure
-Global $mPacket = DllStructCreate('ptr;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword')
-Global $mPacketPtr = DllStructGetPtr($mPacket)
-#EndRegion Command Processing
-
-#Region Event System
 #Region Logging System
 ; Logging related constants and variables
 Global $g_iDebugMode = True                     ; Debug mode flag for logging
