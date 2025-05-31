@@ -35,6 +35,34 @@ Func _($aASM)
 			For $i = 1 To $lBuffer
 				$mASMString &= '90'
 			Next
+		Case StringLeft($aASM, 16) = 'push dword[eax+4]'
+            $mASMSize += 3
+            $mASMString &= 'FF7004'
+        Case StringLeft($aASM, 16) = 'push dword[eax+8]'
+            $mASMSize += 3
+            $mASMString &= 'FF7008'
+        Case StringLeft($aASM, 16) = 'push dword[eax+c]'
+            $mASMSize += 3
+            $mASMString &= 'FF700C'
+        Case StringLeft($aASM, 17) = 'push dword[eax+12]'
+            $mASMSize += 3
+            $mASMString &= 'FF7012'
+        Case StringLeft($aASM, 17) = 'push dword[eax+10]'
+            $mASMSize += 3
+            $mASMString &= 'FF7010'
+        Case StringLeft($aASM, 17) = 'push dword[eax+14]'
+            $mASMSize += 3
+            $mASMString &= 'FF7014'
+		Case StringRegExp($aASM, 'push dword\[eax\+[0-9A-Fa-f]+\]')
+            Local $lOffset = StringRegExpReplace($aASM, 'push dword\[eax\+([0-9A-Fa-f]+)\]', '$1')
+            $lOffset = Dec($lOffset)
+            If $lOffset <= 0x7F Then
+                $mASMSize += 3
+                $mASMString &= 'FF70' & Hex($lOffset, 2)
+            Else
+                $mASMSize += 6
+                $mASMString &= 'FFB0' & SwapEndian(Hex($lOffset, 8))
+            EndIf
 		Case StringLeft($aASM, 5) = 'ljmp '
 			$mASMSize += 5
 			$mASMString &= 'E9{' & StringRight($aASM, StringLen($aASM) - 5) & '}'
@@ -752,6 +780,18 @@ Func _($aASM)
 					$lOpCode = '3BDE'
 				Case 'pop edi'
 					$lOpCode = '5F'
+				Case $aASM = 'push dword[eax+4]'
+					$lOpCode = 'FF7004'
+				Case $aASM = 'push dword[eax+8]'
+					$lOpCode = 'FF7008'
+				Case $aASM = 'push dword[eax+c]'
+					$lOpCode = 'FF700C'
+				Case $aASM = 'push dword[eax+10]'
+					$lOpCode = 'FF7010'
+				Case $aASM = 'push dword[eax+12]'
+					$lOpCode = 'FF7012'
+				Case $aASM = 'push dword[eax+14]'
+					$lOpCode = 'FF7014'
 				Case Else
 					_Log_Error("Could not assemble: " & $aASM, "ASM", $GUIEdit)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $aASM)

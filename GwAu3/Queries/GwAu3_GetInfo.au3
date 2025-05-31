@@ -1743,61 +1743,76 @@ EndFunc
 Func GetHeroFlagInfo($aHeroNumber = 1, $aInfo = "")
 	Local $lPtr = GetWorldInfo("HeroFlagArray")
 	Local $lSize = GetWorldInfo("HeroFlagArraySize")
-	$aHeroNumber = $aHeroNumber - 1
-	If $lPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lSize Then Return 0
+	If $lPtr = 0 Or $aHeroNumber < 1 Or $aHeroNumber >= $lSize Then Return 0
 
-    $lPtr = $lPtr + ($aHeroNumber * 0x24)
-    If $lPtr = 0 Or $aInfo = "" Then Return 0
+	local $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Local $lpartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
+	If $lHeroID = 0 Or $lpartySize = 0 Then Return 0
+
+	Local $lReadHeroID, $lHeroFlagPtr
+	For $i = 0 To $lpartySize - 1
+		$lHeroFlagPtr = $lPtr + (0x24 * $i)
+		$lReadHeroID = MemoryRead($lHeroFlagPtr + 0x4, "dword")
+		If $lHeroFlagPtr <> 0 And $lReadHeroID = $lHeroID Then ExitLoop
+	Next
+	If $lHeroFlagPtr = 0 Or $lReadHeroID <> $lHeroID Then Return 0
 
 	Switch $aInfo
 		Case "HeroID"
-			Return MemoryRead($lPtr, "dword")
+			Return MemoryRead($lHeroFlagPtr, "dword")
 		Case "AgentID"
-			Return MemoryRead($lPtr + 0x4, "dword")
+			Return MemoryRead($lHeroFlagPtr + 0x4, "dword")
 		Case "Level"
-			Return MemoryRead($lPtr + 0x8, "dword")
+			Return MemoryRead($lHeroFlagPtr + 0x8, "dword")
 		Case "Behavior"
-			Return MemoryRead($lPtr + 0xC, "dword")
+			Return MemoryRead($lHeroFlagPtr + 0xC, "dword")
 		Case "FlagX"
-			Return MemoryRead($lPtr + 0x10, "float")
+			Return MemoryRead($lHeroFlagPtr + 0x10, "float")
 		Case "FlagY"
-			Return MemoryRead($lPtr + 0x14, "float")
+			Return MemoryRead($lHeroFlagPtr + 0x14, "float")
 		Case "LockedTargetID"
-			Return MemoryRead($lPtr + 0x20, "dword")
+			Return MemoryRead($lHeroFlagPtr + 0x20, "dword")
 	EndSwitch
 
 	Return 0
 EndFunc
 
-;~ CAREFUL: This is related to your UNLOCKED Hero, HeroID is Different from GetMyPartyHeroInfo - "HeroID"
-Func GetHeroInfo($aHeroNumber, $aInfo = "")
+Func GetHeroInfo($aHeroNumber = 1, $aInfo = "")
 	Local $lPtr = GetWorldInfo("HeroInfoArray")
 	Local $lSize = GetWorldInfo("HeroInfoArraySize")
-	$aHeroNumber = $aHeroNumber - 1
-	If $lPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lSize Then Return 0
+	If $lPtr = 0 Or $aHeroNumber < 1 Or $aHeroNumber >= $lSize Then Return 0
 
-    $lPtr = $lPtr + ($aHeroNumber * 0x78)
-    If $lPtr = 0 Or $aInfo = "" Then Return 0
+	local $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+	Local $lpartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
+	If $lHeroID = 0 Or $lpartySize = 0 Then Return 0
+
+	Local $lReadHeroID, $lHeroPtr
+	For $i = 0 To $lpartySize - 1
+		$lHeroPtr = $lPtr + (0x78 * $i)
+		$lReadHeroID = MemoryRead($lHeroPtr + 0x4, "dword")
+		If $lHeroPtr <> 0 And $lReadHeroID = $lHeroID Then ExitLoop
+	Next
+	If $lHeroPtr = 0 Or $lReadHeroID <> $lHeroID Then Return 0
 
     Switch $aInfo
         Case "HeroID"
-            Return MemoryRead($lPtr, "dword")
+            Return MemoryRead($lHeroPtr, "dword")
         Case "AgentID"
-            Return MemoryRead($lPtr + 0x4, "dword")
+            Return MemoryRead($lHeroPtr + 0x4, "dword")
         Case "Level"
-            Return MemoryRead($lPtr + 0x8, "dword")
+            Return MemoryRead($lHeroPtr + 0x8, "dword")
         Case "Primary"
-            Return MemoryRead($lPtr + 0xC, "dword")
+            Return MemoryRead($lHeroPtr + 0xC, "dword")
         Case "Secondary"
-            Return MemoryRead($lPtr + 0x10, "dword")
+            Return MemoryRead($lHeroPtr + 0x10, "dword")
         Case "HeroFileID"
-            Return MemoryRead($lPtr + 0x14, "dword")
+            Return MemoryRead($lHeroPtr + 0x14, "dword")
         Case "ModelFileID"
-            Return MemoryRead($lPtr + 0x18, "dword")
+            Return MemoryRead($lHeroPtr + 0x18, "dword")
         Case "Name"
-;~ 			Local $lname = MemoryRead($lPtr + 0x50, "ptr")
+;~ 			Local $lname = MemoryRead($lHeroPtr + 0x50, "ptr")
 ;~ 			Return MemoryRead($lname, "char[20]")
-            Return MemoryRead($lPtr + 0x50, "wchar[24]")
+            Return MemoryRead($lHeroPtr + 0x50, "wchar[24]")
     EndSwitch
 
     Return 0
@@ -1805,14 +1820,29 @@ EndFunc
 #EndRegion Hero Related
 
 #Region Skillbar Related
-Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
+Func GetSkillbarInfo($aSkillSlot = 1, $aInfo = "", $aHeroNumber = 0)
 	Local $lPtr = GetWorldInfo("SkillbarArray")
 	Local $lSize = GetWorldInfo("SkillbarArraySize")
 
 	If $lPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lSize Then Return 0
+	If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
 
-    Local $lSkillbarPtr = $lPtr + ($aHeroNumber * 0xBC)
-    If $lSkillbarPtr = 0 Or $aInfo = "" Then Return 0
+	If $aHeroNumber <> 0 Then
+		local $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+		Local $lpartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
+		If $lHeroID = 0 Or $lpartySize = 0 Then Return 0
+
+		Local $lReadHeroID, $lSkillbarPtr
+		For $i = 1 To $lpartySize
+			$lSkillbarPtr = $lPtr + (0xBC * $i)
+			$lReadHeroID = MemoryRead($lSkillbarPtr, "long")
+			If $lSkillbarPtr <> 0 And $lReadHeroID = $lHeroID Then ExitLoop
+		Next
+		If $lSkillbarPtr = 0 Or $lReadHeroID <> $lHeroID Then Return 0
+	Else
+		$lSkillbarPtr = $lPtr
+		If $lSkillbarPtr = 0 Then Return 0
+	EndIf
 
     Switch $aInfo
         Case "AgentID"
@@ -1827,35 +1857,28 @@ Func GetSkillbarInfo($aSkillSlot = 0, $aInfo = "", $aHeroNumber = 0)
             Return MemoryRead($lSkillbarPtr + 0xB4, "dword")
 
         Case "SkillID"
-            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Return MemoryRead($lSkillbarPtr + 0x10 + (($aSkillSlot - 1) * 0x14), "dword")
 
         Case "IsRecharged"
-            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Local $lTimestamp = MemoryRead($lSkillbarPtr + 0xC + (($aSkillSlot - 1) * 0x14), "dword")
             If $lTimestamp = 0 Then Return True
             Return ($lTimestamp - _SkillMod_GetSkillTimer()) = 0
 
         Case "RawRecharged"
-            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Local $lTimestamp = MemoryRead($lSkillbarPtr + 0xC + (($aSkillSlot - 1) * 0x14), "dword")
 			Local $lSkillID = MemoryRead($lSkillbarPtr + 0x10 + (($aSkillSlot - 1) * 0x14), "dword")
 			Return _SkillMod_GetSkillInfo($lSkillID, "Recharge") - (_SkillMod_GetSkillTimer() - $lTimestamp)
 
         Case "Adrenaline"
-            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Return MemoryRead($lSkillbarPtr + 0x4 + (($aSkillSlot - 1) * 0x14), "dword")
 
 		Case "AdrenalineB"
-            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Return MemoryRead($lSkillbarPtr + 0x8 + (($aSkillSlot - 1) * 0x14), "dword")
 
         Case "Event"
-            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Return MemoryRead($lSkillbarPtr + 0x14 + (($aSkillSlot - 1) * 0x14), "dword")
 
         Case "HasSkill"
-            If $aSkillSlot < 1 Or $aSkillSlot > 8 Then Return 0
             Return MemoryRead($lSkillbarPtr + 0x10 + (($aSkillSlot - 1) * 0x14), "dword") <> 0
 
         Case "SlotBySkillID"

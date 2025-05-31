@@ -426,6 +426,15 @@ Func FindInRange($pattern, $mask, $offset, $start, $end)
    Return 0
 EndFunc
 
+Func ToFunctionStart($call_instruction_address, $scan_range = 0x200)
+    If $call_instruction_address = 0 Then Return 0
+
+    Local $start = $call_instruction_address
+    Local $end = BitAND($call_instruction_address - $scan_range, 0xFFFFFFFF)
+
+    Return FindInRange("558BEC", "xxx", 0, $start, $end)
+EndFunc
+
 Func _UnsignedCompare($a, $b)
    $a = BitAND($a, 0xFFFFFFFF)
    $b = BitAND($b, 0xFFFFFFFF)
