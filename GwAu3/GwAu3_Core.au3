@@ -22,6 +22,9 @@
 #include "Modules/Maps/MapMod_Initialize.au3"
 #include "Modules/Maps/MapMod_Data.au3"
 #include "Modules/Maps/MapMod_Commands.au3"
+#include "Modules/Friends/FriendMod_Initialize.au3"
+#include "Modules/Friends/FriendMod_Data.au3"
+#include "Modules/Friends/FriendMod_Commands.au3"
 
 If @AutoItX64 Then
     MsgBox(16, "Error!", "Please run all bots in 32-bit (x86) mode.")
@@ -34,9 +37,6 @@ Global $mInviteGuildPtr = DllStructGetPtr($mInviteGuild)
 
 Global $mSendChat = DllStructCreate('ptr;dword')
 Global $mSendChatPtr = DllStructGetPtr($mSendChat)
-
-Global $mChangeStatus = DllStructCreate('ptr;dword')
-Global $mChangeStatusPtr = DllStructGetPtr($mChangeStatus)
 
 Global $mAction = DllStructCreate('ptr;dword;dword;')
 Global $mActionPtr = DllStructGetPtr($mAction)
@@ -51,6 +51,7 @@ Global $mQueueSize
 Global $mQueueBase
 Global $mPreGameContextAddr
 Global $mFrameArray
+Global $mFriendList
 #EndRegion CommandStructs
 
 #Region Initialisation
@@ -136,20 +137,22 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	$mPing = MemoryRead(GetScannedAddress('ScanPing', -0x14))
 	_Log_Debug("Ping: " & Ptr($mPing), "Initialize", $GUIEdit)
 
-	$mCurrentStatus = MemoryRead(GetScannedAddress('ScanChangeStatusFunction', 0x23))
-	_Log_Debug("CurrentStatus: " & Ptr($mCurrentStatus), "Initialize", $GUIEdit)
-
 	$mPreGameContextAddr = MemoryRead(GetScannedAddress('ScanPreGameContextAddr', 0x35))
 	_Log_Debug("PreGameContextAddr: " & Ptr($mPreGameContextAddr), "Initialize", $GUIEdit)
 
 	$mFrameArray = MemoryRead(GetScannedAddress('ScanFrameArray', -0x13))
 	_Log_Debug("FrameArray: " & Ptr($mFrameArray), "Initialize", $GUIEdit)
 
+	$mFriendList = GetScannedAddress('ScanFriendList', 0)
+	$mFriendList = MemoryRead(FindInRange("57B9", "xx", 2, $mFriendList, $mFriendList + 0xFF))
+	_Log_Debug("FriendList: " & Ptr($mFriendList), "Initialize", $GUIEdit)
+
 	_SkillMod_Initialize()
 	_AttributeMod_Initialize()
 	_TradeMod_Initialize()
 	_AgentMod_Initialize()
 	_MapMod_Initialize()
+	_FriendMod_Initialize()
 
 	$lTemp = GetScannedAddress('ScanEngine', -0x22)
 	SetValue('MainStart', Ptr($lTemp))
@@ -167,8 +170,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 
 	SetValue('ActionBase', Ptr(MemoryRead(GetScannedAddress('ScanActionBase', -0x3))))
 	SetValue('ActionFunction', Ptr(GetScannedAddress('ScanActionFunction', -0x3)))
-
-	SetValue('ChangeStatusFunction', Ptr(GetScannedAddress("ScanChangeStatusFunction", 0x1)))
 
 	SetValue('QueueSize', '0x00000010')
 	SetValue('CallbackEvent', '0x00000501')
@@ -192,7 +193,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	DllStructSetData($mAction, 1, GetValue('CommandAction'))
 	DllStructSetData($mSendChat, 1, GetValue('CommandSendChat'))
 	DllStructSetData($mSendChat, 2, 0x0063) ; putting raw value, because $HEADER_SEND_CHAT_MESSAGE is used before declaration
-	DllStructSetData($mChangeStatus, 1, GetValue('CommandChangeStatus'))
 
 	$g_mAgentCopyCount = GetValue('AgentCopyCount')
 	$g_mAgentCopyBase = GetValue('AgentCopyBase')
@@ -203,7 +203,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	If $bChangeTitle Then
 		WinSetTitle($mGWWindowHandle, '', 'Guild Wars - ' & GetCharname())
 	EndIf
-	SetMaxMemory()
 
 	_Log_Info("End of Initialization.", "GwAu3", $GUIEdit)
 
@@ -245,24 +244,25 @@ Func Scan()
 	_('ScanTraderHook:')
 	AddPattern('50516A466A06')
 
-	_('ScanChangeStatusFunction:')
-	AddPattern('558BEC568B750883FE047C14')
-
 	_SkillMod_DefinePatterns()
 	_AttributeMod_DefinePatterns()
 	_TradeMod_DefinePatterns()
 	_AgentMod_DefinePatterns()
 	_MapMod_DefinePatterns()
+	_FriendMod_DefinePatterns()
 
-	Local $assertions[2][2] = [ _
+	Local $assertions[3][2] = [ _
 		["P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene"], _
-		["P:\Code\Engine\Frame\FrMsg.cpp", "frame"] _
-	]
+		["P:\Code\Engine\Frame\FrMsg.cpp", "frame"], _
+		["P:\Code\Gw\Friend\FriendApi.cpp", "friendName && *friendName"]]
+
 	Local $assertionPatterns = GetMultipleAssertionPatterns($assertions)
 	_('ScanPreGameContextAddr:')
 	AddPattern($assertionPatterns[0])
 	_('ScanFrameArray:')
 	AddPattern($assertionPatterns[1])
+	_('ScanFriendList:')
+	AddPattern($assertionPatterns[2])
 
 	_('ScanProc:')
 	_('pushad')

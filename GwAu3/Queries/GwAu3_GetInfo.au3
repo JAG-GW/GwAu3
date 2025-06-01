@@ -31,10 +31,6 @@ Func GetInstanceUpTime()
 	Return $lTimer[1]
 EndFunc   ;==>GetInstanceUpTime
 
-Func GetPlayerStatus()
-	Return MemoryRead($mCurrentStatus)
-EndFunc   ;==>GetPlayerStatus
-
 #Region PreGame Context
 ;~ No need curently
 #EndRegion PreGame Context
@@ -1091,31 +1087,50 @@ Func GetMyPartyPlayerMemberInfo($aPartyMemberNumber = 1, $aInfo = "")
     Return 0
 EndFunc
 
-Func GetMyPartyHeroInfo($aHeroNumber = 1, $aInfo = "")
+Func GetMyPartyHeroInfo($aHeroNumber = 1, $aInfo = "", $aIncludeOtherHeroPlayers = False)
     Local $lPlayerPartyPtr = GetMyPartyInfo("ArrayHeroPartyMember")
-	Local $lPlayerPartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
-	$aHeroNumber = $aHeroNumber - 1
-	If $lPlayerPartyPtr = 0 Or $aHeroNumber < 0 Or $aHeroNumber >= $lPlayerPartySize Then Return 0
+    Local $lPlayerPartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
 
-    Local $heroPtr = $lPlayerPartyPtr + ($aHeroNumber * 0x18)
-    If $heroPtr = 0 Or $aInfo = "" Then Return 0
+    If $lPlayerPartyPtr = 0 Or $aHeroNumber < 1 Or $aHeroNumber > $lPlayerPartySize Then Return 0
 
-    Switch $aInfo
+    If $aIncludeOtherHeroPlayers Then
+        $aHeroNumber = $aHeroNumber - 1
+        Local $lHeroPtr = $lPlayerPartyPtr + ($aHeroNumber * 0x18)
+    Else
+        Local $lPlayerNumber = GetCharacterInfo("PlayerNumber")
+		Local $lMatchedCount = 0
+        Local $lHeroPtr = 0
+        If $lPlayerNumber = 0 Then Return 0
+
+        For $i = 0 To $lPlayerPartySize - 1
+            Local $lCurrentHeroPtr = $lPlayerPartyPtr + ($i * 0x18)
+            Local $lOwnerNumber = MemoryRead($lCurrentHeroPtr + 0x4, "long")
+
+            If $lOwnerNumber = $lPlayerNumber Then
+                $lMatchedCount += 1
+                If $lMatchedCount = $aHeroNumber Then
+                    $lHeroPtr = $lCurrentHeroPtr
+                    ExitLoop
+                EndIf
+            EndIf
+        Next
+
+        If $lHeroPtr = 0 Then Return 0
+	EndIf
+
+	Switch $aInfo
 		Case "AgentID"
-			Return MemoryRead($heroPtr, "long")
-
-        Case "OwnerPlayerNumber"
-            Return MemoryRead($heroPtr + 0x4, "long")
-
-        Case "HeroID"
-            Return MemoryRead($heroPtr + 0x8, "long")
-
-        Case "Level"
-            Return MemoryRead($heroPtr + 0x14, "long")
-    EndSwitch
-
-    Return 0
-EndFunc
+			Return MemoryRead($lHeroPtr, "long")
+		Case "OwnerPlayerNumber"
+			Return MemoryRead($lHeroPtr + 0x4, "long")
+		Case "HeroID"
+			Return MemoryRead($lHeroPtr + 0x8, "long")
+		Case "Level"
+			Return MemoryRead($lHeroPtr + 0x14, "long")
+		Case Else
+			Return 0
+	EndSwitch
+EndFunc   ;==>GetMyPartyHeroInfo
 
 Func GetMyPartyHenchmanInfo($aHenchmanNumber = 1, $aInfo = "")
     Local $lPlayerPartyPtr = GetMyPartyInfo("ArrayHenchmanPartyMember")
@@ -1746,11 +1761,10 @@ Func GetHeroFlagInfo($aHeroNumber = 1, $aInfo = "")
 	If $lPtr = 0 Or $aHeroNumber < 1 Or $aHeroNumber >= $lSize Then Return 0
 
 	local $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
-	Local $lpartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
-	If $lHeroID = 0 Or $lpartySize = 0 Then Return 0
+	If $lHeroID = 0 Then Return 0
 
 	Local $lReadHeroID, $lHeroFlagPtr
-	For $i = 0 To $lpartySize - 1
+	For $i = 0 To $lSize - 1
 		$lHeroFlagPtr = $lPtr + (0x24 * $i)
 		$lReadHeroID = MemoryRead($lHeroFlagPtr + 0x4, "dword")
 		If $lHeroFlagPtr <> 0 And $lReadHeroID = $lHeroID Then ExitLoop
@@ -1783,11 +1797,10 @@ Func GetHeroInfo($aHeroNumber = 1, $aInfo = "")
 	If $lPtr = 0 Or $aHeroNumber < 1 Or $aHeroNumber >= $lSize Then Return 0
 
 	local $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
-	Local $lpartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
-	If $lHeroID = 0 Or $lpartySize = 0 Then Return 0
+	If $lHeroID = 0 Then Return 0
 
 	Local $lReadHeroID, $lHeroPtr
-	For $i = 0 To $lpartySize - 1
+	For $i = 0 To $lSize - 1
 		$lHeroPtr = $lPtr + (0x78 * $i)
 		$lReadHeroID = MemoryRead($lHeroPtr + 0x4, "dword")
 		If $lHeroPtr <> 0 And $lReadHeroID = $lHeroID Then ExitLoop
@@ -1829,20 +1842,19 @@ Func GetSkillbarInfo($aSkillSlot = 1, $aInfo = "", $aHeroNumber = 0)
 
 	If $aHeroNumber <> 0 Then
 		local $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
-		Local $lpartySize = GetMyPartyInfo("ArrayHeroPartyMemberSize")
-		If $lHeroID = 0 Or $lpartySize = 0 Then Return 0
-
-		Local $lReadHeroID, $lSkillbarPtr
-		For $i = 1 To $lpartySize
-			$lSkillbarPtr = $lPtr + (0xBC * $i)
-			$lReadHeroID = MemoryRead($lSkillbarPtr, "long")
-			If $lSkillbarPtr <> 0 And $lReadHeroID = $lHeroID Then ExitLoop
-		Next
-		If $lSkillbarPtr = 0 Or $lReadHeroID <> $lHeroID Then Return 0
 	Else
-		$lSkillbarPtr = $lPtr
-		If $lSkillbarPtr = 0 Then Return 0
+		local $lHeroID = GetMyID()
 	EndIf
+
+	If $lHeroID = 0 Then Return 0
+
+	Local $lReadHeroID, $lSkillbarPtr
+	For $i = 0 To $lSize - 1
+		$lSkillbarPtr = $lPtr + (0xBC * $i)
+		$lReadHeroID = MemoryRead($lSkillbarPtr, "long")
+		If $lSkillbarPtr <> 0 And $lReadHeroID = $lHeroID Then ExitLoop
+	Next
+	If $lSkillbarPtr = 0 Or $lReadHeroID <> $lHeroID Then Return 0
 
     Switch $aInfo
         Case "AgentID"

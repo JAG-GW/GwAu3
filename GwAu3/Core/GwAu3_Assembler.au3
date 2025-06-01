@@ -975,13 +975,6 @@ Func CreateCommands()
 	_('pop edx')
 	_('ljmp CommandReturn')
 
-	_('CommandChangeStatus:')
-	_('mov eax,dword[eax+4]')
-	_('push eax')
-	_('call ChangeStatusFunction')
-	_('pop eax')
-	_('ljmp CommandReturn')
-
 	_("CommandAction:")
 	_("mov ecx,dword[ActionBase]")
 	_("mov ecx,dword[ecx+c]")
@@ -1022,6 +1015,7 @@ Func ModifyMemory()
 	_TradeMod_CreateCommands()
 	_AgentMod_CreateCommands()
 	_MapMod_CreateCommands()
+	_FriendMod_CreateCommands()
 	$mMemory = MemoryRead(MemoryRead($mBase), 'ptr')
 
 	Switch $mMemory

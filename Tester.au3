@@ -136,11 +136,9 @@ While Not $BotRunning
 WEnd
 
 While $BotRunning
-	Sleep(500)
-	Out("Ready")
-	_SkillMod_UseSkill(2, -2)
-	_SkillMod_UseHeroSkill(1, 2, -2)
-	Sleep(5000)
+    Sleep(500)
+
+    Sleep(30000)
 WEnd
 
 Func Out($TEXT)

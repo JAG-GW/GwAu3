@@ -375,55 +375,70 @@ Func FindInRange($pattern, $mask, $offset, $start, $end)
     Local $patternLength = UBound($patternBytes)
     Local $found = False
 
+    $start = BitAND($start, 0xFFFFFFFF)
     $end = BitAND($end, 0xFFFFFFFF)
-    $end -= $patternLength
+
+    If $end > $start Then
+        $end = $end - $patternLength + 1
+    EndIf
 
     If $start > $end Then
         Local $i = $start
         While $i >= $end
-            If MemoryRead($i, 'byte') <> $patternBytes[0] Then
+            Local $firstByte = MemoryRead($i, 'byte')
+            If $firstByte <> $patternBytes[0] Then
                 $i -= 1
                 ContinueLoop
             EndIf
 
             $found = True
             For $idx = 0 To $patternLength - 1
-                If (Not $mask Or StringMid($mask, $idx + 1, 1) = "x") And _
-                   MemoryRead($i + $idx, 'byte') <> $patternBytes[$idx] Then
+                If $mask <> "" And StringMid($mask, $idx + 1, 1) <> "x" Then
+                    ContinueLoop
+                EndIf
+
+                Local $memByte = MemoryRead($i + $idx, 'byte')
+                If $memByte <> $patternBytes[$idx] Then
                     $found = False
                     ExitLoop
                 EndIf
             Next
 
             If $found Then
-                Return BitAND($i + $offset, 0xFFFFFFFF)
+                Return $i + $offset
             EndIf
             $i -= 1
         WEnd
     Else
-       Local $i = $start
-       While _UnsignedCompare($i, $end) < 0
-           If MemoryRead($i, 'byte') <> $patternBytes[0] Then
-               $i = BitAND($i + 1, 0xFFFFFFFF)
-               ContinueLoop
-           EndIf
+        Local $i = $start
+        While $i < $end
+            Local $firstByte = MemoryRead($i, 'byte')
+            If $firstByte <> $patternBytes[0] Then
+                $i += 1
+                ContinueLoop
+            EndIf
 
-           $found = True
-           For $idx = 0 To $patternLength - 1
-               If (Not $mask Or StringMid($mask, $idx + 1, 1) = "x") And _
-                  MemoryRead($i + $idx, 'byte') <> $patternBytes[$idx] Then
-                   $found = False
-                   ExitLoop
-               EndIf
-           Next
+            $found = True
+            For $idx = 0 To $patternLength - 1
+                If $mask <> "" And StringMid($mask, $idx + 1, 1) <> "x" Then
+                    ContinueLoop
+                EndIf
 
-           If $found Then
-               Return $i + $offset
-           EndIf
-           $i = BitAND($i + 1, 0xFFFFFFFF)
-       WEnd
-   EndIf
-   Return 0
+                Local $memByte = MemoryRead($i + $idx, 'byte')
+                If $memByte <> $patternBytes[$idx] Then
+                    $found = False
+                    ExitLoop
+                EndIf
+            Next
+
+            If $found Then
+                Return $i + $offset
+            EndIf
+            $i += 1
+        WEnd
+    EndIf
+
+    Return 0
 EndFunc
 
 Func ToFunctionStart($call_instruction_address, $scan_range = 0x200)
@@ -443,13 +458,13 @@ Func _UnsignedCompare($a, $b)
 EndFunc
 
 Func StringToByteArray($hexString)
-   Local $length = StringLen($hexString) / 2
-   Local $bytes[$length]
+    Local $length = StringLen($hexString) / 2
+    Local $bytes[$length]
 
-   For $i = 0 To $length - 1
-       Local $hexByte = StringMid($hexString, ($i * 2) + 1, 2)
-       $bytes[$i] = "0x" & $hexByte
-   Next
+    For $i = 0 To $length - 1
+        Local $hexByte = StringMid($hexString, ($i * 2) + 1, 2)
+        $bytes[$i] = Dec($hexByte)
+    Next
 
-   Return $bytes
+    Return $bytes
 EndFunc

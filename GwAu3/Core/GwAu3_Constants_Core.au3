@@ -40,7 +40,6 @@ Global $SecondInject                         ; Address of secondary code injecti
 ; Variables related to game state
 Global $mCharname                            ; Character name
 Global $mPing                                ; Current ping to server in milliseconds
-Global $mCurrentStatus                       ; Current status of the character (idle, moving, etc.)
 Global $mUseEventSystem                      ; Flag to enable/disable event system
 Global $mDisableRendering                    ; Flag to enable/disable game rendering
 Global $lTemp                                ; Temporary variable for various operations

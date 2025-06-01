@@ -30,15 +30,4 @@ Func InviteGuest($charName)
 	DllStructSetData($mInviteGuild, 6, 0x01)
 	Enqueue(DllStructGetPtr($mInviteGuild), DllStructGetSize($mInviteGuild))
 EndFunc   ;==>InviteGuest
-
-;~ Description: Change online status. 0 = Offline, 1 = Online, 2 = Do not disturb, 3 = Away
-Func SetPlayerStatus($iStatus)
-	If (($iStatus >= 0 And $iStatus <= 3) And (GetPlayerStatus() <> $iStatus)) Then
-		DllStructSetData($mChangeStatus, 2, $iStatus)
-
-		Enqueue($mChangeStatusPtr, 8)
-		Return True
-	EndIf
-	Return False
-EndFunc   ;==>SetPlayerStatus
 #EndRegion Misc Enqueue

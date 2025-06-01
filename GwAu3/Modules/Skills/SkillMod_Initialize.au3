@@ -61,21 +61,6 @@ Func _SkillMod_InitializeCommands()
 
 	SetValue('UseHeroSkillFunction', Ptr(GetScannedAddress('ScanUseHeroSkillFunction', -0x59)))
 	_Log_Debug("UseHeroSkillFunction: " & GetValue('UseHeroSkillFunction'), "SkillMod", $GUIEdit)
-
-	Local $lTemp
-	$lTemp = GetScannedAddress('ScanSkillLog', 0x1)
-	SetValue('SkillLogStart', Ptr($lTemp))
-	SetValue('SkillLogReturn', Ptr($lTemp + 0x5))
-
-	$lTemp = GetScannedAddress('ScanSkillCompleteLog', -0x4)
-	SetValue('SkillCompleteLogStart', Ptr($lTemp))
-	SetValue('SkillCompleteLogReturn', Ptr($lTemp + 0x5))
-
-	$lTemp = GetScannedAddress('ScanSkillCancelLog', 0x5)
-	SetValue('SkillCancelLogStart', Ptr($lTemp))
-	SetValue('SkillCancelLogReturn', Ptr($lTemp + 0x6))
-
-	SetValue('SkillLogSize', $SKILL_LOG_SIZE)
 EndFunc
 
 Func _SkillMod_Cleanup()
@@ -100,15 +85,6 @@ Func _SkillMod_DefinePatterns()
 
     _('ScanUseHeroSkillFunction:')
     AddPattern('BA02000000B954080000') ; STILL WORKING 23.12.24
-
-    _('ScanSkillLog:')
-    AddPattern('408946105E5B5D') ; COULD NOT UPDATE! 23.12.24
-
-    _('ScanSkillCompleteLog:')
-    AddPattern('741D6A006A40') ; COULD NOT UPDATE! 23.12.24
-
-    _('ScanSkillCancelLog:')
-    AddPattern('741D6A006A48') ; COULD NOT UPDATE! 23.12.24
 EndFunc
 
 Func _SkillMod_CreateCommands()
