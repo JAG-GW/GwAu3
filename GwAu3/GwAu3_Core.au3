@@ -143,10 +143,6 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	$mFrameArray = MemoryRead(GetScannedAddress('ScanFrameArray', -0x13))
 	_Log_Debug("FrameArray: " & Ptr($mFrameArray), "Initialize", $GUIEdit)
 
-	$mFriendList = GetScannedAddress('ScanFriendList', 0)
-	$mFriendList = MemoryRead(FindInRange("57B9", "xx", 2, $mFriendList, $mFriendList + 0xFF))
-	_Log_Debug("FriendList: " & Ptr($mFriendList), "Initialize", $GUIEdit)
-
 	_SkillMod_Initialize()
 	_AttributeMod_Initialize()
 	_TradeMod_Initialize()

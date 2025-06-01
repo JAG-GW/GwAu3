@@ -137,7 +137,9 @@ WEnd
 
 While $BotRunning
     Sleep(500)
+	Out("Ready")
 
+	Out("Done")
     Sleep(30000)
 WEnd
 

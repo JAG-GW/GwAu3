@@ -297,6 +297,26 @@ Func _($aASM)
 			Local $lOpCode = '81F9' & StringMid($aASM, 9)
 			$mASMSize += 0.5 * StringLen($lOpCode)
 			$mASMString &= $lOpCode
+		Case StringRegExp($aASM, 'mov ecx,dword\[eax\+[0-9A-Fa-f]+\]')
+			Local $lOffset = StringRegExpReplace($aASM, 'mov ecx,dword\[eax\+([0-9A-Fa-f]+)\]', '$1')
+			$lOffset = Dec($lOffset)
+			If $lOffset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8B48' & Hex($lOffset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8B88' & SwapEndian(Hex($lOffset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov edx,dword\[eax\+[0-9A-Fa-f]+\]')
+			Local $lOffset = StringRegExpReplace($aASM, 'mov edx,dword\[eax\+([0-9A-Fa-f]+)\]', '$1')
+			$lOffset = Dec($lOffset)
+			If $lOffset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8B50' & Hex($lOffset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8B90' & SwapEndian(Hex($lOffset, 8))
+			EndIf
 		Case Else
 			Local $lOpCode
 			Switch $aASM
@@ -792,6 +812,12 @@ Func _($aASM)
 					$lOpCode = 'FF7012'
 				Case $aASM = 'push dword[eax+14]'
 					$lOpCode = 'FF7014'
+				Case $aASM = 'mov ecx,dword[eax+14]'
+					$lOpCode = '8B4814'
+				Case $aASM = 'mov edx,dword[eax+14]'
+					$lOpCode = '8B5014'
+				Case $aASM = 'mov edx,dword[eax+18]'
+					$lOpCode = '8B5018'
 				Case Else
 					_Log_Error("Could not assemble: " & $aASM, "ASM", $GUIEdit)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $aASM)
