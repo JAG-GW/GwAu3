@@ -1104,9 +1104,9 @@ Func GetMyPartyHeroInfo($aHeroNumber = 1, $aInfo = "", $aIncludeOtherHeroPlayers
 
         For $i = 0 To $lPlayerPartySize - 1
             Local $lCurrentHeroPtr = $lPlayerPartyPtr + ($i * 0x18)
-            Local $lOwnerNumber = MemoryRead($lCurrentHeroPtr + 0x4, "long")
+            Local $lOwnerPlayerNumber = MemoryRead($lCurrentHeroPtr + 0x4, "long")
 
-            If $lOwnerNumber = $lPlayerNumber Then
+            If $lOwnerPlayerNumber = $lPlayerNumber Then
                 $lMatchedCount += 1
                 If $lMatchedCount = $aHeroNumber Then
                     $lHeroPtr = $lCurrentHeroPtr
@@ -1122,6 +1122,7 @@ Func GetMyPartyHeroInfo($aHeroNumber = 1, $aInfo = "", $aIncludeOtherHeroPlayers
 		Case "AgentID"
 			Return MemoryRead($lHeroPtr, "long")
 		Case "OwnerPlayerNumber"
+			If Not $aIncludeOtherHeroPlayers Then Return $lOwnerPlayerNumber
 			Return MemoryRead($lHeroPtr + 0x4, "long")
 		Case "HeroID"
 			Return MemoryRead($lHeroPtr + 0x8, "long")

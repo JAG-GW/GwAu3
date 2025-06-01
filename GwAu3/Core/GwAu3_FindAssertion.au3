@@ -9,8 +9,11 @@ Global Const $SECTION_RELOC = 4
 
 ; Array to store section address ranges
 Global $sections[5][2]  ; [section][0=start, 1=end]
-Global Const $BLOCK_SIZE = 131072 ; 128 Ko
+Global Const $BLOCK_SIZE = 262144 ; 256 Ko (doubled from 128 Ko)
 Global $g_AssertionCache[0][3] ; [file, msg, pattern]
+Global $g_SectionBuffer = 0 ; Buffer to hold entire section
+Global $g_SectionBufferSize = 0
+Global $g_CompiledPatternsCache[0][4] ; [pattern_binary, length, first_byte, last_byte]
 
 Func GetGWBaseAddress()
     If $mGWProcHandle = 0 Then
@@ -58,7 +61,6 @@ Func GetGWBaseAddress()
 EndFunc
 
 Func InitializeSections($baseAddress)
-
     Local $dosHeader = DllStructCreate("struct;word e_magic;byte[58];dword e_lfanew;endstruct")
     Local $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress, DllStructGetPtr($dosHeader), DllStructGetSize($dosHeader), 0)
     If Not $success Then
@@ -89,7 +91,6 @@ Func InitializeSections($baseAddress)
     Local $sizeOfOptionalHeader = DllStructGetData($ntHeaders, "SizeOfOptionalHeader")
     Local $sectionHeaderOffset = $e_lfanew + 24 + $sizeOfOptionalHeader
 
-    ; Clear sections array
     For $i = 0 To 4
         $sections[$i][0] = 0
         $sections[$i][1] = 0
@@ -120,26 +121,28 @@ Func InitializeSections($baseAddress)
         Local $virtualSize = DllStructGetData($sectionHeader, "VirtualSize")
         Local $SizeRawData = DllStructGetData($sectionHeader, "SizeOfRawData")
 
+        Local $actualSize = $virtualSize > $SizeRawData ? $virtualSize : $SizeRawData
+
         Switch $sectionName
             Case ".text"
                 $sections[$SECTION_TEXT][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_TEXT][1] = $sections[$SECTION_TEXT][0] + $virtualSize
+                $sections[$SECTION_TEXT][1] = $sections[$SECTION_TEXT][0] + $actualSize
 
             Case ".rdata"
                 $sections[$SECTION_RDATA][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_RDATA][1] = $sections[$SECTION_RDATA][0] + $virtualSize
+                $sections[$SECTION_RDATA][1] = $sections[$SECTION_RDATA][0] + $actualSize
 
             Case ".data"
                 $sections[$SECTION_DATA][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_DATA][1] = $sections[$SECTION_DATA][0] + $virtualSize
+                $sections[$SECTION_DATA][1] = $sections[$SECTION_DATA][0] + $actualSize
 
             Case ".rsrc"
                 $sections[$SECTION_RSRC][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_RSRC][1] = $sections[$SECTION_RSRC][0] + $virtualSize
+                $sections[$SECTION_RSRC][1] = $sections[$SECTION_RSRC][0] + $actualSize
 
             Case ".reloc"
                 $sections[$SECTION_RELOC][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_RELOC][1] = $sections[$SECTION_RELOC][0] + $virtualSize
+                $sections[$SECTION_RELOC][1] = $sections[$SECTION_RELOC][0] + $actualSize
         EndSwitch
     Next
 
@@ -148,89 +151,235 @@ Func InitializeSections($baseAddress)
         Return False
     EndIf
 
-    ; Adjust section ends
-    If $sections[$SECTION_TEXT][0] > 0 And $sections[$SECTION_RDATA][0] > 0 Then
-        $sections[$SECTION_TEXT][1] = $sections[$SECTION_RDATA][0]
-    EndIf
-    If $sections[$SECTION_RDATA][0] > 0 And $sections[$SECTION_DATA][0] > 0 Then
-        $sections[$SECTION_RDATA][1] = $sections[$SECTION_DATA][0]
-    EndIf
-    If $sections[$SECTION_DATA][0] > 0 And $sections[$SECTION_RSRC][0] > 0 Then
-        $sections[$SECTION_DATA][1] = $sections[$SECTION_RSRC][0]
-    EndIf
-    If $sections[$SECTION_RSRC][0] > 0 And $sections[$SECTION_RELOC][0] > 0 Then
-        $sections[$SECTION_RSRC][1] = $sections[$SECTION_RELOC][0]
-    EndIf
-
     Return True
 EndFunc
 
 Func _StringToBytes($str)
-    Local $result = Binary("")
+    Local $len = StringLen($str) + 1
+    Local $struct = DllStructCreate("byte[" & $len & "]")
+
     For $i = 1 To StringLen($str)
-        $result &= Binary(Chr(Asc(StringMid($str, $i, 1))))
+        DllStructSetData($struct, 1, Asc(StringMid($str, $i, 1)), $i)
     Next
-    $result &= Binary(Chr(0))
+    DllStructSetData($struct, 1, 0, $len)
 
-    Local $debug_str = ""
-    For $i = 1 To BinaryLen($result)
-        $debug_str &= Hex(BinaryMid($result, $i, 1), 2) & " "
-    Next
-
+    Local $result = DllStructGetData($struct, 1)
     Return $result
 EndFunc
 
 Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
+    If $sections[$section][0] = 0 Or $sections[$section][1] = 0 Then
+        Local $baseAddr = GetGWBaseAddress()
+        If $baseAddr = 0 Then
+            _Log_Error("Failed to get GW base address", "FindMultipleStrings", $GUIEdit)
+            Local $emptyResults[UBound($aStrings)]
+            For $i = 0 To UBound($aStrings) - 1
+                $emptyResults[$i] = 0
+            Next
+            Return $emptyResults
+        EndIf
+
+        If Not InitializeSections($baseAddr) Then
+            _Log_Error("Failed to initialize sections", "FindMultipleStrings", $GUIEdit)
+            Local $emptyResults[UBound($aStrings)]
+            For $i = 0 To UBound($aStrings) - 1
+                $emptyResults[$i] = 0
+            Next
+            Return $emptyResults
+        EndIf
+    EndIf
+
     Local $stringCount = UBound($aStrings)
     Local $results[$stringCount]
     Local $found[$stringCount]
     Local $patterns[$stringCount]
-    Local $masks[$stringCount]
     Local $lengths[$stringCount]
+    Local $skipTables[$stringCount][256]
 
     For $i = 0 To $stringCount - 1
         $results[$i] = 0
         $found[$i] = False
-    Next
-
-    For $i = 0 To $stringCount - 1
         $patterns[$i] = _StringToBytes($aStrings[$i])
         $lengths[$i] = BinaryLen($patterns[$i])
-        $masks[$i] = ""
-        For $j = 1 To $lengths[$i]
-            $masks[$i] &= "x"
+
+        For $j = 0 To 255
+            $skipTables[$i][$j] = $lengths[$i]
+        Next
+
+        For $j = 0 To $lengths[$i] - 2
+            Local $byte = Number(BinaryMid($patterns[$i], $j + 1, 1))
+            $skipTables[$i][$byte] = $lengths[$i] - $j - 1
         Next
     Next
 
     Local $start = $sections[$section][0]
     Local $end = $sections[$section][1]
-    Local $buffer = DllStructCreate("byte[" & $BLOCK_SIZE & "]")
+
+    If $start = 0 Or $end = 0 Or $start >= $end Then
+        _Log_Warning("Invalid section bounds. Start: " & Hex($start) & ", End: " & Hex($end), "FindMultipleStrings", $GUIEdit)
+        Return FindMultipleStringsFallback($aStrings, $section)
+    EndIf
+
+    Local $sectionSize = Number($end - $start)
+    Local $sectionSizeMB = Number($sectionSize) / Number(1048576) ; 1024 * 1024 = 1048576
+
+    Local $maxReadSize = 1 * 1024 * 1024 ; 1 MB max for direct read (reduced for safety)
+    Local $maxReadSizeMB = 1.0
+
+    If $sectionSize > $maxReadSize Then
+        Return FindMultipleStringsFallback($aStrings, $section)
+    EndIf
+
+    Local $sectionBuffer = DllStructCreate("byte[" & $sectionSize & "]")
+    If @error Then
+        Return FindMultipleStringsFallback($aStrings, $section)
+    EndIf
+
+    Local $bytesRead = 0
+    Local $success = DllCall($mKernelHandle, "bool", "ReadProcessMemory", _
+        "handle", $mGWProcHandle, _
+        "ptr", $start, _
+        "ptr", DllStructGetPtr($sectionBuffer), _
+        "ulong_ptr", $sectionSize, _
+        "ulong_ptr*", $bytesRead)
+
+    If @error Or Not $success[0] Or $success[5] < $sectionSize Then
+        _Log_Warning("Failed to read section into memory. Read " & $success[5] & "/" & $sectionSize & " bytes. Using fallback method.", "FindMultipleStrings", $GUIEdit)
+        Return FindMultipleStringsFallback($aStrings, $section)
+    EndIf
+
     Local $totalFound = 0
     Local $startTime = TimerInit()
-    Local $blocksSearched = 0
 
-    For $currentAddr = $start To $end Step $BLOCK_SIZE - 255
+    For $patternIdx = 0 To $stringCount - 1
+        If $found[$patternIdx] Then ContinueLoop
+
+        Local $patternLen = $lengths[$patternIdx]
+        Local $pos = $patternLen - 1
+
+        While $pos < $sectionSize
+            Local $match = True
+            Local $j = $patternLen - 1
+
+            While $j >= 0
+                Local $memByte = DllStructGetData($sectionBuffer, 1, $pos - ($patternLen - 1 - $j) + 1)
+                Local $patByte = Number(BinaryMid($patterns[$patternIdx], $j + 1, 1))
+
+                If $memByte <> $patByte Then
+                    $match = False
+                    $pos += $skipTables[$patternIdx][$memByte]
+                    ExitLoop
+                EndIf
+                $j -= 1
+            WEnd
+
+            If $match Then
+                $results[$patternIdx] = $start + $pos - ($patternLen - 1)
+                $found[$patternIdx] = True
+                $totalFound += 1
+                ExitLoop
+            EndIf
+        WEnd
+
+        If $totalFound = $stringCount Then ExitLoop
+    Next
+
+    Return $results
+EndFunc
+
+Func FindMultipleStringsFallback($aStrings, $section = $SECTION_RDATA)
+    Local $stringCount = UBound($aStrings)
+    Local $results[$stringCount]
+    Local $found[$stringCount]
+    Local $patterns[$stringCount]
+    Local $lengths[$stringCount]
+    Local $firstBytes[$stringCount]
+    Local $hashTable[256]
+    Local $minLength = 999999
+    Local $maxLength = 0
+
+    For $i = 0 To 255
+        $hashTable[$i] = ""
+    Next
+
+    For $i = 0 To $stringCount - 1
+        $results[$i] = 0
+        $found[$i] = False
+        $patterns[$i] = _StringToBytes($aStrings[$i])
+        $lengths[$i] = BinaryLen($patterns[$i])
+        $firstBytes[$i] = Number(BinaryMid($patterns[$i], 1, 1))
+
+        If $lengths[$i] < $minLength Then $minLength = $lengths[$i]
+        If $lengths[$i] > $maxLength Then $maxLength = $lengths[$i]
+
+        If $hashTable[$firstBytes[$i]] = "" Then
+            $hashTable[$firstBytes[$i]] = String($i)
+        Else
+            $hashTable[$firstBytes[$i]] &= "," & $i
+        EndIf
+    Next
+
+    Local $start = $sections[$section][0]
+    Local $end = $sections[$section][1]
+    Local $bufferSize = 2097152 ; 2MB buffer
+    Local $buffer = DllStructCreate("byte[" & $bufferSize & "]")
+    Local $totalFound = 0
+    Local $startTime = TimerInit()
+    Local $overlap = $maxLength - 1
+
+    Local $patternData[$stringCount][$maxLength]
+    For $i = 0 To $stringCount - 1
+        For $j = 0 To $lengths[$i] - 1
+            $patternData[$i][$j] = Number(BinaryMid($patterns[$i], $j + 1, 1))
+        Next
+    Next
+
+    For $currentAddr = $start To $end Step $bufferSize - $overlap
         If $totalFound = $stringCount Then ExitLoop
 
-        Local $readSize = $BLOCK_SIZE
+        Local $readSize = $bufferSize
         If $currentAddr + $readSize > $end Then
             $readSize = $end - $currentAddr
         EndIf
 
-        Local $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $currentAddr, DllStructGetPtr($buffer), $readSize, 0)
-        If Not $success Then ContinueLoop
+        Local $bytesRead = 0
+        Local $success = DllCall($mKernelHandle, "bool", "ReadProcessMemory", _
+            "handle", $mGWProcHandle, _
+            "ptr", $currentAddr, _
+            "ptr", DllStructGetPtr($buffer), _
+            "ulong_ptr", $readSize, _
+            "ulong_ptr*", $bytesRead)
 
-        $blocksSearched += 1
+        If @error Or Not $success[0] Or $success[5] = 0 Then ContinueLoop
 
-        For $patternIdx = 0 To $stringCount - 1
-            If $found[$patternIdx] Then ContinueLoop
+        $readSize = $success[5]
 
-            Local $patternLen = $lengths[$patternIdx]
-            For $i = 0 To $readSize - $patternLen
+        Local $searchEnd = $readSize - $minLength + 1
+        For $i = 0 To $searchEnd - 1
+            Local $byte = DllStructGetData($buffer, 1, $i + 1)
+
+            If $hashTable[$byte] = "" Then ContinueLoop
+
+            Local $indices = StringSplit($hashTable[$byte], ",", 2)
+
+            For $idx = 0 To UBound($indices) - 1
+                Local $patternIdx = Number($indices[$idx])
+                If $found[$patternIdx] Then ContinueLoop
+
+                Local $patternLen = $lengths[$patternIdx]
+
+                If $i + $patternLen > $readSize Then ContinueLoop
+
                 Local $match = True
 
-                For $j = 0 To $patternLen - 1
-                    If DllStructGetData($buffer, 1, $i + $j + 1) <> BinaryMid($patterns[$patternIdx], $j + 1, 1) Then
+                Local $midPoint = Int($patternLen / 2)
+                If DllStructGetData($buffer, 1, $i + $midPoint + 1) <> $patternData[$patternIdx][$midPoint] Then ContinueLoop
+
+                If DllStructGetData($buffer, 1, $i + $patternLen) <> $patternData[$patternIdx][$patternLen - 1] Then ContinueLoop
+
+                For $j = 1 To $patternLen - 2
+                    If $j = $midPoint Then ContinueLoop
+                    If DllStructGetData($buffer, 1, $i + $j + 1) <> $patternData[$patternIdx][$j] Then
                         $match = False
                         ExitLoop
                     EndIf
@@ -240,14 +389,26 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
                     $results[$patternIdx] = $currentAddr + $i
                     $found[$patternIdx] = True
                     $totalFound += 1
-                    ExitLoop
+
+                    Local $newIndices = ""
+                    For $k = 0 To UBound($indices) - 1
+                        If Number($indices[$k]) <> $patternIdx Then
+                            If $newIndices = "" Then
+                                $newIndices = $indices[$k]
+                            Else
+                                $newIndices &= "," & $indices[$k]
+                            EndIf
+                        EndIf
+                    Next
+                    $hashTable[$byte] = $newIndices
+
+                    If $totalFound = $stringCount Then ExitLoop 3
                 EndIf
             Next
         Next
-
-        If Mod($blocksSearched, 100) = 0 Then
-        EndIf
     Next
+
+    Local $elapsedTime = TimerDiff($startTime)
 
     Return $results
 EndFunc
@@ -255,8 +416,9 @@ EndFunc
 Func GetMultipleAssertionPatterns($aAssertions)
     Local $assertionCount = UBound($aAssertions)
     Local $patterns[$assertionCount]
+
+    Local $uncachedAssertions[0][3] ; [index, file, msg]
     Local $allStrings[0]
-    Local $stringMap[0][3]
 
     For $i = 0 To $assertionCount - 1
         Local $cached = False
@@ -269,74 +431,68 @@ Func GetMultipleAssertionPatterns($aAssertions)
         Next
 
         If Not $cached Then
-            Local $idx = UBound($allStrings)
-            ReDim $allStrings[$idx + 1]
-            $allStrings[$idx] = $aAssertions[$i][0]
+            Local $idx = UBound($uncachedAssertions)
+            ReDim $uncachedAssertions[$idx + 1][3]
+            $uncachedAssertions[$idx][0] = $i
+            $uncachedAssertions[$idx][1] = $aAssertions[$i][0]
+            $uncachedAssertions[$idx][2] = $aAssertions[$i][1]
 
-            ReDim $stringMap[UBound($stringMap) + 1][3]
-            $stringMap[UBound($stringMap) - 1][0] = $i
-            $stringMap[UBound($stringMap) - 1][1] = 0
-            $stringMap[UBound($stringMap) - 1][2] = $aAssertions[$i][0]
+            _ArrayAdd($allStrings, $aAssertions[$i][0])
+            _ArrayAdd($allStrings, $aAssertions[$i][1])
 
-            $idx = UBound($allStrings)
-            ReDim $allStrings[$idx + 1]
-            $allStrings[$idx] = $aAssertions[$i][1]
-
-            ReDim $stringMap[UBound($stringMap) + 1][3]
-            $stringMap[UBound($stringMap) - 1][0] = $i
-            $stringMap[UBound($stringMap) - 1][1] = 1
-            $stringMap[UBound($stringMap) - 1][2] = $aAssertions[$i][1]
+            $patterns[$i] = ""
         EndIf
     Next
 
-    If UBound($allStrings) > 0 Then
-
-        If $sections[$SECTION_RDATA][0] = 0 Then
-            InitializeSections(GetGWBaseAddress())
-        EndIf
-
-        Local $addresses = FindMultipleStrings($allStrings)
-
-        Local $tempResults[$assertionCount][2]
-        For $i = 0 To $assertionCount - 1
-            $tempResults[$i][0] = 0
-            $tempResults[$i][1] = 0
-        Next
-
-        For $i = 0 To UBound($stringMap) - 1
-            Local $assertIdx = $stringMap[$i][0]
-            Local $isMsg = $stringMap[$i][1]
-
-            For $j = 0 To UBound($allStrings) - 1
-                If $allStrings[$j] = $stringMap[$i][2] Then
-                    If $isMsg Then
-                        $tempResults[$assertIdx][1] = $addresses[$j]
-                    Else
-                        $tempResults[$assertIdx][0] = $addresses[$j]
-                    EndIf
-                    ExitLoop
-                EndIf
-            Next
-        Next
-
-        For $i = 0 To $assertionCount - 1
-            If $patterns[$i] = "" Then
-                If $tempResults[$i][0] > 0 And $tempResults[$i][1] > 0 Then
-                    $patterns[$i] = "BA" & SwapEndian(Hex($tempResults[$i][0], 8)) & "B9" & SwapEndian(Hex($tempResults[$i][1], 8))
-
-                    Local $idx = UBound($g_AssertionCache)
-                    ReDim $g_AssertionCache[$idx + 1][3]
-                    $g_AssertionCache[$idx][0] = $aAssertions[$i][0]
-                    $g_AssertionCache[$idx][1] = $aAssertions[$i][1]
-                    $g_AssertionCache[$idx][2] = $patterns[$i]
-                Else
-                    $patterns[$i] = ""
-                EndIf
-            EndIf
-        Next
+    If UBound($uncachedAssertions) = 0 Then
+        Return $patterns
     EndIf
 
+    If $sections[$SECTION_RDATA][0] = 0 Then
+        InitializeSections(GetGWBaseAddress())
+    EndIf
+
+    Local $addresses = FindMultipleStrings($allStrings)
+
+    Local $stringToAddress[0][2] ; [string, address]
+    For $i = 0 To UBound($allStrings) - 1
+        If $addresses[$i] > 0 Then
+            _ArrayAdd2D($stringToAddress, $allStrings[$i], $addresses[$i])
+        EndIf
+    Next
+
+    For $i = 0 To UBound($uncachedAssertions) - 1
+        Local $assertIdx = $uncachedAssertions[$i][0]
+        Local $fileAddr = 0
+        Local $msgAddr = 0
+
+        For $j = 0 To UBound($stringToAddress) - 1
+            If $stringToAddress[$j][0] = $uncachedAssertions[$i][1] Then
+                $fileAddr = $stringToAddress[$j][1]
+            ElseIf $stringToAddress[$j][0] = $uncachedAssertions[$i][2] Then
+                $msgAddr = $stringToAddress[$j][1]
+            EndIf
+        Next
+
+        If $fileAddr > 0 And $msgAddr > 0 Then
+            $patterns[$assertIdx] = "BA" & SwapEndian(Hex($fileAddr, 8)) & "B9" & SwapEndian(Hex($msgAddr, 8))
+
+            Local $cacheIdx = UBound($g_AssertionCache)
+            ReDim $g_AssertionCache[$cacheIdx + 1][3]
+            $g_AssertionCache[$cacheIdx][0] = $uncachedAssertions[$i][1]
+            $g_AssertionCache[$cacheIdx][1] = $uncachedAssertions[$i][2]
+            $g_AssertionCache[$cacheIdx][2] = $patterns[$assertIdx]
+        EndIf
+    Next
+
     Return $patterns
+EndFunc
+
+Func _ArrayAdd2D(ByRef $array, $val1, $val2)
+    Local $idx = UBound($array)
+    ReDim $array[$idx + 1][2]
+    $array[$idx][0] = $val1
+    $array[$idx][1] = $val2
 EndFunc
 
 Func FunctionFromNearCall($call_instruction_address)
