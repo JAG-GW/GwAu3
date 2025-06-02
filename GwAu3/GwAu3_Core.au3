@@ -134,7 +134,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
 	SetValue('PacketLocation', $mPacketLocation)
 	_Log_Debug("PacketLocation: " & $mPacketLocation, "Initialize", $GUIEdit)
 
-	$mPing = MemoryRead(GetScannedAddress('ScanPing', -0x14))
+	$mPing = MemoryRead(GetScannedAddress('ScanPing', -0x3))
 	_Log_Debug("Ping: " & Ptr($mPing), "Initialize", $GUIEdit)
 
 	$mPreGameContextAddr = MemoryRead(GetScannedAddress('ScanPreGameContextAddr', 0x35))
@@ -223,7 +223,7 @@ Func Scan()
 	AddPattern('F6C401741C68B1010000BA')
 
 	_('ScanPing:')
-	AddPattern('E874651600')
+	AddPattern('568B750889165E')
 
 	_('ScanPacketSendFunction:')
 	AddPattern('C747540000000081E6')
