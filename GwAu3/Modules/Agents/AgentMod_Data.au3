@@ -1,5 +1,15 @@
 #include-once
-#include "AgentMod_Initialize.au3"
+
+#Region Module Constants
+; Agent module specific constants
+Global Const $AGENT_TYPE_LIVING = 0xDB
+Global Const $AGENT_TYPE_GADGET = 0x200
+Global Const $AGENT_TYPE_ITEM = 0x400
+
+; Agent array constants
+Global Const $AGENT_MAX_COPY = 256
+Global Const $AGENT_STRUCT_SIZE = 0x1C0
+#EndRegion Module Constants
 
 Func ConvertID($aID)
 	Select

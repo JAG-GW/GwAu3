@@ -1488,11 +1488,11 @@ EndFunc
 
 #Region Related Player Info
 Func GetPlayerInfo($aAgentID = 0, $aInfo = "")
-	Local $lPtr = GetWorldInfo("PlayerArray")
-	Local $lSize = GetWorldInfo("PlayerArraySize")
-	Local $lAgentPtr = 0
+    Local $lPtr = GetWorldInfo("PlayerArray")
+    Local $lSize = GetWorldInfo("PlayerArraySize")
+    Local $lAgentPtr = 0
 
-	For $i = 0 To $lSize
+    For $i = 1 To $lSize - 1
         Local $lAgentEffectsPtr = $lPtr + ($i * 0x4C)
         If MemoryRead($lAgentEffectsPtr, "dword") = ConvertID($aAgentID) Then
             $lAgentPtr = $lAgentEffectsPtr
@@ -1500,31 +1500,55 @@ Func GetPlayerInfo($aAgentID = 0, $aInfo = "")
         EndIf
     Next
 
-	If $lAgentPtr = 0 Then Return 0
+    If $lAgentPtr = 0 Then Return 0
 
-	Switch $aInfo
+    Switch $aInfo
         Case "AgentID"
             Return MemoryRead($lAgentPtr, "dword")
         Case "AppearanceBitmap"
             Return MemoryRead($lAgentPtr + 0x10, "dword")
-		Case "Flags"
+        Case "Flags"
             Return MemoryRead($lAgentPtr + 0x14, "dword")
-		Case "Primary"
+        Case "Primary"
             Return MemoryRead($lAgentPtr + 0x18, "dword")
-		Case "Secondary"
+        Case "Secondary"
             Return MemoryRead($lAgentPtr + 0x1C, "dword")
-		Case "Name"
+        Case "Name"
 ;~             Return MemoryRead($lAgentPtr + 0x24, "wchar[20]")
-			Local $lName = MemoryRead($lAgentPtr + 0x24, "ptr")
-			Return MemoryRead($lName, "wchar[20]")
-		Case "PartLeaderPlayerNumber"
+            Local $lName = MemoryRead($lAgentPtr + 0x24, "ptr")
+            Return MemoryRead($lName, "wchar[20]")
+        Case "PartLeaderPlayerNumber"
             Return MemoryRead($lAgentPtr + 0x2C, "dword")
-		Case "ActiveTitle"
+        Case "ActiveTitle"
             Return MemoryRead($lAgentPtr + 0x30, "dword")
-		Case "PlayerNumber"
+        Case "PlayerNumber"
             Return MemoryRead($lAgentPtr + 0x34, "dword")
-		Case "PartySize"
+        Case "PartySize"
             Return MemoryRead($lAgentPtr + 0x38, "dword")
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+
+Func GetPlayerLogInfo($aInfo = "")
+    Local $lPtr = GetWorldInfo("PlayerArray")
+    If $lPtr = 0 Then Return 0
+
+    Switch $aInfo
+        Case "LastPlayerHeroAdded"
+            Return MemoryRead($lPtr + 0x2C, "dword")
+        Case "LastPartyHenchmenCount"
+            Local $lHenchmenCnt = MemoryRead($lPtr + 0x38, "dword")
+            $lHenchmenCnt = $lHenchmenCnt - ($lHenchmenCnt <> 0)
+        Case "LastPlayerOut"
+            Local $lLogPtr = MemoryRead($lPtr + 0x3C, "ptr")
+            If $lLogPtr = 0 Then Return 0
+            Local $lZoneCnt = MemoryRead($lPtr + 0x44, "dword")
+            Return MemoryRead($lLogPtr + (($lZoneCnt - 1) * 0x4))
+        Case "LogCapacity"
+            Return MemoryRead($lPtr + 0x40, "dword")
+        Case "ZoneCount"
+            Return MemoryRead($lPtr + 0x44, "dword")
         Case Else
             Return 0
     EndSwitch

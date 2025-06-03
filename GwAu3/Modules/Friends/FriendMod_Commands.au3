@@ -1,5 +1,4 @@
 #include-once
-#include "FriendMod_Initialize.au3"
 #include "FriendMod_Data.au3"
 
 #Region Status Functions

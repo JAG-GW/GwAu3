@@ -1,5 +1,4 @@
 #include-once
-#include "SkillMod_Initialize.au3"
 
 Func _SkillMod_GetLastUsedSkill()
     Return $g_iLastSkillUsed

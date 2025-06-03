@@ -1,5 +1,4 @@
 #include-once
-#include "TradeMod_Initialize.au3"
 
 Func _TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
     If Not $g_bTradeModuleInitialized Then

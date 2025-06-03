@@ -1,12 +1,6 @@
 #include-once
-#include "SkillMod_Initialize.au3"
 
 Func _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
-    If Not $g_bSkillModuleInitialized Then
-        _Log_Error("SkillMod module not initialized", "SkillMod", $GUIEdit)
-        Return False
-    EndIf
-
     If $iSkillSlot < 1 Or $iSkillSlot > 8 Then
         _Log_Error("Invalid skill ID: " & $iSkillSlot, "SkillMod", $GUIEdit)
         Return False
@@ -36,11 +30,6 @@ Func _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
 EndFunc
 
 Func _SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
-    If Not $g_bSkillModuleInitialized Then
-        _Log_Error("SkillMod module not initialized", "SkillMod", $GUIEdit)
-        Return False
-    EndIf
-
     If $iHeroIndex < 1 Or $iHeroIndex > 8 Then
         _Log_Error("Invalid hero index: " & $iHeroIndex, "SkillMod", $GUIEdit)
         Return False

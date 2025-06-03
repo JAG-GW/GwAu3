@@ -1,5 +1,24 @@
 #include-once
-#include "TradeMod_Initialize.au3"
+
+#Region Module Constants
+; Merchant module specific constants
+Global Const $MERCHANT_MAX_ITEM_STACK = 250
+Global Const $MERCHANT_MAX_GOLD = 100000
+
+; Transaction types
+Global Const $TRANSACTION_SELL = 0x0B
+Global Const $TRANSACTION_BUY = 0x0C
+Global Const $TRANSACTION_REQUEST_QUOTE = 0x0C
+Global Const $TRANSACTION_REQUEST_QUOTE_SELL = 0x0D
+Global Const $TRANSACTION_TRADER_BUY = 0x0C
+Global Const $TRANSACTION_TRADER_SELL = 0x0D
+Global Const $TRANSACTION_CRAFT = 0x03
+
+; Salvage types
+Global Const $SALVAGE_TYPE_NORMAL = 1
+Global Const $SALVAGE_TYPE_EXPERT = 2
+Global Const $SALVAGE_TYPE_PERFECT = 3
+#EndRegion Module Constants
 
 Func _TradeMod_GetLastTransaction()
     Local $result[4] = [$g_iLastTransactionType, $g_iLastItemID, $g_iLastQuantity, $g_iLastPrice]

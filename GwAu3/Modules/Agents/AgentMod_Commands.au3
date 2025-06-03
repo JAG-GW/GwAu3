@@ -1,5 +1,4 @@
 #include-once
-#include "AgentMod_Initialize.au3"
 
 Func _AgentMod_ChangeTarget($iAgentID)
     If Not $g_bAgentModuleInitialized Then

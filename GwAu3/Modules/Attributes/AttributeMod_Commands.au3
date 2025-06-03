@@ -1,5 +1,4 @@
 #include-once
-#include "AttributeMod_Initialize.au3"
 
 Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
