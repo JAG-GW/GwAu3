@@ -49,6 +49,11 @@ Global $mActionPtr = DllStructGetPtr($mAction)
 Global $mPacket = DllStructCreate('ptr;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword')
 Global $mPacketPtr = DllStructGetPtr($mPacket)
 
+Global $mSkillLogStruct = DllStructCreate('dword;dword;dword;float')
+Global $mSkillLogStructPtr = DllStructGetPtr($mSkillLogStruct)
+Global $mUseEventSystem = False
+GUIRegisterMsg(0x501, 'Event')
+
 Global $mBasePointer
 Global $mPacketLocation
 Global $mQueueCounter
@@ -57,6 +62,7 @@ Global $mQueueBase
 Global $mPreGame
 Global $mFrameArray
 Global $mFriendList
+Global $mPostMessageA
 
 ;Skill
 Global $g_mSkillBase
@@ -185,6 +191,7 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
     AddPattern('Action', '8B7508578BF983FE09750C6876', -0x3, 'Func')
     AddPattern('ActionBase', '8D1C87899DF4', -0x3, 'Ptr')
     AddPattern('Trader', '50516A466A06', -0x2F, 'Hook')
+	AddPattern('PostMessage', '6AFF6A00680180', 0x19, 'Ptr')
     ; Assertion patterns
     AddPattern('PreGame', "P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene", 'Ptr')
     AddPattern('FrameArray', "P:\Code\Engine\Frame\FrMsg.cpp", "frame", 'Ptr')
@@ -223,103 +230,173 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
     AddPattern('WorldConst', '8D0476C1E00405', 0x8, 'Ptr')
     AddPattern('Region', '6A548D46248908', -0x3, 'Ptr')
 
+	; callback
+	AddPattern('CasterSkillLog', '558BECFF7508E845120200', 0x1, 'Hook')
+	AddPattern('MeleeSkillLog', '558BEC568B750885F6751468D004', -0x2E, 'Hook')
+
     Local $aScanResults = ScanAllPatterns()
 
     ;Core
     $mBasePointer = MemoryRead(GetScanResult('BasePointer', $aScanResults))
     SetValue('BasePointer', Ptr($mBasePointer))
+	_Log_Debug("BasePointer: " & GetValue('BasePointer'), "Initialize", $GUIEdit)
     $mPacketLocation = MemoryRead(GetScanResult('PacketLocation', $aScanResults))
     SetValue('PacketLocation', Ptr($mPacketLocation))
+	_Log_Debug("PacketLocation: " & GetValue('PacketLocation'), "Initialize", $GUIEdit)
     $mPing = MemoryRead(GetScanResult('Ping', $aScanResults))
-	SetValue('Ping', $mPing)
+	SetValue('Ping', Ptr($mPing))
+	_Log_Debug("Ping: " & GetValue('Ping'), "Initialize", $GUIEdit)
     $mPreGame = MemoryRead(GetScanResult('PreGame', $aScanResults) + 0x35)
-	SetValue('PreGame', $mPreGame)
+	SetValue('PreGame', Ptr($mPreGame))
+	_Log_Debug("PreGame: " & GetValue('PreGame'), "Initialize", $GUIEdit)
     $mFrameArray = MemoryRead(GetScanResult('FrameArray', $aScanResults) - 0x13)
-	SetValue('FrameArray', $mFrameArray)
+	SetValue('FrameArray', Ptr($mFrameArray))
+	_Log_Debug("FrameArray: " & GetValue('FrameArray'), "Initialize", $GUIEdit)
+	$mPostMessageA = MemoryRead(GetScanResult('PostMessage', $aScanResults))
+	SetValue('PostMessage', Ptr(MemoryRead($mPostMessageA, 'dword')))
+	_Log_Debug("PostMessage: " & GetValue('PostMessage'), "Initialize", $GUIEdit)
 
 	;Skill
     $g_mSkillBase = MemoryRead(GetScanResult('SkillBase', $aScanResults))
     SetValue('SkillBase', Ptr($g_mSkillBase))
+	_Log_Debug("SkillBase: " & GetValue('SkillBase'), "Initialize", $GUIEdit)
     $g_mSkillTimer = MemoryRead(GetScanResult('SkillTimer', $aScanResults))
     SetValue('SkillTimer', Ptr($g_mSkillTimer))
+	_Log_Debug("SkillTimer: " & GetValue('SkillTimer'), "Initialize", $GUIEdit)
     SetValue('UseSkill', Ptr(GetScanResult('UseSkill', $aScanResults)))
+	_Log_Debug("UseSkill: " & GetValue('UseSkill'), "Initialize", $GUIEdit)
     SetValue('UseHeroSkill', Ptr(GetScanResult('UseHeroSkill', $aScanResults)))
+	_Log_Debug("UseHeroSkill: " & GetValue('UseHeroSkill'), "Initialize", $GUIEdit)
 
 	;Friend
 	$g_mFriendList = GetScanResult('FriendList', $aScanResults)
 	$g_mFriendList = MemoryRead(FindInRange("57B9", "xx", 2, $g_mFriendList, $g_mFriendList + 0xFF))
     SetValue('FriendList', Ptr($g_mFriendList))
+	_Log_Debug("FriendList: " & GetValue('FriendList'), "Initialize", $GUIEdit)
 	SetValue('PlayerStatus', Ptr(GetScanResult("PlayerStatus", $aScanResults)))
+	_Log_Debug("PlayerStatus: " & GetValue('PlayerStatus'), "Initialize", $GUIEdit)
     SetValue('AddFriend', Ptr(GetScanResult("AddFriend", $aScanResults)))
+	_Log_Debug("AddFriend: " & GetValue('AddFriend'), "Initialize", $GUIEdit)
 	Local $lAddFriendScan = GetScanResult("RemoveFriend", $aScanResults)
 	$lAddFriendScan = FindInRange("50E8", "xx", 1, $lAddFriendScan, $lAddFriendScan + 0x32)
 	$lAddFriendScan = FunctionFromNearCall($lAddFriendScan)
 	SetValue('RemoveFriend', Ptr($lAddFriendScan))
+	_Log_Debug("RemoveFriend: " & GetValue('RemoveFriend'), "Initialize", $GUIEdit)
 
 	;Attributes
     $g_mAttributeInfo = MemoryRead(GetScanResult('AttributeInfo', $aScanResults))
     SetValue('AttributeInfo', Ptr($g_mAttributeInfo))
+	_Log_Debug("AttributeInfo: " & GetValue('AttributeInfo'), "Initialize", $GUIEdit)
     SetValue('IncreaseAttribute', Ptr(GetScanResult('IncreaseAttribute', $aScanResults)))
+	_Log_Debug("IncreaseAttribute: " & GetValue('IncreaseAttribute'), "Initialize", $GUIEdit)
     SetValue('DecreaseAttribute', Ptr(GetScanResult('DecreaseAttribute', $aScanResults)))
+	_Log_Debug("DecreaseAttribute: " & GetValue('DecreaseAttribute'), "Initialize", $GUIEdit)
 
 	;Trade
 	$g_mBuyItemBase = MemoryRead(GetScanResult('BuyItemBase', $aScanResults))
     SetValue('BuyItemBase', Ptr($g_mBuyItemBase))
+	_Log_Debug("BuyItemBase: " & GetValue('BuyItemBase'), "Initialize", $GUIEdit)
     $g_mSalvageGlobal = MemoryRead(GetScanResult('SalvageGlobal', $aScanResults) - 0x4)
     SetValue('SalvageGlobal', Ptr($g_mSalvageGlobal))
+	_Log_Debug("SalvageGlobal: " & GetValue('SalvageGlobal'), "Initialize", $GUIEdit)
     SetValue('SellItem', Ptr(GetScanResult('SellItem', $aScanResults)))
+	_Log_Debug("SellItem: " & GetValue('SellItem'), "Initialize", $GUIEdit)
     SetValue('Transaction', Ptr(GetScanResult('Transaction', $aScanResults)))
+	_Log_Debug("Transaction: " & GetValue('Transaction'), "Initialize", $GUIEdit)
     SetValue('RequestQuote', Ptr(GetScanResult('RequestQuote', $aScanResults)))
+	_Log_Debug("RequestQuote: " & GetValue('RequestQuote'), "Initialize", $GUIEdit)
     SetValue('Trader', Ptr(GetScanResult('Trader', $aScanResults)))
+	_Log_Debug("Trader: " & GetValue('Trader'), "Initialize", $GUIEdit)
     SetValue('Salvage', Ptr(GetScanResult('Salvage', $aScanResults)))
+	_Log_Debug("Salvage: " & GetValue('Salvage'), "Initialize", $GUIEdit)
 
 	;Agent
 	$g_mAgentBase = MemoryRead(GetScanResult('AgentBase', $aScanResults))
     SetValue('AgentBase', Ptr($g_mAgentBase))
+	_Log_Debug("AgentBase: " & GetValue('AgentBase'), "Initialize", $GUIEdit)
     $g_mMaxAgents = $g_mAgentBase + 0x8
     SetValue('MaxAgents', Ptr($g_mMaxAgents))
+	_Log_Debug("MaxAgents: " & GetValue('MaxAgents'), "Initialize", $GUIEdit)
     $g_mMyID = MemoryRead(GetScanResult('MyID', $aScanResults))
     SetValue('MyID', Ptr($g_mMyID))
+	_Log_Debug("MyID: " & GetValue('MyID'), "Initialize", $GUIEdit)
     $g_mCurrentTarget = MemoryRead(GetScanResult('CurrentTarget', $aScanResults))
     SetValue('ChangeTarget', Ptr(GetScanResult('ChangeTarget', $aScanResults) + 1))
+	_Log_Debug("ChangeTarget: " & GetValue('ChangeTarget'), "Initialize", $GUIEdit)
 
 	;Map
 	$g_mInstanceInfo = MemoryRead(GetScanResult('InstanceInfo', $aScanResults))
 	SetValue('InstanceInfo', Ptr($g_mInstanceInfo))
+	_Log_Debug("InstanceInfo: " & GetValue('InstanceInfo'), "Initialize", $GUIEdit)
     $g_mAreaInfo = MemoryRead(GetScanResult('AreaInfo', $aScanResults))
 	SetValue('AreaInfo', Ptr($g_mAreaInfo))
+	_Log_Debug("AreaInfo: " & GetValue('AreaInfo'), "Initialize", $GUIEdit)
     $g_mWorldConst = MemoryRead(GetScanResult('WorldConst', $aScanResults))
 	SetValue('WorldConst', Ptr($g_mWorldConst))
+	_Log_Debug("WorldConst: " & GetValue('WorldConst'), "Initialize", $GUIEdit)
     $g_mClickCoordsX = MemoryRead(GetScanResult('ClickCoords', $aScanResults))
 	SetValue('ClickCoords', Ptr($g_mClickCoordsX))
+	_Log_Debug("ClickCoords: " & GetValue('ClickCoords'), "Initialize", $GUIEdit)
     $g_mClickCoordsY = MemoryRead(GetScanResult('ClickCoords', $aScanResults) + 9)
 	SetValue('ClickCoords', Ptr($g_mClickCoordsY))
     $g_mRegion = MemoryRead(GetScanResult('Region', $aScanResults))
 	SetValue('Region', Ptr($g_mRegion))
+	_Log_Debug("Region: " & GetValue('Region'), "Initialize", $GUIEdit)
     SetValue('Move', Ptr(GetScanResult('Move', $aScanResults)))
+	_Log_Debug("Move: " & GetValue('Move'), "Initialize", $GUIEdit)
 
     ; Setup addresses for hooks
     Local $lTemp = GetScanResult('Engine', $aScanResults, 'Hook')
+	_Log_Debug("Engine: " & GetValue('Engine'), "Initialize", $GUIEdit)
     SetValue('MainStart', Ptr($lTemp))
     SetValue('MainReturn', Ptr($lTemp + 0x5))
 
     $lTemp = GetScanResult('Render', $aScanResults, 'Hook')
+	_Log_Debug("Render: " & GetValue('Render'), "Initialize", $GUIEdit)
     SetValue('RenderingMod', Ptr($lTemp))
     SetValue('RenderingModReturn', Ptr($lTemp + 0xA))
 
     $lTemp = GetScanResult('Trader', $aScanResults, 'Hook')
+	_Log_Debug("Trader: " & GetValue('Trader'), "Initialize", $GUIEdit)
     SetValue('TraderStart', Ptr($lTemp))
     SetValue('TraderReturn', Ptr($lTemp + 0x5))
 
     SetValue('PacketSend', Ptr(GetScanResult('PacketSend', $aScanResults)))
+	_Log_Debug("PacketSend: " & GetValue('PacketSend'), "Initialize", $GUIEdit)
     SetValue('ActionBase', Ptr(MemoryRead(GetScanResult('ActionBase', $aScanResults))))
+	_Log_Debug("ActionBase: " & GetValue('ActionBase'), "Initialize", $GUIEdit)
     SetValue('Action', Ptr(GetScanResult('Action', $aScanResults)))
+	_Log_Debug("Action: " & GetValue('Action'), "Initialize", $GUIEdit)
+
+	;Callback
+	$lTemp = GetScanResult('CasterSkillLog', $aScanResults, 'Hook')
+	_Log_Debug("CasterSkillLog: " & Hex($lTemp), "Initialize", $GUIEdit)
+	SetValue('CasterSkillLogStart', Ptr($lTemp))
+	SetValue('CasterSkillLogReturn', Ptr($lTemp + 0x5))
+	$lTemp = GetScanResult('MeleeSkillLog', $aScanResults, 'Hook')
+	_Log_Debug("MeleeSkillLog: " & Hex($lTemp), "Initialize", $GUIEdit)
+	SetValue('MeleeSkillLogStart', Ptr($lTemp))
+	SetValue('MeleeSkillLogReturn', Ptr($lTemp + 0x5))
 
     SetValue('QueueSize', '0x00000010')
+	SetValue('SkillLogSize', '0x00000010')
     SetValue('CallbackEvent', '0x00000501')
 
     ; Modify memory
     ModifyMemory()
+
+	Local $casterStart = GetValue('CasterSkillLogStart')
+	Local $casterReturn = GetValue('CasterSkillLogReturn')
+
+	_Log_Info("Hook addresses configured:", "Initialize", $GUIEdit)
+	_Log_Info("  CasterSkillLogStart: " & Hex($casterStart), "Initialize", $GUIEdit)
+	_Log_Info("  CasterSkillLogReturn: " & Hex($casterReturn), "Initialize", $GUIEdit)
+
+	; Vérifier que le detour est écrit
+	If $casterStart > 0 Then
+		Local $detourBytes = MemoryRead($casterStart, 'dword')
+		_Log_Debug("  Detour bytes at CasterSkillLogStart: " & Hex($detourBytes), "Initialize", $GUIEdit)
+	EndIf
 
     $mQueueCounter = MemoryRead(GetValue('QueueCounter'))
     $mQueueSize = GetValue('QueueSize') - 1
@@ -327,11 +404,15 @@ Func Initialize($aGW, $bChangeTitle = True, $aUseEventSystem = True)
     $mDisableRendering = GetValue('DisableRendering')
 
     ; Setup event system
-    If $mUseEventSystem Then
-        $mGUI = GUICreate('GwAu3')
-        RegisterCallbackHandler()
-        MemoryWrite(GetValue('CallbackHandle'), $mGUI)
-    EndIf
+	If $mUseEventSystem Then
+		$mGUI = GUICreate('GwAu3')
+		_Log_Debug("Event GUI created with handle: " & $mGUI, "Initialize", $GUIEdit)
+		MemoryWrite(GetValue('CallbackHandle'), $mGUI)
+
+		; Vérifier que le handle est bien écrit
+		Local $writtenHandle = MemoryRead(GetValue('CallbackHandle'))
+		_Log_Debug("CallbackHandle written: " & $writtenHandle & " (should be " & $mGUI & ")", "Initialize", $GUIEdit)
+	EndIf
 
     ; Setup command structures
     DllStructSetData($mInviteGuild, 1, GetValue('CommandPacketSend'))

@@ -317,6 +317,99 @@ Func _($aASM)
 				$mASMSize += 6
 				$mASMString &= '8B90' & SwapEndian(Hex($lOffset, 8))
 			EndIf
+		Case StringRegExp($aASM, 'and ecx,[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 9)
+			$mASMSize += 6
+			$mASMString &= '81E1' & ASMNumber($value)
+		Case StringRegExp($aASM, 'and eax,[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 9)
+			$mASMSize += 5
+			$mASMString &= '25' & ASMNumber($value)
+		Case StringRegExp($aASM, 'or eax,[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 8)
+			$mASMSize += 5
+			$mASMString &= '0D' & ASMNumber($value)
+		Case StringRegExp($aASM, 'mov esi,dword\[ebp\+[0-9A-Fa-f]+\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov esi,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8B75' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8BB5' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov edi,dword\[ebp\+[0-9A-Fa-f]+\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov edi,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8B7D' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8BBD' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov ebx,dword\[ebp\+[0-9A-Fa-f]+\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov ebx,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8B5D' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8B9D' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov edx,dword\[ebp\+[0-9A-Fa-f]+\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov edx,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8B55' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8B95' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],0')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],0', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 7
+				$mASMString &= 'C740' & Hex($offset, 2) & '00000000'
+			Else
+				$mASMSize += 10
+				$mASMString &= 'C780' & SwapEndian(Hex($offset, 8)) & '00000000'
+			EndIf
+		Case StringRegExp($aASM, 'mov dword\[ebx\+[0-9A-Fa-f]+\],0')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[ebx\+([0-9A-Fa-f]+)\],0', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 7
+				$mASMString &= 'C743' & Hex($offset, 2) & '00000000'
+			Else
+				$mASMSize += 10
+				$mASMString &= 'C783' & SwapEndian(Hex($offset, 8)) & '00000000'
+			EndIf
+		Case StringRegExp($aASM, 'mov dword\[ecx\+[0-9A-Fa-f]+\],0')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[ecx\+([0-9A-Fa-f]+)\],0', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 7
+				$mASMString &= 'C741' & Hex($offset, 2) & '00000000'
+			Else
+				$mASMSize += 10
+				$mASMString &= 'C781' & SwapEndian(Hex($offset, 8)) & '00000000'
+			EndIf
+		Case StringRegExp($aASM, 'mov dword\[edx\+[0-9A-Fa-f]+\],0')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[edx\+([0-9A-Fa-f]+)\],0', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 7
+				$mASMString &= 'C742' & Hex($offset, 2) & '00000000'
+			Else
+				$mASMSize += 10
+				$mASMString &= 'C782' & SwapEndian(Hex($offset, 8)) & '00000000'
+			EndIf
+
 		Case Else
 			Local $lOpCode
 			Switch $aASM
@@ -818,6 +911,136 @@ Func _($aASM)
 					$lOpCode = '8B5014'
 				Case $aASM = 'mov edx,dword[eax+18]'
 					$lOpCode = '8B5018'
+				Case $aASM = 'mov edi,ecx'
+					$lOpCode = '8BF9'
+				Case $aASM = 'mov edi,ebx'
+					$lOpCode = '8BFB'
+				Case $aASM = 'mov esi,ecx'
+					$lOpCode = '8BF1'
+				Case $aASM = 'mov esi,ebx'
+					$lOpCode = '8BF3'
+				Case $aASM = 'mov edi,esi'
+					$lOpCode = '8BFE'
+				Case $aASM = 'mov ebx,ecx'
+					$lOpCode = '8BD9'
+				Case $aASM = 'mov eax,ebx'
+					$lOpCode = '8BC3'
+				Case $aASM = 'mov eax,esi'
+					$lOpCode = '8BC6'
+				Case $aASM = 'mov ecx,ebx'
+					$lOpCode = '8BCB'
+				Case $aASM = 'or eax,esi'
+					$lOpCode = '0BC6'
+				Case $aASM = 'or eax,edi'
+					$lOpCode = '0BC7'
+				Case $aASM = 'or ecx,ebx'
+					$lOpCode = '0BCB'
+				Case $aASM = 'or eax,ebx'
+					$lOpCode = '0BC3'
+				Case $aASM = 'and ecx,0xFFFF'
+					$lOpCode = '81E1FFFF0000'
+				Case $aASM = 'and eax,0xFFFF'
+					$lOpCode = '25FFFF0000'
+				Case $aASM = 'add eax,ebx'
+					$lOpCode = '03C3'
+				Case $aASM = 'add ecx,edx'
+					$lOpCode = '03CA'
+				Case $aASM = 'add eax,esi'
+					$lOpCode = '03C6'
+				Case $aASM = 'shl ebx,8'
+					$lOpCode = 'C1E308'
+				Case $aASM = 'shl edx,16'
+					$lOpCode = 'C1E210'
+				Case $aASM = 'shl ebx,16'
+					$lOpCode = 'C1E310'
+				Case $aASM = 'shl esi,8'
+					$lOpCode = 'C1E608'
+				Case $aASM = 'movzx ecx,di'
+					$lOpCode = '0FB7CF'
+				Case $aASM = 'movzx eax,di'
+					$lOpCode = '0FB7C7'
+				Case $aASM = 'movzx ecx,cx'
+					$lOpCode = '0FB7C9'
+				Case $aASM = 'add esp,16'
+					$lOpCode = '83C410'
+				Case $aASM = 'add esp,12'
+					$lOpCode = '83C40C'
+				Case $aASM = 'sub esp,16'
+					$lOpCode = '83EC10'
+				Case $aASM = 'sub esp,12'
+					$lOpCode = '83EC0C'
+				Case $aASM = 'mov ebx,edx'
+					$lOpCode = '8BDA'
+				Case $aASM = 'mov esi,edx'
+					$lOpCode = '8BF2'
+				Case $aASM = 'mov ebx,esi'
+					$lOpCode = '8BDE'
+				Case $aASM = 'mov edx,ebx'
+					$lOpCode = '8BD3'
+				Case $aASM = 'mov edx,esi'
+					$lOpCode = '8BD6'
+				Case $aASM = 'mov edx,edi'
+					$lOpCode = '8BD7'
+				Case $aASM = 'mov ecx,edx'
+					$lOpCode = '8BCA'
+				Case $aASM = 'mov esi,edi'
+					$lOpCode = '8BF7'
+				Case $aASM = 'mov edi,esi'
+					$lOpCode = '8BFE'
+				Case $aASM = 'mov ebp,eax'
+					$lOpCode = '8BE8'
+				Case $aASM = 'mov ebp,ebx'
+					$lOpCode = '8BEB'
+				Case $aASM = 'mov ebp,ecx'
+					$lOpCode = '8BE9'
+				Case $aASM = 'mov ebp,edx'
+					$lOpCode = '8BEA'
+				Case $aASM = 'mov esp,eax'
+					$lOpCode = '8BE0'
+				Case $aASM = 'mov esp,ecx'
+					$lOpCode = '8BE1'
+				Case $aASM = 'mov esp,edx'
+					$lOpCode = '8BE2'
+				Case $aASM = 'mov esp,ebx'
+					$lOpCode = '8BE3'
+					Case $aASM = 'mov esi,dword[ebp+8]'
+					$lOpCode = '8B7508'
+				Case $aASM = 'mov esi,dword[ebp+C]'
+					$lOpCode = '8B750C'
+				Case $aASM = 'mov esi,dword[ebp+10]'
+					$lOpCode = '8B7510'
+				Case $aASM = 'mov edi,dword[ebp+8]'
+					$lOpCode = '8B7D08'
+				Case $aASM = 'mov edi,dword[ebp+C]'
+					$lOpCode = '8B7D0C'
+				Case $aASM = 'mov ebx,dword[ebp+8]'
+					$lOpCode = '8B5D08'
+				Case $aASM = 'mov edx,dword[ebp+8]'
+					$lOpCode = '8B5508'
+				Case $aASM = 'mov edx,dword[ebp+C]'
+					$lOpCode = '8B550C'
+				Case $aASM = 'mov dword[eax+C],0'
+					$lOpCode = 'C7400C00000000'
+				Case 'mov dword[eax+4],edx'
+					$lOpCode = '895004'
+				Case 'mov dword[eax+4],ebx'
+					$lOpCode = '895804'
+				Case 'mov dword[eax+8],edx'
+					$lOpCode = '895008'
+				Case 'mov dword[eax+C],edx'
+					$lOpCode = '89500C'
+				Case 'mov dword[eax+C],0'
+					$lOpCode = 'C7400C00000000'
+				Case 'mov dword[eax+C],1'
+					$lOpCode = 'C7400C01000000'
+				Case 'mov edx,dword[ebp+C]'
+					$lOpCode = '8B550C'
+				Case 'mov ebx,dword[ebp+10]'
+					$lOpCode = '8B5D10'
+				Case 'mov edx,dword[ebp+10]'
+					$lOpCode = '8B5510'
+				Case $aASM = 'mov esi,ebp'
+					$lOpCode = '8BF5'
 				Case Else
 					_Log_Error('Could not assemble: ' & $aASM, 'ASM', $GUIEdit)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $aASM)
@@ -986,6 +1209,8 @@ Func ModifyMemory()
 	_TradeMod_CreateSalvageCommand()
 	_AgentMod_CreateCommands()
 	_MapMod_CreateCommands()
+	CreateMeleeSkillLog()
+	CreateCasterSkillLog()
 	$mMemory = MemoryRead(MemoryRead($mBase), 'ptr')
 
 	Switch $mMemory
@@ -997,12 +1222,15 @@ Func ModifyMemory()
 			WriteBinary($mASMString, $mMemory + $mASMCodeOffset)
 			$SecondInject = $mMemory + $mASMCodeOffset
 			MemoryWrite(GetValue('QueuePtr'), GetValue('QueueBase'))
+			MemoryWrite(GetValue('SkillLogPtr'), GetValue('SkillLogBase'))
 		Case Else
 			CompleteASMCode()
 	EndSwitch
 	WriteDetour('MainStart', 'MainProc')
 	WriteDetour('TraderStart', 'TraderProc')
 	WriteDetour('RenderingMod', 'RenderingModProc')
+	WriteDetour('CasterSkillLogStart', 'CasterSkillLogProc')
+    WriteDetour('MeleeSkillLogStart', 'MeleeSkillLogProc')
 EndFunc
 
 Func CreateData()
@@ -1012,8 +1240,10 @@ Func CreateData()
 	_('TraderCostID/4')
 	_('TraderCostValue/4')
 	_('DisableRendering/4')
+	_('SkillLogCounter/4')
 
 	_('QueueBase/' & 256 * GetValue('QueueSize'))
+	_('SkillLogBase/' & 16 * GetValue('SkillLogSize'))
 
 	_('AgentCopyCount/4')
 	_('AgentCopyBase/' & 0x1C0 * 256)
@@ -1414,3 +1644,89 @@ Func _MapMod_CreateCommands()
 	_('pop eax')
 	_('ljmp CommandReturn')
 EndFunc
+
+Func CreateCasterSkillLog()
+    _('CasterSkillLogProc:')
+    _('push ebx')
+    _('push ecx')
+    _('push edx')
+    _('push esi')
+    _('push edi')
+
+    ; Incrémenter un compteur simple pour vérifier que la fonction est appelée
+    _('mov eax,dword[SkillLogCounter]')
+    _('inc eax')
+    _('mov dword[SkillLogCounter],eax')
+
+    ; Maintenant traiter les données
+    _('dec eax')  ; Revenir à la valeur précédente
+    _('push eax')
+    _('shl eax,4')
+    _('add eax,SkillLogBase')
+
+    ; Stocker des valeurs de test fixes pour déboguer
+    _('mov dword[eax],99')         ; Caster = 99 (valeur de test)
+    _('mov dword[eax+4],88')       ; Target = 88
+    _('mov dword[eax+8],77')       ; Skill = 77
+    _('mov dword[eax+C],66')       ; Activation = 66
+
+    _('push 1')
+    _('push eax')
+    _('push CallbackEvent')
+    _('push dword[CallbackHandle]')
+    _('call dword[PostMessage]')
+
+    _('pop eax')
+    _('inc eax')
+    _('cmp eax,SkillLogSize')
+    _('jnz SkillLogSkipReset')
+    _('xor eax,eax')
+    _('SkillLogSkipReset:')
+    _('mov dword[SkillLogCounter],eax')
+
+    _('pop edi')
+    _('pop esi')
+    _('pop edx')
+    _('pop ecx')
+    _('pop ebx')
+
+    ; Reproduire le début de la fonction originale
+    _('push ebp')
+    _('mov ebp,esp')
+    _('push dword[ebp+8]')
+
+    _('ljmp CasterSkillLogReturn')
+EndFunc
+
+Func CreateMeleeSkillLog()
+	_('MeleeSkillLogProc:')
+	_('pushad')
+
+	_('mov eax,dword[SkillLogCounter]')
+	_('push eax')
+	_('shl eax,4')
+	_('add eax,SkillLogBase')
+
+	_('mov dword[eax],edi')
+	_('mov dword[eax+4],ecx')
+	_('mov dword[eax+8],ebx')
+
+	_('push 1')
+	_('push eax')
+	_('push CallbackEvent')
+	_('push dword[CallbackHandle]')
+	_('call dword[PostMessage]')
+
+	_('pop eax')
+	_('inc eax')
+	_('cmp eax,SkillLogSize')
+	_('jnz SkillLogSkipReset')
+	_('xor eax,eax')
+	_('SkillLogSkipReset:')
+	_('mov dword[SkillLogCounter],eax')
+
+	_('popad')
+	_('mov ebp,esp')
+	_('push dword[ebp+8]')
+	_('ljmp MeleeSkillLogReturn')
+EndFunc   ;==>CreateMeleeSkillLog

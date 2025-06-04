@@ -1,5 +1,4 @@
 #include-once
-#include "MapMod_Initialize.au3"
 
 Func _MapMod_Move($fX, $fY, $fRandomize = 50)
     If Not $g_bMapModuleInitialized Then

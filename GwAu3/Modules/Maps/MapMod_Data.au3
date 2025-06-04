@@ -1,5 +1,4 @@
 #include-once
-#include "MapMod_Initialize.au3"
 
 Func _MapMod_GetRegion()
 	Return MemoryRead($g_mRegion)
