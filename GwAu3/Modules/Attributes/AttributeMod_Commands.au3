@@ -2,17 +2,17 @@
 
 Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $GUIEdit)
+        _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAttributeID < 0 Or $iAttributeID > 44 Then
-        _Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $GUIEdit)
+        _Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAmount < 0 Or $iAmount > 12 Then
-        _Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $GUIEdit)
+        _Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
@@ -36,23 +36,23 @@ Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
     $g_iLastAttributeValue = $iAmount
 
     Local $attrName = ($iAttributeID < 45) ? $g_aAttributeNames[$iAttributeID] : "Unknown"
-    _Log_Debug("Increased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $GUIEdit)
+    _Log_Debug("Increased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
     Return True
 EndFunc
 
 Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $GUIEdit)
+        _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAttributeID < 0 Or $iAttributeID > 44 Then
-        _Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $GUIEdit)
+        _Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAmount < 1 Or $iAmount > 12 Then
-        _Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $GUIEdit)
+        _Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
@@ -76,13 +76,13 @@ Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
     $g_iLastAttributeValue = -$iAmount
 
     Local $attrName = ($iAttributeID < 45) ? $g_aAttributeNames[$iAttributeID] : "Unknown"
-    _Log_Debug("Decreased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $GUIEdit)
+    _Log_Debug("Decreased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
     Return True
 EndFunc
 
 Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMod module not initialized", "LoadTemplate", $GUIEdit)
+        _Log_Error("AttributeMod module not initialized", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
@@ -90,7 +90,7 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     If $aHeroNumber <> 0 Then
         $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
         If $lHeroID = 0 Then
-            _Log_Error("Invalid hero number: " & $aHeroNumber, "LoadTemplate", $GUIEdit)
+            _Log_Error("Invalid hero number: " & $aHeroNumber, "LoadTemplate", $g_h_EditText)
             Return False
         EndIf
     Else
@@ -100,7 +100,7 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     ; Split template into individual characters
     Local $lSplitTemplate = StringSplit($aTemplate, '')
     If @error Or $lSplitTemplate[0] = 0 Then
-        _Log_Error("Invalid template format", "LoadTemplate", $GUIEdit)
+        _Log_Error("Invalid template format", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
@@ -120,14 +120,14 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     ; Convert Base64 to binary
     $aTemplate = ''
     For $i = 1 To $lSplitTemplate[0]
-        $aTemplate &= Base64ToBin64($lSplitTemplate[$i])
+        $aTemplate &= Base64ToBin64_GW($lSplitTemplate[$i])
     Next
 
     ; Parse template header
     $lTemplateType = Bin64ToDec(StringLeft($aTemplate, 4))
     $aTemplate = StringTrimLeft($aTemplate, 4)
     If $lTemplateType <> 14 Then
-        _Log_Error("Invalid template type: " & $lTemplateType & " (expected 14)", "LoadTemplate", $GUIEdit)
+        _Log_Error("Invalid template type: " & $lTemplateType & " (expected 14)", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
@@ -143,7 +143,7 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
 
     ; Validate primary profession
     If $lProfPrimary <> GetPartyProfessionInfo($lHeroID, "Primary") Then
-        _Log_Error("Primary profession mismatch. Template: " & $lProfPrimary & ", Character: " & GetPartyProfessionInfo($lHeroID, "Primary"), "LoadTemplate", $GUIEdit)
+        _Log_Error("Primary profession mismatch. Template: " & $lProfPrimary & ", Character: " & GetPartyProfessionInfo($lHeroID, "Primary"), "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
@@ -192,24 +192,24 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     $lOpTail = Bin64ToDec($aTemplate)
 
     ; Apply the template
-    _Log_Info("Loading template - Primary: " & $lProfPrimary & ", Secondary: " & $lProfSecondary, "LoadTemplate", $GUIEdit)
+    _Log_Info("Loading template - Primary: " & $lProfPrimary & ", Secondary: " & $lProfSecondary, "LoadTemplate", $g_h_EditText)
 
     ; Load attributes (includes secondary profession change if needed)
     If Not LoadAttributes($lAttributes, $lProfSecondary, $aHeroNumber) Then
-        _Log_Error("Failed to load attributes", "LoadTemplate", $GUIEdit)
+        _Log_Error("Failed to load attributes", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
     ; Load skill bar
     LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber)
 
-    _Log_Info("Template loaded successfully", "LoadTemplate", $GUIEdit)
+    _Log_Info("Template loaded successfully", "LoadTemplate", $g_h_EditText)
     Return True
 EndFunc
 
 Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMod module not initialized", "LoadAttributes", $GUIEdit)
+        _Log_Error("AttributeMod module not initialized", "LoadAttributes", $g_h_EditText)
         Return False
     EndIf
 
@@ -217,7 +217,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     If $aHeroNumber <> 0 Then
         $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
         If $lHeroID = 0 Then
-            _Log_Error("Invalid hero number: " & $aHeroNumber, "LoadAttributes", $GUIEdit)
+            _Log_Error("Invalid hero number: " & $aHeroNumber, "LoadAttributes", $g_h_EditText)
             Return False
         EndIf
     Else
@@ -231,14 +231,14 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     Local $lMaxRetries = 10
     Local $lTimeout = 5000
 
-    _Log_Info("Loading attributes for " & ($aHeroNumber = 0 ? "player" : "hero " & $aHeroNumber), "LoadAttributes", $GUIEdit)
+    _Log_Info("Loading attributes for " & ($aHeroNumber = 0 ? "player" : "hero " & $aHeroNumber), "LoadAttributes", $g_h_EditText)
 
     ; Change secondary profession if needed
     If $aSecondaryProfession <> 0 And _
        GetPartyProfessionInfo($lHeroID, "Secondary") <> $aSecondaryProfession And _
        GetPartyProfessionInfo($lHeroID, "Primary") <> $aSecondaryProfession Then
 
-        _Log_Info("Changing secondary profession to: " & $aSecondaryProfession, "LoadAttributes", $GUIEdit)
+        _Log_Info("Changing secondary profession to: " & $aSecondaryProfession, "LoadAttributes", $g_h_EditText)
 
         Local $lRetryCount = 0
         Do
@@ -253,11 +253,11 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         Until GetPartyProfessionInfo($lHeroID, "Secondary") = $aSecondaryProfession Or $lRetryCount >= $lMaxRetries
 
         If GetPartyProfessionInfo($lHeroID, "Secondary") <> $aSecondaryProfession Then
-            _Log_Error("Failed to change secondary profession after " & $lMaxRetries & " attempts", "LoadAttributes", $GUIEdit)
+            _Log_Error("Failed to change secondary profession after " & $lMaxRetries & " attempts", "LoadAttributes", $g_h_EditText)
             Return False
         EndIf
 
-        _Log_Info("Secondary profession changed successfully", "LoadAttributes", $GUIEdit)
+        _Log_Info("Secondary profession changed successfully", "LoadAttributes", $g_h_EditText)
     EndIf
 
     ; Validate and clamp attribute levels
@@ -267,14 +267,14 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     Next
 
     ; Phase 1: Decrease primary attribute to target level
-    _Log_Debug("Phase 1: Adjusting primary attribute (" & $lPrimaryAttribute & ") to level " & $aAttributesArray[0][1], "LoadAttributes", $GUIEdit)
+    _Log_Debug("Phase 1: Adjusting primary attribute (" & $lPrimaryAttribute & ") to level " & $aAttributesArray[0][1], "LoadAttributes", $g_h_EditText)
 
     While _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $aAttributesArray[0][1]
         $lLevel = _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
         $lDeadlock = TimerInit()
 
         If Not _AttributeMod_DecreaseAttribute($lPrimaryAttribute, 1, $aHeroNumber) Then
-            _Log_Error("Failed to decrease primary attribute", "LoadAttributes", $GUIEdit)
+            _Log_Error("Failed to decrease primary attribute", "LoadAttributes", $g_h_EditText)
             Return False
         EndIf
 
@@ -283,13 +283,13 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         Until _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
         If TimerDiff($lDeadlock) > $lTimeout Then
-            _Log_Warning("Timeout decreasing primary attribute", "LoadAttributes", $GUIEdit)
+            _Log_Warning("Timeout decreasing primary attribute", "LoadAttributes", $g_h_EditText)
             ExitLoop
         EndIf
     WEnd
 
     ; Phase 2: Decrease secondary attributes to target levels
-    _Log_Debug("Phase 2: Adjusting secondary attributes", "LoadAttributes", $GUIEdit)
+    _Log_Debug("Phase 2: Adjusting secondary attributes", "LoadAttributes", $g_h_EditText)
 
     For $i = 1 To UBound($aAttributesArray) - 1
         Local $lAttrID = $aAttributesArray[$i][0]
@@ -300,7 +300,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             $lDeadlock = TimerInit()
 
             If Not _AttributeMod_DecreaseAttribute($lAttrID, 1, $aHeroNumber) Then
-                _Log_Warning("Failed to decrease attribute " & $lAttrID, "LoadAttributes", $GUIEdit)
+                _Log_Warning("Failed to decrease attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
 
@@ -309,14 +309,14 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             Until _AttributeMod_GetPartyAttributeInfo($lAttrID, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
             If TimerDiff($lDeadlock) > $lTimeout Then
-                _Log_Warning("Timeout decreasing attribute " & $lAttrID, "LoadAttributes", $GUIEdit)
+                _Log_Warning("Timeout decreasing attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
         WEnd
     Next
 
     ; Phase 3: Reset all other attributes to 0
-    _Log_Debug("Phase 3: Resetting unused attributes", "LoadAttributes", $GUIEdit)
+    _Log_Debug("Phase 3: Resetting unused attributes", "LoadAttributes", $g_h_EditText)
 
     For $i = 0 To 44
         If _AttributeMod_GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
@@ -339,7 +339,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
                 $lDeadlock = TimerInit()
 
                 If Not _AttributeMod_DecreaseAttribute($i, 1, $aHeroNumber) Then
-                    _Log_Warning("Failed to reset attribute " & $i, "LoadAttributes", $GUIEdit)
+                    _Log_Warning("Failed to reset attribute " & $i, "LoadAttributes", $g_h_EditText)
                     ExitLoop
                 EndIf
 
@@ -348,7 +348,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
                 Until _AttributeMod_GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
                 If TimerDiff($lDeadlock) > $lTimeout Then
-                    _Log_Warning("Timeout resetting attribute " & $i, "LoadAttributes", $GUIEdit)
+                    _Log_Warning("Timeout resetting attribute " & $i, "LoadAttributes", $g_h_EditText)
                     ExitLoop
                 EndIf
             WEnd
@@ -356,7 +356,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     Next
 
     ; Phase 4: Increase primary attribute to target level
-    _Log_Debug("Phase 4: Setting primary attribute to target level", "LoadAttributes", $GUIEdit)
+    _Log_Debug("Phase 4: Setting primary attribute to target level", "LoadAttributes", $g_h_EditText)
 
     $lTestTimer = 0
     While _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
@@ -364,7 +364,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         $lDeadlock = TimerInit()
 
         If Not _AttributeMod_IncreaseAttribute($lPrimaryAttribute, 1, $aHeroNumber) Then
-            _Log_Error("Failed to increase primary attribute", "LoadAttributes", $GUIEdit)
+            _Log_Error("Failed to increase primary attribute", "LoadAttributes", $g_h_EditText)
             ExitLoop
         EndIf
 
@@ -374,13 +374,13 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         Until _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
         If TimerDiff($lDeadlock) > $lTimeout Or $lTestTimer > 225 Then
-            _Log_Warning("Timeout or max attempts reached for primary attribute", "LoadAttributes", $GUIEdit)
+            _Log_Warning("Timeout or max attempts reached for primary attribute", "LoadAttributes", $g_h_EditText)
             ExitLoop
         EndIf
     WEnd
 
     ; Phase 5: Increase secondary attributes to target levels
-    _Log_Debug("Phase 5: Setting secondary attributes to target levels", "LoadAttributes", $GUIEdit)
+    _Log_Debug("Phase 5: Setting secondary attributes to target levels", "LoadAttributes", $g_h_EditText)
 
     For $i = 1 To UBound($aAttributesArray) - 1
         Local $lAttrID = $aAttributesArray[$i][0]
@@ -392,7 +392,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             $lDeadlock = TimerInit()
 
             If Not _AttributeMod_IncreaseAttribute($lAttrID, 1, $aHeroNumber) Then
-                _Log_Warning("Failed to increase attribute " & $lAttrID, "LoadAttributes", $GUIEdit)
+                _Log_Warning("Failed to increase attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
 
@@ -402,12 +402,12 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             Until _AttributeMod_GetPartyAttributeInfo($lAttrID, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
             If TimerDiff($lDeadlock) > $lTimeout Or $lTestTimer > 225 Then
-                _Log_Warning("Timeout or max attempts reached for attribute " & $lAttrID, "LoadAttributes", $GUIEdit)
+                _Log_Warning("Timeout or max attempts reached for attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
         WEnd
     Next
 
-    _Log_Info("Attribute loading completed", "LoadAttributes", $GUIEdit)
+    _Log_Info("Attribute loading completed", "LoadAttributes", $g_h_EditText)
     Return True
 EndFunc

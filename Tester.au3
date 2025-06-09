@@ -1,3 +1,4 @@
+#RequireAdmin
 #include <ButtonConstants.au3>
 #include <ComboConstants.au3>
 #include <EditConstants.au3>
@@ -10,6 +11,7 @@
 #include <GUIListBox.au3>
 #include <GuiListView.au3>
 #include <GuiComboBox.au3>
+#include <Misc.au3>
 #include <ScrollBarsConstants.au3>
 #include <Array.au3>
 #Include <WinAPIEx.au3>
@@ -59,8 +61,8 @@ $GUIStartButton = GUICtrlCreateButton("Start", 24, 72, 75, 25)
 GUICtrlSetOnEvent($GUIStartButton, "GuiButtonHandler")
 $GUIRefreshButton = GUICtrlCreateButton("Refresh", 110, 72, 75, 25)
 GUICtrlSetOnEvent($GUIRefreshButton, "GuiButtonHandler")
-$GUIEdit = _GUICtrlRichEdit_Create($MainGui, "", 16, 104, 458, 222, BitOR($ES_AUTOVSCROLL, $ES_MULTILINE, $WS_VSCROLL, $ES_READONLY))
-_GUICtrlRichEdit_SetBkColor($GUIEdit, $COLOR_WHITE) ; Couleur de fond
+$g_h_EditText = _GUICtrlRichEdit_Create($MainGui, "", 16, 104, 458, 222, BitOR($ES_AUTOVSCROLL, $ES_MULTILINE, $WS_VSCROLL, $ES_READONLY))
+_GUICtrlRichEdit_SetBkColor($g_h_EditText, $COLOR_WHITE) ; Couleur de fond
 
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUISetOnEvent($GUI_EVENT_CLOSE, "_Exit")
@@ -72,13 +74,13 @@ Func GuiButtonHandler()
 		Case $GUIStartButton
             Local $charName = GUICtrlRead($GUINameCombo)
             If $charName=="" Then
-                If Initialize(ProcessExists("gw.exe"), True, False) = 0 Then
+                If Initialize(ProcessExists("gw.exe"), True) = 0 Then
                     MsgBox(0, "Error", "Guild Wars is not running.")
                     _Exit()
                 EndIf
             ElseIf $ProcessID Then
                 $proc_id_int = Number($ProcessID, 2)
-                If Initialize($proc_id_int, True, False) = 0 Then
+                If Initialize($proc_id_int, True) = 0 Then
                     MsgBox(0, "Error", "Could not Find a ProcessID or somewhat '"&$proc_id_int&"'  "&VarGetType($proc_id_int)&"'")
                     _Exit()
                     If ProcessExists($proc_id_int) Then
@@ -87,7 +89,7 @@ Func GuiButtonHandler()
                     Exit
                 EndIf
             Else
-                If Initialize($CharName, True, False) = 0 Then
+                If Initialize($CharName, True) = 0 Then
                     MsgBox(0, "Error", "Could not Find a Guild Wars client with a Character named '"&$CharName&"'")
                     _Exit()
                 EndIf
@@ -140,16 +142,16 @@ While $BotRunning
 	Out("Ready")
 
 	Out("Done")
-    Sleep(30000)
+    Sleep(50000)
 WEnd
 
 Func Out($TEXT)
     Local $TEXTLEN = StringLen($TEXT)
-    Local $CONSOLELEN = _GUICtrlEdit_GetTextLen($GUIEdit)
-    If $TEXTLEN + $CONSOLELEN > 30000 Then GUICtrlSetData($GUIEdit, StringRight(_GUICtrlEdit_GetText($GUIEdit), 30000 - $TEXTLEN - 1000))
-	_GUICtrlRichEdit_SetCharColor($GUIEdit, $COLOR_BLACK)
-    _GUICtrlEdit_AppendText($GUIEdit, @CRLF & $TEXT)
-    _GUICtrlEdit_Scroll($GUIEdit, 1)
+    Local $CONSOLELEN = _GUICtrlEdit_GetTextLen($g_h_EditText)
+    If $TEXTLEN + $CONSOLELEN > 30000 Then GUICtrlSetData($g_h_EditText, StringRight(_GUICtrlEdit_GetText($g_h_EditText), 30000 - $TEXTLEN - 1000))
+	_GUICtrlRichEdit_SetCharColor($g_h_EditText, $COLOR_BLACK)
+    _GUICtrlEdit_AppendText($g_h_EditText, @CRLF & $TEXT)
+    _GUICtrlEdit_Scroll($g_h_EditText, 1)
 EndFunc
 
 Func GetChecked($GUICtrl)

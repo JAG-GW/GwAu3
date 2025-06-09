@@ -1,5 +1,5 @@
 #include-once
-#include 'GwAu3_Constants_Core.au3'
+#include 'GwAu3_Constants.au3'
 
 Func _($aASM)
 	Local $lBuffer
@@ -22,6 +22,334 @@ Func _($aASM)
 		Case StringRegExp($aASM, 'cmp edx,[a-z,A-Z]{4,}') And StringInStr($aASM, ',dword') = 0
 			$mASMSize += 6
 			$mASMString &= '81FA[' & StringRight($aASM, StringLen($aASM) - 8) & ']'
+		Case StringRegExp($aASM, 'cmp eax,[0-9A-Fa-f]+\z')
+			Local $value = Dec(StringMid($aASM, 9))
+			If $value <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83F8' & Hex($value, 2)
+			Else
+				$mASMSize += 5
+				$mASMString &= '3D' & SwapEndian(Hex($value, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov eax,dword\[esp\+[0-9A-Fa-f]+h?\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov eax,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
+			$offset = StringReplace($offset, "h", "") ; Remove 'h' if present
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4
+				$mASMString &= '8B4424' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= '8B8424' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'add esp,[0-9A-Fa-f]+h')
+			Local $value = StringRegExpReplace($aASM, 'add esp,([0-9A-Fa-f]+)h', '$1')
+			$value = Dec($value)
+			If $value <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83C4' & Hex($value, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81C4' & SwapEndian(Hex($value, 8))
+			EndIf
+		Case StringRegExp($aASM, 'add esp,0x[0-9A-Fa-f]+')
+			Local $value = StringRegExpReplace($aASM, 'add esp,0x([0-9A-Fa-f]+)', '$1')
+			$value = Dec($value)
+			If $value <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83C4' & Hex($value, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81C4' & SwapEndian(Hex($value, 8))
+			EndIf
+
+		; Also add support for other registers with hex notation
+		Case StringRegExp($aASM, 'add eax,[0-9A-Fa-f]+h')
+			Local $value = StringRegExpReplace($aASM, 'add eax,([0-9A-Fa-f]+)h', '$1')
+			$value = Dec($value)
+			If $value <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83C0' & Hex($value, 2)
+			Else
+				$mASMSize += 5
+				$mASMString &= '05' & SwapEndian(Hex($value, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'add ebx,[0-9A-Fa-f]+h')
+			Local $value = StringRegExpReplace($aASM, 'add ebx,([0-9A-Fa-f]+)h', '$1')
+			$value = Dec($value)
+			If $value <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83C3' & Hex($value, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81C3' & SwapEndian(Hex($value, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'add ecx,[0-9A-Fa-f]+h')
+			Local $value = StringRegExpReplace($aASM, 'add ecx,([0-9A-Fa-f]+)h', '$1')
+			$value = Dec($value)
+			If $value <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83C1' & Hex($value, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81C1' & SwapEndian(Hex($value, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'add edx,[0-9A-Fa-f]+h')
+			Local $value = StringRegExpReplace($aASM, 'add edx,([0-9A-Fa-f]+)h', '$1')
+			$value = Dec($value)
+			If $value <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83C2' & Hex($value, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81C2' & SwapEndian(Hex($value, 8))
+			EndIf
+		Case StringRegExp($aASM, 'inc dword\[eax\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[eax\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF40' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF80' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'inc dword\[esi\+0x[0-9A-Fa-f]+\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esi\+0x([0-9A-Fa-f]+)\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF46' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF86' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'retn [0-9A-Fa-f]+h')
+			Local $value = StringRegExpReplace($aASM, 'retn ([0-9A-Fa-f]+)h', '$1')
+			$value = Dec($value)
+			$mASMSize += 3
+			$mASMString &= 'C2' & SwapEndian(Hex($value, 4))
+		Case StringRegExp($aASM, 'retn 0x[0-9A-Fa-f]+')
+			Local $value = StringRegExpReplace($aASM, 'retn 0x([0-9A-Fa-f]+)', '$1')
+			$value = Dec($value)
+			$mASMSize += 3
+			$mASMString &= 'C2' & SwapEndian(Hex($value, 4))
+		Case StringRegExp($aASM, 'inc dword\[ebx\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[ebx\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF43' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF83' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'inc dword\[ecx\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[ecx\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF41' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF81' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'inc dword\[edx\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[edx\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF42' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF82' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'inc dword\[esi\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esi\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF46' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF86' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'inc dword\[edi\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[edi\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF47' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF87' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'inc dword\[ebp\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[ebp\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF45' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF85' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'inc dword\[esp\+[0-9A-Fa-f]+h\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esp\+([0-9A-Fa-f]+)h\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4  ; ESP requires SIB byte
+				$mASMString &= 'FF4424' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= 'FF8424' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov ebx,dword\[esp\+[0-9A-Fa-f]+h?\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov ebx,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
+			$offset = StringReplace($offset, "h", "")
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4
+				$mASMString &= '8B5C24' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= '8B9C24' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov ecx,dword\[esp\+[0-9A-Fa-f]+h?\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov ecx,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
+			$offset = StringReplace($offset, "h", "")
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4
+				$mASMString &= '8B4C24' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= '8B8C24' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov edx,dword\[esp\+[0-9A-Fa-f]+h?\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov edx,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
+			$offset = StringReplace($offset, "h", "")
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4
+				$mASMString &= '8B5424' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= '8B9424' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov esi,dword\[esp\+[0-9A-Fa-f]+h?\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov esi,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
+			$offset = StringReplace($offset, "h", "")
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4
+				$mASMString &= '8B7424' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= '8BB424' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov edi,dword\[esp\+[0-9A-Fa-f]+h?\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov edi,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
+			$offset = StringReplace($offset, "h", "")
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4
+				$mASMString &= '8B7C24' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= '8BBC24' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov ebp,dword\[esp\+[0-9A-Fa-f]+h?\]')
+			Local $offset = StringRegExpReplace($aASM, 'mov ebp,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
+			$offset = StringReplace($offset, "h", "")
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 4
+				$mASMString &= '8B6C24' & Hex($offset, 2)
+			Else
+				$mASMSize += 7
+				$mASMString &= '8BAC24' & SwapEndian(Hex($offset, 8))
+			EndIf
+		Case StringRegExp($aASM, 'mov dword\[eax\],0x[0-9A-Fa-f]+\z')
+			Local $value = StringMid($aASM, 15)
+			$value = StringReplace($value, "0x", "")
+			$mASMSize += 6
+			$mASMString &= 'C700' & SwapEndian(Hex(Dec("0x" & $value), 8))
+		Case StringRegExp($aASM, 'retn [-[:xdigit:]]{1,4}\z')
+			Local $value = StringMid($aASM, 6)
+			$mASMSize += 3
+			$mASMString &= 'C2' & SwapEndian(Hex(Number($value), 4))
+		Case StringRegExp($aASM, 'cmp eax,[-[:xdigit:]]{1,2}\z')
+			Local $value = StringMid($aASM, 9)
+			If StringLen($value) <= 2 Then
+				$mASMSize += 3
+				$mASMString &= '83F8' & Hex(Number($value), 2)
+			Else
+				$mASMSize += 5
+				$mASMString &= '3D' & ASMNumber($value)
+			EndIf
+				Case StringRegExp($aASM, 'and eax,[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 9)
+			If StringLen($value) <= 2 And Dec($value) <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83E0' & Hex(Dec($value), 2)
+			Else
+				$mASMSize += 5
+				$mASMString &= '25' & ASMNumber($value)
+			EndIf
+		Case StringRegExp($aASM, 'and ebx,[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 9)
+			If StringLen($value) <= 2 And Dec($value) <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83E3' & Hex(Dec($value), 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81E3' & ASMNumber($value)
+			EndIf
+		Case StringRegExp($aASM, 'and ecx,[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 9)
+			If StringLen($value) <= 2 And Dec($value) <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83E1' & Hex(Dec($value), 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81E1' & ASMNumber($value)
+			EndIf
+		Case StringRegExp($aASM, 'and edx,[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 9)
+			If StringLen($value) <= 2 And Dec($value) <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '83E2' & Hex(Dec($value), 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '81E2' & ASMNumber($value)
+			EndIf
+		Case StringRegExp($aASM, 'cmp ebx,[-[:xdigit:]]{1,2}\z')
+			Local $value = StringMid($aASM, 9)
+			$mASMSize += 3
+			$mASMString &= '83FB' & Hex(Number($value), 2)
+		Case StringRegExp($aASM, 'cmp ecx,[-[:xdigit:]]{1,2}\z')
+			Local $value = StringMid($aASM, 9)
+			$mASMSize += 3
+			$mASMString &= '83F9' & Hex(Number($value), 2)
+		Case StringRegExp($aASM, 'cmp edx,[-[:xdigit:]]{1,2}\z')
+			Local $value = StringMid($aASM, 9)
+			$mASMSize += 3
+			$mASMString &= '83FA' & Hex(Number($value), 2)
 		Case StringRight($aASM, 1) = ':'
 			SetValue('Label_' & StringLeft($aASM, StringLen($aASM) - 1), $mASMSize)
 		Case StringInStr($aASM, '/') > 0
@@ -35,6 +363,51 @@ Func _($aASM)
 			For $i = 1 To $lBuffer
 				$mASMString &= '90'
 			Next
+		Case StringLeft($aASM, 17) = 'mov edx,dword[esi]'
+			$mASMSize += 2
+			$mASMString &= '8B16'
+		Case StringLeft($aASM, 17) = 'mov edx,dword[edi]'
+			$mASMSize += 2
+			$mASMString &= '8B17'
+		Case StringLeft($aASM, 17) = 'mov eax,dword[esi]'
+			$mASMSize += 2
+			$mASMString &= '8B06'
+		Case StringLeft($aASM, 17) = 'mov eax,dword[edi]'
+			$mASMSize += 2
+			$mASMString &= '8B07'
+		Case StringLeft($aASM, 17) = 'mov ecx,dword[esi]'
+			$mASMSize += 2
+			$mASMString &= '8B0E'
+		Case StringLeft($aASM, 17) = 'mov ecx,dword[edi]'
+			$mASMSize += 2
+			$mASMString &= '8B0F'
+		Case StringLeft($aASM, 17) = 'mov ebx,dword[esi]'
+			$mASMSize += 2
+			$mASMString &= '8B1E'
+		Case StringLeft($aASM, 17) = 'mov ebx,dword[edi]'
+			$mASMSize += 2
+			$mASMString &= '8B1F'
+		Case StringRegExp($aASM, 'inc dword\[[a-zA-Z_][a-zA-Z0-9_]*\]')
+			; Pattern pour inc dword[label]
+			Local $label = StringRegExpReplace($aASM, 'inc dword\[([a-zA-Z_][a-zA-Z0-9_]*)\]', '$1')
+			$mASMSize += 6
+			$mASMString &= 'FF05[' & $label & ']'
+
+		Case StringRegExp($aASM, 'dec dword\[[a-zA-Z_][a-zA-Z0-9_]*\]')
+			; Ajoutons aussi dec dword[label] pendant qu'on y est
+			Local $label = StringRegExpReplace($aASM, 'dec dword\[([a-zA-Z_][a-zA-Z0-9_]*)\]', '$1')
+			$mASMSize += 6
+			$mASMString &= 'FF0D[' & $label & ']'
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],esi')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],esi', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8970' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '89B0' & SwapEndian(Hex($offset, 8))
+			EndIf
 		Case StringLeft($aASM, 16) = 'push dword[eax+4]'
             $mASMSize += 3
             $mASMString &= 'FF7004'
@@ -63,6 +436,16 @@ Func _($aASM)
                 $mASMSize += 6
                 $mASMString &= 'FFB0' & SwapEndian(Hex($lOffset, 8))
             EndIf
+		Case StringRegExp($aASM, 'inc dword\[esi\+[0-9A-Fa-f]+\]')
+			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esi\+([0-9A-Fa-f]+)\]', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= 'FF46' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= 'FF86' & SwapEndian(Hex($offset, 8))
+			EndIf
 		Case StringLeft($aASM, 5) = 'ljmp '
 			$mASMSize += 5
 			$mASMString &= 'E9{' & StringRight($aASM, StringLen($aASM) - 5) & '}'
@@ -409,7 +792,122 @@ Func _($aASM)
 				$mASMSize += 10
 				$mASMString &= 'C782' & SwapEndian(Hex($offset, 8)) & '00000000'
 			EndIf
+		Case StringRegExp($aASM, 'mov dword\[eax\],[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 15)
+			$mASMSize += 6
+			$mASMString &= 'C700' & ASMNumber($value)
+		Case StringRegExp($aASM, 'mov dword\[ebx\],[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 15)
+			$mASMSize += 6
+			$mASMString &= 'C703' & ASMNumber($value)
+		Case StringRegExp($aASM, 'mov dword\[ecx\],[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 15)
+			$mASMSize += 6
+			$mASMString &= 'C701' & ASMNumber($value)
+		Case StringRegExp($aASM, 'mov dword\[edx\],[-[:xdigit:]]{1,8}\z')
+			Local $value = StringMid($aASM, 15)
+			$mASMSize += 6
+			$mASMString &= 'C702' & ASMNumber($value)
+		Case StringRegExp($aASM, 'mov dword\[eax\],[0-9]\z')
+			Local $value = StringMid($aASM, 15)
+			$mASMSize += 6
+			$mASMString &= 'C700' & SwapEndian(Hex(Number($value), 8))
+		Case StringRegExp($aASM, 'mov dword\[eax\],\d+\z')
+			Local $value = Number(StringMid($aASM, 15))
+			If $value <= 127 Then
+				$mASMSize += 6
+				$mASMString &= 'C700' & SwapEndian(Hex($value, 8))
+			Else
+				$mASMSize += 6
+				$mASMString &= 'C700' & ASMNumber($value)
+			EndIf
+				Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],eax')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],eax', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8940' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8980' & SwapEndian(Hex($offset, 8))
+			EndIf
 
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],ebx')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],ebx', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8958' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8998' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],ecx')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],ecx', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8948' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8988' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],edx')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],edx', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8950' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '8990' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],esi')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],esi', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8970' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '89B0' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],edi')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],edi', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8978' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '89B8' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],ebp')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],ebp', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8968' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '89A8' & SwapEndian(Hex($offset, 8))
+			EndIf
+
+		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],esp')
+			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],esp', '$1')
+			$offset = Dec($offset)
+			If $offset <= 0x7F Then
+				$mASMSize += 3
+				$mASMString &= '8960' & Hex($offset, 2)
+			Else
+				$mASMSize += 6
+				$mASMString &= '89A0' & SwapEndian(Hex($offset, 8))
+			EndIf
 		Case Else
 			Local $lOpCode
 			Switch $aASM
@@ -421,6 +919,14 @@ Func _($aASM)
 					$lOpCode = '60'
 				Case 'popad'
 					$lOpCode = '61'
+				Case 'pushfd'
+					$lOpCode = '9C'
+				Case 'popfd'
+					$lOpCode = '9D'
+				Case 'pushf'
+					$lOpCode = '9C'
+				Case 'popf'
+					$lOpCode = '9D'
 				Case 'mov ebx,dword[eax]'
 					$lOpCode = '8B18'
 				Case 'mov ebx,dword[ecx]'
@@ -1003,7 +1509,7 @@ Func _($aASM)
 					$lOpCode = '8BE2'
 				Case $aASM = 'mov esp,ebx'
 					$lOpCode = '8BE3'
-					Case $aASM = 'mov esi,dword[ebp+8]'
+				Case $aASM = 'mov esi,dword[ebp+8]'
 					$lOpCode = '8B7508'
 				Case $aASM = 'mov esi,dword[ebp+C]'
 					$lOpCode = '8B750C'
@@ -1041,8 +1547,42 @@ Func _($aASM)
 					$lOpCode = '8B5510'
 				Case $aASM = 'mov esi,ebp'
 					$lOpCode = '8BF5'
+				Case 'mov ecx,dword[esi]'
+					$lOpCode = '8B0E'
+				Case 'mov ecx,dword[ebp+C]'
+					$lOpCode = '8B4D0C'
+				Case 'mov ecx,dword[ebp+10]'
+					$lOpCode = '8B4D10'
+				Case 'mov edx,dword[esi]'
+					$lOpCode = '8B16'
+				Case 'mov edx,dword[edi]'
+					$lOpCode = '8B17'
+				Case 'mov eax,dword[esi]'
+					$lOpCode = '8B06'
+				Case 'mov eax,dword[edi]'
+					$lOpCode = '8B07'
+				Case 'mov ecx,dword[esi]'
+					$lOpCode = '8B0E'
+				Case 'mov ecx,dword[edi]'
+					$lOpCode = '8B0F'
+				Case 'mov ebx,dword[esi]'
+					$lOpCode = '8B1E'
+				Case 'mov ebx,dword[edi]'
+					$lOpCode = '8B1F'
+				Case 'and eax,0xF'
+					$lOpCode = '83E00F'
+				Case 'and eax,0xFF'
+					$lOpCode = '25FF000000'
+				Case 'and eax,0xFFFF'
+					$lOpCode = '25FFFF0000'  ; Celui-ci existe déjà
+				Case 'and ebx,0xF'
+					$lOpCode = '83E30F'
+				Case 'and ecx,0xF'
+					$lOpCode = '83E10F'
+				Case 'and edx,0xF'
+					$lOpCode = '83E20F'
 				Case Else
-					_Log_Error('Could not assemble: ' & $aASM, 'ASM', $GUIEdit)
+					_Log_Error('Could not assemble: ' & $aASM, 'ASM', $g_h_EditText)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $aASM)
 					Exit
 			EndSwitch
@@ -1058,10 +1598,10 @@ Func CompleteASMCode()
 	Local $lCurrentOffset = Dec(Hex($mMemory)) + $mASMCodeOffset
 	Local $lToken
 
-	For $i = 1 To $mLabels[0][0]
-		If StringLeft($mLabels[$i][0], 6) = 'Label_' Then
-			$mLabels[$i][0] = StringTrimLeft($mLabels[$i][0], 6)
-			$mLabels[$i][1] = $mMemory + $mLabels[$i][1]
+	For $i = 1 To $g_amx2_Labels[0][0]
+		If StringLeft($g_amx2_Labels[$i][0], 6) = 'Label_' Then
+			$g_amx2_Labels[$i][0] = StringTrimLeft($g_amx2_Labels[$i][0], 6)
+			$g_amx2_Labels[$i][1] = $mMemory + $g_amx2_Labels[$i][1]
 		EndIf
 	Next
 
@@ -1121,7 +1661,6 @@ Func WriteDetour($aFrom, $aTo)
 	WriteBinary('E9' & SwapEndian(Hex(GetLabelInfo($aTo) - GetLabelInfo($aFrom) - 5)), GetLabelInfo($aFrom))
 EndFunc
 
-; Create scan procedure
 Func _CreateScanProcedure($lGwBase)
     _('ScanProc:')
     _('pushad')
@@ -1209,8 +1748,6 @@ Func ModifyMemory()
 	_TradeMod_CreateSalvageCommand()
 	_AgentMod_CreateCommands()
 	_MapMod_CreateCommands()
-	CreateMeleeSkillLog()
-	CreateCasterSkillLog()
 	$mMemory = MemoryRead(MemoryRead($mBase), 'ptr')
 
 	Switch $mMemory
@@ -1222,32 +1759,26 @@ Func ModifyMemory()
 			WriteBinary($mASMString, $mMemory + $mASMCodeOffset)
 			$SecondInject = $mMemory + $mASMCodeOffset
 			MemoryWrite(GetValue('QueuePtr'), GetValue('QueueBase'))
-			MemoryWrite(GetValue('SkillLogPtr'), GetValue('SkillLogBase'))
 		Case Else
 			CompleteASMCode()
 	EndSwitch
 	WriteDetour('MainStart', 'MainProc')
 	WriteDetour('TraderStart', 'TraderProc')
 	WriteDetour('RenderingMod', 'RenderingModProc')
-	WriteDetour('CasterSkillLogStart', 'CasterSkillLogProc')
-    WriteDetour('MeleeSkillLogStart', 'MeleeSkillLogProc')
 EndFunc
 
 Func CreateData()
-	_('CallbackHandle/4')
-	_('QueueCounter/4')
-	_('TraderQuoteID/4')
-	_('TraderCostID/4')
-	_('TraderCostValue/4')
-	_('DisableRendering/4')
-	_('SkillLogCounter/4')
+    _('QueueCounter/4')
+    _('TraderQuoteID/4')
+    _('TraderCostID/4')
+    _('TraderCostValue/4')
+    _('DisableRendering/4')
 
-	_('QueueBase/' & 256 * GetValue('QueueSize'))
-	_('SkillLogBase/' & 16 * GetValue('SkillLogSize'))
+    _('QueueBase/' & 256 * GetValue('QueueSize'))
 
-	_('AgentCopyCount/4')
-	_('AgentCopyBase/' & 0x1C0 * 256)
-EndFunc
+    _('AgentCopyCount/4')
+    _('AgentCopyBase/' & 0x1C0 * 256)
+EndFunc   ;==>CreateData
 
 Func CreateMain()
 	_('MainProc:')
@@ -1644,89 +2175,3 @@ Func _MapMod_CreateCommands()
 	_('pop eax')
 	_('ljmp CommandReturn')
 EndFunc
-
-Func CreateCasterSkillLog()
-    _('CasterSkillLogProc:')
-    _('push ebx')
-    _('push ecx')
-    _('push edx')
-    _('push esi')
-    _('push edi')
-
-    ; Incrémenter un compteur simple pour vérifier que la fonction est appelée
-    _('mov eax,dword[SkillLogCounter]')
-    _('inc eax')
-    _('mov dword[SkillLogCounter],eax')
-
-    ; Maintenant traiter les données
-    _('dec eax')  ; Revenir à la valeur précédente
-    _('push eax')
-    _('shl eax,4')
-    _('add eax,SkillLogBase')
-
-    ; Stocker des valeurs de test fixes pour déboguer
-    _('mov dword[eax],99')         ; Caster = 99 (valeur de test)
-    _('mov dword[eax+4],88')       ; Target = 88
-    _('mov dword[eax+8],77')       ; Skill = 77
-    _('mov dword[eax+C],66')       ; Activation = 66
-
-    _('push 1')
-    _('push eax')
-    _('push CallbackEvent')
-    _('push dword[CallbackHandle]')
-    _('call dword[PostMessage]')
-
-    _('pop eax')
-    _('inc eax')
-    _('cmp eax,SkillLogSize')
-    _('jnz SkillLogSkipReset')
-    _('xor eax,eax')
-    _('SkillLogSkipReset:')
-    _('mov dword[SkillLogCounter],eax')
-
-    _('pop edi')
-    _('pop esi')
-    _('pop edx')
-    _('pop ecx')
-    _('pop ebx')
-
-    ; Reproduire le début de la fonction originale
-    _('push ebp')
-    _('mov ebp,esp')
-    _('push dword[ebp+8]')
-
-    _('ljmp CasterSkillLogReturn')
-EndFunc
-
-Func CreateMeleeSkillLog()
-	_('MeleeSkillLogProc:')
-	_('pushad')
-
-	_('mov eax,dword[SkillLogCounter]')
-	_('push eax')
-	_('shl eax,4')
-	_('add eax,SkillLogBase')
-
-	_('mov dword[eax],edi')
-	_('mov dword[eax+4],ecx')
-	_('mov dword[eax+8],ebx')
-
-	_('push 1')
-	_('push eax')
-	_('push CallbackEvent')
-	_('push dword[CallbackHandle]')
-	_('call dword[PostMessage]')
-
-	_('pop eax')
-	_('inc eax')
-	_('cmp eax,SkillLogSize')
-	_('jnz SkillLogSkipReset')
-	_('xor eax,eax')
-	_('SkillLogSkipReset:')
-	_('mov dword[SkillLogCounter],eax')
-
-	_('popad')
-	_('mov ebp,esp')
-	_('push dword[ebp+8]')
-	_('ljmp MeleeSkillLogReturn')
-EndFunc   ;==>CreateMeleeSkillLog

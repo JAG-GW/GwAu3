@@ -2,17 +2,17 @@
 
 Func _TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iItemID <= 0 Then
-        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iQuantity <= 0 Or $iQuantity > $MERCHANT_MAX_ITEM_STACK Then
-        _Log_Error("Invalid quantity: " & $iQuantity, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid quantity: " & $iQuantity, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -28,28 +28,28 @@ Func _TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
     $g_iLastItemID = $iItemID
     $g_iLastQuantity = $iQuantity
 
-    _Log_Debug("Selling item " & $iItemID & " (quantity: " & $iQuantity & ") to merchant " & $iMerchantID, "TradeMod", $GUIEdit)
+    _Log_Debug("Selling item " & $iItemID & " (quantity: " & $iQuantity & ") to merchant " & $iMerchantID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID = 0)
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iItemID <= 0 Then
-        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iQuantity <= 0 Or $iQuantity > $MERCHANT_MAX_ITEM_STACK Then
-        _Log_Error("Invalid quantity: " & $iQuantity, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid quantity: " & $iQuantity, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iPrice < 0 Or $iPrice > $MERCHANT_MAX_GOLD Then
-        _Log_Error("Invalid price: " & $iPrice, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid price: " & $iPrice, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -67,23 +67,23 @@ Func _TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID = 0)
     $g_iLastQuantity = $iQuantity
     $g_iLastPrice = $iPrice
 
-    _Log_Debug("Buying item " & $iItemID & " (quantity: " & $iQuantity & ", price: " & $iPrice & ") from merchant " & $iMerchantID, "TradeMod", $GUIEdit)
+    _Log_Debug("Buying item " & $iItemID & " (quantity: " & $iQuantity & ", price: " & $iPrice & ") from merchant " & $iMerchantID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCrafterID = 0, $iFlags = 0)
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iRecipeID <= 0 Then
-        _Log_Error("Invalid recipe ID: " & $iRecipeID, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid recipe ID: " & $iRecipeID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iQuantity <= 0 Or $iQuantity > $MERCHANT_MAX_ITEM_STACK Then
-        _Log_Error("Invalid quantity: " & $iQuantity, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid quantity: " & $iQuantity, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -108,18 +108,18 @@ Func _TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCrafterI
     $g_iLastItemID = $iRecipeID
     $g_iLastQuantity = $iQuantity
 
-    _Log_Debug("Crafting item " & $iRecipeID & " (quantity: " & $iQuantity & ") with crafter " & $iCrafterID, "TradeMod", $GUIEdit)
+    _Log_Debug("Crafting item " & $iRecipeID & " (quantity: " & $iQuantity & ") with crafter " & $iCrafterID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _TradeMod_RequestQuote($iItemID)
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iItemID <= 0 Then
-        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -132,18 +132,18 @@ Func _TradeMod_RequestQuote($iItemID)
     $g_iLastTransactionType = $TRANSACTION_REQUEST_QUOTE
     $g_iLastItemID = $iItemID
 
-    _Log_Debug("Requesting quote for item " & $iItemID, "TradeMod", $GUIEdit)
+    _Log_Debug("Requesting quote for item " & $iItemID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _TradeMod_RequestQuoteSell($iItemID)
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iItemID <= 0 Then
-        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -156,13 +156,13 @@ Func _TradeMod_RequestQuoteSell($iItemID)
     $g_iLastTransactionType = $TRANSACTION_REQUEST_QUOTE_SELL
     $g_iLastItemID = $iItemID
 
-    _Log_Debug("Requesting sell quote for item " & $iItemID, "TradeMod", $GUIEdit)
+    _Log_Debug("Requesting sell quote for item " & $iItemID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _TradeMod_TraderBuy()
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -171,7 +171,7 @@ Func _TradeMod_TraderBuy()
     Local $iCostValue = MemoryRead($g_mTraderCostValue, 'dword')
 
     If $iCostID = 0 Then
-        _Log_Warning("No valid trader quote available", "TradeMod", $GUIEdit)
+        _Log_Warning("No valid trader quote available", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -183,13 +183,13 @@ Func _TradeMod_TraderBuy()
     $g_iLastItemID = $iCostID
     $g_iLastPrice = $iCostValue
 
-    _Log_Debug("Executing trader buy for item " & $iCostID & " at price " & $iCostValue, "TradeMod", $GUIEdit)
+    _Log_Debug("Executing trader buy for item " & $iCostID & " at price " & $iCostValue, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _TradeMod_TraderSell()
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -198,7 +198,7 @@ Func _TradeMod_TraderSell()
     Local $iCostValue = MemoryRead($g_mTraderCostValue, 'dword')
 
     If $iCostID = 0 Then
-        _Log_Warning("No valid trader quote available", "TradeMod", $GUIEdit)
+        _Log_Warning("No valid trader quote available", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -210,28 +210,28 @@ Func _TradeMod_TraderSell()
     $g_iLastItemID = $iCostID
     $g_iLastPrice = $iCostValue
 
-    _Log_Debug("Executing trader sell for item " & $iCostID & " at price " & $iCostValue, "TradeMod", $GUIEdit)
+    _Log_Debug("Executing trader sell for item " & $iCostID & " at price " & $iCostValue, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _TradeMod_SalvageItem($iItemID, $iSalvageKitID, $iSalvageType = $SALVAGE_TYPE_NORMAL)
     If Not $g_bTradeModuleInitialized Then
-        _Log_Error("TradeMod module not initialized", "TradeMod", $GUIEdit)
+        _Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iItemID <= 0 Then
-        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iSalvageKitID <= 0 Then
-        _Log_Error("Invalid salvage kit ID: " & $iSalvageKitID, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid salvage kit ID: " & $iSalvageKitID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iSalvageType < $SALVAGE_TYPE_NORMAL Or $iSalvageType > $SALVAGE_TYPE_PERFECT Then
-        _Log_Error("Invalid salvage type: " & $iSalvageType, "TradeMod", $GUIEdit)
+        _Log_Error("Invalid salvage type: " & $iSalvageType, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -246,6 +246,6 @@ Func _TradeMod_SalvageItem($iItemID, $iSalvageKitID, $iSalvageType = $SALVAGE_TY
     $g_iLastTransactionType = 0 ; Salvage doesn't have a specific transaction type
     $g_iLastItemID = $iItemID
 
-    _Log_Debug("Salvaging item " & $iItemID & " with kit " & $iSalvageKitID & " (type: " & $iSalvageType & ")", "TradeMod", $GUIEdit)
+    _Log_Debug("Salvaging item " & $iItemID & " with kit " & $iSalvageKitID & " (type: " & $iSalvageType & ")", "TradeMod", $g_h_EditText)
     Return True
 EndFunc

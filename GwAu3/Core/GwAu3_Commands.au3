@@ -1,5 +1,5 @@
 #include-once
-#include "GwAu3_Constants_Core.au3"
+#include "GwAu3_Constants.au3"
 
 Func Enqueue($aPtr, $aSize)
 	DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'int', 256 * $mQueueCounter + $mQueueBase, 'ptr', $aPtr, 'int', $aSize, 'int', '')

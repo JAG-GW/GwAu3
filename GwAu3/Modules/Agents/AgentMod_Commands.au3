@@ -2,14 +2,14 @@
 
 Func _AgentMod_ChangeTarget($iAgentID)
     If Not $g_bAgentModuleInitialized Then
-        _Log_Error("AgentMod module not initialized", "AgentMod", $GUIEdit)
+        _Log_Error("AgentMod module not initialized", "AgentMod", $g_h_EditText)
         Return False
     EndIf
 
 	$iAgentID = ConvertID($iAgentID)
 
     If $iAgentID < 0 Then
-        _Log_Error("Invalid agent ID: " & $iAgentID, "AgentMod", $GUIEdit)
+        _Log_Error("Invalid agent ID: " & $iAgentID, "AgentMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -25,12 +25,12 @@ EndFunc
 
 Func _AgentMod_MakeAgentArray($iType = 0)
     If Not $g_bAgentModuleInitialized Then
-        _Log_Error("AgentMod module not initialized", "AgentMod", $GUIEdit)
+        _Log_Error("AgentMod module not initialized", "AgentMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iType < 0 Then
-        _Log_Error("Invalid agent type: " & $iType, "AgentMod", $GUIEdit)
+        _Log_Error("Invalid agent type: " & $iType, "AgentMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -38,13 +38,13 @@ Func _AgentMod_MakeAgentArray($iType = 0)
     DllStructSetData($g_mMakeAgentArray, 2, $iType)
     Enqueue($g_mMakeAgentArrayPtr, 8)
 
-    _Log_Debug("Creating agent array snapshot (type filter: " & $iType & ")", "AgentMod", $GUIEdit)
+    _Log_Debug("Creating agent array snapshot (type filter: " & $iType & ")", "AgentMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func _AgentMod_TargetNearestEnemy($fMaxDistance = 1300)
     If Not $g_bAgentModuleInitialized Then
-        _Log_Error("AgentMod module not initialized", "AgentMod", $GUIEdit)
+        _Log_Error("AgentMod module not initialized", "AgentMod", $g_h_EditText)
         Return 0
     EndIf
 
@@ -75,9 +75,9 @@ Func _AgentMod_TargetNearestEnemy($fMaxDistance = 1300)
 
     If $lNearestID > 0 Then
         _AgentMod_ChangeTarget($lNearestID)
-        _Log_Debug("Targeted nearest enemy: " & $lNearestID & " at distance: " & $lNearestDistance, "AgentMod", $GUIEdit)
+        _Log_Debug("Targeted nearest enemy: " & $lNearestID & " at distance: " & $lNearestDistance, "AgentMod", $g_h_EditText)
     Else
-        _Log_Debug("No enemy found within range: " & $fMaxDistance, "AgentMod", $GUIEdit)
+        _Log_Debug("No enemy found within range: " & $fMaxDistance, "AgentMod", $g_h_EditText)
     EndIf
 
     Return $lNearestID
@@ -85,7 +85,7 @@ EndFunc
 
 Func _AgentMod_TargetNearestAlly($fMaxDistance = 1300, $bExcludeSelf = True)
     If Not $g_bAgentModuleInitialized Then
-        _Log_Error("AgentMod module not initialized", "AgentMod", $GUIEdit)
+        _Log_Error("AgentMod module not initialized", "AgentMod", $g_h_EditText)
         Return 0
     EndIf
 
@@ -119,9 +119,9 @@ Func _AgentMod_TargetNearestAlly($fMaxDistance = 1300, $bExcludeSelf = True)
 
     If $lNearestID > 0 Then
         _AgentMod_ChangeTarget($lNearestID)
-        _Log_Debug("Targeted nearest ally: " & $lNearestID & " at distance: " & $lNearestDistance, "AgentMod", $GUIEdit)
+        _Log_Debug("Targeted nearest ally: " & $lNearestID & " at distance: " & $lNearestDistance, "AgentMod", $g_h_EditText)
     Else
-        _Log_Debug("No ally found within range: " & $fMaxDistance, "AgentMod", $GUIEdit)
+        _Log_Debug("No ally found within range: " & $fMaxDistance, "AgentMod", $g_h_EditText)
     EndIf
 
     Return $lNearestID

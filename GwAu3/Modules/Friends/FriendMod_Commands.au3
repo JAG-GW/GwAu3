@@ -4,19 +4,19 @@
 #Region Status Functions
 Func SetPlayerStatus($iStatus)
     If Not $g_bFriendModuleInitialized Then
-        _Log_Error("FriendMod module not initialized", "FriendMod", $GUIEdit)
+        _Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iStatus < $FRIEND_STATUS_OFFLINE Or $iStatus > $FRIEND_STATUS_AWAY Then
-        _Log_Error("Invalid status: " & $iStatus, "FriendMod", $GUIEdit)
+        _Log_Error("Invalid status: " & $iStatus, "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
     ; Check if status is already set
     Local $lCurrentStatus = GetMyStatus()
     If $lCurrentStatus = $iStatus Then
-        _Log_Debug("Status already set to: " & GetFriendStatusName($iStatus), "FriendMod", $GUIEdit)
+        _Log_Debug("Status already set to: " & GetFriendStatusName($iStatus), "FriendMod", $g_h_EditText)
         Return True
     EndIf
 
@@ -27,7 +27,7 @@ Func SetPlayerStatus($iStatus)
 
     $g_iLastStatus = $iStatus
 
-    _Log_Info("Changed player status to: " & GetFriendStatusName($iStatus), "FriendMod", $GUIEdit)
+    _Log_Info("Changed player status to: " & GetFriendStatusName($iStatus), "FriendMod", $g_h_EditText)
     Return True
 EndFunc
 
@@ -51,23 +51,23 @@ EndFunc
 #Region Friend Management Functions
 Func AddFriend($sCharacterName, $sAlias = "", $iFriendType = $FRIEND_TYPE_FRIEND)
     If Not $g_bFriendModuleInitialized Then
-        _Log_Error("FriendMod module not initialized", "FriendMod", $GUIEdit)
+        _Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
     If StringLen($sCharacterName) = 0 Or StringLen($sCharacterName) > $FRIEND_CHARNAME_MAX_LENGTH Then
-        _Log_Error("Invalid character name length", "FriendMod", $GUIEdit)
+        _Log_Error("Invalid character name length", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iFriendType < 1 Or $iFriendType > 2 Then
-        _Log_Error("Invalid friend type: " & $iFriendType, "FriendMod", $GUIEdit)
+        _Log_Error("Invalid friend type: " & $iFriendType, "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
     Local $lExistingFriend = _FriendMod_GetFriendInfo($sCharacterName, "Ptr")
     If $lExistingFriend <> 0 Then
-        _Log_Warning("Friend already exists: " & $sCharacterName, "FriendMod", $GUIEdit)
+        _Log_Warning("Friend already exists: " & $sCharacterName, "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -81,7 +81,7 @@ Func AddFriend($sCharacterName, $sAlias = "", $iFriendType = $FRIEND_TYPE_FRIEND
     $pAliasMem = $pAliasMem[0]
 
     If $pNameMem = 0 Or $pAliasMem = 0 Then
-        _Log_Error("Failed to allocate memory in GW process", "FriendMod", $GUIEdit)
+        _Log_Error("Failed to allocate memory in GW process", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -109,7 +109,7 @@ EndFunc
 
 Func RemoveFriend($sNameOrAlias)
     If Not $g_bFriendModuleInitialized Then
-        _Log_Error("FriendMod module not initialized", "FriendMod", $GUIEdit)
+        _Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -118,7 +118,7 @@ Func RemoveFriend($sNameOrAlias)
     Local $lArraySize = MemoryRead($g_mFriendListPtr + 0x08, "dword")
 
     If $lArrayDataPtr = 0 Or $lArraySize = 0 Then
-        _Log_Error("Friend array is empty or invalid", "FriendMod", $GUIEdit)
+        _Log_Error("Friend array is empty or invalid", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -142,7 +142,7 @@ Func RemoveFriend($sNameOrAlias)
     Next
 
     If $lFriendPtr = 0 Then
-        _Log_Warning("Friend not found: " & $sNameOrAlias, "FriendMod", $GUIEdit)
+        _Log_Warning("Friend not found: " & $sNameOrAlias, "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -161,7 +161,7 @@ Func RemoveFriend($sNameOrAlias)
     $pAliasMem = $pAliasMem[0]
 
     If $pAliasMem = 0 Then
-        _Log_Error("Failed to allocate memory in GW process", "FriendMod", $GUIEdit)
+        _Log_Error("Failed to allocate memory in GW process", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -187,7 +187,7 @@ EndFunc
 
 Func RemoveIgnore($sCharacterName)
     If Not $g_bFriendModuleInitialized Then
-        _Log_Error("FriendMod module not initialized", "FriendMod", $GUIEdit)
+        _Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -196,7 +196,7 @@ Func RemoveIgnore($sCharacterName)
     Local $lArraySize = MemoryRead($g_mFriendListPtr + 0x08, "dword")
 
     If $lArrayDataPtr = 0 Or $lArraySize = 0 Then
-        _Log_Error("Friend array is empty or invalid", "FriendMod", $GUIEdit)
+        _Log_Error("Friend array is empty or invalid", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
@@ -226,13 +226,13 @@ Func RemoveIgnore($sCharacterName)
     Next
 
     If $lFriendPtr = 0 Then
-        _Log_Warning("Person not found in list: " & $sCharacterName, "FriendMod", $GUIEdit)
+        _Log_Warning("Person not found in list: " & $sCharacterName, "FriendMod", $g_h_EditText)
         Return False
     EndIf
 
     ; Check if the person is in ignore list
     If $lType <> $FRIEND_TYPE_IGNORE Then
-        _Log_Warning("Person is not in ignore list: " & $sCharacterName & " (Type: " & $lType & ")", "FriendMod", $GUIEdit)
+        _Log_Warning("Person is not in ignore list: " & $sCharacterName & " (Type: " & $lType & ")", "FriendMod", $g_h_EditText)
         Return False
     EndIf
 

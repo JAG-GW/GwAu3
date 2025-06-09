@@ -17,7 +17,7 @@ Global $g_CompiledPatternsCache[0][4] ; [pattern_binary, length, first_byte, las
 
 Func GetGWBaseAddress()
     If $mGWProcHandle = 0 Then
-        _Log_Error("Invalid process handle", "Memory", $GUIEdit)
+        _Log_Error("Invalid process handle", "Memory", $g_h_EditText)
         Return 0
     EndIf
 
@@ -26,7 +26,7 @@ Func GetGWBaseAddress()
 
     Local $hPSAPI = DllOpen("psapi.dll")
     If @error Then
-        _Log_Error("Failed to open psapi.dll", "Memory", $GUIEdit)
+        _Log_Error("Failed to open psapi.dll", "Memory", $g_h_EditText)
         Return 0
     EndIf
 
@@ -37,7 +37,7 @@ Func GetGWBaseAddress()
         "ptr", DllStructGetPtr($cbNeeded))
 
     If @error Or Not $success[0] Then
-        _Log_Error("EnumProcessModules failed", "Memory", $GUIEdit)
+        _Log_Error("EnumProcessModules failed", "Memory", $g_h_EditText)
         DllClose($hPSAPI)
         Return 0
     EndIf
@@ -55,7 +55,7 @@ Func GetGWBaseAddress()
         EndIf
     Next
 
-    _Log_Error("Gw.exe module not found", "Memory", $GUIEdit)
+    _Log_Error("Gw.exe module not found", "Memory", $g_h_EditText)
     DllClose($hPSAPI)
     Return 0
 EndFunc
@@ -64,12 +64,12 @@ Func InitializeSections($baseAddress)
     Local $dosHeader = DllStructCreate("struct;word e_magic;byte[58];dword e_lfanew;endstruct")
     Local $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress, DllStructGetPtr($dosHeader), DllStructGetSize($dosHeader), 0)
     If Not $success Then
-        _Log_Error("Failed to read DOS header", "Sections", $GUIEdit)
+        _Log_Error("Failed to read DOS header", "Sections", $g_h_EditText)
         Return False
     EndIf
 
     If DllStructGetData($dosHeader, "e_magic") <> 0x5A4D Then ; 'MZ'
-        _Log_Error("Invalid DOS signature", "Sections", $GUIEdit)
+        _Log_Error("Invalid DOS signature", "Sections", $g_h_EditText)
         Return False
     EndIf
 
@@ -78,12 +78,12 @@ Func InitializeSections($baseAddress)
     Local $ntHeaders = DllStructCreate("struct;dword Signature;word Machine;word NumberOfSections;dword TimeDateStamp;dword PointerToSymbolTable;dword NumberOfSymbols;word SizeOfOptionalHeader;word Characteristics;endstruct")
     $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress + $e_lfanew, DllStructGetPtr($ntHeaders), DllStructGetSize($ntHeaders), 0)
     If Not $success Then
-        _Log_Error("Failed to read NT headers", "Sections", $GUIEdit)
+        _Log_Error("Failed to read NT headers", "Sections", $g_h_EditText)
         Return False
     EndIf
 
     If DllStructGetData($ntHeaders, "Signature") <> 0x4550 Then ; 'PE\0\0'
-        _Log_Error("Invalid PE signature", "Sections", $GUIEdit)
+        _Log_Error("Invalid PE signature", "Sections", $g_h_EditText)
         Return False
     EndIf
 
@@ -112,7 +112,7 @@ Func InitializeSections($baseAddress)
     For $i = 0 To $numberOfSections - 1
         $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress + $sectionHeaderOffset + ($i * 40), DllStructGetPtr($sectionHeader), DllStructGetSize($sectionHeader), 0)
         If Not $success Then
-            _Log_Warning("Failed to read section header " & $i, "Sections", $GUIEdit)
+            _Log_Warning("Failed to read section header " & $i, "Sections", $g_h_EditText)
             ContinueLoop
         EndIf
 
@@ -147,31 +147,18 @@ Func InitializeSections($baseAddress)
     Next
 
     If $sections[$SECTION_TEXT][0] = 0 Then
-        _Log_Error("Failed to find .text section", "Sections", $GUIEdit)
+        _Log_Error("Failed to find .text section", "Sections", $g_h_EditText)
         Return False
     EndIf
 
     Return True
 EndFunc
 
-Func _StringToBytes($str)
-    Local $len = StringLen($str) + 1
-    Local $struct = DllStructCreate("byte[" & $len & "]")
-
-    For $i = 1 To StringLen($str)
-        DllStructSetData($struct, 1, Asc(StringMid($str, $i, 1)), $i)
-    Next
-    DllStructSetData($struct, 1, 0, $len)
-
-    Local $result = DllStructGetData($struct, 1)
-    Return $result
-EndFunc
-
 Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
     If $sections[$section][0] = 0 Or $sections[$section][1] = 0 Then
         Local $baseAddr = GetGWBaseAddress()
         If $baseAddr = 0 Then
-            _Log_Error("Failed to get GW base address", "FindMultipleStrings", $GUIEdit)
+            _Log_Error("Failed to get GW base address", "FindMultipleStrings", $g_h_EditText)
             Local $emptyResults[UBound($aStrings)]
             For $i = 0 To UBound($aStrings) - 1
                 $emptyResults[$i] = 0
@@ -180,7 +167,7 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
         EndIf
 
         If Not InitializeSections($baseAddr) Then
-            _Log_Error("Failed to initialize sections", "FindMultipleStrings", $GUIEdit)
+            _Log_Error("Failed to initialize sections", "FindMultipleStrings", $g_h_EditText)
             Local $emptyResults[UBound($aStrings)]
             For $i = 0 To UBound($aStrings) - 1
                 $emptyResults[$i] = 0
@@ -216,7 +203,7 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
     Local $end = $sections[$section][1]
 
     If $start = 0 Or $end = 0 Or $start >= $end Then
-        _Log_Warning("Invalid section bounds. Start: " & Hex($start) & ", End: " & Hex($end), "FindMultipleStrings", $GUIEdit)
+        _Log_Warning("Invalid section bounds. Start: " & Hex($start) & ", End: " & Hex($end), "FindMultipleStrings", $g_h_EditText)
         Return FindMultipleStringsFallback($aStrings, $section)
     EndIf
 
@@ -244,7 +231,7 @@ Func FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
         "ulong_ptr*", $bytesRead)
 
     If @error Or Not $success[0] Or $success[5] < $sectionSize Then
-        _Log_Warning("Failed to read section into memory. Read " & $success[5] & "/" & $sectionSize & " bytes. Using fallback method.", "FindMultipleStrings", $GUIEdit)
+        _Log_Warning("Failed to read section into memory. Read " & $success[5] & "/" & $sectionSize & " bytes. Using fallback method.", "FindMultipleStrings", $g_h_EditText)
         Return FindMultipleStringsFallback($aStrings, $section)
     EndIf
 
@@ -488,13 +475,6 @@ Func GetMultipleAssertionPatterns($aAssertions)
     Return $patterns
 EndFunc
 
-Func _ArrayAdd2D(ByRef $array, $val1, $val2)
-    Local $idx = UBound($array)
-    ReDim $array[$idx + 1][2]
-    $array[$idx][0] = $val1
-    $array[$idx][1] = $val2
-EndFunc
-
 Func FunctionFromNearCall($call_instruction_address)
     Local $opcode = MemoryRead($call_instruction_address, "byte")
     Local $function_address = 0
@@ -606,6 +586,13 @@ Func ToFunctionStart($call_instruction_address, $scan_range = 0x200)
     Return FindInRange("558BEC", "xxx", 0, $start, $end)
 EndFunc
 
+Func _ArrayAdd2D(ByRef $array, $val1, $val2)
+    Local $idx = UBound($array)
+    ReDim $array[$idx + 1][2]
+    $array[$idx][0] = $val1
+    $array[$idx][1] = $val2
+EndFunc
+
 Func _UnsignedCompare($a, $b)
    $a = BitAND($a, 0xFFFFFFFF)
    $b = BitAND($b, 0xFFFFFFFF)
@@ -623,4 +610,17 @@ Func StringToByteArray($hexString)
     Next
 
     Return $bytes
+EndFunc
+
+Func _StringToBytes($str)
+    Local $len = StringLen($str) + 1
+    Local $struct = DllStructCreate("byte[" & $len & "]")
+
+    For $i = 1 To StringLen($str)
+        DllStructSetData($struct, 1, Asc(StringMid($str, $i, 1)), $i)
+    Next
+    DllStructSetData($struct, 1, 0, $len)
+
+    Local $result = DllStructGetData($struct, 1)
+    Return $result
 EndFunc

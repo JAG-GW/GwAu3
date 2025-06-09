@@ -1,11 +1,6 @@
 #include-once
 
 Func _MapMod_Move($fX, $fY, $fRandomize = 50)
-    If Not $g_bMapModuleInitialized Then
-        _Log_Error("MapMod module not initialized", "MapMod", $GUIEdit)
-        Return False
-    EndIf
-
     ; Add randomization if requested
     If $fRandomize > 0 Then
         $fX += Random(-$fRandomize, $fRandomize)

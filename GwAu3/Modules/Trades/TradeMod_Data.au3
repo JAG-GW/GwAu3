@@ -54,7 +54,7 @@ EndFunc
 Func _TradeMod_ClearTraderQuote()
     MemoryWrite($g_mTraderCostID, 0, 'dword')
     MemoryWrite($g_mTraderCostValue, 0, 'dword')
-    _Log_Debug("Trader quote data cleared", "TradeMod", $GUIEdit)
+    _Log_Debug("Trader quote data cleared", "TradeMod", $g_h_EditText)
 EndFunc
 
 Func _TradeMod_GetTransactionTypeName($iTransactionType)
@@ -96,13 +96,13 @@ Func _TradeMod_WaitForQuote($iTimeout = 5000)
 
     While TimerDiff($iStartTime) < $iTimeout
         If _TradeMod_IsValidQuote() Then
-            _Log_Debug("Quote received after " & TimerDiff($iStartTime) & "ms", "TradeMod", $GUIEdit)
+            _Log_Debug("Quote received after " & TimerDiff($iStartTime) & "ms", "TradeMod", $g_h_EditText)
             Return True
         EndIf
         Sleep(32) ; Small delay to prevent excessive polling
     WEnd
 
-    _Log_Warning("Quote request timed out after " & $iTimeout & "ms", "TradeMod", $GUIEdit)
+    _Log_Warning("Quote request timed out after " & $iTimeout & "ms", "TradeMod", $g_h_EditText)
     Return False
 EndFunc
 

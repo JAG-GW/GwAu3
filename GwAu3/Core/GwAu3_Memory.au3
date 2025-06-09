@@ -1,5 +1,5 @@
 #include-once
-#include "GwAu3_Constants_Core.au3"
+#include "GwAu3_Constants.au3"
 
 Func MemoryOpen($aPID)
 	$mKernelHandle = DllOpen('kernel32.dll')
