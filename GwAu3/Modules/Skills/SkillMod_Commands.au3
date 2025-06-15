@@ -1,66 +1,66 @@
 #include-once
 
-Func _SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
+Func GwAu3_SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
     If $iSkillSlot < 1 Or $iSkillSlot > 8 Then
-        _Log_Error("Invalid skill ID: " & $iSkillSlot, "SkillMod", $g_h_EditText)
+        GwAu3_Log_Error("Invalid skill ID: " & $iSkillSlot, "SkillMod", $g_h_EditText)
         Return False
     EndIf
 
-	Local $iAgentID = ConvertID($iTargetID)
+	Local $iAgentID = GwAu3_AgentMod_ConvertID($iTargetID)
     If $iAgentID = 0 Then
-        _Log_Error("Target not found: " & $iAgentID, "SkillMod", $g_h_EditText)
+        GwAu3_Log_Error("Target not found: " & $iAgentID, "SkillMod", $g_h_EditText)
         Return False
     EndIf
 
     $iSkillSlot = $iSkillSlot - 1
 
-	DllStructSetData($g_mUseSkill, 1, GetValue('CommandUseSkill'))
-    DllStructSetData($g_mUseSkill, 2, GetWorldInfo("MyID"))
+	DllStructSetData($g_mUseSkill, 1, GwAu3_Memory_GetValue('CommandUseSkill'))
+    DllStructSetData($g_mUseSkill, 2, GwAu3_OtherMod_GetWorldInfo("MyID"))
     DllStructSetData($g_mUseSkill, 3, $iSkillSlot)
     DllStructSetData($g_mUseSkill, 4, $iAgentID)
     DllStructSetData($g_mUseSkill, 5, $iCallTarget)
 
-    Enqueue($g_mUseSkillPtr, 20)
+    GwAu3_Core_Enqueue($g_mUseSkillPtr, 20)
 
     $g_iLastSkillUsed = $iSkillSlot + 1
-    $g_iLastSkillTarget = ConvertID($iTargetID)
+    $g_iLastSkillTarget = GwAu3_AgentMod_ConvertID($iTargetID)
 
-    _Log_Debug("Used skill slot: " & ($iSkillSlot + 1) & " on target: " & ConvertID($iTargetID), "SkillMod", $g_h_EditText)
+    GwAu3_Log_Debug("Used skill slot: " & ($iSkillSlot + 1) & " on target: " & GwAu3_AgentMod_ConvertID($iTargetID), "SkillMod", $g_h_EditText)
     Return True
 EndFunc
 
-Func _SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
+Func GwAu3_SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
     If $iHeroIndex < 1 Or $iHeroIndex > 8 Then
-        _Log_Error("Invalid hero index: " & $iHeroIndex, "SkillMod", $g_h_EditText)
+        GwAu3_Log_Error("Invalid hero index: " & $iHeroIndex, "SkillMod", $g_h_EditText)
         Return False
     EndIf
 
     If $iSkillSlot < 1 Or $iSkillSlot > 8 Then
-        _Log_Error("Invalid skill slot: " & $iSkillSlot, "SkillMod", $g_h_EditText)
+        GwAu3_Log_Error("Invalid skill slot: " & $iSkillSlot, "SkillMod", $g_h_EditText)
         Return False
     EndIf
 
-    $iHeroIndex = GetMyPartyHeroInfo($iHeroIndex, "AgentID")
+    $iHeroIndex = GwAu3_PartyMod_GetMyPartyHeroInfo($iHeroIndex, "AgentID")
     If $iHeroIndex = 0 Then
-        _Log_Error("Hero not found or not in party: " & $iHeroIndex, "SkillMod", $g_h_EditText)
+        GwAu3_Log_Error("Hero not found or not in party: " & $iHeroIndex, "SkillMod", $g_h_EditText)
         Return False
     EndIf
 
-	$iTargetID = ConvertID($iTargetID)
+	$iTargetID = GwAu3_AgentMod_ConvertID($iTargetID)
     If $iTargetID = 0 Then
-        _Log_Error("Target not found: " & $iTargetID, "SkillMod", $g_h_EditText)
+        GwAu3_Log_Error("Target not found: " & $iTargetID, "SkillMod", $g_h_EditText)
         Return False
     EndIf
 
     $iSkillSlot = $iSkillSlot - 1
 
-	DllStructSetData($g_mUseHeroSkill, 1, GetValue('CommandUseHeroSkill'))
+	DllStructSetData($g_mUseHeroSkill, 1, GwAu3_Memory_GetValue('CommandUseHeroSkill'))
     DllStructSetData($g_mUseHeroSkill, 2, $iHeroIndex)
 	DllStructSetData($g_mUseHeroSkill, 3, $iTargetID)
     DllStructSetData($g_mUseHeroSkill, 4, $iSkillSlot)
 
-    Enqueue($g_mUseHeroSkillPtr, 16)
+    GwAu3_Core_Enqueue($g_mUseHeroSkillPtr, 16)
 
-    _Log_Debug("Hero " & $iHeroIndex & " used skill " & ($iSkillSlot + 1) & " on target: " & $iTargetID, "SkillMod", $g_h_EditText)
+    GwAu3_Log_Debug("Hero " & $iHeroIndex & " used skill " & ($iSkillSlot + 1) & " on target: " & $iTargetID, "SkillMod", $g_h_EditText)
     Return True
 EndFunc

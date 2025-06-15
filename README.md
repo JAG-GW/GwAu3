@@ -1,20 +1,15 @@
-# GWA2 (Guild Wars AutoIt) Framework
+# GwAu3 (Guild Wars AutoIt 3) Framework
+- GwAu3 is a rewritten Gwa2, improved by Greg76, KleuTSchi, Logan and all other participants on the Jag-Gw community server
 
 ## Branch Updates
 Potential Updates -> https://github.com/JAG-GW
 
 ## GWA2 Current Version
 - Updated by MrJambix and Glob of Armbraces
-- Rewritten and enhanced by Greg76
 
 ## Structural Improvements
 - **Improved modular architecture**: The new version reorganizes features into more coherent and better separated modules
 - **Better code organization**: Grouping related functions into specific files to facilitate maintenance and evolution
-
-## New Features
-- **Extended game context support**: Added many functions to access character, agent, and item information
-- **Advanced information system**: New functions like `GetAgents()` and `GetXY()` in Gwa2_ExtraInfo.au3 that allow for more sophisticated agent detection
-- **Improved buff and effect management**: Full support for reading and manipulating buffs and effects on agents
 
 ## Technical Optimizations
 - **Memory pointer updates**: Adaptation to changes in the Guild Wars client memory structure
@@ -31,36 +26,15 @@ Potential Updates -> https://github.com/JAG-GW
 
 ## Requirements
 - AutoIt v3.3.14.5 or higher
-- Guild Wars client (32-bit mode only)
-- Administrator privileges for memory operations
+- Guild Wars client
 
 ## Best Practices
-- **Do not modify the core GWA2 files**: To ensure compatibility with future updates, avoid modifying the files in the GWA2 folder
-- **Create your own functions in GWAddOns.au3**: Implement your custom functions and routines in a separate GWAddOns.au3 file
-- **Import both core and custom files**: Include both the core GWA2 files and your custom GWAddOns.au3 in your scripts
-
-## Usage
-```autoit
-#include "GWAddOns.au3" ; Your custom file with additional functions
-
-; Initialize the connection to Guild Wars
-Initialize("Character Name")
-
-; Get player information
-$myID = GetMyID()
-$myPosition = [GetAgentInfo($myID, "X"), GetAgentInfo($myID, "Y")]
-
-; Perform actions
-SendChat("Hello Guild Wars!")
-
-; Use your custom functions from GWAddOns.au3
-MyCustomFunction()
-```
+- **Do not modify the core GwAu3 files**: To ensure compatibility with future updates, avoid modifying the files in the GwAu3 folder
+- **Create your own functions in GwAu3_AddOns.au3**: Implement your custom functions and routines in a separate GwAu3_AddOns.au3 file
+- **Import both core and custom files**: Include both the core GwAu3 files and your custom GwAu3_AddOns.au3 in your scripts
 
 ## Contribution
-
 Contributions to this repository are welcome. If you have additional headers or improvements, please feel free to submit a pull request or open an issue.
 
 ## License
-
 This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.

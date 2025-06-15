@@ -78,49 +78,49 @@ Global $g_aAttributeNames[45] = [ _
     "Scythe Mastery", "Wind Prayers", "Earth Prayers", "Mysticism"]
 #EndRegion Module Constants
 
-Func _AttributeMod_GetAttributeName($iAttributeID)
+Func GwAu3_AttributeMod_GetAttributeName($iAttributeID)
     If $iAttributeID >= 0 And $iAttributeID < 45 Then
         Return $g_aAttributeNames[$iAttributeID]
     EndIf
     Return "Unknown"
 EndFunc
 
-Func _AttributeMod_GetLastModified()
+Func GwAu3_AttributeMod_GetLastModified()
     Local $result[2] = [$g_iLastAttributeModified, $g_iLastAttributeValue]
     Return $result
 EndFunc
 
-Func _AttributeMod_GetAttributePtr($aAttributeID)
+Func GwAu3_AttributeMod_GetAttributePtr($aAttributeID)
 	Local $lAttributeStructAddress = $g_mAttributeInfo + (0x14 * $aAttributeID)
 	Return Ptr($lAttributeStructAddress)
 EndFunc
 
-Func _AttributeMod_GetAttributeInfo($aAttributeID, $aInfo = "")
+Func GwAu3_AttributeMod_GetAttributeInfo($aAttributeID, $aInfo = "")
     Local $lPtr = _AttributeMod_GetAttributePtr($aAttributeID)
     If $lPtr = 0 Or $aInfo = "" Then Return 0
 
     Switch $aInfo
 		Case "ProfessionID"
-			Return MemoryRead($lPtr, "long")
+			Return GwAu3_Memory_Read($lPtr, "long")
 		Case "AttributeID"
-			Return MemoryRead($lPtr + 0x4, "long")
+			Return GwAu3_Memory_Read($lPtr + 0x4, "long")
 		Case "NameID"
-			Return MemoryRead($lPtr + 0x8, "long")
+			Return GwAu3_Memory_Read($lPtr + 0x8, "long")
 		Case "DescID"
-			Return MemoryRead($lPtr + 0xC, "long")
+			Return GwAu3_Memory_Read($lPtr + 0xC, "long")
 		Case "IsPVE"
-			Return MemoryRead($lPtr + 0x10, "long")
+			Return GwAu3_Memory_Read($lPtr + 0x10, "long")
 	EndSwitch
 
 	Return 0
 EndFunc
 
-Func _AttributeMod_GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo = "")
+Func GwAu3_AttributeMod_GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo = "")
 	Local $lAgentID
 	If $aHeroNumber <> 0 Then
-		$lAgentID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+		$lAgentID = GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID")
 	Else
-		$lAgentID = GetWorldInfo("MyID")
+		$lAgentID = GwAu3_OtherMod_GetWorldInfo("MyID")
 	EndIf
     Local $lBuffer
     Local $lOffset[5]
@@ -129,9 +129,9 @@ Func _AttributeMod_GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo
     $lOffset[2] = 0x2C
     $lOffset[3] = 0xAC
 
-    For $i = 0 To GetWorldInfo("PartyAttributeArraySize")
+    For $i = 0 To GwAu3_OtherMod_GetWorldInfo("PartyAttributeArraySize")
         $lOffset[4] = 0x43C * $i
-        $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+        $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
 
         If $lBuffer[1] == $lAgentID Then
             Local $lBaseAttrOffset = 0x43C * $i + 0x14 * $aAttributeID + 0x4
@@ -139,45 +139,45 @@ Func _AttributeMod_GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo
             Switch $aInfo
                 Case "ID"
                     $lOffset[4] = $lBaseAttrOffset
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "BaseLevel", "LevelBase"
                     $lOffset[4] = $lBaseAttrOffset + 0x4
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "Level", "CurrentLevel"
                     $lOffset[4] = $lBaseAttrOffset + 0x8
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "DecrementPoints"
                     $lOffset[4] = $lBaseAttrOffset + 0xC
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "IncrementPoints"
                     $lOffset[4] = $lBaseAttrOffset + 0x10
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "HasAttribute"
                     $lOffset[4] = $lBaseAttrOffset
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1] <> 0
                 Case "BonusLevel"
                     $lOffset[4] = $lBaseAttrOffset + 0x4
-                    Local $baseLevel = MemoryReadPtr($mBasePointer, $lOffset)[1]
+                    Local $baseLevel = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)[1]
                     $lOffset[4] = $lBaseAttrOffset + 0x8
-                    Local $currentLevel = MemoryReadPtr($mBasePointer, $lOffset)[1]
+                    Local $currentLevel = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)[1]
                     Return $currentLevel - $baseLevel
                 Case "IsMaxed"
                     $lOffset[4] = $lBaseAttrOffset + 0x8
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1] >= 12
                 Case "IsRaisable"
                     $lOffset[4] = $lBaseAttrOffset + 0x10
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1] > 0
                 Case "IsDecreasable"
                     $lOffset[4] = $lBaseAttrOffset + 0xC
-                    $lBuffer = MemoryReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
                     Return $lBuffer[1] > 0
                 Case Else
                     Return 0
@@ -187,7 +187,7 @@ Func _AttributeMod_GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $aInfo
     Return 0
 EndFunc
 
-Func _AttributeMod_GetProfPrimaryAttribute($aProfession)
+Func GwAu3_AttributeMod_GetProfPrimaryAttribute($aProfession)
 	Switch $aProfession
 		Case 1
 			Return 17

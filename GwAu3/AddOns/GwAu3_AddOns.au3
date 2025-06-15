@@ -1,7 +1,5 @@
 #include-once
 #include "../GwAu3_Core.au3"
-#include "../Commands/GwAu3_Enqueue.au3"
-#include "../Queries/GwAu3_GetInfo.au3"
 #include "../Commands/GwAu3_Packet.au3"
 
 #Region Sleep
@@ -18,7 +16,7 @@ EndFunc   ;==>TolSleep
 
 ;~ Description: Sleep a period of time, plus ping.
 Func PingSleep($msExtra = 0)
-	Sleep(GetPing() + $msExtra)
+	Sleep(GwAu3_OtherMod_GetPing() + $msExtra)
 EndFunc   ;==>PingSleep
 #EndRegion
 
@@ -26,23 +24,23 @@ EndFunc   ;==>PingSleep
 ;~ Description: Enable graphics rendering.
 Func EnableRendering()
     If GetRenderEnabled() Then Return 1
-	MemoryWrite($mDisableRendering, 0)
+	GwAu3_Memory_Write($mDisableRendering, 0)
 EndFunc ;==>EnableRendering
 
 ;~ Description: Disable graphics rendering.
 Func DisableRendering()
 	If GetRenderDisabled() Then Return 1
-	MemoryWrite($mDisableRendering, 1)
+	GwAu3_Memory_Write($mDisableRendering, 1)
 EndFunc ;==>DisableRendering
 
 ;~ Description: Checks if Rendering is disabled
 Func GetRenderDisabled()
-	Return MemoryRead($mDisableRendering) = 1
+	Return GwAu3_Memory_Read($mDisableRendering) = 1
 EndFunc ;==>GetRenderDisabled
 
 ;~ Description: Checks if Rendering is enabled
 Func GetRenderEnabled()
-	Return MemoryRead($mDisableRendering) = 0
+	Return GwAu3_Memory_Read($mDisableRendering) = 0
 EndFunc ;==>GetRenderEnabled
 
 ;~ Description: Toggle Rendering *and* Window State
@@ -53,7 +51,7 @@ Func ToggleRendering()
 	Else
 		DisableRendering()
 		WinSetState(GetWindowHandle(), "", @SW_HIDE)
-		ClearMemory()
+		GwAu3_Memory_Clear()
 	EndIf
 EndFunc ;==>ToggleRendering
 
@@ -70,10 +68,10 @@ EndFunc ;==>PurgeHook
 Func ToggleRendering_()
 	If GetRenderDisabled() Then
         EnableRendering()
-		ClearMemory()
+		GwAu3_Memory_Clear()
 	Else
 		DisableRendering()
-		ClearMemory()
+		GwAu3_Memory_Clear()
 	EndIf
 EndFunc ;==>ToggleRendering_
 
@@ -104,7 +102,7 @@ Func WriteChat($aMessage, $aSender = 'GwAu3')
 		$lSender = $aSender
 	EndIf
 
-	MemoryWrite($lAddress + 4, $lSender, 'wchar[20]')
+	GwAu3_Memory_Write($lAddress + 4, $lSender, 'wchar[20]')
 
 	If StringLen($aMessage) > 100 Then
 		$lMessage = StringLeft($aMessage, 100)
@@ -112,7 +110,7 @@ Func WriteChat($aMessage, $aSender = 'GwAu3')
 		$lMessage = $aMessage
 	EndIf
 
-	MemoryWrite($lAddress + 44, $lMessage, 'wchar[101]')
+	GwAu3_Memory_Write($lAddress + 44, $lMessage, 'wchar[101]')
 	DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'int', $lAddress, 'ptr', $mWriteChatPtr, 'int', 4, 'int', '')
 
 	If StringLen($aMessage) > 100 Then WriteChat(StringTrimLeft($aMessage, 100), $aSender)
@@ -152,7 +150,7 @@ Func SendChat($aMessage, $aChannel = '!')
 		$lMessage = $aMessage
 	EndIf
 
-	MemoryWrite($lAddress + 12, $aChannel & $lMessage, 'wchar[122]')
+	GwAu3_Memory_Write($lAddress + 12, $aChannel & $lMessage, 'wchar[122]')
 	DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'int', $lAddress, 'ptr', $mSendChatPtr, 'int', 8, 'int', '')
 
 	If StringLen($aMessage) > 120 Then SendChat(StringTrimLeft($aMessage, 120), $aChannel)
@@ -163,8 +161,8 @@ EndFunc   ;==>SendChat
 ;~ Description: Deposit gold into storage.
 Func DepositGold($aAmount = 0)
 	Local $lAmount
-	Local $lStorage = GetInventoryInfo("GoldStorage")
-	Local $lCharacter = GetInventoryInfo("GoldCharacter")
+	Local $lStorage = GwAu3_ItemMod_GetInventoryInfo("GoldStorage")
+	Local $lCharacter = GwAu3_ItemMod_GetInventoryInfo("GoldCharacter")
 
 	If $aAmount > 0 And $lCharacter >= $aAmount Then
 		$lAmount = $aAmount
@@ -180,8 +178,8 @@ EndFunc   ;==>DepositGold
 ;~ Description: Withdraw gold from storage.
 Func WithdrawGold($aAmount = 0)
 	Local $lAmount
-	Local $lStorage = GetInventoryInfo("GoldStorage")
-	Local $lCharacter = GetInventoryInfo("GoldCharacter")
+	Local $lStorage = GwAu3_ItemMod_GetInventoryInfo("GoldStorage")
+	Local $lCharacter = GwAu3_ItemMod_GetInventoryInfo("GoldCharacter")
 
 	If $aAmount > 0 And $lStorage >= $aAmount Then
 		$lAmount = $aAmount
@@ -197,9 +195,9 @@ EndFunc   ;==>WithdrawGold
 
 #Region Travel
 ;~ Description: Map travel to an outpost.
-Func TravelTo($aMapID, $aLanguage = GetCharacterInfo("Language"), $aRegion = GetCharacterInfo("Region"), $aDistrict = 0)
-	If	GetCharacterInfo("MapID") = $aMapID And GetInstanceInfo("IsOutpost") _
-		And $aLanguage = GetCharacterInfo("Language") And $aRegion = GetCharacterInfo("Region")  Then Return True
+Func TravelTo($aMapID, $aLanguage = GwAu3_MapMod_GetCharacterInfo("Language"), $aRegion = GwAu3_MapMod_GetCharacterInfo("Region"), $aDistrict = 0)
+	If	_MapMod_GetCharacterInfo("MapID") = $aMapID And GwAu3_MapMod_GetInstanceInfo("IsOutpost") _
+		And $aLanguage = GwAu3_MapMod_GetCharacterInfo("Language") And $aRegion = GwAu3_MapMod_GetCharacterInfo("Region")  Then Return True
 	MoveMap($aMapID, $aRegion, $aDistrict, $aLanguage)
 	Return WaitMapLoading($aMapID)
 EndFunc   ;==>TravelTo
@@ -209,7 +207,7 @@ Func WaitMapLoading($aMapID = 0, $aDeadlock = 10000, $aSkipCinematic = False)
 	Local $Timer = TimerInit(), $lTypeMap
 	Do
 		Sleep(100)
-		$lTypeMap = MemoryRead(GetAgentPtr(-2) + 0x158, 'long')
+		$lTypeMap = GwAu3_Memory_Read(_AgentMod_GetAgentPtr(-2) + 0x158, 'long')
 	Until Not BitAND($lTypeMap, 0x400000) Or TimerDiff($Timer) > $aDeadlock
 
 	If $aSkipCinematic Then
@@ -219,7 +217,7 @@ Func WaitMapLoading($aMapID = 0, $aDeadlock = 10000, $aSkipCinematic = False)
 
 	$Timer = TimerInit()
 	Do
-		$lTypeMap = MemoryRead(GetAgentPtr(-2) + 0x158, 'long')
+		$lTypeMap = GwAu3_Memory_Read(_AgentMod_GetAgentPtr(-2) + 0x158, 'long')
 		Sleep(200)
 	Until BitAND($lTypeMap, 0x400000) And (GetMapID() = $aMapID Or $aMapID = 0) Or TimerDiff($Timer) > $aDeadlock
 	Sleep(3000)
@@ -230,24 +228,24 @@ EndFunc   ;==>WaitMapLoading
 Func WaitMapLoadingEx($aMapID = -1, $aInstanceType = -1)
 	Do
 		Sleep(250)
-		If GetGameInfo("IsCinematic") Then
+		If GwAu3_OtherMod_GetGameInfo("IsCinematic") Then
 			SkipCinematic()
 			Sleep(1000)
 		EndIf
-	Until GetAgentPtr(-2) <> 0 And GetAgentArraySize() <> 0 And GetWorldInfo("SkillbarArray") <> 0 And GetPartyContextPtr() <> 0 _
-	And ($aInstanceType = -1 Or GetInstanceInfo("Type") = $aInstanceType) And ($aMapID = -1 Or GetMapID() = $aMapID) And Not GetGameInfo("IsCinematic")
+	Until GwAu3_AgentMod_GetAgentPtr(-2) <> 0 And GwAu3_AgentMod_GetAgentArraySize() <> 0 And GwAu3_OtherMod_GetWorldInfo("SkillbarArray") <> 0 And _PartyMod_GetPartyContextPtr() <> 0 _
+	And ($aInstanceType = -1 Or GwAu3_MapMod_GetInstanceInfo("Type") = $aInstanceType) And ($aMapID = -1 Or GetMapID() = $aMapID) And Not GwAu3_OtherMod_GetGameInfo("IsCinematic")
 EndFunc
 
 ;~ Description: Returns current MapID
 Func GetMapID()
-    Return GetCharacterInfo("MapID")
+    Return GwAu3_MapMod_GetCharacterInfo("MapID")
 EndFunc   ;==>GetMapID
 #EndRegion Travel
 
 #Region Other
 ;~ Description: Returns the distance between two agents.
 Func GetDistance($aAgentID1 = -1, $aAgentID2 = -2)
-	Return ComputeDistance(GetAgentInfo($aAgentID1, 'X'), GetAgentInfo($aAgentID1, 'Y'), GetAgentInfo($aAgentID2, 'X'), GetAgentInfo($aAgentID2, 'Y'))
+	Return ComputeDistance(GwAu3_AgentMod_GetAgentInfo($aAgentID1, 'X'), GwAu3_AgentMod_GetAgentInfo($aAgentID1, 'Y'), GwAu3_AgentMod_GetAgentInfo($aAgentID2, 'X'), GwAu3_AgentMod_GetAgentInfo($aAgentID2, 'Y'))
 EndFunc   ;==>GetDistance
 
 ;~ Description: Returns the distance between two coordinate pairs.
@@ -257,17 +255,17 @@ EndFunc   ;==>ComputeDistance
 
 Func GetBestTarget($aRange = 1320)
 	Local $lBestTarget, $lDistance, $lLowestSum = 100000000
-	Local $lAgentArray = GetAgentArray(0xDB)
+	Local $lAgentArray = GwAu3_AgentMod_GetAgentArray(0xDB)
 	For $i = 1 To $lAgentArray[0]
 		Local $lSumDistances = 0
-		If GetAgentInfo($lAgentArray[$i], 'Allegiance') <> 3 Then ContinueLoop
-		If GetAgentInfo($lAgentArray[$i], 'HP') <= 0 Then ContinueLoop
-		If GetAgentInfo($lAgentArray[$i], 'ID') = GetMyID() Then ContinueLoop
+		If GwAu3_AgentMod_GetAgentInfo($lAgentArray[$i], 'Allegiance') <> 3 Then ContinueLoop
+		If GwAu3_AgentMod_GetAgentInfo($lAgentArray[$i], 'HP') <= 0 Then ContinueLoop
+		If GwAu3_AgentMod_GetAgentInfo($lAgentArray[$i], 'ID') = GwAu3_AgentMod_GetMyID() Then ContinueLoop
 		If GetDistance($lAgentArray[$i]) > $aRange Then ContinueLoop
 		For $j = 1 To $lAgentArray[0]
-			If GetAgentInfo($lAgentArray[$j], 'Allegiance') <> 3 Then ContinueLoop
-			If GetAgentInfo($lAgentArray[$j], 'HP') <= 0 Then ContinueLoop
-			If GetAgentInfo($lAgentArray[$j], 'ID') = GetMyID() Then ContinueLoop
+			If GwAu3_AgentMod_GetAgentInfo($lAgentArray[$j], 'Allegiance') <> 3 Then ContinueLoop
+			If GwAu3_AgentMod_GetAgentInfo($lAgentArray[$j], 'HP') <= 0 Then ContinueLoop
+			If GwAu3_AgentMod_GetAgentInfo($lAgentArray[$j], 'ID') = GwAu3_AgentMod_GetMyID() Then ContinueLoop
 			If GetDistance($lAgentArray[$j]) > $aRange Then ContinueLoop
 			$lDistance = GetDistance($lAgentArray[$i], $lAgentArray[$j])
 			$lSumDistances += $lDistance
@@ -282,7 +280,7 @@ EndFunc   ;==>GetBestTarget
 
 ;~ Description: Returns modstruct of an item.
 Func GetModStruct($aItem)
-	If GetItemInfoByItemID($aItem, "ModStruct") = 0 Then Return
-	Return MemoryRead(GetItemInfoByItemID($aItem, "ModStruct"), 'Byte[' & GetItemInfoByItemID($aItem, "ModStructSize") * 4 & ']')
+	If GwAu3_ItemMod_GetItemInfoByItemID($aItem, "ModStruct") = 0 Then Return
+	Return GwAu3_Memory_Read(_ItemMod_GetItemInfoByItemID($aItem, "ModStruct"), 'Byte[' & GwAu3_ItemMod_GetItemInfoByItemID($aItem, "ModStructSize") * 4 & ']')
 EndFunc   ;==>GetModStruct
 #EndRegion

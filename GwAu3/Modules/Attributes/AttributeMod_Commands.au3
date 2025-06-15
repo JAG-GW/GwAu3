@@ -1,31 +1,31 @@
 #include-once
 
-Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
+Func GwAu3_AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
+        GwAu3_Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAttributeID < 0 Or $iAttributeID > 44 Then
-        _Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
+        GwAu3_Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAmount < 0 Or $iAmount > 12 Then
-        _Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $g_h_EditText)
+        GwAu3_Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     ; Increase attribute one point at a time (Guild Wars limitation)
     For $i = 1 To $iAmount
-		DllStructSetData($g_mIncreaseAttribute, 1, GetValue('CommandIncreaseAttribute'))
+		DllStructSetData($g_mIncreaseAttribute, 1, GwAu3_Memory_GetValue('CommandIncreaseAttribute'))
         DllStructSetData($g_mIncreaseAttribute, 2, $iAttributeID)
 		If $aHeroNumber <> 0 Then
-			DllStructSetData($g_mIncreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
+			DllStructSetData($g_mIncreaseAttribute, 3, GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
 		Else
-			DllStructSetData($g_mIncreaseAttribute, 3, GetWorldInfo("MyID"))
+			DllStructSetData($g_mIncreaseAttribute, 3, GwAu3_OtherMod_GetWorldInfo("MyID"))
 		EndIf
-        Enqueue($g_mIncreaseAttributePtr, 12)
+        GwAu3_Core_Enqueue($g_mIncreaseAttributePtr, 12)
 
         ; Small delay between increases to avoid issues
         If $i < $iAmount Then Sleep(32)
@@ -36,36 +36,36 @@ Func _AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
     $g_iLastAttributeValue = $iAmount
 
     Local $attrName = ($iAttributeID < 45) ? $g_aAttributeNames[$iAttributeID] : "Unknown"
-    _Log_Debug("Increased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
+    GwAu3_Log_Debug("Increased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
     Return True
 EndFunc
 
-Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
+Func GwAu3_AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
+        GwAu3_Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAttributeID < 0 Or $iAttributeID > 44 Then
-        _Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
+        GwAu3_Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     If $iAmount < 1 Or $iAmount > 12 Then
-        _Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $g_h_EditText)
+        GwAu3_Log_Error("Invalid amount: " & $iAmount, "AttributeMgr", $g_h_EditText)
         Return False
     EndIf
 
     ; Decrease attribute one point at a time (Guild Wars limitation)
     For $i = 1 To $iAmount
-		DllStructSetData($g_mDecreaseAttribute, 1, GetValue('CommandDecreaseAttribute'))
+		DllStructSetData($g_mDecreaseAttribute, 1, GwAu3_Memory_GetValue('CommandDecreaseAttribute'))
         DllStructSetData($g_mDecreaseAttribute, 2, $iAttributeID)
         If $aHeroNumber <> 0 Then
-			DllStructSetData($g_mDecreaseAttribute, 3, GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
+			DllStructSetData($g_mDecreaseAttribute, 3, GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
 		Else
-			DllStructSetData($g_mDecreaseAttribute, 3, GetWorldInfo("MyID"))
+			DllStructSetData($g_mDecreaseAttribute, 3, GwAu3_OtherMod_GetWorldInfo("MyID"))
 		EndIf
-        Enqueue($g_mDecreaseAttributePtr, 12)
+        GwAu3_Core_Enqueue($g_mDecreaseAttributePtr, 12)
 
         ; Small delay between decreases to avoid issues
         If $i < $iAmount Then Sleep(32)
@@ -76,31 +76,31 @@ Func _AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber =
     $g_iLastAttributeValue = -$iAmount
 
     Local $attrName = ($iAttributeID < 45) ? $g_aAttributeNames[$iAttributeID] : "Unknown"
-    _Log_Debug("Decreased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
+    GwAu3_Log_Debug("Decreased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
     Return True
 EndFunc
 
 Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMod module not initialized", "LoadTemplate", $g_h_EditText)
+        GwAu3_Log_Error("AttributeMod module not initialized", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
     Local $lHeroID
     If $aHeroNumber <> 0 Then
-        $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+        $lHeroID = GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID")
         If $lHeroID = 0 Then
-            _Log_Error("Invalid hero number: " & $aHeroNumber, "LoadTemplate", $g_h_EditText)
+            GwAu3_Log_Error("Invalid hero number: " & $aHeroNumber, "LoadTemplate", $g_h_EditText)
             Return False
         EndIf
     Else
-        $lHeroID = GetWorldInfo("MyID")
+        $lHeroID = GwAu3_OtherMod_GetWorldInfo("MyID")
     EndIf
 
     ; Split template into individual characters
     Local $lSplitTemplate = StringSplit($aTemplate, '')
     If @error Or $lSplitTemplate[0] = 0 Then
-        _Log_Error("Invalid template format", "LoadTemplate", $g_h_EditText)
+        GwAu3_Log_Error("Invalid template format", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
@@ -120,41 +120,41 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     ; Convert Base64 to binary
     $aTemplate = ''
     For $i = 1 To $lSplitTemplate[0]
-        $aTemplate &= Base64ToBin64_GW($lSplitTemplate[$i])
+        $aTemplate &= GwAu3_Utils_Base64ToBin64($lSplitTemplate[$i])
     Next
 
     ; Parse template header
-    $lTemplateType = Bin64ToDec(StringLeft($aTemplate, 4))
+    $lTemplateType = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, 4))
     $aTemplate = StringTrimLeft($aTemplate, 4)
     If $lTemplateType <> 14 Then
-        _Log_Error("Invalid template type: " & $lTemplateType & " (expected 14)", "LoadTemplate", $g_h_EditText)
+        GwAu3_Log_Error("Invalid template type: " & $lTemplateType & " (expected 14)", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
-    $lVersionNumber = Bin64ToDec(StringLeft($aTemplate, 4))
+    $lVersionNumber = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, 4))
     $aTemplate = StringTrimLeft($aTemplate, 4)
 
     ; Parse profession data
-    $lProfBits = Bin64ToDec(StringLeft($aTemplate, 2)) * 2 + 4
+    $lProfBits = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, 2)) * 2 + 4
     $aTemplate = StringTrimLeft($aTemplate, 2)
 
-    $lProfPrimary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
+    $lProfPrimary = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, $lProfBits))
     $aTemplate = StringTrimLeft($aTemplate, $lProfBits)
 
     ; Validate primary profession
-    If $lProfPrimary <> GetPartyProfessionInfo($lHeroID, "Primary") Then
-        _Log_Error("Primary profession mismatch. Template: " & $lProfPrimary & ", Character: " & GetPartyProfessionInfo($lHeroID, "Primary"), "LoadTemplate", $g_h_EditText)
+    If $lProfPrimary <> GwAu3_PartyMod_GetPartyProfessionInfo($lHeroID, "Primary") Then
+        GwAu3_Log_Error("Primary profession mismatch. Template: " & $lProfPrimary & ", Character: " & GwAu3_PartyMod_GetPartyProfessionInfo($lHeroID, "Primary"), "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
-    $lProfSecondary = Bin64ToDec(StringLeft($aTemplate, $lProfBits))
+    $lProfSecondary = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, $lProfBits))
     $aTemplate = StringTrimLeft($aTemplate, $lProfBits)
 
     ; Parse attributes
-    $lAttributesCount = Bin64ToDec(StringLeft($aTemplate, 4))
+    $lAttributesCount = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, 4))
     $aTemplate = StringTrimLeft($aTemplate, 4)
 
-    $lAttributesBits = Bin64ToDec(StringLeft($aTemplate, 4)) + 4
+    $lAttributesBits = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, 4)) + 4
     $aTemplate = StringTrimLeft($aTemplate, 4)
 
     ; Initialize attributes array
@@ -165,9 +165,9 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     ; Parse attribute data
     Local $lAttributeIndex = 1
     For $i = 1 To $lAttributesCount
-        Local $lAttrID = Bin64ToDec(StringLeft($aTemplate, $lAttributesBits))
+        Local $lAttrID = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, $lAttributesBits))
         $aTemplate = StringTrimLeft($aTemplate, $lAttributesBits)
-        Local $lAttrLevel = Bin64ToDec(StringLeft($aTemplate, 4))
+        Local $lAttrLevel = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, 4))
         $aTemplate = StringTrimLeft($aTemplate, 4)
 
         If $lAttrID = $lPrimaryAttribute Then
@@ -181,47 +181,47 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
     Next
 
     ; Parse skills
-    $lSkillsBits = Bin64ToDec(StringLeft($aTemplate, 4)) + 8
+    $lSkillsBits = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, 4)) + 8
     $aTemplate = StringTrimLeft($aTemplate, 4)
 
     For $i = 0 To 7
-        $lSkills[$i] = Bin64ToDec(StringLeft($aTemplate, $lSkillsBits))
+        $lSkills[$i] = GwAu3_Utils_Bin64ToDec(StringLeft($aTemplate, $lSkillsBits))
         $aTemplate = StringTrimLeft($aTemplate, $lSkillsBits)
     Next
 
-    $lOpTail = Bin64ToDec($aTemplate)
+    $lOpTail = GwAu3_Utils_Bin64ToDec($aTemplate)
 
     ; Apply the template
-    _Log_Info("Loading template - Primary: " & $lProfPrimary & ", Secondary: " & $lProfSecondary, "LoadTemplate", $g_h_EditText)
+    GwAu3_Log_Info("Loading template - Primary: " & $lProfPrimary & ", Secondary: " & $lProfSecondary, "LoadTemplate", $g_h_EditText)
 
     ; Load attributes (includes secondary profession change if needed)
     If Not LoadAttributes($lAttributes, $lProfSecondary, $aHeroNumber) Then
-        _Log_Error("Failed to load attributes", "LoadTemplate", $g_h_EditText)
+        GwAu3_Log_Error("Failed to load attributes", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
 
     ; Load skill bar
     LoadSkillBar($lSkills[0], $lSkills[1], $lSkills[2], $lSkills[3], $lSkills[4], $lSkills[5], $lSkills[6], $lSkills[7], $aHeroNumber)
 
-    _Log_Info("Template loaded successfully", "LoadTemplate", $g_h_EditText)
+    GwAu3_Log_Info("Template loaded successfully", "LoadTemplate", $g_h_EditText)
     Return True
 EndFunc
 
 Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     If Not $g_bAttributeModuleInitialized Then
-        _Log_Error("AttributeMod module not initialized", "LoadAttributes", $g_h_EditText)
+        GwAu3_Log_Error("AttributeMod module not initialized", "LoadAttributes", $g_h_EditText)
         Return False
     EndIf
 
     Local $lHeroID
     If $aHeroNumber <> 0 Then
-        $lHeroID = GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+        $lHeroID = GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID")
         If $lHeroID = 0 Then
-            _Log_Error("Invalid hero number: " & $aHeroNumber, "LoadAttributes", $g_h_EditText)
+            GwAu3_Log_Error("Invalid hero number: " & $aHeroNumber, "LoadAttributes", $g_h_EditText)
             Return False
         EndIf
     Else
-        $lHeroID = GetWorldInfo("MyID")
+        $lHeroID = GwAu3_OtherMod_GetWorldInfo("MyID")
     EndIf
 
     Local $lPrimaryAttribute = $aAttributesArray[0][0]
@@ -231,14 +231,14 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     Local $lMaxRetries = 10
     Local $lTimeout = 5000
 
-    _Log_Info("Loading attributes for " & ($aHeroNumber = 0 ? "player" : "hero " & $aHeroNumber), "LoadAttributes", $g_h_EditText)
+    GwAu3_Log_Info("Loading attributes for " & ($aHeroNumber = 0 ? "player" : "hero " & $aHeroNumber), "LoadAttributes", $g_h_EditText)
 
     ; Change secondary profession if needed
     If $aSecondaryProfession <> 0 And _
-       GetPartyProfessionInfo($lHeroID, "Secondary") <> $aSecondaryProfession And _
-       GetPartyProfessionInfo($lHeroID, "Primary") <> $aSecondaryProfession Then
+       GwAu3_PartyMod_GetPartyProfessionInfo($lHeroID, "Secondary") <> $aSecondaryProfession And _
+       GwAu3_PartyMod_GetPartyProfessionInfo($lHeroID, "Primary") <> $aSecondaryProfession Then
 
-        _Log_Info("Changing secondary profession to: " & $aSecondaryProfession, "LoadAttributes", $g_h_EditText)
+        GwAu3_Log_Info("Changing secondary profession to: " & $aSecondaryProfession, "LoadAttributes", $g_h_EditText)
 
         Local $lRetryCount = 0
         Do
@@ -247,17 +247,17 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
 
             Do
                 Sleep(32)
-            Until GetPartyProfessionInfo($lHeroID, "Secondary") = $aSecondaryProfession Or TimerDiff($lDeadlock) > $lTimeout
+            Until GwAu3_PartyMod_GetPartyProfessionInfo($lHeroID, "Secondary") = $aSecondaryProfession Or TimerDiff($lDeadlock) > $lTimeout
 
             $lRetryCount += 1
-        Until GetPartyProfessionInfo($lHeroID, "Secondary") = $aSecondaryProfession Or $lRetryCount >= $lMaxRetries
+        Until GwAu3_PartyMod_GetPartyProfessionInfo($lHeroID, "Secondary") = $aSecondaryProfession Or $lRetryCount >= $lMaxRetries
 
-        If GetPartyProfessionInfo($lHeroID, "Secondary") <> $aSecondaryProfession Then
-            _Log_Error("Failed to change secondary profession after " & $lMaxRetries & " attempts", "LoadAttributes", $g_h_EditText)
+        If GwAu3_PartyMod_GetPartyProfessionInfo($lHeroID, "Secondary") <> $aSecondaryProfession Then
+            GwAu3_Log_Error("Failed to change secondary profession after " & $lMaxRetries & " attempts", "LoadAttributes", $g_h_EditText)
             Return False
         EndIf
 
-        _Log_Info("Secondary profession changed successfully", "LoadAttributes", $g_h_EditText)
+        GwAu3_Log_Info("Secondary profession changed successfully", "LoadAttributes", $g_h_EditText)
     EndIf
 
     ; Validate and clamp attribute levels
@@ -267,14 +267,14 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     Next
 
     ; Phase 1: Decrease primary attribute to target level
-    _Log_Debug("Phase 1: Adjusting primary attribute (" & $lPrimaryAttribute & ") to level " & $aAttributesArray[0][1], "LoadAttributes", $g_h_EditText)
+    GwAu3_Log_Debug("Phase 1: Adjusting primary attribute (" & $lPrimaryAttribute & ") to level " & $aAttributesArray[0][1], "LoadAttributes", $g_h_EditText)
 
     While _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $aAttributesArray[0][1]
         $lLevel = _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel")
         $lDeadlock = TimerInit()
 
         If Not _AttributeMod_DecreaseAttribute($lPrimaryAttribute, 1, $aHeroNumber) Then
-            _Log_Error("Failed to decrease primary attribute", "LoadAttributes", $g_h_EditText)
+            GwAu3_Log_Error("Failed to decrease primary attribute", "LoadAttributes", $g_h_EditText)
             Return False
         EndIf
 
@@ -283,13 +283,13 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         Until _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
         If TimerDiff($lDeadlock) > $lTimeout Then
-            _Log_Warning("Timeout decreasing primary attribute", "LoadAttributes", $g_h_EditText)
+            GwAu3_Log_Warning("Timeout decreasing primary attribute", "LoadAttributes", $g_h_EditText)
             ExitLoop
         EndIf
     WEnd
 
     ; Phase 2: Decrease secondary attributes to target levels
-    _Log_Debug("Phase 2: Adjusting secondary attributes", "LoadAttributes", $g_h_EditText)
+    GwAu3_Log_Debug("Phase 2: Adjusting secondary attributes", "LoadAttributes", $g_h_EditText)
 
     For $i = 1 To UBound($aAttributesArray) - 1
         Local $lAttrID = $aAttributesArray[$i][0]
@@ -300,7 +300,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             $lDeadlock = TimerInit()
 
             If Not _AttributeMod_DecreaseAttribute($lAttrID, 1, $aHeroNumber) Then
-                _Log_Warning("Failed to decrease attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
+                GwAu3_Log_Warning("Failed to decrease attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
 
@@ -309,14 +309,14 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             Until _AttributeMod_GetPartyAttributeInfo($lAttrID, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
             If TimerDiff($lDeadlock) > $lTimeout Then
-                _Log_Warning("Timeout decreasing attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
+                GwAu3_Log_Warning("Timeout decreasing attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
         WEnd
     Next
 
     ; Phase 3: Reset all other attributes to 0
-    _Log_Debug("Phase 3: Resetting unused attributes", "LoadAttributes", $g_h_EditText)
+    GwAu3_Log_Debug("Phase 3: Resetting unused attributes", "LoadAttributes", $g_h_EditText)
 
     For $i = 0 To 44
         If _AttributeMod_GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") > 0 Then
@@ -339,7 +339,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
                 $lDeadlock = TimerInit()
 
                 If Not _AttributeMod_DecreaseAttribute($i, 1, $aHeroNumber) Then
-                    _Log_Warning("Failed to reset attribute " & $i, "LoadAttributes", $g_h_EditText)
+                    GwAu3_Log_Warning("Failed to reset attribute " & $i, "LoadAttributes", $g_h_EditText)
                     ExitLoop
                 EndIf
 
@@ -348,7 +348,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
                 Until _AttributeMod_GetPartyAttributeInfo($i, $aHeroNumber, "BaseLevel") < $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
                 If TimerDiff($lDeadlock) > $lTimeout Then
-                    _Log_Warning("Timeout resetting attribute " & $i, "LoadAttributes", $g_h_EditText)
+                    GwAu3_Log_Warning("Timeout resetting attribute " & $i, "LoadAttributes", $g_h_EditText)
                     ExitLoop
                 EndIf
             WEnd
@@ -356,7 +356,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
     Next
 
     ; Phase 4: Increase primary attribute to target level
-    _Log_Debug("Phase 4: Setting primary attribute to target level", "LoadAttributes", $g_h_EditText)
+    GwAu3_Log_Debug("Phase 4: Setting primary attribute to target level", "LoadAttributes", $g_h_EditText)
 
     $lTestTimer = 0
     While _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") < $aAttributesArray[0][1]
@@ -364,7 +364,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         $lDeadlock = TimerInit()
 
         If Not _AttributeMod_IncreaseAttribute($lPrimaryAttribute, 1, $aHeroNumber) Then
-            _Log_Error("Failed to increase primary attribute", "LoadAttributes", $g_h_EditText)
+            GwAu3_Log_Error("Failed to increase primary attribute", "LoadAttributes", $g_h_EditText)
             ExitLoop
         EndIf
 
@@ -374,13 +374,13 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
         Until _AttributeMod_GetPartyAttributeInfo($lPrimaryAttribute, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
         If TimerDiff($lDeadlock) > $lTimeout Or $lTestTimer > 225 Then
-            _Log_Warning("Timeout or max attempts reached for primary attribute", "LoadAttributes", $g_h_EditText)
+            GwAu3_Log_Warning("Timeout or max attempts reached for primary attribute", "LoadAttributes", $g_h_EditText)
             ExitLoop
         EndIf
     WEnd
 
     ; Phase 5: Increase secondary attributes to target levels
-    _Log_Debug("Phase 5: Setting secondary attributes to target levels", "LoadAttributes", $g_h_EditText)
+    GwAu3_Log_Debug("Phase 5: Setting secondary attributes to target levels", "LoadAttributes", $g_h_EditText)
 
     For $i = 1 To UBound($aAttributesArray) - 1
         Local $lAttrID = $aAttributesArray[$i][0]
@@ -392,7 +392,7 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             $lDeadlock = TimerInit()
 
             If Not _AttributeMod_IncreaseAttribute($lAttrID, 1, $aHeroNumber) Then
-                _Log_Warning("Failed to increase attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
+                GwAu3_Log_Warning("Failed to increase attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
 
@@ -402,12 +402,12 @@ Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
             Until _AttributeMod_GetPartyAttributeInfo($lAttrID, $aHeroNumber, "BaseLevel") > $lLevel Or TimerDiff($lDeadlock) > $lTimeout
 
             If TimerDiff($lDeadlock) > $lTimeout Or $lTestTimer > 225 Then
-                _Log_Warning("Timeout or max attempts reached for attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
+                GwAu3_Log_Warning("Timeout or max attempts reached for attribute " & $lAttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
         WEnd
     Next
 
-    _Log_Info("Attribute loading completed", "LoadAttributes", $g_h_EditText)
+    GwAu3_Log_Info("Attribute loading completed", "LoadAttributes", $g_h_EditText)
     Return True
 EndFunc

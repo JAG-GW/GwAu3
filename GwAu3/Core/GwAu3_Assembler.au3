@@ -4,12 +4,26 @@
 Func _($aASM)
 	Local $lBuffer
 	Local $lOpCode
+
 	Select
 		Case StringInStr($aASM, ' -> ')
 			Local $split = StringSplit($aASM, ' -> ', 1)
 			$lOpCode = StringReplace($split[2], ' ', '')
 			$mASMSize += 0.5 * StringLen($lOpCode)
 			$mASMString &= $lOpCode
+		Case StringRight($aASM, 1) = ':'
+			GwAu3_Memory_SetValue('Label_' & StringLeft($aASM, StringLen($aASM) - 1), $mASMSize)
+		Case StringInStr($aASM, '/') > 0
+			GwAu3_Memory_SetValue('Label_' & StringLeft($aASM, StringInStr($aASM, '/') - 1), $mASMSize)
+			Local $lOffset = StringRight($aASM, StringLen($aASM) - StringInStr($aASM, '/'))
+			$mASMSize += $lOffset
+			$mASMCodeOffset += $lOffset
+		Case StringLeft($aASM, 5) = 'nop x'
+			$lBuffer = Int(Number(StringTrimLeft($aASM, 5)))
+			$mASMSize += $lBuffer
+			For $i = 1 To $lBuffer
+				$mASMString &= '90'
+			Next
 		Case StringLeft($aASM, 3) = 'jb '
 			$mASMSize += 2
 			$mASMString &= '72(' & StringRight($aASM, StringLen($aASM) - 3) & ')'
@@ -29,28 +43,18 @@ Func _($aASM)
 				$mASMString &= '83F8' & Hex($value, 2)
 			Else
 				$mASMSize += 5
-				$mASMString &= '3D' & SwapEndian(Hex($value, 8))
+				$mASMString &= '3D' & GwAu3_Utils_SwapEndian(Hex($value, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov eax,dword\[esp\+[0-9A-Fa-f]+h?\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov eax,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
-			$offset = StringReplace($offset, "h", "") ; Remove 'h' if present
+			$offset = StringReplace($offset, "h", "")
 			$offset = Dec($offset)
 			If $offset <= 0x7F Then
 				$mASMSize += 4
 				$mASMString &= '8B4424' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= '8B8424' & SwapEndian(Hex($offset, 8))
-			EndIf
-		Case StringRegExp($aASM, 'add esp,[0-9A-Fa-f]+h')
-			Local $value = StringRegExpReplace($aASM, 'add esp,([0-9A-Fa-f]+)h', '$1')
-			$value = Dec($value)
-			If $value <= 0x7F Then
-				$mASMSize += 3
-				$mASMString &= '83C4' & Hex($value, 2)
-			Else
-				$mASMSize += 6
-				$mASMString &= '81C4' & SwapEndian(Hex($value, 8))
+				$mASMString &= '8B8424' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'add esp,0x[0-9A-Fa-f]+')
 			Local $value = StringRegExpReplace($aASM, 'add esp,0x([0-9A-Fa-f]+)', '$1')
@@ -60,10 +64,8 @@ Func _($aASM)
 				$mASMString &= '83C4' & Hex($value, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '81C4' & SwapEndian(Hex($value, 8))
+				$mASMString &= '81C4' & GwAu3_Utils_SwapEndian(Hex($value, 8))
 			EndIf
-
-		; Also add support for other registers with hex notation
 		Case StringRegExp($aASM, 'add eax,[0-9A-Fa-f]+h')
 			Local $value = StringRegExpReplace($aASM, 'add eax,([0-9A-Fa-f]+)h', '$1')
 			$value = Dec($value)
@@ -72,9 +74,8 @@ Func _($aASM)
 				$mASMString &= '83C0' & Hex($value, 2)
 			Else
 				$mASMSize += 5
-				$mASMString &= '05' & SwapEndian(Hex($value, 8))
+				$mASMString &= '05' & GwAu3_Utils_SwapEndian(Hex($value, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'add ebx,[0-9A-Fa-f]+h')
 			Local $value = StringRegExpReplace($aASM, 'add ebx,([0-9A-Fa-f]+)h', '$1')
 			$value = Dec($value)
@@ -83,9 +84,16 @@ Func _($aASM)
 				$mASMString &= '83C3' & Hex($value, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '81C3' & SwapEndian(Hex($value, 8))
+				$mASMString &= '81C3' & GwAu3_Utils_SwapEndian(Hex($value, 8))
 			EndIf
-
+		Case StringRegExp($aASM, 'add ebx,dword\[[a-zA-Z_][a-zA-Z0-9_]*\]')
+		   Local $label = StringRegExpReplace($aASM, 'add ebx,dword\[([a-zA-Z_][a-zA-Z0-9_]*)\]', '$1')
+		   $mASMSize += 6
+		   $mASMString &= '031D[' & $label & ']'
+		Case StringRegExp($aASM, 'add eax,dword\[[a-zA-Z_][a-zA-Z0-9_]*\]')
+		   Local $label = StringRegExpReplace($aASM, 'add eax,dword\[([a-zA-Z_][a-zA-Z0-9_]*)\]', '$1')
+		   $mASMSize += 5
+		   $mASMString &= '0305[' & $label & ']'
 		Case StringRegExp($aASM, 'add ecx,[0-9A-Fa-f]+h')
 			Local $value = StringRegExpReplace($aASM, 'add ecx,([0-9A-Fa-f]+)h', '$1')
 			$value = Dec($value)
@@ -94,9 +102,8 @@ Func _($aASM)
 				$mASMString &= '83C1' & Hex($value, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '81C1' & SwapEndian(Hex($value, 8))
+				$mASMString &= '81C1' & GwAu3_Utils_SwapEndian(Hex($value, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'add edx,[0-9A-Fa-f]+h')
 			Local $value = StringRegExpReplace($aASM, 'add edx,([0-9A-Fa-f]+)h', '$1')
 			$value = Dec($value)
@@ -105,7 +112,7 @@ Func _($aASM)
 				$mASMString &= '83C2' & Hex($value, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '81C2' & SwapEndian(Hex($value, 8))
+				$mASMString &= '81C2' & GwAu3_Utils_SwapEndian(Hex($value, 8))
 			EndIf
 		Case StringRegExp($aASM, 'inc dword\[eax\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[eax\+([0-9A-Fa-f]+)h\]', '$1')
@@ -115,7 +122,7 @@ Func _($aASM)
 				$mASMString &= 'FF40' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF80' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF80' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'inc dword\[esi\+0x[0-9A-Fa-f]+\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esi\+0x([0-9A-Fa-f]+)\]', '$1')
@@ -125,18 +132,18 @@ Func _($aASM)
 				$mASMString &= 'FF46' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF86' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF86' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'retn [0-9A-Fa-f]+h')
 			Local $value = StringRegExpReplace($aASM, 'retn ([0-9A-Fa-f]+)h', '$1')
 			$value = Dec($value)
 			$mASMSize += 3
-			$mASMString &= 'C2' & SwapEndian(Hex($value, 4))
+			$mASMString &= 'C2' & GwAu3_Utils_SwapEndian(Hex($value, 4))
 		Case StringRegExp($aASM, 'retn 0x[0-9A-Fa-f]+')
 			Local $value = StringRegExpReplace($aASM, 'retn 0x([0-9A-Fa-f]+)', '$1')
 			$value = Dec($value)
 			$mASMSize += 3
-			$mASMString &= 'C2' & SwapEndian(Hex($value, 4))
+			$mASMString &= 'C2' & GwAu3_Utils_SwapEndian(Hex($value, 4))
 		Case StringRegExp($aASM, 'inc dword\[ebx\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[ebx\+([0-9A-Fa-f]+)h\]', '$1')
 			$offset = Dec($offset)
@@ -145,9 +152,8 @@ Func _($aASM)
 				$mASMString &= 'FF43' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF83' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF83' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'inc dword\[ecx\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[ecx\+([0-9A-Fa-f]+)h\]', '$1')
 			$offset = Dec($offset)
@@ -156,9 +162,8 @@ Func _($aASM)
 				$mASMString &= 'FF41' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF81' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF81' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'inc dword\[edx\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[edx\+([0-9A-Fa-f]+)h\]', '$1')
 			$offset = Dec($offset)
@@ -167,9 +172,8 @@ Func _($aASM)
 				$mASMString &= 'FF42' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF82' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF82' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'inc dword\[esi\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esi\+([0-9A-Fa-f]+)h\]', '$1')
 			$offset = Dec($offset)
@@ -178,9 +182,8 @@ Func _($aASM)
 				$mASMString &= 'FF46' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF86' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF86' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'inc dword\[edi\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[edi\+([0-9A-Fa-f]+)h\]', '$1')
 			$offset = Dec($offset)
@@ -189,9 +192,8 @@ Func _($aASM)
 				$mASMString &= 'FF47' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF87' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF87' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'inc dword\[ebp\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[ebp\+([0-9A-Fa-f]+)h\]', '$1')
 			$offset = Dec($offset)
@@ -200,18 +202,17 @@ Func _($aASM)
 				$mASMString &= 'FF45' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF85' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF85' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'inc dword\[esp\+[0-9A-Fa-f]+h\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esp\+([0-9A-Fa-f]+)h\]', '$1')
 			$offset = Dec($offset)
 			If $offset <= 0x7F Then
-				$mASMSize += 4  ; ESP requires SIB byte
+				$mASMSize += 4
 				$mASMString &= 'FF4424' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= 'FF8424' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF8424' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov ebx,dword\[esp\+[0-9A-Fa-f]+h?\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov ebx,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
@@ -222,9 +223,8 @@ Func _($aASM)
 				$mASMString &= '8B5C24' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= '8B9C24' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8B9C24' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov ecx,dword\[esp\+[0-9A-Fa-f]+h?\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov ecx,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
 			$offset = StringReplace($offset, "h", "")
@@ -234,9 +234,8 @@ Func _($aASM)
 				$mASMString &= '8B4C24' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= '8B8C24' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8B8C24' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov edx,dword\[esp\+[0-9A-Fa-f]+h?\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov edx,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
 			$offset = StringReplace($offset, "h", "")
@@ -246,9 +245,8 @@ Func _($aASM)
 				$mASMString &= '8B5424' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= '8B9424' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8B9424' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov esi,dword\[esp\+[0-9A-Fa-f]+h?\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov esi,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
 			$offset = StringReplace($offset, "h", "")
@@ -258,9 +256,8 @@ Func _($aASM)
 				$mASMString &= '8B7424' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= '8BB424' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8BB424' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov edi,dword\[esp\+[0-9A-Fa-f]+h?\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov edi,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
 			$offset = StringReplace($offset, "h", "")
@@ -270,9 +267,8 @@ Func _($aASM)
 				$mASMString &= '8B7C24' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= '8BBC24' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8BBC24' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov ebp,dword\[esp\+[0-9A-Fa-f]+h?\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov ebp,dword\[esp\+([0-9A-Fa-f]+)h?\]', '$1')
 			$offset = StringReplace($offset, "h", "")
@@ -282,17 +278,17 @@ Func _($aASM)
 				$mASMString &= '8B6C24' & Hex($offset, 2)
 			Else
 				$mASMSize += 7
-				$mASMString &= '8BAC24' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8BAC24' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov dword\[eax\],0x[0-9A-Fa-f]+\z')
 			Local $value = StringMid($aASM, 15)
 			$value = StringReplace($value, "0x", "")
 			$mASMSize += 6
-			$mASMString &= 'C700' & SwapEndian(Hex(Dec("0x" & $value), 8))
+			$mASMString &= 'C700' & GwAu3_Utils_SwapEndian(Hex(Dec("0x" & $value), 8))
 		Case StringRegExp($aASM, 'retn [-[:xdigit:]]{1,4}\z')
 			Local $value = StringMid($aASM, 6)
 			$mASMSize += 3
-			$mASMString &= 'C2' & SwapEndian(Hex(Number($value), 4))
+			$mASMString &= 'C2' & GwAu3_Utils_SwapEndian(Hex(Number($value), 4))
 		Case StringRegExp($aASM, 'cmp eax,[-[:xdigit:]]{1,2}\z')
 			Local $value = StringMid($aASM, 9)
 			If StringLen($value) <= 2 Then
@@ -300,16 +296,7 @@ Func _($aASM)
 				$mASMString &= '83F8' & Hex(Number($value), 2)
 			Else
 				$mASMSize += 5
-				$mASMString &= '3D' & ASMNumber($value)
-			EndIf
-				Case StringRegExp($aASM, 'and eax,[-[:xdigit:]]{1,8}\z')
-			Local $value = StringMid($aASM, 9)
-			If StringLen($value) <= 2 And Dec($value) <= 0x7F Then
-				$mASMSize += 3
-				$mASMString &= '83E0' & Hex(Dec($value), 2)
-			Else
-				$mASMSize += 5
-				$mASMString &= '25' & ASMNumber($value)
+				$mASMString &= '3D' & GwAu3_Assembler_ASMNumber($value)
 			EndIf
 		Case StringRegExp($aASM, 'and ebx,[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 9)
@@ -318,16 +305,7 @@ Func _($aASM)
 				$mASMString &= '83E3' & Hex(Dec($value), 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '81E3' & ASMNumber($value)
-			EndIf
-		Case StringRegExp($aASM, 'and ecx,[-[:xdigit:]]{1,8}\z')
-			Local $value = StringMid($aASM, 9)
-			If StringLen($value) <= 2 And Dec($value) <= 0x7F Then
-				$mASMSize += 3
-				$mASMString &= '83E1' & Hex(Dec($value), 2)
-			Else
-				$mASMSize += 6
-				$mASMString &= '81E1' & ASMNumber($value)
+				$mASMString &= '81E3' & GwAu3_Assembler_ASMNumber($value)
 			EndIf
 		Case StringRegExp($aASM, 'and edx,[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 9)
@@ -336,7 +314,7 @@ Func _($aASM)
 				$mASMString &= '83E2' & Hex(Dec($value), 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '81E2' & ASMNumber($value)
+				$mASMString &= '81E2' & GwAu3_Assembler_ASMNumber($value)
 			EndIf
 		Case StringRegExp($aASM, 'cmp ebx,[-[:xdigit:]]{1,2}\z')
 			Local $value = StringMid($aASM, 9)
@@ -350,19 +328,6 @@ Func _($aASM)
 			Local $value = StringMid($aASM, 9)
 			$mASMSize += 3
 			$mASMString &= '83FA' & Hex(Number($value), 2)
-		Case StringRight($aASM, 1) = ':'
-			SetValue('Label_' & StringLeft($aASM, StringLen($aASM) - 1), $mASMSize)
-		Case StringInStr($aASM, '/') > 0
-			SetValue('Label_' & StringLeft($aASM, StringInStr($aASM, '/') - 1), $mASMSize)
-			Local $lOffset = StringRight($aASM, StringLen($aASM) - StringInStr($aASM, '/'))
-			$mASMSize += $lOffset
-			$mASMCodeOffset += $lOffset
-		Case StringLeft($aASM, 5) = 'nop x'
-			$lBuffer = Int(Number(StringTrimLeft($aASM, 5)))
-			$mASMSize += $lBuffer
-			For $i = 1 To $lBuffer
-				$mASMString &= '90'
-			Next
 		Case StringLeft($aASM, 17) = 'mov edx,dword[esi]'
 			$mASMSize += 2
 			$mASMString &= '8B16'
@@ -388,13 +353,10 @@ Func _($aASM)
 			$mASMSize += 2
 			$mASMString &= '8B1F'
 		Case StringRegExp($aASM, 'inc dword\[[a-zA-Z_][a-zA-Z0-9_]*\]')
-			; Pattern pour inc dword[label]
 			Local $label = StringRegExpReplace($aASM, 'inc dword\[([a-zA-Z_][a-zA-Z0-9_]*)\]', '$1')
 			$mASMSize += 6
 			$mASMString &= 'FF05[' & $label & ']'
-
 		Case StringRegExp($aASM, 'dec dword\[[a-zA-Z_][a-zA-Z0-9_]*\]')
-			; Ajoutons aussi dec dword[label] pendant qu'on y est
 			Local $label = StringRegExpReplace($aASM, 'dec dword\[([a-zA-Z_][a-zA-Z0-9_]*)\]', '$1')
 			$mASMSize += 6
 			$mASMString &= 'FF0D[' & $label & ']'
@@ -406,26 +368,8 @@ Func _($aASM)
 				$mASMString &= '8970' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '89B0' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '89B0' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-		Case StringLeft($aASM, 16) = 'push dword[eax+4]'
-            $mASMSize += 3
-            $mASMString &= 'FF7004'
-        Case StringLeft($aASM, 16) = 'push dword[eax+8]'
-            $mASMSize += 3
-            $mASMString &= 'FF7008'
-        Case StringLeft($aASM, 16) = 'push dword[eax+c]'
-            $mASMSize += 3
-            $mASMString &= 'FF700C'
-        Case StringLeft($aASM, 17) = 'push dword[eax+12]'
-            $mASMSize += 3
-            $mASMString &= 'FF7012'
-        Case StringLeft($aASM, 17) = 'push dword[eax+10]'
-            $mASMSize += 3
-            $mASMString &= 'FF7010'
-        Case StringLeft($aASM, 17) = 'push dword[eax+14]'
-            $mASMSize += 3
-            $mASMString &= 'FF7014'
 		Case StringRegExp($aASM, 'push dword\[eax\+[0-9A-Fa-f]+\]')
             Local $lOffset = StringRegExpReplace($aASM, 'push dword\[eax\+([0-9A-Fa-f]+)\]', '$1')
             $lOffset = Dec($lOffset)
@@ -434,7 +378,7 @@ Func _($aASM)
                 $mASMString &= 'FF70' & Hex($lOffset, 2)
             Else
                 $mASMSize += 6
-                $mASMString &= 'FFB0' & SwapEndian(Hex($lOffset, 8))
+                $mASMString &= 'FFB0' & GwAu3_Utils_SwapEndian(Hex($lOffset, 8))
             EndIf
 		Case StringRegExp($aASM, 'inc dword\[esi\+[0-9A-Fa-f]+\]')
 			Local $offset = StringRegExpReplace($aASM, 'inc dword\[esi\+([0-9A-Fa-f]+)\]', '$1')
@@ -444,7 +388,7 @@ Func _($aASM)
 				$mASMString &= 'FF46' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= 'FF86' & SwapEndian(Hex($offset, 8))
+				$mASMString &= 'FF86' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringLeft($aASM, 5) = 'ljmp '
 			$mASMSize += 5
@@ -508,7 +452,7 @@ Func _($aASM)
 			$mASMString &= '8D3C15[' & StringMid($aASM, 19, StringLen($aASM) - 19) & ']'
 		Case StringRegExp($aASM, 'cmp dword[[][a-z,A-Z]{4,}[]],[-[:xdigit:]]')
 			$lBuffer = StringInStr($aASM, ',')
-			$lBuffer = ASMNumber(StringMid($aASM, $lBuffer + 1), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, $lBuffer + 1), True)
 			If @extended Then
 				$mASMSize += 7
 				$mASMString &= '833D[' & StringMid($aASM, 11, StringInStr($aASM, ',') - 12) & ']' & $lBuffer
@@ -519,9 +463,6 @@ Func _($aASM)
 		Case StringRegExp($aASM, 'cmp ecx,[a-z,A-Z]{4,}') And StringInStr($aASM, ',dword') = 0
 			$mASMSize += 6
 			$mASMString &= '81F9[' & StringRight($aASM, StringLen($aASM) - 8) & ']'
-		Case StringRegExp($aASM, 'cmp ebx,[a-z,A-Z]{4,}') And StringInStr($aASM, ',dword') = 0
-			$mASMSize += 6
-			$mASMString &= '81FB[' & StringRight($aASM, StringLen($aASM) - 8) & ']'
 		Case StringRegExp($aASM, 'cmp eax,[a-z,A-Z]{4,}') And StringInStr($aASM, ',dword') = 0
 			$mASMSize += 5
 			$mASMString &= '3D[' & StringRight($aASM, StringLen($aASM) - 8) & ']'
@@ -582,9 +523,9 @@ Func _($aASM)
 		Case StringRegExp($aASM, 'mov dword\[[a-z,A-Z]{4,}\],[-[:xdigit:]]{1,8}\z')
 			$lBuffer = StringInStr($aASM, ',')
 			$mASMSize += 10
-			$mASMString &= 'C705[' & StringMid($aASM, 11, $lBuffer - 12) & ']' & ASMNumber(StringMid($aASM, $lBuffer + 1))
+			$mASMString &= 'C705[' & StringMid($aASM, 11, $lBuffer - 12) & ']' & GwAu3_Assembler_ASMNumber(StringMid($aASM, $lBuffer + 1))
 		Case StringRegExp($aASM, 'push [-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 6), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 6), True)
 			If @extended Then
 				$mASMSize += 2
 				$mASMString &= '6A' & $lBuffer
@@ -594,18 +535,18 @@ Func _($aASM)
 			EndIf
 		Case StringRegExp($aASM, 'mov eax,[-[:xdigit:]]{1,8}\z')
 			$mASMSize += 5
-			$mASMString &= 'B8' & ASMNumber(StringMid($aASM, 9))
+			$mASMString &= 'B8' & GwAu3_Assembler_ASMNumber(StringMid($aASM, 9))
 		Case StringRegExp($aASM, 'mov ebx,[-[:xdigit:]]{1,8}\z')
 			$mASMSize += 5
-			$mASMString &= 'BB' & ASMNumber(StringMid($aASM, 9))
+			$mASMString &= 'BB' & GwAu3_Assembler_ASMNumber(StringMid($aASM, 9))
 		Case StringRegExp($aASM, 'mov ecx,[-[:xdigit:]]{1,8}\z')
 			$mASMSize += 5
-			$mASMString &= 'B9' & ASMNumber(StringMid($aASM, 9))
+			$mASMString &= 'B9' & GwAu3_Assembler_ASMNumber(StringMid($aASM, 9))
 		Case StringRegExp($aASM, 'mov edx,[-[:xdigit:]]{1,8}\z')
 			$mASMSize += 5
-			$mASMString &= 'BA' & ASMNumber(StringMid($aASM, 9))
+			$mASMString &= 'BA' & GwAu3_Assembler_ASMNumber(StringMid($aASM, 9))
 		Case StringRegExp($aASM, 'add eax,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83C0' & $lBuffer
@@ -614,7 +555,7 @@ Func _($aASM)
 				$mASMString &= '05' & $lBuffer
 			EndIf
 		Case StringRegExp($aASM, 'add ebx,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83C3' & $lBuffer
@@ -623,7 +564,7 @@ Func _($aASM)
 				$mASMString &= '81C3' & $lBuffer
 			EndIf
 		Case StringRegExp($aASM, 'add ecx,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83C1' & $lBuffer
@@ -632,7 +573,7 @@ Func _($aASM)
 				$mASMString &= '81C1' & $lBuffer
 			EndIf
 		Case StringRegExp($aASM, 'add edx,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83C2' & $lBuffer
@@ -641,7 +582,7 @@ Func _($aASM)
 				$mASMString &= '81C2' & $lBuffer
 			EndIf
 		Case StringRegExp($aASM, 'add edi,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83C7' & $lBuffer
@@ -650,7 +591,7 @@ Func _($aASM)
 				$mASMString &= '81C7' & $lBuffer
 			EndIf
 		Case StringRegExp($aASM, 'add esi,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83C6' & $lBuffer
@@ -659,7 +600,7 @@ Func _($aASM)
 				$mASMString &= '81C6' & $lBuffer
 			EndIf
 		Case StringRegExp($aASM, 'add esp,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83C4' & $lBuffer
@@ -668,7 +609,7 @@ Func _($aASM)
 				$mASMString &= '81C4' & $lBuffer
 			EndIf
 		Case StringRegExp($aASM, 'cmp ebx,[-[:xdigit:]]{1,8}\z')
-			$lBuffer = ASMNumber(StringMid($aASM, 9), True)
+			$lBuffer = GwAu3_Assembler_ASMNumber(StringMid($aASM, 9), True)
 			If @extended Then
 				$mASMSize += 3
 				$mASMString &= '83FB' & $lBuffer
@@ -688,7 +629,7 @@ Func _($aASM)
 				$mASMString &= '8B48' & Hex($lOffset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8B88' & SwapEndian(Hex($lOffset, 8))
+				$mASMString &= '8B88' & GwAu3_Utils_SwapEndian(Hex($lOffset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov edx,dword\[eax\+[0-9A-Fa-f]+\]')
 			Local $lOffset = StringRegExpReplace($aASM, 'mov edx,dword\[eax\+([0-9A-Fa-f]+)\]', '$1')
@@ -698,20 +639,20 @@ Func _($aASM)
 				$mASMString &= '8B50' & Hex($lOffset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8B90' & SwapEndian(Hex($lOffset, 8))
+				$mASMString &= '8B90' & GwAu3_Utils_SwapEndian(Hex($lOffset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'and ecx,[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 9)
 			$mASMSize += 6
-			$mASMString &= '81E1' & ASMNumber($value)
+			$mASMString &= '81E1' & GwAu3_Assembler_ASMNumber($value)
 		Case StringRegExp($aASM, 'and eax,[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 9)
 			$mASMSize += 5
-			$mASMString &= '25' & ASMNumber($value)
+			$mASMString &= '25' & GwAu3_Assembler_ASMNumber($value)
 		Case StringRegExp($aASM, 'or eax,[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 8)
 			$mASMSize += 5
-			$mASMString &= '0D' & ASMNumber($value)
+			$mASMString &= '0D' & GwAu3_Assembler_ASMNumber($value)
 		Case StringRegExp($aASM, 'mov esi,dword\[ebp\+[0-9A-Fa-f]+\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov esi,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
 			$offset = Dec($offset)
@@ -720,7 +661,7 @@ Func _($aASM)
 				$mASMString &= '8B75' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8BB5' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8BB5' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov edi,dword\[ebp\+[0-9A-Fa-f]+\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov edi,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
@@ -730,7 +671,7 @@ Func _($aASM)
 				$mASMString &= '8B7D' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8BBD' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8BBD' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov ebx,dword\[ebp\+[0-9A-Fa-f]+\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov ebx,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
@@ -740,7 +681,7 @@ Func _($aASM)
 				$mASMString &= '8B5D' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8B9D' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8B9D' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov edx,dword\[ebp\+[0-9A-Fa-f]+\]')
 			Local $offset = StringRegExpReplace($aASM, 'mov edx,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
@@ -750,7 +691,7 @@ Func _($aASM)
 				$mASMString &= '8B55' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8B95' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8B95' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],0')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],0', '$1')
@@ -760,7 +701,7 @@ Func _($aASM)
 				$mASMString &= 'C740' & Hex($offset, 2) & '00000000'
 			Else
 				$mASMSize += 10
-				$mASMString &= 'C780' & SwapEndian(Hex($offset, 8)) & '00000000'
+				$mASMString &= 'C780' & GwAu3_Utils_SwapEndian(Hex($offset, 8)) & '00000000'
 			EndIf
 		Case StringRegExp($aASM, 'mov dword\[ebx\+[0-9A-Fa-f]+\],0')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[ebx\+([0-9A-Fa-f]+)\],0', '$1')
@@ -770,7 +711,7 @@ Func _($aASM)
 				$mASMString &= 'C743' & Hex($offset, 2) & '00000000'
 			Else
 				$mASMSize += 10
-				$mASMString &= 'C783' & SwapEndian(Hex($offset, 8)) & '00000000'
+				$mASMString &= 'C783' & GwAu3_Utils_SwapEndian(Hex($offset, 8)) & '00000000'
 			EndIf
 		Case StringRegExp($aASM, 'mov dword\[ecx\+[0-9A-Fa-f]+\],0')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[ecx\+([0-9A-Fa-f]+)\],0', '$1')
@@ -780,7 +721,7 @@ Func _($aASM)
 				$mASMString &= 'C741' & Hex($offset, 2) & '00000000'
 			Else
 				$mASMSize += 10
-				$mASMString &= 'C781' & SwapEndian(Hex($offset, 8)) & '00000000'
+				$mASMString &= 'C781' & GwAu3_Utils_SwapEndian(Hex($offset, 8)) & '00000000'
 			EndIf
 		Case StringRegExp($aASM, 'mov dword\[edx\+[0-9A-Fa-f]+\],0')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[edx\+([0-9A-Fa-f]+)\],0', '$1')
@@ -790,36 +731,36 @@ Func _($aASM)
 				$mASMString &= 'C742' & Hex($offset, 2) & '00000000'
 			Else
 				$mASMSize += 10
-				$mASMString &= 'C782' & SwapEndian(Hex($offset, 8)) & '00000000'
+				$mASMString &= 'C782' & GwAu3_Utils_SwapEndian(Hex($offset, 8)) & '00000000'
 			EndIf
 		Case StringRegExp($aASM, 'mov dword\[eax\],[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 15)
 			$mASMSize += 6
-			$mASMString &= 'C700' & ASMNumber($value)
+			$mASMString &= 'C700' & GwAu3_Assembler_ASMNumber($value)
 		Case StringRegExp($aASM, 'mov dword\[ebx\],[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 15)
 			$mASMSize += 6
-			$mASMString &= 'C703' & ASMNumber($value)
+			$mASMString &= 'C703' & GwAu3_Assembler_ASMNumber($value)
 		Case StringRegExp($aASM, 'mov dword\[ecx\],[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 15)
 			$mASMSize += 6
-			$mASMString &= 'C701' & ASMNumber($value)
+			$mASMString &= 'C701' & GwAu3_Assembler_ASMNumber($value)
 		Case StringRegExp($aASM, 'mov dword\[edx\],[-[:xdigit:]]{1,8}\z')
 			Local $value = StringMid($aASM, 15)
 			$mASMSize += 6
-			$mASMString &= 'C702' & ASMNumber($value)
+			$mASMString &= 'C702' & GwAu3_Assembler_ASMNumber($value)
 		Case StringRegExp($aASM, 'mov dword\[eax\],[0-9]\z')
 			Local $value = StringMid($aASM, 15)
 			$mASMSize += 6
-			$mASMString &= 'C700' & SwapEndian(Hex(Number($value), 8))
+			$mASMString &= 'C700' & GwAu3_Utils_SwapEndian(Hex(Number($value), 8))
 		Case StringRegExp($aASM, 'mov dword\[eax\],\d+\z')
 			Local $value = Number(StringMid($aASM, 15))
 			If $value <= 127 Then
 				$mASMSize += 6
-				$mASMString &= 'C700' & SwapEndian(Hex($value, 8))
+				$mASMString &= 'C700' & GwAu3_Utils_SwapEndian(Hex($value, 8))
 			Else
 				$mASMSize += 6
-				$mASMString &= 'C700' & ASMNumber($value)
+				$mASMString &= 'C700' & GwAu3_Assembler_ASMNumber($value)
 			EndIf
 				Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],eax')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],eax', '$1')
@@ -829,9 +770,8 @@ Func _($aASM)
 				$mASMString &= '8940' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8980' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8980' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],ebx')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],ebx', '$1')
 			$offset = Dec($offset)
@@ -840,9 +780,8 @@ Func _($aASM)
 				$mASMString &= '8958' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8998' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8998' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],ecx')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],ecx', '$1')
 			$offset = Dec($offset)
@@ -851,9 +790,8 @@ Func _($aASM)
 				$mASMString &= '8948' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8988' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8988' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],edx')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],edx', '$1')
 			$offset = Dec($offset)
@@ -862,9 +800,8 @@ Func _($aASM)
 				$mASMString &= '8950' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '8990' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '8990' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],esi')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],esi', '$1')
 			$offset = Dec($offset)
@@ -873,9 +810,8 @@ Func _($aASM)
 				$mASMString &= '8970' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '89B0' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '89B0' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],edi')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],edi', '$1')
 			$offset = Dec($offset)
@@ -884,9 +820,8 @@ Func _($aASM)
 				$mASMString &= '8978' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '89B8' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '89B8' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],ebp')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],ebp', '$1')
 			$offset = Dec($offset)
@@ -895,9 +830,8 @@ Func _($aASM)
 				$mASMString &= '8968' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '89A8' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '89A8' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
-
 		Case StringRegExp($aASM, 'mov dword\[eax\+[0-9A-Fa-f]+\],esp')
 			Local $offset = StringRegExpReplace($aASM, 'mov dword\[eax\+([0-9A-Fa-f]+)\],esp', '$1')
 			$offset = Dec($offset)
@@ -906,7 +840,7 @@ Func _($aASM)
 				$mASMString &= '8960' & Hex($offset, 2)
 			Else
 				$mASMSize += 6
-				$mASMString &= '89A0' & SwapEndian(Hex($offset, 8))
+				$mASMString &= '89A0' & GwAu3_Utils_SwapEndian(Hex($offset, 8))
 			EndIf
 		Case Else
 			Local $lOpCode
@@ -1049,8 +983,6 @@ Func _($aASM)
 					$lOpCode = '8B500C'
 				Case 'mov edx,dword[esi+1c]'
 					$lOpCode = '8B561C'
-				Case 'push dword[eax+8]'
-					$lOpCode = 'FF7008'
 				Case 'lea eax,dword[eax+18]'
 					$lOpCode = '8D4018'
 				Case 'lea ecx,dword[eax+4]'
@@ -1079,8 +1011,6 @@ Func _($aASM)
 					$lOpCode = '8B400C'
 				Case 'mov ebx,dword[eax+4]'
 					$lOpCode = '8B5804'
-				Case 'mov ebx,dword[eax]'
-					$lOpCode = '8B10'
 				Case 'mov ebx,dword[eax+8]'
 					$lOpCode = '8B5808'
 				Case 'mov ebx,dword[eax+C]'
@@ -1097,12 +1027,6 @@ Func _($aASM)
 					$lOpCode = '8B4810'
 				Case 'mov eax,dword[eax+4]'
 					$lOpCode = '8B4004'
-				Case 'push dword[eax+4]'
-					$lOpCode = 'FF7004'
-				Case 'push dword[eax+c]'
-					$lOpCode = 'FF700C'
-				Case 'mov esp,ebp'
-					$lOpCode = '8BE5'
 				Case 'mov esp,ebp'
 					$lOpCode = '8BE5'
 				Case 'pop ebp'
@@ -1125,8 +1049,6 @@ Func _($aASM)
 					$lOpCode = 'C1E006'
 				Case 'shl eax,7'
 					$lOpCode = 'C1E007'
-				Case 'shl eax,8'
-					$lOpCode = 'C1E008'
 				Case 'shl eax,9'
 					$lOpCode = 'C1E009'
 				Case 'mov edi,eax'
@@ -1193,17 +1115,17 @@ Func _($aASM)
 					$lOpCode = '8B7A04'
 				Case 'mov edi,dword[eax+4]'
 					$lOpCode = '8B7804'
-				Case $aASM = 'mov ecx,dword[E1D684]'
+				Case  'mov ecx,dword[E1D684]'
 					$lOpCode = '8B0D84D6E100'
-				Case $aASM = 'mov dword[edx-0x70],ecx'
+				Case  'mov dword[edx-0x70],ecx'
 					$lOpCode = '894A90'
-				Case $aASM = 'mov ecx,dword[edx+0x1C]'
+				Case  'mov ecx,dword[edx+0x1C]'
 					$lOpCode = '8B4A1C'
-				Case $aASM = 'mov dword[edx+0x54],ecx'
+				Case  'mov dword[edx+0x54],ecx'
 					$lOpCode = '894A54'
-				Case $aASM = 'mov ecx,dword[edx+4]'
+				Case  'mov ecx,dword[edx+4]'
 					$lOpCode = '8B4A04'
-				Case $aASM = 'mov dword[edx-0x14],ecx'
+				Case  'mov dword[edx-0x14],ecx'
 					$lOpCode = '894AEC'
 				Case 'cmp ebx,edi'
 					$lOpCode = '3BDF'
@@ -1305,11 +1227,11 @@ Func _($aASM)
 					$lOpCode = '8B4108'
 				Case 'test al,1'
 					$lOpCode = 'A801'
-				Case $aASM = 'mov eax,[eax+2C]'
+				Case  'mov eax,[eax+2C]'
 					$lOpCode = '8B402C'
-				Case $aASM = 'mov eax,[eax+680]'
+				Case  'mov eax,[eax+680]'
 					$lOpCode = '8B8080060000'
-				Case $aASM = 'fld st(0),dword[ebp+8]'
+				Case  'fld st(0),dword[ebp+8]'
 					$lOpCode = 'D94508'
 				Case 'mov esi,eax'
 					$lOpCode = '8BF0'
@@ -1355,7 +1277,7 @@ Func _($aASM)
 					$lOpCode = '89480C'
 				Case 'mov ebx,dword[ecx-C]'
 					$lOpCode = '8B59F4'
-				Case 'mov [eax+!],ebx'
+				Case 'mov [eax+C],ebx'
 					$lOpCode = '89580C'
 				Case 'mov ecx,[eax+8]'
 					$lOpCode = '8B4808'
@@ -1371,8 +1293,6 @@ Func _($aASM)
 					$lOpCode = '8BC2'
 				Case 'mov esi,edx'
 					$lOpCode = '8BF2'
-				Case 'mov edi,edx'
-					$lOpCode = '8BFA'
 				Case 'add esi,D'
 					$lOpCode = '83C60D'
 				Case 'add esi,12'
@@ -1399,133 +1319,119 @@ Func _($aASM)
 					$lOpCode = '3BDE'
 				Case 'pop edi'
 					$lOpCode = '5F'
-				Case $aASM = 'push dword[eax+4]'
-					$lOpCode = 'FF7004'
-				Case $aASM = 'push dword[eax+8]'
-					$lOpCode = 'FF7008'
-				Case $aASM = 'push dword[eax+c]'
-					$lOpCode = 'FF700C'
-				Case $aASM = 'push dword[eax+10]'
-					$lOpCode = 'FF7010'
-				Case $aASM = 'push dword[eax+12]'
-					$lOpCode = 'FF7012'
-				Case $aASM = 'push dword[eax+14]'
-					$lOpCode = 'FF7014'
-				Case $aASM = 'mov ecx,dword[eax+14]'
+				Case  'mov ecx,dword[eax+14]'
 					$lOpCode = '8B4814'
-				Case $aASM = 'mov edx,dword[eax+14]'
+				Case  'mov edx,dword[eax+14]'
 					$lOpCode = '8B5014'
-				Case $aASM = 'mov edx,dword[eax+18]'
+				Case  'mov edx,dword[eax+18]'
 					$lOpCode = '8B5018'
-				Case $aASM = 'mov edi,ecx'
+				Case  'mov edi,ecx'
 					$lOpCode = '8BF9'
-				Case $aASM = 'mov edi,ebx'
+				Case  'mov edi,ebx'
 					$lOpCode = '8BFB'
-				Case $aASM = 'mov esi,ecx'
+				Case  'mov esi,ecx'
 					$lOpCode = '8BF1'
-				Case $aASM = 'mov esi,ebx'
+				Case  'mov esi,ebx'
 					$lOpCode = '8BF3'
-				Case $aASM = 'mov edi,esi'
+				Case  'mov edi,esi'
 					$lOpCode = '8BFE'
-				Case $aASM = 'mov ebx,ecx'
+				Case  'mov ebx,ecx'
 					$lOpCode = '8BD9'
-				Case $aASM = 'mov eax,ebx'
+				Case  'mov eax,ebx'
 					$lOpCode = '8BC3'
-				Case $aASM = 'mov eax,esi'
+				Case  'mov eax,esi'
 					$lOpCode = '8BC6'
-				Case $aASM = 'mov ecx,ebx'
+				Case  'mov ecx,ebx'
 					$lOpCode = '8BCB'
-				Case $aASM = 'or eax,esi'
+				Case  'or eax,esi'
 					$lOpCode = '0BC6'
-				Case $aASM = 'or eax,edi'
+				Case  'or eax,edi'
 					$lOpCode = '0BC7'
-				Case $aASM = 'or ecx,ebx'
+				Case  'or ecx,ebx'
 					$lOpCode = '0BCB'
-				Case $aASM = 'or eax,ebx'
+				Case  'or eax,ebx'
 					$lOpCode = '0BC3'
-				Case $aASM = 'and ecx,0xFFFF'
+				Case  'and ecx,0xFFFF'
 					$lOpCode = '81E1FFFF0000'
-				Case $aASM = 'and eax,0xFFFF'
+				Case  'and eax,0xFFFF'
 					$lOpCode = '25FFFF0000'
-				Case $aASM = 'add eax,ebx'
+				Case  'add eax,ebx'
 					$lOpCode = '03C3'
-				Case $aASM = 'add ecx,edx'
+				Case  'add ecx,edx'
 					$lOpCode = '03CA'
-				Case $aASM = 'add eax,esi'
+				Case  'add eax,esi'
 					$lOpCode = '03C6'
-				Case $aASM = 'shl ebx,8'
+				Case  'shl ebx,8'
 					$lOpCode = 'C1E308'
-				Case $aASM = 'shl edx,16'
+				Case  'shl edx,16'
 					$lOpCode = 'C1E210'
-				Case $aASM = 'shl ebx,16'
+				Case  'shl ebx,16'
 					$lOpCode = 'C1E310'
-				Case $aASM = 'shl esi,8'
+				Case  'shl esi,8'
 					$lOpCode = 'C1E608'
-				Case $aASM = 'movzx ecx,di'
+				Case  'movzx ecx,di'
 					$lOpCode = '0FB7CF'
-				Case $aASM = 'movzx eax,di'
+				Case  'movzx eax,di'
 					$lOpCode = '0FB7C7'
-				Case $aASM = 'movzx ecx,cx'
+				Case  'movzx ecx,cx'
 					$lOpCode = '0FB7C9'
-				Case $aASM = 'add esp,16'
+				Case  'add esp,16'
 					$lOpCode = '83C410'
-				Case $aASM = 'add esp,12'
+				Case  'add esp,12'
 					$lOpCode = '83C40C'
-				Case $aASM = 'sub esp,16'
+				Case  'sub esp,16'
 					$lOpCode = '83EC10'
-				Case $aASM = 'sub esp,12'
+				Case  'sub esp,12'
 					$lOpCode = '83EC0C'
-				Case $aASM = 'mov ebx,edx'
+				Case  'mov ebx,edx'
 					$lOpCode = '8BDA'
-				Case $aASM = 'mov esi,edx'
+				Case  'mov esi,edx'
 					$lOpCode = '8BF2'
-				Case $aASM = 'mov ebx,esi'
+				Case  'mov ebx,esi'
 					$lOpCode = '8BDE'
-				Case $aASM = 'mov edx,ebx'
+				Case  'mov edx,ebx'
 					$lOpCode = '8BD3'
-				Case $aASM = 'mov edx,esi'
+				Case  'mov edx,esi'
 					$lOpCode = '8BD6'
-				Case $aASM = 'mov edx,edi'
+				Case  'mov edx,edi'
 					$lOpCode = '8BD7'
-				Case $aASM = 'mov ecx,edx'
+				Case  'mov ecx,edx'
 					$lOpCode = '8BCA'
-				Case $aASM = 'mov esi,edi'
+				Case  'mov esi,edi'
 					$lOpCode = '8BF7'
-				Case $aASM = 'mov edi,esi'
-					$lOpCode = '8BFE'
-				Case $aASM = 'mov ebp,eax'
+				Case  'mov ebp,eax'
 					$lOpCode = '8BE8'
-				Case $aASM = 'mov ebp,ebx'
+				Case  'mov ebp,ebx'
 					$lOpCode = '8BEB'
-				Case $aASM = 'mov ebp,ecx'
+				Case  'mov ebp,ecx'
 					$lOpCode = '8BE9'
-				Case $aASM = 'mov ebp,edx'
+				Case  'mov ebp,edx'
 					$lOpCode = '8BEA'
-				Case $aASM = 'mov esp,eax'
+				Case  'mov esp,eax'
 					$lOpCode = '8BE0'
-				Case $aASM = 'mov esp,ecx'
+				Case  'mov esp,ecx'
 					$lOpCode = '8BE1'
-				Case $aASM = 'mov esp,edx'
+				Case  'mov esp,edx'
 					$lOpCode = '8BE2'
-				Case $aASM = 'mov esp,ebx'
+				Case  'mov esp,ebx'
 					$lOpCode = '8BE3'
-				Case $aASM = 'mov esi,dword[ebp+8]'
+				Case  'mov esi,dword[ebp+8]'
 					$lOpCode = '8B7508'
-				Case $aASM = 'mov esi,dword[ebp+C]'
+				Case  'mov esi,dword[ebp+C]'
 					$lOpCode = '8B750C'
-				Case $aASM = 'mov esi,dword[ebp+10]'
+				Case  'mov esi,dword[ebp+10]'
 					$lOpCode = '8B7510'
-				Case $aASM = 'mov edi,dword[ebp+8]'
+				Case  'mov edi,dword[ebp+8]'
 					$lOpCode = '8B7D08'
-				Case $aASM = 'mov edi,dword[ebp+C]'
+				Case  'mov edi,dword[ebp+C]'
 					$lOpCode = '8B7D0C'
-				Case $aASM = 'mov ebx,dword[ebp+8]'
+				Case  'mov ebx,dword[ebp+8]'
 					$lOpCode = '8B5D08'
-				Case $aASM = 'mov edx,dword[ebp+8]'
+				Case  'mov edx,dword[ebp+8]'
 					$lOpCode = '8B5508'
-				Case $aASM = 'mov edx,dword[ebp+C]'
+				Case  'mov edx,dword[ebp+C]'
 					$lOpCode = '8B550C'
-				Case $aASM = 'mov dword[eax+C],0'
+				Case  'mov dword[eax+C],0'
 					$lOpCode = 'C7400C00000000'
 				Case 'mov dword[eax+4],edx'
 					$lOpCode = '895004'
@@ -1545,7 +1451,7 @@ Func _($aASM)
 					$lOpCode = '8B5D10'
 				Case 'mov edx,dword[ebp+10]'
 					$lOpCode = '8B5510'
-				Case $aASM = 'mov esi,ebp'
+				Case  'mov esi,ebp'
 					$lOpCode = '8BF5'
 				Case 'mov ecx,dword[esi]'
 					$lOpCode = '8B0E'
@@ -1561,10 +1467,6 @@ Func _($aASM)
 					$lOpCode = '8B06'
 				Case 'mov eax,dword[edi]'
 					$lOpCode = '8B07'
-				Case 'mov ecx,dword[esi]'
-					$lOpCode = '8B0E'
-				Case 'mov ecx,dword[edi]'
-					$lOpCode = '8B0F'
 				Case 'mov ebx,dword[esi]'
 					$lOpCode = '8B1E'
 				Case 'mov ebx,dword[edi]'
@@ -1574,15 +1476,45 @@ Func _($aASM)
 				Case 'and eax,0xFF'
 					$lOpCode = '25FF000000'
 				Case 'and eax,0xFFFF'
-					$lOpCode = '25FFFF0000'  ; Celui-ci existe déjà
+					$lOpCode = '25FFFF0000'
 				Case 'and ebx,0xF'
 					$lOpCode = '83E30F'
 				Case 'and ecx,0xF'
 					$lOpCode = '83E10F'
 				Case 'and edx,0xF'
 					$lOpCode = '83E20F'
+				Case 'mov eax,dword[eax]'
+					$lOpCode = '8B00'
+				Case 'mov eax,dword[eax+18]'
+					$lOpCode = '8B4018'
+				Case 'mov eax,dword[eax+44]'
+					$lOpCode = '8B4044'
+				Case 'mov eax,dword[eax+198]'
+					$lOpCode = '8B8098010000'
+				Case 'imul ebx,ebx,7C'
+					$lOpCode = '6BDB7C'
+				Case 'mov ebx,dword[ebx+10]'
+					$lOpCode = '8B5B10'
+				Case 'test ebx,40001'
+					$lOpCode = 'F7C301000400'
+				Case 'imul eax,eax,7C'
+					$lOpCode = '6BC07C'
+				Case 'mov ebx,dword[eax+10]'
+					$lOpCode = '8B5810'
+				Case 'test ebx,1'
+					$lOpCode = 'F7C301000000'
+				Case 'test ebx,40000'
+				   $lOpCode = 'F7C300000400'
+				Case 'test ebx,40001'
+				   $lOpCode = 'F7C301000400'
+				Case 'mov ebx,dword[eax+19C]'
+					$lOpCode = '8B989C010000'
+				Case 'test eax,1DA'
+					$lOpCode = 'A9DA010000'
+				Case 'cmp eax,1DA'
+					$lOpCode = '3DDA010000'
 				Case Else
-					_Log_Error('Could not assemble: ' & $aASM, 'ASM', $g_h_EditText)
+					GwAu3_Log_Error('Could not assemble: ' & $aASM, 'ASM', $g_h_EditText)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $aASM)
 					Exit
 			EndSwitch
@@ -1591,7 +1523,7 @@ Func _($aASM)
 	EndSelect
 EndFunc
 
-Func CompleteASMCode()
+Func GwAu3_Assembler_CompleteASMCode()
 	Local $lInExpression = False
 	Local $lExpression
 	Local $lTempASM = $mASMString
@@ -1612,17 +1544,17 @@ Func CompleteASMCode()
 			Case '(', '[', '{'
 				$lInExpression = True
 			Case ')'
-				$mASMString &= Hex(GetLabelInfo($lExpression) - Int($lCurrentOffset) - 1, 2)
+				$mASMString &= Hex(GwAu3_Memory_GetLabelInfo($lExpression) - Int($lCurrentOffset) - 1, 2)
 				$lCurrentOffset += 1
 				$lInExpression = False
 				$lExpression = ''
 			Case ']'
-				$mASMString &= SwapEndian(Hex(GetLabelInfo($lExpression), 8))
+				$mASMString &= GwAu3_Utils_SwapEndian(Hex(GwAu3_Memory_GetLabelInfo($lExpression), 8))
 				$lCurrentOffset += 4
 				$lInExpression = False
 				$lExpression = ''
 			Case '}'
-				$mASMString &= SwapEndian(Hex(GetLabelInfo($lExpression) - Int($lCurrentOffset) - 4, 8))
+				$mASMString &= GwAu3_Utils_SwapEndian(Hex(GwAu3_Memory_GetLabelInfo($lExpression) - Int($lCurrentOffset) - 4, 8))
 				$lCurrentOffset += 4
 				$lInExpression = False
 				$lExpression = ''
@@ -1637,31 +1569,18 @@ Func CompleteASMCode()
 	Next
 EndFunc
 
-Func ASMNumber($aNumber, $aSmall = False)
+Func GwAu3_Assembler_ASMNumber($aNumber, $aSmall = False)
 	If $aNumber >= 0 Then
 		$aNumber = Dec($aNumber)
 	EndIf
 	If $aSmall And $aNumber <= 127 And $aNumber >= -128 Then
 		Return SetExtended(1, Hex($aNumber, 2))
 	Else
-		Return SetExtended(0, SwapEndian(Hex($aNumber, 8)))
+		Return SetExtended(0, GwAu3_Utils_SwapEndian(Hex($aNumber, 8)))
 	EndIf
 EndFunc
 
-Func GetLabelInfo($aLab)
-	Local Const $lVal = GetValue($aLab)
-	Return $lVal
-EndFunc
-
-Func GetScannedAddress($aLabel, $aOffset)
-	Return MemoryRead(GetLabelInfo($aLabel) + 8) - MemoryRead(GetLabelInfo($aLabel) + 4) + $aOffset
-EndFunc
-
-Func WriteDetour($aFrom, $aTo)
-	WriteBinary('E9' & SwapEndian(Hex(GetLabelInfo($aTo) - GetLabelInfo($aFrom) - 5)), GetLabelInfo($aFrom))
-EndFunc
-
-Func _CreateScanProcedure($lGwBase)
+Func GwAu3_Assembler_CreateScanProcedure($lGwBase)
     _('ScanProc:')
     _('pushad')
     _('mov ecx,' & Hex($lGwBase, 8))
@@ -1678,7 +1597,7 @@ Func _CreateScanProcedure($lGwBase)
     _('add edx,50')
     _('cmp edx,esi')
     _('jnz ScanInnerLoop')
-    _('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+    _('cmp ecx,' & GwAu3_Utils_SwapEndian(Hex($lGwBase + 5238784, 8)))
     _('jnz ScanLoop')
     _('jmp ScanExit')
 
@@ -1694,7 +1613,7 @@ Func _CreateScanProcedure($lGwBase)
     _('add edx,50')
     _('cmp edx,esi')
     _('jnz ScanInnerLoop')
-    _('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+    _('cmp ecx,' & GwAu3_Utils_SwapEndian(Hex($lGwBase + 5238784, 8)))
     _('jnz ScanLoop')
     _('jmp ScanExit')
 
@@ -1707,7 +1626,7 @@ Func _CreateScanProcedure($lGwBase)
     _('add edx,50')
     _('cmp edx,esi')
     _('jnz ScanInnerLoop')
-    _('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+    _('cmp ecx,' & GwAu3_Utils_SwapEndian(Hex($lGwBase + 5238784, 8)))
     _('jnz ScanLoop')
     _('jmp ScanExit')
 
@@ -1718,7 +1637,7 @@ Func _CreateScanProcedure($lGwBase)
     _('add edx,50')
     _('cmp edx,esi')
     _('jnz ScanInnerLoop')
-    _('cmp ecx,' & SwapEndian(Hex($lGwBase + 5238784, 8)))
+    _('cmp ecx,' & GwAu3_Utils_SwapEndian(Hex($lGwBase + 5238784, 8)))
     _('jnz ScanLoop')
 
     _('ScanExit:')
@@ -1726,89 +1645,144 @@ Func _CreateScanProcedure($lGwBase)
     _('retn')
 EndFunc
 
-Func ModifyMemory()
+Func GwAu3_Assembler_ModifyMemory()
 	$mASMSize = 0
 	$mASMCodeOffset = 0
 	$mASMString = ''
-	CreateData()
-	CreateMain()
-	CreateTrader()
-	CreateRenderingMod()
-	CreateCommands()
-	_SkillMod_CreateCommands()
-	_FriendMod_CreateCommands()
-	_AttributeMod_CreateCommands()
-	_TradeMod_CreateSellItemCommand()
-	_TradeMod_CreateBuyItemCommand()
-	_TradeMod_CreateCraftItemExCommand()
-	_TradeMod_CreateRequestQuoteCommand()
-	_TradeMod_CreateRequestQuoteSellCommand()
-	_TradeMod_CreateTraderBuyCommand()
-	_TradeMod_CreateTraderSellCommand()
-	_TradeMod_CreateSalvageCommand()
-	_AgentMod_CreateCommands()
-	_MapMod_CreateCommands()
-	$mMemory = MemoryRead(MemoryRead($mBase), 'ptr')
+	GwAu3_Assembler_CreateData()
+	GwAu3_Assembler_CreateMain()
+	GwAu3_Assembler_CreateRenderingMod()
+	GwAu3_Assembler_CreateCommands()
+	GwAu3_Assembler_CreateSkillCommands()
+	GwAu3_Assembler_CreateFriendCommands()
+	GwAu3_Assembler_CreateAttributeCommands()
+	GwAu3_Assembler_CreateTrader()
+	GwAu3_Assembler_CreateSellItemCommand()
+	GwAu3_Assembler_CreateBuyItemCommand()
+	GwAu3_Assembler_CreateCraftItemExCommand()
+	GwAu3_Assembler_CreateRequestQuoteCommand()
+	GwAu3_Assembler_CreateRequestQuoteSellCommand()
+	GwAu3_Assembler_CreateTraderBuyCommand()
+	GwAu3_Assembler_CreateTraderSellCommand()
+	GwAu3_Assembler_CreateSalvageCommand()
+	GwAu3_Assembler_CreateAgentCommands()
+	GwAu3_Assembler_CreateMapCommands()
+	$mMemory = GwAu3_Memory_Read(GwAu3_Memory_Read($mBase), 'ptr')
 
 	Switch $mMemory
 		Case 0
 			$mMemory = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $mASMSize, 'dword', 0x1000, 'dword', 64)
 			$mMemory = $mMemory[0]
-			MemoryWrite(MemoryRead($mBase), $mMemory)
-			CompleteASMCode()
-			WriteBinary($mASMString, $mMemory + $mASMCodeOffset)
+			GwAu3_Memory_Write(GwAu3_Memory_Read($mBase), $mMemory)
+			GwAu3_Assembler_CompleteASMCode()
+			GwAu3_Memory_WriteBinary($mASMString, $mMemory + $mASMCodeOffset)
 			$SecondInject = $mMemory + $mASMCodeOffset
-			MemoryWrite(GetValue('QueuePtr'), GetValue('QueueBase'))
+			GwAu3_Memory_Write(GwAu3_Memory_GetValue('QueuePtr'), GwAu3_Memory_GetValue('QueueBase'))
 		Case Else
-			CompleteASMCode()
+			GwAu3_Assembler_CompleteASMCode()
 	EndSwitch
-	WriteDetour('MainStart', 'MainProc')
-	WriteDetour('TraderStart', 'TraderProc')
-	WriteDetour('RenderingMod', 'RenderingModProc')
+	GwAu3_Memory_WriteDetour('MainStart', 'MainProc')
+	GwAu3_Memory_WriteDetour('TraderStart', 'TraderProc')
+	GwAu3_Memory_WriteDetour('RenderingMod', 'RenderingModProc')
 EndFunc
 
-Func CreateData()
+Func GwAu3_Assembler_CreateData()
     _('QueueCounter/4')
     _('TraderQuoteID/4')
     _('TraderCostID/4')
     _('TraderCostValue/4')
     _('DisableRendering/4')
 
-    _('QueueBase/' & 256 * GetValue('QueueSize'))
+    _('QueueBase/' & 256 * GwAu3_Memory_GetValue('QueueSize'))
 
     _('AgentCopyCount/4')
     _('AgentCopyBase/' & 0x1C0 * 256)
-EndFunc   ;==>CreateData
+EndFunc   ;==>GwAu3_Assembler_CreateData
 
-Func CreateMain()
-	_('MainProc:')
-	_('pushad')
-	_('mov eax,dword[QueueCounter]')
-	_('mov ecx,eax')
-	_('shl eax,8')
-	_('add eax,QueueBase')
-	_('mov ebx,dword[eax]')
-	_('test ebx,ebx')
-	_('jz MainExit')
-	_('push ecx')
-	_('mov dword[eax],0')
-	_('jmp ebx')
-	_('CommandReturn:')
-	_('pop eax')
-	_('inc eax')
-	_('cmp eax,QueueSize')
-	_('jnz MainSkipReset')
-	_('xor eax,eax')
-	_('MainSkipReset:')
-	_('mov dword[QueueCounter],eax')
-	_('MainExit:')
-	_('popad')
-	_('mov ebp,esp')
-	_('fld st(0),dword[ebp+8]')
-	_('ljmp MainReturn')
+Func GwAu3_Assembler_CreateMain()
+    _('MainProc:')
+    _('pushad')
+    _('push eax')
+    _('push ebx')
+
+    _('mov eax,dword[BasePointer]')
+    _('test eax,eax')
+    _('jz RegularFlow')
+    _('mov eax,dword[eax]')
+    _('test eax,eax')
+    _('jz RegularFlow')
+    _('mov eax,dword[eax+18]')
+    _('test eax,eax')
+    _('jz RegularFlow')
+    _('mov eax,dword[eax+44]')
+    _('test eax,eax')
+    _('jz RegularFlow')
+    _('mov ebx,dword[eax+19C]')
+    _('test ebx,ebx')
+    _('jz RegularFlow')
+    _('mov eax,dword[eax+198]')
+    _('cmp eax,0')
+    _('je HandleCase')
+    _('mov ebx,eax')
+    _('imul ebx,ebx,7C')
+    _('add ebx,dword[Environment]')
+    _('test ebx,ebx')
+    _('jz RegularFlow')
+    _('mov ebx,dword[ebx+10]')
+    _('test ebx,40001')
+    _('jz RegularFlow')
+
+    _('HandleCase:')
+    _('pop ebx')
+    _('pop eax')
+    _('mov eax,dword[QueueCounter]')
+    _('mov ecx,eax')
+    _('shl eax,8')
+    _('add eax,QueueBase')
+    _('mov ebx,dword[eax]')
+    _('test ebx,ebx')
+    _('jz MainExit')
+    _('mov dword[eax],0')
+    _('mov eax,ecx')
+    _('inc eax')
+    _('cmp eax,QueueSize')
+    _('jnz SubSkipReset')
+    _('xor eax,eax')
+    _('SubSkipReset:')
+    _('mov dword[QueueCounter],eax')
+    _('jmp MainExit')
+
+    _('RegularFlow:')
+    _('pop ebx')
+    _('pop eax')
+    _('mov eax,dword[QueueCounter]')
+    _('mov ecx,eax')
+    _('shl eax,8')
+    _('add eax,QueueBase')
+    _('mov ebx,dword[eax]')
+    _('test ebx,ebx')
+    _('jz MainExit')
+    _('push ecx')
+    _('mov dword[eax],0')
+    _('jmp ebx')
+
+    _('CommandReturn:')
+    _('pop eax')
+    _('inc eax')
+    _('cmp eax,QueueSize')
+    _('jnz MainSkipReset')
+    _('xor eax,eax')
+    _('MainSkipReset:')
+    _('mov dword[QueueCounter],eax')
+
+    _('MainExit:')
+    _('popad')
+    _('mov ebp,esp')
+    _('fld st(0),dword[ebp+8]')
+    _('ljmp MainReturn')
 EndFunc
 
-Func CreateTrader()
+Func GwAu3_Assembler_CreateTrader()
 	_('TraderProc:')
 	_('push eax')
 	_('mov eax,dword[ebx+28] -> 8b 43 28')
@@ -1832,14 +1806,14 @@ Func CreateTrader()
 	_('ljmp TraderReturn')
 EndFunc
 
-Func CreateRenderingMod()
+Func GwAu3_Assembler_CreateRenderingMod()
 	_('RenderingModProc:')
 	_('add esp,4')
 	_('cmp dword[DisableRendering],1')
 	_('ljmp RenderingModReturn')
 EndFunc
 
-Func CreateCommands()
+Func GwAu3_Assembler_CreateCommands()
 	_('CommandPacketSend:')
 	_('lea edx,dword[eax+8]')
 	_('push edx')
@@ -1879,7 +1853,7 @@ Func CreateCommands()
 	_('ljmp CommandReturn')
 EndFunc
 
-Func _SkillMod_CreateCommands()
+Func GwAu3_Assembler_CreateSkillCommands()
 	_('CommandUseSkill:')
 	_('mov ecx,dword[eax+10]')
 	_('push ecx')
@@ -1905,7 +1879,7 @@ Func _SkillMod_CreateCommands()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _FriendMod_CreateCommands()
+Func GwAu3_Assembler_CreateFriendCommands()
     _('CommandPlayerStatus:')
     _('mov eax,dword[eax+4]')
     _('push eax')
@@ -1936,7 +1910,7 @@ Func _FriendMod_CreateCommands()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _AttributeMod_CreateCommands()
+Func GwAu3_Assembler_CreateAttributeCommands()
     _('CommandIncreaseAttribute:')
     _('mov edx,dword[eax+4]')
     _('push edx')
@@ -1956,7 +1930,7 @@ Func _AttributeMod_CreateCommands()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateSellItemCommand()
+Func GwAu3_Assembler_CreateSellItemCommand()
     _('CommandSellItem:')
     _('mov esi,eax')
     _('add esi,C')
@@ -1975,7 +1949,7 @@ Func _TradeMod_CreateSellItemCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateBuyItemCommand()
+Func GwAu3_Assembler_CreateBuyItemCommand()
     _('CommandBuyItem:')
     _('mov esi,eax')
     _('add esi,10')
@@ -1998,7 +1972,7 @@ Func _TradeMod_CreateBuyItemCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateCraftItemExCommand()
+Func GwAu3_Assembler_CreateCraftItemExCommand()
     _('CommandCraftItemEx:')
     _('add eax,4')
     _('push eax')
@@ -2021,7 +1995,7 @@ Func _TradeMod_CreateCraftItemExCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateRequestQuoteCommand()
+Func GwAu3_Assembler_CreateRequestQuoteCommand()
     _('CommandRequestQuote:')
     _('mov dword[TraderCostID],0')
     _('mov dword[TraderCostValue],0')
@@ -2042,7 +2016,7 @@ Func _TradeMod_CreateRequestQuoteCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateRequestQuoteSellCommand()
+Func GwAu3_Assembler_CreateRequestQuoteSellCommand()
     _('CommandRequestQuoteSell:')
     _('mov dword[TraderCostID],0')
     _('mov dword[TraderCostValue],0')
@@ -2061,7 +2035,7 @@ Func _TradeMod_CreateRequestQuoteSellCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateTraderBuyCommand()
+Func GwAu3_Assembler_CreateTraderBuyCommand()
     _('CommandTraderBuy:')
     _('push 0')
     _('push TraderCostID')
@@ -2081,7 +2055,7 @@ Func _TradeMod_CreateTraderBuyCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateTraderSellCommand()
+Func GwAu3_Assembler_CreateTraderSellCommand()
     _('CommandTraderSell:')
     _('push 0')
     _('push 0')
@@ -2101,7 +2075,7 @@ Func _TradeMod_CreateTraderSellCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _TradeMod_CreateSalvageCommand()
+Func GwAu3_Assembler_CreateSalvageCommand()
     _('CommandSalvage:')
     _('push eax')
     _('push ecx')
@@ -2126,7 +2100,7 @@ Func _TradeMod_CreateSalvageCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func _AgentMod_CreateCommands()
+Func GwAu3_Assembler_CreateAgentCommands()
 	_('CommandChangeTarget:')
 	_('xor edx,edx')
 	_('push edx')
@@ -2167,7 +2141,7 @@ Func _AgentMod_CreateCommands()
 	_('ljmp CommandReturn')
 EndFunc
 
-Func _MapMod_CreateCommands()
+Func GwAu3_Assembler_CreateMapCommands()
 	_('CommandMove:')
 	_('lea eax,dword[eax+4]')
 	_('push eax')

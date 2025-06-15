@@ -11,7 +11,7 @@ Global Const $GC_AS_BASE64_BINARY_GW[64] = [ _
         "000011", "100011", "010011", "110011", "001011", "101011", "011011", "111011", _ ; w-3
         "000111", "100111", "010111", "110111", "001111", "101111", "011111", "111111"]   ; 4-/
 
-Func FloatToInt($a_f_Float)
+Func GwAu3_Utils_FloatToInt($a_f_Float)
 ;~     Local $l_d_Float = DllStructCreate("float")
 ;~     Local $l_d_Int = DllStructCreate("int", DllStructGetPtr($l_d_Float))
 ;~     DllStructSetData($l_d_Float, 1, $a_f_Float)
@@ -19,7 +19,7 @@ Func FloatToInt($a_f_Float)
 	Return Int($a_f_Float)
 EndFunc
 
-Func IntToFloat($a_i_Int)
+Func GwAu3_Utils_IntToFloat($a_i_Int)
 ;~     Local $l_d_Int = DllStructCreate("int")
 ;~     Local $l_d_Float = DllStructCreate("float", DllStructGetPtr($l_d_Int))
 ;~     DllStructSetData($l_d_Int, 1, $a_i_Int)
@@ -27,7 +27,7 @@ Func IntToFloat($a_i_Int)
 	Return Number($a_i_Int, 3)
 EndFunc
 
-Func Bin64ToDec($a_s_Binary)
+Func GwAu3_Utils_Bin64ToDec($a_s_Binary)
 ;~     Local $l_i_Return = 0
 ;~     Local $l_i_Length = StringLen($a_s_Binary)
 ;~
@@ -41,7 +41,7 @@ Func Bin64ToDec($a_s_Binary)
 	Return Dec(StringReplace($a_s_Binary, "0b", ""), 2)
 EndFunc
 
-Func Base64ToBin64_GW($a_s_Character)
+Func GwAu3_Utils_Base64ToBin64($a_s_Character)
     Local $l_i_Index = StringInStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", $a_s_Character, 1) - 1
 
     If $l_i_Index < 0 Then Return SetError(1, 0, "")
@@ -49,19 +49,45 @@ Func Base64ToBin64_GW($a_s_Character)
     Return $GC_AS_BASE64_BINARY_GW[$l_i_Index]
 EndFunc
 
-Func GetValue($a_s_Key)
-    For $l_i_Index = 1 To $g_amx2_Labels[0][0]
-        If $g_amx2_Labels[$l_i_Index][0] = $a_s_Key Then
-            Return $g_amx2_Labels[$l_i_Index][1]
-        EndIf
-    Next
-    Return -1
+Func GwAu3_Utils_ArrayAdd2D(ByRef $array, $val1, $val2)
+    Local $idx = UBound($array)
+    ReDim $array[$idx + 1][2]
+    $array[$idx][0] = $val1
+    $array[$idx][1] = $val2
 EndFunc
 
-Func SetValue($a_s_Key, $a_v_Value)
-    $g_amx2_Labels[0][0] += 1
-    ReDim $g_amx2_Labels[$g_amx2_Labels[0][0] + 1][2]
-    $g_amx2_Labels[$g_amx2_Labels[0][0]][0] = $a_s_Key
-    $g_amx2_Labels[$g_amx2_Labels[0][0]][1] = $a_v_Value
-    Return True
+Func GwAu3_Utils_UnsignedCompare($a, $b)
+   $a = BitAND($a, 0xFFFFFFFF)
+   $b = BitAND($b, 0xFFFFFFFF)
+   If $a = $b Then Return 0
+   Return ($a > $b And $a - $b < 0x80000000) Or ($b > $a And $b - $a > 0x80000000) ? 1 : -1
+EndFunc
+
+Func GwAu3_Utils_StringToByteArray($hexString)
+    Local $length = StringLen($hexString) / 2
+    Local $bytes[$length]
+
+    For $i = 0 To $length - 1
+        Local $hexByte = StringMid($hexString, ($i * 2) + 1, 2)
+        $bytes[$i] = Dec($hexByte)
+    Next
+
+    Return $bytes
+EndFunc
+
+Func GwAu3_Utils_StringToBytes($str)
+    Local $len = StringLen($str) + 1
+    Local $struct = DllStructCreate("byte[" & $len & "]")
+
+    For $i = 1 To StringLen($str)
+        DllStructSetData($struct, 1, Asc(StringMid($str, $i, 1)), $i)
+    Next
+    DllStructSetData($struct, 1, 0, $len)
+
+    Local $result = DllStructGetData($struct, 1)
+    Return $result
+EndFunc
+
+Func GwAu3_Utils_SwapEndian($aHex)
+	Return StringMid($aHex, 7, 2) & StringMid($aHex, 5, 2) & StringMid($aHex, 3, 2) & StringMid($aHex, 1, 2)
 EndFunc

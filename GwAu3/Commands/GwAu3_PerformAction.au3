@@ -1,8 +1,7 @@
 #include-once
 #include '../GwAu3_Core.au3'
-#include '../Queries/GwAu3_GetInfo.au3'
 
-#Region PerformAction
+#Region GwAu3_Core_PerformAction(
 Global Const $ControlAction_None = 0x00
 Global Const $ControlAction_Interact = 0x80
 Global Const $ControlAction_ActivateWeaponSet1 = 0x81
@@ -177,6 +176,6 @@ Global Const $ActionType_Activate = 0x1E
 Global Const $ActionType_Desactivate = 0x20
 
 Func ControlAction($lAction, $lActionType = $ActionType_Activate)
-	Return PerformAction($lAction, $lActionType)
+	Return GwAu3_Core_PerformAction(($lAction, $lActionType)
 EndFunc
 #EndRegion

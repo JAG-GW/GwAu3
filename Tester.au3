@@ -1,28 +1,4 @@
 #RequireAdmin
-#include <ButtonConstants.au3>
-#include <ComboConstants.au3>
-#include <EditConstants.au3>
-#include <GUIConstantsEx.au3>
-#include <SliderConstants.au3>
-#include <StaticConstants.au3>
-#include <TabConstants.au3>
-#include <WindowsConstants.au3>
-#include <AVIConstants.au3>
-#include <GUIListBox.au3>
-#include <GuiListView.au3>
-#include <GuiComboBox.au3>
-#include <Misc.au3>
-#include <ScrollBarsConstants.au3>
-#include <Array.au3>
-#Include <WinAPIEx.au3>
-#include <WinAPIFiles.au3>
-#include <GuiSlider.au3>
-#include <ColorConstants.au3>
-#include <WinAPITheme.au3>
-#include <WinAPIDiag.au3>
-#include <RichEditConstants.au3>
-#include <GuiRichEdit.au3>
-#include <GuiEdit.au3>
 #include "_GwAu3.au3"
 
 Global Const $doLoadLoggedChars = True
@@ -36,7 +12,7 @@ Global $ProcessID = ""
 Global $timer = TimerInit()
 
 Global $BotRunning = False
-Global $BotInitialized = False
+Global $Bot_Core_Initialized = False
 Global Const $BotTitle = "Tester"
 #EndRegion Declaration
 
@@ -47,7 +23,7 @@ $Group1 = GUICtrlCreateGroup("Select Your Character", 8, 8, 475, 325)
 Global $GUINameCombo
 If $doLoadLoggedChars Then
     $GUINameCombo = GUICtrlCreateCombo($charName, 24, 32, 145, 25, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL))
-    GUICtrlSetData(-1, GetLoggedCharNames())
+    GUICtrlSetData(-1, GwAu3_Scanner_GetLoggedCharNames())
 Else
     $GUINameCombo = GUICtrlCreateInput("Character name", 24, 32, 145, 25)
 EndIf
@@ -74,13 +50,13 @@ Func GuiButtonHandler()
 		Case $GUIStartButton
             Local $charName = GUICtrlRead($GUINameCombo)
             If $charName=="" Then
-                If Initialize(ProcessExists("gw.exe"), True) = 0 Then
+                If GwAu3_Core_Initialize(ProcessExists("gw.exe"), True) = 0 Then
                     MsgBox(0, "Error", "Guild Wars is not running.")
                     _Exit()
                 EndIf
             ElseIf $ProcessID Then
                 $proc_id_int = Number($ProcessID, 2)
-                If Initialize($proc_id_int, True) = 0 Then
+                If GwAu3_Core_Initialize($proc_id_int, True) = 0 Then
                     MsgBox(0, "Error", "Could not Find a ProcessID or somewhat '"&$proc_id_int&"'  "&VarGetType($proc_id_int)&"'")
                     _Exit()
                     If ProcessExists($proc_id_int) Then
@@ -89,7 +65,7 @@ Func GuiButtonHandler()
                     Exit
                 EndIf
             Else
-                If Initialize($CharName, True) = 0 Then
+                If GwAu3_Core_Initialize($CharName, True) = 0 Then
                     MsgBox(0, "Error", "Could not Find a Guild Wars client with a Character named '"&$CharName&"'")
                     _Exit()
                 EndIf
@@ -99,11 +75,11 @@ Func GuiButtonHandler()
             GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
             WinSetTitle($MainGui, "", GetCharname() & " - Bot for test")
             $BotRunning = True
-            $BotInitialized = True
+            $Bot_Core_Initialized = True
 
         Case $GUIRefreshButton
             GUICtrlSetData($GUINameCombo, "")
-            GUICtrlSetData($GUINameCombo, GetLoggedCharNames())
+            GUICtrlSetData($GUINameCombo, GwAu3_Scanner_GetLoggedCharNames())
 
         Case $gOnTopCheckbox
             If GetChecked($gOnTopCheckbox) Then
@@ -114,9 +90,9 @@ Func GuiButtonHandler()
 
 		Case $gDebugCheckbox
             If GetChecked($gDebugCheckbox) Then
-                _Log_SetDebugMode(True)
+                GwAu3_Log_SetDebugMode(True)
             Else
-                _Log_SetDebugMode(False)
+                GwAu3_Log_SetDebugMode(False)
             EndIf
 
         Case $GUI_EVENT_CLOSE
@@ -142,7 +118,7 @@ While $BotRunning
 	Out("Ready")
 
 	Out("Done")
-    Sleep(50000)
+    Sleep(500)
 WEnd
 
 Func Out($TEXT)
