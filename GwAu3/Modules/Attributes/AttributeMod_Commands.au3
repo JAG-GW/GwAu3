@@ -1,11 +1,6 @@
 #include-once
 
 Func GwAu3_AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
-    If Not $g_bAttributeModuleInitialized Then
-        GwAu3_Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iAttributeID < 0 Or $iAttributeID > 44 Then
         GwAu3_Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
         Return False
@@ -18,22 +13,22 @@ Func GwAu3_AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNum
 
     ; Increase attribute one point at a time (Guild Wars limitation)
     For $i = 1 To $iAmount
-		DllStructSetData($g_mIncreaseAttribute, 1, GwAu3_Memory_GetValue('CommandIncreaseAttribute'))
-        DllStructSetData($g_mIncreaseAttribute, 2, $iAttributeID)
+		DllStructSetData($g_d_IncreaseAttribute, 1, GwAu3_Memory_GetValue('CommandIncreaseAttribute'))
+        DllStructSetData($g_d_IncreaseAttribute, 2, $iAttributeID)
 		If $aHeroNumber <> 0 Then
-			DllStructSetData($g_mIncreaseAttribute, 3, GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
+			DllStructSetData($g_d_IncreaseAttribute, 3, GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
 		Else
-			DllStructSetData($g_mIncreaseAttribute, 3, GwAu3_OtherMod_GetWorldInfo("MyID"))
+			DllStructSetData($g_d_IncreaseAttribute, 3, GwAu3_OtherMod_GetWorldInfo("MyID"))
 		EndIf
-        GwAu3_Core_Enqueue($g_mIncreaseAttributePtr, 12)
+        GwAu3_Core_Enqueue($g_p_IncreaseAttribute, 12)
 
         ; Small delay between increases to avoid issues
         If $i < $iAmount Then Sleep(32)
     Next
 
     ; Record for tracking
-    $g_iLastAttributeModified = $iAttributeID
-    $g_iLastAttributeValue = $iAmount
+    $g_i_LastAttributeModified = $iAttributeID
+    $g_i_LastAttributeValue = $iAmount
 
     Local $attrName = ($iAttributeID < 45) ? $g_aAttributeNames[$iAttributeID] : "Unknown"
     GwAu3_Log_Debug("Increased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
@@ -41,11 +36,6 @@ Func GwAu3_AttributeMod_IncreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNum
 EndFunc
 
 Func GwAu3_AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNumber = 0)
-    If Not $g_bAttributeModuleInitialized Then
-        GwAu3_Log_Error("AttributeMgr module not initialized", "AttributeMgr", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iAttributeID < 0 Or $iAttributeID > 44 Then
         GwAu3_Log_Error("Invalid attribute ID: " & $iAttributeID, "AttributeMgr", $g_h_EditText)
         Return False
@@ -58,22 +48,22 @@ Func GwAu3_AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNum
 
     ; Decrease attribute one point at a time (Guild Wars limitation)
     For $i = 1 To $iAmount
-		DllStructSetData($g_mDecreaseAttribute, 1, GwAu3_Memory_GetValue('CommandDecreaseAttribute'))
-        DllStructSetData($g_mDecreaseAttribute, 2, $iAttributeID)
+		DllStructSetData($g_d_DecreaseAttribute, 1, GwAu3_Memory_GetValue('CommandDecreaseAttribute'))
+        DllStructSetData($g_d_DecreaseAttribute, 2, $iAttributeID)
         If $aHeroNumber <> 0 Then
-			DllStructSetData($g_mDecreaseAttribute, 3, GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
+			DllStructSetData($g_d_DecreaseAttribute, 3, GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID"))
 		Else
-			DllStructSetData($g_mDecreaseAttribute, 3, GwAu3_OtherMod_GetWorldInfo("MyID"))
+			DllStructSetData($g_d_DecreaseAttribute, 3, GwAu3_OtherMod_GetWorldInfo("MyID"))
 		EndIf
-        GwAu3_Core_Enqueue($g_mDecreaseAttributePtr, 12)
+        GwAu3_Core_Enqueue($g_p_DecreaseAttribute, 12)
 
         ; Small delay between decreases to avoid issues
         If $i < $iAmount Then Sleep(32)
     Next
 
     ; Record for tracking
-    $g_iLastAttributeModified = $iAttributeID
-    $g_iLastAttributeValue = -$iAmount
+    $g_i_LastAttributeModified = $iAttributeID
+    $g_i_LastAttributeValue = -$iAmount
 
     Local $attrName = ($iAttributeID < 45) ? $g_aAttributeNames[$iAttributeID] : "Unknown"
     GwAu3_Log_Debug("Decreased attribute " & $attrName & " (" & $iAttributeID & ") by " & $iAmount, "AttributeMgr", $g_h_EditText)
@@ -81,11 +71,6 @@ Func GwAu3_AttributeMod_DecreaseAttribute($iAttributeID, $iAmount = 1, $aHeroNum
 EndFunc
 
 Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
-    If Not $g_bAttributeModuleInitialized Then
-        GwAu3_Log_Error("AttributeMod module not initialized", "LoadTemplate", $g_h_EditText)
-        Return False
-    EndIf
-
     Local $lHeroID
     If $aHeroNumber <> 0 Then
         $lHeroID = GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID")
@@ -208,11 +193,6 @@ Func LoadSkillTemplate($aTemplate, $aHeroNumber = 0)
 EndFunc
 
 Func LoadAttributes($aAttributesArray, $aSecondaryProfession, $aHeroNumber = 0)
-    If Not $g_bAttributeModuleInitialized Then
-        GwAu3_Log_Error("AttributeMod module not initialized", "LoadAttributes", $g_h_EditText)
-        Return False
-    EndIf
-
     Local $lHeroID
     If $aHeroNumber <> 0 Then
         $lHeroID = GwAu3_PartyMod_GetMyPartyHeroInfo($aHeroNumber, "AgentID")

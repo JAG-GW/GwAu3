@@ -1,111 +1,118 @@
 #include-once
 #include "GwAu3_Constants.au3"
 
-Func GwAu3_Memory_Open($aPID)
-	$mKernelHandle = DllOpen('kernel32.dll')
-	Local $lOpenProcess = DllCall($mKernelHandle, 'int', 'OpenProcess', 'int', 0x1F0FFF, 'int', 1, 'int', $aPID)
-	$mGWProcHandle = $lOpenProcess[0]
+Func GwAu3_Memory_Open($a_i_PID)
+    $g_h_Kernel32 = DllOpen('kernel32.dll')
+    Local $l_ai_OpenProcess = DllCall($g_h_Kernel32, 'int', 'OpenProcess', 'int', 0x1F0FFF, 'int', 1, 'int', $a_i_PID)
+    $g_h_GWProcess = $l_ai_OpenProcess[0]
 EndFunc
 
 Func GwAu3_Memory_Close()
-	DllCall($mKernelHandle, 'int', 'CloseHandle', 'int', $mGWProcHandle)
-	DllClose($mKernelHandle)
+    DllCall($g_h_Kernel32, 'int', 'CloseHandle', 'int', $g_h_GWProcess)
+    DllClose($g_h_Kernel32)
 EndFunc
 
-Func GwAu3_Memory_WriteBinary($aBinaryString, $aAddress)
-	Local $lData = DllStructCreate('byte[' & 0.5 * StringLen($aBinaryString) & ']'), $i
-	For $i = 1 To DllStructGetSize($lData)
-		DllStructSetData($lData, 1, Dec(StringMid($aBinaryString, 2 * $i - 1, 2)), $i)
-	Next
-	DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'ptr', $aAddress, 'ptr', DllStructGetPtr($lData), 'int', DllStructGetSize($lData), 'int', 0)
-EndFunc
+Func GwAu3_Memory_WriteBinary($a_s_BinaryString, $a_p_Address)
+    Local $l_d_Data = DllStructCreate('byte[' & 0.5 * StringLen($a_s_BinaryString) & ']')
+    Local $l_i_Index
 
-Func GwAu3_Memory_Write($aAddress, $aData, $aType = 'dword')
-	Local $lBuffer = DllStructCreate($aType)
-	DllStructSetData($lBuffer, 1, $aData)
-	DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'int', $aAddress, 'ptr', DllStructGetPtr($lBuffer), 'int', DllStructGetSize($lBuffer), 'int', '')
-EndFunc
-
-Func GwAu3_Memory_Read($aAddress, $aType = 'dword')
-	Local $lBuffer = DllStructCreate($aType)
-	DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'int', $aAddress, 'ptr', DllStructGetPtr($lBuffer), 'int', DllStructGetSize($lBuffer), 'int', '')
-	Return DllStructGetData($lBuffer, 1)
-EndFunc
-
-Func GwAu3_Memory_ReadPtr($aAddress, $aOffset, $aType = 'dword')
-	Local $lPointerCount = UBound($aOffset) - 2
-	Local $lBuffer = DllStructCreate('dword')
-	For $i = 0 To $lPointerCount
-		$aAddress += $aOffset[$i]
-		DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'int', $aAddress, 'ptr', DllStructGetPtr($lBuffer), 'int', DllStructGetSize($lBuffer), 'int', '')
-		$aAddress = DllStructGetData($lBuffer, 1)
-		If $aAddress == 0 Then
-			Local $lData[2] = [0, 0]
-			Return $lData
-		EndIf
-	Next
-	$aAddress += $aOffset[$lPointerCount + 1]
-	$lBuffer = DllStructCreate($aType)
-	DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'int', $aAddress, 'ptr', DllStructGetPtr($lBuffer), 'int', DllStructGetSize($lBuffer), 'int', '')
-	Local $lData[2] = [Ptr($aAddress), DllStructGetData($lBuffer, 1)]
-	Return $lData
-EndFunc
-
-Func GwAu3_Memory_ReadToStruct($aAddress, ByRef $aStructure)
-	Return DllCall($mKernelHandle, "int", "ReadProcessMemory", "int", $mGWProcHandle, "int", $aAddress, "ptr", DllStructGetPtr($aStructure), "int", DllStructGetSize($aStructure), "int", "")[0]
-EndFunc
-
-Func GwAu3_Memory_ReadArray($aAddress, $aSizeOffset = 0x0)
-    Local $lArraySize = GwAu3_Memory_Read($aAddress + $aSizeOffset, "dword")
-    Local $lArrayBasePtr = GwAu3_Memory_Read($aAddress, "ptr")
-    Local $lArray[$lArraySize + 1]
-    Local $lBuffer = DllStructCreate("ptr[" & $lArraySize & "]")
-	Local $lValue
-
-    DllCall($mKernelHandle, "bool", "ReadProcessMemory", "handle", $mGWProcHandle, _
-            "ptr", $lArrayBasePtr, "struct*", $lBuffer, _
-            "ulong_ptr", 4 * $lArraySize, "ulong_ptr*", 0)
-
-	$lArray[0] = 0
-    For $i = 1 To $lArraySize
-        $lValue = DllStructGetData($lBuffer, 1, $i)
-        If $lValue = 0 Then ContinueLoop
-
-        $lArray[0] += 1
-        $lArray[$lArray[0]] = $lValue
+    For $l_i_Index = 1 To DllStructGetSize($l_d_Data)
+        DllStructSetData($l_d_Data, 1, Dec(StringMid($a_s_BinaryString, 2 * $l_i_Index - 1, 2)), $l_i_Index)
     Next
 
-    If $lArray[0] < $lArraySize Then
-        ReDim $lArray[$lArray[0] + 1]
-    EndIf
-
-    Return $lArray
+    DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'ptr', $a_p_Address, 'ptr', DllStructGetPtr($l_d_Data), 'int', DllStructGetSize($l_d_Data), 'int', 0)
 EndFunc
 
-Func GwAu3_Memory_ReadArrayPtr($aAddress, $aOffset, $aSizeOffset)
-    Local $lAddress = GwAu3_Memory_ReadPtr($aAddress, $aOffset, 'ptr')
-    Return GwAu3_Memory_ReadArray($lAddress[0], $aSizeOffset)
+Func GwAu3_Memory_Write($a_p_Address, $a_v_Data, $a_s_Type = 'dword')
+    Local $l_d_Buffer = DllStructCreate($a_s_Type)
+    DllStructSetData($l_d_Buffer, 1, $a_v_Data)
+    DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'int', $a_p_Address, 'ptr', DllStructGetPtr($l_d_Buffer), 'int', DllStructGetSize($l_d_Buffer), 'int', '')
+EndFunc
+
+Func GwAu3_Memory_Read($a_p_Address, $a_s_Type = 'dword')
+    Local $l_d_Buffer = DllStructCreate($a_s_Type)
+    DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'int', $a_p_Address, 'ptr', DllStructGetPtr($l_d_Buffer), 'int', DllStructGetSize($l_d_Buffer), 'int', '')
+    Return DllStructGetData($l_d_Buffer, 1)
+EndFunc
+
+Func GwAu3_Memory_ReadPtr($a_p_Address, $a_ai_Offset, $a_s_Type = 'dword')
+    Local $l_i_PointerCount = UBound($a_ai_Offset) - 2
+    Local $l_d_Buffer = DllStructCreate('dword')
+    Local $l_i_Index
+
+    For $l_i_Index = 0 To $l_i_PointerCount
+        $a_p_Address += $a_ai_Offset[$l_i_Index]
+        DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'int', $a_p_Address, 'ptr', DllStructGetPtr($l_d_Buffer), 'int', DllStructGetSize($l_d_Buffer), 'int', '')
+        $a_p_Address = DllStructGetData($l_d_Buffer, 1)
+        If $a_p_Address == 0 Then
+            Local $l_av_Data[2] = [0, 0]
+            Return $l_av_Data
+        EndIf
+    Next
+
+    $a_p_Address += $a_ai_Offset[$l_i_PointerCount + 1]
+    $l_d_Buffer = DllStructCreate($a_s_Type)
+    DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'int', $a_p_Address, 'ptr', DllStructGetPtr($l_d_Buffer), 'int', DllStructGetSize($l_d_Buffer), 'int', '')
+
+    Local $l_av_Data[2] = [Ptr($a_p_Address), DllStructGetData($l_d_Buffer, 1)]
+    Return $l_av_Data
+EndFunc
+
+Func GwAu3_Memory_ReadToStruct($a_p_Address, ByRef $a_d_Structure)
+    Return DllCall($g_h_Kernel32, "int", "ReadProcessMemory", "int", $g_h_GWProcess, "int", $a_p_Address, "ptr", DllStructGetPtr($a_d_Structure), "int", DllStructGetSize($a_d_Structure), "int", "")[0]
+EndFunc
+
+Func GwAu3_Memory_ReadArray($a_p_Address, $a_i_SizeOffset = 0x0)
+    Local $l_i_ArraySize = GwAu3_Memory_Read($a_p_Address + $a_i_SizeOffset, "dword")
+    Local $l_p_ArrayBasePtr = GwAu3_Memory_Read($a_p_Address, "ptr")
+    Local $l_av_Array[$l_i_ArraySize + 1]
+    Local $l_d_Buffer = DllStructCreate("ptr[" & $l_i_ArraySize & "]")
+    Local $l_v_Value
+
+    DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", "handle", $g_h_GWProcess, _
+            "ptr", $l_p_ArrayBasePtr, "struct*", $l_d_Buffer, _
+            "ulong_ptr", 4 * $l_i_ArraySize, "ulong_ptr*", 0)
+
+    $l_av_Array[0] = 0
+    For $l_i_Index = 1 To $l_i_ArraySize
+        $l_v_Value = DllStructGetData($l_d_Buffer, 1, $l_i_Index)
+        If $l_v_Value = 0 Then ContinueLoop
+
+        $l_av_Array[0] += 1
+        $l_av_Array[$l_av_Array[0]] = $l_v_Value
+    Next
+
+    If $l_av_Array[0] < $l_i_ArraySize Then
+        ReDim $l_av_Array[$l_av_Array[0] + 1]
+    EndIf
+
+    Return $l_av_Array
+EndFunc
+
+Func GwAu3_Memory_ReadArrayPtr($a_p_Address, $a_ai_Offset, $a_i_SizeOffset)
+    Local $l_ap_Address = GwAu3_Memory_ReadPtr($a_p_Address, $a_ai_Offset, 'ptr')
+    Return GwAu3_Memory_ReadArray($l_ap_Address[0], $a_i_SizeOffset)
 EndFunc
 
 Func GwAu3_Memory_Clear()
-	DllCall($mKernelHandle, 'int', 'SetProcessWorkingSetSize', 'int', $mGWProcHandle, 'int', -1, 'int', -1)
+    DllCall($g_h_Kernel32, 'int', 'SetProcessWorkingSetSize', 'int', $g_h_GWProcess, 'int', -1, 'int', -1)
 EndFunc
 
-Func GwAu3_Memory_SetMax($aMemory = 157286400)
-	DllCall($mKernelHandle, 'int', 'SetProcessWorkingSetSizeEx', 'int', $mGWProcHandle, 'int', 1, 'int', $aMemory, 'int', 6)
+Func GwAu3_Memory_SetMax($a_i_Memory = 157286400)
+	DllCall($g_h_Kernel32, 'int', 'SetProcessWorkingSetSizeEx', 'int', $g_h_GWProcess, 'int', 1, 'int', $a_i_Memory, 'int', 6)
 EndFunc
 
-Func GwAu3_Memory_GetLabelInfo($aLab)
-	Local Const $lVal = GwAu3_Memory_GetValue($aLab)
-	Return $lVal
+Func GwAu3_Memory_GetLabelInfo($a_s_Lab)
+    Local Const $l_v_Val = GwAu3_Memory_GetValue($a_s_Lab)
+    Return $l_v_Val
 EndFunc
 
-Func GwAu3_Memory_GetScannedAddress($aLabel, $aOffset)
-	Return GwAu3_Memory_Read(GwAu3_Memory_GetLabelInfo($aLabel) + 8) - GwAu3_Memory_Read(GwAu3_Memory_GetLabelInfo($aLabel) + 4) + $aOffset
+Func GwAu3_Memory_GetScannedAddress($a_s_Label, $a_i_Offset)
+    Return GwAu3_Memory_Read(GwAu3_Memory_GetLabelInfo($a_s_Label) + 8) - GwAu3_Memory_Read(GwAu3_Memory_GetLabelInfo($a_s_Label) + 4) + $a_i_Offset
 EndFunc
 
-Func GwAu3_Memory_WriteDetour($aFrom, $aTo)
-	GwAu3_Memory_WriteBinary('E9' & GwAu3_Utils_SwapEndian(Hex(GwAu3_Memory_GetLabelInfo($aTo) - GwAu3_Memory_GetLabelInfo($aFrom) - 5)), GwAu3_Memory_GetLabelInfo($aFrom))
+Func GwAu3_Memory_WriteDetour($a_s_From, $a_s_To)
+    GwAu3_Memory_WriteBinary('E9' & GwAu3_Utils_SwapEndian(Hex(GwAu3_Memory_GetLabelInfo($a_s_To) - GwAu3_Memory_GetLabelInfo($a_s_From) - 5)), GwAu3_Memory_GetLabelInfo($a_s_From))
 EndFunc
 
 Func GwAu3_Memory_GetValue($a_s_Key)

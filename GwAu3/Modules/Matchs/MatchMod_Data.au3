@@ -3,7 +3,7 @@
 #Region Observer Match Related
 Func GwAu3_MatchMod_GetObserverMatchPtr($aMatchNumber = 0)
     Local $lOffset[4] = [0, 0x18, 0x44, 0x24C]
-    Local $lMatchPtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "ptr")
+    Local $lMatchPtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "ptr")
     Local $lPtr = $lMatchPtr[1]
     Return GwAu3_Memory_Read($lPtr + ($aMatchNumber * 4), "ptr")
 EndFunc

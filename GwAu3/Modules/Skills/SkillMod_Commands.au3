@@ -14,16 +14,16 @@ Func GwAu3_SkillMod_UseSkill($iSkillSlot, $iTargetID = 0, $iCallTarget = False)
 
     $iSkillSlot = $iSkillSlot - 1
 
-	DllStructSetData($g_mUseSkill, 1, GwAu3_Memory_GetValue('CommandUseSkill'))
-    DllStructSetData($g_mUseSkill, 2, GwAu3_OtherMod_GetWorldInfo("MyID"))
-    DllStructSetData($g_mUseSkill, 3, $iSkillSlot)
-    DllStructSetData($g_mUseSkill, 4, $iAgentID)
-    DllStructSetData($g_mUseSkill, 5, $iCallTarget)
+	DllStructSetData($g_d_UseSkill, 1, GwAu3_Memory_GetValue('CommandUseSkill'))
+    DllStructSetData($g_d_UseSkill, 2, GwAu3_OtherMod_GetWorldInfo("MyID"))
+    DllStructSetData($g_d_UseSkill, 3, $iSkillSlot)
+    DllStructSetData($g_d_UseSkill, 4, $iAgentID)
+    DllStructSetData($g_d_UseSkill, 5, $iCallTarget)
 
-    GwAu3_Core_Enqueue($g_mUseSkillPtr, 20)
+    GwAu3_Core_Enqueue($g_p_UseSkill, 20)
 
-    $g_iLastSkillUsed = $iSkillSlot + 1
-    $g_iLastSkillTarget = GwAu3_AgentMod_ConvertID($iTargetID)
+    $g_i_LastSkillUsed = $iSkillSlot + 1
+    $g_i_LastSkillTarget = GwAu3_AgentMod_ConvertID($iTargetID)
 
     GwAu3_Log_Debug("Used skill slot: " & ($iSkillSlot + 1) & " on target: " & GwAu3_AgentMod_ConvertID($iTargetID), "SkillMod", $g_h_EditText)
     Return True
@@ -54,12 +54,12 @@ Func GwAu3_SkillMod_UseHeroSkill($iHeroIndex, $iSkillSlot, $iTargetID = 0)
 
     $iSkillSlot = $iSkillSlot - 1
 
-	DllStructSetData($g_mUseHeroSkill, 1, GwAu3_Memory_GetValue('CommandUseHeroSkill'))
-    DllStructSetData($g_mUseHeroSkill, 2, $iHeroIndex)
-	DllStructSetData($g_mUseHeroSkill, 3, $iTargetID)
-    DllStructSetData($g_mUseHeroSkill, 4, $iSkillSlot)
+	DllStructSetData($g_d_UseHeroSkill, 1, GwAu3_Memory_GetValue('CommandUseHeroSkill'))
+    DllStructSetData($g_d_UseHeroSkill, 2, $iHeroIndex)
+	DllStructSetData($g_d_UseHeroSkill, 3, $iTargetID)
+    DllStructSetData($g_d_UseHeroSkill, 4, $iSkillSlot)
 
-    GwAu3_Core_Enqueue($g_mUseHeroSkillPtr, 16)
+    GwAu3_Core_Enqueue($g_p_UseHeroSkill, 16)
 
     GwAu3_Log_Debug("Hero " & $iHeroIndex & " used skill " & ($iSkillSlot + 1) & " on target: " & $iTargetID, "SkillMod", $g_h_EditText)
     Return True

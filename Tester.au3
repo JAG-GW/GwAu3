@@ -73,7 +73,7 @@ Func GuiButtonHandler()
             GUICtrlSetState($GUIStartButton, $GUI_Disable)
 			GUICtrlSetState($GUIRefreshButton, $GUI_Disable)
             GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
-            WinSetTitle($MainGui, "", GetCharname() & " - Bot for test")
+            WinSetTitle($MainGui, "", GwAu3_OtherMod_GetCharname() & " - Bot for test")
             $BotRunning = True
             $Bot_Core_Initialized = True
 
@@ -101,13 +101,13 @@ Func GuiButtonHandler()
 EndFunc
 
 Out("Based on GWA2")
-Out("GWA2 - Created by: " & $GWA2_CREATOR)
-Out("GWA2 - Build date: " & $GWA2_BUILD_DATE & @CRLF)
+Out("GWA2 - Created by: " & $GC_S_GWA2_CREATOR)
+Out("GWA2 - Build date: " & $GC_S_GWA2_BUILD_DATE & @CRLF)
 
-Out("GwAu3 - Created by: " & $GWAU3_UPDATOR)
-Out("GwAu3 - Build date: " & $GWAU3_BUILD_DATE)
-Out("GwAu3 - Version: " & $GWAU3_VERSION)
-Out("GwAu3 - Last Update: " & $GWAU3_LAST_UPDATE & @CRLF)
+Out("GwAu3 - Created by: " & $GC_S_GWAU3_UPDATOR)
+Out("GwAu3 - Build date: " & $GC_S_GWAU3_BUILD_DATE)
+Out("GwAu3 - Version: " & $GC_S_GWAU3_VERSION)
+Out("GwAu3 - Last Update: " & $GC_S_GWAU3_LAST_UPDATE & @CRLF)
 
 While Not $BotRunning
     Sleep(100)

@@ -24,11 +24,11 @@ Global Const $FRIEND_UUID_SIZE = 16
 #EndRegion Module Constants
 
 Func GwAu3_FriendMod_GetMyStatus()
-    Return GwAu3_Memory_Read($g_mFriendListPtr + 0xA0, 'dword')
+    Return GwAu3_Memory_Read($g_p_FriendListPtr + 0xA0, 'dword')
 EndFunc
 
 Func GwAu3_FriendMod_GetFriendListPtr()
-    Return $g_mFriendListPtr
+    Return $g_p_FriendListPtr
 EndFunc
 
 Func GwAu3_FriendMod_GetFriendListInfo($aInfo = "")
@@ -57,10 +57,10 @@ Func GwAu3_FriendMod_GetFriendInfo($aFriendIdentifier = "", $aInfo = "")
     Local $lFriendPtr = 0
     Local $lFriendNumber = 0
 
-    Local $lTotalFriends = GwAu3_Memory_Read($g_mFriendListPtr + 0x24, "dword") + _  ; Friends
-                          GwAu3_Memory_Read($g_mFriendListPtr + 0x28, "dword") + _  ; Ignores
-                          GwAu3_Memory_Read($g_mFriendListPtr + 0x2C, "dword") + _  ; Partners
-                          GwAu3_Memory_Read($g_mFriendListPtr + 0x30, "dword")      ; Traders
+    Local $lTotalFriends = GwAu3_Memory_Read($g_p_FriendListPtr + 0x24, "dword") + _  ; Friends
+                          GwAu3_Memory_Read($g_p_FriendListPtr + 0x28, "dword") + _  ; Ignores
+                          GwAu3_Memory_Read($g_p_FriendListPtr + 0x2C, "dword") + _  ; Partners
+                          GwAu3_Memory_Read($g_p_FriendListPtr + 0x30, "dword")      ; Traders
 
     ; By friend number of Friend Name
     If IsNumber($aFriendIdentifier) Then
@@ -68,13 +68,13 @@ Func GwAu3_FriendMod_GetFriendInfo($aFriendIdentifier = "", $aInfo = "")
         If $lFriendNumber < 1 Or $lFriendNumber > $lTotalFriends Then Return 0
 
         Local $lOffset[3] = [0, 0x4 * $lFriendNumber, 0]
-        Local $lResult = GwAu3_Memory_ReadPtr($g_mFriendListPtr, $lOffset, "ptr")
+        Local $lResult = GwAu3_Memory_ReadPtr($g_p_FriendListPtr, $lOffset, "ptr")
         $lFriendPtr = $lResult[0]
     Else
         ; Find by name
 		For $i = 1 To $lTotalFriends
 			Local $lOffset[3] = [0, 0x4 * $i, 0x2C]
-			Local $lNameResult = GwAu3_Memory_ReadPtr($g_mFriendListPtr, $lOffset, 'WCHAR[20]')
+			Local $lNameResult = GwAu3_Memory_ReadPtr($g_p_FriendListPtr, $lOffset, 'WCHAR[20]')
 			If $lNameResult[1] = $aFriendIdentifier Then
 				$lFriendNumber = $i
 				$lFriendPtr = $lNameResult[0] - 0x2C
@@ -86,7 +86,7 @@ Func GwAu3_FriendMod_GetFriendInfo($aFriendIdentifier = "", $aInfo = "")
 		If $lFriendPtr = 0 Then
 			 For $i = 1 To $lTotalFriends
 				Local $lOffset[3] = [0, 0x4 * $i, 0x18]
-				Local $lNameResult = GwAu3_Memory_ReadPtr($g_mFriendListPtr, $lOffset, 'WCHAR[20]')
+				Local $lNameResult = GwAu3_Memory_ReadPtr($g_p_FriendListPtr, $lOffset, 'WCHAR[20]')
 				If $lNameResult[1] = $aFriendIdentifier Then
 					$lFriendNumber = $i
 					$lFriendPtr = $lNameResult[0] - 0x18

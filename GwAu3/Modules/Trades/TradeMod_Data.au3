@@ -21,39 +21,39 @@ Global Const $SALVAGE_TYPE_PERFECT = 3
 #EndRegion Module Constants
 
 Func GwAu3_TradeMod_GetLastTransaction()
-    Local $result[4] = [$g_iLastTransactionType, $g_iLastItemID, $g_iLastQuantity, $g_iLastPrice]
+    Local $result[4] = [$g_i_LastTransactionType, $g_i_LastItemID, $g_i_LastQuantity, $g_i_LastPrice]
     Return $result
 EndFunc
 
 Func GwAu3_TradeMod_GetTraderQuoteID()
-    Return GwAu3_Memory_Read($g_mTraderQuoteID, 'dword')
+    Return GwAu3_Memory_Read($g_i_TraderQuoteID, 'dword')
 EndFunc
 
 Func GwAu3_TradeMod_GetTraderCostID()
-    Return GwAu3_Memory_Read($g_mTraderCostID, 'dword')
+    Return GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
 EndFunc
 
 Func GwAu3_TradeMod_GetTraderCostValue()
-    Return GwAu3_Memory_Read($g_mTraderCostValue, 'dword')
+    Return GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
 EndFunc
 
 Func GwAu3_TradeMod_GetTraderQuoteInfo()
     Local $result[3]
-    $result[0] = GwAu3_Memory_Read($g_mTraderQuoteID, 'dword')
-    $result[1] = GwAu3_Memory_Read($g_mTraderCostID, 'dword')
-    $result[2] = GwAu3_Memory_Read($g_mTraderCostValue, 'dword')
+    $result[0] = GwAu3_Memory_Read($g_i_TraderQuoteID, 'dword')
+    $result[1] = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
+    $result[2] = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
     Return $result
 EndFunc
 
 Func GwAu3_TradeMod_IsValidQuote()
-    Local $iCostID = GwAu3_Memory_Read($g_mTraderCostID, 'dword')
-    Local $iCostValue = GwAu3_Memory_Read($g_mTraderCostValue, 'dword')
+    Local $iCostID = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
+    Local $iCostValue = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
     Return ($iCostID > 0 And $iCostValue > 0)
 EndFunc
 
 Func GwAu3_TradeMod_ClearTraderQuote()
-    GwAu3_Memory_Write($g_mTraderCostID, 0, 'dword')
-    GwAu3_Memory_Write($g_mTraderCostValue, 0, 'dword')
+    GwAu3_Memory_Write($g_i_TraderCostID, 0, 'dword')
+    GwAu3_Memory_Write($g_f_TraderCostValue, 0, 'dword')
     GwAu3_Log_Debug("Trader quote data cleared", "TradeMod", $g_h_EditText)
 EndFunc
 
@@ -107,17 +107,17 @@ Func GwAu3_TradeMod_WaitForQuote($iTimeout = 5000)
 EndFunc
 
 Func GwAu3_TradeMod_GetBuyItemBase()
-    Return $g_mBuyItemBase
+    Return $g_p_BuyItemBase
 EndFunc
 
 Func GwAu3_TradeMod_GetSalvageGlobal()
-    Return $g_mSalvageGlobal
+    Return $g_p_SalvageGlobal
 EndFunc
 
 #Region Trade Context Related
 Func GwAu3_TradeMod_GetTradePtr()
     Local $lOffset[3] = [0, 0x18, 0x58]
-    Local $lTradePtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "ptr")
+    Local $lTradePtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "ptr")
     Return $lTradePtr[1]
 EndFunc
 

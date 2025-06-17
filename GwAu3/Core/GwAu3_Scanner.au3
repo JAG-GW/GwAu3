@@ -1,102 +1,102 @@
 #include-once
 
 ; Memory section definitions
-Global Const $SECTION_TEXT = 0
-Global Const $SECTION_RDATA = 1
-Global Const $SECTION_DATA = 2
-Global Const $SECTION_RSRC = 3
-Global Const $SECTION_RELOC = 4
+Global Const $GC_I_SECTION_TEXT = 0
+Global Const $GC_I_SECTION_RDATA = 1
+Global Const $GC_I_SECTION_DATA = 2
+Global Const $GC_I_SECTION_RSRC = 3
+Global Const $GC_I_SECTION_RELOC = 4
 
 ; Array to store section address ranges
-Global $sections[5][2]  ; [section][0=start, 1=end]
-Global Const $BLOCK_SIZE = 262144 ; 256 Ko (doubled from 128 Ko)
-Global $g_AssertionCache[0][3] ; [file, msg, pattern]
-Global $g_SectionBuffer = 0 ; Buffer to hold entire section
-Global $g_SectionBufferSize = 0
-Global $g_CompiledPatternsCache[0][4] ; [pattern_binary, length, first_byte, last_byte]
+Global $g_ai2_Sections[5][2]  ; [section][0=start, 1=end]
+Global Const $GC_I_BLOCK_SIZE = 262144 ; 256 Ko (doubled from 128 Ko)
+Global $g_amx_AssertionCache[0][3] ; [file, msg, pattern]
+Global $g_p_SectionBuffer = 0 ; Buffer to hold entire section
+Global $g_i_SectionBufferSize = 0
+Global $g_amx_CompiledPatternsCache[0][4] ; [pattern_binary, length, first_byte, last_byte]
 
 Func GwAu3_Scanner_GWBaseAddress()
-    If $mGWProcHandle = 0 Then
+    If $g_h_GWProcess = 0 Then
         GwAu3_Log_Error("Invalid process handle", "Memory", $g_h_EditText)
         Return 0
     EndIf
 
-    Local $aModules = DllStructCreate("ptr[1024]")
-    Local $cbNeeded = DllStructCreate("dword")
+    Local $l_d_Modules = DllStructCreate("ptr[1024]")
+    Local $l_d_CbNeeded = DllStructCreate("dword")
 
-    Local $hPSAPI = DllOpen("psapi.dll")
+    Local $l_h_PSAPI = DllOpen("psapi.dll")
     If @error Then
         GwAu3_Log_Error("Failed to open psapi.dll", "Memory", $g_h_EditText)
         Return 0
     EndIf
 
-    Local $success = DllCall($hPSAPI, "bool", "EnumProcessModules", _
-        "handle", $mGWProcHandle, _
-        "ptr", DllStructGetPtr($aModules), _
-        "dword", DllStructGetSize($aModules), _
-        "ptr", DllStructGetPtr($cbNeeded))
+    Local $l_b_Success = DllCall($l_h_PSAPI, "bool", "EnumProcessModules", _
+        "handle", $g_h_GWProcess, _
+        "ptr", DllStructGetPtr($l_d_Modules), _
+        "dword", DllStructGetSize($l_d_Modules), _
+        "ptr", DllStructGetPtr($l_d_CbNeeded))
 
-    If @error Or Not $success[0] Then
+    If @error Or Not $l_b_Success[0] Then
         GwAu3_Log_Error("EnumProcessModules failed", "Memory", $g_h_EditText)
-        DllClose($hPSAPI)
+        DllClose($l_h_PSAPI)
         Return 0
     EndIf
 
-    Local $moduleCount = DllStructGetData($cbNeeded, 1) / 4
+    Local $l_i_ModuleCount = DllStructGetData($l_d_CbNeeded, 1) / 4
 
-    For $i = 1 To $moduleCount
-        Local $moduleBase = DllStructGetData($aModules, 1, $i)
+    For $l_i_Idx = 1 To $l_i_ModuleCount
+        Local $l_p_ModuleBase = DllStructGetData($l_d_Modules, 1, $l_i_Idx)
 
-        Local $moduleName = _WinAPI_GetModuleFileNameEx($mGWProcHandle, $moduleBase)
+        Local $l_s_ModuleName = _WinAPI_GetModuleFileNameEx($g_h_GWProcess, $l_p_ModuleBase)
 
-        If StringInStr($moduleName, "Gw.exe", 1) Then
-            DllClose($hPSAPI)
-            Return $moduleBase
+        If StringInStr($l_s_ModuleName, "Gw.exe", 1) Then
+            DllClose($l_h_PSAPI)
+            Return $l_p_ModuleBase
         EndIf
     Next
 
     GwAu3_Log_Error("Gw.exe module not found", "Memory", $g_h_EditText)
-    DllClose($hPSAPI)
+    DllClose($l_h_PSAPI)
     Return 0
 EndFunc
 
-Func GwAu3_Scanner_InitializeSections($baseAddress)
-    Local $dosHeader = DllStructCreate("struct;word e_magic;byte[58];dword e_lfanew;endstruct")
-    Local $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress, DllStructGetPtr($dosHeader), DllStructGetSize($dosHeader), 0)
-    If Not $success Then
+Func GwAu3_Scanner_InitializeSections($a_p_BaseAddress)
+    Local $l_d_DosHeader = DllStructCreate("struct;word e_magic;byte[58];dword e_lfanew;endstruct")
+    Local $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress, DllStructGetPtr($l_d_DosHeader), DllStructGetSize($l_d_DosHeader), 0)
+    If Not $l_b_Success Then
         GwAu3_Log_Error("Failed to read DOS header", "Sections", $g_h_EditText)
         Return False
     EndIf
 
-    If DllStructGetData($dosHeader, "e_magic") <> 0x5A4D Then ; 'MZ'
+    If DllStructGetData($l_d_DosHeader, "e_magic") <> 0x5A4D Then ; 'MZ'
         GwAu3_Log_Error("Invalid DOS signature", "Sections", $g_h_EditText)
         Return False
     EndIf
 
-    Local $e_lfanew = DllStructGetData($dosHeader, "e_lfanew")
+    Local $l_i_ELfanew = DllStructGetData($l_d_DosHeader, "e_lfanew")
 
-    Local $ntHeaders = DllStructCreate("struct;dword Signature;word Machine;word NumberOfSections;dword TimeDateStamp;dword PointerToSymbolTable;dword NumberOfSymbols;word SizeOfOptionalHeader;word Characteristics;endstruct")
-    $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress + $e_lfanew, DllStructGetPtr($ntHeaders), DllStructGetSize($ntHeaders), 0)
-    If Not $success Then
+    Local $l_d_NtHeaders = DllStructCreate("struct;dword Signature;word Machine;word NumberOfSections;dword TimeDateStamp;dword PointerToSymbolTable;dword NumberOfSymbols;word SizeOfOptionalHeader;word Characteristics;endstruct")
+    $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress + $l_i_ELfanew, DllStructGetPtr($l_d_NtHeaders), DllStructGetSize($l_d_NtHeaders), 0)
+    If Not $l_b_Success Then
         GwAu3_Log_Error("Failed to read NT headers", "Sections", $g_h_EditText)
         Return False
     EndIf
 
-    If DllStructGetData($ntHeaders, "Signature") <> 0x4550 Then ; 'PE\0\0'
+    If DllStructGetData($l_d_NtHeaders, "Signature") <> 0x4550 Then ; 'PE\0\0'
         GwAu3_Log_Error("Invalid PE signature", "Sections", $g_h_EditText)
         Return False
     EndIf
 
-    Local $numberOfSections = DllStructGetData($ntHeaders, "NumberOfSections")
-    Local $sizeOfOptionalHeader = DllStructGetData($ntHeaders, "SizeOfOptionalHeader")
-    Local $sectionHeaderOffset = $e_lfanew + 24 + $sizeOfOptionalHeader
+    Local $l_i_NumberOfSections = DllStructGetData($l_d_NtHeaders, "NumberOfSections")
+    Local $l_i_SizeOfOptionalHeader = DllStructGetData($l_d_NtHeaders, "SizeOfOptionalHeader")
+    Local $l_i_SectionHeaderOffset = $l_i_ELfanew + 24 + $l_i_SizeOfOptionalHeader
 
-    For $i = 0 To 4
-        $sections[$i][0] = 0
-        $sections[$i][1] = 0
+    For $l_i_Idx = 0 To 4
+        $g_ai2_Sections[$l_i_Idx][0] = 0
+        $g_ai2_Sections[$l_i_Idx][1] = 0
     Next
 
-    Local $sectionHeader = DllStructCreate("struct;" & _
+    Local $l_d_SectionHeader = DllStructCreate("struct;" & _
         "char Name[8];" & _
         "dword VirtualSize;" & _
         "dword VirtualAddress;" & _
@@ -109,44 +109,44 @@ Func GwAu3_Scanner_InitializeSections($baseAddress)
         "dword Characteristics;" & _
         "endstruct")
 
-    For $i = 0 To $numberOfSections - 1
-        $success = _WinAPI_ReadProcessMemory($mGWProcHandle, $baseAddress + $sectionHeaderOffset + ($i * 40), DllStructGetPtr($sectionHeader), DllStructGetSize($sectionHeader), 0)
-        If Not $success Then
-            GwAu3_Log_Warning("Failed to read section header " & $i, "Sections", $g_h_EditText)
+    For $l_i_Idx = 0 To $l_i_NumberOfSections - 1
+        $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress + $l_i_SectionHeaderOffset + ($l_i_Idx * 40), DllStructGetPtr($l_d_SectionHeader), DllStructGetSize($l_d_SectionHeader), 0)
+        If Not $l_b_Success Then
+            GwAu3_Log_Warning("Failed to read section header " & $l_i_Idx, "Sections", $g_h_EditText)
             ContinueLoop
         EndIf
 
-        Local $sectionName = StringStripWS(DllStructGetData($sectionHeader, "Name"), 8)
-        Local $virtualAddress = DllStructGetData($sectionHeader, "VirtualAddress")
-        Local $virtualSize = DllStructGetData($sectionHeader, "VirtualSize")
-        Local $SizeRawData = DllStructGetData($sectionHeader, "SizeOfRawData")
+        Local $l_s_SectionName = StringStripWS(DllStructGetData($l_d_SectionHeader, "Name"), 8)
+        Local $l_i_VirtualAddress = DllStructGetData($l_d_SectionHeader, "VirtualAddress")
+        Local $l_i_VirtualSize = DllStructGetData($l_d_SectionHeader, "VirtualSize")
+        Local $l_i_SizeRawData = DllStructGetData($l_d_SectionHeader, "SizeOfRawData")
 
-        Local $actualSize = $virtualSize > $SizeRawData ? $virtualSize : $SizeRawData
+        Local $l_i_ActualSize = $l_i_VirtualSize > $l_i_SizeRawData ? $l_i_VirtualSize : $l_i_SizeRawData
 
-        Switch $sectionName
+        Switch $l_s_SectionName
             Case ".text"
-                $sections[$SECTION_TEXT][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_TEXT][1] = $sections[$SECTION_TEXT][0] + $actualSize
+                $g_ai2_Sections[$GC_I_SECTION_TEXT][0] = $a_p_BaseAddress + $l_i_VirtualAddress
+                $g_ai2_Sections[$GC_I_SECTION_TEXT][1] = $g_ai2_Sections[$GC_I_SECTION_TEXT][0] + $l_i_ActualSize
 
             Case ".rdata"
-                $sections[$SECTION_RDATA][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_RDATA][1] = $sections[$SECTION_RDATA][0] + $actualSize
+                $g_ai2_Sections[$GC_I_SECTION_RDATA][0] = $a_p_BaseAddress + $l_i_VirtualAddress
+                $g_ai2_Sections[$GC_I_SECTION_RDATA][1] = $g_ai2_Sections[$GC_I_SECTION_RDATA][0] + $l_i_ActualSize
 
             Case ".data"
-                $sections[$SECTION_DATA][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_DATA][1] = $sections[$SECTION_DATA][0] + $actualSize
+                $g_ai2_Sections[$GC_I_SECTION_DATA][0] = $a_p_BaseAddress + $l_i_VirtualAddress
+                $g_ai2_Sections[$GC_I_SECTION_DATA][1] = $g_ai2_Sections[$GC_I_SECTION_DATA][0] + $l_i_ActualSize
 
             Case ".rsrc"
-                $sections[$SECTION_RSRC][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_RSRC][1] = $sections[$SECTION_RSRC][0] + $actualSize
+                $g_ai2_Sections[$GC_I_SECTION_RSRC][0] = $a_p_BaseAddress + $l_i_VirtualAddress
+                $g_ai2_Sections[$GC_I_SECTION_RSRC][1] = $g_ai2_Sections[$GC_I_SECTION_RSRC][0] + $l_i_ActualSize
 
             Case ".reloc"
-                $sections[$SECTION_RELOC][0] = $baseAddress + $virtualAddress
-                $sections[$SECTION_RELOC][1] = $sections[$SECTION_RELOC][0] + $actualSize
+                $g_ai2_Sections[$GC_I_SECTION_RELOC][0] = $a_p_BaseAddress + $l_i_VirtualAddress
+                $g_ai2_Sections[$GC_I_SECTION_RELOC][1] = $g_ai2_Sections[$GC_I_SECTION_RELOC][0] + $l_i_ActualSize
         EndSwitch
     Next
 
-    If $sections[$SECTION_TEXT][0] = 0 Then
+    If $g_ai2_Sections[$GC_I_SECTION_TEXT][0] = 0 Then
         GwAu3_Log_Error("Failed to find .text section", "Sections", $g_h_EditText)
         Return False
     EndIf
@@ -154,703 +154,685 @@ Func GwAu3_Scanner_InitializeSections($baseAddress)
     Return True
 EndFunc
 
-Func GwAu3_Scanner_FindMultipleStrings($aStrings, $section = $SECTION_RDATA)
-    If $sections[$section][0] = 0 Or $sections[$section][1] = 0 Then
-        Local $baseAddr = GwAu3_Scanner_GWBaseAddress()
-        If $baseAddr = 0 Then
+Func GwAu3_Scanner_FindMultipleStrings($a_as_Strings, $a_i_Section = $GC_I_SECTION_RDATA)
+    If $g_ai2_Sections[$a_i_Section][0] = 0 Or $g_ai2_Sections[$a_i_Section][1] = 0 Then
+        Local $l_p_BaseAddr = GwAu3_Scanner_GWBaseAddress()
+        If $l_p_BaseAddr = 0 Then
             GwAu3_Log_Error("Failed to get GW base address", "GwAu3_Scanner_FindMultipleStrings", $g_h_EditText)
-            Local $emptyResults[UBound($aStrings)]
-            For $i = 0 To UBound($aStrings) - 1
-                $emptyResults[$i] = 0
+            Local $l_ai_EmptyResults[UBound($a_as_Strings)]
+            For $l_i_Idx = 0 To UBound($a_as_Strings) - 1
+                $l_ai_EmptyResults[$l_i_Idx] = 0
             Next
-            Return $emptyResults
+            Return $l_ai_EmptyResults
         EndIf
 
-        If Not GwAu3_Scanner_InitializeSections($baseAddr) Then
+        If Not GwAu3_Scanner_InitializeSections($l_p_BaseAddr) Then
             GwAu3_Log_Error("Failed to initialize sections", "GwAu3_Scanner_FindMultipleStrings", $g_h_EditText)
-            Local $emptyResults[UBound($aStrings)]
-            For $i = 0 To UBound($aStrings) - 1
-                $emptyResults[$i] = 0
+            Local $l_ai_EmptyResults[UBound($a_as_Strings)]
+            For $l_i_Idx = 0 To UBound($a_as_Strings) - 1
+                $l_ai_EmptyResults[$l_i_Idx] = 0
             Next
-            Return $emptyResults
+            Return $l_ai_EmptyResults
         EndIf
     EndIf
 
-    Local $stringCount = UBound($aStrings)
-    Local $results[$stringCount]
-    Local $found[$stringCount]
-    Local $patterns[$stringCount]
-    Local $lengths[$stringCount]
-    Local $skipTables[$stringCount][256]
+    Local $l_i_StringCount = UBound($a_as_Strings)
+    Local $l_ai_Results[$l_i_StringCount]
+    Local $l_ab_Found[$l_i_StringCount]
+    Local $l_ax_Patterns[$l_i_StringCount]
+    Local $l_ai_Lengths[$l_i_StringCount]
+    Local $l_ai2_SkipTables[$l_i_StringCount][256]
 
-    For $i = 0 To $stringCount - 1
-        $results[$i] = 0
-        $found[$i] = False
-        $patterns[$i] = GwAu3_Utils_StringToBytes($aStrings[$i])
-        $lengths[$i] = BinaryLen($patterns[$i])
+    For $l_i_Idx = 0 To $l_i_StringCount - 1
+        $l_ai_Results[$l_i_Idx] = 0
+        $l_ab_Found[$l_i_Idx] = False
+        $l_ax_Patterns[$l_i_Idx] = GwAu3_Utils_StringToBytes($a_as_Strings[$l_i_Idx])
+        $l_ai_Lengths[$l_i_Idx] = BinaryLen($l_ax_Patterns[$l_i_Idx])
 
-        For $j = 0 To 255
-            $skipTables[$i][$j] = $lengths[$i]
+        For $l_i_ByteIdx = 0 To 255
+            $l_ai2_SkipTables[$l_i_Idx][$l_i_ByteIdx] = $l_ai_Lengths[$l_i_Idx]
         Next
 
-        For $j = 0 To $lengths[$i] - 2
-            Local $byte = Number(BinaryMid($patterns[$i], $j + 1, 1))
-            $skipTables[$i][$byte] = $lengths[$i] - $j - 1
+        For $l_i_PatternIdx = 0 To $l_ai_Lengths[$l_i_Idx] - 2
+            Local $l_i_Byte = Number(BinaryMid($l_ax_Patterns[$l_i_Idx], $l_i_PatternIdx + 1, 1))
+            $l_ai2_SkipTables[$l_i_Idx][$l_i_Byte] = $l_ai_Lengths[$l_i_Idx] - $l_i_PatternIdx - 1
         Next
     Next
 
-    Local $start = $sections[$section][0]
-    Local $end = $sections[$section][1]
+    Local $l_p_Start = $g_ai2_Sections[$a_i_Section][0]
+    Local $l_p_End = $g_ai2_Sections[$a_i_Section][1]
 
-    If $start = 0 Or $end = 0 Or $start >= $end Then
-        GwAu3_Log_Warning("Invalid section bounds. Start: " & Hex($start) & ", End: " & Hex($end), "GwAu3_Scanner_FindMultipleStrings", $g_h_EditText)
-        Return GwAu3_Scanner_FindMultipleStringsFallback($aStrings, $section)
+    If $l_p_Start = 0 Or $l_p_End = 0 Or $l_p_Start >= $l_p_End Then
+        GwAu3_Log_Warning("Invalid section bounds. Start: " & Hex($l_p_Start) & ", End: " & Hex($l_p_End), "GwAu3_Scanner_FindMultipleStrings", $g_h_EditText)
+        Return GwAu3_Scanner_FindMultipleStringsFallback($a_as_Strings, $a_i_Section)
     EndIf
 
-    Local $sectionSize = Number($end - $start)
-    Local $sectionSizeMB = Number($sectionSize) / Number(1048576) ; 1024 * 1024 = 1048576
+    Local $l_i_SectionSize = Number($l_p_End - $l_p_Start)
+    Local $l_f_SectionSizeMB = Number($l_i_SectionSize) / Number(1048576)
 
-    Local $maxReadSize = 1 * 1024 * 1024 ; 1 MB max for direct read (reduced for safety)
-    Local $maxReadSizeMB = 1.0
+    Local $l_i_MaxReadSize = 1 * 1024 * 1024
+    Local $l_f_MaxReadSizeMB = 1.0
 
-    If $sectionSize > $maxReadSize Then
-        Return GwAu3_Scanner_FindMultipleStringsFallback($aStrings, $section)
+    If $l_i_SectionSize > $l_i_MaxReadSize Then
+        Return GwAu3_Scanner_FindMultipleStringsFallback($a_as_Strings, $a_i_Section)
     EndIf
 
-    Local $sectionBuffer = DllStructCreate("byte[" & $sectionSize & "]")
+    Local $l_d_SectionBuffer = DllStructCreate("byte[" & $l_i_SectionSize & "]")
     If @error Then
-        Return GwAu3_Scanner_FindMultipleStringsFallback($aStrings, $section)
+        Return GwAu3_Scanner_FindMultipleStringsFallback($a_as_Strings, $a_i_Section)
     EndIf
 
-    Local $bytesRead = 0
-    Local $success = DllCall($mKernelHandle, "bool", "ReadProcessMemory", _
-        "handle", $mGWProcHandle, _
-        "ptr", $start, _
-        "ptr", DllStructGetPtr($sectionBuffer), _
-        "ulong_ptr", $sectionSize, _
-        "ulong_ptr*", $bytesRead)
+    Local $l_i_BytesRead = 0
+    Local $l_ab_Success = DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
+        "handle", $g_h_GWProcess, _
+        "ptr", $l_p_Start, _
+        "ptr", DllStructGetPtr($l_d_SectionBuffer), _
+        "ulong_ptr", $l_i_SectionSize, _
+        "ulong_ptr*", $l_i_BytesRead)
 
-    If @error Or Not $success[0] Or $success[5] < $sectionSize Then
-        GwAu3_Log_Warning("Failed to read section into memory. Read " & $success[5] & "/" & $sectionSize & " bytes. Using fallback method.", "GwAu3_Scanner_FindMultipleStrings", $g_h_EditText)
-        Return GwAu3_Scanner_FindMultipleStringsFallback($aStrings, $section)
+    If @error Or Not $l_ab_Success[0] Or $l_ab_Success[5] < $l_i_SectionSize Then
+        GwAu3_Log_Warning("Failed to read section into memory. Read " & $l_ab_Success[5] & "/" & $l_i_SectionSize & " bytes. Using fallback method.", "GwAu3_Scanner_FindMultipleStrings", $g_h_EditText)
+        Return GwAu3_Scanner_FindMultipleStringsFallback($a_as_Strings, $a_i_Section)
     EndIf
 
-    Local $totalFound = 0
-    Local $startTime = TimerInit()
+    Local $l_i_TotalFound = 0
+    Local $l_i_StartTime = TimerInit()
 
-    For $patternIdx = 0 To $stringCount - 1
-        If $found[$patternIdx] Then ContinueLoop
+    For $l_i_PatternIdx = 0 To $l_i_StringCount - 1
+        If $l_ab_Found[$l_i_PatternIdx] Then ContinueLoop
 
-        Local $patternLen = $lengths[$patternIdx]
-        Local $pos = $patternLen - 1
+        Local $l_i_PatternLen = $l_ai_Lengths[$l_i_PatternIdx]
+        Local $l_i_Pos = $l_i_PatternLen - 1
 
-        While $pos < $sectionSize
-            Local $match = True
-            Local $j = $patternLen - 1
+        While $l_i_Pos < $l_i_SectionSize
+            Local $l_b_Match = True
+            Local $l_i_CheckIdx = $l_i_PatternLen - 1
 
-            While $j >= 0
-                Local $memByte = DllStructGetData($sectionBuffer, 1, $pos - ($patternLen - 1 - $j) + 1)
-                Local $patByte = Number(BinaryMid($patterns[$patternIdx], $j + 1, 1))
+            While $l_i_CheckIdx >= 0
+                Local $l_i_MemByte = DllStructGetData($l_d_SectionBuffer, 1, $l_i_Pos - ($l_i_PatternLen - 1 - $l_i_CheckIdx) + 1)
+                Local $l_i_PatByte = Number(BinaryMid($l_ax_Patterns[$l_i_PatternIdx], $l_i_CheckIdx + 1, 1))
 
-                If $memByte <> $patByte Then
-                    $match = False
-                    $pos += $skipTables[$patternIdx][$memByte]
+                If $l_i_MemByte <> $l_i_PatByte Then
+                    $l_b_Match = False
+                    $l_i_Pos += $l_ai2_SkipTables[$l_i_PatternIdx][$l_i_MemByte]
                     ExitLoop
                 EndIf
-                $j -= 1
+                $l_i_CheckIdx -= 1
             WEnd
 
-            If $match Then
-                $results[$patternIdx] = $start + $pos - ($patternLen - 1)
-                $found[$patternIdx] = True
-                $totalFound += 1
+            If $l_b_Match Then
+                $l_ai_Results[$l_i_PatternIdx] = $l_p_Start + $l_i_Pos - ($l_i_PatternLen - 1)
+                $l_ab_Found[$l_i_PatternIdx] = True
+                $l_i_TotalFound += 1
                 ExitLoop
             EndIf
         WEnd
 
-        If $totalFound = $stringCount Then ExitLoop
+        If $l_i_TotalFound = $l_i_StringCount Then ExitLoop
     Next
 
-    Return $results
+    Return $l_ai_Results
 EndFunc
 
-Func GwAu3_Scanner_FindMultipleStringsFallback($aStrings, $section = $SECTION_RDATA)
-    Local $stringCount = UBound($aStrings)
-    Local $results[$stringCount]
-    Local $found[$stringCount]
-    Local $patterns[$stringCount]
-    Local $lengths[$stringCount]
-    Local $firstBytes[$stringCount]
-    Local $hashTable[256]
-    Local $minLength = 999999
-    Local $maxLength = 0
+Func GwAu3_Scanner_FindMultipleStringsFallback($a_as_Strings, $a_i_Section = $GC_I_SECTION_RDATA)
+    Local $l_i_StringCount = UBound($a_as_Strings)
+    Local $l_ai_Results[$l_i_StringCount]
+    Local $l_ab_Found[$l_i_StringCount]
+    Local $l_ax_Patterns[$l_i_StringCount]
+    Local $l_ai_Lengths[$l_i_StringCount]
+    Local $l_ai_FirstBytes[$l_i_StringCount]
+    Local $l_as_HashTable[256]
+    Local $l_i_MinLength = 999999
+    Local $l_i_MaxLength = 0
 
-    For $i = 0 To 255
-        $hashTable[$i] = ""
+    For $l_i_Idx = 0 To 255
+        $l_as_HashTable[$l_i_Idx] = ""
     Next
 
-    For $i = 0 To $stringCount - 1
-        $results[$i] = 0
-        $found[$i] = False
-        $patterns[$i] = GwAu3_Utils_StringToBytes($aStrings[$i])
-        $lengths[$i] = BinaryLen($patterns[$i])
-        $firstBytes[$i] = Number(BinaryMid($patterns[$i], 1, 1))
+    For $l_i_Idx = 0 To $l_i_StringCount - 1
+        $l_ai_Results[$l_i_Idx] = 0
+        $l_ab_Found[$l_i_Idx] = False
+        $l_ax_Patterns[$l_i_Idx] = GwAu3_Utils_StringToBytes($a_as_Strings[$l_i_Idx])
+        $l_ai_Lengths[$l_i_Idx] = BinaryLen($l_ax_Patterns[$l_i_Idx])
+        $l_ai_FirstBytes[$l_i_Idx] = Number(BinaryMid($l_ax_Patterns[$l_i_Idx], 1, 1))
 
-        If $lengths[$i] < $minLength Then $minLength = $lengths[$i]
-        If $lengths[$i] > $maxLength Then $maxLength = $lengths[$i]
+        If $l_ai_Lengths[$l_i_Idx] < $l_i_MinLength Then $l_i_MinLength = $l_ai_Lengths[$l_i_Idx]
+        If $l_ai_Lengths[$l_i_Idx] > $l_i_MaxLength Then $l_i_MaxLength = $l_ai_Lengths[$l_i_Idx]
 
-        If $hashTable[$firstBytes[$i]] = "" Then
-            $hashTable[$firstBytes[$i]] = String($i)
+        If $l_as_HashTable[$l_ai_FirstBytes[$l_i_Idx]] = "" Then
+            $l_as_HashTable[$l_ai_FirstBytes[$l_i_Idx]] = String($l_i_Idx)
         Else
-            $hashTable[$firstBytes[$i]] &= "," & $i
+            $l_as_HashTable[$l_ai_FirstBytes[$l_i_Idx]] &= "," & $l_i_Idx
         EndIf
     Next
 
-    Local $start = $sections[$section][0]
-    Local $end = $sections[$section][1]
-    Local $bufferSize = 2097152 ; 2MB buffer
-    Local $buffer = DllStructCreate("byte[" & $bufferSize & "]")
-    Local $totalFound = 0
-    Local $startTime = TimerInit()
-    Local $overlap = $maxLength - 1
+    Local $l_p_Start = $g_ai2_Sections[$a_i_Section][0]
+    Local $l_p_End = $g_ai2_Sections[$a_i_Section][1]
+    Local $l_i_BufferSize = 2097152
+    Local $l_d_Buffer = DllStructCreate("byte[" & $l_i_BufferSize & "]")
+    Local $l_i_TotalFound = 0
+    Local $l_i_StartTime = TimerInit()
+    Local $l_i_Overlap = $l_i_MaxLength - 1
 
-    Local $patternData[$stringCount][$maxLength]
-    For $i = 0 To $stringCount - 1
-        For $j = 0 To $lengths[$i] - 1
-            $patternData[$i][$j] = Number(BinaryMid($patterns[$i], $j + 1, 1))
+    Local $l_ai2_PatternData[$l_i_StringCount][$l_i_MaxLength]
+    For $l_i_Idx = 0 To $l_i_StringCount - 1
+        For $l_i_ByteIdx = 0 To $l_ai_Lengths[$l_i_Idx] - 1
+            $l_ai2_PatternData[$l_i_Idx][$l_i_ByteIdx] = Number(BinaryMid($l_ax_Patterns[$l_i_Idx], $l_i_ByteIdx + 1, 1))
         Next
     Next
 
-    For $currentAddr = $start To $end Step $bufferSize - $overlap
-        If $totalFound = $stringCount Then ExitLoop
+    For $l_p_CurrentAddr = $l_p_Start To $l_p_End Step $l_i_BufferSize - $l_i_Overlap
+        If $l_i_TotalFound = $l_i_StringCount Then ExitLoop
 
-        Local $readSize = $bufferSize
-        If $currentAddr + $readSize > $end Then
-            $readSize = $end - $currentAddr
+        Local $l_i_ReadSize = $l_i_BufferSize
+        If $l_p_CurrentAddr + $l_i_ReadSize > $l_p_End Then
+            $l_i_ReadSize = $l_p_End - $l_p_CurrentAddr
         EndIf
 
-        Local $bytesRead = 0
-        Local $success = DllCall($mKernelHandle, "bool", "ReadProcessMemory", _
-            "handle", $mGWProcHandle, _
-            "ptr", $currentAddr, _
-            "ptr", DllStructGetPtr($buffer), _
-            "ulong_ptr", $readSize, _
-            "ulong_ptr*", $bytesRead)
+        Local $l_i_BytesRead = 0
+        Local $l_ab_Success = DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
+            "handle", $g_h_GWProcess, _
+            "ptr", $l_p_CurrentAddr, _
+            "ptr", DllStructGetPtr($l_d_Buffer), _
+            "ulong_ptr", $l_i_ReadSize, _
+            "ulong_ptr*", $l_i_BytesRead)
 
-        If @error Or Not $success[0] Or $success[5] = 0 Then ContinueLoop
+        If @error Or Not $l_ab_Success[0] Or $l_ab_Success[5] = 0 Then ContinueLoop
 
-        $readSize = $success[5]
+        $l_i_ReadSize = $l_ab_Success[5]
 
-        Local $searchEnd = $readSize - $minLength + 1
-        For $i = 0 To $searchEnd - 1
-            Local $byte = DllStructGetData($buffer, 1, $i + 1)
+        Local $l_i_SearchEnd = $l_i_ReadSize - $l_i_MinLength + 1
+        For $l_i_SearchIdx = 0 To $l_i_SearchEnd - 1
+            Local $l_i_Byte = DllStructGetData($l_d_Buffer, 1, $l_i_SearchIdx + 1)
 
-            If $hashTable[$byte] = "" Then ContinueLoop
+            If $l_as_HashTable[$l_i_Byte] = "" Then ContinueLoop
 
-            Local $indices = StringSplit($hashTable[$byte], ",", 2)
+            Local $l_as_Indices = StringSplit($l_as_HashTable[$l_i_Byte], ",", 2)
 
-            For $idx = 0 To UBound($indices) - 1
-                Local $patternIdx = Number($indices[$idx])
-                If $found[$patternIdx] Then ContinueLoop
+            For $l_i_IndexIdx = 0 To UBound($l_as_Indices) - 1
+                Local $l_i_PatternIdx = Number($l_as_Indices[$l_i_IndexIdx])
+                If $l_ab_Found[$l_i_PatternIdx] Then ContinueLoop
 
-                Local $patternLen = $lengths[$patternIdx]
+                Local $l_i_PatternLen = $l_ai_Lengths[$l_i_PatternIdx]
 
-                If $i + $patternLen > $readSize Then ContinueLoop
+                If $l_i_SearchIdx + $l_i_PatternLen > $l_i_ReadSize Then ContinueLoop
 
-                Local $match = True
+                Local $l_b_Match = True
 
-                Local $midPoint = Int($patternLen / 2)
-                If DllStructGetData($buffer, 1, $i + $midPoint + 1) <> $patternData[$patternIdx][$midPoint] Then ContinueLoop
+                Local $l_i_MidPoint = Int($l_i_PatternLen / 2)
+                If DllStructGetData($l_d_Buffer, 1, $l_i_SearchIdx + $l_i_MidPoint + 1) <> $l_ai2_PatternData[$l_i_PatternIdx][$l_i_MidPoint] Then ContinueLoop
 
-                If DllStructGetData($buffer, 1, $i + $patternLen) <> $patternData[$patternIdx][$patternLen - 1] Then ContinueLoop
+                If DllStructGetData($l_d_Buffer, 1, $l_i_SearchIdx + $l_i_PatternLen) <> $l_ai2_PatternData[$l_i_PatternIdx][$l_i_PatternLen - 1] Then ContinueLoop
 
-                For $j = 1 To $patternLen - 2
-                    If $j = $midPoint Then ContinueLoop
-                    If DllStructGetData($buffer, 1, $i + $j + 1) <> $patternData[$patternIdx][$j] Then
-                        $match = False
+                For $l_i_CompareIdx = 1 To $l_i_PatternLen - 2
+                    If $l_i_CompareIdx = $l_i_MidPoint Then ContinueLoop
+                    If DllStructGetData($l_d_Buffer, 1, $l_i_SearchIdx + $l_i_CompareIdx + 1) <> $l_ai2_PatternData[$l_i_PatternIdx][$l_i_CompareIdx] Then
+                        $l_b_Match = False
                         ExitLoop
                     EndIf
                 Next
 
-                If $match Then
-                    $results[$patternIdx] = $currentAddr + $i
-                    $found[$patternIdx] = True
-                    $totalFound += 1
+                If $l_b_Match Then
+                    $l_ai_Results[$l_i_PatternIdx] = $l_p_CurrentAddr + $l_i_SearchIdx
+                    $l_ab_Found[$l_i_PatternIdx] = True
+                    $l_i_TotalFound += 1
 
-                    Local $newIndices = ""
-                    For $k = 0 To UBound($indices) - 1
-                        If Number($indices[$k]) <> $patternIdx Then
-                            If $newIndices = "" Then
-                                $newIndices = $indices[$k]
+                    Local $l_s_NewIndices = ""
+                    For $l_i_RemoveIdx = 0 To UBound($l_as_Indices) - 1
+                        If Number($l_as_Indices[$l_i_RemoveIdx]) <> $l_i_PatternIdx Then
+                            If $l_s_NewIndices = "" Then
+                                $l_s_NewIndices = $l_as_Indices[$l_i_RemoveIdx]
                             Else
-                                $newIndices &= "," & $indices[$k]
+                                $l_s_NewIndices &= "," & $l_as_Indices[$l_i_RemoveIdx]
                             EndIf
                         EndIf
                     Next
-                    $hashTable[$byte] = $newIndices
+                    $l_as_HashTable[$l_i_Byte] = $l_s_NewIndices
 
-                    If $totalFound = $stringCount Then ExitLoop 3
+                    If $l_i_TotalFound = $l_i_StringCount Then ExitLoop 3
                 EndIf
             Next
         Next
     Next
 
-    Local $elapsedTime = TimerDiff($startTime)
+    Local $l_f_ElapsedTime = TimerDiff($l_i_StartTime)
 
-    Return $results
+    Return $l_ai_Results
 EndFunc
 
-Func GwAu3_Scanner_GetMultipleAssertionPatterns($aAssertions)
-    Local $assertionCount = UBound($aAssertions)
-    Local $patterns[$assertionCount]
+Func GwAu3_Scanner_GetMultipleAssertionPatterns($a_amx_Assertions)
+    Local $l_i_AssertionCount = UBound($a_amx_Assertions)
+    Local $l_as_Patterns[$l_i_AssertionCount]
 
-    Local $uncachedAssertions[0][3] ; [index, file, msg]
-    Local $allStrings[0]
+    Local $l_amx_UncachedAssertions[0][3]
+    Local $l_as_AllStrings[0]
 
-    For $i = 0 To $assertionCount - 1
-        Local $cached = False
-        For $j = 0 To UBound($g_AssertionCache) - 1
-            If $g_AssertionCache[$j][0] = $aAssertions[$i][0] And $g_AssertionCache[$j][1] = $aAssertions[$i][1] Then
-                $patterns[$i] = $g_AssertionCache[$j][2]
-                $cached = True
+    For $l_i_Idx = 0 To $l_i_AssertionCount - 1
+        Local $l_b_Cached = False
+        For $l_i_CacheIdx = 0 To UBound($g_amx_AssertionCache) - 1
+            If $g_amx_AssertionCache[$l_i_CacheIdx][0] = $a_amx_Assertions[$l_i_Idx][0] And $g_amx_AssertionCache[$l_i_CacheIdx][1] = $a_amx_Assertions[$l_i_Idx][1] Then
+                $l_as_Patterns[$l_i_Idx] = $g_amx_AssertionCache[$l_i_CacheIdx][2]
+                $l_b_Cached = True
                 ExitLoop
             EndIf
         Next
 
-        If Not $cached Then
-            Local $idx = UBound($uncachedAssertions)
-            ReDim $uncachedAssertions[$idx + 1][3]
-            $uncachedAssertions[$idx][0] = $i
-            $uncachedAssertions[$idx][1] = $aAssertions[$i][0]
-            $uncachedAssertions[$idx][2] = $aAssertions[$i][1]
+        If Not $l_b_Cached Then
+            Local $l_i_UncachedIdx = UBound($l_amx_UncachedAssertions)
+            ReDim $l_amx_UncachedAssertions[$l_i_UncachedIdx + 1][3]
+            $l_amx_UncachedAssertions[$l_i_UncachedIdx][0] = $l_i_Idx
+            $l_amx_UncachedAssertions[$l_i_UncachedIdx][1] = $a_amx_Assertions[$l_i_Idx][0]
+            $l_amx_UncachedAssertions[$l_i_UncachedIdx][2] = $a_amx_Assertions[$l_i_Idx][1]
 
-            _ArrayAdd($allStrings, $aAssertions[$i][0])
-            _ArrayAdd($allStrings, $aAssertions[$i][1])
+            _ArrayAdd($l_as_AllStrings, $a_amx_Assertions[$l_i_Idx][0])
+            _ArrayAdd($l_as_AllStrings, $a_amx_Assertions[$l_i_Idx][1])
 
-            $patterns[$i] = ""
+            $l_as_Patterns[$l_i_Idx] = ""
         EndIf
     Next
 
-    If UBound($uncachedAssertions) = 0 Then
-        Return $patterns
+    If UBound($l_amx_UncachedAssertions) = 0 Then
+        Return $l_as_Patterns
     EndIf
 
-    If $sections[$SECTION_RDATA][0] = 0 Then
+    If $g_ai2_Sections[$GC_I_SECTION_RDATA][0] = 0 Then
         GwAu3_Scanner_InitializeSections(GwAu3_Scanner_GWBaseAddress())
     EndIf
 
-    Local $addresses = GwAu3_Scanner_FindMultipleStrings($allStrings)
+    Local $l_ap_Addresses = GwAu3_Scanner_FindMultipleStrings($l_as_AllStrings)
 
-    Local $stringToAddress[0][2] ; [string, address]
-    For $i = 0 To UBound($allStrings) - 1
-        If $addresses[$i] > 0 Then
-            GwAu3_Utils_ArrayAdd2D($stringToAddress, $allStrings[$i], $addresses[$i])
+    Local $l_amx_StringToAddress[0][2]
+    For $l_i_Idx = 0 To UBound($l_as_AllStrings) - 1
+        If $l_ap_Addresses[$l_i_Idx] > 0 Then
+            GwAu3_Utils_ArrayAdd2D($l_amx_StringToAddress, $l_as_AllStrings[$l_i_Idx], $l_ap_Addresses[$l_i_Idx])
         EndIf
     Next
 
-    For $i = 0 To UBound($uncachedAssertions) - 1
-        Local $assertIdx = $uncachedAssertions[$i][0]
-        Local $fileAddr = 0
-        Local $msgAddr = 0
+    For $l_i_Idx = 0 To UBound($l_amx_UncachedAssertions) - 1
+        Local $l_i_AssertIdx = $l_amx_UncachedAssertions[$l_i_Idx][0]
+        Local $l_p_FileAddr = 0
+        Local $l_p_MsgAddr = 0
 
-        For $j = 0 To UBound($stringToAddress) - 1
-            If $stringToAddress[$j][0] = $uncachedAssertions[$i][1] Then
-                $fileAddr = $stringToAddress[$j][1]
-            ElseIf $stringToAddress[$j][0] = $uncachedAssertions[$i][2] Then
-                $msgAddr = $stringToAddress[$j][1]
+        For $l_i_LookupIdx = 0 To UBound($l_amx_StringToAddress) - 1
+            If $l_amx_StringToAddress[$l_i_LookupIdx][0] = $l_amx_UncachedAssertions[$l_i_Idx][1] Then
+                $l_p_FileAddr = $l_amx_StringToAddress[$l_i_LookupIdx][1]
+            ElseIf $l_amx_StringToAddress[$l_i_LookupIdx][0] = $l_amx_UncachedAssertions[$l_i_Idx][2] Then
+                $l_p_MsgAddr = $l_amx_StringToAddress[$l_i_LookupIdx][1]
             EndIf
         Next
 
-        If $fileAddr > 0 And $msgAddr > 0 Then
-            $patterns[$assertIdx] = "BA" & GwAu3_Utils_SwapEndian(Hex($fileAddr, 8)) & "B9" & GwAu3_Utils_SwapEndian(Hex($msgAddr, 8))
+        If $l_p_FileAddr > 0 And $l_p_MsgAddr > 0 Then
+            $l_as_Patterns[$l_i_AssertIdx] = "BA" & GwAu3_Utils_SwapEndian(Hex($l_p_FileAddr, 8)) & "B9" & GwAu3_Utils_SwapEndian(Hex($l_p_MsgAddr, 8))
 
-            Local $cacheIdx = UBound($g_AssertionCache)
-            ReDim $g_AssertionCache[$cacheIdx + 1][3]
-            $g_AssertionCache[$cacheIdx][0] = $uncachedAssertions[$i][1]
-            $g_AssertionCache[$cacheIdx][1] = $uncachedAssertions[$i][2]
-            $g_AssertionCache[$cacheIdx][2] = $patterns[$assertIdx]
+            Local $l_i_CacheIdx = UBound($g_amx_AssertionCache)
+            ReDim $g_amx_AssertionCache[$l_i_CacheIdx + 1][3]
+            $g_amx_AssertionCache[$l_i_CacheIdx][0] = $l_amx_UncachedAssertions[$l_i_Idx][1]
+            $g_amx_AssertionCache[$l_i_CacheIdx][1] = $l_amx_UncachedAssertions[$l_i_Idx][2]
+            $g_amx_AssertionCache[$l_i_CacheIdx][2] = $l_as_Patterns[$l_i_AssertIdx]
         EndIf
     Next
 
-    Return $patterns
+    Return $l_as_Patterns
 EndFunc
 
-Func GwAu3_Scanner_FunctionFromNearCall($call_instruction_address)
-    Local $opcode = GwAu3_Memory_Read($call_instruction_address, "byte")
-    Local $function_address = 0
+Func GwAu3_Scanner_FunctionFromNearCall($a_p_CallInstructionAddress)
+    Local $l_i_Opcode = GwAu3_Memory_Read($a_p_CallInstructionAddress, "byte")
+    Local $l_p_FunctionAddress = 0
 
-    Switch $opcode
+    Switch $l_i_Opcode
         Case 0xE8, 0xE9
-            Local $near_address = GwAu3_Memory_Read($call_instruction_address + 1, "dword")
-            If $near_address > 0x7FFFFFFF Then
-                $near_address -= 0x100000000
+            Local $l_i_NearAddress = GwAu3_Memory_Read($a_p_CallInstructionAddress + 1, "dword")
+            If $l_i_NearAddress > 0x7FFFFFFF Then
+                $l_i_NearAddress -= 0x100000000
             EndIf
-            $function_address = $near_address + ($call_instruction_address + 5)
+            $l_p_FunctionAddress = $l_i_NearAddress + ($a_p_CallInstructionAddress + 5)
 
         Case 0xEB
-            Local $near_address = GwAu3_Memory_Read($call_instruction_address + 1, "byte")
-            If BitAND($near_address, 0x80) Then
-                $near_address = -((BitNOT($near_address) + 1) And 0xFF)
+            Local $l_i_NearAddress = GwAu3_Memory_Read($a_p_CallInstructionAddress + 1, "byte")
+            If BitAND($l_i_NearAddress, 0x80) Then
+                $l_i_NearAddress = -((BitNOT($l_i_NearAddress) + 1) And 0xFF)
             EndIf
-            $function_address = $near_address + ($call_instruction_address + 2)
+            $l_p_FunctionAddress = $l_i_NearAddress + ($a_p_CallInstructionAddress + 2)
 
         Case Else
             Return 0
     EndSwitch
 
-    Local $nested_call = GwAu3_Scanner_FunctionFromNearCall($function_address)
-    If $nested_call <> 0 Then
-        Return $nested_call
+    Local $l_p_NestedCall = GwAu3_Scanner_FunctionFromNearCall($l_p_FunctionAddress)
+    If $l_p_NestedCall <> 0 Then
+        Return $l_p_NestedCall
     EndIf
 
-    Return $function_address
+    Return $l_p_FunctionAddress
 EndFunc
 
-Func GwAu3_Scanner_FindInRange($pattern, $mask, $offset, $start, $end)
-    Local $patternBytes = GwAu3_Utils_StringToByteArray($pattern)
-    Local $patternLength = UBound($patternBytes)
-    Local $found = False
+Func GwAu3_Scanner_FindInRange($a_s_Pattern, $a_s_Mask, $a_i_Offset, $a_p_Start, $a_p_End)
+    Local $l_ai_PatternBytes = GwAu3_Utils_StringToByteArray($a_s_Pattern)
+    Local $l_i_PatternLength = UBound($l_ai_PatternBytes)
+    Local $l_b_Found = False
 
-    $start = BitAND($start, 0xFFFFFFFF)
-    $end = BitAND($end, 0xFFFFFFFF)
+    $a_p_Start = BitAND($a_p_Start, 0xFFFFFFFF)
+    $a_p_End = BitAND($a_p_End, 0xFFFFFFFF)
 
-    If $end > $start Then
-        $end = $end - $patternLength + 1
+    If $a_p_End > $a_p_Start Then
+        $a_p_End = $a_p_End - $l_i_PatternLength + 1
     EndIf
 
-    If $start > $end Then
-        Local $i = $start
-        While $i >= $end
-            Local $firstByte = GwAu3_Memory_Read($i, 'byte')
-            If $firstByte <> $patternBytes[0] Then
-                $i -= 1
+    If $a_p_Start > $a_p_End Then
+        Local $l_p_Idx = $a_p_Start
+        While $l_p_Idx >= $a_p_End
+            Local $l_i_FirstByte = GwAu3_Memory_Read($l_p_Idx, 'byte')
+            If $l_i_FirstByte <> $l_ai_PatternBytes[0] Then
+                $l_p_Idx -= 1
                 ContinueLoop
             EndIf
 
-            $found = True
-            For $idx = 0 To $patternLength - 1
-                If $mask <> "" And StringMid($mask, $idx + 1, 1) <> "x" Then
+            $l_b_Found = True
+            For $l_i_ByteIdx = 0 To $l_i_PatternLength - 1
+                If $a_s_Mask <> "" And StringMid($a_s_Mask, $l_i_ByteIdx + 1, 1) <> "x" Then
                     ContinueLoop
                 EndIf
 
-                Local $memByte = GwAu3_Memory_Read($i + $idx, 'byte')
-                If $memByte <> $patternBytes[$idx] Then
-                    $found = False
+                Local $l_i_MemByte = GwAu3_Memory_Read($l_p_Idx + $l_i_ByteIdx, 'byte')
+                If $l_i_MemByte <> $l_ai_PatternBytes[$l_i_ByteIdx] Then
+                    $l_b_Found = False
                     ExitLoop
                 EndIf
             Next
 
-            If $found Then
-                Return $i + $offset
+            If $l_b_Found Then
+                Return $l_p_Idx + $a_i_Offset
             EndIf
-            $i -= 1
+            $l_p_Idx -= 1
         WEnd
     Else
-        Local $i = $start
-        While $i < $end
-            Local $firstByte = GwAu3_Memory_Read($i, 'byte')
-            If $firstByte <> $patternBytes[0] Then
-                $i += 1
+        Local $l_p_Idx = $a_p_Start
+        While $l_p_Idx < $a_p_End
+            Local $l_i_FirstByte = GwAu3_Memory_Read($l_p_Idx, 'byte')
+            If $l_i_FirstByte <> $l_ai_PatternBytes[0] Then
+                $l_p_Idx += 1
                 ContinueLoop
             EndIf
 
-            $found = True
-            For $idx = 0 To $patternLength - 1
-                If $mask <> "" And StringMid($mask, $idx + 1, 1) <> "x" Then
+            $l_b_Found = True
+            For $l_i_ByteIdx = 0 To $l_i_PatternLength - 1
+                If $a_s_Mask <> "" And StringMid($a_s_Mask, $l_i_ByteIdx + 1, 1) <> "x" Then
                     ContinueLoop
                 EndIf
 
-                Local $memByte = GwAu3_Memory_Read($i + $idx, 'byte')
-                If $memByte <> $patternBytes[$idx] Then
-                    $found = False
+                Local $l_i_MemByte = GwAu3_Memory_Read($l_p_Idx + $l_i_ByteIdx, 'byte')
+                If $l_i_MemByte <> $l_ai_PatternBytes[$l_i_ByteIdx] Then
+                    $l_b_Found = False
                     ExitLoop
                 EndIf
             Next
 
-            If $found Then
-                Return $i + $offset
+            If $l_b_Found Then
+                Return $l_p_Idx + $a_i_Offset
             EndIf
-            $i += 1
+            $l_p_Idx += 1
         WEnd
     EndIf
 
     Return 0
 EndFunc
 
-Func GwAu3_Scanner_ToFunctionStart($call_instruction_address, $scan_range = 0x200)
-    If $call_instruction_address = 0 Then Return 0
+Func GwAu3_Scanner_ToFunctionStart($a_p_CallInstructionAddress, $a_i_ScanRange = 0x200)
+    If $a_p_CallInstructionAddress = 0 Then Return 0
 
-    Local $start = $call_instruction_address
-    Local $end = BitAND($call_instruction_address - $scan_range, 0xFFFFFFFF)
+    Local $l_p_Start = $a_p_CallInstructionAddress
+    Local $l_p_End = BitAND($a_p_CallInstructionAddress - $a_i_ScanRange, 0xFFFFFFFF)
 
-    Return GwAu3_Scanner_FindInRange("558BEC", "xxx", 0, $start, $end)
+    Return GwAu3_Scanner_FindInRange("558BEC", "xxx", 0, $l_p_Start, $l_p_End)
 EndFunc
 
-Func GwAu3_Scanner_GetHwnd($aProc)
-    Local $wins = WinList()
-    For $i = 1 To UBound($wins) - 1
-        If (WinGetProcess($wins[$i][1]) == $aProc) And (BitAND(WinGetState($wins[$i][1]), 2)) Then Return $wins[$i][1]
+Func GwAu3_Scanner_GetHwnd($a_i_Proc)
+    Local $l_as_Wins = WinList()
+    For $l_i_Idx = 1 To UBound($l_as_Wins) - 1
+        If (WinGetProcess($l_as_Wins[$l_i_Idx][1]) == $a_i_Proc) And (BitAND(WinGetState($l_as_Wins[$l_i_Idx][1]), 2)) Then Return $l_as_Wins[$l_i_Idx][1]
     Next
 EndFunc
 
 Func GwAu3_Scanner_GetWindowHandle()
-    Return $mGWWindowHandle
+    Return $g_h_GWWindow
 EndFunc
 
 Func GwAu3_Scanner_GetLoggedCharNames()
-    Local $array = GwAu3_Scanner_ScanGW()
-    If $array[0] == 0 Then Return ''
-    Local $ret = $array[1]
-    For $i = 2 To $array[0]
-        $ret &= "|" & $array[$i]
+    Local $l_as_Array = GwAu3_Scanner_ScanGW()
+    If $l_as_Array[0] == 0 Then Return ''
+    Local $l_s_Ret = $l_as_Array[1]
+    For $l_i_Idx = 2 To $l_as_Array[0]
+        $l_s_Ret &= "|" & $l_as_Array[$l_i_Idx]
     Next
-    Return $ret
+    Return $l_s_Ret
 EndFunc
 
 Func GwAu3_Scanner_ScanGW()
-    Local $lProcessList = ProcessList("gw.exe")
-    Local $lReturnArray[1] = [0]
-    Local $lPid
+    Local $l_as_ProcessList = ProcessList("gw.exe")
+    Local $l_as_ReturnArray[1] = [0]
+    Local $l_i_Pid
 
-    For $i = 1 To $lProcessList[0][0]
-        GwAu3_Memory_Open($lProcessList[$i][1])
+    For $l_i_Idx = 1 To $l_as_ProcessList[0][0]
+        GwAu3_Memory_Open($l_as_ProcessList[$l_i_Idx][1])
 
-        If $mGWProcHandle Then
-            $lReturnArray[0] += 1
-            ReDim $lReturnArray[$lReturnArray[0] + 1]
-            $lReturnArray[$lReturnArray[0]] = GwAu3_Scanner_ScanForCharname()
+        If $g_h_GWProcess Then
+            $l_as_ReturnArray[0] += 1
+            ReDim $l_as_ReturnArray[$l_as_ReturnArray[0] + 1]
+            $l_as_ReturnArray[$l_as_ReturnArray[0]] = GwAu3_Scanner_ScanForCharname()
         EndIf
 
         GwAu3_Memory_Close()
 
-        $mGWProcHandle = 0
+        $g_h_GWProcess = 0
     Next
 
-    Return $lReturnArray
+    Return $l_as_ReturnArray
 EndFunc
 
 Func GwAu3_Scanner_ScanForProcess()
-    Local $lCharNameCode = BinaryToString('0x558BEC83EC105356578B7D0833F63BFE')
-    Local $lCurrentSearchAddress = 0x00000000
-    Local $lMBI[7], $lMBIBuffer = DllStructCreate('dword;dword;dword;dword;dword;dword;dword')
-    Local $lSearch, $lTmpMemData, $lTmpAddress, $lTmpBuffer = DllStructCreate('ptr'), $i
+    Local $l_s_CharNameCode = BinaryToString('0x558BEC83EC105356578B7D0833F63BFE')
+    Local $l_p_CurrentSearchAddress = 0x00000000
+    Local $l_ai_MBI[7], $l_d_MBIBuffer = DllStructCreate('dword;dword;dword;dword;dword;dword;dword')
+    Local $l_i_Search, $l_s_TmpMemData, $l_p_TmpAddress, $l_d_TmpBuffer = DllStructCreate('ptr'), $l_i_Idx
 
-    While $lCurrentSearchAddress < 0x01F00000
-        Local $lMBI[7]
-        DllCall($mKernelHandle, 'int', 'VirtualQueryEx', 'int', $mGWProcHandle, 'int', $lCurrentSearchAddress, 'ptr', DllStructGetPtr($lMBIBuffer), 'int', DllStructGetSize($lMBIBuffer))
-        For $i = 0 To 6
-            $lMBI[$i] = StringStripWS(DllStructGetData($lMBIBuffer, ($i + 1)), 3)
+    While $l_p_CurrentSearchAddress < 0x01F00000
+        Local $l_ai_MBI[7]
+        DllCall($g_h_Kernel32, 'int', 'VirtualQueryEx', 'int', $g_h_GWProcess, 'int', $l_p_CurrentSearchAddress, 'ptr', DllStructGetPtr($l_d_MBIBuffer), 'int', DllStructGetSize($l_d_MBIBuffer))
+        For $l_i_Idx = 0 To 6
+            $l_ai_MBI[$l_i_Idx] = StringStripWS(DllStructGetData($l_d_MBIBuffer, ($l_i_Idx + 1)), 3)
         Next
-        If $lMBI[4] = 4096 Then
-            Local $lBuffer = DllStructCreate('byte[' & $lMBI[3] & ']')
-            DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'int', $lCurrentSearchAddress, 'ptr', DllStructGetPtr($lBuffer), 'int', DllStructGetSize($lBuffer), 'int', '')
+        If $l_ai_MBI[4] = 4096 Then
+            Local $l_d_Buffer = DllStructCreate('byte[' & $l_ai_MBI[3] & ']')
+            DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'int', $l_p_CurrentSearchAddress, 'ptr', DllStructGetPtr($l_d_Buffer), 'int', DllStructGetSize($l_d_Buffer), 'int', '')
 
-            $lTmpMemData = DllStructGetData($lBuffer, 1)
-            $lTmpMemData = BinaryToString($lTmpMemData)
+            $l_s_TmpMemData = DllStructGetData($l_d_Buffer, 1)
+            $l_s_TmpMemData = BinaryToString($l_s_TmpMemData)
 
-            $lSearch = StringInStr($lTmpMemData, $lCharNameCode, 2)
-            If $lSearch > 0 Then
-                Return $lMBI[0]
+            $l_i_Search = StringInStr($l_s_TmpMemData, $l_s_CharNameCode, 2)
+            If $l_i_Search > 0 Then
+                Return $l_ai_MBI[0]
             EndIf
         EndIf
-        $lCurrentSearchAddress += $lMBI[3]
+        $l_p_CurrentSearchAddress += $l_ai_MBI[3]
     WEnd
     Return ''
 EndFunc
 
 Func GwAu3_Scanner_ScanForCharname()
-    Local $lCharNameCode = BinaryToString('0x6A14FF751868')
-    Local $lCurrentSearchAddress = 0x00000000
-    Local $lMBI[7], $lMBIBuffer = DllStructCreate('dword;dword;dword;dword;dword;dword;dword')
-    Local $lSearch, $lTmpMemData, $lTmpAddress, $lTmpBuffer = DllStructCreate('ptr'), $i
+    Local $l_s_CharNameCode = BinaryToString('0x6A14FF751868')
+    Local $l_p_CurrentSearchAddress = 0x00000000
+    Local $l_ai_MBI[7], $l_d_MBIBuffer = DllStructCreate('dword;dword;dword;dword;dword;dword;dword')
+    Local $l_i_Search, $l_s_TmpMemData, $l_p_TmpAddress, $l_d_TmpBuffer = DllStructCreate('ptr'), $l_i_Idx
 
-    While $lCurrentSearchAddress < 0x01F00000
-        Local $lMBI[7]
-        DllCall($mKernelHandle, 'int', 'VirtualQueryEx', 'int', $mGWProcHandle, 'int', $lCurrentSearchAddress, 'ptr', DllStructGetPtr($lMBIBuffer), 'int', DllStructGetSize($lMBIBuffer))
-        For $i = 0 To 6
-            $lMBI[$i] = StringStripWS(DllStructGetData($lMBIBuffer, ($i + 1)), 3)
+    While $l_p_CurrentSearchAddress < 0x01F00000
+        Local $l_ai_MBI[7]
+        DllCall($g_h_Kernel32, 'int', 'VirtualQueryEx', 'int', $g_h_GWProcess, 'int', $l_p_CurrentSearchAddress, 'ptr', DllStructGetPtr($l_d_MBIBuffer), 'int', DllStructGetSize($l_d_MBIBuffer))
+        For $l_i_Idx = 0 To 6
+            $l_ai_MBI[$l_i_Idx] = StringStripWS(DllStructGetData($l_d_MBIBuffer, ($l_i_Idx + 1)), 3)
         Next
-        If $lMBI[4] = 4096 Then
-            Local $lBuffer = DllStructCreate('byte[' & $lMBI[3] & ']')
-            DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'int', $lCurrentSearchAddress, 'ptr', DllStructGetPtr($lBuffer), 'int', DllStructGetSize($lBuffer), 'int', '')
+        If $l_ai_MBI[4] = 4096 Then
+            Local $l_d_Buffer = DllStructCreate('byte[' & $l_ai_MBI[3] & ']')
+            DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'int', $l_p_CurrentSearchAddress, 'ptr', DllStructGetPtr($l_d_Buffer), 'int', DllStructGetSize($l_d_Buffer), 'int', '')
 
-            $lTmpMemData = DllStructGetData($lBuffer, 1)
-            $lTmpMemData = BinaryToString($lTmpMemData)
+            $l_s_TmpMemData = DllStructGetData($l_d_Buffer, 1)
+            $l_s_TmpMemData = BinaryToString($l_s_TmpMemData)
 
-            $lSearch = StringInStr($lTmpMemData, $lCharNameCode, 2)
-            If $lSearch > 0 Then
-                $lTmpAddress = $lCurrentSearchAddress + $lSearch - 1
-                DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'int', $lTmpAddress + 6, 'ptr', DllStructGetPtr($lTmpBuffer), 'int', DllStructGetSize($lTmpBuffer), 'int', '')
-                $mCharname = DllStructGetData($lTmpBuffer, 1)
+            $l_i_Search = StringInStr($l_s_TmpMemData, $l_s_CharNameCode, 2)
+            If $l_i_Search > 0 Then
+                $l_p_TmpAddress = $l_p_CurrentSearchAddress + $l_i_Search - 1
+                DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'int', $l_p_TmpAddress + 6, 'ptr', DllStructGetPtr($l_d_TmpBuffer), 'int', DllStructGetSize($l_d_TmpBuffer), 'int', '')
+                $g_p_CharName = DllStructGetData($l_d_TmpBuffer, 1)
                 Return GwAu3_OtherMod_GetCharname()
             EndIf
         EndIf
-        $lCurrentSearchAddress += $lMBI[3]
+        $l_p_CurrentSearchAddress += $l_ai_MBI[3]
     WEnd
     Return ''
 EndFunc
 
-; Add a pattern to the scan list
-Func GwAu3_Scanner_AddPattern($sName, $sPattern, $iOffsetOrMsg = 0, $sType = 'Ptr')
-    Local $iIndex = $g_aPatterns[0][0] + 1
-    ReDim $g_aPatterns[$iIndex + 1][6]
-    $g_aPatterns[0][0] = $iIndex
+Func GwAu3_Scanner_AddPattern($a_s_Name, $a_s_Pattern, $a_v_OffsetOrMsg = 0, $a_s_Type = 'Ptr')
+    Local $l_i_Index = $g_amx2_Patterns[0][0] + 1
+    ReDim $g_amx2_Patterns[$l_i_Index + 1][6]
+    $g_amx2_Patterns[0][0] = $l_i_Index
 
-    ; Build full name with prefix and suffix
-    Local $sFullName = 'Scan' & $sName & $sType
+    Local $l_s_FullName = 'Scan' & $a_s_Name & $a_s_Type
 
-    ; Check if it's an assertion pattern
-    Local $bIsAssertion = False
-    Local $sAssertionMsg = ""
+    Local $l_b_IsAssertion = False
+    Local $l_s_AssertionMsg = ""
 
-    If StringInStr($sPattern, ":\") Or StringInStr($sPattern, ":/") Then
-        ; This is a file path, so it's an assertion
-        $bIsAssertion = True
-        $sAssertionMsg = $iOffsetOrMsg
+    If StringInStr($a_s_Pattern, ":\") Or StringInStr($a_s_Pattern, ":/") Then
+        $l_b_IsAssertion = True
+        $l_s_AssertionMsg = $a_v_OffsetOrMsg
 
-        ; Add to assertion list
-        Local $iAssertIndex = UBound($g_aAssertionPatterns)
-        ReDim $g_aAssertionPatterns[$iAssertIndex + 1][2]
-        $g_aAssertionPatterns[$iAssertIndex][0] = $sPattern
-        $g_aAssertionPatterns[$iAssertIndex][1] = $sAssertionMsg
+        Local $l_i_AssertIndex = UBound($g_amx2_AssertionPatterns)
+        ReDim $g_amx2_AssertionPatterns[$l_i_AssertIndex + 1][2]
+        $g_amx2_AssertionPatterns[$l_i_AssertIndex][0] = $a_s_Pattern
+        $g_amx2_AssertionPatterns[$l_i_AssertIndex][1] = $l_s_AssertionMsg
     EndIf
 
-    ; Store pattern information
-    $g_aPatterns[$iIndex][0] = $sFullName
-    $g_aPatterns[$iIndex][1] = $sPattern
-    $g_aPatterns[$iIndex][2] = $bIsAssertion ? 0 : $iOffsetOrMsg ; Offset if not assertion
-    $g_aPatterns[$iIndex][3] = $sType
-    $g_aPatterns[$iIndex][4] = $bIsAssertion
-    $g_aPatterns[$iIndex][5] = $sAssertionMsg
+    $g_amx2_Patterns[$l_i_Index][0] = $l_s_FullName
+    $g_amx2_Patterns[$l_i_Index][1] = $a_s_Pattern
+    $g_amx2_Patterns[$l_i_Index][2] = $l_b_IsAssertion ? 0 : $a_v_OffsetOrMsg
+    $g_amx2_Patterns[$l_i_Index][3] = $a_s_Type
+    $g_amx2_Patterns[$l_i_Index][4] = $l_b_IsAssertion
+    $g_amx2_Patterns[$l_i_Index][5] = $l_s_AssertionMsg
 EndFunc
 
-; Clear all patterns
 Func GwAu3_Scanner_ClearPatterns()
-    ReDim $g_aPatterns[1][6]
-    $g_aPatterns[0][0] = 0
-    ReDim $g_aAssertionPatterns[0][2]
+    ReDim $g_amx2_Patterns[1][6]
+    $g_amx2_Patterns[0][0] = 0
+    ReDim $g_amx2_AssertionPatterns[0][2]
 EndFunc
 
-; Get pattern info by original name
-Func GwAu3_Scanner_GetPatternInfo($sName, $sType = '')
-    Local $sSearchName = 'Scan' & $sName & $sType
-    For $i = 1 To $g_aPatterns[0][0]
-        If $g_aPatterns[$i][0] = $sSearchName Or _
-           ($sType = '' And StringInStr($g_aPatterns[$i][0], 'Scan' & $sName)) Then
-            Local $aInfo[6]
-            For $j = 0 To 5
-                $aInfo[$j] = $g_aPatterns[$i][$j]
+Func GwAu3_Scanner_GetPatternInfo($a_s_Name, $a_s_Type = '')
+    Local $l_s_SearchName = 'Scan' & $a_s_Name & $a_s_Type
+    For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
+        If $g_amx2_Patterns[$l_i_Idx][0] = $l_s_SearchName Or _
+           ($a_s_Type = '' And StringInStr($g_amx2_Patterns[$l_i_Idx][0], 'Scan' & $a_s_Name)) Then
+            Local $l_av_Info[6]
+            For $l_i_InfoIdx = 0 To 5
+                $l_av_Info[$l_i_InfoIdx] = $g_amx2_Patterns[$l_i_Idx][$l_i_InfoIdx]
             Next
-            Return $aInfo
+            Return $l_av_Info
         EndIf
     Next
     Return 0
 EndFunc
 
-; Scan all patterns and return results
 Func GwAu3_Scanner_ScanAllPatterns()
-    Local $lGwBase = GwAu3_Scanner_ScanForProcess()
-    Local $aResults[$g_aPatterns[0][0] + 1]
-    $aResults[0] = $g_aPatterns[0][0]
+    Local $l_p_GwBase = GwAu3_Scanner_ScanForProcess()
+    Local $l_ap_Results[$g_amx2_Patterns[0][0] + 1]
+    $l_ap_Results[0] = $g_amx2_Patterns[0][0]
 
-    ; Handle assertion patterns first if any exist
-    If UBound($g_aAssertionPatterns) > 0 Then
-        Local $assertionPatterns = GwAu3_Scanner_GetMultipleAssertionPatterns($g_aAssertionPatterns)
+    If UBound($g_amx2_AssertionPatterns) > 0 Then
+        Local $l_as_AssertionPatterns = GwAu3_Scanner_GetMultipleAssertionPatterns($g_amx2_AssertionPatterns)
 
-        ; Update assertion patterns with actual patterns
-        Local $iAssertIdx = 0
-        For $i = 1 To $g_aPatterns[0][0]
-            If $g_aPatterns[$i][4] Then ; Is assertion
-                $g_aPatterns[$i][1] = $assertionPatterns[$iAssertIdx]
-                $iAssertIdx += 1
+        Local $l_i_AssertIdx = 0
+        For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
+            If $g_amx2_Patterns[$l_i_Idx][4] Then
+                $g_amx2_Patterns[$l_i_Idx][1] = $l_as_AssertionPatterns[$l_i_AssertIdx]
+                $l_i_AssertIdx += 1
             EndIf
         Next
     EndIf
 
-    ; Create ASM for scanning
-    $mASMSize = 0
-    $mASMCodeOffset = 0
-    $mASMString = ''
+    $g_i_ASMSize = 0
+    $g_i_ASMCodeOffset= 0
+    $g_s_ASMCode = ''
 
     _('MainModPtr/4')
 
-    ; Add all patterns to ASM
-    For $i = 1 To $g_aPatterns[0][0]
-        _($g_aPatterns[$i][0] & ':')
-        GwAu3_Scanner_AddPatternToASM($g_aPatterns[$i][1])
+    For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
+        _($g_amx2_Patterns[$l_i_Idx][0] & ':')
+        GwAu3_Scanner_AddPatternToASM($g_amx2_Patterns[$l_i_Idx][1])
     Next
 
-    ; Add scan procedure
-    GwAu3_Assembler_CreateScanProcedure($lGwBase)
+    GwAu3_Assembler_CreateScanProcedure($l_p_GwBase)
 
-    ; Execute scan
-    $mBase = $lGwBase + 0x9DF000
-    Local $lScanMemory = GwAu3_Memory_Read($mBase, 'ptr')
+    $g_p_GWBaseAddress = $l_p_GwBase + 0x9DF000
+    Local $l_p_ScanMemory = GwAu3_Memory_Read($g_p_GWBaseAddress, 'ptr')
 
-    If $lScanMemory = 0 Then
-        $mMemory = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $mASMSize, 'dword', 0x1000, 'dword', 0x40)
-        $mMemory = $mMemory[0]
-        GwAu3_Memory_Write($mBase, $mMemory)
+    If $l_p_ScanMemory = 0 Then
+        $g_p_ASMMemory = DllCall($g_h_Kernel32, 'ptr', 'VirtualAllocEx', 'handle', $g_h_GWProcess, 'ptr', 0, 'ulong_ptr', $g_i_ASMSize, 'dword', 0x1000, 'dword', 0x40)
+        $g_p_ASMMemory = $g_p_ASMMemory[0]
+        GwAu3_Memory_Write($g_p_GWBaseAddress, $g_p_ASMMemory)
     Else
-        $mMemory = $lScanMemory
+        $g_p_ASMMemory = $l_p_ScanMemory
     EndIf
 
     GwAu3_Assembler_CompleteASMCode()
 
-    If $lScanMemory = 0 Then
-        GwAu3_Memory_WriteBinary($mASMString, $mMemory + $mASMCodeOffset)
+    If $l_p_ScanMemory = 0 Then
+        GwAu3_Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
 
-        Local $lThread = DllCall($mKernelHandle, 'int', 'CreateRemoteThread', 'int', $mGWProcHandle, 'ptr', 0, 'int', 0, 'int', GwAu3_Memory_GetLabelInfo('ScanProc'), 'ptr', 0, 'int', 0, 'int', 0)
-        $lThread = $lThread[0]
+        Local $l_h_Thread = DllCall($g_h_Kernel32, 'int', 'CreateRemoteThread', 'int', $g_h_GWProcess, 'ptr', 0, 'int', 0, 'int', GwAu3_Memory_GetLabelInfo('ScanProc'), 'ptr', 0, 'int', 0, 'int', 0)
+        $l_h_Thread = $l_h_Thread[0]
 
-        Local $lResult
+        Local $l_av_Result
         Do
-            $lResult = DllCall($mKernelHandle, 'int', 'WaitForSingleObject', 'int', $lThread, 'int', 50)
-        Until $lResult[0] <> 258
+            $l_av_Result = DllCall($g_h_Kernel32, 'int', 'WaitForSingleObject', 'int', $l_h_Thread, 'int', 50)
+        Until $l_av_Result[0] <> 258
 
-        DllCall($mKernelHandle, 'int', 'CloseHandle', 'int', $lThread)
+        DllCall($g_h_Kernel32, 'int', 'CloseHandle', 'int', $l_h_Thread)
     EndIf
 
-    ; Collect results using GwAu3_Memory_GetScannedAddress which does the proper calculation
-    For $i = 1 To $g_aPatterns[0][0]
-        $aResults[$i] = GwAu3_Memory_GetScannedAddress($g_aPatterns[$i][0], $g_aPatterns[$i][2])
+    For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
+        $l_ap_Results[$l_i_Idx] = GwAu3_Memory_GetScannedAddress($g_amx2_Patterns[$l_i_Idx][0], $g_amx2_Patterns[$l_i_Idx][2])
     Next
 
-    Return $aResults
+    Return $l_ap_Results
 EndFunc
 
-; Get a specific scan result by original name and optional type
-Func GwAu3_Scanner_GetScanResult($sName, $aResults = 0, $sType = '')
-    If Not IsArray($aResults) Then Return 0
+Func GwAu3_Scanner_GetScanResult($a_s_Name, $a_ap_Results = 0, $a_s_Type = '')
+    If Not IsArray($a_ap_Results) Then Return 0
 
-    Local $sSearchName = 'Scan' & $sName & $sType
+    Local $l_s_SearchName = 'Scan' & $a_s_Name & $a_s_Type
 
-    For $i = 1 To $g_aPatterns[0][0]
-        If $g_aPatterns[$i][0] = $sSearchName Or _
-           ($sType = '' And StringInStr($g_aPatterns[$i][0], 'Scan' & $sName)) Then
-            Return $aResults[$i]
+    For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
+        If $g_amx2_Patterns[$l_i_Idx][0] = $l_s_SearchName Or _
+           ($a_s_Type = '' And StringInStr($g_amx2_Patterns[$l_i_Idx][0], 'Scan' & $a_s_Name)) Then
+            Return $a_ap_Results[$l_i_Idx]
         EndIf
     Next
 
     Return 0
 EndFunc
 
-; Helper function to add pattern to ASM
-Func GwAu3_Scanner_AddPatternToASM($aPattern)
+Func GwAu3_Scanner_AddPatternToASM($a_s_Pattern)
 
-	$aPattern = StringReplace($aPattern, "??", "00")
+	$a_s_Pattern = StringReplace($a_s_Pattern, "??", "00")
 
-    Local $lSize = Int(0.5 * StringLen($aPattern))
-    Local $pattern_header = "00000000" & _
-                           GwAu3_Utils_SwapEndian(Hex($lSize, 8)) & _
+    Local $l_i_Size = Int(0.5 * StringLen($a_s_Pattern))
+    Local $l_s_PatternHeader = "00000000" & _
+                           GwAu3_Utils_SwapEndian(Hex($l_i_Size, 8)) & _
                            "00000000"
 
-    $mASMString &= $pattern_header & $aPattern
-    $mASMSize += $lSize + 12
+    $g_s_ASMCode &= $l_s_PatternHeader & $a_s_Pattern
+    $g_i_ASMSize += $l_i_Size + 12
 
-    Local $padding_count = 68 - $lSize
-    For $i = 1 To $padding_count
-        $mASMSize += 1
-        $mASMString &= "00"
+    Local $l_i_PaddingCount = 68 - $l_i_Size
+    For $l_i_Idx = 1 To $l_i_PaddingCount
+        $g_i_ASMSize += 1
+        $g_s_ASMCode &= "00"
     Next
 EndFunc

@@ -12,12 +12,12 @@ Func GwAu3_MapMod_Move($fX, $fY, $fRandomize = 50)
     $g_fLastMoveY = $fY
 
     ; Set move data
-	DllStructSetData($g_mMove, 1, GwAu3_Memory_GetValue('CommandMove'))
-    DllStructSetData($g_mMove, 2, $fX)
-    DllStructSetData($g_mMove, 3, $fY)
-    DllStructSetData($g_mMove, 4, 0)  ; Z coordinate (usually 0)
+	DllStructSetData($g_d_Move, 1, GwAu3_Memory_GetValue('CommandMove'))
+    DllStructSetData($g_d_Move, 2, $fX)
+    DllStructSetData($g_d_Move, 3, $fY)
+    DllStructSetData($g_d_Move, 4, 0)  ; Z coordinate (usually 0)
 
-    GwAu3_Core_Enqueue($g_mMovePtr, 16)
+    GwAu3_Core_Enqueue($g_p_Move, 16)
 
     Return True
 EndFunc

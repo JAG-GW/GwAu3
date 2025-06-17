@@ -3,13 +3,13 @@
 #Region Item Context
 Func GwAu3_ItemMod_GetItemContextPtr()
     Local $lOffset[3] = [0, 0x18, 0x40]
-    Local $lItemContextPtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "ptr")
+    Local $lItemContextPtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "ptr")
     Return $lItemContextPtr[1]
 EndFunc
 
 Func GwAu3_ItemMod_GetInventoryPtr()
 	Local $lOffset[4] = [0, 0x18, 0x40, 0xF8]
-    Local $lItemContextPtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "ptr")
+    Local $lItemContextPtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "ptr")
     Return $lItemContextPtr[1]
 EndFunc
 
@@ -125,7 +125,7 @@ Global Enum $INVENTORY_unused_bag, $INVENTORY_backpack, $INVENTORY_belt_pouch, $
 Func GwAu3_ItemMod_GetBagPtr($aBagNumber)
     If IsPtr($aBagNumber) Then Return $aBagNumber
 	Local $lOffset[5] = [0, 0x18, 0x40, 0xF8, 0x4 * $aBagNumber]
-	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, 'ptr')
+	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, 'ptr')
 	Return $lItemStructAddress[1]
 EndFunc   ;==>_ItemMod_GetBagPtr
 
@@ -211,7 +211,7 @@ Func GwAu3_ItemMod_GetBagItemArray($aBagNumber)
     Local $lItemPtr, $lCount = 0
 
     Local $lItemPtrBuffer = DllStructCreate("ptr[" & $lSlots & "]")
-    DllCall($mKernelHandle, "bool", "ReadProcessMemory", "handle", $mGWProcHandle, "ptr", $lItemArrayPtr, "struct*", $lItemPtrBuffer, "ulong_ptr", 4 * $lSlots, "ulong_ptr*", 0)
+    DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", "handle", $g_h_GWProcess, "ptr", $lItemArrayPtr, "struct*", $lItemPtrBuffer, "ulong_ptr", 4 * $lSlots, "ulong_ptr*", 0)
 
     For $i = 1 To $lSlots
         $lItemPtr = DllStructGetData($lItemPtrBuffer, 1, $i)
@@ -249,7 +249,7 @@ EndFunc   ;==>ItemID
 Func GwAu3_ItemMod_GetItemPtr($aItemID)
 	If IsPtr($aItemID) Then Return $aItemID
 	Local $lOffset[5] = [0, 0x18, 0x40, 0xB8, 0x4 * GwAu3_ItemMod_ItemID($aItemID)]
-	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "ptr")
+	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "ptr")
 	Return $lItemStructAddress[1]
 EndFunc   ;==>_ItemMod_GetItemPtr
 
@@ -395,7 +395,7 @@ EndFunc   ;==>__ItemMod_FindItemByAgentID
 
 Func GwAu3_ItemMod_GetMaxItems()
 	Local $lOffset[4] = [0, 0x18, 0x40, 0xB8 + 0x8]
-	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "dword")
+	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "dword")
 	Return $lItemStructAddress[1]
 EndFunc   ;==>_ItemMod_GetMaxItems
 
@@ -404,14 +404,14 @@ Func GwAu3_ItemMod_GetItemArray()
     If $lMaxItems <= 0 Then Return
 
 	Local $lOffset[4] = [0, 0x18, 0x40, 0xB8]
-	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "dword")
+	Local $lItemStructAddress = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "dword")
 
 	Local $lItemArray[$lMaxItems + 1]
     Local $lPtr, $lCount = 0
     Local $lItemBasePtr = $lItemStructAddress[1]
     Local $lItemPtrBuffer = DllStructCreate("ptr[" & $lMaxItems & "]")
 
-    DllCall($mKernelHandle, "bool", "ReadProcessMemory", "handle", $mGWProcHandle, "ptr", $lItemBasePtr, "struct*", $lItemPtrBuffer, "ulong_ptr", 4 * $lMaxItems, "ulong_ptr*", 0)
+    DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", "handle", $g_h_GWProcess, "ptr", $lItemBasePtr, "struct*", $lItemPtrBuffer, "ulong_ptr", 4 * $lMaxItems, "ulong_ptr*", 0)
 
     For $i = 1 To $lMaxItems
         $lPtr = DllStructGetData($lItemPtrBuffer, 1, $i)

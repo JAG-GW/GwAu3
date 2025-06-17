@@ -1,11 +1,6 @@
 #include-once
 
 Func GwAu3_TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iItemID <= 0 Then
         GwAu3_Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
@@ -16,28 +11,23 @@ Func GwAu3_TradeMod_SellItem($iItemID, $iQuantity = 1, $iMerchantID = 0)
         Return False
     EndIf
 
-	DllStructSetData($g_mSellItem, 1, GwAu3_Memory_GetValue('CommandSellItem'))
-    DllStructSetData($g_mSellItem, 2, $iItemID)
-    DllStructSetData($g_mSellItem, 3, $iQuantity)
-    DllStructSetData($g_mSellItem, 4, $iMerchantID)
+	DllStructSetData($g_d_SellItem, 1, GwAu3_Memory_GetValue('CommandSellItem'))
+    DllStructSetData($g_d_SellItem, 2, $iItemID)
+    DllStructSetData($g_d_SellItem, 3, $iQuantity)
+    DllStructSetData($g_d_SellItem, 4, $iMerchantID)
 
-    GwAu3_Core_Enqueue($g_mSellItemPtr, 16)
+    GwAu3_Core_Enqueue($g_p_SellItem, 16)
 
     ; Record for tracking
-    $g_iLastTransactionType = $TRANSACTION_SELL
-    $g_iLastItemID = $iItemID
-    $g_iLastQuantity = $iQuantity
+    $g_i_LastTransactionType = $TRANSACTION_SELL
+    $g_i_LastItemID = $iItemID
+    $g_i_LastQuantity = $iQuantity
 
     GwAu3_Log_Debug("Selling item " & $iItemID & " (quantity: " & $iQuantity & ") to merchant " & $iMerchantID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func GwAu3_TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID = 0)
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iItemID <= 0 Then
         GwAu3_Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
@@ -53,30 +43,25 @@ Func GwAu3_TradeMod_BuyItem($iItemID, $iQuantity = 1, $iPrice = 0, $iMerchantID 
         Return False
     EndIf
 
-	DllStructSetData($g_mBuyItem, 1, GwAu3_Memory_GetValue('CommandBuyItem'))
-    DllStructSetData($g_mBuyItem, 2, $iItemID)
-    DllStructSetData($g_mBuyItem, 3, $iQuantity)
-    DllStructSetData($g_mBuyItem, 4, $iPrice)
-    DllStructSetData($g_mBuyItem, 5, $iMerchantID)
+	DllStructSetData($g_d_BuyItem, 1, GwAu3_Memory_GetValue('CommandBuyItem'))
+    DllStructSetData($g_d_BuyItem, 2, $iItemID)
+    DllStructSetData($g_d_BuyItem, 3, $iQuantity)
+    DllStructSetData($g_d_BuyItem, 4, $iPrice)
+    DllStructSetData($g_d_BuyItem, 5, $iMerchantID)
 
-    GwAu3_Core_Enqueue($g_mBuyItemPtr, 20)
+    GwAu3_Core_Enqueue($g_p_BuyItem, 20)
 
     ; Record for tracking
-    $g_iLastTransactionType = $TRANSACTION_BUY
-    $g_iLastItemID = $iItemID
-    $g_iLastQuantity = $iQuantity
-    $g_iLastPrice = $iPrice
+    $g_i_LastTransactionType = $TRANSACTION_BUY
+    $g_i_LastItemID = $iItemID
+    $g_i_LastQuantity = $iQuantity
+    $g_i_LastPrice = $iPrice
 
     GwAu3_Log_Debug("Buying item " & $iItemID & " (quantity: " & $iQuantity & ", price: " & $iPrice & ") from merchant " & $iMerchantID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func GwAu3_TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCrafterID = 0, $iFlags = 0)
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iRecipeID <= 0 Then
         GwAu3_Log_Error("Invalid recipe ID: " & $iRecipeID, "TradeMod", $g_h_EditText)
         Return False
@@ -94,132 +79,107 @@ Func GwAu3_TradeMod_CraftItem($iRecipeID, $iQuantity = 1, $aMaterials = 0, $iCra
         $pMaterialsPtr = Ptr($aMaterials)
     EndIf
 
-	DllStructSetData($g_mCraftItemEx, 1, GwAu3_Memory_GetValue('CommandCraftItemEx'))
-    DllStructSetData($g_mCraftItemEx, 2, $iRecipeID)
-    DllStructSetData($g_mCraftItemEx, 3, $iQuantity)
-    DllStructSetData($g_mCraftItemEx, 4, $pMaterialsPtr)
-    DllStructSetData($g_mCraftItemEx, 5, $iCrafterID)
-    DllStructSetData($g_mCraftItemEx, 6, $iFlags)
+	DllStructSetData($g_d_CraftItemEx, 1, GwAu3_Memory_GetValue('CommandCraftItemEx'))
+    DllStructSetData($g_d_CraftItemEx, 2, $iRecipeID)
+    DllStructSetData($g_d_CraftItemEx, 3, $iQuantity)
+    DllStructSetData($g_d_CraftItemEx, 4, $pMaterialsPtr)
+    DllStructSetData($g_d_CraftItemEx, 5, $iCrafterID)
+    DllStructSetData($g_d_CraftItemEx, 6, $iFlags)
 
-    GwAu3_Core_Enqueue($g_mCraftItemExPtr, 24)
+    GwAu3_Core_Enqueue($g_p_CraftItemEx, 24)
 
     ; Record for tracking
-    $g_iLastTransactionType = $TRANSACTION_CRAFT
-    $g_iLastItemID = $iRecipeID
-    $g_iLastQuantity = $iQuantity
+    $g_i_LastTransactionType = $TRANSACTION_CRAFT
+    $g_i_LastItemID = $iRecipeID
+    $g_i_LastQuantity = $iQuantity
 
     GwAu3_Log_Debug("Crafting item " & $iRecipeID & " (quantity: " & $iQuantity & ") with crafter " & $iCrafterID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func GwAu3_TradeMod_RequestQuote($iItemID)
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iItemID <= 0 Then
         GwAu3_Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
-	DllStructSetData($g_mRequestQuote, 1, GwAu3_Memory_GetValue('CommandRequestQuote'))
-    DllStructSetData($g_mRequestQuote, 2, $iItemID)
+	DllStructSetData($g_d_RequestQuote, 1, GwAu3_Memory_GetValue('CommandRequestQuote'))
+    DllStructSetData($g_d_RequestQuote, 2, $iItemID)
 
-    GwAu3_Core_Enqueue($g_mRequestQuotePtr, 8)
+    GwAu3_Core_Enqueue($g_p_RequestQuote, 8)
 
     ; Record for tracking
-    $g_iLastTransactionType = $TRANSACTION_REQUEST_QUOTE
-    $g_iLastItemID = $iItemID
+    $g_i_LastTransactionType = $TRANSACTION_REQUEST_QUOTE
+    $g_i_LastItemID = $iItemID
 
     GwAu3_Log_Debug("Requesting quote for item " & $iItemID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func GwAu3_TradeMod_RequestQuoteSell($iItemID)
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iItemID <= 0 Then
         GwAu3_Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
-	DllStructSetData($g_mRequestQuoteSell, 1, GwAu3_Memory_GetValue('CommandRequestQuoteSell'))
-    DllStructSetData($g_mRequestQuoteSell, 2, $iItemID)
+	DllStructSetData($g_d_RequestQuoteSell, 1, GwAu3_Memory_GetValue('CommandRequestQuoteSell'))
+    DllStructSetData($g_d_RequestQuoteSell, 2, $iItemID)
 
-    GwAu3_Core_Enqueue($g_mRequestQuoteSellPtr, 8)
+    GwAu3_Core_Enqueue($g_p_RequestQuoteSell, 8)
 
     ; Record for tracking
-    $g_iLastTransactionType = $TRANSACTION_REQUEST_QUOTE_SELL
-    $g_iLastItemID = $iItemID
+    $g_i_LastTransactionType = $TRANSACTION_REQUEST_QUOTE_SELL
+    $g_i_LastItemID = $iItemID
 
     GwAu3_Log_Debug("Requesting sell quote for item " & $iItemID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func GwAu3_TradeMod_TraderBuy()
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     ; Check if we have valid trader data
-    Local $iCostID = GwAu3_Memory_Read($g_mTraderCostID, 'dword')
-    Local $iCostValue = GwAu3_Memory_Read($g_mTraderCostValue, 'dword')
+    Local $iCostID = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
+    Local $iCostValue = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
 
     If $iCostID = 0 Then
         GwAu3_Log_Warning("No valid trader quote available", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
-	DllStructSetData($g_mTraderBuy, 1, GwAu3_Memory_GetValue('CommandTraderBuy'))
-    GwAu3_Core_Enqueue($g_mTraderBuyPtr, 4)
+	DllStructSetData($g_d_TraderBuy, 1, GwAu3_Memory_GetValue('CommandTraderBuy'))
+    GwAu3_Core_Enqueue($g_p_TraderBuy, 4)
 
     ; Record for tracking
-    $g_iLastTransactionType = $TRANSACTION_TRADER_BUY
-    $g_iLastItemID = $iCostID
-    $g_iLastPrice = $iCostValue
+    $g_i_LastTransactionType = $TRANSACTION_TRADER_BUY
+    $g_i_LastItemID = $iCostID
+    $g_i_LastPrice = $iCostValue
 
     GwAu3_Log_Debug("Executing trader buy for item " & $iCostID & " at price " & $iCostValue, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func GwAu3_TradeMod_TraderSell()
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     ; Check if we have valid trader data
-    Local $iCostID = GwAu3_Memory_Read($g_mTraderCostID, 'dword')
-    Local $iCostValue = GwAu3_Memory_Read($g_mTraderCostValue, 'dword')
+    Local $iCostID = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
+    Local $iCostValue = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
 
     If $iCostID = 0 Then
         GwAu3_Log_Warning("No valid trader quote available", "TradeMod", $g_h_EditText)
         Return False
     EndIf
 
-	DllStructSetData($g_mTraderSell, 1, GwAu3_Memory_GetValue('CommandTraderSell'))
-    GwAu3_Core_Enqueue($g_mTraderSellPtr, 4)
+	DllStructSetData($g_d_TraderSell, 1, GwAu3_Memory_GetValue('CommandTraderSell'))
+    GwAu3_Core_Enqueue($g_p_TraderSell, 4)
 
     ; Record for tracking
-    $g_iLastTransactionType = $TRANSACTION_TRADER_SELL
-    $g_iLastItemID = $iCostID
-    $g_iLastPrice = $iCostValue
+    $g_i_LastTransactionType = $TRANSACTION_TRADER_SELL
+    $g_i_LastItemID = $iCostID
+    $g_i_LastPrice = $iCostValue
 
     GwAu3_Log_Debug("Executing trader sell for item " & $iCostID & " at price " & $iCostValue, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
 Func GwAu3_TradeMod_SalvageItem($iItemID, $iSalvageKitID, $iSalvageType = $SALVAGE_TYPE_NORMAL)
-    If Not $g_bTradeModuleInitialized Then
-        GwAu3_Log_Error("TradeMod module not initialized", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If $iItemID <= 0 Then
         GwAu3_Log_Error("Invalid item ID: " & $iItemID, "TradeMod", $g_h_EditText)
         Return False
@@ -235,16 +195,16 @@ Func GwAu3_TradeMod_SalvageItem($iItemID, $iSalvageKitID, $iSalvageType = $SALVA
         Return False
     EndIf
 
-	DllStructSetData($g_mSalvage, 1, GwAu3_Memory_GetValue('CommandSalvage'))
-    DllStructSetData($g_mSalvage, 2, $iItemID)
-    DllStructSetData($g_mSalvage, 3, $iSalvageKitID)
-    DllStructSetData($g_mSalvage, 4, $iSalvageType)
+	DllStructSetData($g_d_Salvage, 1, GwAu3_Memory_GetValue('CommandSalvage'))
+    DllStructSetData($g_d_Salvage, 2, $iItemID)
+    DllStructSetData($g_d_Salvage, 3, $iSalvageKitID)
+    DllStructSetData($g_d_Salvage, 4, $iSalvageType)
 
-    GwAu3_Core_Enqueue($g_mSalvagePtr, 16)
+    GwAu3_Core_Enqueue($g_p_Salvage, 16)
 
     ; Record for tracking
-    $g_iLastTransactionType = 0 ; Salvage doesn't have a specific transaction type
-    $g_iLastItemID = $iItemID
+    $g_i_LastTransactionType = 0 ; Salvage doesn't have a specific transaction type
+    $g_i_LastItemID = $iItemID
 
     GwAu3_Log_Debug("Salvaging item " & $iItemID & " with kit " & $iSalvageKitID & " (type: " & $iSalvageType & ")", "TradeMod", $g_h_EditText)
     Return True

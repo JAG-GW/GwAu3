@@ -3,7 +3,7 @@
 #Region Party Context
 Func GwAu3_PartyMod_GetPartyContextPtr()
     Local $lOffset[3] = [0, 0x18, 0x4C]
-    Local $lPartyPtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, 'ptr')
+    Local $lPartyPtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, 'ptr')
     Return $lPartyPtr[1]
 EndFunc
 
@@ -198,13 +198,13 @@ Func GwAu3_PartyMod_GetMoraleInfo($aAgentID = -2, $aInfo = "")
     Local $lAgentID = GwAu3_AgentMod_ConvertID($aAgentID)
 
     Local $lOffset[4] = [0, 0x18, 0x2C, 0x638]
-    Local $lIndex = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+    Local $lIndex = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
 
     ReDim $lOffset[6]
     $lOffset[3] = 0x62C
     $lOffset[4] = 8 + 0xC * BitAND($lAgentID, $lIndex[1])
     $lOffset[5] = 0x18
-    Local $lReturn = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+    Local $lReturn = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
 
     If Not IsArray($lReturn) Or $lReturn[0] = 0 Then Return 0
 

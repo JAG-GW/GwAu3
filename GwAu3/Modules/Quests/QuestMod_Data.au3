@@ -8,7 +8,7 @@ Func GwAu3_QuestMod_GetQuestInfo($aQuestID, $aInfo = "")
 
 	For $i = 0 To $lSize
 		Local $lOffsetQuestLog[5] = [0, 0x18, 0x2C, 0x52C, 0x34 * $i]
-		Local $lQuestPtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffsetQuestLog, "long")
+		Local $lQuestPtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffsetQuestLog, "long")
 		If $lQuestPtr[1] = $aQuestID Then $lPtr = Ptr($lQuestPtr[0])
 	Next
 

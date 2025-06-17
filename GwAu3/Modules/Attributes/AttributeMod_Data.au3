@@ -86,12 +86,12 @@ Func GwAu3_AttributeMod_GetAttributeName($iAttributeID)
 EndFunc
 
 Func GwAu3_AttributeMod_GetLastModified()
-    Local $result[2] = [$g_iLastAttributeModified, $g_iLastAttributeValue]
+    Local $result[2] = [$g_i_LastAttributeModified, $g_i_LastAttributeValue]
     Return $result
 EndFunc
 
 Func GwAu3_AttributeMod_GetAttributePtr($aAttributeID)
-	Local $lAttributeStructAddress = $g_mAttributeInfo + (0x14 * $aAttributeID)
+	Local $lAttributeStructAddress = $g_p_AttributeInfo + (0x14 * $aAttributeID)
 	Return Ptr($lAttributeStructAddress)
 EndFunc
 
@@ -131,7 +131,7 @@ Func GwAu3_AttributeMod_GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $
 
     For $i = 0 To GwAu3_OtherMod_GetWorldInfo("PartyAttributeArraySize")
         $lOffset[4] = 0x43C * $i
-        $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+        $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
 
         If $lBuffer[1] == $lAgentID Then
             Local $lBaseAttrOffset = 0x43C * $i + 0x14 * $aAttributeID + 0x4
@@ -139,45 +139,45 @@ Func GwAu3_AttributeMod_GetPartyAttributeInfo($aAttributeID, $aHeroNumber = 0, $
             Switch $aInfo
                 Case "ID"
                     $lOffset[4] = $lBaseAttrOffset
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "BaseLevel", "LevelBase"
                     $lOffset[4] = $lBaseAttrOffset + 0x4
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "Level", "CurrentLevel"
                     $lOffset[4] = $lBaseAttrOffset + 0x8
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "DecrementPoints"
                     $lOffset[4] = $lBaseAttrOffset + 0xC
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "IncrementPoints"
                     $lOffset[4] = $lBaseAttrOffset + 0x10
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1]
                 Case "HasAttribute"
                     $lOffset[4] = $lBaseAttrOffset
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1] <> 0
                 Case "BonusLevel"
                     $lOffset[4] = $lBaseAttrOffset + 0x4
-                    Local $baseLevel = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)[1]
+                    Local $baseLevel = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)[1]
                     $lOffset[4] = $lBaseAttrOffset + 0x8
-                    Local $currentLevel = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)[1]
+                    Local $currentLevel = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)[1]
                     Return $currentLevel - $baseLevel
                 Case "IsMaxed"
                     $lOffset[4] = $lBaseAttrOffset + 0x8
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1] >= 12
                 Case "IsRaisable"
                     $lOffset[4] = $lBaseAttrOffset + 0x10
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1] > 0
                 Case "IsDecreasable"
                     $lOffset[4] = $lBaseAttrOffset + 0xC
-                    $lBuffer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+                    $lBuffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
                     Return $lBuffer[1] > 0
                 Case Else
                     Return 0

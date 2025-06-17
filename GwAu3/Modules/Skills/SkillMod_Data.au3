@@ -9,14 +9,14 @@ Func GwAu3_SkillMod_GetLastTarget()
 EndFunc
 
 Func GwAu3_SkillMod_GetSkillTimer()
-	Local $lExeStart = GwAu3_Memory_Read($g_mSkillTimer, 'dword')
-	Local $lTickCount = DllCall($mKernelHandle, 'dword', 'GetTickCount')[0]
+	Local $lExeStart = GwAu3_Memory_Read($g_p_SkillTimer, 'dword')
+	Local $lTickCount = DllCall($g_h_Kernel32, 'dword', 'GetTickCount')[0]
 	Return Int($lTickCount + $lExeStart, 1)
 EndFunc
 
 Func GwAu3_SkillMod_GetSkillPtr($aSkillID)
     If IsPtr($aSkillID) Then Return $aSkillID
-	Local $Skillptr = $g_mSkillBase + 0xA0 * $aSkillID
+	Local $Skillptr = $g_p_SkillBase + 0xA0 * $aSkillID
 	Return Ptr($Skillptr)
 EndFunc
 

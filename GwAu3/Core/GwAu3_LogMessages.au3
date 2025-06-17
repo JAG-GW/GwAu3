@@ -4,25 +4,25 @@
 #include <GuiEdit.au3>
 #include "GwAu3_Constants.au3"
 
-Func GwAu3_Log_Message($a_s_Message, $a_e_MsgType = $g_e_Log_MsgType_Info, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-    If $a_e_MsgType = $g_e_Log_MsgType_Debug And Not $g_b_DebugMode Then Return False
+Func GwAu3_Log_Message($a_s_Message, $a_e_MsgType = $GC_I_LOG_MSGTYPE_INFO, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+    If $a_e_MsgType = $GC_I_LOG_MSGTYPE_DEBUG And Not $g_b_DebugMode Then Return False
 
     Local $l_s_TypeText
     Local $l_x_Color
     Switch $a_e_MsgType
-        Case $g_e_Log_MsgType_Debug
+        Case $GC_I_LOG_MSGTYPE_DEBUG
             $l_s_TypeText = "DEBUG"
             $l_x_Color = 0xFFA500
-        Case $g_e_Log_MsgType_Info
+        Case $GC_I_LOG_MSGTYPE_INFO
             $l_s_TypeText = "INFO"
             $l_x_Color = 0x008000
-        Case $g_e_Log_MsgType_Warning
+        Case $GC_I_LOG_MSGTYPE_WARNING
             $l_s_TypeText = "WARNING"
             $l_x_Color = 0x00C8FF
-        Case $g_e_Log_MsgType_Error
+        Case $GC_I_LOG_MSGTYPE_ERROR
             $l_s_TypeText = "ERROR"
             $l_x_Color = 0x0000CC
-        Case $g_e_Log_MsgType_Critical
+        Case $GC_I_LOG_MSGTYPE_CRITICAL
             $l_s_TypeText = "CRITICAL"
             $l_x_Color = 0x0000FF
         Case Else
@@ -43,28 +43,28 @@ Func GwAu3_Log_Message($a_s_Message, $a_e_MsgType = $g_e_Log_MsgType_Info, $a_s_
 EndFunc
 
 Func GwAu3_Log_Debug($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $g_e_Log_MsgType_Debug, $a_s_Author, $a_h_EditText)
+	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_DEBUG, $a_s_Author, $a_h_EditText)
 EndFunc
 
 Func GwAu3_Log_Info($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $g_e_Log_MsgType_Info, $a_s_Author, $a_h_EditText)
+	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_INFO, $a_s_Author, $a_h_EditText)
 EndFunc
 
 Func GwAu3_Log_Warning($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $g_e_Log_MsgType_Warning, $a_s_Author, $a_h_EditText)
+	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_WARNING, $a_s_Author, $a_h_EditText)
 EndFunc
 
 Func GwAu3_Log_Error($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $g_e_Log_MsgType_Error, $a_s_Author, $a_h_EditText)
+	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_ERROR, $a_s_Author, $a_h_EditText)
 EndFunc
 
 Func GwAu3_Log_Critical($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $g_e_Log_MsgType_Critical, $a_s_Author, $a_h_EditText)
+	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_CRITICAL, $a_s_Author, $a_h_EditText)
 EndFunc
 
 Func GwAu3_Log_SetDebugMode($a_b_Enable = True)
     $g_b_DebugMode = $a_b_Enable
-    GwAu3_Log_Message("Debug Mode " & ($a_b_Enable ? "Enabled" : "Disabled"), $g_e_Log_MsgType_Info, "SetDebugMode")
+    GwAu3_Log_Message("Debug Mode " & ($a_b_Enable ? "Enabled" : "Disabled"), $GC_I_LOG_MSGTYPE_INFO, "SetDebugMode")
 EndFunc
 
 Func GwAu3_Log_GetCurrentTime()

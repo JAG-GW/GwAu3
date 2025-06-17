@@ -3,38 +3,38 @@
 ;~ Description: Internal use for BuyItem()
 Func GwAu3_OtherMod_GetMerchantItemsBase()
 	Local $lOffset[4] = [0, 0x18, 0x2C, 0x24]
-	Local $lReturn = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+	Local $lReturn = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
 	Return $lReturn[1]
 EndFunc   ;==>GetMerchantItemsBase
 
 ;~ Description: Internal use for BuyItem()
 Func GwAu3_OtherMod_GetMerchantItemsSize()
 	Local $lOffset[4] = [0, 0x18, 0x2C, 0x28]
-	Local $lReturn = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+	Local $lReturn = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
 	Return $lReturn[1]
 EndFunc   ;==>GetMerchantItemsSize
 
 ;~ Description: Returns current ping.
 Func GwAu3_OtherMod_GetPing()
-	Return GwAu3_Memory_Read($mPing)
+	Return GwAu3_Memory_Read($g_p_Ping)
 EndFunc   ;==>GwAu3_OtherMod_GetPing
 
 ;~ Description: Returns your characters name.
 Func GwAu3_OtherMod_GetCharname()
-	Return GwAu3_Memory_Read($mCharname, 'wchar[30]')
+	Return GwAu3_Memory_Read($g_p_CharName, 'wchar[30]')
 EndFunc   ;==>GwAu3_OtherMod_GetCharname
 
 ;~ Returns how long the current instance has been active, in milliseconds.
 Func GwAu3_OtherMod_GetInstanceUpTime()
 	Local $lOffset[4] = [0, 0x18, 0x8, 0x1AC]
-	Local $lTimer = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+	Local $lTimer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
 	Return $lTimer[1]
 EndFunc   ;==>GwAu3_OtherMod_GetInstanceUpTime
 
 #Region Game Context Related
 Func GwAu3_OtherMod_GetGameContextPtr()
     Local $lOffset[2] = [0, 0x18]
-    Local $lGamePtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "ptr")
+    Local $lGamePtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "ptr")
     Return $lGamePtr[1]
 EndFunc
 
@@ -92,7 +92,7 @@ EndFunc
 #Region World Context
 Func GwAu3_OtherMod_GetWorldContextPtr()
     Local $lOffset[3] = [0, 0x18, 0x2C]
-    Local $lWorldContextPtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset)
+    Local $lWorldContextPtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset)
     Return $lWorldContextPtr[1]
 EndFunc
 

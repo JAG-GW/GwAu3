@@ -3,7 +3,7 @@
 #Region Guild Context
 Func GwAu3_GuildMod_GetGuildContextPtr()
     Local $lOffset[3] = [0, 0x18, 0x3C]
-    Local $lGuildPtr = GwAu3_Memory_ReadPtr($mBasePointer, $lOffset, "ptr")
+    Local $lGuildPtr = GwAu3_Memory_ReadPtr($g_p_BasePointer, $lOffset, "ptr")
     Return $lGuildPtr[1]
 EndFunc
 

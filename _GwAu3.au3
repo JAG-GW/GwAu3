@@ -153,6 +153,4 @@
 #include <Word.au3>
 
 #include "GwAu3/GwAu3_Core.au3"
-#include "GwAu3/Commands/GwAu3_Packet.au3"
-#include "GwAu3/Commands/GwAu3_PerformAction.au3"
-#include "GwAu3/AddOns/GwAu3_AddOns.au3"
+#include "GwAu3/GwUpdater/GwAu3_Updater.au3"

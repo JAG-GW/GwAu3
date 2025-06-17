@@ -20,12 +20,12 @@ Func GwAu3_FriendMod_SetPlayerStatus($iStatus)
         Return True
     EndIf
 
-    DllStructSetData($g_mChangeStatus, 1, GwAu3_Memory_GetValue('CommandPlayerStatus'))
-    DllStructSetData($g_mChangeStatus, 2, $iStatus)
+    DllStructSetData($g_d_ChangeStatus, 1, GwAu3_Memory_GetValue('CommandPlayerStatus'))
+    DllStructSetData($g_d_ChangeStatus, 2, $iStatus)
 
-    GwAu3_Core_Enqueue($g_mChangeStatusPtr, 8)
+    GwAu3_Core_Enqueue($g_p_ChangeStatus, 8)
 
-    $g_iLastStatus = $iStatus
+    $g_i_LastStatus = $iStatus
 
     GwAu3_Log_Info("Changed player status to: " & GwAu3_FriendMod_GetFriendStatusName($iStatus), "FriendMod", $g_h_EditText)
     Return True
@@ -74,10 +74,10 @@ Func GwAu3_FriendMod_AddFriend($sCharacterName, $sAlias = "", $iFriendType = $FR
     Local $iNameSize = (StringLen($sCharacterName) + 1) * 2
     Local $iAliasSize = (StringLen($sAlias = "" ? $sCharacterName : $sAlias) + 1) * 2
 
-    Local $pNameMem = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $iNameSize, 'dword', 0x1000, 'dword', 0x40)
+    Local $pNameMem = DllCall($g_h_Kernel32, 'ptr', 'VirtualAllocEx', 'handle', $g_h_GWProcess, 'ptr', 0, 'ulong_ptr', $iNameSize, 'dword', 0x1000, 'dword', 0x40)
     $pNameMem = $pNameMem[0]
 
-    Local $pAliasMem = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $iAliasSize, 'dword', 0x1000, 'dword', 0x40)
+    Local $pAliasMem = DllCall($g_h_Kernel32, 'ptr', 'VirtualAllocEx', 'handle', $g_h_GWProcess, 'ptr', 0, 'ulong_ptr', $iAliasSize, 'dword', 0x1000, 'dword', 0x40)
     $pAliasMem = $pAliasMem[0]
 
     If $pNameMem = 0 Or $pAliasMem = 0 Then
@@ -91,20 +91,20 @@ Func GwAu3_FriendMod_AddFriend($sCharacterName, $sAlias = "", $iFriendType = $FR
     DllStructSetData($lNameStruct, 1, $sCharacterName)
     DllStructSetData($lAliasStruct, 1, $sAlias = "" ? $sCharacterName : $sAlias)
 
-    DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'ptr', $pNameMem, 'ptr', DllStructGetPtr($lNameStruct), 'int', $iNameSize, 'int', 0)
-    DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'ptr', $pAliasMem, 'ptr', DllStructGetPtr($lAliasStruct), 'int', $iAliasSize, 'int', 0)
+    DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'ptr', $pNameMem, 'ptr', DllStructGetPtr($lNameStruct), 'int', $iNameSize, 'int', 0)
+    DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'ptr', $pAliasMem, 'ptr', DllStructGetPtr($lAliasStruct), 'int', $iAliasSize, 'int', 0)
 
     Local $lVerifyStruct = DllStructCreate("wchar[20]")
-    DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'ptr', $pNameMem, 'ptr', DllStructGetPtr($lVerifyStruct), 'int', 40, 'int', 0)
+    DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'ptr', $pNameMem, 'ptr', DllStructGetPtr($lVerifyStruct), 'int', 40, 'int', 0)
 
-    DllStructSetData($g_mAddFriend, 1, GwAu3_Memory_GetValue('CommandAddFriend'))
-    DllStructSetData($g_mAddFriend, 2, $pNameMem)
-    DllStructSetData($g_mAddFriend, 3, $pAliasMem)
-    DllStructSetData($g_mAddFriend, 4, $iFriendType)
+    DllStructSetData($g_d_AddFriend, 1, GwAu3_Memory_GetValue('CommandAddFriend'))
+    DllStructSetData($g_d_AddFriend, 2, $pNameMem)
+    DllStructSetData($g_d_AddFriend, 3, $pAliasMem)
+    DllStructSetData($g_d_AddFriend, 4, $iFriendType)
 
-    GwAu3_Core_Enqueue($g_mAddFriendPtr, 16)
+    GwAu3_Core_Enqueue($g_p_AddFriend, 16)
 	Sleep(500)
-	DllCall($mKernelHandle, 'int', 'VirtualFreeEx', 'int', $mGWProcHandle, 'ptr', $pAliasMem, 'int', 0, 'dword', 0x8000)
+	DllCall($g_h_Kernel32, 'int', 'VirtualFreeEx', 'int', $g_h_GWProcess, 'ptr', $pAliasMem, 'int', 0, 'dword', 0x8000)
 EndFunc
 
 Func GwAu3_FriendMod_RemoveFriend($sNameOrAlias)
@@ -114,8 +114,8 @@ Func GwAu3_FriendMod_RemoveFriend($sNameOrAlias)
     EndIf
 
     ; Get array info
-    Local $lArrayDataPtr = GwAu3_Memory_Read($g_mFriendListPtr + 0x00, "ptr")
-    Local $lArraySize = GwAu3_Memory_Read($g_mFriendListPtr + 0x08, "dword")
+    Local $lArrayDataPtr = GwAu3_Memory_Read($g_p_FriendListPtr + 0x00, "ptr")
+    Local $lArraySize = GwAu3_Memory_Read($g_p_FriendListPtr + 0x08, "dword")
 
     If $lArrayDataPtr = 0 Or $lArraySize = 0 Then
         GwAu3_Log_Error("Friend array is empty or invalid", "FriendMod", $g_h_EditText)
@@ -148,16 +148,16 @@ Func GwAu3_FriendMod_RemoveFriend($sNameOrAlias)
 
     ; Read UUID
     Local $lUUIDBytes = DllStructCreate("byte[16]")
-    DllCall($mKernelHandle, 'int', 'ReadProcessMemory', 'int', $mGWProcHandle, 'ptr', $lFriendPtr + 0x8, 'ptr', DllStructGetPtr($lUUIDBytes), 'int', 16, 'int', '')
+    DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'ptr', $lFriendPtr + 0x8, 'ptr', DllStructGetPtr($lUUIDBytes), 'int', 16, 'int', '')
 
     ; Copy UUID to our structure
     For $i = 1 To 16
-        DllStructSetData($g_mRemoveFriend, 2, DllStructGetData($lUUIDBytes, 1, $i), $i)
+        DllStructSetData($g_d_RemoveFriend, 2, DllStructGetData($lUUIDBytes, 1, $i), $i)
     Next
 
     ; Allocate memory for alias in GW process
     Local $iAliasSize = (StringLen($lAlias) + 1) * 2
-    Local $pAliasMem = DllCall($mKernelHandle, 'ptr', 'VirtualAllocEx', 'handle', $mGWProcHandle, 'ptr', 0, 'ulong_ptr', $iAliasSize, 'dword', 0x1000, 'dword', 0x40)
+    Local $pAliasMem = DllCall($g_h_Kernel32, 'ptr', 'VirtualAllocEx', 'handle', $g_h_GWProcess, 'ptr', 0, 'ulong_ptr', $iAliasSize, 'dword', 0x1000, 'dword', 0x40)
     $pAliasMem = $pAliasMem[0]
 
     If $pAliasMem = 0 Then
@@ -168,17 +168,17 @@ Func GwAu3_FriendMod_RemoveFriend($sNameOrAlias)
     ; Write alias to GW memory
     Local $lAliasStruct = DllStructCreate("wchar[" & (StringLen($lAlias) + 1) & "]")
     DllStructSetData($lAliasStruct, 1, $lAlias)
-    DllCall($mKernelHandle, 'int', 'WriteProcessMemory', 'int', $mGWProcHandle, 'ptr', $pAliasMem, 'ptr', DllStructGetPtr($lAliasStruct), 'int', $iAliasSize, 'int', 0)
+    DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'ptr', $pAliasMem, 'ptr', DllStructGetPtr($lAliasStruct), 'int', $iAliasSize, 'int', 0)
 
     ; Set up the command
-    DllStructSetData($g_mRemoveFriend, 1, GwAu3_Memory_GetValue('CommandRemoveFriend'))
-    DllStructSetData($g_mRemoveFriend, 3, $pAliasMem)
-    DllStructSetData($g_mRemoveFriend, 4, 0)
+    DllStructSetData($g_d_RemoveFriend, 1, GwAu3_Memory_GetValue('CommandRemoveFriend'))
+    DllStructSetData($g_d_RemoveFriend, 3, $pAliasMem)
+    DllStructSetData($g_d_RemoveFriend, 4, 0)
 
-    GwAu3_Core_Enqueue($g_mRemoveFriendPtr, 24)
+    GwAu3_Core_Enqueue($g_p_RemoveFriend, 24)
 
     Sleep(500)
-    DllCall($mKernelHandle, 'int', 'VirtualFreeEx', 'int', $mGWProcHandle, 'ptr', $pAliasMem, 'int', 0, 'dword', 0x8000)
+    DllCall($g_h_Kernel32, 'int', 'VirtualFreeEx', 'int', $g_h_GWProcess, 'ptr', $pAliasMem, 'int', 0, 'dword', 0x8000)
 EndFunc
 
 Func GwAu3_FriendMod_AddIgnore($sCharacterName, $sAlias = "")
@@ -192,8 +192,8 @@ Func GwAu3_FriendMod_RemoveIgnore($sCharacterName)
     EndIf
 
     ; Get array info
-    Local $lArrayDataPtr = GwAu3_Memory_Read($g_mFriendListPtr + 0x00, "ptr")
-    Local $lArraySize = GwAu3_Memory_Read($g_mFriendListPtr + 0x08, "dword")
+    Local $lArrayDataPtr = GwAu3_Memory_Read($g_p_FriendListPtr + 0x00, "ptr")
+    Local $lArraySize = GwAu3_Memory_Read($g_p_FriendListPtr + 0x08, "dword")
 
     If $lArrayDataPtr = 0 Or $lArraySize = 0 Then
         GwAu3_Log_Error("Friend array is empty or invalid", "FriendMod", $g_h_EditText)
