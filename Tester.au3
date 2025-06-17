@@ -1,5 +1,5 @@
 #RequireAdmin
-#include "_GwAu3.au3"
+#include "GwAu3/_GwAu3.au3"
 
 Global Const $doLoadLoggedChars = True
 Opt("GUIOnEventMode", True)
@@ -73,7 +73,7 @@ Func GuiButtonHandler()
             GUICtrlSetState($GUIStartButton, $GUI_Disable)
 			GUICtrlSetState($GUIRefreshButton, $GUI_Disable)
             GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
-            WinSetTitle($MainGui, "", GwAu3_OtherMod_GetCharname() & " - Bot for test")
+            WinSetTitle($MainGui, "", GwAu3_player_GetCharname() & " - Bot for test")
             $BotRunning = True
             $Bot_Core_Initialized = True
 
