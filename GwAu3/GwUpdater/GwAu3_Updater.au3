@@ -127,7 +127,7 @@ Global Const $WINHTTP_QUERY_CONTENT_TYPE = 1
 #Region GwAu3_Updater_ScriptVars
 ; Path to config.ini
 Global $g_s_UpdaterConfigIni = @ScriptDir & "\GwAu3\GwUpdater\config.ini"
-Global $g_s_GwAu3Dir = @ScriptDir
+Global $g_s_GwAu3Dir = @ScriptDir & "\"
 
 ; Section names in INI-file
 Global $g_s_Section_Update = "Update"
@@ -228,7 +228,7 @@ Func GwAu3_Updater_CheckForGwAu3Updates($a_b_Verbose = True)
         If $l_b_DeleteFiles Then
             ; Perform removals
             For $i = 1 To $l_as_Deletion[0]
-                Local $l_s_File = $g_s_GwAu3Dir & $l_as_Deletion[$i]
+                Local $l_s_File = $g_s_GwAu3Dir & "\" & $l_as_Deletion[$i]
                 If FileExists($l_s_File) Then FileDelete($l_s_File)
                 IniDelete($g_s_UpdaterConfigIni, $g_s_Section_Hashes, StringReplace($l_as_Deletion[$i], "\", "~"))
                 $l_o_CachedHashes.Remove($l_as_Deletion[$i])
@@ -265,8 +265,9 @@ Func GwAu3_Updater_CheckForGwAu3Updates($a_b_Verbose = True)
     GwAu3_Updater_DownloadFiles($l_as_UpdateFiles, $l_as_UpdateSHAs)
 
     ; Restart current script with new file version and same privileges
-    Run(@AutoItExe & ' "' & @ScriptFullPath & '"')
-    Exit
+    ;~ Run(@AutoItExe & ' "' & @ScriptFullPath & '"')
+    ;~ Exit
+    Return
 EndFunc
 
 ;=================================================================
@@ -433,11 +434,17 @@ Func GwAu3_Updater_DownloadFiles($a_as_UpdateFiles, $a_as_UpdateSHAs)
         $l_s_SHA = $a_as_UpdateSHAs[$j]
         $l_s_Url = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $l_s_RelPath
         $l_i_FileSize = $l_ai_FileSizes[$j]
+
+        ; Replace "/" with "\" in relative filepath since Windows and GitHub use different delimiters for folders
+        $l_s_RelPath = StringReplace($l_s_RelPath, "/", "\")
         Local $l_s_DownloadDst = $g_s_GwAu3Dir & $l_s_RelPath
 
+        ; Create target directory if not present
+        Local $l_s_TargetDir = StringRegExpReplace($l_s_DownloadDst, "\\[^\\]+$", "")
+        DirCreate($l_s_TargetDir)
+
         ; Update the filename label
-        Local $l_sFileName = StringRegExpReplace($l_s_RelPath, "^.*\\", "")
-        GUICtrlSetData($l_h_Lbl, $l_sFileName)
+        GUICtrlSetData($l_h_Lbl, $l_s_RelPath)
 
         ; Start background download
         Local $l_h_Download = InetGet($l_s_Url, $l_s_DownloadDst, $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
