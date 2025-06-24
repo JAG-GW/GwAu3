@@ -894,3 +894,111 @@ Func GwAu3_Agent_GetBestTarget($a_i_Range = 1320)
     Next
     Return $l_i_BestTarget
 EndFunc   ;==>GetBestTarget
+
+#Region Visible Effect
+Func GwAu3_Agent_CountVisibleEffects($a_i_AgentID = -2)
+    Return VisibleEffect_Count($a_i_AgentID)
+EndFunc
+
+Func GwAu3_Agent_GetAllVisibleEffects($a_i_AgentID = -2)
+    Local $l_a_FullEffects = VisibleEffect_GetAll($a_i_AgentID)
+    Local $l_a_IDs[$l_a_FullEffects[0][0] + 1]
+    $l_a_IDs[0] = $l_a_FullEffects[0][0]
+
+    For $i = 1 To $l_a_IDs[0]
+        $l_a_IDs[$i] = $l_a_FullEffects[$i][2]
+    Next
+
+    Return $l_a_IDs
+EndFunc
+
+Func GwAu3_Agent_HasVisibleEffect($a_i_AgentID = -2, $a_i_EffectID = 0)
+    Local $l_a_Result = VisibleEffect_FindByID($a_i_AgentID, $a_i_EffectID)
+    Return $l_a_Result[0]
+EndFunc
+
+Func VisibleEffect_Count($a_i_AgentID = -2)
+    Local $l_p_AgentPtr = GwAu3_Agent_GetAgentPtr($a_i_AgentID)
+    If $l_p_AgentPtr = 0 Then Return 0
+
+    If GwAu3_Agent_GetAgentInfo($l_p_AgentPtr, "Type") <> 0xDB Then Return 0
+
+    Local $l_p_TList = $l_p_AgentPtr + 0x170
+    Local $l_a_Iterator = GwAu3_Utils_TList_CreateIterator($l_p_TList)
+
+    Local $l_i_Count = 0
+    Local $l_p_Current = GwAu3_Utils_TList_Iterator_Current($l_a_Iterator)
+
+    While $l_p_Current <> 0
+        $l_i_Count += 1
+        If Not GwAu3_Utils_TList_Iterator_Next($l_a_Iterator) Then ExitLoop
+        $l_p_Current = GwAu3_Utils_TList_Iterator_Current($l_a_Iterator)
+    WEnd
+
+    Return $l_i_Count
+EndFunc
+
+Func VisibleEffect_GetAll($a_i_AgentID = -2)
+    Local $l_a_Effects[101][4]
+    $l_a_Effects[0][0] = 0
+
+    Local $l_p_AgentPtr = GwAu3_Agent_GetAgentPtr($a_i_AgentID)
+    If $l_p_AgentPtr = 0 Then Return $l_a_Effects
+
+    If GwAu3_Agent_GetAgentInfo($l_p_AgentPtr, "Type") <> 0xDB Then Return $l_a_Effects
+
+    Local $l_p_TList = $l_p_AgentPtr + 0x170
+    Local $l_a_Iterator = GwAu3_Utils_TList_CreateIterator($l_p_TList)
+
+    Local $l_i_Count = 0
+    Local $l_p_Current = GwAu3_Utils_TList_Iterator_Current($l_a_Iterator)
+
+    While $l_p_Current <> 0 And $l_i_Count < 100
+        $l_i_Count += 1
+
+        $l_a_Effects[$l_i_Count][0] = $l_p_Current
+        $l_a_Effects[$l_i_Count][1] = GwAu3_Memory_Read($l_p_Current, "dword") ; unk
+        $l_a_Effects[$l_i_Count][2] = GwAu3_Memory_Read($l_p_Current + 0x4, "dword") ; id
+        $l_a_Effects[$l_i_Count][3] = GwAu3_Memory_Read($l_p_Current + 0x8, "dword") ; has_ended
+
+        If Not GwAu3_Utils_TList_Iterator_Next($l_a_Iterator) Then ExitLoop
+        $l_p_Current = GwAu3_Utils_TList_Iterator_Current($l_a_Iterator)
+    WEnd
+
+    $l_a_Effects[0][0] = $l_i_Count
+    ReDim $l_a_Effects[$l_i_Count + 1][4]
+
+    Return $l_a_Effects
+EndFunc
+
+Func VisibleEffect_FindByID($a_i_AgentID = -2, $a_i_EffectID = 0)
+    Local $l_a_Result[4] = [False, 0, 0, 0]
+
+    Local $l_p_AgentPtr = GwAu3_Agent_GetAgentPtr($a_i_AgentID)
+    If $l_p_AgentPtr = 0 Then Return $l_a_Result
+
+    If GwAu3_Agent_GetAgentInfo($l_p_AgentPtr, "Type") <> 0xDB Then Return $l_a_Result
+
+    Local $l_p_TList = $l_p_AgentPtr + 0x170
+    Local $l_a_Iterator = GwAu3_Utils_TList_CreateIterator($l_p_TList)
+
+    Local $l_p_Current = GwAu3_Utils_TList_Iterator_Current($l_a_Iterator)
+
+    While $l_p_Current <> 0
+        Local $l_i_ID = GwAu3_Memory_Read($l_p_Current + 0x4, "dword")
+
+        If $l_i_ID = $a_i_EffectID Then
+            $l_a_Result[0] = True
+            $l_a_Result[1] = $l_p_Current
+            $l_a_Result[2] = GwAu3_Memory_Read($l_p_Current, "dword") ; unk
+            $l_a_Result[3] = GwAu3_Memory_Read($l_p_Current + 0x8, "dword") ; has_ended
+            Return $l_a_Result
+        EndIf
+
+        If Not GwAu3_Utils_TList_Iterator_Next($l_a_Iterator) Then ExitLoop
+        $l_p_Current = GwAu3_Utils_TList_Iterator_Current($l_a_Iterator)
+    WEnd
+
+    Return $l_a_Result
+EndFunc
+#EndRegion
