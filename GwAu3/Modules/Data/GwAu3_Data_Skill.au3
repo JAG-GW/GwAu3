@@ -11,7 +11,7 @@ EndFunc
 Func GwAu3_Skill_GetSkillTimer()
     Local $l_i_ExeStart = GwAu3_Memory_Read($g_p_SkillTimer, 'dword')
     Local $l_i_TickCount = DllCall($g_h_Kernel32, 'dword', 'GetTickCount')[0]
-    Return Int($l_i_TickCount + $l_i_ExeStart, 1)
+    Return Int($l_i_TickCount + $l_i_ExeStart)
 EndFunc
 
 Func GwAu3_Skill_GetSkillPtr($a_v_SkillID)

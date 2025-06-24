@@ -1,40 +1,142 @@
-# GwAu3 (Guild Wars AutoIt 3) Framework
-- GwAu3 is a rewritten Gwa2, improved by Greg76, KleuTSchi, Logan and all other participants on the Jag-Gw community server
+# GwAu3 - Guild Wars AutoIt3 API
 
-## Branch Updates
-Potential Updates -> https://github.com/JAG-GW
+A comprehensive AutoIt3 API for automating and controlling Guild Wars.
 
-## GWA2 Current Version
-- Updated by MrJambix and Glob of Armbraces
+## 📋 Description
 
-## Structural Improvements
-- **Improved modular architecture**: The new version reorganizes features into more coherent and better separated modules
-- **Better code organization**: Grouping related functions into specific files to facilitate maintenance and evolution
+GwAu3 is an AutoIt3 library that provides a programming interface to interact with the Guild Wars game. It allows you to create bots, assistance tools, and automation applications for Guild Wars.
 
-## Technical Optimizations
-- **Memory pointer updates**: Adaptation to changes in the Guild Wars client memory structure
-- **Better data management**: More efficient retrieval of information via better organized memory structures
-- **More reliable memory scan**: Improvements to search patterns to locate game functions
+## ✨ Features
 
-## Core Components
-- **Gwa2_Core.au3**: Foundation for memory interaction and client manipulation
-- **Gwa2_Enqueue.au3**: Command queue management for in-game actions
-- **Gwa2_ExtraInfo.au3**: Advanced agent filtering and detection tools
-- **Gwa2_GetInfo.au3**: Comprehensive game state information retrieval
-- **Gwa2_Packet.au3**: Network packet construction and management
-- **Gwa2_PerformAction.au3**: User interface and character action control
+### Core
+- **Initialization**: Connection to Guild Wars process
+- **Memory**: Read/write game memory
+- **Scanner**: Pattern search in memory
+- **Updates**: Automatic update system from GitHub
 
-## Requirements
-- AutoIt v3.3.14.5 or higher
-- Guild Wars client
+### Commands
+- **Agent**: Targeting, interaction with NPCs and players
+- **Attributes**: Attribute points management
+- **Chat**: Send messages, whispers
+- **Friend**: Friend list and status management
+- **Party**: Party and heroes management
+- **Inventory**: Item manipulation
+- **Map**: Movement and travel
+- **Skills**: Skill usage
+- **Trade**: Buy/sell with merchants
+- ...
 
-## Best Practices
-- **Do not modify the core GwAu3 files**: To ensure compatibility with future updates, avoid modifying the files in the GwAu3 folder
-- **Create your own functions in GwAu3_AddOns.au3**: Implement your custom functions and routines in a separate GwAu3_AddOns.au3 file
-- **Import both core and custom files**: Include both the core GwAu3 files and your custom GwAu3_AddOns.au3 in your scripts
+### Data
+- **Agent**: Game entity information
+- **Guild**: Guild data
+- **Inventory**: Inventory management
+- **Map**: Zone information
+- **Party**: Party composition and states
+- **Quest**: Quest tracking
+- **Skill**: Skills database
+- ...
 
-## Contribution
-Contributions to this repository are welcome. If you have additional headers or improvements, please feel free to submit a pull request or open an issue.
+## 🚀 Installation
 
-## License
+1. **Prerequisites**
+   - AutoIt3 v3.3.16.1 or higher (32-bit)
+   - Guild Wars installed
+   - Windows 7/8/10/11
+
+2. **Installation**
+   ```
+   1. Download the project
+   2. Ensure all files are in the same folder
+   3. Launch Guild Wars
+   4. Run your AutoIt3 script
+   ```
+
+## 💻 Usage
+
+### Basic Example
+
+```autoit
+#include "GwAu3_Core.au3"
+
+; Initialize with character name
+GwAu3_Core_Initialize("Character Name")
+
+; Or initialize with process PID
+; GwAu3_Core_Initialize($ProcessID)
+
+; Usage examples
+Local $l_i_MyID = GwAu3_Agent_GetMyID()
+Local $l_s_CharName = GwAu3_Player_GetCharname()
+Local $l_i_MapID = GwAu3_Map_GetCharacterInfo("MapID")
+
+; Movement
+GwAu3_Map_Move(1000, -500)
+
+; Targeting
+GwAu3_Agent_ChangeTarget($TargetID)
+
+; Use a skill
+GwAu3_Skill_UseSkill(1) ; Uses skill 1
+```
+
+## 📚 Module Documentation
+
+### Core
+- `GwAu3_Core_Initialize($CharacterName)` : Initialize connection
+- `GwAu3_Core_SendPacket(...)` : Send packets to server
+- `GwAu3_Core_Enqueue(...)` : Queue commands
+
+### Agent
+- `GwAu3_Agent_GetMyID()` : Returns your character's ID
+- `GwAu3_Agent_ChangeTarget($AgentID)` : Target an agent
+- `GwAu3_Agent_GetAgentInfo($AgentID, $Info)` : Get agent information
+
+### Map
+- `GwAu3_Map_Move($X, $Y)` : Move character
+- `GwAu3_Map_TravelTo($MapID)` : Travel to a zone
+- `GwAu3_Map_GetCharacterInfo($Info)` : Current zone information
+
+### Inventory
+- `GwAu3_Item_UseItem($Item)` : Use an item
+- `GwAu3_Item_MoveItem($Item, $Bag, $Slot)` : Move an item
+- `GwAu3_Item_GetBagInfo($BagNumber, $Info)` : Bag information
+
+### Skills
+- `GwAu3_Skill_UseSkill($SkillSlot)` : Use a skill
+- `GwAu3_Skill_GetSkillInfo($SkillID, $Info)` : Skill information
+
+## ⚙️ Configuration
+
+### Automatic Updates
+
+The `UpdaterConfig.ini` file allows you to configure updates:
+
+```ini
+[Update]
+Enabled=1
+Owner=JAG-GW
+Repo=GwAu3
+Branch=main
+```
+
+## ⚠️ Warnings
+
+- **Use at your own risk**: Using bots may violate Guild Wars Terms of Service
+- **32-bit mode required**: AutoIt3 must be run in 32-bit (x86) mode
+- **Antivirus**: Some antivirus software may detect scripts as potential threats
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Improve documentation
+
+## 📄 License
 This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Guild Wars community
+- AutoIt3 developers
+- All project contributors

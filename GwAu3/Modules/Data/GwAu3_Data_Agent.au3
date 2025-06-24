@@ -347,14 +347,20 @@ Func GwAu3_Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
             Return GwAu3_Memory_Read($l_p_AgentPtr + 0x15C, "dword[4]")
         Case "InSpiritRange"
             Return GwAu3_Memory_Read($l_p_AgentPtr + 0x16C, "dword")
+
+
 		Case "VisibleEffectsPtr"
-            Return GwAu3_Memory_Read($l_p_AgentPtr + 0x170, "ptr")
-        Case "VisibleEffects"
-            Return GwAu3_Memory_Read($l_p_AgentPtr + 0x170, "dword")
-        Case "VisibleEffectsID"
-            Return GwAu3_Memory_Read($l_p_AgentPtr + 0x174, "dword")
-        Case "VisibleEffectsHasEnded"
-            Return GwAu3_Memory_Read($l_p_AgentPtr + 0x178, "dword")
+			Return $l_p_AgentPtr + 0x174
+		Case "VisibleEffectsPrevLink"
+			Return GwAu3_Memory_Read($l_p_AgentPtr + 0x174, "ptr")
+		Case "VisibleEffectsNextNode"
+			Local $l_p_Next = GwAu3_Memory_Read($l_p_AgentPtr + 0x178, "ptr")
+			Return BitAND($l_p_Next, 0xFFFFFFFE)
+		Case "VisibleEffectCount"
+			Return VisibleEffect_Count($a_i_AgentID)
+		Case "HasVisibleEffects"
+			Return VisibleEffect_Count($a_i_AgentID) > 0
+
         Case "h017C"
             Return GwAu3_Memory_Read($l_p_AgentPtr + 0x17C, "dword")
 
@@ -578,18 +584,6 @@ Func GwAu3_Agent_GetAgentEquimentInfo($a_i_AgentID = -2, $a_s_Info = "")
 		Case "ItemID_CostumeHead"
 			Return GwAu3_Memory_Read($l_p_AgentPtr + 0xD4, "dword")
 	EndSwitch
-	Return 0
-EndFunc
-
-Func GwAu3_Agent_GetAgentVisibleEffectInfo($a_i_AgentID = -2, $a_s_Info = "")
-	Local $l_p_AgentPtr = GwAu3_Agent_GetAgentInfo($a_i_AgentID, "VisibleEffectsPtr")
-    If $l_p_AgentPtr = 0 Or $a_s_Info = "" Then Return 0
-
-    Switch $a_s_Info
-        Case "" ; dummy case to avoid syntax error
-            Sleep(100)
-	EndSwitch
-
 	Return 0
 EndFunc
 

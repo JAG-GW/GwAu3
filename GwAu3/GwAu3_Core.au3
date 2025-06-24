@@ -69,7 +69,7 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     GwAu3_Scanner_AddPattern('Salvage','33C58945FC8B45088945F08B450C8945F48B45108945F88D45EC506A10C745EC76', -0xA, 'Func')
     GwAu3_Scanner_AddPattern('SalvageGlobal', '8B4A04538945F48B4208', 0x1, 'Ptr')
     ; Agent patterns
-    GwAu3_Scanner_AddPattern('AgentBase', 'FF501083C6043BF775E2', -0x3, 'Ptr')
+    GwAu3_Scanner_AddPattern('AgentBase', '8B0C9085C97419', -0x3, 'Ptr')
     GwAu3_Scanner_AddPattern('ChangeTarget', '3BDF0F95', -0x86, 'Func')
     GwAu3_Scanner_AddPattern('CurrentTarget', '83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCC55', -0xE, 'Ptr')
     GwAu3_Scanner_AddPattern('MyID', '83EC08568BF13B15', -0x3, 'Ptr')
