@@ -109,4 +109,8 @@ Global $g_f_LastMoveX = 0
 Global $g_f_LastMoveY = 0
 Global $g_f_ClickCoordsX = 0
 Global $g_f_ClickCoordsY = 0
+
+;UI
+Global $g_d_EnterMission = DllStructCreate('ptr')
+Global $g_p_EnterMission = DllStructGetPtr($g_d_EnterMission)
 #EndRegion Global Variables
