@@ -135,9 +135,13 @@ Global $g_s_Section_Hashes = "Hashes"
 
 ; Read GitHub repo details from [Update]
 Global $g_b_AutoUpdate = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Enabled", "1") = "1"
+Global $g_b_Verbose = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Verbose", "1") = "1"
 Global $g_s_Owner = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Owner", "myUser")
 Global $g_s_Repo = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Repo", "myRepo")
 Global $g_s_Branch = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Branch", "main")
+
+; Add files as needed, e.g. [n, "file1", "file2", ...], use relative paths and forward "/"
+Global $g_as_IgnoredFiles[2] = [1, "GwAu3/Core/config.ini"]
 #EndRegion GwAu3_Updater_ScriptVars
 
 #Region GwAu3_Updater_Functions
@@ -146,7 +150,7 @@ Global $g_s_Branch = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Branch
 ; them upon confirmation
 ; Return 0 = Error, 1 = No updates, 2 = Update cancelled by user
 ;=================================================================
-Func GwAu3_Updater_CheckForGwAu3Updates($a_b_Verbose = True)
+Func GwAu3_Updater_CheckForGwAu3Updates()
     If Not $g_b_AutoUpdate Then Return 2
 
     ; Load WinHttp.dll
@@ -212,8 +216,8 @@ Func GwAu3_Updater_CheckForGwAu3Updates($a_b_Verbose = True)
 
     If $l_as_Deletion[0] > 0 Then
         ; Decide whether to delete, silent mode = always delete
-        Local $l_b_DeleteFiles = Not $a_b_Verbose
-        If $a_b_Verbose Then
+        Local $l_b_DeleteFiles = Not $g_b_Verbose
+        If $g_b_Verbose Then
             ; Verbose mode, delete only if user confirms
             Local $l_s_DeleteMsg = "Tracked file/s removed upstream:" & @CRLF & @CRLF
             For $i = 1 To $l_as_Deletion[0]
@@ -242,6 +246,7 @@ Func GwAu3_Updater_CheckForGwAu3Updates($a_b_Verbose = True)
     Local $l_s_RelPath, $l_s_CachedSHA, $l_s_RemoteSHA
     For $i = 0 To UBound($l_as_Tree) - 1 Step 2
         $l_s_RelPath = $l_as_Tree[$i]
+        If GwAu3_Updater_IsIgnoredFile($l_s_RelPath) Then ContinueLoop
 		$l_s_RemoteSHA = StringUpper($l_as_Tree[$i + 1])
 		If $l_o_CachedHashes.Exists($l_s_RelPath) Then
         	$l_s_CachedSHA = $l_o_CachedHashes.Item($l_s_RelPath)
@@ -257,11 +262,12 @@ Func GwAu3_Updater_CheckForGwAu3Updates($a_b_Verbose = True)
     Next
     If $l_as_UpdateFiles[0]=0 Then Return 1
 
-    If $a_b_Verbose Then
+    If $g_b_Verbose Then
         ; verbose mode: prompt and abort if they decline
         If MsgBox(4 + 32, "GwAu3-Updater - Update/s Available", $l_as_UpdateFiles[0] & " update/s available. Update now?") <> 6 Then Return 2
     EndIf
 
+    GwAu3_Log_Info("Starting download, please wait...", "GwAu3", $g_h_EditText)
     GwAu3_Updater_DownloadFiles($l_as_UpdateFiles, $l_as_UpdateSHAs)
 
     ; Restart current script with new file version and same privileges
@@ -313,6 +319,16 @@ Func GwAu3_Updater_InitializeHashCache()
         GwAu3_Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
     Next
     MsgBox(64, "Initialized", "Wrote " & $l_as_Files[0] & " entries into [" & $g_s_Section_Hashes & "]")
+EndFunc
+
+;=================================================================
+; Check if file is on ignore list
+;=================================================================
+Func GwAu3_Updater_IsIgnoredFile($a_s_Path)
+    For $i = 1 To $g_as_IgnoredFiles[0]
+        If $a_s_Path = $g_as_IgnoredFiles[$i] Then Return True
+    Next
+    Return False
 EndFunc
 
 ;=================================================================

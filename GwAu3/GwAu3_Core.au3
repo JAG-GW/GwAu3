@@ -11,6 +11,16 @@ EndIf
 
 #Region Initialization
 Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
+	GwAu3_Log_Info("Checking for updates...", "GwAu3", $g_h_EditText)
+	Local $l_i_UpdateStatus = GwAu3_Updater_CheckForGwAu3Updates()
+	Switch $l_i_UpdateStatus
+		Case 0
+			GwAu3_Log_Info("Encountered an error while checking for updates", "GwAu3", $g_h_EditText)
+		Case 1
+			GwAu3_Log_Info("No updates available", "GwAu3", $g_h_EditText)
+		Case 2
+			GwAu3_Log_Info("Update has been cancelled", "GwAu3", $g_h_EditText)
+	EndSwitch
 	GwAu3_Log_Info("Initializing...", "GwAu3", $g_h_EditText)
     ; Open process
     If IsString($a_s_GW) Then
@@ -289,7 +299,7 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 
     If $a_b_ChangeTitle Then WinSetTitle($g_h_GWWindow, '', 'Guild Wars - ' & GwAu3_Player_GetCharname())
 
-    GwAu3_Log_Info("End of Initialization.", "GwAu3", $g_h_EditText)
+    GwAu3_Log_Info("End of Initialization", "GwAu3", $g_h_EditText)
     Return $g_h_GWWindow
 EndFunc
 #EndRegion Initialization
