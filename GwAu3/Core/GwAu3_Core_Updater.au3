@@ -126,7 +126,7 @@ Global Const $WINHTTP_QUERY_CONTENT_TYPE = 1
 
 #Region GwAu3_Updater_ScriptVars
 ; Path to config.ini
-Global $g_s_UpdaterConfigIni = @ScriptDir & "\GwAu3\GwUpdater\config.ini"
+Global $g_s_UpdaterConfigIni = @ScriptDir & "\GwAu3\Core\config.ini"
 Global $g_s_GwAu3Dir = @ScriptDir & "\"
 
 ; Section names in INI-file

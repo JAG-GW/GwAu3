@@ -9,7 +9,6 @@ If @AutoItX64 Then
     Exit
 EndIf
 
-
 #Region Initialization
 Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	GwAu3_Log_Info("Initializing...", "GwAu3", $g_h_EditText)
