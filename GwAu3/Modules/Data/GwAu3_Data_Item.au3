@@ -421,7 +421,8 @@ EndFunc   ;==>GetItemArray
 
 ;~ Description: Returns modstruct of an item.
 Func GwAu3_Item_GetModStruct($a_v_Item)
-    If GwAu3_Item_GetItemInfoByItemID($a_v_Item, "ModStruct") = 0 Then Return
-    Return GwAu3_Memory_Read(GwAu3_Item_GetItemInfoByItemID($a_v_Item, "ModStruct"), 'Byte[' & GwAu3_Item_GetItemInfoByItemID($a_v_Item, "ModStructSize") * 4 & ']')
-EndFunc   ;==>GetModStruct
+    If Not IsPtr($a_v_Item) Then $a_v_Item= GwAu3_Item_GetItemPtr($a_v_Item)
+    If GwAu3_Item_GetItemInfoByPtr($a_v_Item, "ModStruct") = 0 Then Return
+    Return GwAu3_Memory_Read(GwAu3_Item_GetItemInfoByPtr($a_v_Item, "ModStruct"), 'Byte[' & GwAu3_Item_GetItemInfoByPtr($a_v_Item, "ModStructSize") * 4 & ']')
+EndFunc   ;==>GwAu3_Item_GetModStruct
 #EndRegion Item Context

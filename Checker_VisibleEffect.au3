@@ -1,5 +1,3 @@
-#include-once
-
 #RequireAdmin
 #include "GwAu3/_GwAu3.au3"
 
@@ -9,11 +7,12 @@ Opt("GUICloseOnESC", False)
 Opt("ExpandVarStrings", 1)
 
 #Region Declarations
-Global $charName  = ""
+Global $g_s_MainCharName  = ""
 Global $ProcessID = ""
 Global $BotRunning = False
 Global $Bot_Core_Initialized = False
 Global Const $BotTitle = "TList VisibleEffects Tester"
+Global $g_bAutoStart = False  ; Flag for auto-start
 
 ; Extended effects dictionary
 Global $g_EffectNames[1000][3] ; [ID][Name][Type]
@@ -24,6 +23,15 @@ Global $g_a_LastEffects[1] = [0]
 Global $g_i_TotalScans = 0
 Global $g_i_TotalEffectsDetected = 0
 #EndRegion Declaration
+
+; Process command line arguments
+For $i = 1 To $CmdLine[0]
+    If $CmdLine[$i] = "-character" And $i < $CmdLine[0] Then
+        $g_s_MainCharName = $CmdLine[$i + 1]
+        $g_bAutoStart = True
+        ExitLoop
+    EndIf
+Next
 
 #Region ### START Koda GUI section ### Form=
 $MainGui = GUICreate($BotTitle, 900, 700, -1, -1, -1, BitOR($WS_EX_TOPMOST,$WS_EX_WINDOWEDGE))
@@ -49,10 +57,10 @@ GUICtrlSetFont(-1, 9, 600)
 $lblChar = GUICtrlCreateLabel("Character:", 25, 85, 60, 20)
 Global $GUINameCombo
 If $doLoadLoggedChars Then
-    $GUINameCombo = GUICtrlCreateCombo($charName, 90, 82, 200, 25, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL))
+    $GUINameCombo = GUICtrlCreateCombo($g_s_MainCharName, 90, 82, 200, 25, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL))
     GUICtrlSetData(-1, GwAu3_Scanner_GetLoggedCharNames())
 Else
-    $GUINameCombo = GUICtrlCreateInput("Character name", 90, 82, 200, 25)
+    $GUINameCombo = GUICtrlCreateInput($g_s_MainCharName, 90, 82, 200, 25)
 EndIf
 
 $GUIStartButton = GUICtrlCreateButton("Initialize", 25, 115, 110, 35, 0x0001)
@@ -156,37 +164,41 @@ Global $g_i_MonitorInterval = 250
 Global $g_a_UniqueEffects[1000]
 Global $g_i_UniqueCount = 0
 
+Func StartBot()
+    Local $g_s_MainCharName = GUICtrlRead($GUINameCombo)
+    If $g_s_MainCharName=="" Then
+        If GwAu3_Core_Initialize(ProcessExists("gw.exe"), True) = 0 Then
+            MsgBox(0, "Error", "Guild Wars is not running.")
+            _Exit()
+        EndIf
+    Else
+        If GwAu3_Core_Initialize($g_s_MainCharName, True) = 0 Then
+            MsgBox(0, "Error", "Could not find character: '"&$g_s_MainCharName&"'")
+            _Exit()
+        EndIf
+    EndIf
+
+    GUICtrlSetState($GUIStartButton, $GUI_Disable)
+    GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
+    WinSetTitle($MainGui, "", GwAu3_player_GetCharname() & " - TList Monitor")
+    $BotRunning = True
+    $Bot_Core_Initialized = True
+
+    GUICtrlSetColor($lblStatusIndicator, 0x27AE60)
+    GUICtrlSetData($lblActivityIndicator, "Active")
+
+    Out("╔══════════════════════════════════════╗", 0x3498DB)
+    Out("   TList VisibleEffects Monitor", 0x3498DB)
+    Out("╚══════════════════════════════════════╝", 0x3498DB)
+    Out("Character: " & GwAu3_player_GetCharname(), 0x27AE60)
+    Out("Implementation: C++ TList/TLink structure", 0x95A5A6)
+    Out("Ready to monitor effects!", 0x27AE60)
+EndFunc
+
 Func GuiButtonHandler()
     Switch @GUI_CtrlId
 		Case $GUIStartButton
-            Local $charName = GUICtrlRead($GUINameCombo)
-            If $charName=="" Then
-                If GwAu3_Core_Initialize(ProcessExists("gw.exe"), True) = 0 Then
-                    MsgBox(0, "Error", "Guild Wars is not running.")
-                    _Exit()
-                EndIf
-            Else
-                If GwAu3_Core_Initialize($CharName, True) = 0 Then
-                    MsgBox(0, "Error", "Could not find character: '"&$CharName&"'")
-                    _Exit()
-                EndIf
-            EndIf
-
-            GUICtrlSetState($GUIStartButton, $GUI_Disable)
-            GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
-            WinSetTitle($MainGui, "", GwAu3_player_GetCharname() & " - TList Monitor")
-            $BotRunning = True
-            $Bot_Core_Initialized = True
-
-            GUICtrlSetColor($lblStatusIndicator, 0x27AE60)
-            GUICtrlSetData($lblActivityIndicator, "Active")
-
-            Out("╔══════════════════════════════════════╗", 0x3498DB)
-            Out("   TList VisibleEffects Monitor", 0x3498DB)
-            Out("╚══════════════════════════════════════╝", 0x3498DB)
-            Out("Character: " & GwAu3_player_GetCharname(), 0x27AE60)
-            Out("Implementation: C++ TList/TLink structure", 0x95A5A6)
-            Out("Ready to monitor effects!", 0x27AE60)
+            StartBot()
 
         Case $GUIRefreshButton
             GUICtrlSetData($GUINameCombo, "")
@@ -246,6 +258,7 @@ EndFunc
 
 Out("TList VisibleEffects Tester", 0x3498DB)
 Out("Ready to initialize...", 0x95A5A6)
+GwAu3_Core_AutoStart()
 
 While Not $BotRunning
     Sleep(100)

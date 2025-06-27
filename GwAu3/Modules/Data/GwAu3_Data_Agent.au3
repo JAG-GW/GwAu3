@@ -698,13 +698,13 @@ Func GwAu3_Agent_GetAgentEffectInfo($a_i_AgentID = -2, $a_i_SkillID = 0, $a_s_In
             Return GwAu3_Memory_Read($l_p_EffectPtr + 0x10, "float")
         Case "Timestamp"
             Return GwAu3_Memory_Read($l_p_EffectPtr + 0x14, "dword")
-        Case "TimeElapsed"
-            Local $l_i_Timestamp = GwAu3_Memory_Read($l_p_EffectPtr + 0x14, "dword")
-            Return _Skill_GetSkillTimer() - $l_i_Timestamp
-        Case "TimeRemaining"
-            Local $l_i_Timestamp = GwAu3_Memory_Read($l_p_EffectPtr + 0x14, "dword")
-            Local $l_i_Duration = GwAu3_Memory_Read($l_p_EffectPtr + 0x10, "float")
-            Return $l_i_Duration * 1000 - (_Skill_GetSkillTimer() - $l_i_Timestamp)
+		Case "TimeElapsed"
+			Local $l_i_Timestamp = GwAu3_Memory_Read($l_p_EffectPtr + 0x14, "dword")
+			Return BitAND(GwAu3_Skill_GetSkillTimer() - $l_i_Timestamp, 0xFFFFFFFF)
+		Case "TimeRemaining"
+			Local $l_i_Timestamp = GwAu3_Memory_Read($l_p_EffectPtr + 0x14, "dword")
+			Local $l_i_Duration = GwAu3_Memory_Read($l_p_EffectPtr + 0x10, "float")
+			Return $l_i_Duration * 1000 - BitAND(GwAu3_Skill_GetSkillTimer() - $l_i_Timestamp, 0xFFFFFFFF)
         Case "HasEffect"
             Return True
         Case Else
@@ -1002,3 +1002,80 @@ Func VisibleEffect_FindByID($a_i_AgentID = -2, $a_i_EffectID = 0)
     Return $l_a_Result
 EndFunc
 #EndRegion
+
+Func GetAgents($aAgentID = -2, $aRange = 1320, $aType = 0, $aReturnMode = 0, $aCustomFilter = "")
+    ; Variables for tracking
+    Local $lCount = 0
+    Local $lClosestAgent = 0
+    Local $lClosestDistance = 999999
+    Local $lFarthestAgent = 0
+    Local $lFarthestDistance = 0
+
+    ; Get the coordinates of the reference agent
+    Local $lRefID = GwAu3_Agent_ConvertID($aAgentID)
+    Local $lRefX = GwAu3_Agent_GetAgentInfo($aAgentID, "X")
+    Local $lRefY = GwAu3_Agent_GetAgentInfo($aAgentID, "Y")
+
+    ; Get the agent array based on the type
+    Local $lAgentArray
+    If $aType > 0 Then
+        $lAgentArray = GwAu3_Agent_GetAgentArray($aType)
+    Else
+        $lAgentArray = GwAu3_Agent_GetAgentArray()
+    EndIf
+
+    ; If no agents found, return 0
+    If Not IsArray($lAgentArray) Or $lAgentArray[0] = 0 Then
+        Return 0
+    EndIf
+
+    ; Process each agent
+    For $i = 1 To $lAgentArray[0]
+        Local $lAgentPtr = $lAgentArray[$i]
+        Local $lAgentID = GwAu3_Agent_GetAgentInfo($lAgentPtr, "ID")
+
+        ; Ignore the reference agent
+        If $lAgentID = $lRefID Then ContinueLoop
+
+        ; Calculate the distance to the reference agent (not the player)
+        Local $lAgentX = GwAu3_Agent_GetAgentInfo($lAgentPtr, "X")
+        Local $lAgentY = GwAu3_Agent_GetAgentInfo($lAgentPtr, "Y")
+        Local $lDistance = Sqrt(($lAgentX - $lRefX) ^ 2 + ($lAgentY - $lRefY) ^ 2)
+
+        ; Ignore if outside the reference agent's range
+        If $lDistance > $aRange Then ContinueLoop
+
+        ; Apply the custom filter
+		If $aCustomFilter <> "" Then
+            Local $lResult = Call($aCustomFilter, $lAgentPtr)
+            If Not $lResult Then ContinueLoop
+        EndIf
+
+        ; Increment the counter
+        $lCount += 1
+
+        ; Update the closest agent
+        If $lDistance < $lClosestDistance Then
+            $lClosestDistance = $lDistance
+            $lClosestAgent = $lAgentPtr
+        EndIf
+
+        ; Update the farthest agent
+        If $lDistance > $lFarthestDistance Then
+            $lFarthestDistance = $lDistance
+            $lFarthestAgent = $lAgentPtr
+        EndIf
+    Next
+
+    ; Return the result based on the mode
+    Switch $aReturnMode
+        Case 0 ; Number of agents
+            Return $lCount
+        Case 1 ; Closest Agent
+            Return $lClosestAgent
+        Case 2 ; Farthest Agent
+            Return $lFarthestAgent
+        Case 3 ; Closest Distance
+            Return $lClosestDistance
+    EndSwitch
+EndFunc

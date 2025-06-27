@@ -61,6 +61,8 @@ Func _($a_s_ASM)
 	Local $l_s_OpCode
 
 	Select
+		Case StringLeft($a_s_ASM, 1) = ";"
+            Return
 		Case StringInStr($a_s_ASM, ' -> ')
 			Local $l_s_Split = StringSplit($a_s_ASM, ' -> ', 1)
 			$l_s_OpCode = StringReplace($l_s_Split[2], ' ', '')
@@ -1666,7 +1668,7 @@ Func GwAu3_Assembler_CreateScanProcedure($a_p_GwBase)
     _('ScanLoop:')
     _('inc ecx')
     _('mov al,byte[ecx]')
-    _('mov edx,' & $g_amx2_Patterns[1][0]) ; Start with first pattern
+    _('mov edx,' & $g_amx2_Patterns[1][0])
 
     _('ScanInnerLoop:')
     _('mov ebx,dword[edx]')
@@ -1745,6 +1747,7 @@ Func GwAu3_Assembler_ModifyMemory()
 	GwAu3_Assembler_CreateSalvageCommand()
 	GwAu3_Assembler_CreateAgentCommands()
 	GwAu3_Assembler_CreateMapCommands()
+	GwAu3_Assembler_CreateUICommands()
 	$g_p_ASMMemory = GwAu3_Memory_Read(GwAu3_Memory_Read($g_p_GWBaseAddress), 'ptr')
 
 	Switch $g_p_ASMMemory
@@ -1775,7 +1778,7 @@ Func GwAu3_Assembler_CreateData()
 
     _('AgentCopyCount/4')
     _('AgentCopyBase/' & 0x1C0 * 256)
-EndFunc   ;==>GwAu3_Assembler_CreateData
+EndFunc
 
 Func GwAu3_Assembler_CreateMain()
     _('MainProc:')
@@ -1966,22 +1969,22 @@ Func GwAu3_Assembler_CreateFriendCommands()
     _('ljmp CommandReturn')
 
     _('CommandAddFriend:')
-    _('mov ecx,dword[eax+C]')  ; type
+    _('mov ecx,dword[eax+C]')
     _('push ecx')
-    _('mov edx,dword[eax+8]')   ; alias
+    _('mov edx,dword[eax+8]')
     _('push edx')
-    _('mov ecx,dword[eax+4]')   ; name
+    _('mov ecx,dword[eax+4]')
     _('push ecx')
     _('call AddFriend')
     _('add esp,C')
     _('ljmp CommandReturn')
 
     _('CommandRemoveFriend:')
-    _('mov ecx,dword[eax+18]')  ; arg8 (usually 0)
+    _('mov ecx,dword[eax+18]')
     _('push ecx')
-    _('mov edx,dword[eax+14]')  ; name
+    _('mov edx,dword[eax+14]')
     _('push edx')
-    _('lea ecx,dword[eax+4]')   ; uuid
+    _('lea ecx,dword[eax+4]')
     _('push ecx')
     _('call RemoveFriend')
     _('add esp,C')
@@ -2185,8 +2188,6 @@ Func GwAu3_Assembler_CreateAgentCommands()
 	_('mov eax,dword[eax+4]')
 	_('push eax')
 	_('call ChangeTarget')
-;~ 	_('pop eax')
-;~ 	_('pop edx')
 	_('add esp,8')
 	_('ljmp CommandReturn')
 
@@ -2226,4 +2227,12 @@ Func GwAu3_Assembler_CreateMapCommands()
 	_('call Move')
 	_('pop eax')
 	_('ljmp CommandReturn')
+EndFunc
+
+Func GwAu3_Assembler_CreateUICommands()
+    _('CommandEnterMission:')
+    _('push 1')
+    _('call EnterMission')
+    _('add esp,4')
+    _('ljmp CommandReturn')
 EndFunc

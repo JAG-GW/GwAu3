@@ -1,33 +1,31 @@
 #include-once
 
 Func GwAu3_Utils_FloatToInt($a_f_Float)
-;~     Local $l_d_Float = DllStructCreate("float")
-;~     Local $l_d_Int = DllStructCreate("int", DllStructGetPtr($l_d_Float))
-;~     DllStructSetData($l_d_Float, 1, $a_f_Float)
-;~     Return DllStructGetData($l_d_Int, 1)
-	Return Int($a_f_Float)
+    Local $l_d_Float = DllStructCreate("float")
+    Local $l_d_Int = DllStructCreate("int", DllStructGetPtr($l_d_Float))
+    DllStructSetData($l_d_Float, 1, $a_f_Float)
+    Return DllStructGetData($l_d_Int, 1)
 EndFunc
 
 Func GwAu3_Utils_IntToFloat($a_i_Int)
-;~     Local $l_d_Int = DllStructCreate("int")
-;~     Local $l_d_Float = DllStructCreate("float", DllStructGetPtr($l_d_Int))
-;~     DllStructSetData($l_d_Int, 1, $a_i_Int)
-;~     Return DllStructGetData($l_d_Float, 1)
-	Return Number($a_i_Int, 3)
+    Local $l_d_Int = DllStructCreate("int")
+    Local $l_d_Float = DllStructCreate("float", DllStructGetPtr($l_d_Int))
+    DllStructSetData($l_d_Int, 1, $a_i_Int)
+    Return DllStructGetData($l_d_Float, 1)
 EndFunc
 
 Func GwAu3_Utils_Bin64ToDec($a_s_Binary)
-;~     Local $l_i_Return = 0
-;~     Local $l_i_Length = StringLen($a_s_Binary)
-;~
-;~     For $l_i_Pos = 1 To $l_i_Length
-;~         If StringMid($a_s_Binary, $l_i_Length - $l_i_Pos + 1, 1) == "1" Then
-;~             $l_i_Return += 2 ^ ($l_i_Pos - 1)
-;~         EndIf
-;~     Next
-;~
-;~     Return $l_i_Return
-	Return Dec(StringReplace($a_s_Binary, "0b", ""), 2)
+    Local $l_i_Return = 0
+    Local $l_i_Power = 1
+
+    For $i = 1 To StringLen($a_s_Binary)
+        If StringMid($a_s_Binary, $i, 1) = "1" Then
+            $l_i_Return += $l_i_Power
+        EndIf
+        $l_i_Power *= 2
+    Next
+
+    Return $l_i_Return
 EndFunc
 
 Func GwAu3_Utils_Base64ToBin64($a_s_Character)

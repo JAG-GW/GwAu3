@@ -1,5 +1,10 @@
 #include-once
 
+Func GwAu3_Ui_EnterChallenge()
+	DllStructSetData($g_d_EnterMission, 1, GwAu3_Memory_GetValue('CommandEnterMission'))
+    GwAu3_Core_Enqueue($g_p_EnterMission, 4)
+EndFunc   ;==>EnterChallenge
+
 ;~ Description: Open a dialog.
 Func GwAu3_Ui_Dialog($a_v_DialogID)
     Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_DIALOG_SEND, $a_v_DialogID)

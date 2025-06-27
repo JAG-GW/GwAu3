@@ -181,7 +181,7 @@ Func GwAu3_Attribute_LoadSkillTemplate($a_s_Template, $a_i_HeroNumber = 0)
     EndIf
 
     ; Load skill bar
-    LoadSkillBar($l_ai_Skills[0], $l_ai_Skills[1], $l_ai_Skills[2], $l_ai_Skills[3], $l_ai_Skills[4], $l_ai_Skills[5], $l_ai_Skills[6], $l_ai_Skills[7], $a_i_HeroNumber)
+    GwAu3_Skill_LoadSkillBar($l_ai_Skills[0], $l_ai_Skills[1], $l_ai_Skills[2], $l_ai_Skills[3], $l_ai_Skills[4], $l_ai_Skills[5], $l_ai_Skills[6], $l_ai_Skills[7], $a_i_HeroNumber)
 
     Return True
 EndFunc
@@ -215,7 +215,7 @@ Func GwAu3_Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_SecondaryProfes
         Local $l_i_RetryCount = 0
         Do
             $l_i_Deadlock = TimerInit()
-            ChangeSecondProfession($a_i_SecondaryProfession, $a_i_HeroNumber)
+            GwAu3_Attribute_ChangeSecondProfession($a_i_SecondaryProfession, $a_i_HeroNumber)
 
             Do
                 Sleep(32)

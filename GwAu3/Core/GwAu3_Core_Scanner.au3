@@ -821,3 +821,15 @@ Func GwAu3_Scanner_AddPatternToASM($a_s_Pattern)
         $g_s_ASMCode &= "00"
     Next
 EndFunc
+
+Func GwAu3_Scanner_GetCallTargetAddress($a_p_Address)
+    Local $l_x_Offset = GwAu3_Memory_Read($a_p_Address + 1, 'dword')
+
+    If $l_x_Offset > 0x7FFFFFFF Then
+        $l_x_Offset -= 0x100000000
+    EndIf
+
+    Local $l_p_TargetAddress = $a_p_Address + 5 + $l_x_Offset
+
+    Return $l_p_TargetAddress
+EndFunc

@@ -1,6 +1,17 @@
 #include-once
 
+Global $g_f_GwAu3_LogCallback = Null
+
+Func GwAu3_Log_SetCallback($a_f_Callback)
+    $g_f_GwAu3_LogCallback = $a_f_Callback
+EndFunc
+
 Func GwAu3_Log_Message($a_s_Message, $a_e_MsgType = $GC_I_LOG_MSGTYPE_INFO, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+    If IsFunc($g_f_GwAu3_LogCallback) Then
+        Call($g_f_GwAu3_LogCallback, $a_s_Message, $a_e_MsgType, $a_s_Author)
+        Return
+    EndIf
+
     If $a_e_MsgType = $GC_I_LOG_MSGTYPE_DEBUG And Not $g_b_DebugMode Then Return False
 
     Local $l_s_TypeText

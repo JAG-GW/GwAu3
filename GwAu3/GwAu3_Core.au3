@@ -79,6 +79,9 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     GwAu3_Scanner_AddPattern('InstanceInfo', '6A2C50E80000000083C408C7', 0xE, 'Ptr')
     GwAu3_Scanner_AddPattern('WorldConst', '8D0476C1E00405', 0x8, 'Ptr')
     GwAu3_Scanner_AddPattern('Region', '6A548D46248908', -0x3, 'Ptr')
+	; Ui
+	GwAu3_Scanner_AddPattern('SendUIMessage', 'B900000000E8000000005DC3894508', 0x0, 'Func')
+	GwAu3_Scanner_AddPattern('EnterMission', 'A900001000743A', 0x52, 'Func')
 	; hook
 	GwAu3_Scanner_AddPattern('Engine', '568B3085F67478EB038D4900D9460C', -0x22, 'Hook')
     GwAu3_Scanner_AddPattern('Render', 'F6C401741C68B1010000BA', -0x67, 'Hook')
@@ -208,6 +211,12 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	GwAu3_Log_Debug("Region: " & GwAu3_Memory_GetValue('Region'), "Initialize", $g_h_EditText)
 	GwAu3_Log_Debug("Move: " & GwAu3_Memory_GetValue('Move'), "Initialize", $g_h_EditText)
 
+	;Ui
+	$l_p_Temp = GwAu3_Scanner_GetScanResult('EnterMission', $g_ap_ScanResults, 'Func')
+	GwAu3_Memory_SetValue('EnterMission', Ptr(GwAu3_Scanner_GetCallTargetAddress($l_p_Temp)))
+	;Ui log
+	GwAu3_Log_Debug("EnterMission: " & GwAu3_Memory_GetValue('EnterMission'), "Initialize", $g_h_EditText)
+
     ;Hook
     $l_p_Temp = GwAu3_Scanner_GetScanResult('Engine', $g_ap_ScanResults, 'Hook')
     GwAu3_Memory_SetValue('MainStart', Ptr($l_p_Temp))
@@ -276,6 +285,8 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     DllStructSetData($g_d_MakeAgentArray, 1, GwAu3_Memory_GetValue('CommandMakeAgentArray'))
 	;Map
 	DllStructSetData($g_d_Move, 1, GwAu3_Memory_GetValue('CommandMove'))
+	;Ui
+	DllStructSetData($g_d_EnterMission, 1, GwAu3_Memory_GetValue('CommandEnterMission'))
 
     If $a_b_ChangeTitle Then WinSetTitle($g_h_GWWindow, '', 'Guild Wars - ' & GwAu3_Player_GetCharname())
 
@@ -317,4 +328,66 @@ EndFunc
 
 Func GwAu3_Core_ControlAction($a_i_Action, $a_i_ActionType = $GC_I_ACTIONTYPE_ACTIVATE)
 	Return GwAu3_Core_PerformAction($a_i_Action, $a_i_ActionType)
+EndFunc
+
+Func GwAu3_Core_AutoStart()
+	If $g_bAutoStart And $g_s_MainCharName <> "" Then
+		Sleep(2000)
+		StartBot()
+		Local $l_h_GWWindow = GwAu3_Core_GetGuildWarsWindow()
+		If $l_h_GWWindow = 0 Then
+			_Exit()
+		EndIf
+
+		If GwAu3_PreGame_Ptr() <> 0 Then
+
+			Local $l_i_currentIndex = GwAu3_PreGame_ChosenCharacter()
+			Local $l_s_currentName = StringStripWS(GwAu3_PreGame_CharName($l_i_currentIndex), 3)
+
+			If StringCompare($l_s_currentName, $g_s_MainCharName, 0) <> 0 Then
+				Local $l_b_found = False
+				Local $l_i_maxAttempts = 20
+				Local $l_i_attempts = 0
+				Local $l_i_initialIndex = $l_i_currentIndex
+
+				While $l_i_attempts < $l_i_maxAttempts And Not $l_b_found
+					ControlSend($l_h_GWWindow, "", "", "{RIGHT}")
+					Sleep(250)
+
+					$l_i_currentIndex = GwAu3_PreGame_ChosenCharacter()
+					$l_s_currentName = StringStripWS(GwAu3_PreGame_CharName($l_i_currentIndex), 3)
+
+					If StringCompare($l_s_currentName, $g_s_MainCharName, 0) = 0 Then
+						$l_b_found = True
+					EndIf
+
+					$l_i_attempts += 1
+
+					If $l_i_attempts > 1 And $l_i_currentIndex = $l_i_initialIndex Then
+						ExitLoop
+					EndIf
+				WEnd
+
+				If Not $l_b_found Then
+					MsgBox(16, "Error", "Character '" & $g_s_MainCharName & "' not found on this account!")
+					_Exit()
+				EndIf
+			EndIf
+
+			ControlSend($l_h_GWWindow, "", "", "{ENTER}")
+
+			While GwAu3_PreGame_Ptr() <> 0
+				Sleep(500)
+			WEnd
+			GwAu3_Map_WaitMapLoading()
+			Sleep(1000)
+		EndIf
+	EndIf
+EndFunc
+
+Func GwAu3_Core_GetGuildWarsWindow()
+    Local $l_s_expectedTitle = "Guild Wars - " & $g_s_MainCharName
+
+    Local $l_h_Wnd = WinGetHandle($l_s_expectedTitle)
+    If $l_h_Wnd <> 0 Then Return $l_h_Wnd
 EndFunc
