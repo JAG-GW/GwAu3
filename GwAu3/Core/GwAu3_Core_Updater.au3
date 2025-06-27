@@ -322,7 +322,7 @@ Func GwAu3_Updater_InitializeHashCache()
 EndFunc
 
 ;=================================================================
-; Check for if file is on ignore list
+; Check if file is on ignore list
 ;=================================================================
 Func GwAu3_Updater_IsIgnoredFile($a_s_Path)
     For $i = 1 To $g_as_IgnoredFiles[0]
