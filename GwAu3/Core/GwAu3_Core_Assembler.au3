@@ -2230,9 +2230,9 @@ Func GwAu3_Assembler_CreateMapCommands()
 EndFunc
 
 Func GwAu3_Assembler_CreateUICommands()
-    _('CommandEnterMission:')
-    _('push 1')
-    _('call EnterMission')
-    _('add esp,4')
-    _('ljmp CommandReturn')
+	_('CommandEnterMission:')
+	_('push dword[eax+4]')
+	_('call EnterMission')
+	_('add esp,4')
+	_('ljmp CommandReturn')
 EndFunc

@@ -1,8 +1,9 @@
 #include-once
 
-Func GwAu3_Ui_EnterChallenge()
+Func GwAu3_Ui_EnterChallenge($a_b_Foreign = False)
 	DllStructSetData($g_d_EnterMission, 1, GwAu3_Memory_GetValue('CommandEnterMission'))
-    GwAu3_Core_Enqueue($g_p_EnterMission, 4)
+    DllStructSetData($g_d_EnterMission, 1, Not $a_b_Foreign)
+    GwAu3_Core_Enqueue($g_p_EnterMission, 8)
 EndFunc   ;==>EnterChallenge
 
 ;~ Description: Open a dialog.
