@@ -14,23 +14,15 @@ Func GwAu3_Merchant_GetMerchantItemsSize()
     Return $l_av_Return[1]
 EndFunc   ;==>GetMerchantItemsSize
 
-Func GwAu3_Merchant_SellItem($a_i_ItemID, $a_i_Quantity = 1, $a_i_MerchantID = 0)
-    If $a_i_ItemID <= 0 Then
-        GwAu3_Log_Error("Invalid item ID: " & $a_i_ItemID, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
+Func GwAu3_Merchant_SellItem($a_p_Item, $a_i_Quantity = 0)
+	Local $lItemID = GwAu3_Item_ItemID($a_p_Item)
+	Local $a_i_Quantity = GwAu3_Memory_Read(GwAu3_Item_GetItemPtr($a_p_Item) + 76, 'short')
+	Local $l_i_Value = GwAu3_Memory_Read(GwAu3_Item_GetItemPtr($a_p_Item) + 36, 'short')
 
-    If $a_i_Quantity <= 0 Or $a_i_Quantity > $GC_I_MERCHANT_MAX_ITEM_STACK Then
-        GwAu3_Log_Error("Invalid quantity: " & $a_i_Quantity, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    DllStructSetData($g_d_SellItem, 1, GwAu3_Memory_GetValue('CommandSellItem'))
-    DllStructSetData($g_d_SellItem, 2, $a_i_ItemID)
-    DllStructSetData($g_d_SellItem, 3, $a_i_Quantity)
-    DllStructSetData($g_d_SellItem, 4, $a_i_MerchantID)
-
-    GwAu3_Core_Enqueue($g_p_SellItem, 16)
+	If $a_i_Quantity = 0 Or $a_i_Quantity > $a_i_Quantity Then $a_i_Quantity = $a_i_Quantity
+	DllStructSetData($g_d_SellItem, 2, $a_i_Quantity * $l_i_Value)
+	DllStructSetData($g_d_SellItem, 3, $lItemID)
+	GwAu3_Core_Enqueue($g_p_SellItem, 12)
 
     ; Record for tracking
     $g_i_LastTransactionType = $GC_I_TRANSACTION_SELL
@@ -41,37 +33,23 @@ Func GwAu3_Merchant_SellItem($a_i_ItemID, $a_i_Quantity = 1, $a_i_MerchantID = 0
     Return True
 EndFunc
 
-Func GwAu3_Merchant_BuyItem($a_i_ItemID, $a_i_Quantity = 1, $a_i_Price = 0, $a_i_MerchantID = 0)
-    If $a_i_ItemID <= 0 Then
-        GwAu3_Log_Error("Invalid item ID: " & $a_i_ItemID, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
+Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity, $a_i_Value)
+	Local $l_p_MerchantItemsBase = GwAu3_Merchant_GetMerchantItemsBase()
 
-    If $a_i_Quantity <= 0 Or $a_i_Quantity > $GC_I_MERCHANT_MAX_ITEM_STACK Then
-        GwAu3_Log_Error("Invalid quantity: " & $a_i_Quantity, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
+	If Not $l_p_MerchantItemsBase Then Return
+	If $a_p_Item < 1 Or $a_p_Item > GwAu3_Merchant_GetMerchantItemsSize() Then Return
 
-    If $a_i_Price < 0 Or $a_i_Price > $GC_I_MERCHANT_MAX_GOLD Then
-        GwAu3_Log_Error("Invalid price: " & $a_i_Price, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
+	DllStructSetData($g_d_BuyItem, 2, $a_i_Quantity)
+	DllStructSetData($g_d_BuyItem, 3, GwAu3_Memory_Read($l_p_MerchantItemsBase + 4 * ($a_p_Item - 1)))
+	DllStructSetData($g_d_BuyItem, 4, $a_i_Quantity * $a_i_Value)
+	DllStructSetData($g_d_BuyItem, 5, GwAu3_Memory_GetValue('BuyItemBase')
+;~ 	Or
+;~ 	DllStructSetData($g_d_BuyItem, 5, GwAu3_Memory_Read(GwAu3_Memory_GetValue('BuyItemBase')))
+	GwAu3_Core_Enqueue($g_p_BuyItem, 20)
 
-    DllStructSetData($g_d_BuyItem, 1, GwAu3_Memory_GetValue('CommandBuyItem'))
-    DllStructSetData($g_d_BuyItem, 2, $a_i_ItemID)
-    DllStructSetData($g_d_BuyItem, 3, $a_i_Quantity)
-    DllStructSetData($g_d_BuyItem, 4, $a_i_Price)
-    DllStructSetData($g_d_BuyItem, 5, $a_i_MerchantID)
-
-    GwAu3_Core_Enqueue($g_p_BuyItem, 20)
-
-    ; Record for tracking
-    $g_i_LastTransactionType = $GC_I_TRANSACTION_BUY
-    $g_i_LastItemID = $a_i_ItemID
+    $g_i_LastItemID = $a_p_Item
     $g_i_LastQuantity = $a_i_Quantity
     $g_i_LastPrice = $a_i_Price
-
-    GwAu3_Log_Debug("Buying item " & $a_i_ItemID & " (quantity: " & $a_i_Quantity & ", price: " & $a_i_Price & ") from merchant " & $a_i_MerchantID, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
 
@@ -93,7 +71,6 @@ Func GwAu3_Merchant_CraftItem($a_i_RecipeID, $a_i_Quantity = 1, $a_v_Materials =
         $l_p_MaterialsPtr = Ptr($a_v_Materials)
     EndIf
 
-    DllStructSetData($g_d_CraftItemEx, 1, GwAu3_Memory_GetValue('CommandCraftItemEx'))
     DllStructSetData($g_d_CraftItemEx, 2, $a_i_RecipeID)
     DllStructSetData($g_d_CraftItemEx, 3, $a_i_Quantity)
     DllStructSetData($g_d_CraftItemEx, 4, $l_p_MaterialsPtr)
@@ -117,7 +94,6 @@ Func GwAu3_Merchant_RequestQuote($a_i_ItemID)
         Return False
     EndIf
 
-    DllStructSetData($g_d_RequestQuote, 1, GwAu3_Memory_GetValue('CommandRequestQuote'))
     DllStructSetData($g_d_RequestQuote, 2, $a_i_ItemID)
 
     GwAu3_Core_Enqueue($g_p_RequestQuote, 8)
@@ -136,7 +112,6 @@ Func GwAu3_Merchant_RequestQuoteSell($a_i_ItemID)
         Return False
     EndIf
 
-    DllStructSetData($g_d_RequestQuoteSell, 1, GwAu3_Memory_GetValue('CommandRequestQuoteSell'))
     DllStructSetData($g_d_RequestQuoteSell, 2, $a_i_ItemID)
 
     GwAu3_Core_Enqueue($g_p_RequestQuoteSell, 8)
@@ -159,7 +134,6 @@ Func GwAu3_Merchant_TraderBuy()
         Return False
     EndIf
 
-    DllStructSetData($g_d_TraderBuy, 1, GwAu3_Memory_GetValue('CommandTraderBuy'))
     GwAu3_Core_Enqueue($g_p_TraderBuy, 4)
 
     ; Record for tracking
@@ -181,7 +155,6 @@ Func GwAu3_Merchant_TraderSell()
         Return False
     EndIf
 
-    DllStructSetData($g_d_TraderSell, 1, GwAu3_Memory_GetValue('CommandTraderSell'))
     GwAu3_Core_Enqueue($g_p_TraderSell, 4)
 
     ; Record for tracking

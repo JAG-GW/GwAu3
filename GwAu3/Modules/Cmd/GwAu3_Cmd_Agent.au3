@@ -8,7 +8,6 @@ Func GwAu3_Agent_ChangeTarget($a_i_AgentID)
         Return False
     EndIf
 
-	DllStructSetData($g_d_ChangeTarget, 1, GwAu3_Memory_GetValue('CommandChangeTarget'))
     DllStructSetData($g_d_ChangeTarget, 2, $a_i_AgentID)
     GwAu3_Core_Enqueue($g_p_ChangeTarget, 8)
 
@@ -24,7 +23,6 @@ Func GwAu3_Agent_MakeAgentArray($a_i_Type = 0)
         Return False
     EndIf
 
-	DllStructSetData($g_d_MakeAgentArray, 1, GwAu3_Memory_GetValue('CommandMakeAgentArray'))
     DllStructSetData($g_d_MakeAgentArray, 2, $a_i_Type)
     GwAu3_Core_Enqueue($g_p_MakeAgentArray, 8)
 

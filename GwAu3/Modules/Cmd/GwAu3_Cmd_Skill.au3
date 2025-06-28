@@ -14,7 +14,6 @@ Func GwAu3_Skill_UseSkill($a_i_SkillSlot, $a_v_TargetID = 0, $a_b_CallTarget = F
 
     $a_i_SkillSlot = $a_i_SkillSlot - 1
 
-    DllStructSetData($g_d_UseSkill, 1, GwAu3_Memory_GetValue('CommandUseSkill'))
     DllStructSetData($g_d_UseSkill, 2, GwAu3_World_GetWorldInfo("MyID"))
     DllStructSetData($g_d_UseSkill, 3, $a_i_SkillSlot)
     DllStructSetData($g_d_UseSkill, 4, $l_i_AgentID)
@@ -54,7 +53,6 @@ Func GwAu3_Skill_UseHeroSkill($a_i_HeroIndex, $a_i_SkillSlot, $a_v_TargetID = 0)
 
     $a_i_SkillSlot = $a_i_SkillSlot - 1
 
-    DllStructSetData($g_d_UseHeroSkill, 1, GwAu3_Memory_GetValue('CommandUseHeroSkill'))
     DllStructSetData($g_d_UseHeroSkill, 2, $a_i_HeroIndex)
     DllStructSetData($g_d_UseHeroSkill, 3, $a_v_TargetID)
     DllStructSetData($g_d_UseHeroSkill, 4, $a_i_SkillSlot)

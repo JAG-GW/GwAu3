@@ -1,7 +1,6 @@
 #include-once
 
 Func GwAu3_Guild_InviteGuild($a_s_CharName)
-    DllStructSetData($g_d_InviteGuild, 1, GwAu3_Memory_GetValue('CommandPacketSend'))
     DllStructSetData($g_d_InviteGuild, 2, 0x4C)
     DllStructSetData($g_d_InviteGuild, 3, 0xBC)
     DllStructSetData($g_d_InviteGuild, 4, 0x01)
@@ -11,7 +10,6 @@ Func GwAu3_Guild_InviteGuild($a_s_CharName)
 EndFunc   ;==>InviteGuild
 
 Func GwAu3_Guild_InviteGuest($a_s_CharName)
-    DllStructSetData($g_d_InviteGuild, 1, GwAu3_Memory_GetValue('CommandPacketSend'))
     DllStructSetData($g_d_InviteGuild, 2, 0x4C)
     DllStructSetData($g_d_InviteGuild, 3, 0xBC)
     DllStructSetData($g_d_InviteGuild, 4, 0x01)

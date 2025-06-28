@@ -19,7 +19,6 @@ Func GwAu3_Friend_SetPlayerStatus($a_i_Status)
         Return True
     EndIf
 
-    DllStructSetData($g_d_ChangeStatus, 1, GwAu3_Memory_GetValue('CommandPlayerStatus'))
     DllStructSetData($g_d_ChangeStatus, 2, $a_i_Status)
 
     GwAu3_Core_Enqueue($g_p_ChangeStatus, 8)
@@ -96,7 +95,6 @@ Func GwAu3_Friend_AddFriend($a_s_CharacterName, $a_s_Alias = "", $a_i_FriendType
     Local $l_d_VerifyStruct = DllStructCreate("wchar[20]")
     DllCall($g_h_Kernel32, 'int', 'ReadProcessMemory', 'int', $g_h_GWProcess, 'ptr', $l_p_NameMem, 'ptr', DllStructGetPtr($l_d_VerifyStruct), 'int', 40, 'int', 0)
 
-    DllStructSetData($g_d_AddFriend, 1, GwAu3_Memory_GetValue('CommandAddFriend'))
     DllStructSetData($g_d_AddFriend, 2, $l_p_NameMem)
     DllStructSetData($g_d_AddFriend, 3, $l_p_AliasMem)
     DllStructSetData($g_d_AddFriend, 4, $a_i_FriendType)
@@ -170,7 +168,6 @@ Func GwAu3_Friend_RemoveFriend($a_s_NameOrAlias)
     DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'ptr', $l_p_AliasMem, 'ptr', DllStructGetPtr($l_d_AliasStruct), 'int', $l_i_AliasSize, 'int', 0)
 
     ; Set up the command
-    DllStructSetData($g_d_RemoveFriend, 1, GwAu3_Memory_GetValue('CommandRemoveFriend'))
     DllStructSetData($g_d_RemoveFriend, 3, $l_p_AliasMem)
     DllStructSetData($g_d_RemoveFriend, 4, 0)
 

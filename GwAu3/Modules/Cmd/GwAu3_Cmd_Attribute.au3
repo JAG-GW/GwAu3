@@ -13,7 +13,6 @@ Func GwAu3_Attribute_IncreaseAttribute($a_i_AttributeID, $a_i_Amount = 1, $a_i_H
 
     ; Increase attribute one point at a time (Guild Wars limitation)
     For $l_i_Idx = 1 To $a_i_Amount
-        DllStructSetData($g_d_IncreaseAttribute, 1, GwAu3_Memory_GetValue('CommandIncreaseAttribute'))
         DllStructSetData($g_d_IncreaseAttribute, 2, $a_i_AttributeID)
         If $a_i_HeroNumber <> 0 Then
             DllStructSetData($g_d_IncreaseAttribute, 3, GwAu3_Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))
@@ -47,7 +46,6 @@ Func GwAu3_Attribute_DecreaseAttribute($a_i_AttributeID, $a_i_Amount = 1, $a_i_H
 
     ; Decrease attribute one point at a time (Guild Wars limitation)
     For $l_i_Idx = 1 To $a_i_Amount
-        DllStructSetData($g_d_DecreaseAttribute, 1, GwAu3_Memory_GetValue('CommandDecreaseAttribute'))
         DllStructSetData($g_d_DecreaseAttribute, 2, $a_i_AttributeID)
         If $a_i_HeroNumber <> 0 Then
             DllStructSetData($g_d_DecreaseAttribute, 3, GwAu3_Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))

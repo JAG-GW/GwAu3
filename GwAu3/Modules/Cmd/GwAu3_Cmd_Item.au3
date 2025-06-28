@@ -16,7 +16,6 @@ Func GwAu3_Item_SalvageItem($a_i_ItemID, $a_i_SalvageKitID, $a_i_SalvageType = $
         Return False
     EndIf
 
-    DllStructSetData($g_d_Salvage, 1, GwAu3_Memory_GetValue('CommandSalvage'))
     DllStructSetData($g_d_Salvage, 2, $a_i_ItemID)
     DllStructSetData($g_d_Salvage, 3, $a_i_SalvageKitID)
     DllStructSetData($g_d_Salvage, 4, $a_i_SalvageType)
