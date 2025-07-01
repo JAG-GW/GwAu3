@@ -1,84 +1,259 @@
 #include-once
 
-Func GwAu3_Item_SalvageItem($a_i_ItemID, $a_i_SalvageKitID, $a_i_SalvageType = $GC_I_SALVAGE_TYPE_NORMAL)
-    If $a_i_ItemID <= 0 Then
-        GwAu3_Log_Error("Invalid item ID: " & $a_i_ItemID, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    If $a_i_SalvageKitID <= 0 Then
-        GwAu3_Log_Error("Invalid salvage kit ID: " & $a_i_SalvageKitID, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    If $a_i_SalvageType < $GC_I_SALVAGE_TYPE_NORMAL Or $a_i_SalvageType > $GC_I_SALVAGE_TYPE_PERFECT Then
-        GwAu3_Log_Error("Invalid salvage type: " & $a_i_SalvageType, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    DllStructSetData($g_d_Salvage, 2, $a_i_ItemID)
-    DllStructSetData($g_d_Salvage, 3, $a_i_SalvageKitID)
-    DllStructSetData($g_d_Salvage, 4, $a_i_SalvageType)
-
-    GwAu3_Core_Enqueue($g_p_Salvage, 16)
-
-    ; Record for tracking
-    $g_i_LastTransactionType = 0 ; Salvage doesn't have a specific transaction type
-    $g_i_LastItemID = $a_i_ItemID
-
-    GwAu3_Log_Debug("Salvaging item " & $a_i_ItemID & " with kit " & $a_i_SalvageKitID & " (type: " & $a_i_SalvageType & ")", "TradeMod", $g_h_EditText)
-    Return True
-EndFunc
-
-;~ Description: Salvage the materials out of an item.
-Func GwAu3_Item_SalvageMaterials()
-    Return GwAu3_Core_SendPacket(0x4, $GC_I_HEADER_ITEM_SALVAGE_MATERIALS)
-EndFunc ;==>SalvageMaterials
-
-;~ Description: Salvages a mod out of an item.
-Func GwAu3_Item_SalvageMod($a_i_ModIndex)
-    Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, $a_i_ModIndex)
-EndFunc ;==>SalvageMod
-
-;~ Description: Identifies an item.
-Func GwAu3_Item_IdentifyItem($a_v_Item, $a_s_KitType = "Superior")
-    Local $l_i_IDKit = 0
+;~ Description: Salvage an item.
+Func GwAu3_Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "Materials")
     Local $l_i_ItemID = GwAu3_Item_ItemID($a_v_Item)
 
-    If GwAu3_Item_GetItemInfoByItemID($l_i_ItemID, "IsIdentified") Then Return True
+    ; Check if Standard kit is requested with mod salvage (not allowed)
+    If $a_s_KitType = "Standard" And $a_s_SalvageType <> "Materials" Then
+        Return False ; Standard only salvage materials
+    EndIf
 
+    ; Find the optimal salvage kit
+    Local $l_ptr_SalvageKit = 0
+    Local $l_a_Kits[5][3] ; [ModelID, ItemPtr, Uses]
+    $l_a_Kits[0][0] = 0 ; Charr Salvage Kit (ModelID 170)
+    $l_a_Kits[1][0] = 0 ; Salvage Kit (ModelID 2992)
+    $l_a_Kits[2][0] = 0 ; Expert Salvage Kit (ModelID 2991)
+    $l_a_Kits[3][0] = 0 ; Superior Salvage Kit (ModelID 5900)
+    $l_a_Kits[4][0] = 0 ; Perfect Salvage Kit (ModelID 25881)
+
+    ; Browse bags to find available salvage kits
+    For $i = 1 To 4
+        For $j = 1 To GwAu3_Item_GetBagInfo(GwAu3_Item_GetBagPtr($i), 'Slots')
+            Local $l_ptr_Item = GwAu3_Item_GetItemBySlot($i, $j)
+            Local $l_i_ModelID = GwAu3_Item_GetItemInfoByPtr($l_ptr_Item, 'ModelID')
+            Local $l_i_Value = GwAu3_Item_GetItemInfoByPtr($l_ptr_Item, 'Value')
+
+            Switch $l_i_ModelID
+                Case 170 ; Charr Salvage Kit
+                    Local $l_i_Uses = $l_i_Value / 1
+                    If $l_a_Kits[0][0] = 0 Or $l_i_Uses < $l_a_Kits[0][2] Then
+                        $l_a_Kits[0][0] = 170
+                        $l_a_Kits[0][1] = $l_ptr_Item
+                        $l_a_Kits[0][2] = $l_i_Uses
+                    EndIf
+
+                Case 2992 ; Salvage Kit (standard)
+                    Local $l_i_Uses = $l_i_Value / 2
+                    If $l_a_Kits[1][0] = 0 Or $l_i_Uses < $l_a_Kits[1][2] Then
+                        $l_a_Kits[1][0] = 2992
+                        $l_a_Kits[1][1] = $l_ptr_Item
+                        $l_a_Kits[1][2] = $l_i_Uses
+                    EndIf
+
+                Case 2991 ; Expert Salvage Kit
+                    Local $l_i_Uses = $l_i_Value / 8
+                    If $l_a_Kits[2][0] = 0 Or $l_i_Uses < $l_a_Kits[2][2] Then
+                        $l_a_Kits[2][0] = 2991
+                        $l_a_Kits[2][1] = $l_ptr_Item
+                        $l_a_Kits[2][2] = $l_i_Uses
+                    EndIf
+
+                Case 5900 ; Superior Salvage Kit
+                    Local $l_i_Uses = $l_i_Value / 10
+                    If $l_a_Kits[3][0] = 0 Or $l_i_Uses < $l_a_Kits[3][2] Then
+                        $l_a_Kits[3][0] = 5900
+                        $l_a_Kits[3][1] = $l_ptr_Item
+                        $l_a_Kits[3][2] = $l_i_Uses
+                    EndIf
+
+                Case 25881 ; Perfect Salvage Kit
+                    Local $l_i_Uses = $l_i_Value / 10
+                    If $l_a_Kits[4][0] = 0 Or $l_i_Uses < $l_a_Kits[4][2] Then
+                        $l_a_Kits[4][0] = 25881
+                        $l_a_Kits[4][1] = $l_ptr_Item
+                        $l_a_Kits[4][2] = $l_i_Uses
+                    EndIf
+            EndSwitch
+        Next
+    Next
+
+    ; Select kit according to preference
     Switch $a_s_KitType
-        Case "Superior"
-            If GwAu3_Map_GetInstanceInfo("IsOutpost") Then
-                $l_i_IDKit = GwAu3_Item_GetItemInfoByModelID(5899, "ItemID")
-                If $l_i_IDKit = 0 Then $l_i_IDKit = GwAu3_Item_GetItemInfoByModelID(2989, "ItemID")
-            ElseIf GwAu3_Map_GetInstanceInfo("IsExplorable") Then
-                $l_i_IDKit = GwAu3_Item_GetBagsItembyModelID(5899)
-                If $l_i_IDKit = 0 Then $l_i_IDKit = GwAu3_Item_GetBagsItembyModelID(2989)
+        Case "Perfect"
+            ; Prefer perfect kit, then superior, expert, standard, charr
+            If $l_a_Kits[4][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[4][1]
+            ElseIf $l_a_Kits[3][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[3][1]
+            ElseIf $l_a_Kits[2][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[2][1]
+            ElseIf $l_a_Kits[1][0] <> 0 And $a_s_SalvageType = "Materials" Then
+                $l_ptr_SalvageKit = $l_a_Kits[1][1]
+            ElseIf $l_a_Kits[0][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[0][1]
             EndIf
-        Case "Normal"
-            If GwAu3_Map_GetInstanceInfo("IsOutpost") Then
-                $l_i_IDKit = GwAu3_Item_GetItemInfoByModelID(2989, "ItemID")
-                If $l_i_IDKit = 0 Then $l_i_IDKit = GwAu3_Item_GetItemInfoByModelID(5899, "ItemID")
-            ElseIf GwAu3_Map_GetInstanceInfo("IsExplorable") Then
-                $l_i_IDKit = GwAu3_Item_GetBagsItembyModelID(2989)
-                If $l_i_IDKit = 0 Then $l_i_IDKit = GwAu3_Item_GetBagsItembyModelID(5899)
+
+        Case "Superior"
+            ; Prefer superior kit, then perfect, expert, standard, charr
+            If $l_a_Kits[3][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[3][1]
+            ElseIf $l_a_Kits[4][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[4][1]
+            ElseIf $l_a_Kits[2][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[2][1]
+            ElseIf $l_a_Kits[1][0] <> 0 And $a_s_SalvageType = "Materials" Then
+                $l_ptr_SalvageKit = $l_a_Kits[1][1]
+            ElseIf $l_a_Kits[0][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[0][1]
+            EndIf
+
+        Case "Expert"
+            ; Prefer expert kit, then superior, perfect, standard, charr
+            If $l_a_Kits[2][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[2][1]
+            ElseIf $l_a_Kits[3][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[3][1]
+            ElseIf $l_a_Kits[4][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[4][1]
+            ElseIf $l_a_Kits[1][0] <> 0 And $a_s_SalvageType = "Materials" Then
+                $l_ptr_SalvageKit = $l_a_Kits[1][1]
+            ElseIf $l_a_Kits[0][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[0][1]
+            EndIf
+
+        Case "Standard"
+            ; Prefer standard kit, then charr, expert, superior, perfect
+            If $l_a_Kits[1][0] <> 0 And $a_s_SalvageType = "Materials" Then
+                $l_ptr_SalvageKit = $l_a_Kits[1][1]
+            ElseIf $l_a_Kits[0][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[0][1]
+            ElseIf $l_a_Kits[2][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[2][1]
+            ElseIf $l_a_Kits[3][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[3][1]
+            ElseIf $l_a_Kits[4][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[4][1]
+            EndIf
+
+        Case "Charr"
+            ; Prefer charr kit, then standard, expert, superior, perfect
+            If $l_a_Kits[0][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[0][1]
+            ElseIf $l_a_Kits[1][0] <> 0 And $a_s_SalvageType = "Materials" Then
+                $l_ptr_SalvageKit = $l_a_Kits[1][1]
+            ElseIf $l_a_Kits[2][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[2][1]
+            ElseIf $l_a_Kits[3][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[3][1]
+            ElseIf $l_a_Kits[4][0] <> 0 Then
+                $l_ptr_SalvageKit = $l_a_Kits[4][1]
             EndIf
     EndSwitch
 
+    If $l_ptr_SalvageKit = 0 Then Return False
+
+    ; Start salvage session
+    Local $l_a_Offset[4] = [0, 0x18, 0x2C, 0x690]
+    Local $l_i_SalvageSessionID = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_a_Offset)
+
+    Sleep(32)
+
+    DllStructSetData($g_d_Salvage, 2, $l_i_ItemID)
+    DllStructSetData($g_d_Salvage, 3, GwAu3_Item_ItemID($l_ptr_SalvageKit))
+    DllStructSetData($g_d_Salvage, 4, $l_i_SalvageSessionID[1])
+    GwAu3_Core_Enqueue($g_p_Salvage, 16)
+
+    ; Wait for salvage window to open
+    Sleep(32)
+
+    ; Perform the salvage type requested
+    Switch $a_s_SalvageType
+        Case "Materials"
+            GwAu3_Core_SendPacket(0x4, $GC_I_HEADER_ITEM_SALVAGE_MATERIALS)
+			Sleep(32)
+        Case "Prefix"
+            GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 0)
+			Sleep(32)
+        Case "Suffix"
+            GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 1)
+			Sleep(32)
+        Case "Inscription"
+            GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 2)
+			Sleep(32)
+        Case Else
+            Return False
+    EndSwitch
+
+    Return True
+EndFunc ;==>GwAu3_Item_SalvageItem
+
+;~ Description: Identifies an item.
+Func GwAu3_Item_IdentifyItem($a_v_Item, $a_s_KitType = "Superior")
+    Local $l_i_ItemID = GwAu3_Item_ItemID($a_v_Item)
+
+    ; Check if item is already identified
+    If GwAu3_Item_GetItemInfoByItemID($l_i_ItemID, "IsIdentified") Then Return True
+
+    ; Find the optimal identification kit
+    Local $l_i_IDKit = 0
+    Local $l_i_BestUses = 101
+    Local $l_a_Kits[2][3] ; [ModelID, ItemID, Uses]
+    $l_a_Kits[0][0] = 0 ; Normal kit (ModelID 2989)
+    $l_a_Kits[1][0] = 0 ; Superior kit (ModelID 5899)
+
+    ; Browse bags to find available kits
+    For $i = 1 To 4
+        For $j = 1 To GwAu3_Item_GetBagInfo(GwAu3_Item_GetBagPtr($i), 'Slots')
+            Local $l_ptr_Item = GwAu3_Item_GetItemBySlot($i, $j)
+            Local $l_i_ModelID = GwAu3_Item_GetItemInfoByPtr($l_ptr_Item, 'ModelID')
+            Local $l_i_Value = GwAu3_Item_GetItemInfoByPtr($l_ptr_Item, 'Value')
+
+            Switch $l_i_ModelID
+                Case 2989 ; Normal kit
+                    Local $l_i_Uses = $l_i_Value / 2
+                    If $l_a_Kits[0][0] = 0 Or $l_i_Uses < $l_a_Kits[0][2] Then
+                        $l_a_Kits[0][0] = 2989
+                        $l_a_Kits[0][1] = GwAu3_Item_GetItemInfoByPtr($l_ptr_Item, 'ItemID')
+                        $l_a_Kits[0][2] = $l_i_Uses
+                    EndIf
+
+                Case 5899 ; Superior kit
+                    Local $l_i_Uses = $l_i_Value / 2.5
+                    If $l_a_Kits[1][0] = 0 Or $l_i_Uses < $l_a_Kits[1][2] Then
+                        $l_a_Kits[1][0] = 5899
+                        $l_a_Kits[1][1] = GwAu3_Item_GetItemInfoByPtr($l_ptr_Item, 'ItemID')
+                        $l_a_Kits[1][2] = $l_i_Uses
+                    EndIf
+            EndSwitch
+        Next
+    Next
+
+    ; Select kit according to preference
+    Switch $a_s_KitType
+        Case "Superior"
+            ; Prefer superior kit, otherwise use normal
+            If $l_a_Kits[1][0] <> 0 Then
+                $l_i_IDKit = $l_a_Kits[1][1]
+            ElseIf $l_a_Kits[0][0] <> 0 Then
+                $l_i_IDKit = $l_a_Kits[0][1]
+            EndIf
+
+        Case "Normal"
+            ; Prefer normal kit, otherwise use superior
+            If $l_a_Kits[0][0] <> 0 Then
+                $l_i_IDKit = $l_a_Kits[0][1]
+            ElseIf $l_a_Kits[1][0] <> 0 Then
+                $l_i_IDKit = $l_a_Kits[1][1]
+            EndIf
+    EndSwitch
+
+    ; If no kit found, return False
     If $l_i_IDKit = 0 Then Return False
 
-    GwAu3_Core_SendPacket(0xC, $GC_I_HEADER_ITEM_IDENTIFY, GwAu3_Item_ItemID($l_i_IDKit), $l_i_ItemID)
+    ; Send identification packet
+    GwAu3_Core_SendPacket(0xC, $GC_I_HEADER_ITEM_IDENTIFY, $l_i_IDKit, $l_i_ItemID)
 
+    ; Wait for item to be identified
     Local $l_i_Deadlock = TimerInit()
     Do
         Sleep(16)
     Until GwAu3_Item_GetItemInfoByItemID($l_i_ItemID, "IsIdentified") Or TimerDiff($l_i_Deadlock) > 2500
 
     If TimerDiff($l_i_Deadlock) > 2500 Then Return False
-
     Return True
-EndFunc ;==>IdentifyItem
+EndFunc ;==>GwAu3_Item_IdentifyItem
 
 ;~ Description: Equips an item.
 Func GwAu3_Item_EquipItem($a_v_Item)
@@ -159,14 +334,13 @@ Func GwAu3_Item_WithdrawGold($a_i_Amount = 0)
     GwAu3_Item_ChangeGold($l_i_Character + $l_i_Amount, $l_i_Storage - $l_i_Amount)
 EndFunc ;==>WithdrawGold
 
-;~ Description: Open a chest with key.
-Func GwAu3_Item_OpenChestNoLockpick()
-    Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_CHEST_OPEN, 1)
-EndFunc ;==>OpenChestNoLockpick
-
-;~ Description: Open a chest with lockpick.
-Func GwAu3_Item_OpenChest()
-    Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_CHEST_OPEN, 2)
+;~ Description: Open a chest.
+Func GwAu3_Item_OpenChest($a_b_WithLockpick = True)
+	If $a_b_WithLockpick Then
+		Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_CHEST_OPEN, 2)
+	Else
+		Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_CHEST_OPEN, 1)
+	EndIf
 EndFunc ;==>OpenChest
 
 Func GwAu3_Item_SwitchWeaponSet($a_i_WeaponSet)

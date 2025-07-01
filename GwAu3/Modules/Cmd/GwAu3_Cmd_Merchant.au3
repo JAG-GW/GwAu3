@@ -14,44 +14,191 @@ Func GwAu3_Merchant_GetMerchantItemsSize()
     Return $l_av_Return[1]
 EndFunc   ;==>GetMerchantItemsSize
 
-Func GwAu3_Merchant_SellItem($a_p_Item, $a_i_Quantity = 0)
-	Local $lItemID = GwAu3_Item_ItemID($a_p_Item)
-	Local $a_i_Quantity = GwAu3_Memory_Read(GwAu3_Item_GetItemPtr($a_p_Item) + 76, 'short')
-	Local $l_i_Value = GwAu3_Memory_Read(GwAu3_Item_GetItemPtr($a_p_Item) + 36, 'short')
+;~ Description: Internal use for buy an item, extraID is for dye
+Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity = 1, $a_i_Value = 0, $a_b_Trader = False, $a_i_ExtraID = -1)
+	If $a_b_Trader Then
+        ; For trader, $a_p_Item is the ModelID
+        Local $l_i_ModelID = $a_p_Item
+        Local $l_i_BoughtCount = 0
 
-	If $a_i_Quantity = 0 Or $a_i_Quantity > $a_i_Quantity Then $a_i_Quantity = $a_i_Quantity
-	DllStructSetData($g_d_SellItem, 2, $a_i_Quantity * $l_i_Value)
-	DllStructSetData($g_d_SellItem, 3, $lItemID)
-	GwAu3_Core_Enqueue($g_p_SellItem, 12)
+        For $i = 1 To $a_i_Quantity
+            ; Find the item in trader's inventory
+            Local $l_a_Offset[4] = [0, 0x18, 0x40, 0xC0]
+            Local $l_i_ItemArraySize = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_a_Offset)
+            Local $l_ptr_Item = 0
+            Local $l_b_Found = False
+            Local $l_i_QuoteID = GwAu3_Memory_Read($g_i_TraderQuoteID)
 
-    ; Record for tracking
-    $g_i_LastTransactionType = $GC_I_TRANSACTION_SELL
-    $g_i_LastItemID = $a_i_ItemID
-    $g_i_LastQuantity = $a_i_Quantity
+            ; Search for item with matching ModelID
+            For $l_i_ItemID = 1 To $l_i_ItemArraySize[1]
+                $l_ptr_Item = GwAu3_Item_GetItemPtr($l_i_ItemID)
+                If $l_ptr_Item = 0 Then ContinueLoop
 
-    GwAu3_Log_Debug("Selling item " & $a_i_ItemID & " (quantity: " & $a_i_Quantity & ") to merchant " & $a_i_MerchantID, "TradeMod", $g_h_EditText)
+                Local $l_i_CurrentModelID = GwAu3_Memory_Read($l_ptr_Item + 44, 'long')
+
+                If $l_i_CurrentModelID = $l_i_ModelID Then
+                    Local $l_i_Offset12 = GwAu3_Memory_Read($l_ptr_Item + 12, 'ptr')
+                    Local $l_i_Offset4 = GwAu3_Memory_Read($l_ptr_Item + 4, 'long')
+
+                    If $l_i_Offset12 = 0 And $l_i_Offset4 = 0 Then
+                        If $a_i_ExtraID = -1 Then
+                            $l_b_Found = True
+                            ExitLoop
+                        Else
+                            Local $l_i_ItemExtraID = GwAu3_Memory_Read($l_ptr_Item + 34, 'short')
+                            If $l_i_ItemExtraID = $a_i_ExtraID Then
+                                $l_b_Found = True
+                                ExitLoop
+                            EndIf
+                        EndIf
+                    EndIf
+                EndIf
+            Next
+
+            If Not $l_b_Found Then
+                Return $l_i_BoughtCount
+            EndIf
+
+            ; Request quote
+            Local $l_i_ItemID = GwAu3_Item_ItemID($l_ptr_Item)
+            DllStructSetData($g_d_RequestQuote, 2, $l_i_ItemID)
+            GwAu3_Core_Enqueue($g_p_RequestQuote, 8)
+
+            ; Wait for quote
+            Local $l_i_Deadlock = TimerInit()
+            Local $l_i_Timeout = 5000
+
+            Do
+                Sleep(36)
+                Local $l_i_NewQuoteID = GwAu3_Memory_Read($g_i_TraderQuoteID)
+            Until $l_i_NewQuoteID <> $l_i_QuoteID Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
+
+            If TimerDiff($l_i_Deadlock) > $l_i_Timeout Then
+                Return $l_i_BoughtCount
+            EndIf
+
+            ; Check if we have valid trader cost data
+            Local $l_i_CostID = GwAu3_Memory_Read($g_i_TraderCostID)
+            Local $l_f_CostValue = GwAu3_Memory_Read($g_f_TraderCostValue)
+
+            If Not $l_i_CostID Or Not $l_f_CostValue Then
+                Return $l_i_BoughtCount
+            EndIf
+
+            ; Execute trader buy
+            GwAu3_Core_Enqueue($g_p_TraderBuy, 4)
+            ; Wait for transaction
+            Sleep(36)
+            $l_i_BoughtCount += 1
+        Next
+        Return $l_i_BoughtCount > 0
+    Else
+        ; Standard merchant buy - search by ModelID
+        Local $l_p_MerchantItemsBase = GwAu3_Merchant_GetMerchantItemsBase()
+        If Not $l_p_MerchantItemsBase Then Return False
+
+        Local $l_i_MerchantSize = GwAu3_Merchant_GetMerchantItemsSize()
+        Local $l_i_ModelID = $a_p_Item
+        Local $l_i_FoundIndex = 0
+        Local $l_i_FoundItemID = 0
+
+        ; Search for ModelID in merchant's items
+        For $i = 1 To $l_i_MerchantSize
+            Local $l_i_ItemID = GwAu3_Memory_Read($l_p_MerchantItemsBase + 4 * ($i - 1))
+            Local $l_ptr_Item = GwAu3_Item_GetItemPtr($l_i_ItemID)
+            If $l_ptr_Item = 0 Then ContinueLoop
+
+            Local $l_i_CurrentModelID = GwAu3_Memory_Read($l_ptr_Item + 44, 'long')
+
+            If $l_i_CurrentModelID = $l_i_ModelID Then
+                If $a_i_ExtraID = -1 Then
+                    $l_i_FoundIndex = $i
+                    $l_i_FoundItemID = $l_i_ItemID
+                    ExitLoop
+                Else
+                    Local $l_i_ItemExtraID = GwAu3_Memory_Read($l_ptr_Item + 34, 'short')
+                    If $l_i_ItemExtraID = $a_i_ExtraID Then
+                        $l_i_FoundIndex = $i
+                        $l_i_FoundItemID = $l_i_ItemID
+                        ExitLoop
+                    EndIf
+                EndIf
+            EndIf
+        Next
+
+        If $l_i_FoundIndex = 0 Then Return False
+
+        DllStructSetData($g_d_BuyItem, 2, $a_i_Quantity)
+        DllStructSetData($g_d_BuyItem, 3, $l_i_FoundItemID)
+        DllStructSetData($g_d_BuyItem, 4, $a_i_Quantity * $a_i_Value)
+        DllStructSetData($g_d_BuyItem, 5, GwAu3_Memory_GetValue('BuyItemBase'))
+        GwAu3_Core_Enqueue($g_p_BuyItem, 20)
+
+        Return True
+    EndIf
+EndFunc ;==>GwAu3_Merchant_BuyItem
+
+Func GwAu3_Merchant_SellItem($a_p_Item, $a_i_Quantity = 1, $a_b_Trader = False)
+    Local $l_i_ItemID = GwAu3_Item_ItemID($a_p_Item)
+    Local $l_ptr_Item = GwAu3_Item_GetItemPtr($a_p_Item)
+    Local $l_i_ItemQuantity = GwAu3_Memory_Read($l_ptr_Item + 76, 'short')
+
+    ; Adjust quantity if needed
+    If $a_i_Quantity = 0 Or $a_i_Quantity > $l_i_ItemQuantity Then
+        $a_i_Quantity = $l_i_ItemQuantity
+    EndIf
+
+    If $a_b_Trader Then
+        ; Trader sell process - one by one
+        Local $l_i_SoldCount = 0
+
+        For $i = 1 To $a_i_Quantity
+            ; First request quote
+            DllStructSetData($g_d_RequestQuoteSell, 2, $l_i_ItemID)
+            GwAu3_Core_Enqueue($g_p_RequestQuoteSell, 8)
+
+            ; Wait for quote response
+            Local $l_i_Timeout = TimerInit()
+            Do
+                Sleep(50)
+                Local $l_i_CostID = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
+            Until $l_i_CostID = $l_i_ItemID Or TimerDiff($l_i_Timeout) > 2000
+
+            ; Check if quote received
+            If TimerDiff($l_i_Timeout) > 2000 Then
+                GwAu3_Log_Warning("Trader quote timeout for item " & $l_i_ItemID & " (iteration " & $i & ")", "TradeMod", $g_h_EditText)
+                ExitLoop
+            EndIf
+
+            ; Execute trader sell
+            Local $l_i_CostValue = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
+            GwAu3_Core_Enqueue($g_p_TraderSell, 4)
+
+            ; Wait a bit for transaction to complete
+            Sleep(250)
+
+            $l_i_SoldCount += 1
+
+            ; Check if item still exists (stack might be depleted)
+            Local $l_i_CurrentQuantity = GwAu3_Memory_Read($l_ptr_Item + 76, 'short')
+            If $l_i_CurrentQuantity = 0 Then ExitLoop
+        Next
+
+        GwAu3_Log_Debug("Sold to trader: Item " & $l_i_ItemID & " x" & $l_i_SoldCount & " (requested: " & $a_i_Quantity & ")", "TradeMod", $g_h_EditText)
+
+    Else
+        ; Standard merchant sell - can sell multiple at once
+        Local $l_i_Value = GwAu3_Memory_Read($l_ptr_Item + 36, 'short')
+
+        DllStructSetData($g_d_SellItem, 2, $a_i_Quantity * $l_i_Value)
+        DllStructSetData($g_d_SellItem, 3, $l_i_ItemID)
+        GwAu3_Core_Enqueue($g_p_SellItem, 12)
+
+        GwAu3_Log_Debug("Sold to merchant: Item " & $l_i_ItemID & " x" & $a_i_Quantity, "TradeMod", $g_h_EditText)
+    EndIf
+
     Return True
-EndFunc
-
-Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity, $a_i_Value)
-	Local $l_p_MerchantItemsBase = GwAu3_Merchant_GetMerchantItemsBase()
-
-	If Not $l_p_MerchantItemsBase Then Return
-	If $a_p_Item < 1 Or $a_p_Item > GwAu3_Merchant_GetMerchantItemsSize() Then Return
-
-	DllStructSetData($g_d_BuyItem, 2, $a_i_Quantity)
-	DllStructSetData($g_d_BuyItem, 3, GwAu3_Memory_Read($l_p_MerchantItemsBase + 4 * ($a_p_Item - 1)))
-	DllStructSetData($g_d_BuyItem, 4, $a_i_Quantity * $a_i_Value)
-	DllStructSetData($g_d_BuyItem, 5, GwAu3_Memory_GetValue('BuyItemBase')
-;~ 	Or
-;~ 	DllStructSetData($g_d_BuyItem, 5, GwAu3_Memory_Read(GwAu3_Memory_GetValue('BuyItemBase')))
-	GwAu3_Core_Enqueue($g_p_BuyItem, 20)
-
-    $g_i_LastItemID = $a_p_Item
-    $g_i_LastQuantity = $a_i_Quantity
-    $g_i_LastPrice = $a_i_Price
-    Return True
-EndFunc
+EndFunc ;==>GwAu3_Merchant_SellItem
 
 Func GwAu3_Merchant_CraftItem($a_i_RecipeID, $a_i_Quantity = 1, $a_v_Materials = 0, $a_i_CrafterID = 0, $a_i_Flags = 0)
     If $a_i_RecipeID <= 0 Then
@@ -85,83 +232,5 @@ Func GwAu3_Merchant_CraftItem($a_i_RecipeID, $a_i_Quantity = 1, $a_v_Materials =
     $g_i_LastQuantity = $a_i_Quantity
 
     GwAu3_Log_Debug("Crafting item " & $a_i_RecipeID & " (quantity: " & $a_i_Quantity & ") with crafter " & $a_i_CrafterID, "TradeMod", $g_h_EditText)
-    Return True
-EndFunc
-
-Func GwAu3_Merchant_RequestQuote($a_i_ItemID)
-    If $a_i_ItemID <= 0 Then
-        GwAu3_Log_Error("Invalid item ID: " & $a_i_ItemID, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    DllStructSetData($g_d_RequestQuote, 2, $a_i_ItemID)
-
-    GwAu3_Core_Enqueue($g_p_RequestQuote, 8)
-
-    ; Record for tracking
-    $g_i_LastTransactionType = $GC_I_TRANSACTION_REQUEST_QUOTE
-    $g_i_LastItemID = $a_i_ItemID
-
-    GwAu3_Log_Debug("Requesting quote for item " & $a_i_ItemID, "TradeMod", $g_h_EditText)
-    Return True
-EndFunc
-
-Func GwAu3_Merchant_RequestQuoteSell($a_i_ItemID)
-    If $a_i_ItemID <= 0 Then
-        GwAu3_Log_Error("Invalid item ID: " & $a_i_ItemID, "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    DllStructSetData($g_d_RequestQuoteSell, 2, $a_i_ItemID)
-
-    GwAu3_Core_Enqueue($g_p_RequestQuoteSell, 8)
-
-    ; Record for tracking
-    $g_i_LastTransactionType = $GC_I_TRANSACTION_REQUEST_QUOTE_SELL
-    $g_i_LastItemID = $a_i_ItemID
-
-    GwAu3_Log_Debug("Requesting sell quote for item " & $a_i_ItemID, "TradeMod", $g_h_EditText)
-    Return True
-EndFunc
-
-Func GwAu3_Merchant_TraderBuy()
-    ; Check if we have valid trader data
-    Local $l_i_CostID = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
-    Local $l_i_CostValue = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
-
-    If $l_i_CostID = 0 Then
-        GwAu3_Log_Warning("No valid trader quote available", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    GwAu3_Core_Enqueue($g_p_TraderBuy, 4)
-
-    ; Record for tracking
-    $g_i_LastTransactionType = $GC_I_TRANSACTION_TRADER_BUY
-    $g_i_LastItemID = $l_i_CostID
-    $g_i_LastPrice = $l_i_CostValue
-
-    GwAu3_Log_Debug("Executing trader buy for item " & $l_i_CostID & " at price " & $l_i_CostValue, "TradeMod", $g_h_EditText)
-    Return True
-EndFunc
-
-Func GwAu3_Merchant_TraderSell()
-    ; Check if we have valid trader data
-    Local $l_i_CostID = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
-    Local $l_i_CostValue = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
-
-    If $l_i_CostID = 0 Then
-        GwAu3_Log_Warning("No valid trader quote available", "TradeMod", $g_h_EditText)
-        Return False
-    EndIf
-
-    GwAu3_Core_Enqueue($g_p_TraderSell, 4)
-
-    ; Record for tracking
-    $g_i_LastTransactionType = $GC_I_TRANSACTION_TRADER_SELL
-    $g_i_LastItemID = $l_i_CostID
-    $g_i_LastPrice = $l_i_CostValue
-
-    GwAu3_Log_Debug("Executing trader sell for item " & $l_i_CostID & " at price " & $l_i_CostValue, "TradeMod", $g_h_EditText)
     Return True
 EndFunc
