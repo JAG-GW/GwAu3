@@ -15,10 +15,8 @@ Func GwAu3_Merchant_GetMerchantItemsSize()
 EndFunc   ;==>GetMerchantItemsSize
 
 ;~ Description: Internal use for buy an item, extraID is for dye
-Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity = 1, $a_i_Value = 0, $a_b_Trader = False, $a_i_ExtraID = -1)
+Func GwAu3_Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_i_ExtraID = -1)
 	If $a_b_Trader Then
-        ; For trader, $a_p_Item is the ModelID
-        Local $l_i_ModelID = $a_p_Item
         Local $l_i_BoughtCount = 0
 
         For $i = 1 To $a_i_Quantity
@@ -36,7 +34,7 @@ Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity = 1, $a_i_Value = 0, $a_b_T
 
                 Local $l_i_CurrentModelID = GwAu3_Memory_Read($l_ptr_Item + 44, 'long')
 
-                If $l_i_CurrentModelID = $l_i_ModelID Then
+                If $l_i_CurrentModelID = $a_i_ModelID Then
                     Local $l_i_Offset12 = GwAu3_Memory_Read($l_ptr_Item + 12, 'ptr')
                     Local $l_i_Offset4 = GwAu3_Memory_Read($l_ptr_Item + 4, 'long')
 
@@ -98,9 +96,9 @@ Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity = 1, $a_i_Value = 0, $a_b_T
         If Not $l_p_MerchantItemsBase Then Return False
 
         Local $l_i_MerchantSize = GwAu3_Merchant_GetMerchantItemsSize()
-        Local $l_i_ModelID = $a_p_Item
         Local $l_i_FoundIndex = 0
         Local $l_i_FoundItemID = 0
+		Local $l_i_ItemValue = 0
 
         ; Search for ModelID in merchant's items
         For $i = 1 To $l_i_MerchantSize
@@ -114,12 +112,14 @@ Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity = 1, $a_i_Value = 0, $a_b_T
                 If $a_i_ExtraID = -1 Then
                     $l_i_FoundIndex = $i
                     $l_i_FoundItemID = $l_i_ItemID
+                    $l_i_ItemValue = GwAu3_Memory_Read($l_ptr_Item + 36, 'short')
                     ExitLoop
                 Else
                     Local $l_i_ItemExtraID = GwAu3_Memory_Read($l_ptr_Item + 34, 'short')
                     If $l_i_ItemExtraID = $a_i_ExtraID Then
                         $l_i_FoundIndex = $i
                         $l_i_FoundItemID = $l_i_ItemID
+                        $l_i_ItemValue = GwAu3_Memory_Read($l_ptr_Item + 36, 'short')
                         ExitLoop
                     EndIf
                 EndIf
@@ -130,7 +130,7 @@ Func GwAu3_Merchant_BuyItem($a_p_Item, $a_i_Quantity = 1, $a_i_Value = 0, $a_b_T
 
         DllStructSetData($g_d_BuyItem, 2, $a_i_Quantity)
         DllStructSetData($g_d_BuyItem, 3, $l_i_FoundItemID)
-        DllStructSetData($g_d_BuyItem, 4, $a_i_Quantity * $a_i_Value)
+        DllStructSetData($g_d_BuyItem, 4, $a_i_Quantity * ($l_i_ItemValue*2))
         DllStructSetData($g_d_BuyItem, 5, GwAu3_Memory_GetValue('BuyItemBase'))
         GwAu3_Core_Enqueue($g_p_BuyItem, 20)
 
