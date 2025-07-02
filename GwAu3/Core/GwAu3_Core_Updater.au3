@@ -136,6 +136,7 @@ Global $g_s_Section_Hashes = "Hashes"
 ; Read GitHub repo details from [Update]
 Global $g_b_AutoUpdate = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Enabled", "1") = "1"
 Global $g_b_Verbose = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Verbose", "1") = "1"
+Global $g_b_HidePB = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "ProgressBar", "1") = "1"
 Global $g_s_Owner = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Owner", "myUser")
 Global $g_s_Repo = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Repo", "myRepo")
 Global $g_s_Branch = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Branch", "main")
@@ -149,9 +150,10 @@ Global $g_as_IgnoredFiles[2] = [1, "GwAu3/Core/config.ini"]
 ; Checks for updates to the GwAu3 GitHub repository and downloads
 ; them upon confirmation
 ; Return 0 = Error, 1 = No updates, 2 = Update cancelled by user
+; Return 3 = Updates disabled, 4 = Update completed
 ;=================================================================
 Func GwAu3_Updater_CheckForGwAu3Updates()
-    If Not $g_b_AutoUpdate Then Return 2
+    If Not $g_b_AutoUpdate Then Return 3
 
     ; Load WinHttp.dll
     GwAu3_Updater_LoadWinHttp()
@@ -268,12 +270,17 @@ Func GwAu3_Updater_CheckForGwAu3Updates()
     EndIf
 
     GwAu3_Log_Info("Starting download, please wait...", "GwAu3", $g_h_EditText)
-    GwAu3_Updater_DownloadFiles($l_as_UpdateFiles, $l_as_UpdateSHAs)
+    If Not $g_b_HidePB Then
+        GwAu3_Updater_DownloadFiles_PB($l_as_UpdateFiles, $l_as_UpdateSHAs)
+    Else
+        GwAu3_Updater_DownloadFiles_NoPB($l_as_UpdateFiles, $l_as_UpdateSHAs)
+    EndIf
 
     ; Restart current script with new file version and same privileges
     ;~ Run(@AutoItExe & ' "' & @ScriptFullPath & '"')
     ;~ Exit
-    Return
+
+    Return 4
 EndFunc
 
 ;=================================================================
@@ -421,35 +428,25 @@ EndFunc
 ; Download files from $a_as_UpdateFiles and write their respective
 ; hashes from $a_as_UpdateSHAs into INI file
 ;=================================================================
-Func GwAu3_Updater_DownloadFiles($a_as_UpdateFiles, $a_as_UpdateSHAs)
-    ; Compute each file’s size and the total
-    Local $l_ai_FileSizes[$a_as_UpdateFiles[0] + 1]
-    Local $l_i_TotalBytes = 0, $l_i_FileSize
-    Local $l_s_RelPath, $l_s_Url, $l_s_SHA
+Func GwAu3_Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
+    Local $l_i_FileSize, $l_s_RelPath
+    Local $l_s_Url, $l_s_SHA
 
-    For $i = 1 To $a_as_UpdateFiles[0]
-        $l_s_RelPath = $a_as_UpdateFiles[$i]
-        $l_s_Url = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $l_s_RelPath
-        $l_i_FileSize = InetGetSize($l_s_Url)
-        If @error Or $l_i_FileSize < 0 Then $l_i_FileSize = 0
-        $l_ai_FileSizes[$i] = $l_i_FileSize
-        $l_i_TotalBytes += $l_i_FileSize
-    Next
+    Local $l_i_FileCount = $a_as_UpdateFiles[0]
 
     ; Build a single GUI with label + progress bar
     Local $l_h_GUI = GUICreate("GwAu3-Updater - Downloading Updates", 400, 120)
     Local $l_h_Lbl = GUICtrlCreateLabel("", 20, 20, 360, 20)
     Local $l_h_ProgressBar = GUICtrlCreateProgress(20, 50, 360, 20)
-    GUICtrlSetLimit($l_h_ProgressBar, $l_i_TotalBytes)
+    GUICtrlSetLimit($l_h_ProgressBar, $l_i_FileCount)
     GUISetState(@SW_SHOW)
 
     ; Download sequentially, shifting the bar by an offset each time
-    Local $l_i_OffsetProgressBar = 0
     For $j = 1 To $a_as_UpdateFiles[0]
         $l_s_RelPath = $a_as_UpdateFiles[$j]
         $l_s_SHA = $a_as_UpdateSHAs[$j]
         $l_s_Url = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $l_s_RelPath
-        $l_i_FileSize = $l_ai_FileSizes[$j]
+        $l_i_FileSize = InetGetSize($l_s_Url)
 
         ; Replace "/" with "\" in relative filepath since Windows and GitHub use different delimiters for folders
         $l_s_RelPath = StringReplace($l_s_RelPath, "/", "\")
@@ -459,7 +456,8 @@ Func GwAu3_Updater_DownloadFiles($a_as_UpdateFiles, $a_as_UpdateSHAs)
         Local $l_s_TargetDir = StringRegExpReplace($l_s_DownloadDst, "\\[^\\]+$", "")
         DirCreate($l_s_TargetDir)
 
-        ; Update the filename label
+        ; Update status
+        GwAu3_Log_Info("Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath, "GwAu3", $g_h_EditText)
         GUICtrlSetData($l_h_Lbl, $l_s_RelPath)
 
         ; Start background download
@@ -473,19 +471,65 @@ Func GwAu3_Updater_DownloadFiles($a_as_UpdateFiles, $a_as_UpdateSHAs)
         While True
             Local $l_i_BytesRead = InetGetInfo($l_h_Download, $INET_DOWNLOADREAD)
             If @error Then ExitLoop
-            GUICtrlSetData($l_h_ProgressBar, $l_i_OffsetProgressBar + $l_i_BytesRead)
-            GUISetState()
             If $l_i_BytesRead >= $l_i_FileSize Then ExitLoop
             Sleep(100)
         WEnd
 
-        ; Advance offset and save hash
-        $l_i_OffsetProgressBar += $l_i_FileSize
+        ; Update progress bar
+        GUICtrlSetData($l_h_ProgressBar, $j)
+
+        ; Save hash
         GwAu3_Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
     Next
 
     ; Remove update GUI
     GUIDelete($l_h_GUI)
+EndFunc
+
+;=================================================================
+; Download files from $a_as_UpdateFiles and write their respective
+; hashes from $a_as_UpdateSHAs into INI file
+;=================================================================
+Func GwAu3_Updater_DownloadFiles_NoPB($a_as_UpdateFiles, $a_as_UpdateSHAs)
+    Local $l_i_FileSize, $l_s_RelPath
+    Local $l_s_Url, $l_s_SHA
+
+    Local $l_i_FileCount = $a_as_UpdateFiles[0]
+    For $j = 1 To $l_i_FileCount
+        $l_s_RelPath = $a_as_UpdateFiles[$j]
+        $l_s_SHA = $a_as_UpdateSHAs[$j]
+        $l_s_Url = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $l_s_RelPath
+        $l_i_FileSize = InetGetSize($l_s_Url)
+
+        ; Replace "/" with "\" in relative filepath since Windows and GitHub use different delimiters for folders
+        $l_s_RelPath = StringReplace($l_s_RelPath, "/", "\")
+        Local $l_s_DownloadDst = $g_s_GwAu3Dir & $l_s_RelPath
+
+        ; Create target directory if not present
+        Local $l_s_TargetDir = StringRegExpReplace($l_s_DownloadDst, "\\[^\\]+$", "")
+        DirCreate($l_s_TargetDir)
+
+        ; Update status
+        GwAu3_Log_Info("Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath, "GwAu3", $g_h_EditText)
+
+        ; Start background download
+        Local $l_h_Download = InetGet($l_s_Url, $l_s_DownloadDst, $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
+        If @error Or $l_h_Download = 0 Then
+            MsgBox(16, "Download Error", "Failed to fetch " & $l_s_RelPath)
+            ContinueLoop
+        EndIf
+
+        ; Poll until this file is done
+        While True
+            Local $l_i_BytesRead = InetGetInfo($l_h_Download, $INET_DOWNLOADREAD)
+            If @error Then ExitLoop
+            If $l_i_BytesRead >= $l_i_FileSize Then ExitLoop
+            Sleep(100)
+        WEnd
+
+        ; Save hash
+        GwAu3_Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
+    Next
 EndFunc
 
 ;=================================================================

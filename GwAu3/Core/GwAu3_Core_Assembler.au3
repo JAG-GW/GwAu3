@@ -1571,6 +1571,19 @@ Func _($a_s_ASM)
 					$l_s_OpCode = '0FB7C7'
 				Case 'movzx ecx,cx'
 					$l_s_OpCode = '0FB7C9'
+				; Crafting
+				Case 'lea edi,[eax+C]'
+					$l_s_OpCode = '8D780C'
+				;Collector Exchange
+				Case 'lea ecx,[edx+4]'
+					$l_s_OpCode = '8D4A04'
+				Case 'lea eax,[edx+C]'
+					$l_s_OpCode = '8D420C'
+				Case 'mov ebx,[edx+8]'
+					$l_s_OpCode = '8B5A08'
+				Case 'lea ecx,[edx+ebx*4+C]'
+					$l_s_OpCode = '8D4C9A0C'	
+
 				Case Else
 					GwAu3_Log_Error('Could not assemble: ' & $a_s_ASM, 'ASM', $g_h_EditText)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $a_s_ASM)
@@ -1739,11 +1752,12 @@ Func GwAu3_Assembler_ModifyMemory()
 	GwAu3_Assembler_CreateTrader()
 	GwAu3_Assembler_CreateSellItemCommand()
 	GwAu3_Assembler_CreateBuyItemCommand()
-	GwAu3_Assembler_CreateCraftItemExCommand()
 	GwAu3_Assembler_CreateRequestQuoteCommand()
 	GwAu3_Assembler_CreateRequestQuoteSellCommand()
 	GwAu3_Assembler_CreateTraderBuyCommand()
 	GwAu3_Assembler_CreateTraderSellCommand()
+	GwAu3_Assembler_CreateCraftItemCommand()
+	GwAu3_Assembler_CreateCollectorExchangeCommand()
 	GwAu3_Assembler_CreateSalvageCommand()
 	GwAu3_Assembler_CreateAgentCommands()
 	GwAu3_Assembler_CreateMapCommands()
@@ -2053,27 +2067,45 @@ Func GwAu3_Assembler_CreateBuyItemCommand()
     _('ljmp CommandReturn')
 EndFunc
 
-Func GwAu3_Assembler_CreateCraftItemExCommand()
-    _('CommandCraftItemEx:')
-    _('add eax,4')
-    _('push eax')
-    _('add eax,4')
-    _('push eax')
-    _('push 1')
-    _('push 0')
-    _('push 0')
-    _('mov ecx,dword[TradeID]')
-    _('mov ecx,dword[ecx]')
-    _('mov edx,dword[eax+4]')
-    _('lea ecx,dword[ebx+ecx*4]')
-    _('push ecx')
-    _('push 1')
-    _('push dword[eax+8]')
-    _('push dword[eax+C]')
-    _('call Trader')
-    _('add esp,24')
-    _('mov dword[TraderCostID],0')
-    _('ljmp CommandReturn')
+Func GwAu3_Assembler_CreateCraftItemCommand()
+	_('CommandCraftItem:')
+	_('add eax,4')
+	_('push eax')
+	_('add eax,4')
+	_('push eax')
+	_('push 1')
+	_('push 0')
+	_('push 0')
+	_('lea edi,[eax+C]')
+	_('push edi')
+	_('push dword[eax+8]')
+	_('push dword[eax+4]')
+	_('push 3')
+	_('call Transaction')
+	_('add esp,24')
+	_('mov dword[TraderCostID],0')
+	_('ljmp CommandReturn')
+EndFunc
+
+Func GwAu3_Assembler_CreateCollectorExchangeCommand()
+	_('CommandCollectorExchange:')
+	_('mov edx,eax')
+	_('push 0')
+	_('lea ecx,[edx+4]')
+	_('push ecx')
+	_('push 1')
+	_('push 0')
+	_('lea eax,[edx+C]')
+	_('push eax')
+	_('mov ebx,[edx+8]')
+	_('lea ecx,[edx+ebx*4+C]')
+	_('push ecx')
+	_('push ebx')
+	_('push 0')
+	_('push 2')
+	_('call Transaction')
+	_('add esp,24')
+	_('ljmp CommandReturn')
 EndFunc
 
 Func GwAu3_Assembler_CreateRequestQuoteCommand()
