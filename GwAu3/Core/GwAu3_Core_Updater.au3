@@ -136,7 +136,7 @@ Global $g_s_Section_Hashes = "Hashes"
 ; Read GitHub repo details from [Update]
 Global $g_b_AutoUpdate = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Enabled", "1") = "1"
 Global $g_b_Verbose = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Verbose", "1") = "1"
-Global $g_b_HidePB = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "ProgressBar", "1") = "1"
+Global $g_b_EnablePB = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "ProgressBar", "1") = "1"
 Global $g_s_Owner = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Owner", "myUser")
 Global $g_s_Repo = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Repo", "myRepo")
 Global $g_s_Branch = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Branch", "main")
@@ -270,7 +270,7 @@ Func GwAu3_Updater_CheckForGwAu3Updates()
     EndIf
 
     GwAu3_Log_Info("Starting download, please wait...", "GwAu3", $g_h_EditText)
-    If Not $g_b_HidePB Then
+    If $g_b_EnablePB Then
         GwAu3_Updater_DownloadFiles_PB($l_as_UpdateFiles, $l_as_UpdateSHAs)
     Else
         GwAu3_Updater_DownloadFiles_NoPB($l_as_UpdateFiles, $l_as_UpdateSHAs)
