@@ -108,7 +108,7 @@ Func GwAu3_Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False
 
             Local $l_i_CurrentModelID = GwAu3_Memory_Read($l_ptr_Item + 44, 'long')
 
-            If $l_i_CurrentModelID = $l_i_ModelID Then
+            If $l_i_CurrentModelID = $a_i_ModelID Then
                 If $a_i_ExtraID = -1 Then
                     $l_i_FoundIndex = $i
                     $l_i_FoundItemID = $l_i_ItemID
