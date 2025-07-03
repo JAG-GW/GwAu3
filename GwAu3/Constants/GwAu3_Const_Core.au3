@@ -111,4 +111,6 @@ Global $g_f_ClickCoordsY = 0
 ;UI
 Global $g_d_EnterMission = DllStructCreate('ptr;dword')
 Global $g_p_EnterMission = DllStructGetPtr($g_d_EnterMission)
+Global $g_d_SetDifficulty = DllStructCreate('ptr;dword')
+Global $g_p_SetDifficulty = DllStructGetPtr($g_d_SetDifficulty)
 #EndRegion Global Variables

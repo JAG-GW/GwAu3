@@ -93,6 +93,7 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	; Ui
 	GwAu3_Scanner_AddPattern('SendUIMessage', 'B900000000E8000000005DC3894508', 0x0, 'Func')
 	GwAu3_Scanner_AddPattern('EnterMission', 'A900001000743A', 0x52, 'Func')
+	GwAu3_Scanner_AddPattern('SetDifficulty', '8B75086828010010', 0x71, 'Func')
 	; hook
 	GwAu3_Scanner_AddPattern('Engine', '568B3085F67478EB038D4900D9460C', -0x22, 'Hook')
     GwAu3_Scanner_AddPattern('Render', 'F6C401741C68B1010000BA', -0x67, 'Hook')
@@ -221,8 +222,11 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	;Ui
 	$l_p_Temp = GwAu3_Scanner_GetScanResult('EnterMission', $g_ap_ScanResults, 'Func')
 	GwAu3_Memory_SetValue('EnterMission', Ptr(GwAu3_Scanner_GetCallTargetAddress($l_p_Temp)))
+	$l_p_Temp = GwAu3_Scanner_GetScanResult('SetDifficulty', $g_ap_ScanResults, 'Func')
+	GwAu3_Memory_SetValue('SetDifficulty', Ptr(GwAu3_Scanner_GetCallTargetAddress($l_p_Temp)))
 	;Ui log
 	GwAu3_Log_Debug("EnterMission: " & GwAu3_Memory_GetValue('EnterMission'), "Initialize", $g_h_EditText)
+	GwAu3_Log_Debug("SetDifficulty: " & GwAu3_Memory_GetValue('SetDifficulty'), "Initialize", $g_h_EditText)
 
     ;Hook
     $l_p_Temp = GwAu3_Scanner_GetScanResult('Engine', $g_ap_ScanResults, 'Hook')
@@ -293,6 +297,7 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	DllStructSetData($g_d_Move, 1, GwAu3_Memory_GetValue('CommandMove'))
 	;Ui
 	DllStructSetData($g_d_EnterMission, 1, GwAu3_Memory_GetValue('CommandEnterMission'))
+	DllStructSetData($g_d_SetDifficulty, 1, GwAu3_Memory_GetValue('CommandSetDifficulty'))
 
     If $a_b_ChangeTitle Then WinSetTitle($g_h_GWWindow, '', 'Guild Wars - ' & GwAu3_Player_GetCharname())
 
