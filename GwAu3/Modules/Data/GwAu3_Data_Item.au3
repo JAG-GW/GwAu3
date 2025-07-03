@@ -449,6 +449,34 @@ Func GwAu3_Item_GetItemInfoByPtr($a_p_ItemPtr, $a_s_Info)
     EndSwitch
 EndFunc   ;==>GetItemInfoByPtr
 
+Func GwAu3_Item_GetItemIsCommonMaterial($a_p_Item)
+    Local $l_p_Item = GwAu3_Item_GetItemPtr($a_p_Item)
+    Local $l_i_Item_ModelID = GwAu3_Memory_Read($l_p_Item + 0x2C, "dword")
+    Local $l_b_IsCommon = False
+
+    For $i = 1 To $GC_AI_COMMON_MATERIALS[0]
+        If $GC_AI_COMMON_MATERIALS[$i] = $l_i_Item_ModelID Then
+            $l_b_IsCommon = True
+            ExitLoop
+        EndIf
+    Next
+    Return $l_b_IsCommon
+EndFunc
+
+Func GwAu3_Item_GetItemIsRareMaterial($a_p_Item)
+    Local $l_p_Item = GwAu3_Item_GetItemPtr($a_p_Item)
+    Local $l_i_Item_ModelID = GwAu3_Memory_Read($l_p_Item + 0x2C, "dword")
+    Local $l_b_IsRare = False
+
+    For $i = 1 To $GC_AI_RARE_MATERIALS[0]
+        If $GC_AI_RARE_MATERIALS[$i] = $l_i_Item_ModelID Then
+            $l_b_IsRare = True
+            ExitLoop
+        EndIf
+    Next
+    Return $l_b_IsRare
+EndFunc
+
 Func GwAu3_Item_FindItemByModelID($a_i_ModelID)
     Local $l_ap_ItemArray = GwAu3_Item_GetItemArray()
 
