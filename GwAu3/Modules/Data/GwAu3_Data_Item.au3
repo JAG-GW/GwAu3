@@ -110,10 +110,6 @@ Func GwAu3_Item_GetInventoryInfo($a_s_Info = "")
     Return 0
 EndFunc
 
-Global Enum $GC_E_INVENTORY_UNUSED_BAG, $GC_E_INVENTORY_BACKPACK, $GC_E_INVENTORY_BELT_POUCH, $GC_E_INVENTORY_BAG1, $GC_E_INVENTORY_BAG2, $GC_E_INVENTORY_EQUIPMENT_PACK, $GC_E_INVENTORY_MATERIAL_STORAGE, $GC_E_INVENTORY_UNCLAIMED_ITEMS, _
-            $GC_E_INVENTORY_STORAGE1, $GC_E_INVENTORY_STORAGE2, $GC_E_INVENTORY_STORAGE3, $GC_E_INVENTORY_STORAGE4, $GC_E_INVENTORY_STORAGE5, $GC_E_INVENTORY_STORAGE6, $GC_E_INVENTORY_STORAGE7, _
-            $GC_E_INVENTORY_STORAGE8, $GC_E_INVENTORY_STORAGE9, $GC_E_INVENTORY_STORAGE10, $GC_E_INVENTORY_STORAGE11, $GC_E_INVENTORY_STORAGE12, $GC_E_INVENTORY_STORAGE13, $GC_E_INVENTORY_STORAGE14, $GC_E_INVENTORY_EQUIPPED_ITEMS
-
 Func GwAu3_Item_GetBagPtr($a_v_BagNumber)
     If IsPtr($a_v_BagNumber) Then Return $a_v_BagNumber
     Local $l_ai_Offset[5] = [0, 0x18, 0x40, 0xF8, 0x4 * $a_v_BagNumber]
@@ -170,7 +166,7 @@ Func GwAu3_Item_GetBagInfo($a_v_BagNumber, $a_s_Info = "")
 EndFunc
 
 Func GwAu3_Item_GetBagsItembyModelID($a_i_ModelID)
-    Local $l_ai_BagList[4] = [$GC_E_INVENTORY_BACKPACK, $GC_E_INVENTORY_BELT_POUCH, $GC_E_INVENTORY_BAG1, $GC_E_INVENTORY_BAG2]
+    Local $l_ai_BagList[4] = [$GC_I_INVENTORY_BACKPACK, $GC_I_INVENTORY_BELT_POUCH, $GC_I_INVENTORY_BAG1, $GC_I_INVENTORY_BAG2]
 
     For $l_i_Idx = 0 To UBound($l_ai_BagList) - 1
         Local $l_p_BagPtr = GwAu3_Item_GetBagPtr($l_ai_BagList[$l_i_Idx])
@@ -218,6 +214,100 @@ Func GwAu3_Item_GetBagItemArray($a_v_BagNumber)
 
     Return $l_ap_ItemArray
 EndFunc   ;==>GetBagItemArray
+
+Func GwAu3_Item_GetInventoryArray($a_b_IncludeEquipmentPack = False)
+    If Not $a_b_IncludeEquipmentPack Then
+        Local Const $LC_AI_BAG_LIST[4] = [$GC_I_INVENTORY_BACKPACK, $GC_I_INVENTORY_BELT_POUCH, $GC_I_INVENTORY_BAG1, $GC_I_INVENTORY_BAG2]
+        Local Const $LC_I_MAX_BAG_SLOTS = 60
+    Else
+        Local Const $LC_AI_BAG_LIST[5] = [$GC_I_INVENTORY_BACKPACK, $GC_I_INVENTORY_BELT_POUCH, $GC_I_INVENTORY_BAG1, $GC_I_INVENTORY_BAG2, $GC_I_INVENTORY_EQUIPMENT_PACK]
+        Local Const $LC_I_MAX_BAG_SLOTS = 80
+    EndIf
+
+    Local Const $LC_I_INVENTORY_ARRAY_COLSS = 13
+
+    Local Const $LC_I_OFFSET_ITEMID = 0x0
+    Local Const $LC_I_OFFSET_BAG = 0xC
+    Local Const $LC_I_OFFSET_ITEMTYPE = 0x20
+    Local Const $LC_I_OFFSET_EXTRAID = 0x22
+    Local Const $LC_I_OFFSET_VALUE = 0x24
+    Local Const $LC_I_OFFSET_ITEMFLAG = 0x28
+    Local Const $LC_I_OFFSET_MODELID = 0x2C
+    Local Const $LC_I_OFFSET_RARITY = 0x38
+    Local Const $LC_I_OFFSET_MATSALV = 0x4A
+    Local Const $LC_I_OFFSET_QUANTITY = 0x4C
+    Local Const $LC_I_OFFSET_SLOT = 0x50
+    Local Const $LC_I_BYTE_PADDING = 0x1
+
+    Static $s_d_Struct_Item = DllStructCreate( _
+        "dword ItemID;" & _
+        "byte[" & ($LC_I_OFFSET_BAG - ($LC_I_OFFSET_ITEMID + 4)) & "];" & _
+        "ptr Bag;" & _
+        "byte[" & ($LC_I_OFFSET_ITEMTYPE - ($LC_I_OFFSET_BAG + 4)) & "];" & _
+        "byte ItemType;" & _
+        "byte[" & ($LC_I_BYTE_PADDING) & "];" & _
+        "byte ExtraID;" & _
+        "byte[" & ($LC_I_BYTE_PADDING) & "];" & _
+        "short Value;" & _
+        "byte[" & ($LC_I_OFFSET_ITEMFLAG - ($LC_I_OFFSET_VALUE + 2)) & "];" & _
+        "dword ItemFlag;" & _
+        "dword ModelID;" & _
+        "byte[" & ($LC_I_OFFSET_RARITY - ($LC_I_OFFSET_MODELID + 4)) & "];" & _
+        "ptr Rarity;" & _
+        "byte[" & ($LC_I_OFFSET_MATSALV - ($LC_I_OFFSET_RARITY + 4)) & "];" & _
+        "byte IsMaterialSalvageable;" & _
+        "byte[" & ($LC_I_BYTE_PADDING) & "];" & _
+        "short Quantity;" & _
+        "byte[" & ($LC_I_OFFSET_SLOT - ($LC_I_OFFSET_QUANTITY + 2)) & "];" & _
+        "byte Slot" _
+    )
+    Static $s_i_StructSize_Item = DllStructGetSize($s_d_Struct_Item)
+
+    Local $l_amx2_Inventory[$LC_I_MAX_BAG_SLOTS][$LC_I_INVENTORY_ARRAY_COLS]
+    Local $l_i_Inventory_Idx = 0
+
+    For $l_i_Idx = 0 To UBound($LC_AI_BAG_LIST) - 1
+        Local $l_p_BagPtr = GwAu3_Item_GetBagPtr($LC_AI_BAG_LIST[$l_i_Idx])
+        If $l_p_BagPtr = 0 Then ContinueLoop
+
+        Local $l_ap_ItemArray = GwAu3_Item_GetBagItemArray($LC_AI_BAG_LIST[$l_i_Idx])
+        Local $l_i_ItemCount = $l_ap_ItemArray[0]
+
+        For $l_i_Jdx = 1 To $l_i_ItemCount
+            Local $l_p_CacheItemPtr = $l_ap_ItemArray[$l_i_Jdx]
+            If $l_p_CacheItemPtr = 0 Then ContinueLoop
+
+            DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
+                "handle", $g_h_GWProcess, _
+                "ptr", $l_p_CacheItemPtr, _
+                "struct*", $s_d_Struct_Item, _
+                "ulong_ptr", $s_i_StructSize_Item, _
+                "ulong_ptr*", 0 _
+            )
+
+            Local $l_i_ItemFlag = DllStructGetData($s_d_Struct_Item, "ItemFlag")
+                
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_PTR] = $l_p_CacheItemPtr
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_ITEMID] = DllStructGetData($s_d_Struct_Item, "ItemID")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_BAG] = GwAu3_Memory_Read(DllStructGetData($s_d_Struct_Item, "Bag"), "byte")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_ITEMTYPE] = DllStructGetData($s_d_Struct_Item, "ItemType")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_EXTRAID] = DllStructGetData($s_d_Struct_Item, "ExtraID")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_VALUE] = DllStructGetData($s_d_Struct_Item, "Value")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_ISIDENTIFIED] = BitAND($l_i_ItemFlag, 0x1) > 0
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_ISINSCRIBABLE] = BitAND($l_i_ItemFlag, 0x08000000) > 0
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_MODELID] = DllStructGetData($s_d_Struct_Item, "ModelID")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_RARITY] = GwAu3_Memory_Read(DllStructGetData($s_d_Struct_Item, "Rarity"), "ushort")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_ISMATERIALSALVAGEABLE] = DllStructGetData($s_d_Struct_Item, "IsMaterialSalvageable")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_QUANTITY] = DllStructGetData($s_d_Struct_Item, "Quantity")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_SLOT] = DllStructGetData($s_d_Struct_Item, "Slot")
+            $l_i_Inventory_Idx += 1
+        Next
+    Next
+    
+    ReDim $l_amx2_Inventory[$l_i_Inventory_Idx][$LC_I_INVENTORY_ARRAY_COLS]
+
+    Return $l_amx2_Inventory
+EndFunc
 
 Func GwAu3_Item_GetItemBySlot($a_v_BagNumber, $a_i_Slot)
     If $a_i_Slot < 1 Or $a_i_Slot > GwAu3_Item_GetBagInfo($a_v_BagNumber, "Slots") Then Return 0

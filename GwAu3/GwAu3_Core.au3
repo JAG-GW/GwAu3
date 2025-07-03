@@ -20,6 +20,10 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 			GwAu3_Log_Info("No updates available", "GwAu3", $g_h_EditText)
 		Case 2
 			GwAu3_Log_Info("Update has been cancelled", "GwAu3", $g_h_EditText)
+		Case 3
+			GwAu3_Log_Info("Updates disabled", "GwAu3", $g_h_EditText)
+		Case 4
+			GwAu3_Log_Info("Update complete", "GwAu3", $g_h_EditText)
 	EndSwitch
 	GwAu3_Log_Info("Initializing...", "GwAu3", $g_h_EditText)
     ; Open process
@@ -277,7 +281,6 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	;Trade
 	DllStructSetData($g_d_SellItem, 1, GwAu3_Memory_GetValue('CommandSellItem'))
     DllStructSetData($g_d_BuyItem, 1, GwAu3_Memory_GetValue('CommandBuyItem'))
-    DllStructSetData($g_d_CraftItemEx, 1, GwAu3_Memory_GetValue('CommandCraftItemEx'))
     DllStructSetData($g_d_RequestQuote, 1, GwAu3_Memory_GetValue('CommandRequestQuote'))
     DllStructSetData($g_d_RequestQuoteSell, 1, GwAu3_Memory_GetValue('CommandRequestQuoteSell'))
     DllStructSetData($g_d_TraderBuy, 1, GwAu3_Memory_GetValue('CommandTraderBuy'))
