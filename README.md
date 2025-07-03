@@ -109,11 +109,12 @@ GwAu3_Skill_UseSkill(1) ; Uses skill 1
 
 ### Automatic Updates
 
-The `UpdaterConfig.ini` file allows you to configure updates:
+The `config.ini` file in GwAu3\GwAu3\Core allows you to configure automatic updates:
 
 ```ini
 [Update]
-Enabled=1
+Enabled=1      ;0 = Disable Automatic Updates
+Verbose=1      ;0 = Silently update and delete, no prompts (Use at your own risk)
 Owner=JAG-GW
 Repo=GwAu3
 Branch=main
