@@ -1571,6 +1571,9 @@ Func _($a_s_ASM)
 					$l_s_OpCode = '0FB7C7'
 				Case 'movzx ecx,cx'
 					$l_s_OpCode = '0FB7C9'
+				; SellItem
+				Case 'mov ecx,[eax]'
+					$l_s_OpCode = '8B08'
 				; Crafting
 				Case 'lea edi,[eax+C]'
 					$l_s_OpCode = '8D780C'
@@ -2027,14 +2030,20 @@ EndFunc
 
 Func GwAu3_Assembler_CreateSellItemCommand()
     _('CommandSellItem:')
-    _('mov esi,eax')
-    _('add esi,C')
     _('push 0')
     _('push 0')
     _('push 0')
-    _('push dword[eax+4]')
+    _('push dword[eax+C]')
+    _('add eax,4')
+    _('mov ecx,[eax]')
+    _('test ecx,ecx')
+    _('jz SellItemAll')
+    _('push eax')
+    _('jmp SellItemContinue')
+	_('SellItemAll:')
     _('push 0')
-    _('add eax,8')
+	_('SellItemContinue:')
+    _('add eax,4')
     _('push eax')
     _('push 1')
     _('push 0')
