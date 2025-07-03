@@ -431,7 +431,7 @@ Func GwAu3_Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
 
     ; Build a single GUI with label + progress bar
     Local $l_h_GUI = GUICreate("GwAu3-Updater - Downloading Updates", 400, 120)
-    Local $l_h_Lbl = GUICtrlCreateLabel("", 20, 20, 360, 20)
+    Local $l_h_Lbl = GUICtrlCreateLabel("", 20, 20, 360, 20, BitOR($SS_LEFT, $DT_END_ELLIPSIS))
     Local $l_h_ProgressBar = GUICtrlCreateProgress(20, 50, 360, 20)
     GUICtrlSetLimit($l_h_ProgressBar, $l_i_FileCount)
     GUISetState(@SW_SHOW)
@@ -452,7 +452,7 @@ Func GwAu3_Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         DirCreate($l_s_TargetDir)
 
         ; Update status
-        GUICtrlSetData($l_h_Lbl, "Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath)
+        GUICtrlSetData($l_h_Lbl, "Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath & "   ")
 
         ; Start background download
         Local $l_h_Download = InetGet($l_s_Url, $l_s_DownloadDst, $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
