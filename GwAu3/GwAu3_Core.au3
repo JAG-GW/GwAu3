@@ -74,11 +74,9 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     GwAu3_Scanner_AddPattern('IncreaseAttribute', '8B7D088B702C8B1F3B9E00050000', -0x5A, 'Func')
     GwAu3_Scanner_AddPattern('DecreaseAttribute', '8B8AA800000089480C5DC3CC', 0x19, 'Func')
     ; Trade patterns
-    GwAu3_Scanner_AddPattern('SellItem', '8B4D2085C90F858E', -0x55, 'Func')
     GwAu3_Scanner_AddPattern('Transaction', '85FF741D8B4D14EB08', -0x7E, 'Func')
     GwAu3_Scanner_AddPattern('BuyItemBase', 'D9EED9580CC74004', 0xF, 'Ptr')
     GwAu3_Scanner_AddPattern('RequestQuote', '8B752083FE107614', -0x34, 'Func')
-    GwAu3_Scanner_AddPattern('Trader', '83FF10761468D2210000', -0x1E, 'Func')
     GwAu3_Scanner_AddPattern('Salvage','33C58945FC8B45088945F08B450C8945F48B45108945F88D45EC506A10C745EC76', -0xA, 'Func')
     GwAu3_Scanner_AddPattern('SalvageGlobal', '8B4A04538945F48B4208', 0x1, 'Ptr')
     ; Agent patterns
@@ -98,7 +96,7 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	; hook
 	GwAu3_Scanner_AddPattern('Engine', '568B3085F67478EB038D4900D9460C', -0x22, 'Hook')
     GwAu3_Scanner_AddPattern('Render', 'F6C401741C68B1010000BA', -0x67, 'Hook')
-	GwAu3_Scanner_AddPattern('HookedTrader', '50516A466A06', -0x2F, 'Hook')
+	GwAu3_Scanner_AddPattern('HookedTrader', '50516A476A06', -0x2F, 'Hook')
 
 
     $g_ap_ScanResults = GwAu3_Scanner_ScanAllPatterns()
@@ -175,18 +173,14 @@ Func GwAu3_Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     $g_p_SalvageGlobal = GwAu3_Memory_Read(GwAu3_Scanner_GetScanResult('SalvageGlobal', $g_ap_ScanResults, 'Ptr') - 0x4)
 	GwAu3_Memory_SetValue('BuyItemBase', Ptr($g_p_BuyItemBase))
     GwAu3_Memory_SetValue('SalvageGlobal', Ptr($g_p_SalvageGlobal))
-    GwAu3_Memory_SetValue('SellItem', Ptr(GwAu3_Scanner_GetScanResult('SellItem', $g_ap_ScanResults, 'Func')))
     GwAu3_Memory_SetValue('Transaction', Ptr(GwAu3_Scanner_GetScanResult('Transaction', $g_ap_ScanResults, 'Func')))
     GwAu3_Memory_SetValue('RequestQuote', Ptr(GwAu3_Scanner_GetScanResult('RequestQuote', $g_ap_ScanResults, 'Func')))
-    GwAu3_Memory_SetValue('Trader', Ptr(GwAu3_Scanner_GetScanResult('Trader', $g_ap_ScanResults, 'Func')))
     GwAu3_Memory_SetValue('Salvage', Ptr(GwAu3_Scanner_GetScanResult('Salvage', $g_ap_ScanResults, 'Func')))
 	;Trade log
 	GwAu3_Log_Debug("BuyItemBase: " & GwAu3_Memory_GetValue('BuyItemBase'), "Initialize", $g_h_EditText)
 	GwAu3_Log_Debug("SalvageGlobal: " & GwAu3_Memory_GetValue('SalvageGlobal'), "Initialize", $g_h_EditText)
-	GwAu3_Log_Debug("SellItem: " & GwAu3_Memory_GetValue('SellItem'), "Initialize", $g_h_EditText)
 	GwAu3_Log_Debug("Transaction: " & GwAu3_Memory_GetValue('Transaction'), "Initialize", $g_h_EditText)
 	GwAu3_Log_Debug("RequestQuote: " & GwAu3_Memory_GetValue('RequestQuote'), "Initialize", $g_h_EditText)
-	GwAu3_Log_Debug("Trader: " & GwAu3_Memory_GetValue('Trader'), "Initialize", $g_h_EditText)
 	GwAu3_Log_Debug("Salvage: " & GwAu3_Memory_GetValue('Salvage'), "Initialize", $g_h_EditText)
 
 	;Agent
