@@ -5,6 +5,11 @@ Func GwAu3_Ui_EnterChallenge($a_b_Foreign = False)
     GwAu3_Core_Enqueue($g_p_EnterMission, 8)
 EndFunc   ;==>EnterChallenge
 
+Func GwAu3_Ui_SetDifficulty($a_b_HardMode = False)
+    DllStructSetData($g_d_SetDifficulty, 2, $a_b_HardMode)
+    GwAu3_Core_Enqueue($g_p_SetDifficulty, 8)
+EndFunc   ;==>GwAu3_Ui_SetDifficulty
+
 ;~ Description: Open a dialog.
 Func GwAu3_Ui_Dialog($a_v_DialogID)
     Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_DIALOG_SEND, $a_v_DialogID)

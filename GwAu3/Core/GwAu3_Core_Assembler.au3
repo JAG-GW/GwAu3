@@ -2276,4 +2276,10 @@ Func GwAu3_Assembler_CreateUICommands()
 	_('call EnterMission')
 	_('add esp,4')
 	_('ljmp CommandReturn')
+
+	_('CommandSetDifficulty:')
+	_('push dword[eax+4]')
+	_('call SetDifficulty')
+	_('add esp,4')
+	_('ljmp CommandReturn')
 EndFunc
