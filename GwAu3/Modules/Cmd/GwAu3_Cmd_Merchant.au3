@@ -242,6 +242,7 @@ Func GwAu3_Merchant_SellItem($a_p_Item, $a_i_Quantity = 0, $a_b_Trader = False)
     Return True
 EndFunc ;==>GwAu3_Merchant_SellItem
 
+;~ Description: $a_ai2_Materials expects a 2D array with [[Material1, Count1],...,[MaterialN, CountN]]; materials need to be in the order shown in the recipe
 Func GwAu3_Merchant_CraftItem($a_i_CraftedItem_ModelID, $a_i_Price, $a_ai2_Materials, $a_i_Quantity = 1)
     If $a_i_CraftedItem_ModelID <= 0 Then Return False
     If $a_i_Quantity <= 0 Or $a_i_Quantity > $GC_I_MERCHANT_MAX_ITEM_STACK Then Return False
