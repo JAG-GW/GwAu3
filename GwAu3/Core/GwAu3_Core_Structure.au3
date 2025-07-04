@@ -154,7 +154,8 @@ Func GwAu3_Memory_GetTypeSize($a_s_Type)
     Local $l_i_Size
     Switch StringLower($a_s_Type)
         Case 'byte', 'boolean', 'char'
-            $l_i_Size = 1
+;~ 			$l_i_Size = 1
+			$l_i_Size = 2 ; Guild Wars pads bytes to 2-byte alignment
         Case 'wchar', 'short', 'ushort', 'word'
             $l_i_Size = 2
         Case 'int', 'long', 'bool', 'uint', 'ulong', 'dword', 'float'
