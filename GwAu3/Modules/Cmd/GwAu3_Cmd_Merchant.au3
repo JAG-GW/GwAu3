@@ -36,51 +36,46 @@ Func GwAu3_Merchant_GetMerchantItemPtr($a_i_ModelID = 0, $a_b_ByModelID = True, 
 	Next
 EndFunc   ;==>GetMerchantItemPtrByModelId
 
-;~ Description: Internal use for buy an item, extraID is for dye
-Func GwAu3_Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_i_ExtraID = -1)
+;~ Description: Internal use for buy an item, provide $a_s_ModString for runes and $a_i_ExtraID for dye
+Func GwAu3_Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s_ModString = "", $a_i_ExtraID = -1)
 	If $a_b_Trader Then
-        Local $l_i_BoughtCount = 0
+        ; Search for item with matching ModelID not belonging to a player
+        Local $l_i_ItemArraySize = GwAu3_Item_GetMaxItems()
+        Local $l_p_Item, $l_i_ItemID, $l_i_ItemModelID
+        Local $l_b_Found = False
+
+        For $l_i_Idx = 1 To $l_i_ItemArraySize
+            $l_p_Item = GwAu3_Item_GetItemPtr($l_i_Idx)
+            If Not $l_p_Item Then ContinueLoop
+
+            If GwAu3_Memory_Read($l_p_Item + 0x2C, 'dword') <> $a_i_ModelID Then ContinueLoop
+            If GwAu3_Memory_Read($l_p_Item + 0xC, 'ptr') <> 0 Or GwAu3_Memory_Read($l_p_Item + 0x4, 'dword') <> 0 Then ContinueLoop
+
+            If $a_s_ModString = "" And $a_i_ExtraID = -1 Then
+                $l_b_Found = True
+                ExitLoop
+            ElseIf $a_s_ModString <> "" And $a_i_ExtraID = -1 Then
+                If StringInStr(GwAu3_Item_GetModStruct($l_p_Item), $a_s_ModString) > 0 Then
+                    $l_b_Found = True
+                    ExitLoop
+                EndIf
+            ElseIf $a_s_ModString = "" And $a_i_ExtraID <> -1 Then
+                If GwAu3_Memory_Read($l_p_Item + 0x22, 'short') = $a_i_ExtraID Then
+                    $l_b_Found = True
+                    ExitLoop
+                EndIf
+            EndIf
+        Next
+
+        If Not $l_b_Found Then Return False
 
         For $i = 1 To $a_i_Quantity
-            ; Find the item in trader's inventory
-            Local $l_a_Offset[4] = [0, 0x18, 0x40, 0xC0]
-            Local $l_i_ItemArraySize = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_a_Offset)
-            Local $l_p_Item = 0
-            Local $l_b_Found = False
+            ; Save current QuoteID for later reference
             Local $l_i_QuoteID = GwAu3_Memory_Read($g_i_TraderQuoteID)
 
-            ; Search for item with matching ModelID
-            For $l_i_ItemID = 1 To $l_i_ItemArraySize[1]
-                $l_p_Item = GwAu3_Item_GetItemPtr($l_i_ItemID)
-                If $l_p_Item = 0 Then ContinueLoop
-
-                Local $l_i_CurrentModelID = GwAu3_Memory_Read($l_p_Item + 44, 'long')
-
-                If $l_i_CurrentModelID = $a_i_ModelID Then
-                    Local $l_i_Offset12 = GwAu3_Memory_Read($l_p_Item + 12, 'ptr')
-                    Local $l_i_Offset4 = GwAu3_Memory_Read($l_p_Item + 4, 'long')
-
-                    If $l_i_Offset12 = 0 And $l_i_Offset4 = 0 Then
-                        If $a_i_ExtraID = -1 Then
-                            $l_b_Found = True
-                            ExitLoop
-                        Else
-                            Local $l_i_ItemExtraID = GwAu3_Memory_Read($l_p_Item + 34, 'short')
-                            If $l_i_ItemExtraID = $a_i_ExtraID Then
-                                $l_b_Found = True
-                                ExitLoop
-                            EndIf
-                        EndIf
-                    EndIf
-                EndIf
-            Next
-
-            If Not $l_b_Found Then
-                Return $l_i_BoughtCount
-            EndIf
-
             ; Request quote
-            Local $l_i_ItemID = GwAu3_Item_ItemID($l_p_Item)
+            $l_i_ItemID = GwAu3_Item_ItemID($l_p_Item)
+
             DllStructSetData($g_d_RequestQuote, 2, $l_i_ItemID)
             GwAu3_Core_Enqueue($g_p_RequestQuote, 8)
 
@@ -93,68 +88,69 @@ Func GwAu3_Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False
                 Local $l_i_NewQuoteID = GwAu3_Memory_Read($g_i_TraderQuoteID)
             Until $l_i_NewQuoteID <> $l_i_QuoteID Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
 
-            If TimerDiff($l_i_Deadlock) > $l_i_Timeout Then
-                Return $l_i_BoughtCount
-            EndIf
+            If TimerDiff($l_i_Deadlock) > $l_i_Timeout Then Return False
 
             ; Check if we have valid trader cost data
             Local $l_i_CostID = GwAu3_Memory_Read($g_i_TraderCostID)
             Local $l_f_CostValue = GwAu3_Memory_Read($g_f_TraderCostValue)
 
-            If Not $l_i_CostID Or Not $l_f_CostValue Then
-                Return $l_i_BoughtCount
-            EndIf
+            If Not $l_i_CostID Or Not $l_f_CostValue Then Return False
+            If $l_f_CostValue > GwAu3_Item_GetInventoryInfo("GoldCharacter") Then Return False
 
             ; Execute trader buy
             GwAu3_Core_Enqueue($g_p_TraderBuy, 4)
+
             ; Wait for transaction
             Sleep(36)
-            $l_i_BoughtCount += 1
         Next
-        Return $l_i_BoughtCount > 0
+
+        GwAu3_Log_Debug("Bought from merchant: Item " & $l_i_ItemID & " x" & $a_i_Quantity, "TradeMod", $g_h_EditText)
+        Return True
+        
     Else
         ; Standard merchant buy - search by ModelID
-        Local $l_p_MerchantItemsBase = GwAu3_Merchant_GetMerchantItemsBase()
-        If Not $l_p_MerchantItemsBase Then Return False
+        Local $l_p_Merchant_ItemBase = GwAu3_Merchant_GetMerchantItemsBase()
+        If Not $l_p_Merchant_ItemBase Then Return False
 
-        Local $l_i_MerchantSize = GwAu3_Merchant_GetMerchantItemsSize()
-        Local $l_i_FoundIndex = 0
-        Local $l_i_FoundItemID = 0
-		Local $l_i_ItemValue = 0
+        Local $l_i_MerchantItemCount = GwAu3_Merchant_GetMerchantItemsSize()
+        Local $l_p_Item, $l_i_ItemID, $l_i_ItemModelID, $l_i_ItemValue
+        Local $l_b_MatchFound = False
+        Local $l_i_MatchedItemID = 0
 
         ; Search for ModelID in merchant's items
-        For $i = 1 To $l_i_MerchantSize
-            Local $l_i_ItemID = GwAu3_Memory_Read($l_p_MerchantItemsBase + 4 * ($i - 1))
-            Local $l_p_Item = GwAu3_Item_GetItemPtr($l_i_ItemID)
-            If $l_p_Item = 0 Then ContinueLoop
+        For $i = 0 To $l_i_MerchantItemCount - 1
+            $l_i_ItemID = GwAu3_Memory_Read($l_p_Merchant_ItemBase + 4 * $i)
+            $l_p_Item = GwAu3_Item_GetItemPtr($l_i_ItemID)
+            If Not $l_p_Item Then ContinueLoop
 
-            Local $l_i_CurrentModelID = GwAu3_Memory_Read($l_p_Item + 44, 'long')
-
-            If $l_i_CurrentModelID = $a_i_ModelID Then
+            $l_i_ItemModelID = GwAu3_Memory_Read($l_p_Item + 0x2C)
+            If $l_i_ItemModelID = $a_i_ModelID Then
                 If $a_i_ExtraID = -1 Then
-                    $l_i_FoundIndex = $i
-                    $l_i_FoundItemID = $l_i_ItemID
-                    $l_i_ItemValue = GwAu3_Memory_Read($l_p_Item + 36, 'short')
+                    $l_b_MatchFound = True
+                    $l_i_MatchedItemID = $l_i_ItemID
+                    $l_i_ItemValue = GwAu3_Memory_Read($l_p_Item + 0x24, 'short')
                     ExitLoop
                 Else
-                    Local $l_i_ItemExtraID = GwAu3_Memory_Read($l_p_Item + 34, 'short')
+                    Local $l_i_ItemExtraID = GwAu3_Memory_Read($l_p_Item + 0x22, 'short')
                     If $l_i_ItemExtraID = $a_i_ExtraID Then
-                        $l_i_FoundIndex = $i
-                        $l_i_FoundItemID = $l_i_ItemID
-                        $l_i_ItemValue = GwAu3_Memory_Read($l_p_Item + 36, 'short')
+                        $l_b_MatchFound = True
+                        $l_i_MatchedItemID = $l_i_ItemID
+                        $l_i_ItemValue = GwAu3_Memory_Read($l_p_Item + 0x24, 'short')
                         ExitLoop
                     EndIf
                 EndIf
             EndIf
         Next
 
-        If $l_i_FoundIndex = 0 Then Return False
+        If Not $l_b_MatchFound Then Return False
 
         DllStructSetData($g_d_BuyItem, 2, $a_i_Quantity)
-        DllStructSetData($g_d_BuyItem, 3, $l_i_FoundItemID)
+        DllStructSetData($g_d_BuyItem, 3, $l_i_MatchedItemID)
         DllStructSetData($g_d_BuyItem, 4, $a_i_Quantity * ($l_i_ItemValue*2))
         DllStructSetData($g_d_BuyItem, 5, GwAu3_Memory_GetValue('BuyItemBase'))
+
         GwAu3_Core_Enqueue($g_p_BuyItem, 20)
+        GwAu3_Log_Debug("Bought from merchant: Item " & $l_i_MatchedItemID & " x" & $a_i_Quantity, "TradeMod", $g_h_EditText)
 
         Return True
     EndIf
@@ -255,7 +251,7 @@ Func GwAu3_Merchant_CraftItem($a_i_CraftedItem_ModelID, $a_i_Price, $a_ai2_Mater
     If $a_i_Quantity <= 0 Or $a_i_Quantity > $GC_I_MERCHANT_MAX_ITEM_STACK Then Return False
 
     Local $l_i_Price_Total = $a_i_Price * $a_i_Quantity 
-    If $l_i_Price_Total > GwAu3_Item_GetInventoryInfo("GoldCharacter") Then return False
+    If $l_i_Price_Total > GwAu3_Item_GetInventoryInfo("GoldCharacter") Then Return False
 
     Static $s_i_LastCount_Material_ItemIDs = 0
     Static $s_d_CraftItem, $s_p_CraftItemPtr
