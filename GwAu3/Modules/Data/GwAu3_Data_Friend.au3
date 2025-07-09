@@ -1,43 +1,43 @@
 #include-once
 
-Func GwAu3_Friend_GetMyStatus()
-    Return GwAu3_Memory_Read($g_p_FriendListPtr + 0xA0, 'dword')
+Func Friend_GetMyStatus()
+    Return Memory_Read($g_p_FriendListPtr + 0xA0, 'dword')
 EndFunc
 
-Func GwAu3_Friend_GetFriendListPtr()
+Func Friend_GetFriendListPtr()
     Return $g_p_FriendListPtr
 EndFunc
 
-Func GwAu3_Friend_GetFriendListInfo($a_s_Info = "")
-    Local $l_p_Ptr = GwAu3_Friend_GetFriendListPtr()
+Func Friend_GetFriendListInfo($a_s_Info = "")
+    Local $l_p_Ptr = Friend_GetFriendListPtr()
     If $l_p_Ptr = 0 Or $a_s_Info = "" Then Return 0
 
     Switch $a_s_Info
         Case "NumberOfFriend"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0x24, "dword")
+            Return Memory_Read($l_p_Ptr + 0x24, "dword")
         Case "NumberOfIgnore"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0x28, "dword")
+            Return Memory_Read($l_p_Ptr + 0x28, "dword")
         Case "NumberOfPartner"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0x2C, "dword")
+            Return Memory_Read($l_p_Ptr + 0x2C, "dword")
         Case "NumberOfTrade"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0x30, "dword")
+            Return Memory_Read($l_p_Ptr + 0x30, "dword")
         Case "PlayerStatus"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0xA0, "dword")
+            Return Memory_Read($l_p_Ptr + 0xA0, "dword")
     EndSwitch
 
     Return 0
 EndFunc
 
-Func GwAu3_Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
+Func Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
     If $a_v_FriendIdentifier = "" Or $a_s_Info = "" Then Return 0
 
     Local $l_p_FriendPtr = 0
     Local $l_i_FriendNumber = 0
 
-    Local $l_i_TotalFriends = GwAu3_Memory_Read($g_p_FriendListPtr + 0x24, "dword") + _  ; Friends
-                              GwAu3_Memory_Read($g_p_FriendListPtr + 0x28, "dword") + _  ; Ignores
-                              GwAu3_Memory_Read($g_p_FriendListPtr + 0x2C, "dword") + _  ; Partners
-                              GwAu3_Memory_Read($g_p_FriendListPtr + 0x30, "dword")      ; Traders
+    Local $l_i_TotalFriends = Memory_Read($g_p_FriendListPtr + 0x24, "dword") + _  ; Friends
+                              Memory_Read($g_p_FriendListPtr + 0x28, "dword") + _  ; Ignores
+                              Memory_Read($g_p_FriendListPtr + 0x2C, "dword") + _  ; Partners
+                              Memory_Read($g_p_FriendListPtr + 0x30, "dword")      ; Traders
 
     ; By friend number or Friend Name
     If IsNumber($a_v_FriendIdentifier) Then
@@ -45,13 +45,13 @@ Func GwAu3_Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
         If $l_i_FriendNumber < 1 Or $l_i_FriendNumber > $l_i_TotalFriends Then Return 0
 
         Local $l_ai_Offset[3] = [0, 0x4 * $l_i_FriendNumber, 0]
-        Local $l_av_Result = GwAu3_Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, "ptr")
+        Local $l_av_Result = Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, "ptr")
         $l_p_FriendPtr = $l_av_Result[0]
     Else
         ; Find by name
         For $l_i_Idx = 1 To $l_i_TotalFriends
             Local $l_ai_Offset[3] = [0, 0x4 * $l_i_Idx, 0x2C]
-            Local $l_av_NameResult = GwAu3_Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, 'WCHAR[20]')
+            Local $l_av_NameResult = Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, 'WCHAR[20]')
             If $l_av_NameResult[1] = $a_v_FriendIdentifier Then
                 $l_i_FriendNumber = $l_i_Idx
                 $l_p_FriendPtr = $l_av_NameResult[0] - 0x2C
@@ -63,7 +63,7 @@ Func GwAu3_Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
         If $l_p_FriendPtr = 0 Then
             For $l_i_Idx = 1 To $l_i_TotalFriends
                 Local $l_ai_Offset[3] = [0, 0x4 * $l_i_Idx, 0x18]
-                Local $l_av_NameResult = GwAu3_Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, 'WCHAR[20]')
+                Local $l_av_NameResult = Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, 'WCHAR[20]')
                 If $l_av_NameResult[1] = $a_v_FriendIdentifier Then
                     $l_i_FriendNumber = $l_i_Idx
                     $l_p_FriendPtr = $l_av_NameResult[0] - 0x18
@@ -75,49 +75,49 @@ Func GwAu3_Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
 
     Switch $a_s_Info
         Case "Type", "FriendType"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x0, "dword")
+            Return Memory_Read($l_p_FriendPtr + 0x0, "dword")
 
         Case "Status", "FriendStatus"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x4, "dword")
+            Return Memory_Read($l_p_FriendPtr + 0x4, "dword")
 
         Case "UUID"
             Local $l_s_UUID = ""
             For $l_i_Idx = 0 To 15
-                $l_s_UUID &= Hex(GwAu3_Memory_Read($l_p_FriendPtr + 0x8 + $l_i_Idx, 'byte'), 2)
+                $l_s_UUID &= Hex(Memory_Read($l_p_FriendPtr + 0x8 + $l_i_Idx, 'byte'), 2)
             Next
             Return Binary("0x" & $l_s_UUID)
 
         Case "Name", "Alias"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x18, 'wchar[20]')
+            Return Memory_Read($l_p_FriendPtr + 0x18, 'wchar[20]')
 
         Case "ConnectedName", "CharName", "Playing"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x2C, 'wchar[20]')
+            Return Memory_Read($l_p_FriendPtr + 0x2C, 'wchar[20]')
 
         Case "FriendID"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x40, "dword")
+            Return Memory_Read($l_p_FriendPtr + 0x40, "dword")
 
         Case "MapID", "ZoneID"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x44, "dword")
+            Return Memory_Read($l_p_FriendPtr + 0x44, "dword")
 
         Case "TypeName"
-            Local $l_i_Type = GwAu3_Memory_Read($l_p_FriendPtr + 0x0, "dword")
-            Return GwAu3_Friend_GetFriendTypeName($l_i_Type)
+            Local $l_i_Type = Memory_Read($l_p_FriendPtr + 0x0, "dword")
+            Return Friend_GetFriendTypeName($l_i_Type)
 
         Case "StatusName"
-            Local $l_i_Status = GwAu3_Memory_Read($l_p_FriendPtr + 0x4, "dword")
-            Return GwAu3_Friend_GetFriendStatusName($l_i_Status)
+            Local $l_i_Status = Memory_Read($l_p_FriendPtr + 0x4, "dword")
+            Return Friend_GetFriendStatusName($l_i_Status)
 
         Case "IsOnline"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x4, "dword") = $GC_I_FRIEND_STATUS_ONLINE
+            Return Memory_Read($l_p_FriendPtr + 0x4, "dword") = $GC_I_FRIEND_STATUS_ONLINE
 
         Case "IsOffline"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x4, "dword") = $GC_I_FRIEND_STATUS_OFFLINE
+            Return Memory_Read($l_p_FriendPtr + 0x4, "dword") = $GC_I_FRIEND_STATUS_OFFLINE
 
         Case "IsFriend"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x0, "dword") = $GC_I_FRIEND_TYPE_FRIEND
+            Return Memory_Read($l_p_FriendPtr + 0x0, "dword") = $GC_I_FRIEND_TYPE_FRIEND
 
         Case "IsIgnored"
-            Return GwAu3_Memory_Read($l_p_FriendPtr + 0x0, "dword") = $GC_I_FRIEND_TYPE_IGNORE
+            Return Memory_Read($l_p_FriendPtr + 0x0, "dword") = $GC_I_FRIEND_TYPE_IGNORE
 
         Case "Number", "Index"
             Return $l_i_FriendNumber
@@ -130,21 +130,21 @@ Func GwAu3_Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
     EndSwitch
 EndFunc
 
-Func GwAu3_Friend_IsFriend($a_s_CharacterName)
-    Local $l_p_FriendPtr = GwAu3_Friend_GetFriendInfo($a_s_CharacterName, "Ptr")
+Func Friend_IsFriend($a_s_CharacterName)
+    Local $l_p_FriendPtr = Friend_GetFriendInfo($a_s_CharacterName, "Ptr")
     If $l_p_FriendPtr = 0 Then Return False
 
-    Return GwAu3_Friend_GetFriendInfo($a_s_CharacterName, "Type") = $GC_I_FRIEND_TYPE_FRIEND
+    Return Friend_GetFriendInfo($a_s_CharacterName, "Type") = $GC_I_FRIEND_TYPE_FRIEND
 EndFunc
 
-Func GwAu3_Friend_IsIgnored($a_s_CharacterName)
-    Local $l_p_FriendPtr = GwAu3_Friend_GetFriendInfo($a_s_CharacterName, "Ptr")
+Func Friend_IsIgnored($a_s_CharacterName)
+    Local $l_p_FriendPtr = Friend_GetFriendInfo($a_s_CharacterName, "Ptr")
     If $l_p_FriendPtr = 0 Then Return False
 
-    Return GwAu3_Friend_GetFriendInfo($a_s_CharacterName, "Type") = $GC_I_FRIEND_TYPE_IGNORE
+    Return Friend_GetFriendInfo($a_s_CharacterName, "Type") = $GC_I_FRIEND_TYPE_IGNORE
 EndFunc
 
-Func GwAu3_Friend_GetFriendStatusName($a_i_FriendStatus)
+Func Friend_GetFriendStatusName($a_i_FriendStatus)
     Switch $a_i_FriendStatus
         Case $GC_I_FRIEND_STATUS_OFFLINE
             Return "Offline"
@@ -159,7 +159,7 @@ Func GwAu3_Friend_GetFriendStatusName($a_i_FriendStatus)
     EndSwitch
 EndFunc
 
-Func GwAu3_Friend_GetFriendTypeName($a_i_FriendType)
+Func Friend_GetFriendTypeName($a_i_FriendType)
     Switch $a_i_FriendType
         Case $GC_I_FRIEND_TYPE_FRIEND
             Return "Friend"

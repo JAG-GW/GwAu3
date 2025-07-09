@@ -3,7 +3,7 @@
 ; ===============================================================
 ; Creates an optimized structure definition from a string
 ; ===============================================================
-Func GwAu3_Memory_CreateStructure($a_a_Definition)
+Func Memory_CreateStructure($a_a_Definition)
     ; Parse the definition
     Local $l_a_Lines = StringSplit($a_a_Definition, ";", 2)
     Local $l_a_Fields[UBound($l_a_Lines)][5] ; Added column for struct index
@@ -20,7 +20,7 @@ Func GwAu3_Memory_CreateStructure($a_a_Definition)
         $l_a_Fields[$l_i_FieldCount][0] = $l_a_Match[0] ; Type
         $l_a_Fields[$l_i_FieldCount][1] = $l_a_Match[1] ; Name
         $l_a_Fields[$l_i_FieldCount][2] = Dec($l_a_Match[2]) ; Offset
-        $l_a_Fields[$l_i_FieldCount][3] = GwAu3_Memory_GetTypeSize($l_a_Match[0]) ; Size
+        $l_a_Fields[$l_i_FieldCount][3] = Memory_GetTypeSize($l_a_Match[0]) ; Size
         $l_a_Fields[$l_i_FieldCount][4] = 0 ; Index in struct (will be set later)
         $l_i_FieldCount += 1
     Next
@@ -93,7 +93,7 @@ EndFunc
 ; ===============================================================
 ; Optimized reading without loops
 ; ===============================================================
-Func GwAu3_Memory_ReadStruct($a_p_Address, ByRef $a_a_StructInfo)
+Func Memory_ReadStruct($a_p_Address, ByRef $a_a_StructInfo)
     Local $l_t_Struct = $a_a_StructInfo[0]
     Local $l_i_Size = $a_a_StructInfo[1]
     Local $l_a_Indices = $a_a_StructInfo[2]
@@ -123,7 +123,7 @@ EndFunc
 ; ===============================================================
 ; Version with specific field selection
 ; ===============================================================
-Func GwAu3_Memory_ReadStructFields($a_p_Address, ByRef $a_a_StructInfo, $a_s_Fields)
+Func Memory_ReadStructFields($a_p_Address, ByRef $a_a_StructInfo, $a_s_Fields)
     Local $l_t_Struct = $a_a_StructInfo[0]
     Local $l_i_Size = $a_a_StructInfo[1]
 
@@ -150,7 +150,7 @@ EndFunc
 ; ===============================================================
 ; Returns the size of a type
 ; ===============================================================
-Func GwAu3_Memory_GetTypeSize($a_s_Type)
+Func Memory_GetTypeSize($a_s_Type)
     Local $l_i_Size
     Switch StringLower($a_s_Type)
         Case 'byte', 'boolean', 'char'
@@ -174,55 +174,55 @@ EndFunc
 ; ===============================================================
 #CS
 ; Version using the optimized system
-Func GwAu3_Agent_GeneralInfo($a_i_AgentID = -2)
-    Static $gs_s_StructInfo = GwAu3_Memory_CreateStructure( _
+Func Agent_GeneralInfo($a_i_AgentID = -2)
+    Static $gs_s_StructInfo = Memory_CreateStructure( _
         "float X[0x74];" & _
         "float Y[0x78];" & _
         "float HP[0x130];" & _
         "short Skill[0x1B4]")
 
-    Local $l_p_AgentPtr = GwAu3_Agent_GetAgentPtr($a_i_AgentID)
+    Local $l_p_AgentPtr = Agent_GetAgentPtr($a_i_AgentID)
     If $l_p_AgentPtr = 0 Then Return SetError(1, 0, 0)
 
-    Return GwAu3_Memory_ReadStruct($l_p_AgentPtr, $gs_s_StructInfo)
+    Return Memory_ReadStruct($l_p_AgentPtr, $gs_s_StructInfo)
 EndFunc
 
 ; Version with field selection
-Func GwAu3_Agent_GetPosition($a_i_AgentID = -2)
-    Static $gs_s_StructInfo = GwAu3_Memory_CreateStructure( _
+Func Agent_GetPosition($a_i_AgentID = -2)
+    Static $gs_s_StructInfo = Memory_CreateStructure( _
         "float X[0x74];" & _
         "float Y[0x78];" & _
         "float Z[0x30]")
 
-    Local $l_p_AgentPtr = GwAu3_Agent_GetAgentPtr($a_i_AgentID)
+    Local $l_p_AgentPtr = Agent_GetAgentPtr($a_i_AgentID)
     If $l_p_AgentPtr = 0 Then Return SetError(1, 0, 0)
 
-    Return GwAu3_Memory_ReadStructFields($l_p_AgentPtr, $gs_s_StructInfo, "X|Y")
+    Return Memory_ReadStructFields($l_p_AgentPtr, $gs_s_StructInfo, "X|Y")
 EndFunc
 
 ; Version using the optimized system
-Func GwAu3_Skill_Base($a_i_SkillID)
-    Static $gs_s_StructInfo = GwAu3_Memory_CreateStructure( _
+Func Skill_Base($a_i_SkillID)
+    Static $gs_s_StructInfo = Memory_CreateStructure( _
 		"long SkillID[0x0];" & _
 		"byte Target[0x31];" & _
         "byte EnergyCost[0x35];")
 
-    Local $l_p_SkillPtr = GwAu3_Skill_GetSkillPtr($a_i_SkillID)
+    Local $l_p_SkillPtr = Skill_GetSkillPtr($a_i_SkillID)
     If $l_p_SkillPtr = 0 Then Return SetError(1, 0, 0)
 
-    Return GwAu3_Memory_ReadStruct($l_p_SkillPtr, $gs_s_StructInfo)
+    Return Memory_ReadStruct($l_p_SkillPtr, $gs_s_StructInfo)
 EndFunc
 
 ; Version with field selection
-Func GwAu3_Skill_Base2($a_i_SkillID)
-    Static $gs_s_StructInfo = GwAu3_Memory_CreateStructure( _
+Func Skill_Base2($a_i_SkillID)
+    Static $gs_s_StructInfo = Memory_CreateStructure( _
 		"long SkillID[0x0];" & _
 		"byte Target[0x31];" & _
         "byte EnergyCost[0x35];")
 
-    Local $l_p_SkillPtr = GwAu3_Skill_GetSkillPtr($a_i_SkillID)
+    Local $l_p_SkillPtr = Skill_GetSkillPtr($a_i_SkillID)
     If $l_p_SkillPtr = 0 Then Return SetError(1, 0, 0)
 
-    Return GwAu3_Memory_ReadStructFields($l_p_SkillPtr, $gs_s_StructInfo, "Target|EnergyCost")
+    Return Memory_ReadStructFields($l_p_SkillPtr, $gs_s_StructInfo, "Target|EnergyCost")
 EndFunc
 #CE

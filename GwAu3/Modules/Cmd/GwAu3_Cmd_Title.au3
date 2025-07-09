@@ -1,9 +1,9 @@
 #include-once
 
-Func GwAu3_Title_SetDisplayedTitle($a_i_Title = 0)
+Func Title_SetDisplayedTitle($a_i_Title = 0)
     If $a_i_Title <> 0 Then
-        Return GwAu3_Core_SendPacket(0x8, $GC_I_HEADER_TITLE_DISPLAY, $a_i_Title)
+        Return Core_SendPacket(0x8, $GC_I_HEADER_TITLE_DISPLAY, $a_i_Title)
     Else
-        Return GwAu3_Core_SendPacket(0x4, $GC_I_HEADER_TITLE_HIDE)
+        Return Core_SendPacket(0x4, $GC_I_HEADER_TITLE_HIDE)
     EndIf
 EndFunc   ;==>SetDisplayedTitle

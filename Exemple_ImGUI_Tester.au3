@@ -17,8 +17,8 @@ Global $i_Number_CharName = 0
 Global $Selected_Char = ""
 Global $s_GUI_Script_Name = "Tester Bot"
 
-; Add compatibility with GwAu3_Core_AutoStart
-Global $g_s_MainCharName = ""  ; Used by GwAu3_Core_AutoStart()
+; Add compatibility with Core_AutoStart
+Global $g_s_MainCharName = ""  ; Used by Core_AutoStart()
 Global $ProcessID = ""
 Global $timer = TimerInit()
 Global $Bot_Core_Initialized = False
@@ -43,7 +43,7 @@ Global $g_b_Event_ToggleDebug = False
 Global $g_b_Event_ToggleOnTop = False
 Global $g_b_Event_CharacterSelected = False
 Global $g_i_Event_SelectedCharIndex = 0
-GwAu3_Log_SetCallback(_GwAu3_LogCallback)
+Log_SetCallback(_LogCallback)
 #EndRegion Declarations
 
 For $i = 1 To $CmdLine[0]
@@ -51,7 +51,7 @@ For $i = 1 To $CmdLine[0]
         $Selected_Char = $CmdLine[$i + 1]
         $g_s_MainCharName = $Selected_Char
         $g_bAutoStart = True
-        GwAu3_Log_Message("Auto-start requested for character: " & $Selected_Char, $c_UTILS_Msg_Type_Info, "Init")
+        Log_Message("Auto-start requested for character: " & $Selected_Char, $c_UTILS_Msg_Type_Info, "Init")
         ExitLoop
     EndIf
 Next
@@ -66,9 +66,9 @@ TraySetToolTip($s_GUI_Script_Name)
 
 RefreshCharacterList()
 
-GwAu3_Log_Message("Tester Bot Started", $c_UTILS_Msg_Type_Info, "Init")
-GwAu3_Log_Message("Based on GWA2 by " & $GC_S_GWA2_CREATOR, $c_UTILS_Msg_Type_Info, "Init")
-GwAu3_Log_Message("GwAu3 v" & $GC_S_GWAU3_VERSION & " by " & $GC_S_GWAU3_UPDATOR, $c_UTILS_Msg_Type_Info, "Init")
+Log_Message("Tester Bot Started", $c_UTILS_Msg_Type_Info, "Init")
+Log_Message("Based on GWA2 by " & $GC_S_GWA2_CREATOR, $c_UTILS_Msg_Type_Info, "Init")
+Log_Message("GwAu3 v" & $GC_S_VERSION & " by " & $GC_S_UPDATOR, $c_UTILS_Msg_Type_Info, "Init")
 
 If $g_bAutoStart And $Selected_Char <> "" Then
     Local $charFound = False
@@ -76,13 +76,13 @@ If $g_bAutoStart And $Selected_Char <> "" Then
         If $g_aCharNames[$i] = $Selected_Char Then
             $i_Number_CharName = $i
             $charFound = True
-            GwAu3_Log_Message("Character found in list at index " & $i, $c_UTILS_Msg_Type_Info, "Init")
+            Log_Message("Character found in list at index " & $i, $c_UTILS_Msg_Type_Info, "Init")
             ExitLoop
         EndIf
     Next
 
     If Not $charFound Then
-        GwAu3_Log_Message("Character not found in list, will try direct initialization", $c_UTILS_Msg_Type_Warning, "Init")
+        Log_Message("Character not found in list, will try direct initialization", $c_UTILS_Msg_Type_Warning, "Init")
     EndIf
 
     $g_b_Event_StartBot = True
@@ -129,7 +129,7 @@ Func ProcessEvents()
     If $g_b_Event_ClearConsole Then
         $g_b_Event_ClearConsole = False
         ReDim $a_UTILS_Log_Messages[0][8]
-        GwAu3_Log_Message("Console cleared", $c_UTILS_Msg_Type_Info, "GUI")
+        Log_Message("Console cleared", $c_UTILS_Msg_Type_Info, "GUI")
     EndIf
 
     If $g_b_Event_CopyConsole Then
@@ -140,14 +140,14 @@ Func ProcessEvents()
     If $g_b_Event_ToggleDebug Then
         $g_b_Event_ToggleDebug = False
         $b_GUI_CheckBox_GUI_DebugMode = Not $b_GUI_CheckBox_GUI_DebugMode
-        GwAu3_Log_SetDebugMode($b_GUI_CheckBox_GUI_DebugMode)
-        GwAu3_Log_Message("Debug mode: " & ($b_GUI_CheckBox_GUI_DebugMode ? "Enabled" : "Disabled"), $c_UTILS_Msg_Type_Info, "GUI")
+        Log_SetDebugMode($b_GUI_CheckBox_GUI_DebugMode)
+        Log_Message("Debug mode: " & ($b_GUI_CheckBox_GUI_DebugMode ? "Enabled" : "Disabled"), $c_UTILS_Msg_Type_Info, "GUI")
     EndIf
 
     If $g_b_Event_ToggleOnTop Then
         $g_b_Event_ToggleOnTop = False
         $b_GUI_CheckBox_OnTop = Not $b_GUI_CheckBox_OnTop
-        GwAu3_Log_Message("Always on top: " & ($b_GUI_CheckBox_OnTop ? "Enabled" : "Disabled"), $c_UTILS_Msg_Type_Info, "GUI")
+        Log_Message("Always on top: " & ($b_GUI_CheckBox_OnTop ? "Enabled" : "Disabled"), $c_UTILS_Msg_Type_Info, "GUI")
     EndIf
 
     If $g_b_Event_CharacterSelected Then
@@ -156,7 +156,7 @@ Func ProcessEvents()
             $i_Number_CharName = $g_i_Event_SelectedCharIndex
             $Selected_Char = $g_aCharNames[$g_i_Event_SelectedCharIndex]
             $g_s_MainCharName = $Selected_Char
-            GwAu3_Log_Message("Selected character: " & $Selected_Char, $c_UTILS_Msg_Type_Info, "GUI")
+            Log_Message("Selected character: " & $Selected_Char, $c_UTILS_Msg_Type_Info, "GUI")
         EndIf
     EndIf
 EndFunc
@@ -204,7 +204,7 @@ Func _GUI_Handle()
             $g_b_Event_StartBot = True
         EndIf
     Else
-        _ImGui_Text("Character: " & GwAu3_player_GetCharname())
+        _ImGui_Text("Character: " & player_GetCharname())
         _ImGui_Text("Run Count: " & $g_iRunCount)
         _ImGui_Text("Runtime: " & FormatTime($g_fRunTime))
 
@@ -308,7 +308,7 @@ Func _GUI_CopyConsoleToClipboard()
         $sConsoleText &= $sLine & @CRLF
     Next
     ClipPut($sConsoleText)
-    GwAu3_Log_Message("Console copied to clipboard", $c_UTILS_Msg_Type_Info, "GUI")
+    Log_Message("Console copied to clipboard", $c_UTILS_Msg_Type_Info, "GUI")
 EndFunc
 
 Func _GUI_ExitApp()
@@ -320,12 +320,12 @@ EndFunc
 #Region Bot Functions
 Func StartBot()
     If $Selected_Char = "" Or $Selected_Char = "Select Character..." Then
-        GwAu3_Log_Message("Please select a character first!", $c_UTILS_Msg_Type_Warning, "StartBot")
+        Log_Message("Please select a character first!", $c_UTILS_Msg_Type_Warning, "StartBot")
         $s_GUI_Status = "No character selected"
         Return
     EndIf
 
-    GwAu3_Log_Message("Starting bot for character: " & $Selected_Char, $c_UTILS_Msg_Type_Info, "StartBot")
+    Log_Message("Starting bot for character: " & $Selected_Char, $c_UTILS_Msg_Type_Info, "StartBot")
     $s_GUI_Status = "Initializing..."
 
     $g_s_MainCharName = $Selected_Char
@@ -333,13 +333,13 @@ Func StartBot()
     Local $result = 0
     If $ProcessID Then
         $proc_id_int = Number($ProcessID, 2)
-        $result = GwAu3_Core_Initialize($proc_id_int, True)
+        $result = Core_Initialize($proc_id_int, True)
     Else
-        $result = GwAu3_Core_Initialize($Selected_Char, True)
+        $result = Core_Initialize($Selected_Char, True)
     EndIf
 
     If $result = 0 Then
-        GwAu3_Log_Message("Failed to initialize GwAu3 Core!", $c_UTILS_Msg_Type_Error, "StartBot")
+        Log_Message("Failed to initialize GwAu3 Core!", $c_UTILS_Msg_Type_Error, "StartBot")
         $s_GUI_Status = "Failed to initialize"
         Return
     EndIf
@@ -349,7 +349,7 @@ Func StartBot()
     $s_GUI_Status = "Bot running"
     $timer = TimerInit()
 
-    GwAu3_Log_Message("Bot started successfully for " & GwAu3_player_GetCharname(), $c_UTILS_Msg_Type_Info, "StartBot")
+    Log_Message("Bot started successfully for " & player_GetCharname(), $c_UTILS_Msg_Type_Info, "StartBot")
 
     AdlibRegister("TimeUpdater", 500)
 
@@ -360,13 +360,13 @@ EndFunc
 
 Func HandleAutoStart()
     AdlibUnRegister("HandleAutoStart")
-    GwAu3_Log_Message("Handling auto-start character selection...", $c_UTILS_Msg_Type_Info, "HandleAutoStart")
-    GwAu3_Core_AutoStart()
+    Log_Message("Handling auto-start character selection...", $c_UTILS_Msg_Type_Info, "HandleAutoStart")
+    Core_AutoStart()
     $g_bAutoStart = False
 EndFunc
 
 Func StopBot()
-    GwAu3_Log_Message("Stopping bot...", $c_UTILS_Msg_Type_Info, "StopBot")
+    Log_Message("Stopping bot...", $c_UTILS_Msg_Type_Info, "StopBot")
 
     $b_GUI_BotRunning = False
     $Bot_Core_Initialized = False
@@ -375,12 +375,12 @@ Func StopBot()
 
     AdlibUnRegister("TimeUpdater")
 
-    GwAu3_Log_Message("Bot stopped", $c_UTILS_Msg_Type_Info, "StopBot")
+    Log_Message("Bot stopped", $c_UTILS_Msg_Type_Info, "StopBot")
 EndFunc
 
 Func RefreshCharacterList()
-    GwAu3_Log_Message("Refreshing character list...", $c_UTILS_Msg_Type_Info, "Refresh")
-    Local $sCharNames = GwAu3_Scanner_GetLoggedCharNames()
+    Log_Message("Refreshing character list...", $c_UTILS_Msg_Type_Info, "Refresh")
+    Local $sCharNames = Scanner_GetLoggedCharNames()
 
     ReDim $g_aCharNames[1]
     $g_aCharNames[0] = "Select Character..."
@@ -390,9 +390,9 @@ Func RefreshCharacterList()
         For $i = 0 To UBound($aTempNames) - 1
             _ArrayAdd($g_aCharNames, $aTempNames[$i])
         Next
-        GwAu3_Log_Message("Found " & (UBound($g_aCharNames) - 1) & " characters", $c_UTILS_Msg_Type_Info, "Refresh")
+        Log_Message("Found " & (UBound($g_aCharNames) - 1) & " characters", $c_UTILS_Msg_Type_Info, "Refresh")
     Else
-        GwAu3_Log_Message("No characters found", $c_UTILS_Msg_Type_Warning, "Refresh")
+        Log_Message("No characters found", $c_UTILS_Msg_Type_Warning, "Refresh")
     EndIf
 
     If $Selected_Char <> "" And $Selected_Char <> "Select Character..." Then
@@ -410,9 +410,9 @@ EndFunc
 
 Func BotLoop()
     Sleep(500)
-    GwAu3_Log_Message("Ready", $c_UTILS_Msg_Type_Info, "BotLoop")
+    Log_Message("Ready", $c_UTILS_Msg_Type_Info, "BotLoop")
 
-    GwAu3_Log_Message("Done", $c_UTILS_Msg_Type_Info, "BotLoop")
+    Log_Message("Done", $c_UTILS_Msg_Type_Info, "BotLoop")
     $g_iRunCount += 1
     Sleep(5000)
 EndFunc
@@ -432,7 +432,7 @@ Func FormatTime($seconds)
     Return StringFormat("%02d:%02d:%02d", $hours, $minutes, $secs)
 EndFunc
 
-Func _GwAu3_LogCallback($a_s_Message, $a_e_MsgType, $a_s_Author)
+Func _LogCallback($a_s_Message, $a_e_MsgType, $a_s_Author)
     Local $l_i_UtilsMsgType
     Switch $a_e_MsgType
         Case $GC_I_LOG_MSGTYPE_DEBUG

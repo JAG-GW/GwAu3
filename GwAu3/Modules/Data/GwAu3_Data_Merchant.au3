@@ -1,43 +1,43 @@
 #include-once
 
-Func GwAu3_Merchant_GetLastTransaction()
+Func Merchant_GetLastTransaction()
     Local $l_ai_Result[4] = [$g_i_LastTransactionType, $g_i_LastItemID, $g_i_LastQuantity, $g_i_LastPrice]
     Return $l_ai_Result
 EndFunc
 
-Func GwAu3_Merchant_GetTraderQuoteID()
-    Return GwAu3_Memory_Read($g_i_TraderQuoteID, 'dword')
+Func Merchant_GetTraderQuoteID()
+    Return Memory_Read($g_i_TraderQuoteID, 'dword')
 EndFunc
 
-Func GwAu3_Merchant_GetTraderCostID()
-    Return GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
+Func Merchant_GetTraderCostID()
+    Return Memory_Read($g_i_TraderCostID, 'dword')
 EndFunc
 
-Func GwAu3_Merchant_GetTraderCostValue()
-    Return GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
+Func Merchant_GetTraderCostValue()
+    Return Memory_Read($g_f_TraderCostValue, 'dword')
 EndFunc
 
-Func GwAu3_Merchant_GetTraderQuoteInfo()
+Func Merchant_GetTraderQuoteInfo()
     Local $l_ai_Result[3]
-    $l_ai_Result[0] = GwAu3_Memory_Read($g_i_TraderQuoteID, 'dword')
-    $l_ai_Result[1] = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
-    $l_ai_Result[2] = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
+    $l_ai_Result[0] = Memory_Read($g_i_TraderQuoteID, 'dword')
+    $l_ai_Result[1] = Memory_Read($g_i_TraderCostID, 'dword')
+    $l_ai_Result[2] = Memory_Read($g_f_TraderCostValue, 'dword')
     Return $l_ai_Result
 EndFunc
 
-Func GwAu3_Merchant_IsValidQuote()
-    Local $l_i_CostID = GwAu3_Memory_Read($g_i_TraderCostID, 'dword')
-    Local $l_i_CostValue = GwAu3_Memory_Read($g_f_TraderCostValue, 'dword')
+Func Merchant_IsValidQuote()
+    Local $l_i_CostID = Memory_Read($g_i_TraderCostID, 'dword')
+    Local $l_i_CostValue = Memory_Read($g_f_TraderCostValue, 'dword')
     Return ($l_i_CostID > 0 And $l_i_CostValue > 0)
 EndFunc
 
-Func GwAu3_Merchant_ClearTraderQuote()
-    GwAu3_Memory_Write($g_i_TraderCostID, 0, 'dword')
-    GwAu3_Memory_Write($g_f_TraderCostValue, 0, 'dword')
-    GwAu3_Log_Debug("Trader quote data cleared", "TradeMod", $g_h_EditText)
+Func Merchant_ClearTraderQuote()
+    Memory_Write($g_i_TraderCostID, 0, 'dword')
+    Memory_Write($g_f_TraderCostValue, 0, 'dword')
+    Log_Debug("Trader quote data cleared", "TradeMod", $g_h_EditText)
 EndFunc
 
-Func GwAu3_Merchant_GetTransactionTypeName($a_i_TransactionType)
+Func Merchant_GetTransactionTypeName($a_i_TransactionType)
     Switch $a_i_TransactionType
         Case $GC_I_TRANSACTION_SELL
             Return "Sell"
@@ -58,7 +58,7 @@ Func GwAu3_Merchant_GetTransactionTypeName($a_i_TransactionType)
     EndSwitch
 EndFunc
 
-Func GwAu3_Merchant_GetSalvageTypeName($a_i_SalvageType)
+Func Merchant_GetSalvageTypeName($a_i_SalvageType)
     Switch $a_i_SalvageType
         Case $GC_I_SALVAGE_TYPE_NORMAL
             Return "Normal"
@@ -71,25 +71,25 @@ Func GwAu3_Merchant_GetSalvageTypeName($a_i_SalvageType)
     EndSwitch
 EndFunc
 
-Func GwAu3_Merchant_WaitForQuote($a_i_Timeout = 5000)
+Func Merchant_WaitForQuote($a_i_Timeout = 5000)
     Local $l_i_StartTime = TimerInit()
 
     While TimerDiff($l_i_StartTime) < $a_i_Timeout
-        If GwAu3_Merchant_IsValidQuote() Then
-            GwAu3_Log_Debug("Quote received after " & TimerDiff($l_i_StartTime) & "ms", "TradeMod", $g_h_EditText)
+        If Merchant_IsValidQuote() Then
+            Log_Debug("Quote received after " & TimerDiff($l_i_StartTime) & "ms", "TradeMod", $g_h_EditText)
             Return True
         EndIf
         Sleep(32) ; Small delay to prevent excessive polling
     WEnd
 
-    GwAu3_Log_Warning("Quote request timed out after " & $a_i_Timeout & "ms", "TradeMod", $g_h_EditText)
+    Log_Warning("Quote request timed out after " & $a_i_Timeout & "ms", "TradeMod", $g_h_EditText)
     Return False
 EndFunc
 
-Func GwAu3_Merchant_GetBuyItemBase()
+Func Merchant_GetBuyItemBase()
     Return $g_p_BuyItemBase
 EndFunc
 
-Func GwAu3_Merchant_GetSalvageGlobal()
+Func Merchant_GetSalvageGlobal()
     Return $g_p_SalvageGlobal
 EndFunc

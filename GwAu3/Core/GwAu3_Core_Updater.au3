@@ -124,7 +124,7 @@ Global Const $WINHTTP_AUTOLOGON_SECURITY_LEVEL_DEFAULT = $WINHTTP_AUTOLOGON_SECU
 Global Const $WINHTTP_QUERY_CONTENT_TYPE = 1
 #EndRegion WinHttp_Constants
 
-#Region GwAu3_Updater_ScriptVars
+#Region Updater_ScriptVars
 ; Path to config.ini
 Global $g_s_UpdaterConfigIni = @ScriptDir & "\GwAu3\Core\config.ini"
 Global $g_s_GwAu3Dir = @ScriptDir & "\"
@@ -142,23 +142,23 @@ Global $g_s_Branch = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Branch
 
 ; Add files as needed, e.g. [n, "file1", "file2", ...], use relative paths and forward "/"
 Global $g_as_IgnoredFiles[2] = [1, "GwAu3/Core/config.ini"]
-#EndRegion GwAu3_Updater_ScriptVars
+#EndRegion Updater_ScriptVars
 
-#Region GwAu3_Updater_Functions
+#Region Updater_Functions
 ;=================================================================
 ; Checks for updates to the GwAu3 GitHub repository and downloads
 ; them upon confirmation
 ; Return 0 = Error, 1 = No updates, 2 = Update cancelled by user
 ; Return 3 = Updates disabled, 4 = Update completed
 ;=================================================================
-Func GwAu3_Updater_CheckForGwAu3Updates()
+Func Updater_CheckForGwAu3Updates()
     If Not $g_b_AutoUpdate Then Return 3
 
     ; Load WinHttp.dll
-    GwAu3_Updater_LoadWinHttp()
+    Updater_LoadWinHttp()
 
     ; Load cashed hashes from INI
-    Local $l_o_CachedHashes = GwAu3_Updater_LoadHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes)
+    Local $l_o_CachedHashes = Updater_LoadHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes)
 
     ; Open WinHttp session handle
 	Local $l_h_Session = _WinHttpOpen("GwAu3-Updater/1.0", $WINHTTP_ACCESS_TYPE_DEFAULT_PROXY)
@@ -190,7 +190,7 @@ Func GwAu3_Updater_CheckForGwAu3Updates()
 	_WinHttpCloseHandle($l_h_Session)
 
     ; Unload WinHttp.dll
-    GwAu3_Updater_UnloadWinHttp()
+    Updater_UnloadWinHttp()
 
 	; Parse blobs from JSON
     Local $l_as_Tree = StringRegExp($l_s_Json, '(?s)\{[^}]*"path":"([^"]+)"[^}]*"type":"blob"[^}]*"sha":"([0-9a-f]+)"[^}]*\}', 3)
@@ -247,7 +247,7 @@ Func GwAu3_Updater_CheckForGwAu3Updates()
     Local $l_s_RelPath, $l_s_CachedSHA, $l_s_RemoteSHA
     For $i = 0 To UBound($l_as_Tree) - 1 Step 2
         $l_s_RelPath = $l_as_Tree[$i]
-        If GwAu3_Updater_IsIgnoredFile($l_s_RelPath) Then ContinueLoop
+        If Updater_IsIgnoredFile($l_s_RelPath) Then ContinueLoop
 		$l_s_RemoteSHA = StringUpper($l_as_Tree[$i + 1])
 		If $l_o_CachedHashes.Exists($l_s_RelPath) Then
         	$l_s_CachedSHA = $l_o_CachedHashes.Item($l_s_RelPath)
@@ -268,8 +268,8 @@ Func GwAu3_Updater_CheckForGwAu3Updates()
         If MsgBox(4 + 32, "GwAu3-Updater - Update/s Available", $l_as_UpdateFiles[0] & " update/s available. Update now?") <> 6 Then Return 2
     EndIf
 
-    GwAu3_Log_Info("Starting download, please wait...", "GwAu3", $g_h_EditText)
-    GwAu3_Updater_DownloadFiles_PB($l_as_UpdateFiles, $l_as_UpdateSHAs)
+    Log_Info("Starting download, please wait...", "GwAu3", $g_h_EditText)
+    Updater_DownloadFiles_PB($l_as_UpdateFiles, $l_as_UpdateSHAs)
 
     ; Restart current script with new file version and same privileges
     ;~ Run(@AutoItExe & ' "' & @ScriptFullPath & '"')
@@ -281,7 +281,7 @@ EndFunc
 ;=================================================================
 ; Load cached SHAs from [Hashes] section into a Dictionary
 ;=================================================================
-Func GwAu3_Updater_LoadHashCache($a_s_IniFile, $a_s_IniSection)
+Func Updater_LoadHashCache($a_s_IniFile, $a_s_IniSection)
     Local $l_o_HashDict = ObjCreate("Scripting.Dictionary")
     Local $l_as_ShaHashes = IniReadSection($a_s_IniFile, $a_s_IniSection)
     If @error Or UBound($l_as_ShaHashes) = 0 Then Return $l_o_HashDict
@@ -297,7 +297,7 @@ EndFunc
 ;=================================================================
 ; Save one SHA entry into [Hashes], encoding backslash -> tilde
 ;=================================================================
-Func GwAu3_Updater_SaveHashCache($a_s_IniFile, $a_s_IniSection, $a_s_RelPath, $a_s_SHA)
+Func Updater_SaveHashCache($a_s_IniFile, $a_s_IniSection, $a_s_RelPath, $a_s_SHA)
     Local $l_s_Key = StringRegExpReplace($a_s_RelPath, "[/\\]", "~")
     IniWrite($a_s_IniFile, $a_s_IniSection, $l_s_Key, $a_s_SHA)
 EndFunc
@@ -305,7 +305,7 @@ EndFunc
 ;=================================================================
 ; Optional one-time: Initialize [Hashes] with current file SHAs
 ;=================================================================
-Func GwAu3_Updater_InitializeHashCache()
+Func Updater_InitializeHashCache()
     Local $l_as_OldEntries = IniReadSection($g_s_UpdaterConfigIni, $g_s_Section_Hashes)
     If Not @error Then
         For $i = 0 To UBound($l_as_OldEntries)-1
@@ -313,12 +313,12 @@ Func GwAu3_Updater_InitializeHashCache()
         Next
     EndIf
 
-    Local $l_as_Files = GwAu3_Updater_GetRelativeFiles($g_s_GwAu3Dir)
+    Local $l_as_Files = Updater_GetRelativeFiles($g_s_GwAu3Dir)
     For $i = 1 To $l_as_Files[0]
         Local $l_s_RelPath = $l_as_Files[$i]
         Local $l_s_FullPath = $g_s_GwAu3Dir & $l_s_RelPath
-        Local $l_s_SHA = GwAu3_Updater_ComputeGitBlobSHA($l_s_FullPath)
-        GwAu3_Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
+        Local $l_s_SHA = Updater_ComputeGitBlobSHA($l_s_FullPath)
+        Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
     Next
     MsgBox(64, "Initialized", "Wrote " & $l_as_Files[0] & " entries into [" & $g_s_Section_Hashes & "]")
 EndFunc
@@ -326,7 +326,7 @@ EndFunc
 ;=================================================================
 ; Check if file is on ignore list
 ;=================================================================
-Func GwAu3_Updater_IsIgnoredFile($a_s_Path)
+Func Updater_IsIgnoredFile($a_s_Path)
     For $i = 1 To $g_as_IgnoredFiles[0]
         If $a_s_Path = $g_as_IgnoredFiles[$i] Then Return True
     Next
@@ -336,13 +336,13 @@ EndFunc
 ;=================================================================
 ; Recursively get relative paths of all files under $a_s_Base
 ;=================================================================
-Func GwAu3_Updater_GetRelativeFiles($a_s_Base)
+Func Updater_GetRelativeFiles($a_s_Base)
     Local $l_as_Files[1] = [0]
-    GwAu3_Updater_Scan($a_s_Base, $a_s_Base, $l_as_Files)
+    Updater_Scan($a_s_Base, $a_s_Base, $l_as_Files)
     Return $l_as_Files
 EndFunc
 
-Func GwAu3_Updater_Scan($a_s_Root, $a_s_Current, ByRef $l_as_Files)
+Func Updater_Scan($a_s_Root, $a_s_Current, ByRef $l_as_Files)
     Local $l_h_FirstFileHnd = FileFindFirstFile($a_s_Current & "\*")
     If $l_h_FirstFileHnd = -1 Then Return
     While 1
@@ -351,7 +351,7 @@ Func GwAu3_Updater_Scan($a_s_Root, $a_s_Current, ByRef $l_as_Files)
         If $l_h_NextFileHnd = "." Or $l_h_NextFileHnd = ".." Then ContinueLoop
         Local $l_s_FullPath = $a_s_Current & "\" & $l_h_NextFileHnd
         If StringInStr(FileGetAttrib($l_s_FullPath), "D") Then
-            GwAu3_Updater_Scan($a_s_Root, $l_s_FullPath, $l_as_Files)
+            Updater_Scan($a_s_Root, $l_s_FullPath, $l_as_Files)
         Else
             Local $l_s_RelPath = StringTrimLeft($l_s_FullPath, StringLen($a_s_Root) + 1)
             _ArrayAdd($l_as_Files, $l_s_RelPath)
@@ -365,7 +365,7 @@ EndFunc
 ; ComputeGitBlobSHA($a_s_File)
 ; Computes Git’s blob SHA1: SHA1( "blob " + filesize + "\0" + content )
 ;=================================================================
-Func GwAu3_Updater_ComputeGitBlobSHA($a_s_File)
+Func Updater_ComputeGitBlobSHA($a_s_File)
     If Not FileExists($a_s_File) Then Return ""
 
     ; Read raw file bytes, 0 = read, 8 = binary
@@ -387,7 +387,7 @@ Func GwAu3_Updater_ComputeGitBlobSHA($a_s_File)
     FileClose($l_h_Output)
 
     ; Hash it
-    Local $l_s_SHA = GwAu3_Updater_GetSHA1($l_s_Temp)
+    Local $l_s_SHA = Updater_GetSHA1($l_s_Temp)
 
     ; Clean up
     FileDelete($l_s_Temp)
@@ -398,7 +398,7 @@ EndFunc
 ;=================================================================
 ; GetSHA1($a_s_File) -> Returns the uppercase 40-char SHA-1 of any file
 ;=================================================================
-Func GwAu3_Updater_GetSHA1($a_s_File)
+Func Updater_GetSHA1($a_s_File)
     If Not FileExists($a_s_File) Then Return ""
     Local $l_s_Cmd = 'certutil -hashfile "' & $a_s_File & '" SHA1'
     Local $l_h_PID = Run(@ComSpec & " /c " & $l_s_Cmd, "", @SW_HIDE, BitOR($STDOUT_CHILD, $STDERR_CHILD))
@@ -423,7 +423,7 @@ EndFunc
 ; Download files from $a_as_UpdateFiles and write their respective
 ; hashes from $a_as_UpdateSHAs into INI file
 ;=================================================================
-Func GwAu3_Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
+Func Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
     Local $l_i_FileSize, $l_s_RelPath
     Local $l_s_Url, $l_s_SHA
 
@@ -473,7 +473,7 @@ Func GwAu3_Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         GUICtrlSetData($l_h_ProgressBar, $j)
 
         ; Save hash
-        GwAu3_Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
+        Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
     Next
 
     ; Remove update GUI
@@ -484,7 +484,7 @@ EndFunc
 ; Download files from $a_as_UpdateFiles and write their respective
 ; hashes from $a_as_UpdateSHAs into INI file
 ;=================================================================
-Func GwAu3_Updater_DownloadFiles_NoPB($a_as_UpdateFiles, $a_as_UpdateSHAs)
+Func Updater_DownloadFiles_NoPB($a_as_UpdateFiles, $a_as_UpdateSHAs)
     Local $l_i_FileSize, $l_s_RelPath
     Local $l_s_Url, $l_s_SHA
 
@@ -504,7 +504,7 @@ Func GwAu3_Updater_DownloadFiles_NoPB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         DirCreate($l_s_TargetDir)
 
         ; Update status
-        GwAu3_Log_Info("Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath, "GwAu3", $g_h_EditText)
+        Log_Info("Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath, "GwAu3", $g_h_EditText)
 
         ; Start background download
         Local $l_h_Download = InetGet($l_s_Url, $l_s_DownloadDst, $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
@@ -522,7 +522,7 @@ Func GwAu3_Updater_DownloadFiles_NoPB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         WEnd
 
         ; Save hash
-        GwAu3_Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
+        Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
     Next
 EndFunc
 
@@ -530,7 +530,7 @@ EndFunc
 ; DownloadFile($a_s_URL, $a_s_Dest) -> True on success, False on failure
 ; Uses InetGet() synchronously (waits until the transfer completes)
 ;=================================================================
-Func GwAu3_Updater_DownloadFile($a_s_URL, $a_s_Dest)
+Func Updater_DownloadFile($a_s_URL, $a_s_Dest)
     ; flag 1 = synchronous, flag 1 = binary
     Local $l_h_Download = InetGet($a_s_URL, $a_s_Dest, 1, 1)
     If @error Then Return False
@@ -549,7 +549,7 @@ EndFunc
 ; Uses InetGet() synchronously (waits until the transfer completes)
 ; Includes GUI for download progress
 ;=================================================================
-Func GwAu3_Updater_DownloadFileGUI($a_s_URL, $a_s_Dest)
+Func Updater_DownloadFileGUI($a_s_URL, $a_s_Dest)
     ; Ask the server how big the file is
     Local $l_i_TotalSize = InetGetSize($a_s_URL)
     If @error Or $l_i_TotalSize <= 0 Then Return False
@@ -588,15 +588,15 @@ Func GwAu3_Updater_DownloadFileGUI($a_s_URL, $a_s_Dest)
     ; Return success if we read exactly the total bytes
     Return ($l_i_ReadBytes >= $l_i_TotalSize)
 EndFunc
-#EndRegion GwAu3_Updater_Functions
+#EndRegion Updater_Functions
 
 #Region WinHttp
 ; #MANAGE DLL HANDLES# ;=====================================================================
-Func GwAu3_Updater_LoadWinHttp()
+Func Updater_LoadWinHttp()
     $hWINHTTPDLL__WINHTTP = DllOpen("winhttp.dll")
 EndFunc
 
-Func GwAu3_Updater_UnloadWinHttp()
+Func Updater_UnloadWinHttp()
     DllClose($hWINHTTPDLL__WINHTTP)
 EndFunc
 ;============================================================================================

@@ -1,6 +1,6 @@
 #include-once
 
 ;~ Description: Returns current ping.
-Func GwAu3_Other_GetPing()
-    Return GwAu3_Memory_Read($g_p_Ping)
+Func Other_GetPing()
+    Return Memory_Read($g_p_Ping)
 EndFunc   ;==>GetPing

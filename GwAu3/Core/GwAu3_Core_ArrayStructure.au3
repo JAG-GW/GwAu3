@@ -7,9 +7,9 @@
 ; ===============================================================
 ; Creates an array structure definition
 ; ===============================================================
-Func GwAu3_Memory_CreateArrayStructure($a_a_Definition, $a_i_ElementSize)
+Func Memory_CreateArrayStructure($a_a_Definition, $a_i_ElementSize)
     ; Use the single structure creation function
-    Local $l_a_StructInfo = GwAu3_Memory_CreateStructure($a_a_Definition)
+    Local $l_a_StructInfo = Memory_CreateStructure($a_a_Definition)
     If @error Then Return SetError(1, 0, 0)
 
     ; Add array-specific information
@@ -26,7 +26,7 @@ EndFunc
 ; ===============================================================
 ; Read entire array of structures
 ; ===============================================================
-Func GwAu3_Memory_ReadArrayStruct($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo)
+Func Memory_ReadArrayStruct($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo)
     If Not IsArray($l_a_ArrayStructInfo) Then Return SetError(1, 0, 0)
     If $a_i_ArraySize <= 0 Then Return SetError(2, 0, 0)
 
@@ -66,7 +66,7 @@ EndFunc
 ; ===============================================================
 ; Read entire array with field selection
 ; ===============================================================
-Func GwAu3_Memory_ReadArrayStructFields($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo, $a_s_Fields)
+Func Memory_ReadArrayStructFields($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo, $a_s_Fields)
     If Not IsArray($l_a_ArrayStructInfo) Then Return SetError(1, 0, 0)
     If $a_i_ArraySize <= 0 Then Return SetError(2, 0, 0)
 
@@ -104,7 +104,7 @@ EndFunc
 ; ===============================================================
 ; Read array with filtering
 ; ===============================================================
-Func GwAu3_Memory_ReadArrayStructFiltered($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo, $a_s_FilterField, $a_v_FilterValue, $a_i_FilterOperator = 0)
+Func Memory_ReadArrayStructFiltered($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo, $a_s_FilterField, $a_v_FilterValue, $a_i_FilterOperator = 0)
     ; $a_i_FilterOperator: 0 = equal, 1 = not equal, 2 = greater, 3 = less
     If Not IsArray($l_a_ArrayStructInfo) Then Return SetError(1, 0, 0)
     If $a_i_ArraySize <= 0 Then Return SetError(2, 0, 0)
@@ -176,7 +176,7 @@ EndFunc
 ; ===============================================================
 ; Find single element in array
 ; ===============================================================
-Func GwAu3_Memory_FindInArrayStruct($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo, $sSearchField, $a_v_SearchValue)
+Func Memory_FindInArrayStruct($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo, $sSearchField, $a_v_SearchValue)
     If Not IsArray($l_a_ArrayStructInfo) Then Return SetError(1, 0, 0)
     If $a_i_ArraySize <= 0 Then Return SetError(2, 0, 0)
 
@@ -216,8 +216,8 @@ EndFunc
 ; ===============================================================
 #CS
 ; Get all hero flags
-Func GwAu3_Party_GetAllHeroFlags()
-    Static $l_a_StructInfo = GwAu3_Memory_CreateArrayStructure( _
+Func Party_GetAllHeroFlags()
+    Static $l_a_StructInfo = Memory_CreateArrayStructure( _
         "dword HeroID[0x0];" & _
         "dword AgentID[0x4];" & _
         "dword Level[0x8];" & _
@@ -229,17 +229,17 @@ Func GwAu3_Party_GetAllHeroFlags()
         "dword LockedTargetID[0x20]", _
         0x24) ; Element size
 
-    Local $l_p_Ptr = GwAu3_World_GetWorldInfo("HeroFlagArray")
-    Local $l_i_Size = GwAu3_World_GetWorldInfo("HeroFlagArraySize")
+    Local $l_p_Ptr = World_GetWorldInfo("HeroFlagArray")
+    Local $l_i_Size = World_GetWorldInfo("HeroFlagArraySize")
 
     If $l_p_Ptr = 0 Or $l_i_Size = 0 Then Return SetError(1, 0, 0)
 
-    Return GwAu3_Memory_ReadArrayStruct($l_p_Ptr, $l_i_Size, $l_a_StructInfo)
+    Return Memory_ReadArrayStruct($l_p_Ptr, $l_i_Size, $l_a_StructInfo)
 EndFunc
 
 ; Get specific hero flag by AgentID
-Func GwAu3_Party_GetHeroFlagByAgentID($a_i_AgentID)
-    Static $l_a_StructInfo = GwAu3_Memory_CreateArrayStructure( _
+Func Party_GetHeroFlagByAgentID($a_i_AgentID)
+    Static $l_a_StructInfo = Memory_CreateArrayStructure( _
         "dword HeroID[0x0];" & _
         "dword AgentID[0x4];" & _
         "dword Level[0x8];" & _
@@ -251,17 +251,17 @@ Func GwAu3_Party_GetHeroFlagByAgentID($a_i_AgentID)
         "dword LockedTargetID[0x20]", _
         0x24)
 
-    Local $l_p_Ptr = GwAu3_World_GetWorldInfo("HeroFlagArray")
-    Local $l_i_Size = GwAu3_World_GetWorldInfo("HeroFlagArraySize")
+    Local $l_p_Ptr = World_GetWorldInfo("HeroFlagArray")
+    Local $l_i_Size = World_GetWorldInfo("HeroFlagArraySize")
 
     If $l_p_Ptr = 0 Or $l_i_Size = 0 Then Return SetError(1, 0, 0)
 
-    Return GwAu3_Memory_FindInArrayStruct($l_p_Ptr, $l_i_Size, $l_a_StructInfo, "AgentID", $a_i_AgentID)
+    Return Memory_FindInArrayStruct($l_p_Ptr, $l_i_Size, $l_a_StructInfo, "AgentID", $a_i_AgentID)
 EndFunc
 
 ; Example usage with filtering
-Func GwAu3_Party_GetHeroFlagsWithBehavior($a_i_Behavior)
-    Static $l_a_StructInfo = GwAu3_Memory_CreateArrayStructure( _
+Func Party_GetHeroFlagsWithBehavior($a_i_Behavior)
+    Static $l_a_StructInfo = Memory_CreateArrayStructure( _
         "dword HeroID[0x0];" & _
         "dword AgentID[0x4];" & _
         "dword Level[0x8];" & _
@@ -271,11 +271,11 @@ Func GwAu3_Party_GetHeroFlagsWithBehavior($a_i_Behavior)
         "dword LockedTargetID[0x20]", _
         0x24)
 
-    Local $l_p_Ptr = GwAu3_World_GetWorldInfo("HeroFlagArray")
-    Local $l_i_Size = GwAu3_World_GetWorldInfo("HeroFlagArraySize")
+    Local $l_p_Ptr = World_GetWorldInfo("HeroFlagArray")
+    Local $l_i_Size = World_GetWorldInfo("HeroFlagArraySize")
 
     If $l_p_Ptr = 0 Or $l_i_Size = 0 Then Return SetError(1, 0, 0)
 
-    Return GwAu3_Memory_ReadArrayStructFiltered($l_p_Ptr, $l_i_Size, $l_a_StructInfo, "Behavior", $a_i_Behavior, 0)
+    Return Memory_ReadArrayStructFiltered($l_p_Ptr, $l_i_Size, $l_a_StructInfo, "Behavior", $a_i_Behavior, 0)
 EndFunc
 #CE

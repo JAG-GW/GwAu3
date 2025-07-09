@@ -1,48 +1,48 @@
 #include-once
 
-Func GwAu3_Attribute_GetAttributeName($a_i_AttributeID)
+Func Attribute_GetAttributeName($a_i_AttributeID)
     If $a_i_AttributeID >= 0 And $a_i_AttributeID < 45 Then
         Return $g_as_AttributeNames[$a_i_AttributeID]
     EndIf
     Return "Unknown"
 EndFunc
 
-Func GwAu3_Attribute_GetLastModified()
+Func Attribute_GetLastModified()
     Local $l_ai_Result[2] = [$g_i_LastAttributeModified, $g_i_LastAttributeValue]
     Return $l_ai_Result
 EndFunc
 
-Func GwAu3_Attribute_GetAttributePtr($a_i_AttributeID)
+Func Attribute_GetAttributePtr($a_i_AttributeID)
     Local $l_p_AttributeStructAddress = $g_p_AttributeInfo + (0x14 * $a_i_AttributeID)
     Return Ptr($l_p_AttributeStructAddress)
 EndFunc
 
-Func GwAu3_Attribute_GetAttributeInfo($a_i_AttributeID, $a_s_Info = "")
-    Local $l_p_Ptr = GwAu3_Attribute_GetAttributePtr($a_i_AttributeID)
+Func Attribute_GetAttributeInfo($a_i_AttributeID, $a_s_Info = "")
+    Local $l_p_Ptr = Attribute_GetAttributePtr($a_i_AttributeID)
     If $l_p_Ptr = 0 Or $a_s_Info = "" Then Return 0
 
     Switch $a_s_Info
         Case "ProfessionID"
-            Return GwAu3_Memory_Read($l_p_Ptr, "long")
+            Return Memory_Read($l_p_Ptr, "long")
         Case "AttributeID"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0x4, "long")
+            Return Memory_Read($l_p_Ptr + 0x4, "long")
         Case "NameID"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0x8, "long")
+            Return Memory_Read($l_p_Ptr + 0x8, "long")
         Case "DescID"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0xC, "long")
+            Return Memory_Read($l_p_Ptr + 0xC, "long")
         Case "IsPVE"
-            Return GwAu3_Memory_Read($l_p_Ptr + 0x10, "long")
+            Return Memory_Read($l_p_Ptr + 0x10, "long")
     EndSwitch
 
     Return 0
 EndFunc
 
-Func GwAu3_Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0, $a_s_Info = "")
+Func Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0, $a_s_Info = "")
     Local $l_i_AgentID
     If $a_i_HeroNumber <> 0 Then
-        $l_i_AgentID = GwAu3_Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID")
+        $l_i_AgentID = Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID")
     Else
-        $l_i_AgentID = GwAu3_World_GetWorldInfo("MyID")
+        $l_i_AgentID = World_GetWorldInfo("MyID")
     EndIf
     Local $l_av_Buffer
     Local $l_ai_Offset[5]
@@ -51,9 +51,9 @@ Func GwAu3_Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0
     $l_ai_Offset[2] = 0x2C
     $l_ai_Offset[3] = 0xAC
 
-    For $l_i_Idx = 0 To GwAu3_World_GetWorldInfo("PartyAttributeArraySize")
+    For $l_i_Idx = 0 To World_GetWorldInfo("PartyAttributeArraySize")
         $l_ai_Offset[4] = 0x43C * $l_i_Idx
-        $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+        $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
 
         If $l_av_Buffer[1] == $l_i_AgentID Then
             Local $l_i_BaseAttrOffset = 0x43C * $l_i_Idx + 0x14 * $a_i_AttributeID + 0x4
@@ -61,45 +61,45 @@ Func GwAu3_Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0
             Switch $a_s_Info
                 Case "ID"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1]
                 Case "BaseLevel", "LevelBase"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0x4
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1]
                 Case "Level", "CurrentLevel"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0x8
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1]
                 Case "DecrementPoints"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0xC
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1]
                 Case "IncrementPoints"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0x10
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1]
                 Case "HasAttribute"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1] <> 0
                 Case "BonusLevel"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0x4
-                    Local $l_i_BaseLevel = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)[1]
+                    Local $l_i_BaseLevel = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)[1]
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0x8
-                    Local $l_i_CurrentLevel = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)[1]
+                    Local $l_i_CurrentLevel = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)[1]
                     Return $l_i_CurrentLevel - $l_i_BaseLevel
                 Case "IsMaxed"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0x8
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1] >= 12
                 Case "IsRaisable"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0x10
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1] > 0
                 Case "IsDecreasable"
                     $l_ai_Offset[4] = $l_i_BaseAttrOffset + 0xC
-                    $l_av_Buffer = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
                     Return $l_av_Buffer[1] > 0
                 Case Else
                     Return 0
@@ -109,7 +109,7 @@ Func GwAu3_Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0
     Return 0
 EndFunc
 
-Func GwAu3_Attribute_GetProfPrimaryAttribute($a_i_Profession)
+Func Attribute_GetProfPrimaryAttribute($a_i_Profession)
     Switch $a_i_Profession
         Case 1
             Return 17

@@ -1,14 +1,14 @@
 #include-once
 
-Global $g_f_GwAu3_LogCallback = Null
+Global $g_f_LogCallback = Null
 
-Func GwAu3_Log_SetCallback($a_f_Callback)
-    $g_f_GwAu3_LogCallback = $a_f_Callback
+Func Log_SetCallback($a_f_Callback)
+    $g_f_LogCallback = $a_f_Callback
 EndFunc
 
-Func GwAu3_Log_Message($a_s_Message, $a_e_MsgType = $GC_I_LOG_MSGTYPE_INFO, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-    If IsFunc($g_f_GwAu3_LogCallback) Then
-        Call($g_f_GwAu3_LogCallback, $a_s_Message, $a_e_MsgType, $a_s_Author)
+Func Log_Message($a_s_Message, $a_e_MsgType = $GC_I_LOG_MSGTYPE_INFO, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+    If IsFunc($g_f_LogCallback) Then
+        Call($g_f_LogCallback, $a_s_Message, $a_e_MsgType, $a_s_Author)
         Return
     EndIf
 
@@ -37,7 +37,7 @@ Func GwAu3_Log_Message($a_s_Message, $a_e_MsgType = $GC_I_LOG_MSGTYPE_INFO, $a_s
             $l_x_Color = 0x008000
     EndSwitch
 
-    Local $sLogText = @CRLF & "[" & GwAu3_Log_GetCurrentTime() & "] - " & "[" & $l_s_TypeText & "] - " & "[" & $a_s_Author & "] " & $a_s_Message
+    Local $sLogText = @CRLF & "[" & Log_GetCurrentTime() & "] - " & "[" & $l_s_TypeText & "] - " & "[" & $a_s_Author & "] " & $a_s_Message
 
     If _GUICtrlRichEdit_GetTextLength($a_h_EditText) > 30000 Then
         _GUICtrlRichEdit_SetText($a_h_EditText, "")
@@ -49,31 +49,31 @@ Func GwAu3_Log_Message($a_s_Message, $a_e_MsgType = $GC_I_LOG_MSGTYPE_INFO, $a_s
     _GUICtrlEdit_Scroll($a_h_EditText, 1)
 EndFunc
 
-Func GwAu3_Log_Debug($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_DEBUG, $a_s_Author, $a_h_EditText)
+Func Log_Debug($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+	Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_DEBUG, $a_s_Author, $a_h_EditText)
 EndFunc
 
-Func GwAu3_Log_Info($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_INFO, $a_s_Author, $a_h_EditText)
+Func Log_Info($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+	Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_INFO, $a_s_Author, $a_h_EditText)
 EndFunc
 
-Func GwAu3_Log_Warning($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_WARNING, $a_s_Author, $a_h_EditText)
+Func Log_Warning($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+	Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_WARNING, $a_s_Author, $a_h_EditText)
 EndFunc
 
-Func GwAu3_Log_Error($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_ERROR, $a_s_Author, $a_h_EditText)
+Func Log_Error($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+	Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_ERROR, $a_s_Author, $a_h_EditText)
 EndFunc
 
-Func GwAu3_Log_Critical($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
-	GwAu3_Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_CRITICAL, $a_s_Author, $a_h_EditText)
+Func Log_Critical($a_s_Message, $a_s_Author = "AutoIt", $a_h_EditText = 0)
+	Log_Message($a_s_Message, $GC_I_LOG_MSGTYPE_CRITICAL, $a_s_Author, $a_h_EditText)
 EndFunc
 
-Func GwAu3_Log_SetDebugMode($a_b_Enable = True)
+Func Log_SetDebugMode($a_b_Enable = True)
     $g_b_DebugMode = $a_b_Enable
-    GwAu3_Log_Message("Debug Mode " & ($a_b_Enable ? "Enabled" : "Disabled"), $GC_I_LOG_MSGTYPE_INFO, "SetDebugMode")
+    Log_Message("Debug Mode " & ($a_b_Enable ? "Enabled" : "Disabled"), $GC_I_LOG_MSGTYPE_INFO, "SetDebugMode")
 EndFunc
 
-Func GwAu3_Log_GetCurrentTime()
+Func Log_GetCurrentTime()
     Return StringFormat("%02d:%02d:%02d", @HOUR, @MIN, @SEC)
 EndFunc

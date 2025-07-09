@@ -33,7 +33,7 @@ $Group1 = GUICtrlCreateGroup("Select Your Character", 8, 8, 475, 325)
 Global $GUINameCombo
 If $doLoadLoggedChars Then
     $GUINameCombo = GUICtrlCreateCombo($g_s_MainCharName, 24, 32, 145, 25, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL))
-    GUICtrlSetData(-1, GwAu3_Scanner_GetLoggedCharNames())
+    GUICtrlSetData(-1, Scanner_GetLoggedCharNames())
 Else
     $GUINameCombo = GUICtrlCreateInput($g_s_MainCharName, 24, 32, 145, 25)
 EndIf
@@ -58,13 +58,13 @@ GUISetState(@SW_SHOW)
 Func StartBot()
     Local $g_s_MainCharName = GUICtrlRead($GUINameCombo)
     If $g_s_MainCharName=="" Then
-        If GwAu3_Core_Initialize(ProcessExists("gw.exe"), True) = 0 Then
+        If Core_Initialize(ProcessExists("gw.exe"), True) = 0 Then
             MsgBox(0, "Error", "Guild Wars is not running.")
             _Exit()
         EndIf
     ElseIf $ProcessID Then
         $proc_id_int = Number($ProcessID, 2)
-        If GwAu3_Core_Initialize($proc_id_int, True) = 0 Then
+        If Core_Initialize($proc_id_int, True) = 0 Then
             MsgBox(0, "Error", "Could not Find a ProcessID or somewhat '"&$proc_id_int&"'  "&VarGetType($proc_id_int)&"'")
             _Exit()
             If ProcessExists($proc_id_int) Then
@@ -73,7 +73,7 @@ Func StartBot()
             Exit
         EndIf
     Else
-        If GwAu3_Core_Initialize($g_s_MainCharName, True) = 0 Then
+        If Core_Initialize($g_s_MainCharName, True) = 0 Then
             MsgBox(0, "Error", "Could not Find a Guild Wars client with a Character named '"&$g_s_MainCharName&"'")
             _Exit()
         EndIf
@@ -81,7 +81,7 @@ Func StartBot()
     GUICtrlSetState($GUIStartButton, $GUI_Disable)
     GUICtrlSetState($GUIRefreshButton, $GUI_Disable)
     GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
-    WinSetTitle($MainGui, "", GwAu3_player_GetCharname() & " - Bot for test")
+    WinSetTitle($MainGui, "", player_GetCharname() & " - Bot for test")
     $BotRunning = True
     $Bot_Core_Initialized = True
 EndFunc
@@ -93,7 +93,7 @@ Func GuiButtonHandler()
 
         Case $GUIRefreshButton
             GUICtrlSetData($GUINameCombo, "")
-            GUICtrlSetData($GUINameCombo, GwAu3_Scanner_GetLoggedCharNames())
+            GUICtrlSetData($GUINameCombo, Scanner_GetLoggedCharNames())
 
         Case $gOnTopCheckbox
             If GetChecked($gOnTopCheckbox) Then
@@ -104,9 +104,9 @@ Func GuiButtonHandler()
 
 		Case $gDebugCheckbox
             If GetChecked($gDebugCheckbox) Then
-                GwAu3_Log_SetDebugMode(True)
+                Log_SetDebugMode(True)
             Else
-                GwAu3_Log_SetDebugMode(False)
+                Log_SetDebugMode(False)
             EndIf
 
         Case $GUI_EVENT_CLOSE
@@ -118,11 +118,11 @@ Out("Based on GWA2")
 Out("GWA2 - Created by: " & $GC_S_GWA2_CREATOR)
 Out("GWA2 - Build date: " & $GC_S_GWA2_BUILD_DATE & @CRLF)
 
-Out("GwAu3 - Created by: " & $GC_S_GWAU3_UPDATOR)
-Out("GwAu3 - Build date: " & $GC_S_GWAU3_BUILD_DATE)
-Out("GwAu3 - Version: " & $GC_S_GWAU3_VERSION)
-Out("GwAu3 - Last Update: " & $GC_S_GWAU3_LAST_UPDATE & @CRLF)
-GwAu3_Core_AutoStart()
+Out("GwAu3 - Created by: " & $GC_S_UPDATOR)
+Out("GwAu3 - Build date: " & $GC_S_BUILD_DATE)
+Out("GwAu3 - Version: " & $GC_S_VERSION)
+Out("GwAu3 - Last Update: " & $GC_S_LAST_UPDATE & @CRLF)
+Core_AutoStart()
 
 While Not $BotRunning
     Sleep(100)

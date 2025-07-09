@@ -1,6 +1,6 @@
 #include-once
 
-#Region GwAu3_Core_PerformAction
+#Region Core_PerformAction
 Global Const $GC_I_ACTIONTYPE_ACTIVATE = 0x1E
 Global Const $GC_I_ACTIONTYPE_DESACTIVATE = 0x20
 

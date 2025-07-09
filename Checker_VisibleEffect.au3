@@ -58,7 +58,7 @@ $lblChar = GUICtrlCreateLabel("Character:", 25, 85, 60, 20)
 Global $GUINameCombo
 If $doLoadLoggedChars Then
     $GUINameCombo = GUICtrlCreateCombo($g_s_MainCharName, 90, 82, 200, 25, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL))
-    GUICtrlSetData(-1, GwAu3_Scanner_GetLoggedCharNames())
+    GUICtrlSetData(-1, Scanner_GetLoggedCharNames())
 Else
     $GUINameCombo = GUICtrlCreateInput($g_s_MainCharName, 90, 82, 200, 25)
 EndIf
@@ -167,12 +167,12 @@ Global $g_i_UniqueCount = 0
 Func StartBot()
     Local $g_s_MainCharName = GUICtrlRead($GUINameCombo)
     If $g_s_MainCharName=="" Then
-        If GwAu3_Core_Initialize(ProcessExists("gw.exe"), True) = 0 Then
+        If Core_Initialize(ProcessExists("gw.exe"), True) = 0 Then
             MsgBox(0, "Error", "Guild Wars is not running.")
             _Exit()
         EndIf
     Else
-        If GwAu3_Core_Initialize($g_s_MainCharName, True) = 0 Then
+        If Core_Initialize($g_s_MainCharName, True) = 0 Then
             MsgBox(0, "Error", "Could not find character: '"&$g_s_MainCharName&"'")
             _Exit()
         EndIf
@@ -180,7 +180,7 @@ Func StartBot()
 
     GUICtrlSetState($GUIStartButton, $GUI_Disable)
     GUICtrlSetState($GUINameCombo, $GUI_DISABLE)
-    WinSetTitle($MainGui, "", GwAu3_player_GetCharname() & " - TList Monitor")
+    WinSetTitle($MainGui, "", player_GetCharname() & " - TList Monitor")
     $BotRunning = True
     $Bot_Core_Initialized = True
 
@@ -190,7 +190,7 @@ Func StartBot()
     Out("╔══════════════════════════════════════╗", 0x3498DB)
     Out("   TList VisibleEffects Monitor", 0x3498DB)
     Out("╚══════════════════════════════════════╝", 0x3498DB)
-    Out("Character: " & GwAu3_player_GetCharname(), 0x27AE60)
+    Out("Character: " & player_GetCharname(), 0x27AE60)
     Out("Implementation: C++ TList/TLink structure", 0x95A5A6)
     Out("Ready to monitor effects!", 0x27AE60)
 EndFunc
@@ -202,7 +202,7 @@ Func GuiButtonHandler()
 
         Case $GUIRefreshButton
             GUICtrlSetData($GUINameCombo, "")
-            GUICtrlSetData($GUINameCombo, GwAu3_Scanner_GetLoggedCharNames())
+            GUICtrlSetData($GUINameCombo, Scanner_GetLoggedCharNames())
 
         Case $gAutoMonitorCheckbox
             $g_b_AutoMonitor = GetChecked($gAutoMonitorCheckbox)
@@ -224,7 +224,7 @@ Func GuiButtonHandler()
 
         Case $GUITestTargetButton
             If $Bot_Core_Initialized Then
-                Local $target = GwAu3_Agent_GetCurrentTarget()
+                Local $target = Agent_GetCurrentTarget()
                 If $target > 0 Then
                     TestEffectsDetailed($target, "Target")
                 Else
@@ -258,7 +258,7 @@ EndFunc
 
 Out("TList VisibleEffects Tester", 0x3498DB)
 Out("Ready to initialize...", 0x95A5A6)
-GwAu3_Core_AutoStart()
+Core_AutoStart()
 
 While Not $BotRunning
     Sleep(100)
@@ -282,7 +282,7 @@ Func MonitorEffects()
     If GetChecked($gIteratorModeCheckbox) Then
         $count = VisibleEffect_Count(-2)
     Else
-        $count = GwAu3_Agent_CountVisibleEffectsSimple(-2)
+        $count = Agent_CountVisibleEffectsSimple(-2)
     EndIf
 
     ; Update main display
@@ -384,39 +384,39 @@ Func DebugTListStructure()
     Out("   TList Structure Debug", 0xE91E63)
     Out("╚═══════════════════════════════════════╝", 0xE91E63)
 
-    Local $agentPtr = GwAu3_Agent_GetAgentPtr(-2)
+    Local $agentPtr = Agent_GetAgentPtr(-2)
     Out("Agent Pointer: 0x" & Hex($agentPtr, 8), 0x95A5A6)
 
     ; TList at 0x170
     Local $tlistPtr = $agentPtr + 0x170
     Out(@CRLF & "TList at 0x170:", 0xF39C12)
-    Out("  offset: " & GwAu3_Memory_Read($tlistPtr, "dword"), 0x95A5A6)
+    Out("  offset: " & Memory_Read($tlistPtr, "dword"), 0x95A5A6)
 
     ; Sentinel at 0x174
     Local $sentinel = $tlistPtr + 0x4
     Out(@CRLF & "Sentinel TLink at 0x174:", 0xF39C12)
-    Local $prevLink = GwAu3_Memory_Read($sentinel, "ptr")
-    Local $nextNode = GwAu3_Memory_Read($sentinel + 0x4, "ptr")
+    Local $prevLink = Memory_Read($sentinel, "ptr")
+    Local $nextNode = Memory_Read($sentinel + 0x4, "ptr")
     Out("  prev_link: 0x" & Hex($prevLink, 8), 0x95A5A6)
     Out("  next_node: 0x" & Hex($nextNode, 8), 0x95A5A6)
     Out("  next_node (cleaned): 0x" & Hex(BitAND($nextNode, 0xFFFFFFFE), 8), 0x95A5A6)
 
     ; Check if linked
-    Local $isLinked = GwAu3_Utils_TLink_IsLinked($sentinel)
+    Local $isLinked = Utils_TLink_IsLinked($sentinel)
     Out("  IsLinked: " & ($isLinked ? "Yes" : "No"), 0x3498DB)
 
     ; Traverse with iterator
     Out(@CRLF & "Iterator traversal:", 0xF39C12)
-    Local $iterator = GwAu3_Utils_TList_CreateIterator($tlistPtr)
-    Local $current = GwAu3_Utils_TList_Iterator_Current($iterator)
+    Local $iterator = Utils_TList_CreateIterator($tlistPtr)
+    Local $current = Utils_TList_Iterator_Current($iterator)
     Local $index = 0
 
     While $current <> 0 And $index < 10
         $index += 1
         Out("  [" & $index & "] Effect at 0x" & Hex($current, 8), 0x27AE60)
 
-        If Not GwAu3_Utils_TList_Iterator_Next($iterator) Then ExitLoop
-        $current = GwAu3_Utils_TList_Iterator_Current($iterator)
+        If Not Utils_TList_Iterator_Next($iterator) Then ExitLoop
+        $current = Utils_TList_Iterator_Current($iterator)
     WEnd
 
     If $index = 0 Then
@@ -429,7 +429,7 @@ Func TestPartyEffects()
     Out(@CRLF & "👥 Party Effects Scan", 0x9B59B6)
 
     For $i = 1 To 8
-        Local $partyID = GwAu3_Party_GetPartyMemberID($i)
+        Local $partyID = Party_GetPartyMemberID($i)
         If $partyID <= 0 Then ContinueLoop
 
         Local $count = VisibleEffect_Count($partyID)
@@ -448,19 +448,19 @@ EndFunc
 Func TestNearbyAgents()
     Out(@CRLF & "📍 Nearby Agents Scan", 0x9B59B6)
 
-    Local $agents = GwAu3_Agent_GetAgentArray(0xDB)
+    Local $agents = Agent_GetAgentArray(0xDB)
     Local $found = 0
 
     For $i = 1 To Min($agents[0], 25)
-        Local $agentID = GwAu3_Agent_GetAgentInfo($agents[$i], "ID")
-        If $agentID = GwAu3_Agent_GetMyID() Then ContinueLoop
+        Local $agentID = Agent_GetAgentInfo($agents[$i], "ID")
+        If $agentID = Agent_GetMyID() Then ContinueLoop
 
-        Local $distance = GwAu3_Agent_GetDistance($agentID)
+        Local $distance = Agent_GetDistance($agentID)
         If $distance < 1000 Then
             Local $count = VisibleEffect_Count($agentID)
             If $count > 0 Then
                 $found += 1
-                Local $hp = Round(GwAu3_Agent_GetAgentInfo($agentID, "HP") * 100)
+                Local $hp = Round(Agent_GetAgentInfo($agentID, "HP") * 100)
                 Out("Agent " & $agentID & " (D:" & Round($distance) & ", HP:" & $hp & "%): " & $count & " effects", 0x3498DB)
             EndIf
         EndIf
@@ -502,7 +502,7 @@ Func ExportLog()
     Local $file = FileOpen($filename, 2)
     FileWrite($file, "TList VisibleEffects Log" & @CRLF)
     FileWrite($file, "========================" & @CRLF)
-    FileWrite($file, "Character: " & GwAu3_player_GetCharname() & @CRLF)
+    FileWrite($file, "Character: " & player_GetCharname() & @CRLF)
     FileWrite($file, "Date: " & @YEAR & "/" & @MON & "/" & @MDAY & " " & @HOUR & ":" & @MIN & @CRLF)
     FileWrite($file, "Total Scans: " & $g_i_TotalScans & @CRLF)
     FileWrite($file, "Unique Effects: " & $g_i_UniqueCount & @CRLF)
@@ -580,10 +580,10 @@ Func GetChecked($GUICtrl)
 EndFunc
 
 ; Simple function for compatibility
-Func GwAu3_Agent_CountVisibleEffectsSimple($a_i_AgentID = -2)
+Func Agent_CountVisibleEffectsSimple($a_i_AgentID = -2)
     Local $l_i_Count = 0
-    Local $l_p_Sentinel = GwAu3_Agent_GetAgentInfo($a_i_AgentID, "VisibleEffectsPtr")
-    Local $l_p_CurrentEffect = GwAu3_Agent_GetAgentInfo($a_i_AgentID, "VisibleEffectsNextNode")
+    Local $l_p_Sentinel = Agent_GetAgentInfo($a_i_AgentID, "VisibleEffectsPtr")
+    Local $l_p_CurrentEffect = Agent_GetAgentInfo($a_i_AgentID, "VisibleEffectsNextNode")
 
     If $l_p_CurrentEffect = 0 Or $l_p_CurrentEffect = $l_p_Sentinel Then Return 0
 
@@ -591,7 +591,7 @@ Func GwAu3_Agent_CountVisibleEffectsSimple($a_i_AgentID = -2)
     While ($l_p_CurrentEffect <> 0 And $l_p_CurrentEffect <> $l_p_Sentinel And $l_i_SafetyCounter < 100)
         $l_i_Count += 1
         Local $l_p_CurrentTLink = $l_p_CurrentEffect - 0x8
-        $l_p_CurrentEffect = GwAu3_Memory_Read($l_p_CurrentTLink + 0x4, "ptr")
+        $l_p_CurrentEffect = Memory_Read($l_p_CurrentTLink + 0x4, "ptr")
         $l_i_SafetyCounter += 1
     WEnd
 
@@ -599,13 +599,13 @@ Func GwAu3_Agent_CountVisibleEffectsSimple($a_i_AgentID = -2)
 EndFunc
 
 ; Missing function: Get party member ID
-Func GwAu3_Party_GetPartyMemberID($a_i_MemberIndex)
+Func Party_GetPartyMemberID($a_i_MemberIndex)
     ; Validate index (1-8 for party members)
     If $a_i_MemberIndex < 1 Or $a_i_MemberIndex > 8 Then Return 0
 
     ; Get party info base pointer
     Local $l_a_Offset[5] = [0, 0x18, 0x2C, 0x54C, 0x0]
-    Local $l_p_PartyBase = GwAu3_Memory_ReadPtr($g_p_BasePointer, $l_a_Offset)
+    Local $l_p_PartyBase = Memory_ReadPtr($g_p_BasePointer, $l_a_Offset)
 
     If $l_p_PartyBase[1] = 0 Then Return 0
 
@@ -614,7 +614,7 @@ Func GwAu3_Party_GetPartyMemberID($a_i_MemberIndex)
     Local $l_i_MemberOffset = ($a_i_MemberIndex - 1) * 0x4C
 
     ; AgentID is at offset 0x0 in each party member structure
-    Local $l_i_AgentID = GwAu3_Memory_Read($l_p_PartyBase[1] + $l_i_MemberOffset, "dword")
+    Local $l_i_AgentID = Memory_Read($l_p_PartyBase[1] + $l_i_MemberOffset, "dword")
 
     Return $l_i_AgentID
 EndFunc
