@@ -182,10 +182,19 @@ Func Skill_GetSkillbarInfo($a_i_SkillSlot = 1, $a_s_Info = "", $a_i_HeroNumber =
             If $l_i_Timestamp = 0 Then Return True
             Return ($l_i_Timestamp - Skill_GetSkillTimer()) = 0
 
-        Case "RawRecharged"
-            Local $l_i_Timestamp = Memory_Read($l_p_SkillbarPtr + 0xC + (($a_i_SkillSlot - 1) * 0x14), "dword")
-            Local $l_i_SkillID = Memory_Read($l_p_SkillbarPtr + 0x10 + (($a_i_SkillSlot - 1) * 0x14), "dword")
-            Return Skill_GetSkillInfo($l_i_SkillID, "Recharge") - (Skill_GetSkillTimer() - $l_i_Timestamp)
+        Case "RechargeTime"
+			Local $l_i_RechargeTimestamp = Memory_Read($l_p_SkillbarPtr + 0xC + (($a_i_SkillSlot - 1) * 0x14), "dword")
+			If $l_i_RechargeTimestamp = 0 Then Return 0
+
+			Local $l_i_RechargeTimestampSigned = _MakeInt32($l_i_RechargeTimestamp)
+			Local $l_i_SkillTimerSigned = _MakeInt32(Skill_GetSkillTimer())
+
+			Local $l_i_TimeRemaining = $l_i_RechargeTimestampSigned - $l_i_SkillTimerSigned
+			If $l_i_TimeRemaining <= 0 Then
+				Return 0
+			Else
+				Return $l_i_TimeRemaining
+			EndIf
 
         Case "Adrenaline"
             Return Memory_Read($l_p_SkillbarPtr + 0x4 + (($a_i_SkillSlot - 1) * 0x14), "dword")

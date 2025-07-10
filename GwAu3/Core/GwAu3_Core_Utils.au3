@@ -50,6 +50,14 @@ Func Utils_UnsignedCompare($a_i_A, $a_i_B)
     Return ($a_i_A > $a_i_B And $a_i_A - $a_i_B < 0x80000000) Or ($a_i_B > $a_i_A And $a_i_B - $a_i_A > 0x80000000) ? 1 : -1
 EndFunc
 
+Func Utils_MakeInt32($value)
+    If BitAND($value, 0x80000000) Then
+        Return BitOR($value, 0xFFFFFFFF00000000)
+    Else
+        Return BitAND($value, 0xFFFFFFFF)
+    EndIf
+EndFunc
+
 Func Utils_StringToByteArray($a_s_HexString)
     Local $l_i_Length = StringLen($a_s_HexString) / 2
     Local $l_ax_Bytes[$l_i_Length]
