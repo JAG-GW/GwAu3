@@ -30,7 +30,7 @@ GwAu3 is an AutoIt3 library that provides a programming interface to interact wi
 - **Agent**: Game entity information
 - **Guild**: Guild data
 - **Inventory**: Inventory management
-- **Map**: Zone information
+- **Map**: Map information
 - **Party**: Party composition and states
 - **Quest**: Quest tracking
 - **Skill**: Skills database
@@ -56,54 +56,54 @@ GwAu3 is an AutoIt3 library that provides a programming interface to interact wi
 ### Basic Example
 
 ```autoit
-#include "GwAu3_Core.au3"
+#include "Core.au3"
 
 ; Initialize with character name
-GwAu3_Core_Initialize("Character Name")
+Core_Initialize("Character Name")
 
 ; Or initialize with process PID
-; GwAu3_Core_Initialize($ProcessID)
+; Core_Initialize($ProcessID)
 
 ; Usage examples
-Local $l_i_MyID = GwAu3_Agent_GetMyID()
-Local $l_s_CharName = GwAu3_Player_GetCharname()
-Local $l_i_MapID = GwAu3_Map_GetCharacterInfo("MapID")
+Local $l_i_MyID = Agent_GetMyID()
+Local $l_s_CharName = Player_GetCharname()
+Local $l_i_MapID = Map_GetCharacterInfo("MapID")
 
 ; Movement
-GwAu3_Map_Move(1000, -500)
+Map_Move(1000, -500)
 
 ; Targeting
-GwAu3_Agent_ChangeTarget($TargetID)
+Agent_ChangeTarget($TargetID)
 
 ; Use a skill
-GwAu3_Skill_UseSkill(1) ; Uses skill 1
+Skill_UseSkill(1) ; Uses skill 1
 ```
 
 ## 📚 Module Documentation
-
+📖 [AutoIt Naming Convention Documentation](GwAu3/Constants/README.md)
 ### Core
-- `GwAu3_Core_Initialize($CharacterName)` : Initialize connection
-- `GwAu3_Core_SendPacket(...)` : Send packets to server
-- `GwAu3_Core_Enqueue(...)` : Queue commands
+- `Core_Initialize($CharacterName)` : Initialize connection
+- `Core_SendPacket(...)` : Send packets to server
+- `Core_Enqueue(...)` : Queue commands
 
 ### Agent
-- `GwAu3_Agent_GetMyID()` : Returns your character's ID
-- `GwAu3_Agent_ChangeTarget($AgentID)` : Target an agent
-- `GwAu3_Agent_GetAgentInfo($AgentID, $Info)` : Get agent information
+- `Agent_GetMyID()` : Returns your character's ID
+- `Agent_ChangeTarget($AgentID)` : Target an agent
+- `Agent_GetAgentInfo($AgentID, $Info)` : Get agent information
 
 ### Map
-- `GwAu3_Map_Move($X, $Y)` : Move character
-- `GwAu3_Map_TravelTo($MapID)` : Travel to a zone
-- `GwAu3_Map_GetCharacterInfo($Info)` : Current zone information
+- `Map_Move($X, $Y)` : Move character
+- `Map_TravelTo($MapID)` : Travel to a zone
+- `Map_GetCharacterInfo($Info)` : Current zone information
 
 ### Inventory
-- `GwAu3_Item_UseItem($Item)` : Use an item
-- `GwAu3_Item_MoveItem($Item, $Bag, $Slot)` : Move an item
-- `GwAu3_Item_GetBagInfo($BagNumber, $Info)` : Bag information
+- `Item_UseItem($Item)` : Use an item
+- `Item_MoveItem($Item, $Bag, $Slot)` : Move an item
+- `Item_GetBagInfo($BagNumber, $Info)` : Bag information
 
 ### Skills
-- `GwAu3_Skill_UseSkill($SkillSlot)` : Use a skill
-- `GwAu3_Skill_GetSkillInfo($SkillID, $Info)` : Skill information
+- `Skill_UseSkill($SkillSlot)` : Use a skill
+- `Skill_GetSkillInfo($SkillID, $Info)` : Skill information
 
 ## ⚙️ Configuration
 

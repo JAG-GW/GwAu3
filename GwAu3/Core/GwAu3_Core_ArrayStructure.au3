@@ -24,6 +24,76 @@ Func Memory_CreateArrayStructure($a_a_Definition, $a_i_ElementSize)
 EndFunc
 
 ; ===============================================================
+; Reads an array of pointers to structures
+; ===============================================================
+Func Memory_ReadPointerArrayStruct($a_p_PointerArrayBase, $a_i_ArraySize, ByRef $a_a_StructInfo)
+    If Not IsArray($a_a_StructInfo) Then Return SetError(1, 0, 0)
+    If $a_i_ArraySize <= 0 Then Return SetError(2, 0, 0)
+
+    Local $l_i_FieldCount = $a_a_StructInfo[3]
+    Local $l_a_FieldIndices = $a_a_StructInfo[2]
+
+    ; First, read all pointers in the array
+    Local $l_d_PointerBuffer = DllStructCreate("ptr[" & $a_i_ArraySize & "]")
+
+    Local $l_a_Call = DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
+        "handle", $g_h_GWProcess, _
+        "ptr", $a_p_PointerArrayBase, _
+        "struct*", $l_d_PointerBuffer, _
+        "ulong_ptr", 4 * $a_i_ArraySize, _ ; 4 bytes per pointer
+        "ulong_ptr*", 0)
+
+    If @error Or Not $l_a_Call[0] Then Return SetError(3, 0, 0)
+
+    ; Count valid (non-null) pointers
+    Local $l_i_ValidCount = 0
+    For $i = 1 To $a_i_ArraySize
+        If DllStructGetData($l_d_PointerBuffer, 1, $i) <> 0 Then
+            $l_i_ValidCount += 1
+        EndIf
+    Next
+
+    If $l_i_ValidCount = 0 Then Return SetError(4, 0, 0)
+
+    ; Create the results table for valid agents only
+    Local $l_a_Results[$l_i_ValidCount][$l_i_FieldCount + 1] ; +1 to store the pointer
+
+    ; Structure for reading data
+    Local $l_t_Struct = $a_a_StructInfo[0]
+    Local $l_i_ResultIndex = 0
+
+    ; Read each structure pointed to
+    For $i = 1 To $a_i_ArraySize
+        Local $l_p_StructPtr = DllStructGetData($l_d_PointerBuffer, 1, $i)
+
+        ; Ignore null pointers
+        If $l_p_StructPtr = 0 Then ContinueLoop
+
+        ; Read the structure at this address
+        Local $l_a_Call = DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
+            "handle", $g_h_GWProcess, _
+            "ptr", $l_p_StructPtr, _
+            "struct*", $l_t_Struct, _
+            "ulong_ptr", $a_a_StructInfo[1], _
+            "ulong_ptr*", 0)
+
+        If @error Or Not $l_a_Call[0] Then ContinueLoop
+
+        ; Store the pointer in the first column
+        $l_a_Results[$l_i_ResultIndex][0] = $l_p_StructPtr
+
+        ; Extract all defined fields
+        For $j = 0 To $l_i_FieldCount - 1
+            $l_a_Results[$l_i_ResultIndex][$j + 1] = DllStructGetData($l_t_Struct, $l_a_FieldIndices[$j])
+        Next
+
+        $l_i_ResultIndex += 1
+    Next
+
+    Return $l_a_Results
+EndFunc
+
+; ===============================================================
 ; Read entire array of structures
 ; ===============================================================
 Func Memory_ReadArrayStruct($a_p_ArrayBase, $a_i_ArraySize, ByRef $l_a_ArrayStructInfo)
