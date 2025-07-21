@@ -28,8 +28,8 @@ Func Chat_WriteChat($a_s_Message, $a_s_Sender = 'GwAu3')
     Memory_Write($l_p_Address + 44, $l_s_Message, 'wchar[101]')
     DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'int', $l_p_Address, 'ptr', $g_p_WriteChatPtr, 'int', 4, 'int', '')
 
-    If StringLen($a_s_Message) > 100 Then WriteChat(StringTrimLeft($a_s_Message, 100), $a_s_Sender)
-EndFunc   ;==>WriteChat
+    If StringLen($a_s_Message) > 100 Then Chat_WriteChat(StringTrimLeft($a_s_Message, 100), $a_s_Sender)
+EndFunc   ;==>Chat_WriteChat
 
 ;~ Description: Send a whisper to another player.
 Func Chat_SendWhisper($a_s_Receiver, $a_s_Message)
@@ -44,8 +44,8 @@ Func Chat_SendWhisper($a_s_Receiver, $a_s_Message)
 
     Chat_SendChat($l_s_Message, '/')
 
-    If StringLen($l_s_Total) > 120 Then SendWhisper($a_s_Receiver, StringTrimLeft($l_s_Total, 120))
-EndFunc   ;==>SendWhisper
+    If StringLen($l_s_Total) > 120 Then Chat_SendWhisper($a_s_Receiver, StringTrimLeft($l_s_Total, 120))
+EndFunc   ;==>Chat_SendWhisper
 
 ;~ Description: Send a message to chat.
 ;~ '!' = All, '@' = Guild, '#' = Team, '$' = Trade, '%' = Alliance, '"' = Whisper
@@ -69,4 +69,4 @@ Func Chat_SendChat($a_s_Message, $a_s_Channel = '!')
     DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'int', $l_p_Address, 'ptr', $g_p_SendChat, 'int', 8, 'int', '')
 
     If StringLen($a_s_Message) > 120 Then Chat_SendChat(StringTrimLeft($a_s_Message, 120), $a_s_Channel)
-EndFunc   ;==>SendChat
+EndFunc   ;==>Chat_SendChat
