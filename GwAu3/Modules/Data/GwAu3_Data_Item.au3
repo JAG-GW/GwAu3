@@ -266,11 +266,11 @@ Func Item_GetInventoryArray($a_b_IncludeEquipmentPack = False)
     Local $l_amx2_Inventory[$l_i_MaxBagSlots][$LC_I_INVENTORY_ARRAY_COLS]
     Local $l_i_Inventory_Idx = 0
 
-    For $l_i_Idx = 0 To UBound($LC_AI_BAG_LIST) - 1
-        Local $l_p_BagPtr = Item_GetBagPtr($LC_AI_BAG_LIST[$l_i_Idx])
+    For $l_i_Idx = 0 To UBound($l_ai_BagList) - 1
+        Local $l_p_BagPtr = Item_GetBagPtr($l_ai_BagList[$l_i_Idx])
         If $l_p_BagPtr = 0 Then ContinueLoop
 
-        Local $l_ap_ItemArray = Item_GetBagItemArray($LC_AI_BAG_LIST[$l_i_Idx])
+        Local $l_ap_ItemArray = Item_GetBagItemArray($l_ai_BagList[$l_i_Idx])
         Local $l_i_ItemCount = $l_ap_ItemArray[0]
 
         For $l_i_Jdx = 1 To $l_i_ItemCount
