@@ -7,14 +7,15 @@ Opt("GUICloseOnESC", False)
 Opt("ExpandVarStrings", 1)
 
 #Region Declarations
-Global $g_s_MainCharName  = ""
 Global $ProcessID = ""
 Global $timer = TimerInit()
 
 Global $BotRunning = False
 Global $Bot_Core_Initialized = False
 Global Const $BotTitle = "Tester"
-Global $g_bAutoStart = False  ; Flag for auto-start
+
+$g_bAutoStart = False  ; Flag for auto-start
+$g_s_MainCharName  = ""
 #EndRegion Declaration
 
 ; Process command line arguments
