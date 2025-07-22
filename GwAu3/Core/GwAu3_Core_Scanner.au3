@@ -1,5 +1,4 @@
 #include-once
-#include "../Constants/GwAu3_Const_Memory.au3"
 
 Func Scanner_GWBaseAddress()
     If $g_h_GWProcess = 0 Then
