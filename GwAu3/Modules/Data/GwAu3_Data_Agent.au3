@@ -46,7 +46,7 @@ Func Agent_GetAgentCopyBase()
 EndFunc
 
 Func Agent_GetLastTarget()
-    Return $g_iLastTargetID
+    Return $g_i_LastTargetID
 EndFunc
 
 Func Agent_GetAgentPtr($a_i_AgentID = -2)

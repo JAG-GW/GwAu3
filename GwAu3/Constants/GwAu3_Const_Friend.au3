@@ -21,4 +21,6 @@ Global Const $GC_I_FRIENDLIST_STRUCT_SIZE = 0xA4
 Global Const $GC_I_FRIEND_ALIAS_MAX_LENGTH = 20
 Global Const $GC_I_FRIEND_CHARNAME_MAX_LENGTH = 20
 Global Const $GC_I_FRIEND_UUID_SIZE = 16
+
+Global $g_b_FriendModuleInitialized
 #EndRegion Module Constants
