@@ -1,4 +1,5 @@
 #include-once
+#include "../Constants/GwAu3_Const_Memory.au3"
 
 Func Scanner_GWBaseAddress()
     If $g_h_GWProcess = 0 Then
@@ -578,6 +579,14 @@ Func Scanner_GetHwnd($a_i_Proc)
     Next
 EndFunc
 
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: Scanner_GetWindowHandle
+; Description ...: Returns the GW Window Handle.
+; Syntax ........: Scanner_GetWindowHandle()
+; Parameters ....: None
+; Return values .: $g_h_GWWindow
+; ===============================================================================================================================
 Func Scanner_GetWindowHandle()
     Return $g_h_GWWindow
 EndFunc

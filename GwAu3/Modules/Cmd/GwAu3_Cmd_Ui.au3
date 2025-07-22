@@ -1,4 +1,5 @@
 #include-once
+#include "../../Core/GwAu3_Core_Scanner.au3"
 
 Func Ui_EnterChallenge($a_b_Foreign = False)
     DllStructSetData($g_d_EnterMission, 2, Not $a_b_Foreign)
@@ -31,10 +32,10 @@ EndFunc ;==>DisableRendering
 Func Ui_ToggleRendering()
     If Ui_GetRenderDisabled() Then
         Ui_EnableRendering()
-        WinSetState(GetWindowHandle(), "", @SW_SHOW)
+        WinSetState(Scanner_GetWindowHandle(), "", @SW_SHOW)
     Else
         Ui_DisableRendering()
-        WinSetState(GetWindowHandle(), "", @SW_HIDE)
+        WinSetState(Scanner_GetWindowHandle(), "", @SW_HIDE)
         Memory_Clear()
     EndIf
 EndFunc ;==>ToggleRendering

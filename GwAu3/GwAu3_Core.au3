@@ -10,6 +10,14 @@ If @AutoItX64 Then
 EndIf
 
 #Region Initialization
+; #FUNCTION# ====================================================================================================================
+; Name ..........: Core_Initialize
+; Description ...: Injects your Script into gw.exe
+; Syntax ........: Core_Initialize($a_s_GW[, $a_b_ChangeTitle = True])
+; Parameters ....: $a_s_GW              - 
+;                  $a_b_ChangeTitle     - [optional] Default is True.
+; Return values .: GW Window Handle
+; ===============================================================================================================================
 Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Info("Checking for updates...", "GwAu3", $g_h_EditText)
 	Local $l_i_UpdateStatus = Updater_CheckForGwAu3Updates()
