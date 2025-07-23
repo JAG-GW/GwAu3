@@ -186,8 +186,8 @@ Func Skill_GetSkillbarInfo($a_i_SkillSlot = 1, $a_s_Info = "", $a_i_HeroNumber =
 			Local $l_i_RechargeTimestamp = Memory_Read($l_p_SkillbarPtr + 0xC + (($a_i_SkillSlot - 1) * 0x14), "dword")
 			If $l_i_RechargeTimestamp = 0 Then Return 0
 
-			Local $l_i_RechargeTimestampSigned = _MakeInt32($l_i_RechargeTimestamp)
-			Local $l_i_SkillTimerSigned = _MakeInt32(Skill_GetSkillTimer())
+			Local $l_i_RechargeTimestampSigned = Utils_MakeInt32($l_i_RechargeTimestamp)
+			Local $l_i_SkillTimerSigned = Utils_MakeInt32(Skill_GetSkillTimer())
 
 			Local $l_i_TimeRemaining = $l_i_RechargeTimestampSigned - $l_i_SkillTimerSigned
 			If $l_i_TimeRemaining <= 0 Then
