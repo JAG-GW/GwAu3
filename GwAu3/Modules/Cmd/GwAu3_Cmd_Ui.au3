@@ -31,10 +31,10 @@ EndFunc ;==>DisableRendering
 Func Ui_ToggleRendering()
     If Ui_GetRenderDisabled() Then
         Ui_EnableRendering()
-        WinSetState(GetWindowHandle(), "", @SW_SHOW)
+        WinSetState(Scanner_GetWindowHandle(), "", @SW_SHOW)
     Else
         Ui_DisableRendering()
-        WinSetState(GetWindowHandle(), "", @SW_HIDE)
+        WinSetState(Scanner_GetWindowHandle(), "", @SW_HIDE)
         Memory_Clear()
     EndIf
 EndFunc ;==>ToggleRendering
