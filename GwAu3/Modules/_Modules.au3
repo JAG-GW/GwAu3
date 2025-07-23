@@ -16,7 +16,6 @@
 #include "Data/GwAu3_Data_Merchant.au3"
 #include "Data/GwAu3_Data_Other.au3"
 #include "Data/GwAu3_Data_Party.au3"
-#include "Data/GwAu3_Data_Path.au3"
 #include "Data/GwAu3_Data_Player.au3"
 #include "Data/GwAu3_Data_PreGame.au3"
 #include "Data/GwAu3_Data_Quest.au3"
