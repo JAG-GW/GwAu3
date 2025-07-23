@@ -63,6 +63,6 @@ EndFunc   ;==>ChangeHeroSkillSlotState
 
 ;~ Description: Leave your party.
 Func Party_LeaveGroup($a_b_KickHeroes = True)
-    If $a_b_KickHeroes Then KickAllHeroes()
+    If $a_b_KickHeroes Then Party_KickAllHeroes()
     Return Core_SendPacket(0x4, $GC_I_HEADER_PARTY_LEAVE_GROUP)
 EndFunc   ;==>LeaveGroup
