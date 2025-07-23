@@ -2,7 +2,7 @@
 
 #Region Account Related
 Func Account_GetAccountInfo($a_s_Info = "")
-    Local $l_p_Ptr = Account_GetWorldInfo("AccountInfo")
+    Local $l_p_Ptr = World_GetWorldInfo("AccountInfo")
     If $l_p_Ptr = 0 Or $a_s_Info = "" Then Return 0
 
     Switch $a_s_Info
