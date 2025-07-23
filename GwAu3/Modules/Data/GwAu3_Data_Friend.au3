@@ -1,11 +1,11 @@
 #include-once
 
 Func Friend_GetMyStatus()
-    Return Memory_Read($g_p_FriendListPtr + 0xA0, 'dword')
+    Return Memory_Read($g_p_FriendList + 0xA0, 'dword')
 EndFunc
 
 Func Friend_GetFriendListPtr()
-    Return $g_p_FriendListPtr
+    Return $g_p_FriendList
 EndFunc
 
 Func Friend_GetFriendListInfo($a_s_Info = "")
@@ -34,10 +34,10 @@ Func Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
     Local $l_p_FriendPtr = 0
     Local $l_i_FriendNumber = 0
 
-    Local $l_i_TotalFriends = Memory_Read($g_p_FriendListPtr + 0x24, "dword") + _  ; Friends
-                              Memory_Read($g_p_FriendListPtr + 0x28, "dword") + _  ; Ignores
-                              Memory_Read($g_p_FriendListPtr + 0x2C, "dword") + _  ; Partners
-                              Memory_Read($g_p_FriendListPtr + 0x30, "dword")      ; Traders
+    Local $l_i_TotalFriends = Memory_Read($g_p_FriendList + 0x24, "dword") + _  ; Friends
+                              Memory_Read($g_p_FriendList + 0x28, "dword") + _  ; Ignores
+                              Memory_Read($g_p_FriendList + 0x2C, "dword") + _  ; Partners
+                              Memory_Read($g_p_FriendList + 0x30, "dword")      ; Traders
 
     ; By friend number or Friend Name
     If IsNumber($a_v_FriendIdentifier) Then
@@ -45,13 +45,13 @@ Func Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
         If $l_i_FriendNumber < 1 Or $l_i_FriendNumber > $l_i_TotalFriends Then Return 0
 
         Local $l_ai_Offset[3] = [0, 0x4 * $l_i_FriendNumber, 0]
-        Local $l_av_Result = Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, "ptr")
+        Local $l_av_Result = Memory_ReadPtr($g_p_FriendList, $l_ai_Offset, "ptr")
         $l_p_FriendPtr = $l_av_Result[0]
     Else
         ; Find by name
         For $l_i_Idx = 1 To $l_i_TotalFriends
             Local $l_ai_Offset[3] = [0, 0x4 * $l_i_Idx, 0x2C]
-            Local $l_av_NameResult = Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, 'WCHAR[20]')
+            Local $l_av_NameResult = Memory_ReadPtr($g_p_FriendList, $l_ai_Offset, 'WCHAR[20]')
             If $l_av_NameResult[1] = $a_v_FriendIdentifier Then
                 $l_i_FriendNumber = $l_i_Idx
                 $l_p_FriendPtr = $l_av_NameResult[0] - 0x2C
@@ -63,7 +63,7 @@ Func Friend_GetFriendInfo($a_v_FriendIdentifier = "", $a_s_Info = "")
         If $l_p_FriendPtr = 0 Then
             For $l_i_Idx = 1 To $l_i_TotalFriends
                 Local $l_ai_Offset[3] = [0, 0x4 * $l_i_Idx, 0x18]
-                Local $l_av_NameResult = Memory_ReadPtr($g_p_FriendListPtr, $l_ai_Offset, 'WCHAR[20]')
+                Local $l_av_NameResult = Memory_ReadPtr($g_p_FriendList, $l_ai_Offset, 'WCHAR[20]')
                 If $l_av_NameResult[1] = $a_v_FriendIdentifier Then
                     $l_i_FriendNumber = $l_i_Idx
                     $l_p_FriendPtr = $l_av_NameResult[0] - 0x18

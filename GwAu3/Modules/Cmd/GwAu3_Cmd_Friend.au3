@@ -111,8 +111,8 @@ Func Friend_RemoveFriend($a_s_NameOrAlias)
     EndIf
 
     ; Get array info
-    Local $l_p_ArrayDataPtr = Memory_Read($g_p_FriendListPtr + 0x00, "ptr")
-    Local $l_i_ArraySize = Memory_Read($g_p_FriendListPtr + 0x08, "dword")
+    Local $l_p_ArrayDataPtr = Memory_Read($g_p_FriendList + 0x00, "ptr")
+    Local $l_i_ArraySize = Memory_Read($g_p_FriendList + 0x08, "dword")
 
     If $l_p_ArrayDataPtr = 0 Or $l_i_ArraySize = 0 Then
         Log_Error("Friend array is empty or invalid", "FriendMod", $g_h_EditText)
@@ -188,8 +188,8 @@ Func Friend_RemoveIgnore($a_s_CharacterName)
     EndIf
 
     ; Get array info
-    Local $l_p_ArrayDataPtr = Memory_Read($g_p_FriendListPtr + 0x00, "ptr")
-    Local $l_i_ArraySize = Memory_Read($g_p_FriendListPtr + 0x08, "dword")
+    Local $l_p_ArrayDataPtr = Memory_Read($g_p_FriendList + 0x00, "ptr")
+    Local $l_i_ArraySize = Memory_Read($g_p_FriendList + 0x08, "dword")
 
     If $l_p_ArrayDataPtr = 0 Or $l_i_ArraySize = 0 Then
         Log_Error("Friend array is empty or invalid", "FriendMod", $g_h_EditText)
