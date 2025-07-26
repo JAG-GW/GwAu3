@@ -2,11 +2,6 @@
 
 #Region Status Functions
 Func Friend_SetPlayerStatus($a_i_Status)
-    If Not $g_b_FriendModuleInitialized Then
-        Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If $a_i_Status < $GC_I_FRIEND_STATUS_OFFLINE Or $a_i_Status > $GC_I_FRIEND_STATUS_AWAY Then
         Log_Error("Invalid status: " & $a_i_Status, "FriendMod", $g_h_EditText)
         Return False
@@ -48,11 +43,6 @@ EndFunc
 
 #Region Friend Management Functions
 Func Friend_AddFriend($a_s_CharacterName, $a_s_Alias = "", $a_i_FriendType = $GC_I_FRIEND_TYPE_FRIEND)
-    If Not $g_b_FriendModuleInitialized Then
-        Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
-        Return False
-    EndIf
-
     If StringLen($a_s_CharacterName) = 0 Or StringLen($a_s_CharacterName) > $GC_I_FRIEND_CHARNAME_MAX_LENGTH Then
         Log_Error("Invalid character name length", "FriendMod", $g_h_EditText)
         Return False
@@ -105,11 +95,6 @@ Func Friend_AddFriend($a_s_CharacterName, $a_s_Alias = "", $a_i_FriendType = $GC
 EndFunc
 
 Func Friend_RemoveFriend($a_s_NameOrAlias)
-    If Not $g_b_FriendModuleInitialized Then
-        Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
-        Return False
-    EndIf
-
     ; Get array info
     Local $l_p_ArrayDataPtr = Memory_Read($g_p_FriendList + 0x00, "ptr")
     Local $l_i_ArraySize = Memory_Read($g_p_FriendList + 0x08, "dword")
@@ -182,11 +167,6 @@ Func Friend_AddIgnore($a_s_CharacterName, $a_s_Alias = "")
 EndFunc
 
 Func Friend_RemoveIgnore($a_s_CharacterName)
-    If Not $g_b_FriendModuleInitialized Then
-        Log_Error("FriendMod module not initialized", "FriendMod", $g_h_EditText)
-        Return False
-    EndIf
-
     ; Get array info
     Local $l_p_ArrayDataPtr = Memory_Read($g_p_FriendList + 0x00, "ptr")
     Local $l_i_ArraySize = Memory_Read($g_p_FriendList + 0x08, "dword")
