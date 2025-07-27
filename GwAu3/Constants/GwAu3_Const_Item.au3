@@ -156,7 +156,33 @@ Global Const $GC_AI_ALL_MATERIALS[37] = [ 36, _
 ]
 #EndRegion Materials
 
-#include-once
+#Region Scrolls
+
+Global Const $GC_I_MODELID_SCROLL_FOW = 948
+Global Const $GC_I_MODELID_SCROLL_URGOZ = 3256
+Global Const $GC_I_MODELID_SCROLL_UNDERWORLD = 3746
+Global Const $GC_I_MODELID_SCROLL_HERO = 5594
+Global Const $GC_I_MODELID_SCROLL_BERSERKER = 5595
+Global Const $GC_I_MODELID_SCROLL_SLAYER = 5611
+Global Const $GC_I_MODELID_SCROLL_ADVENTURE = 5853
+Global Const $GC_I_MODELID_SCROLL_RAMPAGER = 5975
+Global Const $GC_I_MODELID_SCROLL_HUNTER = 5976
+Global Const $GC_I_MODELID_SCROLL_LIGHTBRINGER = 21233
+Global Const $GC_I_MODELID_SCROLL_DEEP = 22279
+
+Global Const $GC_AI_ALL_SCROLLS[11] = [ 10, _
+	$GC_I_MODELID_SCROLL_FOW, _
+	$GC_I_MODELID_SCROLL_URGOZ, _
+	$GC_I_MODELID_SCROLL_UNDERWORLD, _
+	$GC_I_MODELID_SCROLL_HERO, _
+	$GC_I_MODELID_SCROLL_BERSERKER, _
+	$GC_I_MODELID_SCROLL_SLAYER, _
+	$GC_I_MODELID_SCROLL_ADVENTURE, _
+	$GC_I_MODELID_SCROLL_RAMPAGER, _
+	$GC_I_MODELID_SCROLL_HUNTER, _
+	$GC_I_MODELID_SCROLL_DEEP _
+]
+#EndRegion Scrolls
 
 #Region WeaponMods
 ; Shield
@@ -214,8 +240,14 @@ Global Const $GC_S_MOD_SHIELD_PLUS_PIERCING 					= "A0118210"	; +10vs Piercing
 Global Const $GC_S_MOD_SHIELD_PLUS_BLUNT 						= "A0018210"	; +10vs Blunt
 Global Const $GC_S_MOD_SHIELD_PLUS_SLASHING 					= "A0218210"	; +10vs Slashing
 ; +20 vs Conditions
+Global Const $GC_S_MOD_SHIELD_VS_BLEEDING						= "DE017824"	; +20%vs Bleeding
 Global Const $GC_S_MOD_SHIELD_VS_BLIND 							= "DF017824"	; +20%vs Blind
-
+Global Const $GC_S_MOD_SHIELD_VS_CRIPPLE						= "E1017824"	; +20%vs Cripple
+Global Const $GC_S_MOD_SHIELD_VS_DEEP_WOUND						= "E2017824"	; +20%vs Deep Wound
+Global Const $GC_S_MOD_SHIELD_VS_DISEASE 						= "E3017824"	; +20%vs Disease
+Global Const $GC_S_MOD_SHIELD_VS_POISON 						= "E4017824"	; +20%vs Poison
+Global Const $GC_S_MOD_SHIELD_VS_DAZE 							= "E5017824"	; +20%vs Daze
+Global Const $GC_S_MOD_SHIELD_VS_WEAKNESS 						= "E6017824"	; +20%vs Weakness
 ; Staff
 ;Generic 10% HCT
 Global Const $GC_S_MOD_STAFF_ALL10_CAST 						= "A0822"		; 10% HCT
