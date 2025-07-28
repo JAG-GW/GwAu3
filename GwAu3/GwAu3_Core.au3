@@ -268,7 +268,6 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 
     ; Setup command structures
     DllStructSetData($g_d_InviteGuild, 1, Memory_GetValue('CommandPacketSend'))
-    DllStructSetData($g_d_InviteGuild, 2, 0x4C)
     DllStructSetData($g_d_Packet, 1, Memory_GetValue('CommandPacketSend'))
     DllStructSetData($g_d_Action, 1, Memory_GetValue('CommandAction'))
     DllStructSetData($g_d_SendChat, 1, Memory_GetValue('CommandSendChat'))
