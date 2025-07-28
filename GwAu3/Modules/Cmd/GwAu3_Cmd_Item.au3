@@ -148,7 +148,7 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
     Local $l_a_Offset[4] = [0, 0x18, 0x2C, 0x690]
     Local $l_i_SalvageSessionID = Memory_ReadPtr($g_p_BasePointer, $l_a_Offset)
 
-    Other_PingSleep(10)
+    Other_PingSleep(32)
 
     DllStructSetData($g_d_Salvage, 2, $l_i_ItemID)
     DllStructSetData($g_d_Salvage, 3, Item_ItemID($l_ptr_SalvageKit))
@@ -156,22 +156,22 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
     Core_Enqueue($g_p_Salvage, 16)
 
     ; Wait for salvage window to open
-    Other_PingSleep(10)
+    Other_PingSleep(32)
 
     ; Perform the salvage type requested
     Switch $a_s_SalvageType
         Case "Materials"
             Core_SendPacket(0x4, $GC_I_HEADER_ITEM_SALVAGE_MATERIALS)
-			Other_PingSleep(10)
+			Other_PingSleep(32)
         Case "Prefix"
             Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 0)
-			Other_PingSleep(10)
+			Other_PingSleep(32)
         Case "Suffix"
             Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 1)
-			Other_PingSleep(10)
+			Other_PingSleep(32)
         Case "Inscription"
             Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 2)
-			Other_PingSleep(10)
+			Other_PingSleep(32)
         Case Else
             Return False
     EndSwitch
