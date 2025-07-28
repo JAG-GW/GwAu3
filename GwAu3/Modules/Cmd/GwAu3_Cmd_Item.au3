@@ -148,7 +148,7 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
     Local $l_a_Offset[4] = [0, 0x18, 0x2C, 0x690]
     Local $l_i_SalvageSessionID = Memory_ReadPtr($g_p_BasePointer, $l_a_Offset)
 
-    Sleep(32)
+    Other_PingSleep(10)
 
     DllStructSetData($g_d_Salvage, 2, $l_i_ItemID)
     DllStructSetData($g_d_Salvage, 3, Item_ItemID($l_ptr_SalvageKit))
@@ -156,22 +156,22 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
     Core_Enqueue($g_p_Salvage, 16)
 
     ; Wait for salvage window to open
-    Sleep(32)
+    Other_PingSleep(10)
 
     ; Perform the salvage type requested
     Switch $a_s_SalvageType
         Case "Materials"
             Core_SendPacket(0x4, $GC_I_HEADER_ITEM_SALVAGE_MATERIALS)
-			Sleep(32)
+			Other_PingSleep(10)
         Case "Prefix"
             Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 0)
-			Sleep(32)
+			Other_PingSleep(10)
         Case "Suffix"
             Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 1)
-			Sleep(32)
+			Other_PingSleep(10)
         Case "Inscription"
             Core_SendPacket(0x8, $GC_I_HEADER_ITEM_SALVAGE_UPGRADE, 2)
-			Sleep(32)
+			Other_PingSleep(10)
         Case Else
             Return False
     EndSwitch
