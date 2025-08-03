@@ -12,6 +12,7 @@
 #include "Data/GwAu3_Data_Guild.au3"
 #include "Data/GwAu3_Data_Item.au3"
 #include "Data/GwAu3_Data_Map.au3"
+#include "Data/GwAu3_Data_MapContext.au3"
 #include "Data/GwAu3_Data_Match.au3"
 #include "Data/GwAu3_Data_Merchant.au3"
 #include "Data/GwAu3_Data_Other.au3"
