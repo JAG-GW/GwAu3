@@ -2316,4 +2316,10 @@ Func Assembler_CreateUICommands()
 	_('call SetDifficulty')
 	_('add esp,4')
 	_('ljmp CommandReturn')
+
+	_('CommandOpenChest:')
+	_('push dword[eax+4]')
+	_('call OpenChest')
+	_('add esp,4')
+	_('ljmp CommandReturn')
 EndFunc

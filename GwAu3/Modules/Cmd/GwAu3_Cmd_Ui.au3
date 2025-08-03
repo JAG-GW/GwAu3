@@ -10,6 +10,12 @@ Func Ui_SetDifficulty($a_b_HardMode = False)
     Core_Enqueue($g_p_SetDifficulty, 8)
 EndFunc   ;==>Ui_SetDifficulty
 
+;~ Description: Open targeted chest using dialog options. (0x1 = Use Key, 0x2 = Use Lockpick, 0x80 = Cancel)
+Func Ui_OpenChest($a_i_DialogID)
+    DllStructSetData($g_d_OpenChest, 2, $a_i_DialogID)
+    Core_Enqueue($g_p_OpenChest, 8)
+EndFunc   ;==>Ui_OpenChest
+
 ;~ Description: Open a dialog.
 Func Ui_Dialog($a_v_DialogID)
     Return Core_SendPacket(0x8, $GC_I_HEADER_DIALOG_SEND, $a_v_DialogID)

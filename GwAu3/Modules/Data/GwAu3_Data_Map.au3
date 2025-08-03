@@ -46,7 +46,8 @@ EndFunc
 Func Map_GetCurrentAreaInfo($a_s_Info = "")
     If $a_s_Info = "" Then Return 0
     Local $l_ai_Offset[1] = [0x8]
-    Local $l_p_Ptr = Memory_ReadPtr($g_p_InstanceInfo, $l_ai_Offset, "dword")
+    Local $l_av_Result = Memory_ReadPtr($g_p_InstanceInfo, $l_ai_Offset, "ptr")
+    Local $l_p_Ptr = $l_av_Result[1]
 
     Switch $a_s_Info
         Case "Campaign"
@@ -112,6 +113,59 @@ Func Map_GetCurrentAreaInfo($a_s_Info = "")
     EndSwitch
 
     Return 0
+EndFunc
+
+Func Map_GetCurrentRegionType()
+	Local $l_i_RegionType = Map_GetCurrentAreaInfo("RegionType")
+
+	Switch $l_i_RegionType
+		Case 0
+			Return "Alliance Battle"
+		Case 1
+			Return "Arena"
+		Case 2
+			Return "Explorable"
+		Case 3
+			Return "Guild Battle"
+		Case 4
+			Return "Guild Hall"
+		Case 5
+			Return "Mission Outpost"
+		Case 6
+			Return "Cooperative Mission"
+		Case 7
+			Return "Competitive Mission"
+		Case 8
+			Return "Elite Mission"
+		Case 9
+			Return "Challenge"
+		Case 10
+			Return "Outpost"
+		Case 11
+			Return "Zaishen Battle"
+		Case 12
+			Return "Heroes Ascent"
+		Case 13
+			Return "City"
+		Case 14
+			Return "Mission"
+		Case 15
+			Return "Hero Battle Outpost"
+		Case 16
+			Return "Hero Battle Area"
+		Case 17
+			Return "Eotn Mission"
+		Case 18
+			Return "Dungeon"
+		Case 19
+			Return "Marketplace"
+		Case 20
+			Return "Unknown 20"
+		Case 21
+			Return "Dev Region"
+		Case Else
+			Return "Unknown Else"
+	EndSwitch
 EndFunc
 #EndRegion Instance Related
 

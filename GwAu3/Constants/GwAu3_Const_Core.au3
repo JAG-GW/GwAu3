@@ -113,6 +113,8 @@ Global $g_d_EnterMission = DllStructCreate('ptr;dword')
 Global $g_p_EnterMission = DllStructGetPtr($g_d_EnterMission)
 Global $g_d_SetDifficulty = DllStructCreate('ptr;dword')
 Global $g_p_SetDifficulty = DllStructGetPtr($g_d_SetDifficulty)
+Global $g_d_OpenChest = DllStructCreate('ptr;dword')
+Global $g_p_OpenChest = DllStructGetPtr($g_d_OpenChest)
 
 ;Bot related
 Global $g_bAutoStart = False  ; Flag for auto-start

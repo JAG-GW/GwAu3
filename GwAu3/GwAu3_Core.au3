@@ -94,6 +94,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Scanner_AddPattern('SendUIMessage', 'B900000000E8000000005DC3894508', 0x0, 'Func')
 	Scanner_AddPattern('EnterMission', 'A900001000743A', 0x52, 'Func')
 	Scanner_AddPattern('SetDifficulty', '8B75086828010010', 0x71, 'Func')
+	Scanner_AddPattern('OpenChest', '83C901894B24', 0x29, 'Func')
 	; hook
 	Scanner_AddPattern('Engine', '568B3085F67478EB038D4900D9460C', -0x22, 'Hook')
     Scanner_AddPattern('Render', 'F6C401741C68B1010000BA', -0x67, 'Hook')
@@ -224,6 +225,8 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Memory_SetValue('EnterMission', Ptr(Scanner_GetCallTargetAddress($l_p_Temp)))
 	$l_p_Temp = Scanner_GetScanResult('SetDifficulty', $g_ap_ScanResults, 'Func')
 	Memory_SetValue('SetDifficulty', Ptr(Scanner_GetCallTargetAddress($l_p_Temp)))
+	$l_p_Temp = Scanner_GetScanResult('OpenChest', $g_ap_ScanResults, 'Func')
+	Memory_SetValue('OpenChest', Ptr(Scanner_GetCallTargetAddress($l_p_Temp)))
 	;Ui log
 	Log_Debug("EnterMission: " & Memory_GetValue('EnterMission'), "Initialize", $g_h_EditText)
 	Log_Debug("SetDifficulty: " & Memory_GetValue('SetDifficulty'), "Initialize", $g_h_EditText)
@@ -268,7 +271,6 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 
     ; Setup command structures
     DllStructSetData($g_d_InviteGuild, 1, Memory_GetValue('CommandPacketSend'))
-    DllStructSetData($g_d_InviteGuild, 2, 0x4C)
     DllStructSetData($g_d_Packet, 1, Memory_GetValue('CommandPacketSend'))
     DllStructSetData($g_d_Action, 1, Memory_GetValue('CommandAction'))
     DllStructSetData($g_d_SendChat, 1, Memory_GetValue('CommandSendChat'))
@@ -299,6 +301,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	;Ui
 	DllStructSetData($g_d_EnterMission, 1, Memory_GetValue('CommandEnterMission'))
 	DllStructSetData($g_d_SetDifficulty, 1, Memory_GetValue('CommandSetDifficulty'))
+	DllStructSetData($g_d_OpenChest, 1, Memory_GetValue('CommandOpenChest'))
 
     If $a_b_ChangeTitle Then WinSetTitle($g_h_GWWindow, '', 'Guild Wars - ' & Player_GetCharname())
 
