@@ -1,3770 +1,7526 @@
 #include-once
 
-;------------------------------------
-; VARIABLES: Global SkillInfo
-;------------------------------------
 #Region Weapon type & Weapon damage
 ; Martial Weapons
-Global Const $gc_iWeaponType_Bow = 1
-Global Const $gc_iWeaponType_Axe = 2
-Global Const $gc_iWeaponType_Hammer = 3
-Global Const $gc_iWeaponType_Daggers = 4
-Global Const $gc_iWeaponType_Scythe = 5
-Global Const $gc_iWeaponType_Spear = 6
-Global Const $gc_iWeaponType_Sword = 7
+Global Const $GC_I_WEAPON_TYPE_BOW = 1
+Global Const $GC_I_WEAPON_TYPE_AXE = 2
+Global Const $GC_I_WEAPON_TYPE_HAMMER = 3
+Global Const $GC_I_WEAPON_TYPE_DAGGERS = 4
+Global Const $GC_I_WEAPON_TYPE_SCYTHE = 5
+Global Const $GC_I_WEAPON_TYPE_SPEAR = 6
+Global Const $GC_I_WEAPON_TYPE_SWORD = 7
 ; Caster Weapons
-Global Const $gc_iWeaponType_Chaos = 8
-Global Const $gc_iWeaponType_Cold = 9
-Global Const $gc_iWeaponType_Dark = 10
-Global Const $gc_iWeaponType_Earth = 11
-Global Const $gc_iWeaponType_Lightning = 12
-Global Const $gc_iWeaponType_Fire = 13
-Global Const $gc_iWeaponType_Holy = 14
+Global Const $GC_I_WEAPON_TYPE_CHAOS = 8
+Global Const $GC_I_WEAPON_TYPE_COLD = 9
+Global Const $GC_I_WEAPON_TYPE_DARK = 10
+Global Const $GC_I_WEAPON_TYPE_EARTH = 11
+Global Const $GC_I_WEAPON_TYPE_LIGHTNING = 12
+Global Const $GC_I_WEAPON_TYPE_FIRE = 13
+Global Const $GC_I_WEAPON_TYPE_HOLY = 14
 #EndRegion Weapon type & Weapon damage
 
-#Region Buff
-Global Const $gc_aiAsuranBuffArr[5] = [2434, 2435, 2436, 2481, 2548]
-Global Const $gc_aiDwarvenBuffArr[9] = [2445, 2446, 2447, 2448, 2549, 2565, 2566, 2567, 2568]
-Global Const $gc_aiNornBuffArr[4] = [2469, 2470, 2471, 2472]
-Global Const $gc_aiVanguardBuffArr[4] = [2457, 2458, 2459, 2460]
-Global Const $gc_aiSunspearsBuffArr[7] = [1790, 1791, 1792, 1793, 1794, 1795, 1796]
-Global Const $gc_aiLightbringerBuffArr[10] = [1898, 1831, 1844, 1846, 1849, 1845, 1847, 1848, 1850, 1851]
-#EndRegion Buff
+#Region Reputation Buffs
+Global Const $GC_AI_REP_BUFFS_ASURA[5] = [2434, 2435, 2436, 2481, 2548]
+Global Const $GC_AI_REP_BUFFS_DWARVEN[9] = [2445, 2446, 2447, 2448, 2549, 2565, 2566, 2567, 2568]
+Global Const $GC_AI_REP_BUFFS_NORN[4] = [2469, 2470, 2471, 2472]
+Global Const $GC_AI_REP_BUFFS_VANGUARD[4] = [2457, 2458, 2459, 2460]
+Global Const $GC_AI_REP_BUFFS_SUNSPEAR[7] = [1790, 1791, 1792, 1793, 1794, 1795, 1796]
+Global Const $GC_AI_REP_BUFFS_LIGHTBRINGER[10] = [1898, 1831, 1844, 1846, 1849, 1845, 1847, 1848, 1850, 1851]
+#EndRegion Reputation Buffs
 
 #Region All Skill Infos
 ; Skill Types
-Global Const $gc_iSkillType_Stance = 3
-Global Const $gc_iSkillType_Hex = 4
-Global Const $gc_iSkillType_Spell = 5
-Global Const $gc_iSkillType_Enchantment = 6
-Global Const $gc_iSkillType_Signet = 7
-Global Const $gc_iSkillType_Condition = 8
-Global Const $gc_iSkillType_Well = 9
-Global Const $gc_iSkillType_Skill = 10
-Global Const $gc_iSkillType_Ward = 11
-Global Const $gc_iSkillType_Glyph = 12
-Global Const $gc_iSkillType_Attack = 14
-Global Const $gc_iSkillType_Shout = 15
-Global Const $gc_iSkillType_Preparation = 19
-Global Const $gc_iSkillType_Trap = 21
-Global Const $gc_iSkillType_Ritual = 22
-Global Const $gc_iSkillType_ItemSpell = 24
-Global Const $gc_iSkillType_WeaponSpell = 25
-Global Const $gc_iSkillType_Form = 26
-Global Const $gc_iSkillType_Chant = 27
-Global Const $gc_iSkillType_EchoRefrain = 28
-Global Const $gc_iSkillType_Disguise = 29
+Global Const $GC_I_SKILL_TYPE_STANCE = 3
+Global Const $GC_I_SKILL_TYPE_HEX = 4
+Global Const $GC_I_SKILL_TYPE_SPELL = 5
+Global Const $GC_I_SKILL_TYPE_ENCHANTMENT = 6
+Global Const $GC_I_SKILL_TYPE_SIGNET = 7
+Global Const $GC_I_SKILL_TYPE_CONDITION = 8
+Global Const $GC_I_SKILL_TYPE_WELL = 9
+Global Const $GC_I_SKILL_TYPE_SKILL = 10
+Global Const $GC_I_SKILL_TYPE_WARD = 11
+Global Const $GC_I_SKILL_TYPE_GLYPH = 12
+Global Const $GC_I_SKILL_TYPE_ATTACK = 14
+Global Const $GC_I_SKILL_TYPE_SHOUT = 15
+Global Const $GC_I_SKILL_TYPE_PREPARATION = 19
+Global Const $GC_I_SKILL_TYPE_TRAP = 21
+Global Const $GC_I_SKILL_TYPE_RITUAL = 22
+Global Const $GC_I_SKILL_TYPE_ITEM_SPELL = 24
+Global Const $GC_I_SKILL_TYPE_WEAPON_SPELL = 25
+Global Const $GC_I_SKILL_TYPE_FORM = 26
+Global Const $GC_I_SKILL_TYPE_CHANT = 27
+Global Const $GC_I_SKILL_TYPE_ECHO_REFRAIN = 28
+Global Const $GC_I_SKILL_TYPE_DISGUISE = 29
 
 ; Professions
-Global Const $gc_iProfession_None = 0
-Global Const $gc_iProfession_Warrior = 1
-Global Const $gc_iProfession_Ranger = 2
-Global Const $gc_iProfession_Monk = 3
-Global Const $gc_iProfession_Necromancer = 4
-Global Const $gc_iProfession_Mesmer = 5
-Global Const $gc_iProfession_Elementalist = 6
-Global Const $gc_iProfession_Assassin = 7
-Global Const $gc_iProfession_Ritualist = 8
-Global Const $gc_iProfession_Paragon = 9
-Global Const $gc_iProfession_Dervish = 10
+Global Const $GC_I_PROFESSION_NONE = 0
+Global Const $GC_I_PROFESSION_WARRIOR = 1
+Global Const $GC_I_PROFESSION_RANGER = 2
+Global Const $GC_I_PROFESSION_MONK = 3
+Global Const $GC_I_PROFESSION_NECROMANCER = 4
+Global Const $GC_I_PROFESSION_MESMER = 5
+Global Const $GC_I_PROFESSION_ELEMENTALIST = 6
+Global Const $GC_I_PROFESSION_ASSASSIN = 7
+Global Const $GC_I_PROFESSION_RITUALIST = 8
+Global Const $GC_I_PROFESSION_PARAGON = 9
+Global Const $GC_I_PROFESSION_DERVISH = 10
 
 ; Attributes
-Global Const $gc_iAttribute_FastCasting = 0
-Global Const $gc_iAttribute_IllusionMagic = 1
-Global Const $gc_iAttribute_DominationMagic = 2
-Global Const $gc_iAttribute_InspirationMagic = 3
-Global Const $gc_iAttribute_BloodMagic = 4
-Global Const $gc_iAttribute_DeathMagic = 5
-Global Const $gc_iAttribute_SoulReaping = 6
-Global Const $gc_iAttribute_Curses = 7
-Global Const $gc_iAttribute_AirMagic = 8
-Global Const $gc_iAttribute_EarthMagic = 9
-Global Const $gc_iAttribute_FireMagic = 10
-Global Const $gc_iAttribute_WaterMagic = 11
-Global Const $gc_iAttribute_EnergyStorage = 12
-Global Const $gc_iAttribute_HealingPrayers = 13
-Global Const $gc_iAttribute_SmitingPrayers = 14
-Global Const $gc_iAttribute_ProtectionPrayers = 15
-Global Const $gc_iAttribute_DivineFavor = 16
-Global Const $gc_iAttribute_Strength = 17
-Global Const $gc_iAttribute_AxeMastery = 18
-Global Const $gc_iAttribute_HammerMastery = 19
-Global Const $gc_iAttribute_Swordsmanship = 20
-Global Const $gc_iAttribute_Tactics = 21
-Global Const $gc_iAttribute_BeastMastery = 22
-Global Const $gc_iAttribute_Expertise = 23
-Global Const $gc_iAttribute_WildernessSurvival = 24
-Global Const $gc_iAttribute_Marksmanship = 25
-Global Const $gc_iAttribute_DaggerMastery = 29
-Global Const $gc_iAttribute_DeadlyArts = 30
-Global Const $gc_iAttribute_ShadowArts = 31
-Global Const $gc_iAttribute_Communing = 32
-Global Const $gc_iAttribute_RestorationMagic = 33
-Global Const $gc_iAttribute_ChannelingMagic = 34
-Global Const $gc_iAttribute_CriticalStrikes = 35
-Global Const $gc_iAttribute_SpawningPower = 36
-Global Const $gc_iAttribute_SpearMastery = 37
-Global Const $gc_iAttribute_Command = 38
-Global Const $gc_iAttribute_Motivation = 39
-Global Const $gc_iAttribute_Leadership = 40
-Global Const $gc_iAttribute_ScytheMastery = 41
-Global Const $gc_iAttribute_WindPrayers = 42
-Global Const $gc_iAttribute_EarthPrayers = 43
-Global Const $gc_iAttribute_Mysticism = 44
-Global Const $gc_iAttribute_AttrIDNone = 0xFF
+Global Const $GC_I_ATTRIBUTE_FAST_CASTING = 0
+Global Const $GC_I_ATTRIBUTE_ILLUSION_MAGIC = 1
+Global Const $GC_I_ATTRIBUTE_DOMINATION_MAGIC = 2
+Global Const $GC_I_ATTRIBUTE_INSPIRATION_MAGIC = 3
+Global Const $GC_I_ATTRIBUTE_BLOOD_MAGIC = 4
+Global Const $GC_I_ATTRIBUTE_DEATH_MAGIC = 5
+Global Const $GC_I_ATTRIBUTE_SOUL_REAPING = 6
+Global Const $GC_I_ATTRIBUTE_CURSES = 7
+Global Const $GC_I_ATTRIBUTE_AIR_MAGIC = 8
+Global Const $GC_I_ATTRIBUTE_EARTH_MAGIC = 9
+Global Const $GC_I_ATTRIBUTE_FIRE_MAGIC = 10
+Global Const $GC_I_ATTRIBUTE_WATER_MAGIC = 11
+Global Const $GC_I_ATTRIBUTE_ENERGY_STORAGE = 12
+Global Const $GC_I_ATTRIBUTE_HEALING_PRAYERS = 13
+Global Const $GC_I_ATTRIBUTE_SMITING_PRAYERS = 14
+Global Const $GC_I_ATTRIBUTE_PROTECTION_PRAYERS = 15
+Global Const $GC_I_ATTRIBUTE_DIVINE_FAVOR = 16
+Global Const $GC_I_ATTRIBUTE_STRENGTH = 17
+Global Const $GC_I_ATTRIBUTE_AXE_MASTERY = 18
+Global Const $GC_I_ATTRIBUTE_HAMMER_MASTERY = 19
+Global Const $GC_I_ATTRIBUTE_SWORDSMANSHIP = 20
+Global Const $GC_I_ATTRIBUTE_TACTICS = 21
+Global Const $GC_I_ATTRIBUTE_BEAST_MASTERY = 22
+Global Const $GC_I_ATTRIBUTE_EXPERTISE = 23
+Global Const $GC_I_ATTRIBUTE_WILDERNESS_SURVIVAL = 24
+Global Const $GC_I_ATTRIBUTE_MARKSMANSHIP = 25
+Global Const $GC_I_ATTRIBUTE_DAGGER_MASTERY = 29
+Global Const $GC_I_ATTRIBUTE_DEADLY_ARTS = 30
+Global Const $GC_I_ATTRIBUTE_SHADOW_ARTS = 31
+Global Const $GC_I_ATTRIBUTE_COMMUNING = 32
+Global Const $GC_I_ATTRIBUTE_RESTORATION_MAGIC = 33
+Global Const $GC_I_ATTRIBUTE_CHANNELING_MAGIC = 34
+Global Const $GC_I_ATTRIBUTE_CRITICAL_STRIKES = 35
+Global Const $GC_I_ATTRIBUTE_SPAWNING_POWER = 36
+Global Const $GC_I_ATTRIBUTE_SPEAR_MASTERY = 37
+Global Const $GC_I_ATTRIBUTE_COMMAND = 38
+Global Const $GC_I_ATTRIBUTE_MOTIVATION = 39
+Global Const $GC_I_ATTRIBUTE_LEADERSHIP = 40
+Global Const $GC_I_ATTRIBUTE_SCYTHE_MASTERY = 41
+Global Const $GC_I_ATTRIBUTE_WIND_PRAYERS = 42
+Global Const $GC_I_ATTRIBUTE_EARTH_PRAYERS = 43
+Global Const $GC_I_ATTRIBUTE_MYSTICISM = 44
+Global Const $GC_I_ATTRIBUTE_ATTR_ID_NONE = 0xFF
 
-Global $AttributesByProfession[10][6] = [ _
-    [ $gc_iProfession_Warrior, $gc_iAttribute_Strength, $gc_iAttribute_AxeMastery, $gc_iAttribute_HammerMastery, $gc_iAttribute_Swordsmanship, $gc_iAttribute_Tactics], _
-    [ $gc_iProfession_Ranger, $gc_iAttribute_BeastMastery, $gc_iAttribute_Expertise, $gc_iAttribute_WildernessSurvival, $gc_iAttribute_Marksmanship, -1], _
-    [ $gc_iProfession_Monk, $gc_iAttribute_HealingPrayers, $gc_iAttribute_SmitingPrayers, $gc_iAttribute_ProtectionPrayers, $gc_iAttribute_DivineFavor, -1], _
-    [ $gc_iProfession_Necromancer, $gc_iAttribute_BloodMagic, $gc_iAttribute_DeathMagic, $gc_iAttribute_SoulReaping, $gc_iAttribute_Curses, -1], _
-    [ $gc_iProfession_Mesmer, $gc_iAttribute_FastCasting, $gc_iAttribute_IllusionMagic, $gc_iAttribute_DominationMagic, $gc_iAttribute_InspirationMagic, -1], _
-    [ $gc_iProfession_Elementalist, $gc_iAttribute_AirMagic, $gc_iAttribute_EarthMagic, $gc_iAttribute_FireMagic, $gc_iAttribute_WaterMagic, $gc_iAttribute_EnergyStorage], _
-    [ $gc_iProfession_Assassin, $gc_iAttribute_CriticalStrikes, $gc_iAttribute_DaggerMastery, $gc_iAttribute_DeadlyArts, $gc_iAttribute_ShadowArts, -1], _
-    [ $gc_iProfession_Ritualist, $gc_iAttribute_SpawningPower, $gc_iAttribute_Communing, $gc_iAttribute_RestorationMagic, $gc_iAttribute_ChannelingMagic, -1], _
-    [ $gc_iProfession_Paragon, $gc_iAttribute_SpearMastery, $gc_iAttribute_Command, $gc_iAttribute_Motivation , $gc_iAttribute_Leadership, -1], _
-    [ $gc_iProfession_Dervish, $gc_iAttribute_ScytheMastery, $gc_iAttribute_WindPrayers, $gc_iAttribute_EarthPrayers, $gc_iAttribute_Mysticism, -1] _
+Global Const $GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION[10][6] = [ _
+    [ $GC_I_PROFESSION_WARRIOR, $GC_I_ATTRIBUTE_STRENGTH, $GC_I_ATTRIBUTE_AXE_MASTERY, $GC_I_ATTRIBUTE_HAMMER_MASTERY, $GC_I_ATTRIBUTE_SWORDSMANSHIP, $GC_I_ATTRIBUTE_TACTICS], _
+    [ $GC_I_PROFESSION_RANGER, $GC_I_ATTRIBUTE_BEAST_MASTERY, $GC_I_ATTRIBUTE_EXPERTISE, $GC_I_ATTRIBUTE_WILDERNESS_SURVIVAL, $GC_I_ATTRIBUTE_MARKSMANSHIP, -1], _
+    [ $GC_I_PROFESSION_MONK, $GC_I_ATTRIBUTE_HEALING_PRAYERS, $GC_I_ATTRIBUTE_SMITING_PRAYERS, $GC_I_ATTRIBUTE_PROTECTION_PRAYERS, $GC_I_ATTRIBUTE_DIVINE_FAVOR, -1], _
+    [ $GC_I_PROFESSION_NECROMANCER, $GC_I_ATTRIBUTE_BLOOD_MAGIC, $GC_I_ATTRIBUTE_DEATH_MAGIC, $GC_I_ATTRIBUTE_SOUL_REAPING, $GC_I_ATTRIBUTE_CURSES, -1], _
+    [ $GC_I_PROFESSION_MESMER, $GC_I_ATTRIBUTE_FAST_CASTING, $GC_I_ATTRIBUTE_ILLUSION_MAGIC, $GC_I_ATTRIBUTE_DOMINATION_MAGIC, $GC_I_ATTRIBUTE_INSPIRATION_MAGIC, -1], _
+    [ $GC_I_PROFESSION_ELEMENTALIST, $GC_I_ATTRIBUTE_AIR_MAGIC, $GC_I_ATTRIBUTE_EARTH_MAGIC, $GC_I_ATTRIBUTE_FIRE_MAGIC, $GC_I_ATTRIBUTE_WATER_MAGIC, $GC_I_ATTRIBUTE_ENERGY_STORAGE], _
+    [ $GC_I_PROFESSION_ASSASSIN, $GC_I_ATTRIBUTE_CRITICAL_STRIKES, $GC_I_ATTRIBUTE_DAGGER_MASTERY, $GC_I_ATTRIBUTE_DEADLY_ARTS, $GC_I_ATTRIBUTE_SHADOW_ARTS, -1], _
+    [ $GC_I_PROFESSION_RITUALIST, $GC_I_ATTRIBUTE_SPAWNING_POWER, $GC_I_ATTRIBUTE_COMMUNING, $GC_I_ATTRIBUTE_RESTORATION_MAGIC, $GC_I_ATTRIBUTE_CHANNELING_MAGIC, -1], _
+    [ $GC_I_PROFESSION_PARAGON, $GC_I_ATTRIBUTE_SPEAR_MASTERY, $GC_I_ATTRIBUTE_COMMAND, $GC_I_ATTRIBUTE_MOTIVATION , $GC_I_ATTRIBUTE_LEADERSHIP, -1], _
+    [ $GC_I_PROFESSION_DERVISH, $GC_I_ATTRIBUTE_SCYTHE_MASTERY, $GC_I_ATTRIBUTE_WIND_PRAYERS, $GC_I_ATTRIBUTE_EARTH_PRAYERS, $GC_I_ATTRIBUTE_MYSTICISM, -1] _
 ]
 
-Global $SecondaryAttributesByProfession[10][5] = [ _
-	[ $gc_iProfession_Warrior,$gc_iAttribute_AxeMastery, $gc_iAttribute_HammerMastery, $gc_iAttribute_Swordsmanship, $gc_iAttribute_Tactics ], _
-	[ $gc_iProfession_Ranger, $gc_iAttribute_BeastMastery, $gc_iAttribute_WildernessSurvival, $gc_iAttribute_Marksmanship, -1 ], _
-	[ $gc_iProfession_Monk, $gc_iAttribute_HealingPrayers, $gc_iAttribute_SmitingPrayers, $gc_iAttribute_ProtectionPrayers, -1 ], _
-	[ $gc_iProfession_Necromancer, $gc_iAttribute_BloodMagic, $gc_iAttribute_DeathMagic, $gc_iAttribute_Curses, -1 ], _
-	[ $gc_iProfession_Mesmer, $gc_iAttribute_IllusionMagic, $gc_iAttribute_DominationMagic, $gc_iAttribute_InspirationMagic, -1 ], _
-	[ $gc_iProfession_Elementalist, $gc_iAttribute_AirMagic, $gc_iAttribute_EarthMagic, $gc_iAttribute_FireMagic, $gc_iAttribute_WaterMagic ], _
-	[ $gc_iProfession_Assassin, $gc_iAttribute_DaggerMastery, $gc_iAttribute_DeadlyArts, $gc_iAttribute_ShadowArts, -1 ], _
-	[ $gc_iProfession_Ritualist, $gc_iAttribute_Communing, $gc_iAttribute_RestorationMagic, $gc_iAttribute_ChannelingMagic, -1], _
-	[ $gc_iProfession_Paragon, $gc_iAttribute_SpearMastery, $gc_iAttribute_Command, $gc_iAttribute_Motivation, -1 ], _
-	[ $gc_iProfession_Dervish, $gc_iAttribute_ScytheMastery, $gc_iAttribute_WindPrayers, $gc_iAttribute_EarthPrayers, -1 ] _
+Global Const $GC_AI2_PRRIMARY_ATTRIBUTES_BY_PROFESSION[10][2] = [ _
+    [ $GC_I_PROFESSION_WARRIOR, $GC_I_ATTRIBUTE_STRENGTH], _
+    [ $GC_I_PROFESSION_RANGER, $GC_I_ATTRIBUTE_EXPERTISE], _
+    [ $GC_I_PROFESSION_MONK, $GC_I_ATTRIBUTE_DIVINE_FAVOR], _
+    [ $GC_I_PROFESSION_NECROMANCER, $GC_I_ATTRIBUTE_SOUL_REAPING], _
+    [ $GC_I_PROFESSION_MESMER, $GC_I_ATTRIBUTE_FAST_CASTING], _
+    [ $GC_I_PROFESSION_ELEMENTALIST, $GC_I_ATTRIBUTE_ENERGY_STORAGE], _
+    [ $GC_I_PROFESSION_ASSASSIN, $GC_I_ATTRIBUTE_CRITICAL_STRIKES], _
+    [ $GC_I_PROFESSION_RITUALIST, $GC_I_ATTRIBUTE_SPAWNING_POWER], _
+    [ $GC_I_PROFESSION_PARAGON, $GC_I_ATTRIBUTE_LEADERSHIP], _
+    [ $GC_I_PROFESSION_DERVISH, $GC_I_ATTRIBUTE_MYSTICISM] _
+]
+
+Global Const $GC_AI2_SECONDARY_ATTRIBUTES_BY_PROFESSION[10][5] = [ _
+	[ $GC_I_PROFESSION_WARRIOR, $GC_I_ATTRIBUTE_AXE_MASTERY, $GC_I_ATTRIBUTE_HAMMER_MASTERY, $GC_I_ATTRIBUTE_SWORDSMANSHIP, $GC_I_ATTRIBUTE_TACTICS ], _
+	[ $GC_I_PROFESSION_RANGER, $GC_I_ATTRIBUTE_BEAST_MASTERY, $GC_I_ATTRIBUTE_WILDERNESS_SURVIVAL, $GC_I_ATTRIBUTE_MARKSMANSHIP, -1 ], _
+	[ $GC_I_PROFESSION_MONK, $GC_I_ATTRIBUTE_HEALING_PRAYERS, $GC_I_ATTRIBUTE_SMITING_PRAYERS, $GC_I_ATTRIBUTE_PROTECTION_PRAYERS, -1 ], _
+	[ $GC_I_PROFESSION_NECROMANCER, $GC_I_ATTRIBUTE_BLOOD_MAGIC, $GC_I_ATTRIBUTE_DEATH_MAGIC, $GC_I_ATTRIBUTE_CURSES, -1 ], _
+	[ $GC_I_PROFESSION_MESMER, $GC_I_ATTRIBUTE_ILLUSION_MAGIC, $GC_I_ATTRIBUTE_DOMINATION_MAGIC, $GC_I_ATTRIBUTE_INSPIRATION_MAGIC, -1 ], _
+	[ $GC_I_PROFESSION_ELEMENTALIST, $GC_I_ATTRIBUTE_AIR_MAGIC, $GC_I_ATTRIBUTE_EARTH_MAGIC, $GC_I_ATTRIBUTE_FIRE_MAGIC, $GC_I_ATTRIBUTE_WATER_MAGIC ], _
+	[ $GC_I_PROFESSION_ASSASSIN, $GC_I_ATTRIBUTE_DAGGER_MASTERY, $GC_I_ATTRIBUTE_DEADLY_ARTS, $GC_I_ATTRIBUTE_SHADOW_ARTS, -1 ], _
+	[ $GC_I_PROFESSION_RITUALIST, $GC_I_ATTRIBUTE_COMMUNING, $GC_I_ATTRIBUTE_RESTORATION_MAGIC, $GC_I_ATTRIBUTE_CHANNELING_MAGIC, -1], _
+	[ $GC_I_PROFESSION_PARAGON, $GC_I_ATTRIBUTE_SPEAR_MASTERY, $GC_I_ATTRIBUTE_COMMAND, $GC_I_ATTRIBUTE_MOTIVATION, -1 ], _
+	[ $GC_I_PROFESSION_DERVISH, $GC_I_ATTRIBUTE_SCYTHE_MASTERY, $GC_I_ATTRIBUTE_WIND_PRAYERS, $GC_I_ATTRIBUTE_EARTH_PRAYERS, -1 ] _
 ]
 
 ; Ranges
-Global Const $gc_iRange_Adjacent = 156
-Global Const $gc_iRange_Nearby = 240
-Global Const $gc_iRange_Area = 312
-Global Const $gc_iRange_RunBy = 500 ; Use to run past undangerous mobs, for example to gain time just before a portal
-Global Const $gc_iRange_Earshot = 1000
-Global Const $gc_iRange_Danger = 1015 + 50 ; Accounts for 50 random movement around destination points + 15
-Global Const $gc_iRange_Spellcasting = 1085
-Global Const $gc_iRange_Longbow = 1320 ; Typical long bow pulling range on flat ground
-Global Const $gc_iRange_Bowpull = 1500 ; Custom pull range to flag heroes and start pulling mobs
-Global Const $gc_iRange_Spirit = 2500
-Global Const $gc_iRange_Room = 3000
-Global Const $gc_iRange_Map = 4000
-Global Const $gc_iRange_Compass = 5000
+Global Const $GC_I_RANGE_ADJACENT = 156
+Global Const $GC_I_RANGE_NEARBY = 240
+Global Const $GC_I_RANGE_AREA = 312
+Global Const $GC_I_RANGE_RUN_BY = 500 ; Use to run past undangerous mobs, for example to gain time just before a portal
+Global Const $GC_I_RANGE_EARSHOT = 1000
+Global Const $GC_I_RANGE_DANGER = 1015 + 50 ; Accounts for 50 random movement around destination points + 15
+Global Const $GC_I_RANGE_SPELLCASTING = 1085
+Global Const $GC_I_RANGE_LONGBOW = 1320 ; Typical long bow pulling range on flat ground
+Global Const $GC_I_RANGE_BOWPULL = 1500 ; Custom pull range to flag heroes and start pulling mobs
+Global Const $GC_I_RANGE_SPIRIT = 2500
+Global Const $GC_I_RANGE_ROOM = 3000
+Global Const $GC_I_RANGE_MAP = 4000
+Global Const $GC_I_RANGE_COMPASS = 5000
 
 ; Skill Targets
-Global Const $gc_iSkillTarget_Self = 0
-Global Const $gc_iSkillTarget_None = 0
-Global Const $gc_iSkillTarget_Spirit = 1
-Global Const $gc_iSkillTarget_Animal = 1
-Global Const $gc_iSkillTarget_Corpse = 1
-Global Const $gc_iSkillTarget_Ally = 3
-Global Const $gc_iSkillTarget_OtherAlly = 4
-Global Const $gc_iSkillTarget_Enemy = 5
-Global Const $gc_iSkillTarget_DeadAlly = 6
-Global Const $gc_iSkillTarget_Minion = 14
-Global Const $gc_iSkillTarget_Ground = 16
-Global Const $gc_iSkillTarget_SpiritEnemy = 17 ; Custom
+Global Const $GC_I_SKILL_TARGET_SELF = 0
+Global Const $GC_I_SKILL_TARGET_NONE = 0
+Global Const $GC_I_SKILL_TARGET_SPIRIT = 1
+Global Const $GC_I_SKILL_TARGET_ANIMAL = 1
+Global Const $GC_I_SKILL_TARGET_CORPSE = 1
+Global Const $GC_I_SKILL_TARGET_ALLY = 3
+Global Const $GC_I_SKILL_TARGET_OTHER_ALLY = 4
+Global Const $GC_I_SKILL_TARGET_ENEMY = 5
+Global Const $GC_I_SKILL_TARGET_DEAD_ALLY = 6
+Global Const $GC_I_SKILL_TARGET_MINION = 14
+Global Const $GC_I_SKILL_TARGET_GROUND = 16
+Global Const $GC_I_SKILL_TARGET_SPIRIT_ENEMY = 17 ; Custom
 
 ; Skill Campaign
-Global Const $gc_iSkillCampaign_AllCampaigns = 0
-Global Const $gc_iSkillCampaign_Prophecies = 1
-Global Const $gc_iSkillCampaign_Factions = 2
-Global Const $gc_iSkillCampaign_Nightfall = 3
-Global Const $gc_iSkillCampaign_EotN = 4
+Global Const $GC_I_SKILL_CAMPAIGN_CORE = 0
+Global Const $GC_I_SKILL_CAMPAIGN_PROPHECIES = 1
+Global Const $GC_I_SKILL_CAMPAIGN_FACTIONS = 2
+Global Const $GC_I_SKILL_CAMPAIGN_NIGHTFALL = 3
+Global Const $GC_I_SKILL_CAMPAIGN_EOTN = 4
 
 ; Skill Special
-Global Const $gc_iSkillSpecial_Exhaustion = 1 ; Exhaustion
-Global Const $gc_iSkillSpecial_Touch = 2 ; Touch Skill
-Global Const $gc_iSkillSpecial_Touch_Exhaustion = 3 ; Touch Skill with Exhaustion
-Global Const $gc_iSkillSpecial_Elite = 4 ; Elite Skill
-Global Const $gc_iSkillSpecial_Elite_Exhaustion = 5 ; Elite Skill with Exhaustion
-Global Const $gc_iSkillSpecial_Elite_Touch = 6 ; Elite Touch Skill
-Global Const $gc_iSkillSpecial_Range_Half = 8 ; Half Range Skill
-Global Const $gc_iSkillSpecial_Elite_Range_Half = 12 ; Elite Skill Half Range
-Global Const $gc_iSkillSpecial_Interrupted_Easily = 32 ; Easily interrupted
-Global Const $gc_iSkillSpecial_Attr_Failure = 64 ; 50% Failure below 4 attribute
-Global Const $gc_iSkillSpecial_Attr_Failure_KD = 65 ; 50% Failure below 4 attribute causes Knockdown
-Global Const $gc_iSkillSpecial_Elite_Attr_Failure = 68 ; 50% Failure below 4 attribute Elite Skill
-Global Const $gc_iSkillSpecial_Armor_Less = 128 ; -40 Armor while using
-Global Const $gc_iSkillSpecial_Trap_Ritual_Prep = 256 ; Preparation, Trap or Ritual
-Global Const $gc_iSkillSpecial_Elite_Trap_Ritual_Prep = 260 ; Preparation, Trap or Ritual Elite Skill
-Global Const $gc_iSkillSpecial_Trap_Piercing = 288 ; Traps dealing Piercing Damage
-Global Const $gc_iSkillSpecial_Trap_Smoke = 292 ; Smoke Trap (Armor ignoring elemental damage)
-Global Const $gc_iSkillSpecial_Prep_Armor_Less = 384 ; Preparation -40 Armor while using
-Global Const $gc_iSkillSpecial_Hex_HealthDegen = 512 ; Hex Health Degeneration
-Global Const $gc_iSkillSpecial_Elite_Hex_HealthDegen = 516 ; Elite Hex Health Degeneration
-Global Const $gc_iSkillSpecial_Resurrection = 2048 ; Resurrection Spell
-Global Const $gc_iSkillSpecial_Touch_Resurrection = 2050 ; Touch Resurrection Spell
-Global Const $gc_iSkillSpecial_Elite_Resurrection = 2052 ; Elite Resurrection Spell
-Global Const $gc_iSkillSpecial_Range_Half_Resurrection = 2056 ; Resurrection Spell half range
-Global Const $gc_iSkillSpecial_Resurrection_Spirit = 2304 ; Resurrection Spirit
-Global Const $gc_iSkillSpecial_Expertise_Failure = 4100 ; 50% Failure below 8 Expertise
-Global Const $gc_iSkillSpecial_Condition = 8192 ; Condition
-Global Const $gc_iSkillSpecial_MustFollow_OHA = 32768 ; Skill Must follow Off-Hand Attack
-Global Const $gc_iSkillSpecial_Elite_MustFollow_OHA = 32772 ; Elite Skill Must follow Off-Hand Attack
-Global Const $gc_iSkillSpecial_Corpse = 262144 ; Skill Exploits Fresh Corpse
-Global Const $gc_iSkillSpecial_Elite_Corpse = 262148 ; Elite Skill Exploits Fresh Corpse
-Global Const $gc_iSkillSpecial_Corpse_Failure = 262208 ; Skill Exploits Fresh Corpse 50% failure below 5 Death Magic
-Global Const $gc_iSkillSpecial_Corpse_HealthDegen = 262656 ; Skill Exploits Fresh Corpse - Health Degeneration
-Global Const $gc_iSkillSpecial_Pve_Skill = 524288 ; PVE Skill
-Global Const $gc_iSkillSpecial_Pve_Touch = 524290 ; PVE Touch Skill
-Global Const $gc_iSkillSpecial_Pve_Elite = 524292 ; PVE Elite Skill
-Global Const $gc_iSkillSpecial_Pve_Cap = 524304 ; Caps Elite Skill
-Global Const $gc_iSkillSpecial_Pve_Ritual = 524544 ; PVE Ritual Skill
-Global Const $gc_iSkillSpecial_Pve_Trap = 524576 ; PVE Trap Skill
-Global Const $gc_iSkillSpecial_Pve_Hex_HealthDegen = 524800 ; PVE Hex Health Degen Spell
-Global Const $gc_iSkillSpecial_Pve_Resurrection = 526336 ; Resurrection Spell Sunspear
-Global Const $gc_iSkillSpecial_Enchant_Flash = 8388608 ; Flash Enchantment Skill
-Global Const $gc_iSkillSpecial_Pve_Enchant_Flash = 8388612 ; Elite Flash Enchantment Skill
-Global Const $gc_iSkillSpecial_Attr_Failure_Enchant_Flash = 8388672 ; Flash Enchantment Skill 50% failure below 5 Windprayer
-Global Const $gc_iSkillSpecial_Boss = 1048576 ; Boss skill?
+Global Const $GC_I_SKILL_SPECIAL_EXHAUSTION = 1 ; Exhaustion
+Global Const $GC_I_SKILL_SPECIAL_TOUCH = 2 ; Touch Skill
+Global Const $GC_I_SKILL_SPECIAL_TOUCH_EXHAUSTION = 3 ; Touch Skill with Exhaustion
+Global Const $GC_I_SKILL_SPECIAL_ELITE = 4 ; Elite Skill
+Global Const $GC_I_SKILL_SPECIAL_ELITE_EXHAUSTION = 5 ; Elite Skill with Exhaustion
+Global Const $GC_I_SKILL_SPECIAL_ELITE_TOUCH = 6 ; Elite Touch Skill
+Global Const $GC_I_SKILL_SPECIAL_RANGE_HALF = 8 ; Half Range Skill
+Global Const $GC_I_SKILL_SPECIAL_ELITE_RANGE_HALF = 12 ; Elite Skill Half Range
+Global Const $GC_I_SKILL_SPECIAL_INTERRUPTED_EASILY = 32 ; Easily interrupted
+Global Const $GC_I_SKILL_SPECIAL_ATTR_FAILURE = 64 ; 50% Failure below 4 attribute
+Global Const $GC_I_SKILL_SPECIAL_ATTR_FAILURE_KD = 65 ; 50% Failure below 4 attribute causes Knockdown
+Global Const $GC_I_SKILL_SPECIAL_ELITE_ATTR_FAILURE = 68 ; 50% Failure below 4 attribute Elite Skill
+Global Const $GC_I_SKILL_SPECIAL_ARMOR_LESS = 128 ; -40 Armor while using
+Global Const $GC_I_SKILL_SPECIAL_TRAP_RITUAL_PREP = 256 ; Preparation, Trap or Ritual
+Global Const $GC_I_SKILL_SPECIAL_ELITE_TRAP_RITUAL_PREP = 260 ; Preparation, Trap or Ritual Elite Skill
+Global Const $GC_I_SKILL_SPECIAL_TRAP_PIERCING = 288 ; Traps dealing Piercing Damage
+Global Const $GC_I_SKILL_SPECIAL_TRAP_SMOKE = 292 ; Smoke Trap (Armor ignoring elemental damage)
+Global Const $GC_I_SKILL_SPECIAL_PREP_ARMOR_LESS = 384 ; Preparation -40 Armor while using
+Global Const $GC_I_SKILL_SPECIAL_HEX_HEALTH_DEGEN = 512 ; Hex Health Degeneration
+Global Const $GC_I_SKILL_SPECIAL_ELITE_HEX_HEALTH_DEGEN = 516 ; Elite Hex Health Degeneration
+Global Const $GC_I_SKILL_SPECIAL_RESURRECTION = 2048 ; Resurrection Spell
+Global Const $GC_I_SKILL_SPECIAL_TOUCH_RESURRECTION = 2050 ; Touch Resurrection Spell
+Global Const $GC_I_SKILL_SPECIAL_ELITE_RESURRECTION = 2052 ; Elite Resurrection Spell
+Global Const $GC_I_SKILL_SPECIAL_RANGE_HALF_RESURRECTION = 2056 ; Resurrection Spell half range
+Global Const $GC_I_SKILL_SPECIAL_RESURRECTION_SPIRIT = 2304 ; Resurrection Spirit
+Global Const $GC_I_SKILL_SPECIAL_EXPERTISE_FAILURE = 4100 ; 50% Failure below 8 Expertise
+Global Const $GC_I_SKILL_SPECIAL_CONDITION = 8192 ; Condition
+Global Const $GC_I_SKILL_SPECIAL_MUST_FOLLOW_OHA = 32768 ; Skill Must follow Off-Hand Attack
+Global Const $GC_I_SKILL_SPECIAL_ELITE_MUST_FOLLOW_OHA = 32772 ; Elite Skill Must follow Off-Hand Attack
+Global Const $GC_I_SKILL_SPECIAL_CORPSE = 262144 ; Skill Exploits Fresh Corpse
+Global Const $GC_I_SKILL_SPECIAL_ELITE_CORPSE = 262148 ; Elite Skill Exploits Fresh Corpse
+Global Const $GC_I_SKILL_SPECIAL_CORPSE_FAILURE = 262208 ; Skill Exploits Fresh Corpse 50% failure below 5 Death Magic
+Global Const $GC_I_SKILL_SPECIAL_CORPSE_HEALTH_DEGEN = 262656 ; Skill Exploits Fresh Corpse - Health Degeneration
+Global Const $GC_I_SKILL_SPECIAL_PVE_SKILL = 524288 ; PVE Skill
+Global Const $GC_I_SKILL_SPECIAL_PVE_TOUCH = 524290 ; PVE Touch Skill
+Global Const $GC_I_SKILL_SPECIAL_PVE_ELITE = 524292 ; PVE Elite Skill
+Global Const $GC_I_SKILL_SPECIAL_PVE_CAP = 524304 ; Caps Elite Skill
+Global Const $GC_I_SKILL_SPECIAL_PVE_RITUAL = 524544 ; PVE Ritual Skill
+Global Const $GC_I_SKILL_SPECIAL_PVE_TRAP = 524576 ; PVE Trap Skill
+Global Const $GC_I_SKILL_SPECIAL_PVE_HEX_HEALTH_DEGEN = 524800 ; PVE Hex Health Degen Spell
+Global Const $GC_I_SKILL_SPECIAL_PVE_RESURRECTION = 526336 ; Resurrection Spell Sunspear
+Global Const $GC_I_SKILL_SPECIAL_ENCHANT_FLASH = 8388608 ; Flash Enchantment Skill
+Global Const $GC_I_SKILL_SPECIAL_PVE_ENCHANT_FLASH = 8388612 ; Elite Flash Enchantment Skill
+Global Const $GC_I_SKILL_SPECIAL_ATTR_FAILURE_ENCHANT_FLASH = 8388672 ; Flash Enchantment Skill 50% failure below 5 Windprayer
+Global Const $GC_I_SKILL_SPECIAL_BOSS = 1048576 ; Boss skill?
 
 ; Skill Combo
-Global Const $gc_iSkillCombo_LeadAttack = 1 ; My Skill is Lead Attack
-Global Const $gc_iSkillCombo_OffHandAttack = 2 ; My Skill is Off-Hand Attack
-Global Const $gc_iSkillCombo_DualAttack = 3 ; My Skill is Dual Attack
+Global Const $GC_I_SKILL_COMBO_LEAD_ATTACK = 1 ; My Skill is Lead Attack
+Global Const $GC_I_SKILL_COMBO_OFF_HAND_ATTACK = 2 ; My Skill is Off-Hand Attack
+Global Const $GC_I_SKILL_COMBO_DUAL_ATTACK = 3 ; My Skill is Dual Attack
 
-; Skill Combo Requirement
-Global Const $gc_iSkillComboReq_DualAttack = 1 ; Skill must follow a Dual Attack
-Global Const $gc_iSkillComboReq_LeadAttack = 2 ; Skill must follow a Lead Attack
-Global Const $gc_iSkillComboReq_OffHandAttack = 4 ; Skill must follow an Off-Hand Attack
-Global Const $gc_iSkillComboReq_HexedFoe = 16 ; Skill must strike a Hexed foe
+; Skill COmbo Requirement
+Global Const $GC_I_SKILL_COMBO_REQ_DUAL_ATTACK = 1 ; Skill must follow a Dual Attack
+Global Const $GC_I_SKILL_COMBO_REQ_LEAD_ATTACK = 2 ; Skill must follow a Lead Attack
+Global Const $GC_I_SKILL_COMBO_REQ_OFF_HAND_ATTACK = 4 ; Skill must follow an Off-Hand Attack
+Global Const $GC_I_SKILL_COMBO_REQ_HEXED_FOE = 16 ; Skill must strike a Hexed foe
 
 ; Skill Effect 1
-Global Const $gc_iSkillEffect1_Inflicts_Bleeding = 1
-Global Const $gc_iSkillEffect1_Inflicts_Blinded = 2
-Global Const $gc_iSkillEffect1_Inflicts_Burning = 4
-Global Const $gc_iSkillEffect1_Inflicts_Crippled = 8
-Global Const $gc_iSkillEffect1_Inflicts_DeepWound = 16
-Global Const $gc_iSkillEffect1_Inflicts_Diseased = 32
-Global Const $gc_iSkillEffect1_Inflicts_Slower_Movement = 64 ; 50% slower Movement
-Global Const $gc_iSkillEffect1_Inflicts_KD = 128
-Global Const $gc_iSkillEffect1_Inflicts_Poisoned = 256
-Global Const $gc_iSkillEffect1_Inflicts_Dazed = 512
-Global Const $gc_iSkillEffect1_Inflicts_Weakness = 1024
-Global Const $gc_iSkillEffect1_Inflicts_Slowed = 2048 ; Slowed (nr 64 could be included here)
-Global Const $gc_iSkillEffect1_Inflicts_RD_H = 4096 ; Remove condition and heal (Only heal ?)
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_BLEEDING = 1 ; Inflicts Bleeding
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_BLINDED = 2 ; Inflicts Blinded
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_BURNING = 4 ; Inflicts Burning
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_CRIPPLED = 8 ; Inflicts Crippled
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_DEEP_WOUND = 16 ; Inflicts DeepWound
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_DISEASED = 32 ; Inflicts Diseased
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_SLOWER_MOVEMENT = 64 ; 50% slower Movement
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_KD = 128 ; Inflicts KD
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_POISONED = 256 ; Inflicts Poisoned
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_DAZED = 512 ; Inflicts Dazed
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_WEAKNESS = 1024 ; Inflicts Weakness
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_SLOWED = 2048 ; Slowed (nr 64 could be included here)
+Global Const $GC_I_SKILL_EFFECT1_INFLICTS_RD_H = 4096 ; Remove condition and heal (Only heal ?)
 
 ; Skill Effect 2
-Global Const $gc_iSkillEffect2_Uncategorized = 0 ; All others that are not categorized but could maybe
-Global Const $gc_iSkillEffect2_Interrupt = 1 ; Interrupting Skill
-Global Const $gc_iSkillEffect2_Others_Heal = 2 ; Healing Spells that can't be cast on oneself (Blood Bond is wrong at this point)
-Global Const $gc_iSkillEffect2_Self_Heal = 4 ; Healing Skills that are only Self-targetable
-Global Const $gc_iSkillEffect2_Healing = 6 ; Healing Skills (not sure if there is smth in common between all of those)
-Global Const $gc_iSkillEffect2_Resurrection = 8 ; Resurrection Skill
-Global Const $gc_iSkillEffect2_Resurrection_Signet = 16 ; Resurrection Signets
-Global Const $gc_iSkillEffect2_Sacrificing = 32 ; Sacrificing Skills (think Blood of the Aggressor is wrong here)
-Global Const $gc_iSkillEffect2_Sacrificing_Heal = 36 ; Sacrificing Skills with Self-heal effect
-Global Const $gc_iSkillEffect2_Sacrificing_Heal_Other = 38 ; Sacrificing Skills with Healing others Effect
-Global Const $gc_iSkillEffect2_Blocking = 128 ; Blocking Skill
-Global Const $gc_iSkillEffect2_Energy_Gain = 256 ; Energy Gain Skill
-Global Const $gc_iSkillEffect2_Interrupt_Energy_Gain = 257 ; Energy Gain Interrupting Spell (could be added elsewhere)
-Global Const $gc_iSkillEffect2_Spell_Energy_Gain = 288 ; Energy Gain Spells (could be added Elsewhere)
-Global Const $gc_iSkillEffect2_Steal_Energy_Gain = 320 ; Energy Steal Skills
-Global Const $gc_iSkillEffect2_Close_Range = 512 ; Close Range Spells
-Global Const $gc_iSkillEffect2_Range = 516 ; Still Close but a bit wider Range Spells
-Global Const $gc_iSkillEffect2_Touch = 544 ; Touch Skills (but just 3 - can be put elsewhere)
-Global Const $gc_iSkillEffect2_Energy_Degen = 768 ; Energy Degen with Energy Gain (just one skill can be put elsewhere)
-Global Const $gc_iSkillEffect2_Surrounding = 1024 ; Skill affecting surrounding Enemies (just one - can be put elsewhere)
-Global Const $gc_iSkillEffect2_Hex_Removal = 2048 ; Plain Hex Removal Skills
-Global Const $gc_iSkillEffect2_Hex_Removal_Heal = 2054 ; Hex Removal Skill with Healing (just one spell can be put elsewhere)
-Global Const $gc_iSkillEffect2_Hex_Removal_Energy = 2304 ; Hex Removal Skill with Energy gain or replacement of skill with removed Hex (just 2 Skills)
-Global Const $gc_iSkillEffect2_Condition_Removal = 4096 ; Plain Condition Removal Skills
-Global Const $gc_iSkillEffect2_Condition_Removal_ = 4102 ; Condition Removal Skills under certain circumstances (just 2 Skills - can be put elsewhere)
-Global Const $gc_iSkillEffect2_Condition_Transfer = 4608 ; Condition Transfer Skill (only one - can be put elsewhere)
-Global Const $gc_iSkillEffect2_Condition_Hex_Removal = 6144 ; Condition and Hex Removal Skills without any requirement (only 2 Skills)
-Global Const $gc_iSkillEffect2_Condition_Hex_Removal_Heal = 6150 ; Healing Skill with Condition and Hex Remove (only 1 Skill)
-Global Const $gc_iSkillEffect2_Dervish_Enchant_Removal = 8192 ; Remove of Dervish Enchantments Skills (Destructive was Glaive is wrong here)
-Global Const $gc_iSkillEffect2_Heal_Dervish_Enchant_Hex_Removal = 8196 ; Dervish Heal Skill with Derv Ench Removal + Hex Removal (just 1 Skill)
-Global Const $gc_iSkillEffect2_Dervish_Heal = 8198 ; Dervish Heal Signet with Derv Ench Removal + Faster Recast (just 1 Skill)
-Global Const $gc_iSkillEffect2_Enchant_Remove_Energy_Regen = 8448 ; Elementalist Lose all Enchantment Skill + Energy Regen (just 1 Skill)
-Global Const $gc_iSkillEffect2_Condition_Hex_Removal_Heal_Loose_Enchant = 14336 ; Heal Spell with Cond and Hex Removal + Lose all Enchantments
-Global Const $gc_iSkillEffect2_Reversal_Damage = 16384 ; Reversal of Damage Spells (a lot are missing in this category)
-Global Const $gc_iSkillEffect2_Attack_Movement_Speed = 32768 ; Attack Speed and Movement Speed Skills (a lot are missing in this category)
-Global Const $gc_iSkillEffect2_KD = 65536 ; Attack that knocks you down when Foe has one of many conditions (just 2 Skills)
-Global Const $gc_iSkillEffect2_Elem_Attunement = 131072 ; Elemental Attunement Enchantment
+Global Const $GC_I_SKILL_EFFECT2_UNCATEGORIZED = 0 ; All others that are not categorized but could maybe
+Global Const $GC_I_SKILL_EFFECT2_INTERRUPT = 1 ; Interrupting Skill
+Global Const $GC_I_SKILL_EFFECT2_OTHERS_HEAL = 2 ; Healing Spells that can't be cast on oneself (Blood Bond is wrong at this point)
+Global Const $GC_I_SKILL_EFFECT2_SELF_HEAL = 4 ; Healing Skills that are only Self-targetable
+Global Const $GC_I_SKILL_EFFECT2_HEALING = 6 ; Healing Skills (not sure if there is smth in common between all of those)
+Global Const $GC_I_SKILL_EFFECT2_RESURRECTION = 8 ; Resurrection Skill
+Global Const $GC_I_SKILL_EFFECT2_RESURRECTION_SIGNET = 16 ; Resurrection Signets
+Global Const $GC_I_SKILL_EFFECT2_SACRIFICING = 32 ; Sacrificing Skills (think Blood of the Aggressor is wrong here)
+Global Const $GC_I_SKILL_EFFECT2_SACRIFICING_HEAL = 36 ; Sacrificing Skills with Self-heal effect
+Global Const $GC_I_SKILL_EFFECT2_SACRIFICING_HEAL_OTHER = 38 ; Sacrificing Skills with Healing others Effect
+Global Const $GC_I_SKILL_EFFECT2_BLOCKING = 128 ; Blocking Skill
+Global Const $GC_I_SKILL_EFFECT2_ENERGY_GAIN = 256 ; Energy Gain Skill
+Global Const $GC_I_SKILL_EFFECT2_INTERRUPT_ENERGY_GAIN = 257 ; Energy Gain Interrupting Spell (could be added elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_SPELL_ENERGY_GAIN = 288 ; Energy Gain Spells (could be added Elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_STEAL_ENERGY_GAIN = 320 ; Energy Steal Skills
+Global Const $GC_I_SKILL_EFFECT2_CLOSE_RANGE = 512 ; Close Range Spells
+Global Const $GC_I_SKILL_EFFECT2_RANGE = 516 ; Still Close but a bit wider Range Spells
+Global Const $GC_I_SKILL_EFFECT2_TOUCH = 544 ; Touch Skills (but just 3 - can be put elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_ENERGY_DEGEN = 768 ; Energy Degen with Energy Gain (just one skill can be put elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_SURROUNDING = 1024 ; Skill affecting surrounding Enemies (just one - can be put elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_HEX_REMOVAL = 2048 ; Plain Hex Removal Skills
+Global Const $GC_I_SKILL_EFFECT2_HEX_REMOVAL_HEAL = 2054 ; Hex Removal Skill with Healing (just one spell can be put elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_HEX_REMOVAL_ENERGY = 2304 ; Hex Removal Skill with Energy gain or replacement of skill with removed Hex (just 2 Skills)
+Global Const $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL = 4096 ; Plain Condition Removal Skills
+Global Const $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL_ = 4102 ; Condition Removal Skills under certain circumstances (just 2 Skills - can be put elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_CONDITION_TRANSFER = 4608 ; Condition Transfer Skill (only one - can be put elsewhere)
+Global Const $GC_I_SKILL_EFFECT2_CONDITION_HEX_REMOVAL = 6144 ; Condition and Hex Removal Skills without any requirement (only 2 Skills)
+Global Const $GC_I_SKILL_EFFECT2_CONDITION_HEX_REMOVAL_HEAL = 6150 ; Healing Skill with Condition and Hex Remove (only 1 Skill)
+Global Const $GC_I_SKILL_EFFECT2_DERVISH_ENCHANT_REMOVAL = 8192 ; Remove of Dervish Enchantments Skills (Destructive was Glaive is wrong here)
+Global Const $GC_I_SKILL_EFFECT2_HEAL_DERVISH_ENCHANT_HEX_REMOVAL = 8196 ; Dervish Heal Skill with Derv Ench Removal + Hex Removal (just 1 Skill)
+Global Const $GC_I_SKILL_EFFECT2_DERVISH_HEAL = 8198 ; Dervish Heal Signet with Derv Ench Removal + Faster Recast (just 1 Skill)
+Global Const $GC_I_SKILL_EFFECT2_ENCHANT_REMOVE_ENERGY_REGEN = 8448 ; Elementalist Lose all Enchantment Skill + Energy Regen (just 1 Skill)
+Global Const $GC_I_SKILL_EFFECT2_CONDITION_HEX_REMOVAL_HEAL_LOOSE_ENCHANT = 14336 ; Heal Spell with Cond and Hex Removal + Lose all Enchantments
+Global Const $GC_I_SKILL_EFFECT2_REVERSAL_DAMAGE = 16384 ; Reversal of Damage Spells (a lot are missing in this category)
+Global Const $GC_I_SKILL_EFFECT2_ATTACK_MOVEMENT_SPEED = 32768 ; Attack Speed and Movement Speed Skills (a lot are missing in this category)
+Global Const $GC_I_SKILL_EFFECT2_KD = 65536 ; Attack that knocks you down when Foe has one of many conditions (just 2 Skills)
+Global Const $GC_I_SKILL_EFFECT2_ELEM_ATTUNEMENT = 131072 ; Elemental Attunement Enchantment
 
-; Skill Requirement
-Global Const $gc_iSkillRequire_Bleeding = 1
-Global Const $gc_iSkillRequire_Blinded = 2
-Global Const $gc_iSkillRequire_Burning = 4
-Global Const $gc_iSkillRequire_Crippled = 8
-Global Const $gc_iSkillRequire_Crippled_Bleeding = 9 ; Crippled + Bleeding
-Global Const $gc_iSkillRequire_DeepWound = 16
-Global Const $gc_iSkillRequire_Bleeding_DeepWound = 17 ; Bleeding + Deep Wound
-Global Const $gc_iSkillRequire_DCBW = 25 ; Deep Wound or Crippled or Bleeding or Weakness (this warrior skills that include one of these randomly)
-Global Const $gc_iSkillRequire_Diseased = 32
-Global Const $gc_iSkillRequire_Slower_Movement = 64 ; 50% Slower Movement
-Global Const $gc_iSkillRequire_KD = 128 ; Knock Down
-Global Const $gc_iSkillRequire_KD_Crippled = 136 ; Crippled + Knock Down
-Global Const $gc_iSkillRequire_Poisoned = 256
-Global Const $gc_iSkillRequire_Dazed = 512
-Global Const $gc_iSkillRequire_Dazed_Blinded = 514 ; Dazed + Blinded
-Global Const $gc_iSkillRequire_Weakness = 1024
-Global Const $gc_iSkillRequire_Weakness_DeepWound = 1040 ; Weakness + Deep Wound
-Global Const $gc_iSkillRequire_Weakness_KD = 1152 ; Knock Down + Weakness
-Global Const $gc_iSkillRequire_Slowed = 2048 ; Slowed (64 could be included here)
+; SKILL REQUIREMENT
+Global Const $GC_I_SKILL_REQUIRE_BLEEDING = 1 ; Bleeding
+Global Const $GC_I_SKILL_REQUIRE_BLINDED = 2 ; Blinded
+Global Const $GC_I_SKILL_REQUIRE_BURNING = 4 ; Burning
+Global Const $GC_I_SKILL_REQUIRE_CRIPPLED = 8 ; Crippled
+Global Const $GC_I_SKILL_REQUIRE_CRIPPLED_BLEEDING = 9 ; Crippled + Bleeding
+Global Const $GC_I_SKILL_REQUIRE_DEEP_WOUND = 16 ; DeepWound
+Global Const $GC_I_SKILL_REQUIRE_BLEEDING_DEEP_WOUND = 17 ; Bleeding + Deep Wound
+Global Const $GC_I_SKILL_REQUIRE_DCBW = 25 ; Deep Wound or Crippled or Bleeding or Weakness (this warrior skills that include one of these randomly)
+Global Const $GC_I_SKILL_REQUIRE_DISEASED = 32 ; Diseased
+Global Const $GC_I_SKILL_REQUIRE_SLOWER_MOVEMENT = 64 ; 50% Slower Movement
+Global Const $GC_I_SKILL_REQUIRE_KD = 128 ; Knock Down
+Global Const $GC_I_SKILL_REQUIRE_KD_CRIPPLED = 136 ; Crippled + Knock Down
+Global Const $GC_I_SKILL_REQUIRE_POISONED = 256 ; Poisoned
+Global Const $GC_I_SKILL_REQUIRE_DAZED = 512 ; Dazed
+Global Const $GC_I_SKILL_REQUIRE_DAZED_BLINDED = 514 ; Dazed + Blinded
+Global Const $GC_I_SKILL_REQUIRE_WEAKNESS = 1024 ; Weakness
+Global Const $GC_I_SKILL_REQUIRE_WEAKNESS_DEEP_WOUND = 1040 ; Weakness + Deep Wound
+Global Const $GC_I_SKILL_REQUIRE_WEAKNESS_KD = 1152 ; Knock Down + Weakness
+Global Const $GC_I_SKILL_REQUIRE_SLOWED = 2048 ; Slowed (64 could be included here)
 
 ; Skill Weapon Requirement
-Global Const $gc_iSkillRequire_Axe = 1 ; All Axe Attacks
-Global Const $gc_iSkillRequire_Bow = 2 ; All Bow Attacks
-Global Const $gc_iSkillRequire_Dagger = 8 ; All Dagger Attacks
-Global Const $gc_iSkillRequire_Hammer = 16 ; All Hammer Attacks
-Global Const $gc_iSkillRequire_Scythe = 32 ; All Scythe Attacks
-Global Const $gc_iSkillRequire_Spear = 64 ; All Spear Attacks
-Global Const $gc_iSkillRequire_NoWeapon = 70 ; Ranged Attack non-Weapon Requirement
-Global Const $gc_iSkillRequire_Sword = 128 ; All Sword Attacks
-Global Const $gc_iSkillRequire_MeleeWeapon = 185 ; All Melee Attack non-Weapon Requirement
+Global Const $GC_I_SKILL_REQUIRE_AXE = 1 ; All Axe Attacks
+Global Const $GC_I_SKILL_REQUIRE_BOW = 2 ; All Bow Attacks
+Global Const $GC_I_SKILL_REQUIRE_DAGGER = 8 ; All Dagger Attacks
+Global Const $GC_I_SKILL_REQUIRE_HAMMER = 16 ; All Hammer Attacks
+Global Const $GC_I_SKILL_REQUIRE_SCYTHE = 32 ; All Scythe Attacks
+Global Const $GC_I_SKILL_REQUIRE_SPEAR = 64 ; All Spear Attacks
+Global Const $GC_I_SKILL_REQUIRE_NO_WEAPON = 70 ; Ranged Attack non-Weapon Requirement
+Global Const $GC_I_SKILL_REQUIRE_SWORD = 128 ; All Sword Attacks
+Global Const $GC_I_SKILL_REQUIRE_MELEE_WEAPON = 185 ; All Melee Attack non-Weapon Requirement
 
 ; Allegiance
-Global Const $gc_iAllegiance_Ally = 0x01 ; Ally/non-attackable
-Global Const $gc_iAllegiance_Enemy = 0x03 ; Enemy
-Global Const $gc_iAllegiance_Spirit = 0x04 ; Spirit or Pet
-Global Const $gc_iAllegiance_Minion = 0x05 ; Minion
-Global Const $gc_iAllegiance_NPC = 0x06 ; NPC/Minipet
+Global Const $GC_I_ALLEGIANCE_ALLY = 0x1 ; Ally/non-attackable
+Global Const $GC_I_ALLEGIANCE_ENEMY = 0x3 ; Enemy
+Global Const $GC_I_ALLEGIANCE_SPIRIT = 0x4 ; Spirit or Pet
+Global Const $GC_I_ALLEGIANCE_MINION = 0x5 ; Minion
+Global Const $GC_I_ALLEGIANCE_NPC = 0x6 ; NPC/Minipet
 
-; TypeMap
-Global Const $gc_iTypeMap_Boss = 3072 ; 0xC00 Boss
-Global Const $gc_iTypeMap_Boss2 = 3073 ; 0xC01 Boss with higher drop rate
-Global Const $gc_iTypeMap_Boss_Dead = 3080 ; 0xC08 Boss when dead
-Global Const $gc_iTypeMap_Ally = 131072 ; 0x20000 Ally
-Global Const $gc_iTypeMap_Ally2 = 131073 ; 0x20001 Ally when targeted
-Global Const $gc_iTypeMap_Spawned_Enemy = 262144 ; 0x40000 Enemy spawned creatures or hero defensive binding rituals
-Global Const $gc_iTypeMap_Spawned_Ally = 393216 ; 0x60000 Allied spawned creatures - SoS, Bloodsong
-Global Const $gc_iTypeMap_Vampiric_Spirit = 393224 ; 0x60008 Allied spawned creatures - Vampiric Spirit
+; Typemap
+Global Const $GC_I_TYPEMAP_BOSS = 3072 ; 0xC00 Boss
+Global Const $GC_I_TYPEMAP_BOSS2 = 3073 ; 0xC01 Boss with higher drop rate
+Global Const $GC_I_TYPEMAP_BOSS_DEAD = 3080 ; 0xC08 Boss when dead
+Global Const $GC_I_TYPEMAP_ALLY = 131072 ; 0x20000 Ally
+Global Const $GC_I_TYPEMAP_ALLY2 = 131073 ; 0x20001 Ally when targeted
+Global Const $GC_I_TYPEMAP_SPAWNED_ENEMY = 262144 ; 0x40000 Enemy spawned creatures or hero defensive binding rituals
+Global Const $GC_I_TYPEMAP_SPAWNED_ALLY = 393216 ; 0x60000 Allied spawned creatures - SoS, Bloodsong
+Global Const $GC_I_TYPEMAP_VAMPIRIC_SPIRIT = 393224 ; 0x60008 Allied spawned creatures - Vampiric Spirit
 #EndRegion All Skill Infos
 
 #Region SkillIDs
-Global Const $gc_iSkillID_No_Skill = 0
-Global Const $gc_iSkillID_Healing_Signet = 1
-Global Const $gc_iSkillID_Resurrection_Signet = 2
-Global Const $gc_iSkillID_Signet_of_Capture = 3
-Global Const $gc_iSkillID_BAMPH = 4
-Global Const $gc_iSkillID_Power_Block = 5
-Global Const $gc_iSkillID_Mantra_of_Earth = 6
-Global Const $gc_iSkillID_Mantra_of_Flame = 7
-Global Const $gc_iSkillID_Mantra_of_Frost = 8
-Global Const $gc_iSkillID_Mantra_of_Lightning = 9
-Global Const $gc_iSkillID_Hex_Breaker = 10
-Global Const $gc_iSkillID_Distortion = 11
-Global Const $gc_iSkillID_Mantra_of_Celerity = 12
-Global Const $gc_iSkillID_Mantra_of_Recovery = 13
-Global Const $gc_iSkillID_Mantra_of_Persistence = 14
-Global Const $gc_iSkillID_Mantra_of_Inscriptions = 15
-Global Const $gc_iSkillID_Mantra_of_Concentration = 16
-Global Const $gc_iSkillID_Mantra_of_Resolve = 17
-Global Const $gc_iSkillID_Mantra_of_Signets = 18
-Global Const $gc_iSkillID_Fragility = 19
-Global Const $gc_iSkillID_Confusion = 20
-Global Const $gc_iSkillID_Inspired_Enchantment = 21
-Global Const $gc_iSkillID_Inspired_Hex = 22
-Global Const $gc_iSkillID_Power_Spike = 23
-Global Const $gc_iSkillID_Power_Leak = 24
-Global Const $gc_iSkillID_Power_Drain = 25
-Global Const $gc_iSkillID_Empathy = 26
-Global Const $gc_iSkillID_Shatter_Delusions = 27
-Global Const $gc_iSkillID_Backfire = 28
-Global Const $gc_iSkillID_Blackout = 29
-Global Const $gc_iSkillID_Diversion = 30
-Global Const $gc_iSkillID_Conjure_Phantasm = 31
-Global Const $gc_iSkillID_Illusion_of_Weakness = 32
-Global Const $gc_iSkillID_Illusionary_Weaponry = 33
-Global Const $gc_iSkillID_Sympathetic_Visage = 34
-Global Const $gc_iSkillID_Ignorance = 35
-Global Const $gc_iSkillID_Arcane_Conundrum = 36
-Global Const $gc_iSkillID_Illusion_of_Haste = 37
-Global Const $gc_iSkillID_Channeling = 38
-Global Const $gc_iSkillID_Energy_Surge = 39
-Global Const $gc_iSkillID_Ether_Feast = 40
-Global Const $gc_iSkillID_Ether_Lord = 41
-Global Const $gc_iSkillID_Energy_Burn = 42
-Global Const $gc_iSkillID_Clumsiness = 43
-Global Const $gc_iSkillID_Phantom_Pain = 44
-Global Const $gc_iSkillID_Ethereal_Burden = 45
-Global Const $gc_iSkillID_Guilt = 46
-Global Const $gc_iSkillID_Ineptitude = 47
-Global Const $gc_iSkillID_Spirit_of_Failure = 48
-Global Const $gc_iSkillID_Mind_Wrack = 49
-Global Const $gc_iSkillID_Wastrels_Worry = 50
-Global Const $gc_iSkillID_Shame = 51
-Global Const $gc_iSkillID_Panic = 52
-Global Const $gc_iSkillID_Migraine = 53
-Global Const $gc_iSkillID_Crippling_Anguish = 54
-Global Const $gc_iSkillID_Fevered_Dreams = 55
-Global Const $gc_iSkillID_Soothing_Images = 56
-Global Const $gc_iSkillID_Cry_of_Frustration = 57
-Global Const $gc_iSkillID_Signet_of_Midnight = 58
-Global Const $gc_iSkillID_Signet_of_Weariness = 59
-Global Const $gc_iSkillID_Signet_of_Illusions_beta_version = 60
-Global Const $gc_iSkillID_Leech_Signet = 61
-Global Const $gc_iSkillID_Signet_of_Humility = 62
-Global Const $gc_iSkillID_Keystone_Signet = 63
-Global Const $gc_iSkillID_Mimic = 64
-Global Const $gc_iSkillID_Arcane_Mimicry = 65
-Global Const $gc_iSkillID_Spirit_Shackles = 66
-Global Const $gc_iSkillID_Shatter_Hex = 67
-Global Const $gc_iSkillID_Drain_Enchantment = 68
-Global Const $gc_iSkillID_Shatter_Enchantment = 69
-Global Const $gc_iSkillID_Disappear = 70
-Global Const $gc_iSkillID_Unnatural_Signet_alpha_version = 71
-Global Const $gc_iSkillID_Elemental_Resistance = 72
-Global Const $gc_iSkillID_Physical_Resistance = 73
-Global Const $gc_iSkillID_Echo = 74
-Global Const $gc_iSkillID_Arcane_Echo = 75
-Global Const $gc_iSkillID_Imagined_Burden = 76
-Global Const $gc_iSkillID_Chaos_Storm = 77
-Global Const $gc_iSkillID_Epidemic = 78
-Global Const $gc_iSkillID_Energy_Drain = 79
-Global Const $gc_iSkillID_Energy_Tap = 80
-Global Const $gc_iSkillID_Arcane_Thievery = 81
-Global Const $gc_iSkillID_Mantra_of_Recall = 82
-Global Const $gc_iSkillID_Animate_Bone_Horror = 83
-Global Const $gc_iSkillID_Animate_Bone_Fiend = 84
-Global Const $gc_iSkillID_Animate_Bone_Minions = 85
-Global Const $gc_iSkillID_Grenths_Balance = 86
-Global Const $gc_iSkillID_Veratas_Gaze = 87
-Global Const $gc_iSkillID_Veratas_Aura = 88
-Global Const $gc_iSkillID_Deathly_Chill = 89
-Global Const $gc_iSkillID_Veratas_Sacrifice = 90
-Global Const $gc_iSkillID_Well_of_Power = 91
-Global Const $gc_iSkillID_Well_of_Blood = 92
-Global Const $gc_iSkillID_Well_of_Suffering = 93
-Global Const $gc_iSkillID_Well_of_the_Profane = 94
-Global Const $gc_iSkillID_Putrid_Explosion = 95
-Global Const $gc_iSkillID_Soul_Feast = 96
-Global Const $gc_iSkillID_Necrotic_Traversal = 97
-Global Const $gc_iSkillID_Consume_Corpse = 98
-Global Const $gc_iSkillID_Parasitic_Bond = 99
-Global Const $gc_iSkillID_Soul_Barbs = 100
-Global Const $gc_iSkillID_Barbs = 101
-Global Const $gc_iSkillID_Shadow_Strike = 102
-Global Const $gc_iSkillID_Price_of_Failure = 103
-Global Const $gc_iSkillID_Death_Nova = 104
-Global Const $gc_iSkillID_Deathly_Swarm = 105
-Global Const $gc_iSkillID_Rotting_Flesh = 106
-Global Const $gc_iSkillID_Virulence = 107
-Global Const $gc_iSkillID_Suffering = 108
-Global Const $gc_iSkillID_Life_Siphon = 109
-Global Const $gc_iSkillID_Unholy_Feast = 110
-Global Const $gc_iSkillID_Awaken_the_Blood = 111
-Global Const $gc_iSkillID_Desecrate_Enchantments = 112
-Global Const $gc_iSkillID_Tainted_Flesh = 113
-Global Const $gc_iSkillID_Aura_of_the_Lich = 114
-Global Const $gc_iSkillID_Blood_Renewal = 115
-Global Const $gc_iSkillID_Dark_Aura = 116
-Global Const $gc_iSkillID_Enfeeble1 = 117
-Global Const $gc_iSkillID_Enfeebling_Blood = 118
-Global Const $gc_iSkillID_Blood_is_Power = 119
-Global Const $gc_iSkillID_Blood_of_the_Master = 120
-Global Const $gc_iSkillID_Spiteful_Spirit = 121
-Global Const $gc_iSkillID_Malign_Intervention = 122
-Global Const $gc_iSkillID_Insidious_Parasite = 123
-Global Const $gc_iSkillID_Spinal_Shivers = 124
-Global Const $gc_iSkillID_Wither = 125
-Global Const $gc_iSkillID_Life_Transfer = 126
-Global Const $gc_iSkillID_Mark_of_Subversion = 127
-Global Const $gc_iSkillID_Soul_Leech = 128
-Global Const $gc_iSkillID_Defile_Flesh = 129
-Global Const $gc_iSkillID_Demonic_Flesh = 130
-Global Const $gc_iSkillID_Barbed_Signet = 131
-Global Const $gc_iSkillID_Plague_Signet = 132
-Global Const $gc_iSkillID_Dark_Pact = 133
-Global Const $gc_iSkillID_Order_of_Pain = 134
-Global Const $gc_iSkillID_Faintheartedness = 135
-Global Const $gc_iSkillID_Shadow_of_Fear = 136
-Global Const $gc_iSkillID_Rigor_Mortis = 137
-Global Const $gc_iSkillID_Dark_Bond = 138
-Global Const $gc_iSkillID_Infuse_Condition = 139
-Global Const $gc_iSkillID_Malaise = 140
-Global Const $gc_iSkillID_Rend_Enchantments = 141
-Global Const $gc_iSkillID_Lingering_Curse = 142
-Global Const $gc_iSkillID_Strip_Enchantment = 143
-Global Const $gc_iSkillID_Chilblains = 144
-Global Const $gc_iSkillID_Signet_of_Agony = 145
-Global Const $gc_iSkillID_Offering_of_Blood = 146
-Global Const $gc_iSkillID_Dark_Fury = 147
-Global Const $gc_iSkillID_Order_of_the_Vampire = 148
-Global Const $gc_iSkillID_Plague_Sending = 149
-Global Const $gc_iSkillID_Mark_of_Pain = 150
-Global Const $gc_iSkillID_Feast_of_Corruption = 151
-Global Const $gc_iSkillID_Taste_of_Death = 152
-Global Const $gc_iSkillID_Vampiric_Gaze = 153
-Global Const $gc_iSkillID_Plague_Touch = 154
-Global Const $gc_iSkillID_Vile_Touch = 155
-Global Const $gc_iSkillID_Vampiric_Touch = 156
-Global Const $gc_iSkillID_Blood_Ritual = 157
-Global Const $gc_iSkillID_Touch_of_Agony = 158
-Global Const $gc_iSkillID_Weaken_Armor = 159
-Global Const $gc_iSkillID_Windborne_Speed = 160
-Global Const $gc_iSkillID_Lightning_Storm = 161
-Global Const $gc_iSkillID_Gale = 162
-Global Const $gc_iSkillID_Whirlwind = 163
-Global Const $gc_iSkillID_Elemental_Attunement = 164
-Global Const $gc_iSkillID_Armor_of_Earth = 165
-Global Const $gc_iSkillID_Kinetic_Armor = 166
-Global Const $gc_iSkillID_Eruption = 167
-Global Const $gc_iSkillID_Magnetic_Aura = 168
-Global Const $gc_iSkillID_Earth_Attunement = 169
-Global Const $gc_iSkillID_Earthquake = 170
-Global Const $gc_iSkillID_Stoning = 171
-Global Const $gc_iSkillID_Stone_Daggers = 172
-Global Const $gc_iSkillID_Grasping_Earth = 173
-Global Const $gc_iSkillID_Aftershock = 174
-Global Const $gc_iSkillID_Ward_Against_Elements = 175
-Global Const $gc_iSkillID_Ward_Against_Melee = 176
-Global Const $gc_iSkillID_Ward_Against_Foes = 177
-Global Const $gc_iSkillID_Ether_Prodigy = 178
-Global Const $gc_iSkillID_Incendiary_Bonds = 179
-Global Const $gc_iSkillID_Aura_of_Restoration = 180
-Global Const $gc_iSkillID_Ether_Renewal = 181
-Global Const $gc_iSkillID_Conjure_Flame = 182
-Global Const $gc_iSkillID_Inferno = 183
-Global Const $gc_iSkillID_Fire_Attunement = 184
-Global Const $gc_iSkillID_Mind_Burn = 185
-Global Const $gc_iSkillID_Fireball = 186
-Global Const $gc_iSkillID_Meteor = 187
-Global Const $gc_iSkillID_Flame_Burst = 188
-Global Const $gc_iSkillID_Rodgorts_Invocation = 189
-Global Const $gc_iSkillID_Mark_of_Rodgort = 190
-Global Const $gc_iSkillID_Immolate = 191
-Global Const $gc_iSkillID_Meteor_Shower = 192
-Global Const $gc_iSkillID_Phoenix = 193
-Global Const $gc_iSkillID_Flare = 194
-Global Const $gc_iSkillID_Lava_Font = 195
-Global Const $gc_iSkillID_Searing_Heat = 196
-Global Const $gc_iSkillID_Fire_Storm = 197
-Global Const $gc_iSkillID_Glyph_of_Elemental_Power = 198
-Global Const $gc_iSkillID_Glyph_of_Energy = 199
-Global Const $gc_iSkillID_Glyph_of_Lesser_Energy = 200
-Global Const $gc_iSkillID_Glyph_of_Concentration = 201
-Global Const $gc_iSkillID_Glyph_of_Sacrifice = 202
-Global Const $gc_iSkillID_Glyph_of_Renewal = 203
-Global Const $gc_iSkillID_Rust = 204
-Global Const $gc_iSkillID_Lightning_Surge = 205
-Global Const $gc_iSkillID_Armor_of_Frost = 206
-Global Const $gc_iSkillID_Conjure_Frost = 207
-Global Const $gc_iSkillID_Water_Attunement = 208
-Global Const $gc_iSkillID_Mind_Freeze = 209
-Global Const $gc_iSkillID_Ice_Prison = 210
-Global Const $gc_iSkillID_Ice_Spikes = 211
-Global Const $gc_iSkillID_Frozen_Burst = 212
-Global Const $gc_iSkillID_Shard_Storm = 213
-Global Const $gc_iSkillID_Ice_Spear = 214
-Global Const $gc_iSkillID_Maelstrom = 215
-Global Const $gc_iSkillID_Iron_Mist = 216
-Global Const $gc_iSkillID_Crystal_Wave = 217
-Global Const $gc_iSkillID_Obsidian_Flesh = 218
-Global Const $gc_iSkillID_Obsidian_Flame = 219
-Global Const $gc_iSkillID_Blinding_Flash = 220
-Global Const $gc_iSkillID_Conjure_Lightning = 221
-Global Const $gc_iSkillID_Lightning_Strike = 222
-Global Const $gc_iSkillID_Chain_Lightning = 223
-Global Const $gc_iSkillID_Enervating_Charge = 224
-Global Const $gc_iSkillID_Air_Attunement = 225
-Global Const $gc_iSkillID_Mind_Shock = 226
-Global Const $gc_iSkillID_Glimmering_Mark = 227
-Global Const $gc_iSkillID_Thunderclap = 228
-Global Const $gc_iSkillID_Lightning_Orb1 = 229
-Global Const $gc_iSkillID_Lightning_Javelin = 230
-Global Const $gc_iSkillID_Shock = 231
-Global Const $gc_iSkillID_Lightning_Touch = 232
-Global Const $gc_iSkillID_Swirling_Aura = 233
-Global Const $gc_iSkillID_Deep_Freeze = 234
-Global Const $gc_iSkillID_Blurred_Vision = 235
-Global Const $gc_iSkillID_Mist_Form = 236
-Global Const $gc_iSkillID_Water_Trident = 237
-Global Const $gc_iSkillID_Armor_of_Mist = 238
-Global Const $gc_iSkillID_Ward_Against_Harm = 239
-Global Const $gc_iSkillID_Smite = 240
-Global Const $gc_iSkillID_Life_Bond = 241
-Global Const $gc_iSkillID_Balthazars_Spirit = 242
-Global Const $gc_iSkillID_Strength_of_Honor = 243
-Global Const $gc_iSkillID_Life_Attunement = 244
-Global Const $gc_iSkillID_Protective_Spirit = 245
-Global Const $gc_iSkillID_Divine_Intervention = 246
-Global Const $gc_iSkillID_Symbol_of_Wrath = 247
-Global Const $gc_iSkillID_Retribution = 248
-Global Const $gc_iSkillID_Holy_Wrath = 249
-Global Const $gc_iSkillID_Essence_Bond = 250
-Global Const $gc_iSkillID_Scourge_Healing = 251
-Global Const $gc_iSkillID_Banish = 252
-Global Const $gc_iSkillID_Scourge_Sacrifice = 253
-Global Const $gc_iSkillID_Vigorous_Spirit = 254
-Global Const $gc_iSkillID_Watchful_Spirit = 255
-Global Const $gc_iSkillID_Blessed_Aura = 256
-Global Const $gc_iSkillID_Aegis = 257
-Global Const $gc_iSkillID_Guardian = 258
-Global Const $gc_iSkillID_Shield_of_Deflection = 259
-Global Const $gc_iSkillID_Aura_of_Faith = 260
-Global Const $gc_iSkillID_Shield_of_Regeneration = 261
-Global Const $gc_iSkillID_Shield_of_Judgment = 262
-Global Const $gc_iSkillID_Protective_Bond = 263
-Global Const $gc_iSkillID_Pacifism = 264
-Global Const $gc_iSkillID_Amity = 265
-Global Const $gc_iSkillID_Peace_and_Harmony = 266
-Global Const $gc_iSkillID_Judges_Insight = 267
-Global Const $gc_iSkillID_Unyielding_Aura = 268
-Global Const $gc_iSkillID_Mark_of_Protection = 269
-Global Const $gc_iSkillID_Life_Barrier = 270
-Global Const $gc_iSkillID_Zealots_Fire = 271
-Global Const $gc_iSkillID_Balthazars_Aura = 272
-Global Const $gc_iSkillID_Spell_Breaker = 273
-Global Const $gc_iSkillID_Healing_Seed = 274
-Global Const $gc_iSkillID_Mend_Condition = 275
-Global Const $gc_iSkillID_Restore_Condition = 276
-Global Const $gc_iSkillID_Mend_Ailment = 277
-Global Const $gc_iSkillID_Purge_Conditions = 278
-Global Const $gc_iSkillID_Divine_Healing = 279
-Global Const $gc_iSkillID_Heal_Area = 280
-Global Const $gc_iSkillID_Orison_of_Healing = 281
-Global Const $gc_iSkillID_Word_of_Healing = 282
-Global Const $gc_iSkillID_Dwaynas_Kiss = 283
-Global Const $gc_iSkillID_Divine_Boon = 284
-Global Const $gc_iSkillID_Healing_Hands = 285
-Global Const $gc_iSkillID_Heal_Other = 286
-Global Const $gc_iSkillID_Heal_Party = 287
-Global Const $gc_iSkillID_Healing_Breeze = 288
-Global Const $gc_iSkillID_Vital_Blessing = 289
-Global Const $gc_iSkillID_Mending = 290
-Global Const $gc_iSkillID_Live_Vicariously = 291
-Global Const $gc_iSkillID_Infuse_Health = 292
-Global Const $gc_iSkillID_Signet_of_Devotion = 293
-Global Const $gc_iSkillID_Signet_of_Judgment = 294
-Global Const $gc_iSkillID_Purge_Signet = 295
-Global Const $gc_iSkillID_Bane_Signet = 296
-Global Const $gc_iSkillID_Blessed_Signet = 297
-Global Const $gc_iSkillID_Martyr = 298
-Global Const $gc_iSkillID_Shielding_Hands = 299
-Global Const $gc_iSkillID_Contemplation_of_Purity = 300
-Global Const $gc_iSkillID_Remove_Hex = 301
-Global Const $gc_iSkillID_Smite_Hex = 302
-Global Const $gc_iSkillID_Convert_Hexes = 303
-Global Const $gc_iSkillID_Light_of_Dwayna = 304
-Global Const $gc_iSkillID_Resurrect = 305
-Global Const $gc_iSkillID_Rebirth = 306
-Global Const $gc_iSkillID_Reversal_of_Fortune = 307
-Global Const $gc_iSkillID_Succor = 308
-Global Const $gc_iSkillID_Holy_Veil = 309
-Global Const $gc_iSkillID_Divine_Spirit = 310
-Global Const $gc_iSkillID_Draw_Conditions = 311
-Global Const $gc_iSkillID_Holy_Strike = 312
-Global Const $gc_iSkillID_Healing_Touch = 313
-Global Const $gc_iSkillID_Restore_Life = 314
-Global Const $gc_iSkillID_Vengeance = 315
-Global Const $gc_iSkillID_To_the_Limit = 316
-Global Const $gc_iSkillID_Battle_Rage = 317
-Global Const $gc_iSkillID_Defy_Pain = 318
-Global Const $gc_iSkillID_Rush = 319
-Global Const $gc_iSkillID_Hamstring = 320
-Global Const $gc_iSkillID_Wild_Blow = 321
-Global Const $gc_iSkillID_Power_Attack = 322
-Global Const $gc_iSkillID_Desperation_Blow = 323
-Global Const $gc_iSkillID_Thrill_of_Victory = 324
-Global Const $gc_iSkillID_Distracting_Blow = 325
-Global Const $gc_iSkillID_Protectors_Strike = 326
-Global Const $gc_iSkillID_Griffons_Sweep = 327
-Global Const $gc_iSkillID_Pure_Strike = 328
-Global Const $gc_iSkillID_Skull_Crack = 329
-Global Const $gc_iSkillID_Cyclone_Axe = 330
-Global Const $gc_iSkillID_Hammer_Bash = 331
-Global Const $gc_iSkillID_Bulls_Strike = 332
-Global Const $gc_iSkillID_I_Will_Avenge_You = 333
-Global Const $gc_iSkillID_Axe_Rake = 334
-Global Const $gc_iSkillID_Cleave = 335
-Global Const $gc_iSkillID_Executioners_Strike = 336
-Global Const $gc_iSkillID_Dismember = 337
-Global Const $gc_iSkillID_Eviscerate = 338
-Global Const $gc_iSkillID_Penetrating_Blow = 339
-Global Const $gc_iSkillID_Disrupting_Chop = 340
-Global Const $gc_iSkillID_Swift_Chop = 341
-Global Const $gc_iSkillID_Axe_Twist = 342
-Global Const $gc_iSkillID_For_Great_Justice = 343
-Global Const $gc_iSkillID_Flurry = 344
-Global Const $gc_iSkillID_Defensive_Stance = 345
-Global Const $gc_iSkillID_Frenzy = 346
-Global Const $gc_iSkillID_Endure_Pain = 347
-Global Const $gc_iSkillID_Watch_Yourself = 348
-Global Const $gc_iSkillID_Sprint = 349
-Global Const $gc_iSkillID_Belly_Smash = 350
-Global Const $gc_iSkillID_Mighty_Blow = 351
-Global Const $gc_iSkillID_Crushing_Blow = 352
-Global Const $gc_iSkillID_Crude_Swing = 353
-Global Const $gc_iSkillID_Earth_Shaker = 354
-Global Const $gc_iSkillID_Devastating_Hammer = 355
-Global Const $gc_iSkillID_Irresistible_Blow = 356
-Global Const $gc_iSkillID_Counter_Blow = 357
-Global Const $gc_iSkillID_Backbreaker = 358
-Global Const $gc_iSkillID_Heavy_Blow = 359
-Global Const $gc_iSkillID_Staggering_Blow = 360
-Global Const $gc_iSkillID_Dolyak_Signet = 361
-Global Const $gc_iSkillID_Warriors_Cunning = 362
-Global Const $gc_iSkillID_Shield_Bash = 363
-Global Const $gc_iSkillID_Charge = 364
-Global Const $gc_iSkillID_Victory_Is_Mine = 365
-Global Const $gc_iSkillID_Fear_Me = 366
-Global Const $gc_iSkillID_Shields_Up = 367
-Global Const $gc_iSkillID_I_Will_Survive = 368
-Global Const $gc_iSkillID_Dont_Believe_Their_Lies = 369
-Global Const $gc_iSkillID_Berserker_Stance = 370
-Global Const $gc_iSkillID_Balanced_Stance = 371
-Global Const $gc_iSkillID_Gladiators_Defense = 372
-Global Const $gc_iSkillID_Deflect_Arrows = 373
-Global Const $gc_iSkillID_Warriors_Endurance = 374
-Global Const $gc_iSkillID_Dwarven_Battle_Stance = 375
-Global Const $gc_iSkillID_Disciplined_Stance = 376
-Global Const $gc_iSkillID_Wary_Stance = 377
-Global Const $gc_iSkillID_Shield_Stance = 378
-Global Const $gc_iSkillID_Bulls_Charge = 379
-Global Const $gc_iSkillID_Bonettis_Defense = 380
-Global Const $gc_iSkillID_Hundred_Blades = 381
-Global Const $gc_iSkillID_Sever_Artery = 382
-Global Const $gc_iSkillID_Galrath_Slash = 383
-Global Const $gc_iSkillID_Gash = 384
-Global Const $gc_iSkillID_Final_Thrust = 385
-Global Const $gc_iSkillID_Seeking_Blade = 386
-Global Const $gc_iSkillID_Riposte = 387
-Global Const $gc_iSkillID_Deadly_Riposte = 388
-Global Const $gc_iSkillID_Flourish = 389
-Global Const $gc_iSkillID_Savage_Slash = 390
-Global Const $gc_iSkillID_Hunters_Shot = 391
-Global Const $gc_iSkillID_Pin_Down = 392
-Global Const $gc_iSkillID_Crippling_Shot = 393
-Global Const $gc_iSkillID_Power_Shot = 394
-Global Const $gc_iSkillID_Barrage = 395
-Global Const $gc_iSkillID_Dual_Shot = 396
-Global Const $gc_iSkillID_Quick_Shot = 397
-Global Const $gc_iSkillID_Penetrating_Attack = 398
-Global Const $gc_iSkillID_Distracting_Shot = 399
-Global Const $gc_iSkillID_Precision_Shot = 400
-Global Const $gc_iSkillID_Splinter_Shot_monster_skill = 401
-Global Const $gc_iSkillID_Determined_Shot = 402
-Global Const $gc_iSkillID_Called_Shot = 403
-Global Const $gc_iSkillID_Poison_Arrow = 404
-Global Const $gc_iSkillID_Oath_Shot = 405
-Global Const $gc_iSkillID_Debilitating_Shot = 406
-Global Const $gc_iSkillID_Point_Blank_Shot = 407
-Global Const $gc_iSkillID_Concussion_Shot = 408
-Global Const $gc_iSkillID_Punishing_Shot = 409
-Global Const $gc_iSkillID_Call_of_Ferocity = 410
-Global Const $gc_iSkillID_Charm_Animal = 411
-Global Const $gc_iSkillID_Call_of_Protection = 412
-Global Const $gc_iSkillID_Call_of_Elemental_Protection = 413
-Global Const $gc_iSkillID_Call_of_Vitality = 414
-Global Const $gc_iSkillID_Call_of_Haste = 415
-Global Const $gc_iSkillID_Call_of_Healing = 416
-Global Const $gc_iSkillID_Call_of_Resilience = 417
-Global Const $gc_iSkillID_Call_of_Feeding = 418
-Global Const $gc_iSkillID_Call_of_the_Hunter = 419
-Global Const $gc_iSkillID_Call_of_Brutality = 420
-Global Const $gc_iSkillID_Call_of_Disruption = 421
-Global Const $gc_iSkillID_Revive_Animal = 422
-Global Const $gc_iSkillID_Symbiotic_Bond = 423
-Global Const $gc_iSkillID_Throw_Dirt = 424
-Global Const $gc_iSkillID_Dodge = 425
-Global Const $gc_iSkillID_Savage_Shot = 426
-Global Const $gc_iSkillID_Antidote_Signet = 427
-Global Const $gc_iSkillID_Incendiary_Arrows = 428
-Global Const $gc_iSkillID_Melandrus_Arrows = 429
-Global Const $gc_iSkillID_Marksmans_Wager = 430
-Global Const $gc_iSkillID_Ignite_Arrows = 431
-Global Const $gc_iSkillID_Read_the_Wind = 432
-Global Const $gc_iSkillID_Kindle_Arrows = 433
-Global Const $gc_iSkillID_Choking_Gas = 434
-Global Const $gc_iSkillID_Apply_Poison = 435
-Global Const $gc_iSkillID_Comfort_Animal = 436
-Global Const $gc_iSkillID_Bestial_Pounce = 437
-Global Const $gc_iSkillID_Maiming_Strike = 438
-Global Const $gc_iSkillID_Feral_Lunge = 439
-Global Const $gc_iSkillID_Scavenger_Strike = 440
-Global Const $gc_iSkillID_Melandrus_Assault = 441
-Global Const $gc_iSkillID_Ferocious_Strike = 442
-Global Const $gc_iSkillID_Predators_Pounce = 443
-Global Const $gc_iSkillID_Brutal_Strike = 444
-Global Const $gc_iSkillID_Disrupting_Lunge = 445
-Global Const $gc_iSkillID_Troll_Unguent = 446
-Global Const $gc_iSkillID_Otyughs_Cry = 447
-Global Const $gc_iSkillID_Escape = 448
-Global Const $gc_iSkillID_Practiced_Stance = 449
-Global Const $gc_iSkillID_Whirling_Defense = 450
-Global Const $gc_iSkillID_Melandrus_Resilience = 451
-Global Const $gc_iSkillID_Dryders_Defenses = 452
-Global Const $gc_iSkillID_Lightning_Reflexes = 453
-Global Const $gc_iSkillID_Tigers_Fury = 454
-Global Const $gc_iSkillID_Storm_Chaser = 455
-Global Const $gc_iSkillID_Serpents_Quickness = 456
-Global Const $gc_iSkillID_Dust_Trap = 457
-Global Const $gc_iSkillID_Barbed_Trap = 458
-Global Const $gc_iSkillID_Flame_Trap = 459
-Global Const $gc_iSkillID_Healing_Spring = 460
-Global Const $gc_iSkillID_Spike_Trap = 461
-Global Const $gc_iSkillID_Winter = 462
-Global Const $gc_iSkillID_Winnowing = 463
-Global Const $gc_iSkillID_Edge_of_Extinction = 464
-Global Const $gc_iSkillID_Greater_Conflagration = 465
-Global Const $gc_iSkillID_Conflagration = 466
-Global Const $gc_iSkillID_Fertile_Season = 467
-Global Const $gc_iSkillID_Symbiosis = 468
-Global Const $gc_iSkillID_Primal_Echoes = 469
-Global Const $gc_iSkillID_Predatory_Season = 470
-Global Const $gc_iSkillID_Frozen_Soil = 471
-Global Const $gc_iSkillID_Favorable_Winds = 472
-Global Const $gc_iSkillID_High_Winds = 473
-Global Const $gc_iSkillID_Energizing_Wind = 474
-Global Const $gc_iSkillID_Quickening_Zephyr = 475
-Global Const $gc_iSkillID_Natures_Renewal = 476
-Global Const $gc_iSkillID_Muddy_Terrain = 477
-Global Const $gc_iSkillID_Bleeding = 478
-Global Const $gc_iSkillID_Blind = 479
-Global Const $gc_iSkillID_Burning = 480
-Global Const $gc_iSkillID_Crippled = 481
-Global Const $gc_iSkillID_Deep_Wound = 482
-Global Const $gc_iSkillID_Disease = 483
-Global Const $gc_iSkillID_Poison = 484
-Global Const $gc_iSkillID_Dazed = 485
-Global Const $gc_iSkillID_Weakness = 486
-Global Const $gc_iSkillID_Cleansed = 487
-Global Const $gc_iSkillID_Eruption_environment = 488
-Global Const $gc_iSkillID_Fire_Storm_environment = 489
-Global Const $gc_iSkillID_Vital_Blessing_monster_skill = 490
-Global Const $gc_iSkillID_Fount_Of_Maguuma = 491
-Global Const $gc_iSkillID_Healing_Fountain = 492
-Global Const $gc_iSkillID_Icy_Ground = 493
-Global Const $gc_iSkillID_Maelstrom_environment = 494
-Global Const $gc_iSkillID_Mursaat_Tower_skill = 495
-Global Const $gc_iSkillID_Quicksand_environment_effect = 496
-Global Const $gc_iSkillID_Curse_of_the_Bloodstone = 497
-Global Const $gc_iSkillID_Chain_Lightning_environment = 498
-Global Const $gc_iSkillID_Obelisk_Lightning = 499
-Global Const $gc_iSkillID_Tar = 500
-Global Const $gc_iSkillID_Siege_Attack4 = 501
-Global Const $gc_iSkillID_Resurrect_Party = 502
-Global Const $gc_iSkillID_Scepter_of_Orrs_Aura = 503
-Global Const $gc_iSkillID_Scepter_of_Orrs_Power = 504
-Global Const $gc_iSkillID_Burden_Totem = 505
-Global Const $gc_iSkillID_Splinter_Mine_skill = 506
-Global Const $gc_iSkillID_Entanglement = 507
-Global Const $gc_iSkillID_Dwarven_Powder_Keg = 508
-Global Const $gc_iSkillID_Seed_of_Resurrection = 509
-Global Const $gc_iSkillID_Deafening_Roar = 510
-Global Const $gc_iSkillID_Brutal_Mauling = 511
-Global Const $gc_iSkillID_Crippling_Attack = 512
-Global Const $gc_iSkillID_Charm_Animal_monster_skill = 513
-Global Const $gc_iSkillID_Breaking_Charm = 514
-Global Const $gc_iSkillID_Charr_Buff = 515
-Global Const $gc_iSkillID_Claim_Resource1 = 516
-Global Const $gc_iSkillID_Claim_Resource2 = 517
-Global Const $gc_iSkillID_Claim_Resource3 = 518
-Global Const $gc_iSkillID_Claim_Resource4 = 519
-Global Const $gc_iSkillID_Claim_Resource5 = 520
-Global Const $gc_iSkillID_Claim_Resource6 = 521
-Global Const $gc_iSkillID_Claim_Resource7 = 522
-Global Const $gc_iSkillID_Claim_Resource8 = 523
-Global Const $gc_iSkillID_Dozen_Shot = 524
-Global Const $gc_iSkillID_Nibble = 525
-Global Const $gc_iSkillID_Claim_Resource9 = 526
-Global Const $gc_iSkillID_Claim_Resource10 = 527
-Global Const $gc_iSkillID_Reflection = 528
-; Global Const $gc_iSkillID_Unknow = 529
-Global Const $gc_iSkillID_Giant_Stomp = 530
-Global Const $gc_iSkillID_Agnars_Rage = 531
-Global Const $gc_iSkillID_Healing_Breeze_Agnars_Rage = 532
-Global Const $gc_iSkillID_Crystal_Haze = 533
-Global Const $gc_iSkillID_Crystal_Bonds = 534
-Global Const $gc_iSkillID_Jagged_Crystal_Skin = 535
-Global Const $gc_iSkillID_Crystal_Hibernation = 536
-Global Const $gc_iSkillID_Stun_Immunity = 537
-Global Const $gc_iSkillID_Invulnerability = 538
-Global Const $gc_iSkillID_Hunger_of_the_Lich = 539
-Global Const $gc_iSkillID_Embrace_the_Pain = 540
-Global Const $gc_iSkillID_Life_Vortex = 541
-Global Const $gc_iSkillID_Oracle_Link = 542
-Global Const $gc_iSkillID_Guardian_Pacify = 543
-Global Const $gc_iSkillID_Soul_Vortex = 544
-; Global Const $gc_iSkillID_Unknow = 545
-Global Const $gc_iSkillID_Spectral_Agony = 546
-Global Const $gc_iSkillID_Natural_Resistance1 = 547
-Global Const $gc_iSkillID_Natural_Resistance2 = 548
-Global Const $gc_iSkillID_Guild_Lord_Aura = 549
-Global Const $gc_iSkillID_Critical_Hit_Probability = 550
-Global Const $gc_iSkillID_Stun_on_Critical_Hit = 551
-Global Const $gc_iSkillID_Blood_Splattering = 552
-Global Const $gc_iSkillID_Inanimate_Object = 553
-Global Const $gc_iSkillID_Undead_sensitivity_to_Light = 554
-Global Const $gc_iSkillID_Energy_Boost = 555
-Global Const $gc_iSkillID_Health_Drain = 556
-Global Const $gc_iSkillID_Immunity_to_Critical_Hits = 557
-Global Const $gc_iSkillID_Titans_get_plus_Health_regen_and_set_enemies_on_fire_each_time_he_is_hit = 558
-Global Const $gc_iSkillID_Undying1 = 559
-Global Const $gc_iSkillID_Resurrect_Gargoyle = 560
-Global Const $gc_iSkillID_Seal_Regen = 561
-Global Const $gc_iSkillID_Lightning_Orb2 = 562
-Global Const $gc_iSkillID_Wurm_Siege_Dunes_of_Despair = 563
-Global Const $gc_iSkillID_Wurm_Siege = 564
-Global Const $gc_iSkillID_Claim_Resource = 565
-Global Const $gc_iSkillID_Shiver_Touch = 566
-Global Const $gc_iSkillID_Spontaneous_Combustion = 567
-Global Const $gc_iSkillID_Vanish = 568
-Global Const $gc_iSkillID_Victory_or_Death = 569
-Global Const $gc_iSkillID_Mark_of_Insecurity = 570
-Global Const $gc_iSkillID_Disrupting_Dagger = 571
-Global Const $gc_iSkillID_Deadly_Paradox = 572
-Global Const $gc_iSkillID_Teleport_Players = 573
-Global Const $gc_iSkillID_Quest_skill_for_Coastal_Exam = 574
-Global Const $gc_iSkillID_Holy_Blessing = 575
-Global Const $gc_iSkillID_Statues_Blessing = 576
-Global Const $gc_iSkillID_Siege_Attack1 = 577
-Global Const $gc_iSkillID_Siege_Attack2 = 578
-Global Const $gc_iSkillID_Domain_of_Skill_Damage = 579
-Global Const $gc_iSkillID_Domain_of_Energy_Draining = 580
-Global Const $gc_iSkillID_Domain_of_Elements = 581
-Global Const $gc_iSkillID_Domain_of_Health_Draining = 582
-Global Const $gc_iSkillID_Domain_of_Slow = 583
-Global Const $gc_iSkillID_Divine_Fire = 584
-Global Const $gc_iSkillID_Swamp_Water = 585
-Global Const $gc_iSkillID_Janthirs_Gaze = 586
-Global Const $gc_iSkillID_Fake_Spell = 587
-Global Const $gc_iSkillID_Charm_Animal_monster = 588
-Global Const $gc_iSkillID_Stormcaller_skill = 589
-Global Const $gc_iSkillID_Knock = 590
-Global Const $gc_iSkillID_Quest_Skill = 591
-Global Const $gc_iSkillID_Rurik_Must_Live = 592
-Global Const $gc_iSkillID_Blessing_of_the_Kurzicks1 = 593
-Global Const $gc_iSkillID_Lichs_Phylactery = 594
-Global Const $gc_iSkillID_Restore_Life_monster_skill = 595
-Global Const $gc_iSkillID_Chimera_of_Intensity = 596
-; Global Const $gc_iSkillID_Unknow = 597
-; Global Const $gc_iSkillID_Unknow = 598
-; Global Const $gc_iSkillID_Unknow = 599
-; Global Const $gc_iSkillID_Unknow = 600
-; Global Const $gc_iSkillID_Unknow = 601
-; Global Const $gc_iSkillID_Unknow = 602
-; Global Const $gc_iSkillID_Unknow = 603
-; Global Const $gc_iSkillID_Unknow = 604
-; Global Const $gc_iSkillID_Unknow = 605
-; Global Const $gc_iSkillID_Unknow = 606
-; Global Const $gc_iSkillID_Unknow = 607
-; Global Const $gc_iSkillID_Unknow = 608
-; Global Const $gc_iSkillID_Unknow = 609
-; Global Const $gc_iSkillID_Unknow = 610
-; Global Const $gc_iSkillID_Unknow = 611
-; Global Const $gc_iSkillID_Unknow = 612
-; Global Const $gc_iSkillID_Unknow = 613
-; Global Const $gc_iSkillID_Unknow = 614
-; Global Const $gc_iSkillID_Unknow = 615
-; Global Const $gc_iSkillID_Unknow = 616
-; Global Const $gc_iSkillID_Unknow = 617
-; Global Const $gc_iSkillID_Unknow = 618
-; Global Const $gc_iSkillID_Unknow = 619
-; Global Const $gc_iSkillID_Unknow = 620
-; Global Const $gc_iSkillID_Unknow = 621
-; Global Const $gc_iSkillID_Unknow = 622
-; Global Const $gc_iSkillID_Unknow = 623
-; Global Const $gc_iSkillID_Unknow = 624
-; Global Const $gc_iSkillID_Unknow = 625
-; Global Const $gc_iSkillID_Unknow = 626
-; Global Const $gc_iSkillID_Unknow = 627
-; Global Const $gc_iSkillID_Unknow = 628
-; Global Const $gc_iSkillID_Unknow = 629
-; Global Const $gc_iSkillID_Unknow = 630
-; Global Const $gc_iSkillID_Unknow = 631
-; Global Const $gc_iSkillID_Unknow = 632
-; Global Const $gc_iSkillID_Unknow = 633
-; Global Const $gc_iSkillID_Unknow = 634
-; Global Const $gc_iSkillID_Unknow = 635
-; Global Const $gc_iSkillID_Unknow = 636
-; Global Const $gc_iSkillID_Unknow = 637
-; Global Const $gc_iSkillID_Unknow = 638
-; Global Const $gc_iSkillID_Unknow = 639
-; Global Const $gc_iSkillID_Unknow = 640
-; Global Const $gc_iSkillID_Unknow = 641
-; Global Const $gc_iSkillID_Unknow = 642
-; Global Const $gc_iSkillID_Unknow = 643
-; Global Const $gc_iSkillID_Unknow = 644
-; Global Const $gc_iSkillID_Unknow = 645
-; Global Const $gc_iSkillID_Unknow = 646
-; Global Const $gc_iSkillID_Unknow = 647
-; Global Const $gc_iSkillID_Unknow = 648
-; Global Const $gc_iSkillID_Unknow = 649
-; Global Const $gc_iSkillID_Unknow = 650
-; Global Const $gc_iSkillID_Unknow = 651
-; Global Const $gc_iSkillID_Unknow = 652
-; Global Const $gc_iSkillID_Unknow = 653
-; Global Const $gc_iSkillID_Unknow = 654
-; Global Const $gc_iSkillID_Unknow = 655
-; Global Const $gc_iSkillID_Unknow = 656
-Global Const $gc_iSkillID_Life_Draining = 657
-; Global Const $gc_iSkillID_Unknow = 658
-; Global Const $gc_iSkillID_Unknow = 659
-; Global Const $gc_iSkillID_Unknow = 660
-; Global Const $gc_iSkillID_Unknow = 661
-; Global Const $gc_iSkillID_Unknow = 662
-; Global Const $gc_iSkillID_Unknow = 663
-; Global Const $gc_iSkillID_Unknow = 664
-; Global Const $gc_iSkillID_Unknow = 665
-; Global Const $gc_iSkillID_Unknow = 666
-; Global Const $gc_iSkillID_Unknow = 667
-; Global Const $gc_iSkillID_Unknow = 668
-; Global Const $gc_iSkillID_Unknow = 669
-; Global Const $gc_iSkillID_Unknow = 670
-; Global Const $gc_iSkillID_Unknow = 671
-; Global Const $gc_iSkillID_Unknow = 672
-; Global Const $gc_iSkillID_Unknow = 673
-; Global Const $gc_iSkillID_Unknow = 674
-; Global Const $gc_iSkillID_Unknow = 675
-; Global Const $gc_iSkillID_Unknow = 676
-; Global Const $gc_iSkillID_Unknow = 677
-; Global Const $gc_iSkillID_Unknow = 678
-; Global Const $gc_iSkillID_Unknow = 679
-; Global Const $gc_iSkillID_Unknow = 680
-; Global Const $gc_iSkillID_Unknow = 681
-; Global Const $gc_iSkillID_Unknow = 682
-; Global Const $gc_iSkillID_Unknow = 683
-; Global Const $gc_iSkillID_Unknow = 684
-; Global Const $gc_iSkillID_Unknow = 685
-; Global Const $gc_iSkillID_Unknow = 686
-; Global Const $gc_iSkillID_Unknow = 687
-; Global Const $gc_iSkillID_Unknow = 688
-; Global Const $gc_iSkillID_Unknow = 689
-; Global Const $gc_iSkillID_Unknow = 690
-; Global Const $gc_iSkillID_Unknow = 691
-; Global Const $gc_iSkillID_Unknow = 692
-; Global Const $gc_iSkillID_Unknow = 693
-; Global Const $gc_iSkillID_Unknow = 694
-; Global Const $gc_iSkillID_Unknow = 695
-; Global Const $gc_iSkillID_Unknow = 696
-; Global Const $gc_iSkillID_Unknow = 697
-; Global Const $gc_iSkillID_Unknow = 698
-; Global Const $gc_iSkillID_Unknow = 699
-; Global Const $gc_iSkillID_Unknow = 700
-; Global Const $gc_iSkillID_Unknow = 701
-; Global Const $gc_iSkillID_Unknow = 702
-; Global Const $gc_iSkillID_Unknow = 703
-; Global Const $gc_iSkillID_Unknow = 704
-; Global Const $gc_iSkillID_Unknow = 705
-; Global Const $gc_iSkillID_Unknow = 706
-; Global Const $gc_iSkillID_Unknow = 707
-; Global Const $gc_iSkillID_Unknow = 708
-; Global Const $gc_iSkillID_Unknow = 709
-; Global Const $gc_iSkillID_Unknow = 710
-; Global Const $gc_iSkillID_Unknow = 711
-; Global Const $gc_iSkillID_Unknow = 712
-; Global Const $gc_iSkillID_Unknow = 713
-; Global Const $gc_iSkillID_Unknow = 714
-; Global Const $gc_iSkillID_Unknow = 715
-; Global Const $gc_iSkillID_Unknow = 716
-; Global Const $gc_iSkillID_Unknow = 717
-; Global Const $gc_iSkillID_Unknow = 718
-; Global Const $gc_iSkillID_Unknow = 719
-; Global Const $gc_iSkillID_Unknow = 720
-; Global Const $gc_iSkillID_Unknow = 721
-; Global Const $gc_iSkillID_Unknow = 722
-; Global Const $gc_iSkillID_Unknow = 723
-; Global Const $gc_iSkillID_Unknow = 724
-; Global Const $gc_iSkillID_Unknow = 725
-; Global Const $gc_iSkillID_Unknow = 726
-; Global Const $gc_iSkillID_Unknow = 727
-; Global Const $gc_iSkillID_Unknow = 728
-; Global Const $gc_iSkillID_Unknow = 729
-; Global Const $gc_iSkillID_Unknow = 730
-; Global Const $gc_iSkillID_Unknow = 731
-; Global Const $gc_iSkillID_Unknow = 732
-; Global Const $gc_iSkillID_Unknow = 733
-; Global Const $gc_iSkillID_Unknow = 734
-; Global Const $gc_iSkillID_Unknow = 735
-; Global Const $gc_iSkillID_Unknow = 736
-; Global Const $gc_iSkillID_Unknow = 737
-; Global Const $gc_iSkillID_Unknow = 738
-; Global Const $gc_iSkillID_Unknow = 739
-; Global Const $gc_iSkillID_Unknow = 740
-; Global Const $gc_iSkillID_Unknow = 741
-; Global Const $gc_iSkillID_Unknow = 742
-; Global Const $gc_iSkillID_Unknow = 743
-; Global Const $gc_iSkillID_Unknow = 744
-; Global Const $gc_iSkillID_Unknow = 745
-; Global Const $gc_iSkillID_Unknow = 746
-; Global Const $gc_iSkillID_Unknow = 747
-; Global Const $gc_iSkillID_Unknow = 748
-; Global Const $gc_iSkillID_Unknow = 749
-; Global Const $gc_iSkillID_Unknow = 750
-; Global Const $gc_iSkillID_Unknow = 751
-; Global Const $gc_iSkillID_Unknow = 752
-; Global Const $gc_iSkillID_Unknow = 753
-; Global Const $gc_iSkillID_Unknow = 754
-; Global Const $gc_iSkillID_Unknow = 755
-; Global Const $gc_iSkillID_Unknow = 756
-; Global Const $gc_iSkillID_Unknow = 757
-; Global Const $gc_iSkillID_Unknow = 758
-; Global Const $gc_iSkillID_Unknow = 759
-; Global Const $gc_iSkillID_Unknow = 760
-; Global Const $gc_iSkillID_Unknow = 761
-; Global Const $gc_iSkillID_Unknow = 762
-Global Const $gc_iSkillID_Jaundiced_Gaze = 763
-Global Const $gc_iSkillID_Wail_of_Doom = 764
-Global Const $gc_iSkillID_Heros_Insight = 765
-Global Const $gc_iSkillID_Gaze_of_Contempt = 766
-Global Const $gc_iSkillID_Berserkers_Insight = 767
-Global Const $gc_iSkillID_Slayers_Insight = 768
-Global Const $gc_iSkillID_Vipers_Defense = 769
-Global Const $gc_iSkillID_Return = 770
-Global Const $gc_iSkillID_Aura_of_Displacement = 771
-Global Const $gc_iSkillID_Generous_Was_Tsungrai = 772
-Global Const $gc_iSkillID_Mighty_Was_Vorizun = 773
-Global Const $gc_iSkillID_To_the_Death = 774
-Global Const $gc_iSkillID_Death_Blossom = 775
-Global Const $gc_iSkillID_Twisting_Fangs = 776
-Global Const $gc_iSkillID_Horns_of_the_Ox = 777
-Global Const $gc_iSkillID_Falling_Spider = 778
-Global Const $gc_iSkillID_Black_Lotus_Strike = 779
-Global Const $gc_iSkillID_Fox_Fangs = 780
-Global Const $gc_iSkillID_Moebius_Strike = 781
-Global Const $gc_iSkillID_Jagged_Strike = 782
-Global Const $gc_iSkillID_Unsuspecting_Strike = 783
-Global Const $gc_iSkillID_Entangling_Asp = 784
-Global Const $gc_iSkillID_Mark_of_Death = 785
-Global Const $gc_iSkillID_Iron_Palm = 786
-Global Const $gc_iSkillID_Resilient_Weapon = 787
-Global Const $gc_iSkillID_Blind_Was_Mingson = 788
-Global Const $gc_iSkillID_Grasping_Was_Kuurong = 789
-Global Const $gc_iSkillID_Vengeful_Was_Khanhei = 790
-Global Const $gc_iSkillID_Flesh_of_My_Flesh = 791
-Global Const $gc_iSkillID_Splinter_Weapon = 792
-Global Const $gc_iSkillID_Weapon_of_Warding = 793
-Global Const $gc_iSkillID_Wailing_Weapon = 794
-Global Const $gc_iSkillID_Nightmare_Weapon = 795
-Global Const $gc_iSkillID_Sorrows_Flame = 796
-Global Const $gc_iSkillID_Sorrows_Fist = 797
-Global Const $gc_iSkillID_Blast_Furnace = 798
-Global Const $gc_iSkillID_Beguiling_Haze = 799
-Global Const $gc_iSkillID_Enduring_Toxin = 800
-Global Const $gc_iSkillID_Shroud_of_Silence = 801
-Global Const $gc_iSkillID_Expose_Defenses = 802
-Global Const $gc_iSkillID_Power_Leech = 803
-Global Const $gc_iSkillID_Arcane_Languor = 804
-Global Const $gc_iSkillID_Animate_Vampiric_Horror = 805
-Global Const $gc_iSkillID_Cultists_Fervor = 806
-; Global Const $gc_iSkillID_Unknow = 807
-Global Const $gc_iSkillID_Reapers_Mark1 = 808
-Global Const $gc_iSkillID_Shatterstone = 809
-Global Const $gc_iSkillID_Protectors_Defense = 810
-Global Const $gc_iSkillID_Run_as_One = 811
-Global Const $gc_iSkillID_Defiant_Was_Xinrae = 812
-Global Const $gc_iSkillID_Lyssas_Aura = 813
-Global Const $gc_iSkillID_Shadow_Refuge = 814
-Global Const $gc_iSkillID_Scorpion_Wire = 815
-Global Const $gc_iSkillID_Mirrored_Stance = 816
-Global Const $gc_iSkillID_Discord = 817
-Global Const $gc_iSkillID_Well_of_Weariness = 818
-Global Const $gc_iSkillID_Vampiric_Spirit = 819
-Global Const $gc_iSkillID_Depravity = 820
-Global Const $gc_iSkillID_Icy_Veins = 821
-Global Const $gc_iSkillID_Weaken_Knees = 822
-Global Const $gc_iSkillID_Burning_Speed = 823
-Global Const $gc_iSkillID_Lava_Arrows = 824
-Global Const $gc_iSkillID_Bed_of_Coals = 825
-Global Const $gc_iSkillID_Shadow_Form = 826
-Global Const $gc_iSkillID_Siphon_Strength = 827
-Global Const $gc_iSkillID_Vile_Miasma = 828
-Global Const $gc_iSkillID_Veratas_Promise = 829
-Global Const $gc_iSkillID_Ray_of_Judgment = 830
-Global Const $gc_iSkillID_Primal_Rage = 831
-Global Const $gc_iSkillID_Animate_Flesh_Golem = 832
-Global Const $gc_iSkillID_Borrowed_Energy = 833
-Global Const $gc_iSkillID_Reckless_Haste = 834
-Global Const $gc_iSkillID_Blood_Bond = 835
-Global Const $gc_iSkillID_Ride_the_Lightning = 836
-Global Const $gc_iSkillID_Energy_Boon = 837
-Global Const $gc_iSkillID_Dwaynas_Sorrow = 838
-Global Const $gc_iSkillID_Retreat = 839
-Global Const $gc_iSkillID_Poisoned_Heart = 840
-Global Const $gc_iSkillID_Fetid_Ground = 841
-Global Const $gc_iSkillID_Arc_Lightning = 842
-Global Const $gc_iSkillID_Gust = 843
-Global Const $gc_iSkillID_Churning_Earth = 844
-Global Const $gc_iSkillID_Liquid_Flame = 845
-Global Const $gc_iSkillID_Steam1 = 846
-Global Const $gc_iSkillID_Boon_Signet = 847
-Global Const $gc_iSkillID_Reverse_Hex = 848
-Global Const $gc_iSkillID_Lacerating_Chop = 849
-Global Const $gc_iSkillID_Fierce_Blow = 850
-Global Const $gc_iSkillID_Sun_and_Moon_Slash = 851
-Global Const $gc_iSkillID_Splinter_Shot = 852
-Global Const $gc_iSkillID_Melandrus_Shot = 853
-Global Const $gc_iSkillID_Snare = 854
-Global Const $gc_iSkillID_Chomper = 855
-Global Const $gc_iSkillID_Kilroy_Stonekin = 856
-Global Const $gc_iSkillID_Adventurers_Insight = 857
-Global Const $gc_iSkillID_Dancing_Daggers = 858
-Global Const $gc_iSkillID_Conjure_Nightmare = 859
-Global Const $gc_iSkillID_Signet_of_Disruption = 860
-Global Const $gc_iSkillID_Dissipation = 861
-Global Const $gc_iSkillID_Ravenous_Gaze = 862
-Global Const $gc_iSkillID_Order_of_Apostasy = 863
-Global Const $gc_iSkillID_Oppressive_Gaze = 864
-Global Const $gc_iSkillID_Lightning_Hammer = 865
-Global Const $gc_iSkillID_Vapor_Blade = 866
-Global Const $gc_iSkillID_Healing_Light = 867
-Global Const $gc_iSkillID_Aim_True = 868
-Global Const $gc_iSkillID_Coward = 869
-Global Const $gc_iSkillID_Pestilence = 870
-Global Const $gc_iSkillID_Shadowsong = 871
-Global Const $gc_iSkillID_Shadowsong_attack = 872
-Global Const $gc_iSkillID_Resurrect_monster_skill = 873
-Global Const $gc_iSkillID_Consuming_Flames = 874
-Global Const $gc_iSkillID_Chains_of_Enslavement = 875
-Global Const $gc_iSkillID_Signet_of_Shadows = 876
-Global Const $gc_iSkillID_Lyssas_Balance = 877
-Global Const $gc_iSkillID_Visions_of_Regret = 878
-Global Const $gc_iSkillID_Illusion_of_Pain = 879
-Global Const $gc_iSkillID_Stolen_Speed = 880
-Global Const $gc_iSkillID_Ether_Signet = 881
-Global Const $gc_iSkillID_Signet_of_Disenchantment = 882
-Global Const $gc_iSkillID_Vocal_Minority = 883
-Global Const $gc_iSkillID_Searing_Flames1 = 884
-Global Const $gc_iSkillID_Shield_Guardian = 885
-Global Const $gc_iSkillID_Restful_Breeze = 886
-Global Const $gc_iSkillID_Signet_of_Rejuvenation = 887
-Global Const $gc_iSkillID_Whirling_Axe = 888
-Global Const $gc_iSkillID_Forceful_Blow = 889
-Global Const $gc_iSkillID_Headshot = 890
-Global Const $gc_iSkillID_None_Shall_Pass = 891
-Global Const $gc_iSkillID_Quivering_Blade = 892
-Global Const $gc_iSkillID_Seeking_Arrows = 893
-Global Const $gc_iSkillID_Rampagers_Insight = 894
-Global Const $gc_iSkillID_Hunters_Insight = 895
-Global Const $gc_iSkillID_Amulet_of_Protection = 896
-Global Const $gc_iSkillID_Oath_of_Healing = 897
-Global Const $gc_iSkillID_Overload = 898
-Global Const $gc_iSkillID_Images_of_Remorse = 899
-Global Const $gc_iSkillID_Shared_Burden = 900
-Global Const $gc_iSkillID_Soul_Bind = 901
-Global Const $gc_iSkillID_Blood_of_the_Aggressor = 902
-Global Const $gc_iSkillID_Icy_Prism = 903
-Global Const $gc_iSkillID_Furious_Axe = 904
-Global Const $gc_iSkillID_Auspicious_Blow = 905
-Global Const $gc_iSkillID_On_Your_Knees = 906
-Global Const $gc_iSkillID_Dragon_Slash = 907
-Global Const $gc_iSkillID_Marauders_Shot = 908
-Global Const $gc_iSkillID_Focused_Shot = 909
-Global Const $gc_iSkillID_Spirit_Rift = 910
-Global Const $gc_iSkillID_Union = 911
-Global Const $gc_iSkillID_Blessing_of_the_Kurzicks2 = 912
-Global Const $gc_iSkillID_Tranquil_Was_Tanasen = 913
-Global Const $gc_iSkillID_Consume_Soul = 914
-Global Const $gc_iSkillID_Spirit_Light = 915
-Global Const $gc_iSkillID_Lamentation = 916
-Global Const $gc_iSkillID_Rupture_Soul = 917
-Global Const $gc_iSkillID_Spirit_to_Flesh = 918
-Global Const $gc_iSkillID_Spirit_Burn = 919
-Global Const $gc_iSkillID_Destruction = 920
-Global Const $gc_iSkillID_Dissonance = 921
-Global Const $gc_iSkillID_Dissonance_attack = 922
-Global Const $gc_iSkillID_Disenchantment = 923
-Global Const $gc_iSkillID_Disenchantment_attack = 924
-Global Const $gc_iSkillID_Recall = 925
-Global Const $gc_iSkillID_Sharpen_Daggers = 926
-Global Const $gc_iSkillID_Shameful_Fear = 927
-Global Const $gc_iSkillID_Shadow_Shroud = 928
-Global Const $gc_iSkillID_Shadow_of_Haste = 929
-Global Const $gc_iSkillID_Auspicious_Incantation = 930
-Global Const $gc_iSkillID_Power_Return = 931
-Global Const $gc_iSkillID_Complicate = 932
-Global Const $gc_iSkillID_Shatter_Storm = 933
-Global Const $gc_iSkillID_Unnatural_Signet = 934
-Global Const $gc_iSkillID_Rising_Bile = 935
-Global Const $gc_iSkillID_Envenom_Enchantments = 936
-Global Const $gc_iSkillID_Shockwave = 937
-Global Const $gc_iSkillID_Ward_of_Stability = 938
-Global Const $gc_iSkillID_Icy_Shackles = 939
-Global Const $gc_iSkillID_Cry_of_Lament = 940
-Global Const $gc_iSkillID_Blessed_Light = 941
-Global Const $gc_iSkillID_Withdraw_Hexes = 942
-Global Const $gc_iSkillID_Extinguish = 943
-Global Const $gc_iSkillID_Signet_of_Strength = 944
-Global Const $gc_iSkillID_REMOVE_With_Haste = 945
-Global Const $gc_iSkillID_Trappers_Focus = 946
-Global Const $gc_iSkillID_Brambles = 947
-Global Const $gc_iSkillID_Desperate_Strike = 948
-Global Const $gc_iSkillID_Way_of_the_Fox = 949
-Global Const $gc_iSkillID_Shadowy_Burden = 950
-Global Const $gc_iSkillID_Siphon_Speed = 951
-Global Const $gc_iSkillID_Deaths_Charge = 952
-Global Const $gc_iSkillID_Power_Flux = 953
-Global Const $gc_iSkillID_Expel_Hexes = 954
-Global Const $gc_iSkillID_Rip_Enchantment = 955
-Global Const $gc_iSkillID_Energy_Font = 956
-Global Const $gc_iSkillID_Spell_Shield = 957
-Global Const $gc_iSkillID_Healing_Whisper = 958
-Global Const $gc_iSkillID_Ethereal_Light = 959
-Global Const $gc_iSkillID_Release_Enchantments = 960
-Global Const $gc_iSkillID_Lacerate = 961
-Global Const $gc_iSkillID_Spirit_Transfer = 962
-Global Const $gc_iSkillID_Restoration = 963
-Global Const $gc_iSkillID_Vengeful_Weapon = 964
-Global Const $gc_iSkillID_Archemorus_Strike = 965
-Global Const $gc_iSkillID_Spear_of_Archemorus_Level_1 = 966
-Global Const $gc_iSkillID_Spear_of_Archemorus_Level_2 = 967
-Global Const $gc_iSkillID_Spear_of_Archemorus_Level_3 = 968
-Global Const $gc_iSkillID_Spear_of_Archemorus_Level_4 = 969
-Global Const $gc_iSkillID_Spear_of_Archemorus_Level_5 = 970
-Global Const $gc_iSkillID_Argos_Cry = 971
-Global Const $gc_iSkillID_Jade_Fury = 972
-Global Const $gc_iSkillID_Blinding_Powder = 973
-Global Const $gc_iSkillID_Mantis_Touch = 974
-Global Const $gc_iSkillID_Exhausting_Assault = 975
-Global Const $gc_iSkillID_Repeating_Strike = 976
-Global Const $gc_iSkillID_Way_of_the_Lotus = 977
-Global Const $gc_iSkillID_Mark_of_Instability = 978
-Global Const $gc_iSkillID_Mistrust = 979
-Global Const $gc_iSkillID_Feast_of_Souls = 980
-Global Const $gc_iSkillID_Recuperation = 981
-Global Const $gc_iSkillID_Shelter = 982
-Global Const $gc_iSkillID_Weapon_of_Shadow = 983
-Global Const $gc_iSkillID_Torch_Enchantment = 984
-Global Const $gc_iSkillID_Caltrops = 985
-Global Const $gc_iSkillID_Nine_Tail_Strike = 986
-Global Const $gc_iSkillID_Way_of_the_Empty_Palm = 987
-Global Const $gc_iSkillID_Temple_Strike = 988
-Global Const $gc_iSkillID_Golden_Phoenix_Strike = 989
-Global Const $gc_iSkillID_Expunge_Enchantments = 990
-Global Const $gc_iSkillID_Deny_Hexes = 991
-Global Const $gc_iSkillID_Triple_Chop = 992
-Global Const $gc_iSkillID_Enraged_Smash = 993
-Global Const $gc_iSkillID_Renewing_Smash = 994
-Global Const $gc_iSkillID_Tiger_Stance = 995
-Global Const $gc_iSkillID_Standing_Slash = 996
-Global Const $gc_iSkillID_Famine = 997
-Global Const $gc_iSkillID_Torch_Hex = 998
-Global Const $gc_iSkillID_Torch_Degeneration_Hex = 999
-Global Const $gc_iSkillID_Blinding_Snow = 1000
-Global Const $gc_iSkillID_Avalanche_skill = 1001
-Global Const $gc_iSkillID_Snowball = 1002
-Global Const $gc_iSkillID_Mega_Snowball = 1003
-Global Const $gc_iSkillID_Yuletide = 1004
-Global Const $gc_iSkillID_Ice_Skates = 1005
-Global Const $gc_iSkillID_Ice_Fort = 1006
-Global Const $gc_iSkillID_Yellow_Snow = 1007
-Global Const $gc_iSkillID_Hidden_Rock = 1008
-Global Const $gc_iSkillID_Snow_Down_the_Shirt = 1009
-Global Const $gc_iSkillID_Mmmm_Snowcone = 1010
-Global Const $gc_iSkillID_Holiday_Blues = 1011
-Global Const $gc_iSkillID_Icicles = 1012
-Global Const $gc_iSkillID_Ice_Breaker = 1013
-Global Const $gc_iSkillID_Lets_Get_Em = 1014
-Global Const $gc_iSkillID_Flurry_of_Ice = 1015
-Global Const $gc_iSkillID_Snowball_NPC = 1016
-Global Const $gc_iSkillID_Undying2 = 1017
-Global Const $gc_iSkillID_Critical_Eye = 1018
-Global Const $gc_iSkillID_Critical_Strike = 1019
-Global Const $gc_iSkillID_Blades_of_Steel = 1020
-Global Const $gc_iSkillID_Jungle_Strike = 1021
-Global Const $gc_iSkillID_Wild_Strike = 1022
-Global Const $gc_iSkillID_Leaping_Mantis_Sting = 1023
-Global Const $gc_iSkillID_Black_Mantis_Thrust = 1024
-Global Const $gc_iSkillID_Disrupting_Stab = 1025
-Global Const $gc_iSkillID_Golden_Lotus_Strike = 1026
-Global Const $gc_iSkillID_Critical_Defenses = 1027
-Global Const $gc_iSkillID_Way_of_Perfection = 1028
-Global Const $gc_iSkillID_Dark_Apostasy = 1029
-Global Const $gc_iSkillID_Locusts_Fury = 1030
-Global Const $gc_iSkillID_Shroud_of_Distress = 1031
-Global Const $gc_iSkillID_Heart_of_Shadow = 1032
-Global Const $gc_iSkillID_Impale = 1033
-Global Const $gc_iSkillID_Seeping_Wound = 1034
-Global Const $gc_iSkillID_Assassins_Promise = 1035
-Global Const $gc_iSkillID_Signet_of_Malice = 1036
-Global Const $gc_iSkillID_Dark_Escape = 1037
-Global Const $gc_iSkillID_Crippling_Dagger = 1038
-Global Const $gc_iSkillID_Star_Strike = 1039
-Global Const $gc_iSkillID_Spirit_Walk = 1040
-Global Const $gc_iSkillID_Unseen_Fury = 1041
-Global Const $gc_iSkillID_Flashing_Blades = 1042
-Global Const $gc_iSkillID_Dash = 1043
-Global Const $gc_iSkillID_Dark_Prison = 1044
-Global Const $gc_iSkillID_Palm_Strike = 1045
-Global Const $gc_iSkillID_Assassin_of_Lyssa = 1046
-Global Const $gc_iSkillID_Mesmer_of_Lyssa = 1047
-Global Const $gc_iSkillID_Revealed_Enchantment = 1048
-Global Const $gc_iSkillID_Revealed_Hex = 1049
-Global Const $gc_iSkillID_Disciple_of_Energy = 1050
-Global Const $gc_iSkillID_Empathy_Koro = 1051
-Global Const $gc_iSkillID_Accumulated_Pain = 1052
-Global Const $gc_iSkillID_Psychic_Distraction = 1053
-Global Const $gc_iSkillID_Ancestors_Visage = 1054
-Global Const $gc_iSkillID_Recurring_Insecurity = 1055
-Global Const $gc_iSkillID_Kitahs_Burden = 1056
-Global Const $gc_iSkillID_Psychic_Instability = 1057
-Global Const $gc_iSkillID_Chaotic_Power = 1058
-Global Const $gc_iSkillID_Hex_Eater_Signet = 1059
-Global Const $gc_iSkillID_Celestial_Haste = 1060
-Global Const $gc_iSkillID_Feedback = 1061
-Global Const $gc_iSkillID_Arcane_Larceny = 1062
-Global Const $gc_iSkillID_Chaotic_Ward = 1063
-Global Const $gc_iSkillID_Favor_of_the_Gods = 1064
-Global Const $gc_iSkillID_Dark_Aura_blessing = 1065
-Global Const $gc_iSkillID_Spoil_Victor = 1066
-Global Const $gc_iSkillID_Lifebane_Strike = 1067
-Global Const $gc_iSkillID_Bitter_Chill = 1068
-Global Const $gc_iSkillID_Taste_of_Pain = 1069
-Global Const $gc_iSkillID_Defile_Enchantments = 1070
-Global Const $gc_iSkillID_Shivers_of_Dread = 1071
-Global Const $gc_iSkillID_Star_Servant = 1072
-Global Const $gc_iSkillID_Necromancer_of_Grenth = 1073
-Global Const $gc_iSkillID_Ritualist_of_Grenth = 1074
-Global Const $gc_iSkillID_Vampiric_Swarm = 1075
-Global Const $gc_iSkillID_Blood_Drinker = 1076
-Global Const $gc_iSkillID_Vampiric_Bite = 1077
-Global Const $gc_iSkillID_Wallows_Bite = 1078
-Global Const $gc_iSkillID_Enfeebling_Touch = 1079
-Global Const $gc_iSkillID_Disciple_of_Ice = 1080
-Global Const $gc_iSkillID_Teinais_Wind = 1081
-Global Const $gc_iSkillID_Shock_Arrow = 1082
-Global Const $gc_iSkillID_Unsteady_Ground = 1083
-Global Const $gc_iSkillID_Sliver_Armor = 1084
-Global Const $gc_iSkillID_Ash_Blast = 1085
-Global Const $gc_iSkillID_Dragons_Stomp = 1086
-Global Const $gc_iSkillID_Unnatural_Resistance = 1087
-Global Const $gc_iSkillID_Second_Wind = 1088
-Global Const $gc_iSkillID_Cloak_of_Faith = 1089
-Global Const $gc_iSkillID_Smoldering_Embers = 1090
-Global Const $gc_iSkillID_Double_Dragon = 1091
-Global Const $gc_iSkillID_Disciple_of_the_Air = 1092
-Global Const $gc_iSkillID_Teinais_Heat = 1093
-Global Const $gc_iSkillID_Breath_of_Fire = 1094
-Global Const $gc_iSkillID_Star_Burst = 1095
-Global Const $gc_iSkillID_Glyph_of_Essence = 1096
-Global Const $gc_iSkillID_Teinais_Prison = 1097
-Global Const $gc_iSkillID_Mirror_of_Ice = 1098
-Global Const $gc_iSkillID_Teinais_Crystals = 1099
-Global Const $gc_iSkillID_Celestial_Storm = 1100
-Global Const $gc_iSkillID_Monk_of_Dwayna = 1101
-Global Const $gc_iSkillID_Aura_of_the_Grove = 1102
-Global Const $gc_iSkillID_Cathedral_Collapse1 = 1103
-Global Const $gc_iSkillID_Miasma = 1104
-Global Const $gc_iSkillID_Acid_Trap = 1105
-Global Const $gc_iSkillID_Shield_of_Saint_Viktor = 1106
-Global Const $gc_iSkillID_Urn_of_Saint_Viktor_Level_1 = 1107
-Global Const $gc_iSkillID_Urn_of_Saint_Viktor_Level_2 = 1108
-Global Const $gc_iSkillID_Urn_of_Saint_Viktor_Level_3 = 1109
-Global Const $gc_iSkillID_Urn_of_Saint_Viktor_Level_4 = 1110
-Global Const $gc_iSkillID_Urn_of_Saint_Viktor_Level_5 = 1111
-Global Const $gc_iSkillID_Aura_of_Light = 1112
-Global Const $gc_iSkillID_Kirins_Wrath = 1113
-Global Const $gc_iSkillID_Spirit_Bond = 1114
-Global Const $gc_iSkillID_Air_of_Enchantment = 1115
-Global Const $gc_iSkillID_Warriors_Might = 1116
-Global Const $gc_iSkillID_Heavens_Delight = 1117
-Global Const $gc_iSkillID_Healing_Burst = 1118
-Global Const $gc_iSkillID_Kareis_Healing_Circle = 1119
-Global Const $gc_iSkillID_Jameis_Gaze = 1120
-Global Const $gc_iSkillID_Gift_of_Health = 1121
-Global Const $gc_iSkillID_Battle_Fervor = 1122
-Global Const $gc_iSkillID_Life_Sheath = 1123
-Global Const $gc_iSkillID_Star_Shine = 1124
-Global Const $gc_iSkillID_Disciple_of_Fire = 1125
-Global Const $gc_iSkillID_Empathic_Removal = 1126
-Global Const $gc_iSkillID_Warrior_of_Balthazar = 1127
-Global Const $gc_iSkillID_Resurrection_Chant = 1128
-Global Const $gc_iSkillID_Word_of_Censure = 1129
-Global Const $gc_iSkillID_Spear_of_Light = 1130
-Global Const $gc_iSkillID_Stonesoul_Strike = 1131
-Global Const $gc_iSkillID_Shielding_Branches = 1132
-Global Const $gc_iSkillID_Drunken_Blow = 1133
-Global Const $gc_iSkillID_Leviathans_Sweep = 1134
-Global Const $gc_iSkillID_Jaizhenju_Strike = 1135
-Global Const $gc_iSkillID_Penetrating_Chop = 1136
-Global Const $gc_iSkillID_Yeti_Smash = 1137
-Global Const $gc_iSkillID_Disciple_of_the_Earth = 1138
-Global Const $gc_iSkillID_Ranger_of_Melandru = 1139
-Global Const $gc_iSkillID_Storm_of_Swords = 1140
-Global Const $gc_iSkillID_You_Will_Die = 1141
-Global Const $gc_iSkillID_Auspicious_Parry = 1142
-Global Const $gc_iSkillID_Strength_of_the_Oak = 1143
-Global Const $gc_iSkillID_Silverwing_Slash = 1144
-Global Const $gc_iSkillID_Destroy_Enchantment = 1145
-Global Const $gc_iSkillID_Shove = 1146
-Global Const $gc_iSkillID_Base_Defense = 1147
-Global Const $gc_iSkillID_Carrier_Defense = 1148
-Global Const $gc_iSkillID_The_Chalice_of_Corruption = 1149
-; Global Const $gc_iSkillID_Unknow = 1150
-Global Const $gc_iSkillID_Song_of_the_Mists = 1151
-Global Const $gc_iSkillID_Demonic_Agility = 1152
-Global Const $gc_iSkillID_Blessing_of_the_Kirin = 1153
-Global Const $gc_iSkillID_Emperor_Degen = 1154
-Global Const $gc_iSkillID_Juggernaut_Toss = 1155
-Global Const $gc_iSkillID_Aura_of_the_Juggernaut = 1156
-Global Const $gc_iSkillID_Star_Shards = 1157
-; Global Const $gc_iSkillID_Unknow = 1158
-; Global Const $gc_iSkillID_Unknow = 1159
-; Global Const $gc_iSkillID_Unknow = 1160
-; Global Const $gc_iSkillID_Unknow = 1161
-; Global Const $gc_iSkillID_Unknow = 1162
-; Global Const $gc_iSkillID_Unknow = 1163
-; Global Const $gc_iSkillID_Unknow = 1164
-; Global Const $gc_iSkillID_Unknow = 1165
-; Global Const $gc_iSkillID_Unknow = 1166
-; Global Const $gc_iSkillID_Unknow = 1167
-; Global Const $gc_iSkillID_Unknow = 1168
-; Global Const $gc_iSkillID_Unknow = 1169
-; Global Const $gc_iSkillID_Unknow = 1170
-; Global Const $gc_iSkillID_Unknow = 1171
-Global Const $gc_iSkillID_Turtle_Shell = 1172
-Global Const $gc_iSkillID_Exposed_Underbelly = 1173
-Global Const $gc_iSkillID_Cathedral_Collapse2 = 1174
-Global Const $gc_iSkillID_Blood_of_zu_Heltzer = 1175
-Global Const $gc_iSkillID_Afflicted_Soul_Explosion = 1176
-Global Const $gc_iSkillID_Invincibility = 1177
-Global Const $gc_iSkillID_Last_Stand = 1178
-Global Const $gc_iSkillID_Dark_Chain_Lightning = 1179
-Global Const $gc_iSkillID_Seadragon_Health_Trigger = 1180
-Global Const $gc_iSkillID_Corrupted_Breath = 1181
-Global Const $gc_iSkillID_Renewing_Corruption = 1182
-Global Const $gc_iSkillID_Corrupted_Dragon_Spores = 1183
-Global Const $gc_iSkillID_Corrupted_Dragon_Scales = 1184
-Global Const $gc_iSkillID_Construct_Possession = 1185
-Global Const $gc_iSkillID_Siege_Turtle_Attack_The_Eternal_Grove = 1186
-Global Const $gc_iSkillID_Siege_Turtle_Attack_Fort_Aspenwood = 1187
-Global Const $gc_iSkillID_Siege_Turtle_Attack_Gyala_Hatchery = 1188
-Global Const $gc_iSkillID_Of_Royal_Blood = 1189
-Global Const $gc_iSkillID_Passage_to_Tahnnakai = 1190
-Global Const $gc_iSkillID_Sundering_Attack = 1191
-Global Const $gc_iSkillID_Zojuns_Shot = 1192
-Global Const $gc_iSkillID_Consume_Spirit = 1193
-Global Const $gc_iSkillID_Predatory_Bond = 1194
-Global Const $gc_iSkillID_Heal_as_One = 1195
-Global Const $gc_iSkillID_Zojuns_Haste = 1196
-Global Const $gc_iSkillID_Needling_Shot = 1197
-Global Const $gc_iSkillID_Broad_Head_Arrow = 1198
-Global Const $gc_iSkillID_Glass_Arrows = 1199
-Global Const $gc_iSkillID_Archers_Signet = 1200
-Global Const $gc_iSkillID_Savage_Pounce = 1201
-Global Const $gc_iSkillID_Enraged_Lunge = 1202
-Global Const $gc_iSkillID_Bestial_Mauling = 1203
-Global Const $gc_iSkillID_Energy_Drain_effect = 1204
-Global Const $gc_iSkillID_Poisonous_Bite = 1205
-Global Const $gc_iSkillID_Pounce = 1206
-Global Const $gc_iSkillID_Celestial_Stance = 1207
-Global Const $gc_iSkillID_Sheer_Exhaustion = 1208
-Global Const $gc_iSkillID_Bestial_Fury = 1209
-Global Const $gc_iSkillID_Life_Drain = 1210
-Global Const $gc_iSkillID_Vipers_Nest = 1211
-Global Const $gc_iSkillID_Equinox = 1212
-Global Const $gc_iSkillID_Tranquility = 1213
-Global Const $gc_iSkillID_Acute_Weakness = 1214
-Global Const $gc_iSkillID_Clamor_of_Souls = 1215
-; Global Const $gc_iSkillID_Unknow = 1216
-Global Const $gc_iSkillID_Ritual_Lord = 1217
-Global Const $gc_iSkillID_Cruel_Was_Daoshen = 1218
-Global Const $gc_iSkillID_Protective_Was_Kaolai = 1219
-Global Const $gc_iSkillID_Attuned_Was_Songkai = 1220
-Global Const $gc_iSkillID_Resilient_Was_Xiko = 1221
-Global Const $gc_iSkillID_Lively_Was_Naomei = 1222
-Global Const $gc_iSkillID_Anguished_Was_Lingwah = 1223
-Global Const $gc_iSkillID_Draw_Spirit = 1224
-Global Const $gc_iSkillID_Channeled_Strike = 1225
-Global Const $gc_iSkillID_Spirit_Boon_Strike = 1226
-Global Const $gc_iSkillID_Essence_Strike = 1227
-Global Const $gc_iSkillID_Spirit_Siphon = 1228
-Global Const $gc_iSkillID_Explosive_Growth = 1229
-Global Const $gc_iSkillID_Boon_of_Creation = 1230
-Global Const $gc_iSkillID_Spirit_Channeling = 1231
-Global Const $gc_iSkillID_Armor_of_Unfeeling = 1232
-Global Const $gc_iSkillID_Soothing_Memories = 1233
-Global Const $gc_iSkillID_Mend_Body_and_Soul = 1234
-Global Const $gc_iSkillID_Dulled_Weapon = 1235
-Global Const $gc_iSkillID_Binding_Chains = 1236
-Global Const $gc_iSkillID_Painful_Bond = 1237
-Global Const $gc_iSkillID_Signet_of_Creation = 1238
-Global Const $gc_iSkillID_Signet_of_Spirits = 1239
-Global Const $gc_iSkillID_Soul_Twisting = 1240
-Global Const $gc_iSkillID_Celestial_Summoning = 1241
-Global Const $gc_iSkillID_Archemorus_Strike_Celestial_Summoning = 1242
-Global Const $gc_iSkillID_Shield_of_Saint_Viktor_Celestial_Summoning = 1243
-Global Const $gc_iSkillID_Ghostly_Haste = 1244
-Global Const $gc_iSkillID_Gaze_from_Beyond = 1245
-Global Const $gc_iSkillID_Ancestors_Rage = 1246
-Global Const $gc_iSkillID_Pain = 1247
-Global Const $gc_iSkillID_Pain_attack = 1248
-Global Const $gc_iSkillID_Displacement = 1249
-Global Const $gc_iSkillID_Preservation = 1250
-Global Const $gc_iSkillID_Life = 1251
-Global Const $gc_iSkillID_Earthbind = 1252
-Global Const $gc_iSkillID_Bloodsong = 1253
-Global Const $gc_iSkillID_Bloodsong_attack = 1254
-Global Const $gc_iSkillID_Wanderlust = 1255
-Global Const $gc_iSkillID_Wanderlust_attack = 1256
-Global Const $gc_iSkillID_Spirit_Light_Weapon = 1257
-Global Const $gc_iSkillID_Brutal_Weapon = 1258
-Global Const $gc_iSkillID_Guided_Weapon = 1259
-Global Const $gc_iSkillID_Meekness = 1260
-Global Const $gc_iSkillID_Frigid_Armor = 1261
-Global Const $gc_iSkillID_Healing_Ring = 1262
-Global Const $gc_iSkillID_Renew_Life = 1263
-Global Const $gc_iSkillID_Doom = 1264
-Global Const $gc_iSkillID_Wielders_Boon = 1265
-Global Const $gc_iSkillID_Soothing = 1266
-Global Const $gc_iSkillID_Vital_Weapon = 1267
-Global Const $gc_iSkillID_Weapon_of_Quickening = 1268
-Global Const $gc_iSkillID_Signet_of_Rage = 1269
-Global Const $gc_iSkillID_Fingers_of_Chaos = 1270
-Global Const $gc_iSkillID_Echoing_Banishment = 1271
-Global Const $gc_iSkillID_Suicidal_Impulse = 1272
-Global Const $gc_iSkillID_Impossible_Odds = 1273
-Global Const $gc_iSkillID_Battle_Scars = 1274
-Global Const $gc_iSkillID_Riposting_Shadows = 1275
-Global Const $gc_iSkillID_Meditation_of_the_Reaper1 = 1276
-Global Const $gc_iSkillID_Battle_Cry2 = 1277
-Global Const $gc_iSkillID_Elemental_Defense_Zone = 1278
-Global Const $gc_iSkillID_Melee_Defense_Zone = 1279
-Global Const $gc_iSkillID_Blessed_Water = 1280
-Global Const $gc_iSkillID_Defiled_Water = 1281
-Global Const $gc_iSkillID_Stone_Spores = 1282
-Global Const $gc_iSkillID_Turret_Arrow = 1283
-Global Const $gc_iSkillID_Blood_Flower_skill = 1284
-Global Const $gc_iSkillID_Fire_Flower_skill = 1285
-Global Const $gc_iSkillID_Poison_Arrow_flower = 1286
-Global Const $gc_iSkillID_Haiju_Lagoon_Water = 1287
-Global Const $gc_iSkillID_Aspect_of_Exhaustion = 1288
-Global Const $gc_iSkillID_Aspect_of_Exposure = 1289
-Global Const $gc_iSkillID_Aspect_of_Surrender = 1290
-Global Const $gc_iSkillID_Aspect_of_Death = 1291
-Global Const $gc_iSkillID_Aspect_of_Soothing = 1292
-Global Const $gc_iSkillID_Aspect_of_Pain = 1293
-Global Const $gc_iSkillID_Aspect_of_Lethargy = 1294
-Global Const $gc_iSkillID_Aspect_of_Depletion_energy_loss = 1295
-Global Const $gc_iSkillID_Aspect_of_Failure = 1296
-Global Const $gc_iSkillID_Aspect_of_Shadows = 1297
-Global Const $gc_iSkillID_Scorpion_Aspect = 1298
-Global Const $gc_iSkillID_Aspect_of_Fear = 1299
-Global Const $gc_iSkillID_Aspect_of_Depletion_energy_depletion_damage = 1300
-Global Const $gc_iSkillID_Aspect_of_Decay = 1301
-Global Const $gc_iSkillID_Aspect_of_Torment = 1302
-Global Const $gc_iSkillID_Nightmare_Aspect = 1303
-Global Const $gc_iSkillID_Spiked_Coral = 1304
-Global Const $gc_iSkillID_Shielding_Urn_skill = 1305
-Global Const $gc_iSkillID_Extensive_Plague_Exposure = 1306
-Global Const $gc_iSkillID_Forests_Binding = 1307
-Global Const $gc_iSkillID_Exploding_Spores = 1308
-Global Const $gc_iSkillID_Suicide_Energy = 1309
-Global Const $gc_iSkillID_Suicide_Health = 1310
-Global Const $gc_iSkillID_Nightmare_Refuge = 1311
-Global Const $gc_iSkillID_Oni_Health_Lock = 1312
-Global Const $gc_iSkillID_Oni_Shadow_Health_Lock = 1313
-Global Const $gc_iSkillID_Signet_of_Attainment = 1314
-Global Const $gc_iSkillID_Rage_of_the_Sea = 1315
-Global Const $gc_iSkillID_Meditation_of_the_Reaper2 = 1316
-; Global Const $gc_iSkillID_Unknow = 1317
-Global Const $gc_iSkillID_Fireball_obelisk = 1318
-; Global Const $gc_iSkillID_Final_Thrust = 1319
-; Global Const $gc_iSkillID_Unknow = 1320
-; Global Const $gc_iSkillID_Unknow = 1321
-; Global Const $gc_iSkillID_Unknow = 1322
-Global Const $gc_iSkillID_Sugar_Rush_medium = 1323
-Global Const $gc_iSkillID_Torment_Slash = 1324
-Global Const $gc_iSkillID_Spirit_of_the_Festival = 1325
-Global Const $gc_iSkillID_Trade_Winds = 1326
-Global Const $gc_iSkillID_Dragon_Blast = 1327
-Global Const $gc_iSkillID_Imperial_Majesty = 1328
-Global Const $gc_iSkillID_Monster_doesnt_get_death_penalty = 1329
-Global Const $gc_iSkillID_Twisted_Spikes = 1330
-Global Const $gc_iSkillID_Marble_Trap = 1331
-Global Const $gc_iSkillID_Shadow_Tripwire = 1332
-Global Const $gc_iSkillID_Extend_Conditions = 1333
-Global Const $gc_iSkillID_Hypochondria = 1334
-Global Const $gc_iSkillID_Wastrels_Demise = 1335
-Global Const $gc_iSkillID_Spiritual_Pain = 1336
-Global Const $gc_iSkillID_Drain_Delusions = 1337
-Global Const $gc_iSkillID_Persistence_of_Memory = 1338
-Global Const $gc_iSkillID_Symbols_of_Inspiration = 1339
-Global Const $gc_iSkillID_Symbolic_Celerity = 1340
-Global Const $gc_iSkillID_Frustration = 1341
-Global Const $gc_iSkillID_Tease = 1342
-Global Const $gc_iSkillID_Ether_Phantom = 1343
-Global Const $gc_iSkillID_Web_of_Disruption = 1344
-Global Const $gc_iSkillID_Enchanters_Conundrum = 1345
-Global Const $gc_iSkillID_Signet_of_Illusions = 1346
-Global Const $gc_iSkillID_Discharge_Enchantment = 1347
-Global Const $gc_iSkillID_Hex_Eater_Vortex = 1348
-Global Const $gc_iSkillID_Mirror_of_Disenchantment = 1349
-Global Const $gc_iSkillID_Simple_Thievery = 1350
-Global Const $gc_iSkillID_Animate_Shambling_Horror = 1351
-Global Const $gc_iSkillID_Order_of_Undeath = 1352
-Global Const $gc_iSkillID_Putrid_Flesh = 1353
-Global Const $gc_iSkillID_Feast_for_the_Dead = 1354
-Global Const $gc_iSkillID_Jagged_Bones = 1355
-Global Const $gc_iSkillID_Contagion = 1356
-Global Const $gc_iSkillID_Bloodletting = 1357
-Global Const $gc_iSkillID_Ulcerous_Lungs = 1358
-Global Const $gc_iSkillID_Pain_of_Disenchantment = 1359
-Global Const $gc_iSkillID_Mark_of_Fury = 1360
-Global Const $gc_iSkillID_Recurring_Scourge = 1361
-Global Const $gc_iSkillID_Corrupt_Enchantment = 1362
-Global Const $gc_iSkillID_Signet_of_Sorrow = 1363
-Global Const $gc_iSkillID_Signet_of_Suffering = 1364
-Global Const $gc_iSkillID_Signet_of_Lost_Souls = 1365
-Global Const $gc_iSkillID_Well_of_Darkness = 1366
-Global Const $gc_iSkillID_Blinding_Surge = 1367
-Global Const $gc_iSkillID_Chilling_Winds = 1368
-Global Const $gc_iSkillID_Lightning_Bolt = 1369
-Global Const $gc_iSkillID_Storm_Djinns_Haste = 1370
-Global Const $gc_iSkillID_Stone_Striker = 1371
-Global Const $gc_iSkillID_Sandstorm = 1372
-Global Const $gc_iSkillID_Stone_Sheath = 1373
-Global Const $gc_iSkillID_Ebon_Hawk = 1374
-Global Const $gc_iSkillID_Stoneflesh_Aura = 1375
-Global Const $gc_iSkillID_Glyph_of_Restoration = 1376
-Global Const $gc_iSkillID_Ether_Prism = 1377
-Global Const $gc_iSkillID_Master_of_Magic = 1378
-Global Const $gc_iSkillID_Glowing_Gaze1 = 1379
-Global Const $gc_iSkillID_Savannah_Heat = 1380
-Global Const $gc_iSkillID_Flame_Djinns_Haste1 = 1381
-Global Const $gc_iSkillID_Freezing_Gust = 1382
-Global Const $gc_iSkillID_Rocky_Ground = 1383
-Global Const $gc_iSkillID_Sulfurous_Haze = 1384
-Global Const $gc_iSkillID_Siege_Attack3 = 1385
-Global Const $gc_iSkillID_Sentry_Trap_skill = 1386
-Global Const $gc_iSkillID_Caltrops_monster = 1387
-Global Const $gc_iSkillID_Sacred_Branch = 1388
-Global Const $gc_iSkillID_Light_of_Seborhin = 1389
-Global Const $gc_iSkillID_Judges_Intervention = 1390
-Global Const $gc_iSkillID_Supportive_Spirit = 1391
-Global Const $gc_iSkillID_Watchful_Healing = 1392
-Global Const $gc_iSkillID_Healers_Boon = 1393
-Global Const $gc_iSkillID_Healers_Covenant = 1394
-Global Const $gc_iSkillID_Balthazars_Pendulum = 1395
-Global Const $gc_iSkillID_Words_of_Comfort = 1396
-Global Const $gc_iSkillID_Light_of_Deliverance = 1397
-Global Const $gc_iSkillID_Scourge_Enchantment = 1398
-Global Const $gc_iSkillID_Shield_of_Absorption = 1399
-Global Const $gc_iSkillID_Reversal_of_Damage = 1400
-Global Const $gc_iSkillID_Mending_Touch = 1401
-Global Const $gc_iSkillID_Critical_Chop = 1402
-Global Const $gc_iSkillID_Agonizing_Chop = 1403
-Global Const $gc_iSkillID_Flail = 1404
-Global Const $gc_iSkillID_Charging_Strike = 1405
-Global Const $gc_iSkillID_Headbutt = 1406
-Global Const $gc_iSkillID_Lions_Comfort = 1407
-Global Const $gc_iSkillID_Rage_of_the_Ntouka = 1408
-Global Const $gc_iSkillID_Mokele_Smash = 1409
-Global Const $gc_iSkillID_Overbearing_Smash = 1410
-Global Const $gc_iSkillID_Signet_of_Stamina = 1411
-Global Const $gc_iSkillID_Youre_All_Alone = 1412
-Global Const $gc_iSkillID_Burst_of_Aggression = 1413
-Global Const $gc_iSkillID_Enraging_Charge = 1414
-Global Const $gc_iSkillID_Crippling_Slash = 1415
-Global Const $gc_iSkillID_Barbarous_Slice = 1416
-Global Const $gc_iSkillID_Vial_of_Purified_Water = 1417
-Global Const $gc_iSkillID_Disarm_Trap = 1418
-Global Const $gc_iSkillID_Feeding_Frenzy_skill = 1419
-Global Const $gc_iSkillID_Quake_Of_Ahdashim = 1420
-Global Const $gc_iSkillID_Shield_of_Madness1 = 1421
-Global Const $gc_iSkillID_Create_Light_of_Seborhin = 1422
-Global Const $gc_iSkillID_Unlock_Cell = 1423
-Global Const $gc_iSkillID_Stop_Pump = 1424
-; Global Const $gc_iSkillID_Unknow = 1425
-Global Const $gc_iSkillID_Shield_of_Madness2 = 1426
-Global Const $gc_iSkillID_Shield_of_Ether = 1427
-Global Const $gc_iSkillID_Shield_of_Iron = 1428
-Global Const $gc_iSkillID_Shield_of_Strength = 1429
-Global Const $gc_iSkillID_Wave_of_Torment = 1430
-; Global Const $gc_iSkillID_Unknow = 1431
-; Global Const $gc_iSkillID_Unknow = 1432
-Global Const $gc_iSkillID_Corsairs_Net = 1433
-Global Const $gc_iSkillID_Corrupted_Healing = 1434
-Global Const $gc_iSkillID_Corrupted_Roots = 1435
-Global Const $gc_iSkillID_Corrupted_Strength = 1436
-Global Const $gc_iSkillID_Desert_Wurm_disguise = 1437
-Global Const $gc_iSkillID_Junundu_Feast = 1438
-Global Const $gc_iSkillID_Junundu_Strike = 1439
-Global Const $gc_iSkillID_Junundu_Smash = 1440
-Global Const $gc_iSkillID_Junundu_Siege1 = 1441
-Global Const $gc_iSkillID_Junundu_Tunnel = 1442
-Global Const $gc_iSkillID_Leave_Junundu = 1443
-Global Const $gc_iSkillID_Summon_Torment = 1444
-Global Const $gc_iSkillID_Signal_Flare = 1445
-Global Const $gc_iSkillID_The_Elixir_of_Strength = 1446
-Global Const $gc_iSkillID_Ehzah_from_Above = 1447
-; Global Const $gc_iSkillID_Unknow = 1448
-Global Const $gc_iSkillID_Last_Rites_of_Torment = 1449
-Global Const $gc_iSkillID_Abaddons_Conspiracy = 1450
-Global Const $gc_iSkillID_Hungers_Bite = 1451
-Global Const $gc_iSkillID_From_Hell = 1452
-Global Const $gc_iSkillID_Pains_Embrace = 1453
-Global Const $gc_iSkillID_Call_to_the_Torment = 1454
-Global Const $gc_iSkillID_Command_of_Torment = 1455
-Global Const $gc_iSkillID_Abaddons_Favor = 1456
-Global Const $gc_iSkillID_Abaddons_Chosen = 1457
-Global Const $gc_iSkillID_Enchantment_Collapse = 1458
-Global Const $gc_iSkillID_Call_of_Sacrifice = 1459
-Global Const $gc_iSkillID_Enemies_Must_Die = 1460
-Global Const $gc_iSkillID_Earth_Vortex = 1461
-Global Const $gc_iSkillID_Frost_Vortex = 1462
-Global Const $gc_iSkillID_Rough_Current = 1463
-Global Const $gc_iSkillID_Turbulent_Flow = 1464
-Global Const $gc_iSkillID_Prepared_Shot = 1465
-Global Const $gc_iSkillID_Burning_Arrow = 1466
-Global Const $gc_iSkillID_Arcing_Shot = 1467
-Global Const $gc_iSkillID_Strike_as_One = 1468
-Global Const $gc_iSkillID_Crossfire = 1469
-Global Const $gc_iSkillID_Barbed_Arrows = 1470
-Global Const $gc_iSkillID_Scavengers_Focus = 1471
-Global Const $gc_iSkillID_Toxicity = 1472
-Global Const $gc_iSkillID_Quicksand = 1473
-Global Const $gc_iSkillID_Storms_Embrace = 1474
-Global Const $gc_iSkillID_Trappers_Speed = 1475
-Global Const $gc_iSkillID_Tripwire = 1476
-Global Const $gc_iSkillID_Kournan_Guardsman = 1477
-Global Const $gc_iSkillID_Renewing_Surge = 1478
-Global Const $gc_iSkillID_Offering_of_Spirit = 1479
-Global Const $gc_iSkillID_Spirits_Gift = 1480
-Global Const $gc_iSkillID_Death_Pact_Signet = 1481
-Global Const $gc_iSkillID_Reclaim_Essence = 1482
-Global Const $gc_iSkillID_Banishing_Strike = 1483
-Global Const $gc_iSkillID_Mystic_Sweep = 1484
-Global Const $gc_iSkillID_Eremites_Attack = 1485
-Global Const $gc_iSkillID_Reap_Impurities = 1486
-Global Const $gc_iSkillID_Twin_Moon_Sweep = 1487
-Global Const $gc_iSkillID_Victorious_Sweep = 1488
-Global Const $gc_iSkillID_Irresistible_Sweep = 1489
-Global Const $gc_iSkillID_Pious_Assault = 1490
-Global Const $gc_iSkillID_Mystic_Twister = 1491
-Global Const $gc_iSkillID_REMOVE_Wind_Prayers_skill = 1492
-Global Const $gc_iSkillID_Grenths_Fingers = 1493
-Global Const $gc_iSkillID_REMOVE_Boon_of_the_Gods = 1494
-Global Const $gc_iSkillID_Aura_of_Thorns = 1495
-Global Const $gc_iSkillID_Balthazars_Rage = 1496
-Global Const $gc_iSkillID_Dust_Cloak = 1497
-Global Const $gc_iSkillID_Staggering_Force = 1498
-Global Const $gc_iSkillID_Pious_Renewal = 1499
-Global Const $gc_iSkillID_Mirage_Cloak = 1500
-Global Const $gc_iSkillID_REMOVE_Balthazars_Rage = 1501
-Global Const $gc_iSkillID_Arcane_Zeal = 1502
-Global Const $gc_iSkillID_Mystic_Vigor = 1503
-Global Const $gc_iSkillID_Watchful_Intervention = 1504
-Global Const $gc_iSkillID_Vow_of_Piety = 1505
-Global Const $gc_iSkillID_Vital_Boon = 1506
-Global Const $gc_iSkillID_Heart_of_Holy_Flame = 1507
-Global Const $gc_iSkillID_Extend_Enchantments = 1508
-Global Const $gc_iSkillID_Faithful_Intervention = 1509
-Global Const $gc_iSkillID_Sand_Shards = 1510
-Global Const $gc_iSkillID_Intimidating_Aura_beta_version = 1511
-Global Const $gc_iSkillID_Lyssas_Haste = 1512
-Global Const $gc_iSkillID_Guiding_Hands = 1513
-Global Const $gc_iSkillID_Fleeting_Stability = 1514
-Global Const $gc_iSkillID_Armor_of_Sanctity = 1515
-Global Const $gc_iSkillID_Mystic_Regeneration = 1516
-Global Const $gc_iSkillID_Vow_of_Silence = 1517
-Global Const $gc_iSkillID_Avatar_of_Balthazar = 1518
-Global Const $gc_iSkillID_Avatar_of_Dwayna = 1519
-Global Const $gc_iSkillID_Avatar_of_Grenth = 1520
-Global Const $gc_iSkillID_Avatar_of_Lyssa = 1521
-Global Const $gc_iSkillID_Avatar_of_Melandru = 1522
-Global Const $gc_iSkillID_Meditation = 1523
-Global Const $gc_iSkillID_Eremites_Zeal = 1524
-Global Const $gc_iSkillID_Natural_Healing = 1525
-Global Const $gc_iSkillID_Imbue_Health = 1526
-Global Const $gc_iSkillID_Mystic_Healing = 1527
-Global Const $gc_iSkillID_Dwaynas_Touch = 1528
-Global Const $gc_iSkillID_Pious_Restoration = 1529
-Global Const $gc_iSkillID_Signet_of_Pious_Light = 1530
-Global Const $gc_iSkillID_Intimidating_Aura = 1531
-Global Const $gc_iSkillID_Mystic_Sandstorm = 1532
-Global Const $gc_iSkillID_Winds_of_Disenchantment = 1533
-Global Const $gc_iSkillID_Rending_Touch = 1534
-Global Const $gc_iSkillID_Crippling_Sweep = 1535
-Global Const $gc_iSkillID_Wounding_Strike = 1536
-Global Const $gc_iSkillID_Wearying_Strike = 1537
-Global Const $gc_iSkillID_Lyssas_Assault = 1538
-Global Const $gc_iSkillID_Chilling_Victory = 1539
-Global Const $gc_iSkillID_Conviction = 1540
-Global Const $gc_iSkillID_Enchanted_Haste = 1541
-Global Const $gc_iSkillID_Pious_Concentration = 1542
-Global Const $gc_iSkillID_Pious_Haste = 1543
-Global Const $gc_iSkillID_Whirling_Charge = 1544
-Global Const $gc_iSkillID_Test_of_Faith = 1545
-Global Const $gc_iSkillID_Blazing_Spear = 1546
-Global Const $gc_iSkillID_Mighty_Throw = 1547
-Global Const $gc_iSkillID_Cruel_Spear = 1548
-Global Const $gc_iSkillID_Harriers_Toss = 1549
-Global Const $gc_iSkillID_Unblockable_Throw = 1550
-Global Const $gc_iSkillID_Spear_of_Lightning = 1551
-Global Const $gc_iSkillID_Wearying_Spear = 1552
-Global Const $gc_iSkillID_Anthem_of_Fury = 1553
-Global Const $gc_iSkillID_Crippling_Anthem = 1554
-Global Const $gc_iSkillID_Defensive_Anthem = 1555
-Global Const $gc_iSkillID_Godspeed = 1556
-Global Const $gc_iSkillID_Anthem_of_Flame = 1557
-Global Const $gc_iSkillID_Go_for_the_Eyes = 1558
-Global Const $gc_iSkillID_Anthem_of_Envy = 1559
-Global Const $gc_iSkillID_Song_of_Power = 1560
-Global Const $gc_iSkillID_Zealous_Anthem = 1561
-Global Const $gc_iSkillID_Aria_of_Zeal = 1562
-Global Const $gc_iSkillID_Lyric_of_Zeal = 1563
-Global Const $gc_iSkillID_Ballad_of_Restoration = 1564
-Global Const $gc_iSkillID_Chorus_of_Restoration = 1565
-Global Const $gc_iSkillID_Aria_of_Restoration = 1566
-Global Const $gc_iSkillID_Song_of_Concentration = 1567
-Global Const $gc_iSkillID_Anthem_of_Guidance = 1568
-Global Const $gc_iSkillID_Energizing_Chorus = 1569
-Global Const $gc_iSkillID_Song_of_Purification = 1570
-Global Const $gc_iSkillID_Hexbreaker_Aria = 1571
-Global Const $gc_iSkillID_Brace_Yourself = 1572
-Global Const $gc_iSkillID_Awe = 1573
-Global Const $gc_iSkillID_Enduring_Harmony = 1574
-Global Const $gc_iSkillID_Blazing_Finale = 1575
-Global Const $gc_iSkillID_Burning_Refrain = 1576
-Global Const $gc_iSkillID_Finale_of_Restoration = 1577
-Global Const $gc_iSkillID_Mending_Refrain = 1578
-Global Const $gc_iSkillID_Purifying_Finale = 1579
-Global Const $gc_iSkillID_Bladeturn_Refrain = 1580
-Global Const $gc_iSkillID_Glowing_Signet = 1581
-Global Const $gc_iSkillID_REMOVE_Leadership_skill = 1582
-Global Const $gc_iSkillID_Leaders_Zeal = 1583
-Global Const $gc_iSkillID_Leaders_Comfort = 1584
-Global Const $gc_iSkillID_Signet_of_Synergy = 1585
-Global Const $gc_iSkillID_Angelic_Protection = 1586
-Global Const $gc_iSkillID_Angelic_Bond = 1587
-Global Const $gc_iSkillID_Cautery_Signet = 1588
-Global Const $gc_iSkillID_Stand_Your_Ground = 1589
-Global Const $gc_iSkillID_Lead_the_Way = 1590
-Global Const $gc_iSkillID_Make_Haste = 1591
-Global Const $gc_iSkillID_We_Shall_Return = 1592
-Global Const $gc_iSkillID_Never_Give_Up = 1593
-Global Const $gc_iSkillID_Help_Me = 1594
-Global Const $gc_iSkillID_Fall_Back = 1595
-Global Const $gc_iSkillID_Incoming = 1596
-Global Const $gc_iSkillID_Theyre_on_Fire = 1597
-Global Const $gc_iSkillID_Never_Surrender = 1598
-Global Const $gc_iSkillID_Its_Just_a_Flesh_Wound = 1599
-Global Const $gc_iSkillID_Barbed_Spear = 1600
-Global Const $gc_iSkillID_Vicious_Attack = 1601
-Global Const $gc_iSkillID_Stunning_Strike = 1602
-Global Const $gc_iSkillID_Merciless_Spear = 1603
-Global Const $gc_iSkillID_Disrupting_Throw = 1604
-Global Const $gc_iSkillID_Wild_Throw = 1605
-Global Const $gc_iSkillID_Curse_of_the_Staff_of_the_Mists = 1606
-Global Const $gc_iSkillID_Aura_of_the_Staff_of_the_Mists = 1607
-Global Const $gc_iSkillID_Power_of_the_Staff_of_the_Mists = 1608
-Global Const $gc_iSkillID_Scepter_of_Ether = 1609
-Global Const $gc_iSkillID_Summoning_of_the_Scepter = 1610
-Global Const $gc_iSkillID_Rise_From_Your_Grave = 1611
-Global Const $gc_iSkillID_Sugar_Rush_long = 1612
-Global Const $gc_iSkillID_Corsair_disguise = 1613
-Global Const $gc_iSkillID_REMOVE_Queen_Wail = 1614
-Global Const $gc_iSkillID_REMOVE_Queen_Armor = 1615
-Global Const $gc_iSkillID_Queen_Heal = 1616
-Global Const $gc_iSkillID_Queen_Wail = 1617
-Global Const $gc_iSkillID_Queen_Armor = 1618
-Global Const $gc_iSkillID_Queen_Bite = 1619
-Global Const $gc_iSkillID_Queen_Thump = 1620
-Global Const $gc_iSkillID_Queen_Siege = 1621
-Global Const $gc_iSkillID_Junundu_Tunnel_monster_skill = 1622
-Global Const $gc_iSkillID_Skin_of_Stone = 1623
-Global Const $gc_iSkillID_Dervish_of_the_Mystic = 1624
-Global Const $gc_iSkillID_Dervish_of_the_Wind = 1625
-Global Const $gc_iSkillID_Paragon_of_Leadership = 1626
-Global Const $gc_iSkillID_Paragon_of_Motivation = 1627
-Global Const $gc_iSkillID_Dervish_of_the_Blade = 1628
-Global Const $gc_iSkillID_Paragon_of_Command = 1629
-Global Const $gc_iSkillID_Paragon_of_the_Spear = 1630
-Global Const $gc_iSkillID_Dervish_of_the_Earth = 1631
-Global Const $gc_iSkillID_Master_of_DPS = 1632
-Global Const $gc_iSkillID_Malicious_Strike = 1633
-Global Const $gc_iSkillID_Shattering_Assault = 1634
-Global Const $gc_iSkillID_Golden_Skull_Strike = 1635
-Global Const $gc_iSkillID_Black_Spider_Strike = 1636
-Global Const $gc_iSkillID_Golden_Fox_Strike = 1637
-Global Const $gc_iSkillID_Deadly_Haste = 1638
-Global Const $gc_iSkillID_Assassins_Remedy = 1639
-Global Const $gc_iSkillID_Foxs_Promise = 1640
-Global Const $gc_iSkillID_Feigned_Neutrality = 1641
-Global Const $gc_iSkillID_Hidden_Caltrops = 1642
-Global Const $gc_iSkillID_Assault_Enchantments = 1643
-Global Const $gc_iSkillID_Wastrels_Collapse = 1644
-Global Const $gc_iSkillID_Lift_Enchantment = 1645
-Global Const $gc_iSkillID_Augury_of_Death = 1646
-Global Const $gc_iSkillID_Signet_of_Toxic_Shock = 1647
-Global Const $gc_iSkillID_Signet_of_Twilight = 1648
-Global Const $gc_iSkillID_Way_of_the_Assassin = 1649
-Global Const $gc_iSkillID_Shadow_Walk = 1650
-Global Const $gc_iSkillID_Deaths_Retreat = 1651
-Global Const $gc_iSkillID_Shadow_Prison = 1652
-Global Const $gc_iSkillID_Swap = 1653
-Global Const $gc_iSkillID_Shadow_Meld = 1654
-Global Const $gc_iSkillID_Price_of_Pride = 1655
-Global Const $gc_iSkillID_Air_of_Disenchantment = 1656
-Global Const $gc_iSkillID_Signet_of_Clumsiness = 1657
-Global Const $gc_iSkillID_Symbolic_Posture = 1658
-Global Const $gc_iSkillID_Toxic_Chill = 1659
-Global Const $gc_iSkillID_Well_of_Silence = 1660
-Global Const $gc_iSkillID_Glowstone = 1661
-Global Const $gc_iSkillID_Mind_Blast = 1662
-Global Const $gc_iSkillID_Elemental_Flame = 1663
-Global Const $gc_iSkillID_Invoke_Lightning = 1664
-Global Const $gc_iSkillID_Battle_Cry1 = 1665
-Global Const $gc_iSkillID_Mending_Shrine_Bonus = 1666
-Global Const $gc_iSkillID_Energy_Shrine_Bonus = 1667
-Global Const $gc_iSkillID_Northern_Health_Shrine_Bonus = 1668
-Global Const $gc_iSkillID_Southern_Health_Shrine_Bonus = 1669
-Global Const $gc_iSkillID_Siege_Attack_Bombardment = 1670
-Global Const $gc_iSkillID_Curse_of_Silence = 1671
-Global Const $gc_iSkillID_To_the_Pain_Hero_Battles = 1672
-Global Const $gc_iSkillID_Edge_of_Reason = 1673
-Global Const $gc_iSkillID_Depths_of_Madness_environment_effect = 1674
-Global Const $gc_iSkillID_Cower_in_Fear = 1675
-Global Const $gc_iSkillID_Dreadful_Pain = 1676
-Global Const $gc_iSkillID_Veiled_Nightmare = 1677
-Global Const $gc_iSkillID_Base_Protection = 1678
-Global Const $gc_iSkillID_Kournan_Siege_Flame = 1679
-Global Const $gc_iSkillID_Drake_Skin = 1680
-Global Const $gc_iSkillID_Skale_Vigor = 1681
-Global Const $gc_iSkillID_Pahnai_Salad_item_effect = 1682
-Global Const $gc_iSkillID_Pensive_Guardian = 1683
-Global Const $gc_iSkillID_Scribes_Insight = 1684
-Global Const $gc_iSkillID_Holy_Haste = 1685
-Global Const $gc_iSkillID_Glimmer_of_Light = 1686
-Global Const $gc_iSkillID_Zealous_Benediction = 1687
-Global Const $gc_iSkillID_Defenders_Zeal = 1688
-Global Const $gc_iSkillID_Signet_of_Mystic_Wrath = 1689
-Global Const $gc_iSkillID_Signet_of_Removal = 1690
-Global Const $gc_iSkillID_Dismiss_Condition = 1691
-Global Const $gc_iSkillID_Divert_Hexes = 1692
-Global Const $gc_iSkillID_Counterattack = 1693
-Global Const $gc_iSkillID_Magehunter_Strike = 1694
-Global Const $gc_iSkillID_Soldiers_Strike = 1695
-Global Const $gc_iSkillID_Decapitate = 1696
-Global Const $gc_iSkillID_Magehunters_Smash = 1697
-Global Const $gc_iSkillID_Soldiers_Stance = 1698
-Global Const $gc_iSkillID_Soldiers_Defense = 1699
-Global Const $gc_iSkillID_Frenzied_Defense = 1700
-Global Const $gc_iSkillID_Steady_Stance = 1701
-Global Const $gc_iSkillID_Steelfang_Slash = 1702
-Global Const $gc_iSkillID_Sunspear_Battle_Call = 1703
-Global Const $gc_iSkillID_Untouchable = 1704
-Global Const $gc_iSkillID_Earth_Shattering_Blow = 1705
-Global Const $gc_iSkillID_Corrupt_Power = 1706
-Global Const $gc_iSkillID_Words_of_Madness_Qwytzylkak = 1707
-Global Const $gc_iSkillID_Gaze_of_MoavuKaal = 1708
-Global Const $gc_iSkillID_Presence_of_the_Skale_Lord = 1709
-Global Const $gc_iSkillID_Madness_Dart = 1710
-Global Const $gc_iSkillID_The_Apocrypha_is_changing_to_another_form = 1711
-; Global Const $gc_iSkillID_Unknow = 1712
-; Global Const $gc_iSkillID_Unknow = 1713
-; Global Const $gc_iSkillID_Unknow = 1714
-Global Const $gc_iSkillID_Reform_Carvings = 1715
-; Global Const $gc_iSkillID_Unknow = 1716
-Global Const $gc_iSkillID_Sunspear_Siege = 1717
-Global Const $gc_iSkillID_Soul_Torture = 1718
-Global Const $gc_iSkillID_Screaming_Shot = 1719
-Global Const $gc_iSkillID_Keen_Arrow = 1720
-Global Const $gc_iSkillID_Rampage_as_One = 1721
-Global Const $gc_iSkillID_Forked_Arrow = 1722
-Global Const $gc_iSkillID_Disrupting_Accuracy = 1723
-Global Const $gc_iSkillID_Experts_Dexterity = 1724
-Global Const $gc_iSkillID_Roaring_Winds = 1725
-Global Const $gc_iSkillID_Magebane_Shot = 1726
-Global Const $gc_iSkillID_Natural_Stride = 1727
-Global Const $gc_iSkillID_Hekets_Rampage = 1728
-Global Const $gc_iSkillID_Smoke_Trap = 1729
-Global Const $gc_iSkillID_Infuriating_Heat = 1730
-Global Const $gc_iSkillID_Vocal_Was_Sogolon = 1731
-Global Const $gc_iSkillID_Destructive_Was_Glaive = 1732
-Global Const $gc_iSkillID_Wielders_Strike = 1733
-Global Const $gc_iSkillID_Gaze_of_Fury = 1734
-Global Const $gc_iSkillID_Gaze_of_Fury_attack = 1735
-Global Const $gc_iSkillID_Spirits_Strength = 1736
-Global Const $gc_iSkillID_Wielders_Zeal = 1737
-Global Const $gc_iSkillID_Sight_Beyond_Sight = 1738
-Global Const $gc_iSkillID_Renewing_Memories = 1739
-Global Const $gc_iSkillID_Wielders_Remedy = 1740
-Global Const $gc_iSkillID_Ghostmirror_Light = 1741
-Global Const $gc_iSkillID_Signet_of_Ghostly_Might = 1742
-Global Const $gc_iSkillID_Signet_of_Binding = 1743
-Global Const $gc_iSkillID_Caretakers_Charge = 1744
-Global Const $gc_iSkillID_Anguish = 1745
-Global Const $gc_iSkillID_Anguish_attack = 1746
-Global Const $gc_iSkillID_Empowerment = 1747
-Global Const $gc_iSkillID_Recovery = 1748
-Global Const $gc_iSkillID_Weapon_of_Fury = 1749
-Global Const $gc_iSkillID_Xinraes_Weapon = 1750
-Global Const $gc_iSkillID_Warmongers_Weapon = 1751
-Global Const $gc_iSkillID_Weapon_of_Remedy = 1752
-Global Const $gc_iSkillID_Rending_Sweep = 1753
-Global Const $gc_iSkillID_Onslaught = 1754
-Global Const $gc_iSkillID_Mystic_Corruption = 1755
-Global Const $gc_iSkillID_Grenths_Grasp = 1756
-Global Const $gc_iSkillID_Veil_of_Thorns = 1757
-Global Const $gc_iSkillID_Harriers_Grasp = 1758
-Global Const $gc_iSkillID_Vow_of_Strength = 1759
-Global Const $gc_iSkillID_Ebon_Dust_Aura = 1760
-Global Const $gc_iSkillID_Zealous_Vow = 1761
-Global Const $gc_iSkillID_Heart_of_Fury = 1762
-Global Const $gc_iSkillID_Zealous_Renewal = 1763
-Global Const $gc_iSkillID_Attackers_Insight = 1764
-Global Const $gc_iSkillID_Rending_Aura = 1765
-Global Const $gc_iSkillID_Featherfoot_Grace = 1766
-Global Const $gc_iSkillID_Reapers_Sweep = 1767
-Global Const $gc_iSkillID_Harriers_Haste = 1768
-Global Const $gc_iSkillID_Focused_Anger = 1769
-Global Const $gc_iSkillID_Natural_Temper = 1770
-Global Const $gc_iSkillID_Song_of_Restoration = 1771
-Global Const $gc_iSkillID_Lyric_of_Purification = 1772
-Global Const $gc_iSkillID_Soldiers_Fury = 1773
-Global Const $gc_iSkillID_Aggressive_Refrain = 1774
-Global Const $gc_iSkillID_Energizing_Finale = 1775
-Global Const $gc_iSkillID_Signet_of_Aggression = 1776
-Global Const $gc_iSkillID_Remedy_Signet = 1777
-Global Const $gc_iSkillID_Signet_of_Return = 1778
-Global Const $gc_iSkillID_Make_Your_Time = 1779
-Global Const $gc_iSkillID_Cant_Touch_This = 1780
-Global Const $gc_iSkillID_Find_Their_Weakness = 1781
-Global Const $gc_iSkillID_The_Power_Is_Yours = 1782
-Global Const $gc_iSkillID_Slayers_Spear = 1783
-Global Const $gc_iSkillID_Swift_Javelin = 1784
-Global Const $gc_iSkillID_Natures_Speed = 1785
-Global Const $gc_iSkillID_Weapon_of_Mastery = 1786
-Global Const $gc_iSkillID_Accelerated_Growth = 1787
-Global Const $gc_iSkillID_Forge_the_Way = 1788
-Global Const $gc_iSkillID_Anthem_of_Aggression = 1789
-Global Const $gc_iSkillID_Skale_Hunt7 = 1790
-Global Const $gc_iSkillID_Mandragor_Hunt6 = 1791
-Global Const $gc_iSkillID_Skree_Battle = 1792
-Global Const $gc_iSkillID_Insect_Hunt3 = 1793
-Global Const $gc_iSkillID_Corsair_Bounty1 = 1794
-Global Const $gc_iSkillID_Plant_Hunt7 = 1795
-Global Const $gc_iSkillID_Undead_Hunt1 = 1796
-Global Const $gc_iSkillID_Eternal_Suffering1 = 1797
-Global Const $gc_iSkillID_Eternal_Suffering2 = 1798
-Global Const $gc_iSkillID_Eternal_Suffering3 = 1799
-Global Const $gc_iSkillID_Eternal_Languor1 = 1800
-Global Const $gc_iSkillID_Eternal_Languor2 = 1801
-Global Const $gc_iSkillID_Eternal_Languor3 = 1802
-Global Const $gc_iSkillID_Eternal_Lethargy1 = 1803
-Global Const $gc_iSkillID_Eternal_Lethargy2 = 1804
-Global Const $gc_iSkillID_Eternal_Lethargy3 = 1805
-; Global Const $gc_iSkillID_Unknow = 1806
-; Global Const $gc_iSkillID_Unknow = 1807
-Global Const $gc_iSkillID_Thirst_of_the_Drought1 = 1808
-Global Const $gc_iSkillID_Thirst_of_the_Drought2 = 1809
-Global Const $gc_iSkillID_Thirst_of_the_Drought3 = 1810
-Global Const $gc_iSkillID_Thirst_of_the_Drought4 = 1811
-Global Const $gc_iSkillID_Thirst_of_the_Drought5 = 1812
-Global Const $gc_iSkillID_Lightbringer = 1813
-Global Const $gc_iSkillID_Lightbringers_Gaze = 1814
-Global Const $gc_iSkillID_Lightbringer_Signet = 1815
-Global Const $gc_iSkillID_Sunspear_Rebirth_Signet = 1816
-Global Const $gc_iSkillID_Wisdom = 1817
-Global Const $gc_iSkillID_Maddened_Strike = 1818
-Global Const $gc_iSkillID_Maddened_Stance = 1819
-Global Const $gc_iSkillID_Spirit_Form_Remains_of_Sahlahja = 1820
-Global Const $gc_iSkillID_Gods_Blessing = 1821
-Global Const $gc_iSkillID_Monster_Hunt1 = 1822
-Global Const $gc_iSkillID_Monster_Hunt2 = 1823
-Global Const $gc_iSkillID_Monster_Hunt3 = 1824
-Global Const $gc_iSkillID_Monster_Hunt4 = 1825
-Global Const $gc_iSkillID_Elemental_Hunt1 = 1826
-Global Const $gc_iSkillID_Elemental_Hunt2 = 1827
-Global Const $gc_iSkillID_Skree_Battle1 = 1828
-Global Const $gc_iSkillID_Insect_Hunt1 = 1829
-Global Const $gc_iSkillID_Insect_Hunt2 = 1830
-Global Const $gc_iSkillID_Demon_Hunt = 1831
-Global Const $gc_iSkillID_Minotaur_Hunt1 = 1832
-Global Const $gc_iSkillID_Plant_Hunt1 = 1833
-Global Const $gc_iSkillID_Plant_Hunt2 = 1834
-Global Const $gc_iSkillID_Skale_Hunt3 = 1835
-Global Const $gc_iSkillID_Skale_Hunt4 = 1836
-Global Const $gc_iSkillID_Heket_Hunt5 = 1837
-Global Const $gc_iSkillID_Heket_Hunt6 = 1838
-Global Const $gc_iSkillID_Kournan_Bounty1 = 1839
-Global Const $gc_iSkillID_Mandragor_Hunt1 = 1840
-Global Const $gc_iSkillID_Mandragor_Hunt2 = 1841
-Global Const $gc_iSkillID_Corsair_Bounty2 = 1842
-Global Const $gc_iSkillID_Kournan_Bounty2 = 1843
-Global Const $gc_iSkillID_Dhuum_Battle = 1844
-Global Const $gc_iSkillID_Menzies_Battle1 = 1845
-Global Const $gc_iSkillID_Elemental_Hunt3 = 1846
-Global Const $gc_iSkillID_Monolith_Hunt1 = 1847
-Global Const $gc_iSkillID_Monolith_Hunt2 = 1848
-Global Const $gc_iSkillID_Margonite_Battle1 = 1849
-Global Const $gc_iSkillID_Monster_Hunt5 = 1850
-Global Const $gc_iSkillID_Titan_Hunt1 = 1851
-Global Const $gc_iSkillID_Mandragor_Hunt3 = 1852
-Global Const $gc_iSkillID_Giant_Hunt1 = 1853
-Global Const $gc_iSkillID_Undead_Hunt2 = 1854
-Global Const $gc_iSkillID_Kournan_Siege = 1855
-Global Const $gc_iSkillID_Lose_your_Head = 1856
-Global Const $gc_iSkillID_Wandering_Mind = 1857
-; Global Const $gc_iSkillID_Unknow = 1858
-Global Const $gc_iSkillID_Altar_Buff = 1859
-Global Const $gc_iSkillID_Sugar_Rush_short = 1860
-Global Const $gc_iSkillID_Choking_Breath = 1861
-Global Const $gc_iSkillID_Junundu_Bite = 1862
-Global Const $gc_iSkillID_Blinding_Breath = 1863
-Global Const $gc_iSkillID_Burning_Breath = 1864
-Global Const $gc_iSkillID_Junundu_Wail = 1865
-Global Const $gc_iSkillID_Capture_Point = 1866
-Global Const $gc_iSkillID_Approaching_the_Vortex = 1867
-; Global Const $gc_iSkillID_Unknow = 1868
-; Global Const $gc_iSkillID_Unknow = 1869
-; Global Const $gc_iSkillID_Unknow = 1870
-Global Const $gc_iSkillID_Avatar_of_Sweetness = 1871
-; Global Const $gc_iSkillID_Unknow = 1872
-Global Const $gc_iSkillID_Corrupted_Lands = 1873
-; Global Const $gc_iSkillID_Unknow = 1874
-Global Const $gc_iSkillID_Words_of_Madness = 1875
-Global Const $gc_iSkillID_Unknown_Junundu_Ability = 1876
-; Global Const $gc_iSkillID_Unknow = 1877
-; Global Const $gc_iSkillID_Unknow = 1878
-; Global Const $gc_iSkillID_Unknow = 1879
-Global Const $gc_iSkillID_Torment_Slash_Smothering_Tendrils = 1880
-Global Const $gc_iSkillID_Bonds_of_Torment = 1881
-Global Const $gc_iSkillID_Shadow_Smash = 1882
-Global Const $gc_iSkillID_Bonds_of_Torment_effect = 1883
-Global Const $gc_iSkillID_Consume_Torment = 1884
-Global Const $gc_iSkillID_Banish_Enchantment = 1885
-Global Const $gc_iSkillID_Summoning_Shadows = 1886
-Global Const $gc_iSkillID_Lightbringers_Insight = 1887
-; Global Const $gc_iSkillID_Unknow = 1888
-Global Const $gc_iSkillID_Repressive_Energy = 1889
-Global Const $gc_iSkillID_Enduring_Torment = 1890
-Global Const $gc_iSkillID_Shroud_of_Darkness = 1891
-Global Const $gc_iSkillID_Demonic_Miasma = 1892
-Global Const $gc_iSkillID_Enraged = 1893
-Global Const $gc_iSkillID_Touch_of_Aaaaarrrrrrggghhh = 1894
-Global Const $gc_iSkillID_Wild_Smash = 1895
-Global Const $gc_iSkillID_Unyielding_Anguish = 1896
-Global Const $gc_iSkillID_Jadoths_Storm_of_Judgment = 1897
-Global Const $gc_iSkillID_Anguish_Hunt1 = 1898
-Global Const $gc_iSkillID_Avatar_of_Holiday_Cheer = 1899
-Global Const $gc_iSkillID_Side_Step = 1900
-Global Const $gc_iSkillID_Jack_Frost = 1901
-Global Const $gc_iSkillID_Avatar_of_Grenth_snow_fighting_skill = 1902
-Global Const $gc_iSkillID_Avatar_of_Dwayna_snow_fighting_skill = 1903
-Global Const $gc_iSkillID_Steady_Aim = 1904
-Global Const $gc_iSkillID_Rudis_Red_Nose = 1905
-; Global Const $gc_iSkillID_Unknow = 1906
-; Global Const $gc_iSkillID_Unknow = 1907
-; Global Const $gc_iSkillID_Unknow = 1908
-; Global Const $gc_iSkillID_Unknow = 1909
-Global Const $gc_iSkillID_Charm_Animal_White_Mantle = 1910
-Global Const $gc_iSkillID_Volatile_Charr_Crystal = 1911
-Global Const $gc_iSkillID_Hard_mode1 = 1912
-Global Const $gc_iSkillID_Claim_Resource_Heroes_Ascent = 1913
-Global Const $gc_iSkillID_Hard_mode2 = 1914
-Global Const $gc_iSkillID_Hard_Mode_NPC_Buff = 1915
-Global Const $gc_iSkillID_Sugar_Jolt_short = 1916
-Global Const $gc_iSkillID_Rollerbeetle_Racer = 1917
-Global Const $gc_iSkillID_Ram = 1918
-Global Const $gc_iSkillID_Harden_Shell = 1919
-Global Const $gc_iSkillID_Rollerbeetle_Dash = 1920
-Global Const $gc_iSkillID_Super_Rollerbeetle = 1921
-Global Const $gc_iSkillID_Rollerbeetle_Echo = 1922
-Global Const $gc_iSkillID_Distracting_Lunge = 1923
-Global Const $gc_iSkillID_Rollerbeetle_Blast = 1924
-Global Const $gc_iSkillID_Spit_Rocks = 1925
-Global Const $gc_iSkillID_Lunar_Blessing = 1926
-Global Const $gc_iSkillID_Lucky_Aura = 1927
-Global Const $gc_iSkillID_Spiritual_Possession = 1928
-Global Const $gc_iSkillID_Water = 1929
-Global Const $gc_iSkillID_Pig_Form = 1930
-Global Const $gc_iSkillID_Beetle_Metamorphosis = 1931
-; Global Const $gc_iSkillID_Unknow = 1932
-Global Const $gc_iSkillID_Sugar_Jolt_long = 1933
-Global Const $gc_iSkillID_Golden_Egg_skill = 1934
-Global Const $gc_iSkillID_Torturous_Embers = 1935
-Global Const $gc_iSkillID_Test_Buff = 1936
-Global Const $gc_iSkillID_Infernal_Rage = 1937
-Global Const $gc_iSkillID_Putrid_Flames = 1938
-Global Const $gc_iSkillID_Shroud_of_Ash = 1939
-Global Const $gc_iSkillID_Flame_Call = 1940
-Global Const $gc_iSkillID_Torturers_Inferno = 1941
-Global Const $gc_iSkillID_Whirling_Fires = 1942
-Global Const $gc_iSkillID_Charr_Siege_Attack_What_Must_Be_Done = 1943
-Global Const $gc_iSkillID_Charr_Siege_Attack_Against_the_Charr = 1944
-Global Const $gc_iSkillID_Birthday_Cupcake_skill = 1945
-Global Const $gc_iSkillID_Shadow_Sanctuary_Luxon1 = 1946
-Global Const $gc_iSkillID_Blessing_of_the_Luxons = 1947
-Global Const $gc_iSkillID_Shadow_Sanctuary_Luxon2 = 1948
-Global Const $gc_iSkillID_Ether_Nightmare_Luxon = 1949
-Global Const $gc_iSkillID_Signet_of_Corruption_Luxon = 1950
-Global Const $gc_iSkillID_Elemental_Lord_Luxon = 1951
-Global Const $gc_iSkillID_Selfless_Spirit_Luxon = 1952
-Global Const $gc_iSkillID_Triple_Shot_Luxon = 1953
-Global Const $gc_iSkillID_Save_Yourselves_Luxon = 1954
-Global Const $gc_iSkillID_Aura_of_Holy_Might_Luxon = 1955
-; Global Const $gc_iSkillID_Unknow = 1956
-Global Const $gc_iSkillID_Spear_of_Fury_Luxon = 1957
-Global Const $gc_iSkillID_Attribute_Balance = 1958
-Global Const $gc_iSkillID_Monster_Hunt6 = 1959
-Global Const $gc_iSkillID_Monster_Hunt7 = 1960
-Global Const $gc_iSkillID_Mandragor_Hunt4 = 1961
-Global Const $gc_iSkillID_Mandragor_Hunt5 = 1962
-Global Const $gc_iSkillID_Giant_Hunt2 = 1963
-Global Const $gc_iSkillID_Giant_Hunt3 = 1964
-Global Const $gc_iSkillID_Skree_Battle2 = 1965
-Global Const $gc_iSkillID_Skree_Battle3 = 1966
-Global Const $gc_iSkillID_Insect_Hunt4 = 1967
-Global Const $gc_iSkillID_Insect_Hunt5 = 1968
-Global Const $gc_iSkillID_Minotaur_Hunt2 = 1969
-Global Const $gc_iSkillID_Minotaur_Hunt3 = 1970
-Global Const $gc_iSkillID_Corsair_Bounty3 = 1971
-Global Const $gc_iSkillID_Corsair_Bounty4 = 1972
-Global Const $gc_iSkillID_Plant_Hunt8 = 1973
-Global Const $gc_iSkillID_Plant_Hunt9 = 1974
-Global Const $gc_iSkillID_Skale_Hunt8 = 1975
-Global Const $gc_iSkillID_Skale_Hunt9 = 1976
-Global Const $gc_iSkillID_Heket_Hunt10 = 1977
-Global Const $gc_iSkillID_Heket_Hunt11 = 1978
-Global Const $gc_iSkillID_Kournan_Bounty3 = 1979
-Global Const $gc_iSkillID_Kournan_Bounty4 = 1980
-Global Const $gc_iSkillID_Undead_Hunt3 = 1981
-Global Const $gc_iSkillID_Undead_Hunt4 = 1982
-Global Const $gc_iSkillID_Fire_Dart = 1983
-Global Const $gc_iSkillID_Ice_Dart = 1984
-Global Const $gc_iSkillID_Poison_Dart = 1985
-Global Const $gc_iSkillID_Vampiric_Assault = 1986
-Global Const $gc_iSkillID_Lotus_Strike = 1987
-Global Const $gc_iSkillID_Golden_Fang_Strike = 1988
-Global Const $gc_iSkillID_Way_of_the_Mantis = 1989
-Global Const $gc_iSkillID_Falling_Lotus_Strike = 1990
-Global Const $gc_iSkillID_Sadists_Signet = 1991
-Global Const $gc_iSkillID_Signet_of_Distraction = 1992
-Global Const $gc_iSkillID_Signet_of_Recall = 1993
-Global Const $gc_iSkillID_Power_Lock = 1994
-Global Const $gc_iSkillID_Waste_Not_Want_Not = 1995
-Global Const $gc_iSkillID_Sum_of_All_Fears = 1996
-Global Const $gc_iSkillID_Withering_Aura = 1997
-Global Const $gc_iSkillID_Cacophony = 1998
-Global Const $gc_iSkillID_Winters_Embrace = 1999
-Global Const $gc_iSkillID_Earthen_Shackles = 2000
-Global Const $gc_iSkillID_Ward_of_Weakness = 2001
-Global Const $gc_iSkillID_Glyph_of_Swiftness = 2002
-Global Const $gc_iSkillID_Cure_Hex = 2003
-Global Const $gc_iSkillID_Smite_Condition = 2004
-Global Const $gc_iSkillID_Smiters_Boon = 2005
-Global Const $gc_iSkillID_Castigation_Signet = 2006
-Global Const $gc_iSkillID_Purifying_Veil = 2007
-Global Const $gc_iSkillID_Pulverizing_Smash = 2008
-Global Const $gc_iSkillID_Keen_Chop = 2009
-Global Const $gc_iSkillID_Knee_Cutter = 2010
-Global Const $gc_iSkillID_Grapple = 2011
-Global Const $gc_iSkillID_Radiant_Scythe = 2012
-Global Const $gc_iSkillID_Grenths_Aura = 2013
-Global Const $gc_iSkillID_Signet_of_Pious_Restraint = 2014
-Global Const $gc_iSkillID_Farmers_Scythe = 2015
-Global Const $gc_iSkillID_Energetic_Was_Lee_Sa = 2016
-Global Const $gc_iSkillID_Anthem_of_Weariness = 2017
-Global Const $gc_iSkillID_Anthem_of_Disruption = 2018
-Global Const $gc_iSkillID_Burning_Ground = 2019
-Global Const $gc_iSkillID_Freezing_Ground = 2020
-Global Const $gc_iSkillID_Poison_Ground = 2021
-Global Const $gc_iSkillID_Fire_Jet = 2022
-Global Const $gc_iSkillID_Ice_Jet = 2023
-Global Const $gc_iSkillID_Poison_Jet = 2024
-Global Const $gc_iSkillID_Lava_Pool = 2025
-Global Const $gc_iSkillID_Water_Pool = 2026
-Global Const $gc_iSkillID_Fire_Spout = 2027
-Global Const $gc_iSkillID_Ice_Spout = 2028
-Global Const $gc_iSkillID_Poison_Spout = 2029
-Global Const $gc_iSkillID_Dhuum_Battle1 = 2030
-Global Const $gc_iSkillID_Dhuum_Battle2 = 2031
-Global Const $gc_iSkillID_Elemental_Hunt4 = 2032
-Global Const $gc_iSkillID_Elemental_Hunt5 = 2033
-Global Const $gc_iSkillID_Monolith_Hunt3 = 2034
-Global Const $gc_iSkillID_Monolith_Hunt4 = 2035
-Global Const $gc_iSkillID_Margonite_Battle2 = 2036
-Global Const $gc_iSkillID_Margonite_Battle3 = 2037
-Global Const $gc_iSkillID_Menzies_Battle2 = 2038
-Global Const $gc_iSkillID_Menzies_Battle3 = 2039
-Global Const $gc_iSkillID_Anguish_Hunt2 = 2040
-Global Const $gc_iSkillID_Titan_Hunt2 = 2041
-Global Const $gc_iSkillID_Titan_Hunt3 = 2042
-Global Const $gc_iSkillID_Monster_Hunt8 = 2043
-Global Const $gc_iSkillID_Monster_Hunt9 = 2044
-Global Const $gc_iSkillID_Sarcophagus_Spores = 2045
-Global Const $gc_iSkillID_Exploding_Barrel = 2046
-Global Const $gc_iSkillID_Greater_Hard_Mode_NPC_Buff = 2047
-Global Const $gc_iSkillID_Fire_Boulder = 2048
-Global Const $gc_iSkillID_Dire_Snowball = 2049
-Global Const $gc_iSkillID_Boulder = 2050
-Global Const $gc_iSkillID_Summon_Spirits_Luxon = 2051
-Global Const $gc_iSkillID_Shadow_Fang = 2052
-Global Const $gc_iSkillID_Calculated_Risk = 2053
-Global Const $gc_iSkillID_Shrinking_Armor = 2054
-Global Const $gc_iSkillID_Aneurysm = 2055
-Global Const $gc_iSkillID_Wandering_Eye = 2056
-Global Const $gc_iSkillID_Foul_Feast = 2057
-Global Const $gc_iSkillID_Putrid_Bile = 2058
-Global Const $gc_iSkillID_Shell_Shock = 2059
-Global Const $gc_iSkillID_Glyph_of_Immolation = 2060
-Global Const $gc_iSkillID_Patient_Spirit = 2061
-Global Const $gc_iSkillID_Healing_Ribbon = 2062
-Global Const $gc_iSkillID_Aura_of_Stability = 2063
-Global Const $gc_iSkillID_Spotless_Mind = 2064
-Global Const $gc_iSkillID_Spotless_Soul = 2065
-Global Const $gc_iSkillID_Disarm = 2066
-Global Const $gc_iSkillID_I_Meant_to_Do_That = 2067
-Global Const $gc_iSkillID_Rapid_Fire = 2068
-Global Const $gc_iSkillID_Sloth_Hunters_Shot = 2069
-Global Const $gc_iSkillID_Aura_Slicer = 2070
-Global Const $gc_iSkillID_Zealous_Sweep = 2071
-Global Const $gc_iSkillID_Pure_Was_Li_Ming = 2072
-Global Const $gc_iSkillID_Weapon_of_Aggression = 2073
-Global Const $gc_iSkillID_Chest_Thumper = 2074
-Global Const $gc_iSkillID_Hasty_Refrain = 2075
-Global Const $gc_iSkillID_Drain_Minion = 2076
-Global Const $gc_iSkillID_Cracked_Armor = 2077
-Global Const $gc_iSkillID_Berserk = 2078
-Global Const $gc_iSkillID_Fleshreavers_Escape = 2079
-Global Const $gc_iSkillID_Chomp = 2080
-Global Const $gc_iSkillID_Twisting_Jaws = 2081
-Global Const $gc_iSkillID_Burning_Immunity = 2082
-Global Const $gc_iSkillID_Mandragors_Charge = 2083
-Global Const $gc_iSkillID_Rock_Slide = 2084
-Global Const $gc_iSkillID_Avalanche_effect = 2085
-Global Const $gc_iSkillID_Snaring_Web = 2086
-Global Const $gc_iSkillID_Ceiling_Collapse = 2087
-Global Const $gc_iSkillID_Trample = 2088
-Global Const $gc_iSkillID_Wurm_Bile = 2089
-Global Const $gc_iSkillID_Ground_Cover = 2090
-Global Const $gc_iSkillID_Shadow_Sanctuary_Kurzick = 2091
-Global Const $gc_iSkillID_Ether_Nightmare_Kurzick = 2092
-Global Const $gc_iSkillID_Signet_of_Corruption_Kurzick = 2093
-Global Const $gc_iSkillID_Elemental_Lord_Kurzick = 2094
-Global Const $gc_iSkillID_Selfless_Spirit_Kurzick = 2095
-Global Const $gc_iSkillID_Triple_Shot_Kurzick = 2096
-Global Const $gc_iSkillID_Save_Yourselves_Kurzick  = 2097
-Global Const $gc_iSkillID_Aura_of_Holy_Might_Kurzick = 2098
-Global Const $gc_iSkillID_Spear_of_Fury_Kurzick = 2099
-Global Const $gc_iSkillID_Summon_Spirits_Kurzick = 2100
-Global Const $gc_iSkillID_Critical_Agility = 2101
-Global Const $gc_iSkillID_Cry_of_Pain = 2102
-Global Const $gc_iSkillID_Necrosis = 2103
-Global Const $gc_iSkillID_Intensity = 2104
-Global Const $gc_iSkillID_Seed_of_Life = 2105
-Global Const $gc_iSkillID_Call_of_the_Eye = 2106
-Global Const $gc_iSkillID_Whirlwind_Attack = 2107
-Global Const $gc_iSkillID_Never_Rampage_Alone = 2108
-Global Const $gc_iSkillID_Eternal_Aura = 2109
-Global Const $gc_iSkillID_Vampirism = 2110
-Global Const $gc_iSkillID_Vampirism_attack = 2111
-Global Const $gc_iSkillID_Theres_Nothing_to_Fear = 2112
-Global Const $gc_iSkillID_Ursan_Rage_Blood_Washes_Blood = 2113
-Global Const $gc_iSkillID_Ursan_Strike_Blood_Washes_Blood = 2114
-; Global Const $gc_iSkillID_Unknow = 2115
-Global Const $gc_iSkillID_Sneak_Attack = 2116
-Global Const $gc_iSkillID_Firebomb_Explosion = 2117
-Global Const $gc_iSkillID_Firebomb = 2118
-Global Const $gc_iSkillID_Shield_of_Fire = 2119
-Global Const $gc_iSkillID_Respawn = 2120
-Global Const $gc_iSkillID_Marked_For_Death = 2121
-Global Const $gc_iSkillID_Spirit_World_Retreat = 2122
-Global Const $gc_iSkillID_Long_Claws1 = 2123
-Global Const $gc_iSkillID_Shattered_Spirit = 2124
-Global Const $gc_iSkillID_Spirit_Roar = 2125
-Global Const $gc_iSkillID_Spirit_Senses = 2126
-Global Const $gc_iSkillID_Unseen_Aggression = 2127
-Global Const $gc_iSkillID_Volfen_Pounce_Curse_of_the_Nornbear = 2128
-Global Const $gc_iSkillID_Volfen_Claw_Curse_of_the_Nornbear = 2129
-; Global Const $gc_iSkillID_Unknow = 2130
-Global Const $gc_iSkillID_Volfen_Bloodlust_Curse_of_the_Nornbear = 2131
-Global Const $gc_iSkillID_Volfen_Agility_Curse_of_the_Nornbear = 2132
-Global Const $gc_iSkillID_Volfen_Blessing_Curse_of_the_Nornbear = 2133
-Global Const $gc_iSkillID_Charging_Spirit = 2134
-Global Const $gc_iSkillID_Trampling_Ox = 2135
-Global Const $gc_iSkillID_Smoke_Powder_Defense = 2136
-Global Const $gc_iSkillID_Confusing_Images = 2137
-Global Const $gc_iSkillID_Hexers_Vigor = 2138
-Global Const $gc_iSkillID_Masochism = 2139
-Global Const $gc_iSkillID_Piercing_Trap = 2140
-Global Const $gc_iSkillID_Companionship = 2141
-Global Const $gc_iSkillID_Feral_Aggression = 2142
-Global Const $gc_iSkillID_Disrupting_Shot = 2143
-Global Const $gc_iSkillID_Volley = 2144
-Global Const $gc_iSkillID_Expert_Focus = 2145
-Global Const $gc_iSkillID_Pious_Fury = 2146
-Global Const $gc_iSkillID_Crippling_Victory = 2147
-Global Const $gc_iSkillID_Sundering_Weapon = 2148
-Global Const $gc_iSkillID_Weapon_of_Renewal = 2149
-Global Const $gc_iSkillID_Maiming_Spear = 2150
-Global Const $gc_iSkillID_Temporal_Sheen = 2151
-Global Const $gc_iSkillID_Flux_Overload = 2152
-Global Const $gc_iSkillID_A_pool_of_water = 2153
-Global Const $gc_iSkillID_Phase_Shield_effect = 2154
-Global Const $gc_iSkillID_Phase_Shield_monster_skill = 2155
-Global Const $gc_iSkillID_Vitality_Transfer = 2156
-Global Const $gc_iSkillID_Golem_Strike = 2157
-Global Const $gc_iSkillID_Bloodstone_Slash = 2158
-Global Const $gc_iSkillID_Energy_Blast_golem = 2159
-Global Const $gc_iSkillID_Chaotic_Energy = 2160
-Global Const $gc_iSkillID_Golem_Fire_Shield = 2161
-Global Const $gc_iSkillID_The_Way_of_Duty = 2162
-Global Const $gc_iSkillID_The_Way_of_Kinship = 2163
-Global Const $gc_iSkillID_Diamondshard_Mist_environment_effect = 2164
-Global Const $gc_iSkillID_Diamondshard_Grave = 2165
-Global Const $gc_iSkillID_The_Way_of_Strength = 2166
-Global Const $gc_iSkillID_Diamondshard_Mist = 2167
-Global Const $gc_iSkillID_Raven_Blessing_A_Gate_Too_Far = 2168
-; Global Const $gc_iSkillID_Unknow = 2169
-Global Const $gc_iSkillID_Raven_Flight_A_Gate_Too_Far = 2170
-Global Const $gc_iSkillID_Raven_Shriek_A_Gate_Too_Far = 2171
-Global Const $gc_iSkillID_Raven_Swoop_A_Gate_Too_Far = 2172
-Global Const $gc_iSkillID_Raven_Talons_A_Gate_Too_Far = 2173
-Global Const $gc_iSkillID_Aspect_of_Oak = 2174
-Global Const $gc_iSkillID_Long_Claws2 = 2175
-Global Const $gc_iSkillID_Tremor = 2176
-Global Const $gc_iSkillID_Rage_of_the_Jotun = 2177
-Global Const $gc_iSkillID_Thundering_Roar = 2178
-Global Const $gc_iSkillID_Sundering_Soulcrush = 2179
-Global Const $gc_iSkillID_Pyroclastic_Shot = 2180
-Global Const $gc_iSkillID_Explosive_Force = 2181
-; Global Const $gc_iSkillID_Unknow = 2182
-; Global Const $gc_iSkillID_Unknow = 2183
-Global Const $gc_iSkillID_Rolling_Shift = 2184
-Global Const $gc_iSkillID_Powder_Keg_Explosion = 2185
-Global Const $gc_iSkillID_Signet_of_Deadly_Corruption = 2186
-Global Const $gc_iSkillID_Way_of_the_Master = 2187
-Global Const $gc_iSkillID_Defile_Defenses = 2188
-Global Const $gc_iSkillID_Angorodons_Gaze = 2189
-Global Const $gc_iSkillID_Magnetic_Surge = 2190
-Global Const $gc_iSkillID_Slippery_Ground = 2191
-Global Const $gc_iSkillID_Glowing_Ice = 2192
-Global Const $gc_iSkillID_Energy_Blast = 2193
-Global Const $gc_iSkillID_Distracting_Strike = 2194
-Global Const $gc_iSkillID_Symbolic_Strike = 2195
-Global Const $gc_iSkillID_Soldiers_Speed = 2196
-Global Const $gc_iSkillID_Body_Blow = 2197
-Global Const $gc_iSkillID_Body_Shot = 2198
-Global Const $gc_iSkillID_Poison_Tip_Signet = 2199
-Global Const $gc_iSkillID_Signet_of_Mystic_Speed = 2200
-Global Const $gc_iSkillID_Shield_of_Force = 2201
-Global Const $gc_iSkillID_Mending_Grip = 2202
-Global Const $gc_iSkillID_Spiritleech_Aura = 2203
-Global Const $gc_iSkillID_Rejuvenation = 2204
-Global Const $gc_iSkillID_Agony = 2205
-Global Const $gc_iSkillID_Ghostly_Weapon = 2206
-Global Const $gc_iSkillID_Inspirational_Speech = 2207
-Global Const $gc_iSkillID_Burning_Shield = 2208
-Global Const $gc_iSkillID_Holy_Spear = 2209
-Global Const $gc_iSkillID_Spear_Swipe = 2210
-Global Const $gc_iSkillID_Alkars_Alchemical_Acid = 2211
-Global Const $gc_iSkillID_Light_of_Deldrimor = 2212
-Global Const $gc_iSkillID_Ear_Bite = 2213
-Global Const $gc_iSkillID_Low_Blow = 2214
-Global Const $gc_iSkillID_Brawling_Headbutt = 2215
-Global Const $gc_iSkillID_Dont_Trip = 2216
-Global Const $gc_iSkillID_By_Urals_Hammer = 2217
-Global Const $gc_iSkillID_Drunken_Master = 2218
-Global Const $gc_iSkillID_Great_Dwarf_Weapon = 2219
-Global Const $gc_iSkillID_Great_Dwarf_Armor = 2220
-Global Const $gc_iSkillID_Breath_of_the_Great_Dwarf = 2221
-Global Const $gc_iSkillID_Snow_Storm = 2222
-Global Const $gc_iSkillID_Black_Powder_Mine = 2223
-Global Const $gc_iSkillID_Summon_Mursaat = 2224
-Global Const $gc_iSkillID_Summon_Ruby_Djinn = 2225
-Global Const $gc_iSkillID_Summon_Ice_Imp = 2226
-Global Const $gc_iSkillID_Summon_Naga_Shaman = 2227
-Global Const $gc_iSkillID_Deft_Strike = 2228
-Global Const $gc_iSkillID_Signet_of_Infection = 2229
-Global Const $gc_iSkillID_Tryptophan_Signet = 2230
-Global Const $gc_iSkillID_Ebon_Battle_Standard_of_Courage = 2231
-Global Const $gc_iSkillID_Ebon_Battle_Standard_of_Wisdom = 2232
-Global Const $gc_iSkillID_Ebon_Battle_Standard_of_Honor = 2233
-Global Const $gc_iSkillID_Ebon_Vanguard_Sniper_Support = 2234
-Global Const $gc_iSkillID_Ebon_Vanguard_Assassin_Support = 2235
-Global Const $gc_iSkillID_Well_of_Ruin = 2236
-Global Const $gc_iSkillID_Atrophy = 2237
-Global Const $gc_iSkillID_Spear_of_Redemption = 2238
-; Global Const $gc_iSkillID_Unknow = 2239
-Global Const $gc_iSkillID_Gelatinous_Material_Explosion = 2240
-Global Const $gc_iSkillID_Gelatinous_Corpse_Consumption = 2241
-Global Const $gc_iSkillID_Gelatinous_Mutation = 2242
-Global Const $gc_iSkillID_Gelatinous_Absorption = 2243
-Global Const $gc_iSkillID_Unstable_Ooze_Explosion = 2244
-Global Const $gc_iSkillID_Golem_Shrapnel = 2245
-Global Const $gc_iSkillID_Unstable_Aura = 2246
-Global Const $gc_iSkillID_Unstable_Pulse = 2247
-Global Const $gc_iSkillID_Polymock_Power_Drain = 2248
-Global Const $gc_iSkillID_Polymock_Block = 2249
-Global Const $gc_iSkillID_Polymock_Glyph_of_Concentration = 2250
-Global Const $gc_iSkillID_Polymock_Ether_Signet = 2251
-Global Const $gc_iSkillID_Polymock_Glyph_of_Power = 2252
-Global Const $gc_iSkillID_Polymock_Overload = 2253
-Global Const $gc_iSkillID_Polymock_Glyph_Destabilization = 2254
-Global Const $gc_iSkillID_Polymock_Mind_Wreck = 2255
-Global Const $gc_iSkillID_Order_of_Unholy_Vigor = 2256
-Global Const $gc_iSkillID_Order_of_the_Lich = 2257
-Global Const $gc_iSkillID_Master_of_Necromancy = 2258
-Global Const $gc_iSkillID_Animate_Undead = 2259
-Global Const $gc_iSkillID_Polymock_Deathly_Chill = 2260
-Global Const $gc_iSkillID_Polymock_Rising_Bile = 2261
-Global Const $gc_iSkillID_Polymock_Rotting_Flesh = 2262
-Global Const $gc_iSkillID_Polymock_Lightning_Strike = 2263
-Global Const $gc_iSkillID_Polymock_Lightning_Orb = 2264
-Global Const $gc_iSkillID_Polymock_Lightning_Djinns_Haste = 2265
-Global Const $gc_iSkillID_Polymock_Flare = 2266
-Global Const $gc_iSkillID_Polymock_Immolate = 2267
-Global Const $gc_iSkillID_Polymock_Meteor = 2268
-Global Const $gc_iSkillID_Polymock_Ice_Spear = 2269
-Global Const $gc_iSkillID_Polymock_Icy_Prison = 2270
-Global Const $gc_iSkillID_Polymock_Mind_Freeze = 2271
-Global Const $gc_iSkillID_Polymock_Ice_Shard_Storm = 2272
-Global Const $gc_iSkillID_Polymock_Frozen_Trident = 2273
-Global Const $gc_iSkillID_Polymock_Smite = 2274
-Global Const $gc_iSkillID_Polymock_Smite_Hex = 2275
-Global Const $gc_iSkillID_Polymock_Bane_Signet = 2276
-Global Const $gc_iSkillID_Polymock_Stone_Daggers = 2277
-Global Const $gc_iSkillID_Polymock_Obsidian_Flame = 2278
-Global Const $gc_iSkillID_Polymock_Earthquake = 2279
-Global Const $gc_iSkillID_Polymock_Frozen_Armor = 2280
-Global Const $gc_iSkillID_Polymock_Glyph_Freeze = 2281
-Global Const $gc_iSkillID_Polymock_Fireball = 2282
-Global Const $gc_iSkillID_Polymock_Rodgorts_Invocation = 2283
-Global Const $gc_iSkillID_Polymock_Calculated_Risk = 2284
-Global Const $gc_iSkillID_Polymock_Recurring_Insecurity = 2285
-Global Const $gc_iSkillID_Polymock_Backfire = 2286
-Global Const $gc_iSkillID_Polymock_Guilt = 2287
-Global Const $gc_iSkillID_Polymock_Lamentation = 2288
-Global Const $gc_iSkillID_Polymock_Spirit_Rift = 2289
-Global Const $gc_iSkillID_Polymock_Painful_Bond = 2290
-Global Const $gc_iSkillID_Polymock_Signet_of_Clumsiness = 2291
-Global Const $gc_iSkillID_Polymock_Migraine = 2292
-Global Const $gc_iSkillID_Polymock_Glowing_Gaze = 2293
-Global Const $gc_iSkillID_Polymock_Searing_Flames = 2294
-Global Const $gc_iSkillID_Polymock_Signet_of_Revenge = 2295
-Global Const $gc_iSkillID_Polymock_Signet_of_Smiting = 2296
-Global Const $gc_iSkillID_Polymock_Stoning = 2297
-Global Const $gc_iSkillID_Polymock_Eruption = 2298
-Global Const $gc_iSkillID_Polymock_Shock_Arrow = 2299
-Global Const $gc_iSkillID_Polymock_Mind_Shock = 2300
-Global Const $gc_iSkillID_Polymock_Piercing_Light_Spear = 2301
-Global Const $gc_iSkillID_Polymock_Mind_Blast = 2302
-Global Const $gc_iSkillID_Polymock_Savannah_Heat = 2303
-Global Const $gc_iSkillID_Polymock_Diversion = 2304
-Global Const $gc_iSkillID_Polymock_Lightning_Blast = 2305
-Global Const $gc_iSkillID_Polymock_Poisoned_Ground = 2306
-Global Const $gc_iSkillID_Polymock_Icy_Bonds = 2307
-Global Const $gc_iSkillID_Polymock_Sandstorm = 2308
-Global Const $gc_iSkillID_Polymock_Banish = 2309
-Global Const $gc_iSkillID_Mergoyle_Form = 2310
-Global Const $gc_iSkillID_Skale_Form = 2311
-Global Const $gc_iSkillID_Gargoyle_Form = 2312
-Global Const $gc_iSkillID_Ice_Imp_Form = 2313
-Global Const $gc_iSkillID_Fire_Imp_Form = 2314
-Global Const $gc_iSkillID_Kappa_Form = 2315
-Global Const $gc_iSkillID_Aloe_Seed_Form = 2316
-Global Const $gc_iSkillID_Earth_Elemental_Form = 2317
-Global Const $gc_iSkillID_Fire_Elemental_Form = 2318
-Global Const $gc_iSkillID_Ice_Elemental_Form = 2319
-Global Const $gc_iSkillID_Mirage_Iboga_Form = 2320
-Global Const $gc_iSkillID_Wind_Rider_Form = 2321
-Global Const $gc_iSkillID_Naga_Shaman_Form = 2322
-Global Const $gc_iSkillID_Mantis_Dreamweaver_Form = 2323
-Global Const $gc_iSkillID_Ruby_Djinn_Form = 2324
-Global Const $gc_iSkillID_Gaki_Form = 2325
-Global Const $gc_iSkillID_Stone_Rain_Form = 2326
-Global Const $gc_iSkillID_Mursaat_Elementalist_Form = 2327
-Global Const $gc_iSkillID_Crystal_Shield = 2328
-Global Const $gc_iSkillID_Crystal_Snare = 2329
-Global Const $gc_iSkillID_Paranoid_Indignation = 2330
-Global Const $gc_iSkillID_Searing_Breath = 2331
-Global Const $gc_iSkillID_Kraks_Charge = 2332
-Global Const $gc_iSkillID_Brawling = 2333
-Global Const $gc_iSkillID_Brawling_Block = 2334
-Global Const $gc_iSkillID_Brawling_Jab1 = 2335
-Global Const $gc_iSkillID_Brawling_Jab2 = 2336
-Global Const $gc_iSkillID_Brawling_Straight_Right = 2337
-Global Const $gc_iSkillID_Brawling_Hook1 = 2338
-Global Const $gc_iSkillID_Brawling_Hook2 = 2339
-Global Const $gc_iSkillID_Brawling_Uppercut = 2340
-Global Const $gc_iSkillID_Brawling_Combo_Punch = 2341
-Global Const $gc_iSkillID_Brawling_Headbutt_Brawling_skill = 2342
-Global Const $gc_iSkillID_STAND_UP = 2343
-Global Const $gc_iSkillID_Call_of_Destruction = 2344
-Global Const $gc_iSkillID_Flame_Jet = 2345
-Global Const $gc_iSkillID_Lava_Ground = 2346
-Global Const $gc_iSkillID_Lava_Wave = 2347
-; Global Const $gc_iSkillID_Unknow = 2348
-Global Const $gc_iSkillID_Spirit_Shield = 2349
-Global Const $gc_iSkillID_Summoning_Lord = 2350
-Global Const $gc_iSkillID_Charm_Animal_Ashlyn_Spiderfriend = 2351
-Global Const $gc_iSkillID_Charr_Siege_Attack_Assault_on_the_Stronghold = 2352
-Global Const $gc_iSkillID_Finish_Him = 2353
-Global Const $gc_iSkillID_Dodge_This = 2354
-Global Const $gc_iSkillID_I_Am_the_Strongest = 2355
-Global Const $gc_iSkillID_I_Am_Unstoppable = 2356
-Global Const $gc_iSkillID_A_Touch_of_Guile = 2357
-Global Const $gc_iSkillID_You_Move_Like_a_Dwarf = 2358
-Global Const $gc_iSkillID_You_Are_All_Weaklings = 2359
-Global Const $gc_iSkillID_Feel_No_Pain = 2360
-Global Const $gc_iSkillID_Club_of_a_Thousand_Bears = 2361
-; Global Const $gc_iSkillID_Unknow = 2362
-Global Const $gc_iSkillID_Talon_Strike = 2363
-Global Const $gc_iSkillID_Lava_Blast = 2364
-Global Const $gc_iSkillID_Thunderfist_Strike = 2365
-; Global Const $gc_iSkillID_Unknow = 2366
-Global Const $gc_iSkillID_Alkars_Concoction = 2367
-Global Const $gc_iSkillID_Murakais_Consumption = 2368
-Global Const $gc_iSkillID_Murakais_Censure = 2369
-Global Const $gc_iSkillID_Murakais_Calamity = 2370
-Global Const $gc_iSkillID_Murakais_Storm_of_Souls = 2371
-Global Const $gc_iSkillID_Edification = 2372
-Global Const $gc_iSkillID_Heart_of_the_Norn = 2373
-Global Const $gc_iSkillID_Ursan_Blessing = 2374
-Global Const $gc_iSkillID_Ursan_Strike = 2375
-Global Const $gc_iSkillID_Ursan_Rage = 2376
-Global Const $gc_iSkillID_Ursan_Roar = 2377
-Global Const $gc_iSkillID_Ursan_Force = 2378
-Global Const $gc_iSkillID_Volfen_Blessing = 2379
-Global Const $gc_iSkillID_Volfen_Claw = 2380
-Global Const $gc_iSkillID_Volfen_Pounce = 2381
-Global Const $gc_iSkillID_Volfen_Bloodlust = 2382
-Global Const $gc_iSkillID_Volfen_Agility = 2383
-Global Const $gc_iSkillID_Raven_Blessing = 2384
-Global Const $gc_iSkillID_Raven_Talons = 2385
-Global Const $gc_iSkillID_Raven_Swoop = 2386
-Global Const $gc_iSkillID_Raven_Shriek = 2387
-Global Const $gc_iSkillID_Raven_Flight = 2388
-Global Const $gc_iSkillID_Totem_of_Man = 2389
-Global Const $gc_iSkillID_Filthy_Explosion = 2390
-Global Const $gc_iSkillID_Murakais_Call = 2391
-Global Const $gc_iSkillID_Spawn_Pods = 2392
-Global Const $gc_iSkillID_Enraged_Blast = 2393
-Global Const $gc_iSkillID_Spawn_Hatchling = 2394
-Global Const $gc_iSkillID_Ursan_Roar_Blood_Washes_Blood = 2395
-Global Const $gc_iSkillID_Ursan_Force_Blood_Washes_Blood = 2396
-Global Const $gc_iSkillID_Ursan_Aura = 2397
-Global Const $gc_iSkillID_Consume_Flames = 2398
-Global Const $gc_iSkillID_Aura_of_the_Great_Destroyer = 2399
-Global Const $gc_iSkillID_Destroy_the_Humans = 2400
-Global Const $gc_iSkillID_Charr_Flame_Keeper_Form = 2401
-Global Const $gc_iSkillID_Titan_Form = 2402
-Global Const $gc_iSkillID_Skeletal_Mage_Form = 2403
-Global Const $gc_iSkillID_Smoke_Wraith_Form = 2404
-Global Const $gc_iSkillID_Bone_Dragon_Form = 2405
-; Global Const $gc_iSkillID_Unknow = 2406
-Global Const $gc_iSkillID_Dwarven_Arcanist_Form = 2407
-Global Const $gc_iSkillID_Dolyak_Rider_Form = 2408
-Global Const $gc_iSkillID_Extract_Inscription = 2409
-Global Const $gc_iSkillID_Charr_Shaman_Form = 2410
-Global Const $gc_iSkillID_Mindbender = 2411
-Global Const $gc_iSkillID_Smooth_Criminal = 2412
-Global Const $gc_iSkillID_Technobabble = 2413
-Global Const $gc_iSkillID_Radiation_Field = 2414
-Global Const $gc_iSkillID_Asuran_Scan = 2415
-Global Const $gc_iSkillID_Air_of_Superiority = 2416
-Global Const $gc_iSkillID_Mental_Block = 2417
-Global Const $gc_iSkillID_Pain_Inverter = 2418
-Global Const $gc_iSkillID_Healing_Salve = 2419
-Global Const $gc_iSkillID_Ebon_Escape = 2420
-Global Const $gc_iSkillID_Weakness_Trap = 2421
-Global Const $gc_iSkillID_Winds = 2422
-Global Const $gc_iSkillID_Dwarven_Stability = 2423
-Global Const $gc_iSkillID_Stout_Hearted = 2424
-Global Const $gc_iSkillID_Inscribed_Ettin_Aura = 2425
-Global Const $gc_iSkillID_Decipher_Inscriptions = 2426
-Global Const $gc_iSkillID_Rebel_Yell = 2427
-; Global Const $gc_iSkillID_Unknow = 2428
-Global Const $gc_iSkillID_Asuran_Flame_Staff = 2429
-Global Const $gc_iSkillID_Aura_of_the_Bloodstone1 = 2430
-Global Const $gc_iSkillID_Aura_of_the_Bloodstone2 = 2431
-Global Const $gc_iSkillID_Aura_of_the_Bloodstone3 = 2432
-Global Const $gc_iSkillID_Haunted_Ground = 2433
-Global Const $gc_iSkillID_Asuran_Bodyguard1 = 2434
-Global Const $gc_iSkillID_Asuran_Bodyguard2 = 2435
-Global Const $gc_iSkillID_Asuran_Bodyguard3 = 2436
-Global Const $gc_iSkillID_Energy_Channel = 2437
-Global Const $gc_iSkillID_Hunt_Rampage1 = 2438
-; Global Const $gc_iSkillID_Unknow = 2439
-Global Const $gc_iSkillID_Boss_Bounty1 = 2440
-Global Const $gc_iSkillID_Hunt_Point_Bonus1 = 2441
-Global Const $gc_iSkillID_Hunt_Point_Bonus2 = 2442
-Global Const $gc_iSkillID_Hunt_Point_Bonus3 = 2443
-Global Const $gc_iSkillID_Time_Attack1 = 2444
-Global Const $gc_iSkillID_Dwarven_Raider5 = 2445
-Global Const $gc_iSkillID_Dwarven_Raider6 = 2446
-Global Const $gc_iSkillID_Dwarven_Raider7 = 2447
-Global Const $gc_iSkillID_Dwarven_Raider8 = 2448
-Global Const $gc_iSkillID_Great_Dwarfs_Blessing1 = 2449
-Global Const $gc_iSkillID_Hunt_Rampage2 = 2450
-; Global Const $gc_iSkillID_Unknow = 2451
-Global Const $gc_iSkillID_Boss_Bounty2 = 2452
-Global Const $gc_iSkillID_Hunt_Point_Bonus4 = 2453
-Global Const $gc_iSkillID_Hunt_Point_Bonus5 = 2454
-; Global Const $gc_iSkillID_Unknow = 2455
-Global Const $gc_iSkillID_Time_Attack2 = 2456
-Global Const $gc_iSkillID_Vanguard_Patrol1 = 2457
-Global Const $gc_iSkillID_Vanguard_Patrol2 = 2458
-Global Const $gc_iSkillID_Vanguard_Patrol3 = 2459
-Global Const $gc_iSkillID_Vanguard_Patrol4 = 2460
-Global Const $gc_iSkillID_Vanguard_Commendation1 = 2461
-Global Const $gc_iSkillID_Hunt_Rampage3 = 2462
-; Global Const $gc_iSkillID_Unknow = 2463
-Global Const $gc_iSkillID_Boss_Bounty3 = 2464
-; Global Const $gc_iSkillID_Unknow = 2465
-; Global Const $gc_iSkillID_Unknow = 2466
-; Global Const $gc_iSkillID_Unknow = 2467
-; Global Const $gc_iSkillID_Unknow = 2468
-Global Const $gc_iSkillID_Norn_Hunting_Party1 = 2469
-Global Const $gc_iSkillID_Norn_Hunting_Party2 = 2470
-Global Const $gc_iSkillID_Norn_Hunting_Party3 = 2471
-Global Const $gc_iSkillID_Norn_Hunting_Party4 = 2472
-Global Const $gc_iSkillID_Strength_of_the_Norn1 = 2473
-Global Const $gc_iSkillID_Hunt_Rampage4 = 2474
-; Global Const $gc_iSkillID_Unknow = 2475
-; Global Const $gc_iSkillID_Unknow = 2476
-; Global Const $gc_iSkillID_Unknow = 2477
-; Global Const $gc_iSkillID_Unknow = 2478
-; Global Const $gc_iSkillID_Unknow = 2479
-; Global Const $gc_iSkillID_Unknow = 2480
-Global Const $gc_iSkillID_Asuran_Bodyguard = 2481
-Global Const $gc_iSkillID_Desperate_Howl = 2482
-Global Const $gc_iSkillID_Gloat = 2483
-Global Const $gc_iSkillID_Metamorphosis = 2484
-Global Const $gc_iSkillID_Inner_Fire = 2485
-Global Const $gc_iSkillID_Elemental_Shift = 2486
-Global Const $gc_iSkillID_Dryders_Feast = 2487
-Global Const $gc_iSkillID_Fungal_Explosion = 2488
-Global Const $gc_iSkillID_Blood_Rage = 2489
-Global Const $gc_iSkillID_Parasitic_Bite = 2490
-Global Const $gc_iSkillID_False_Death = 2491
-Global Const $gc_iSkillID_Ooze_Combination = 2492
-Global Const $gc_iSkillID_Ooze_Division = 2493
-Global Const $gc_iSkillID_Bear_Form = 2494
-Global Const $gc_iSkillID_Sweeping_Strikes = 2495
-Global Const $gc_iSkillID_Spore_Explosion = 2496
-Global Const $gc_iSkillID_Dormant_Husk = 2497
-Global Const $gc_iSkillID_Monkey_See__Monkey_Do = 2498
-Global Const $gc_iSkillID_Feeding_Frenzy = 2499
-Global Const $gc_iSkillID_Tengus_Mimicry = 2500
-Global Const $gc_iSkillID_Tongue_Lash = 2501
-Global Const $gc_iSkillID_Soulrending_Shriek = 2502
-Global Const $gc_iSkillID_Unreliable = 2503
-Global Const $gc_iSkillID_Siege_Devourer = 2504
-Global Const $gc_iSkillID_Siege_Devourer_Feast = 2505
-Global Const $gc_iSkillID_Devourer_Bite = 2506
-Global Const $gc_iSkillID_Siege_Devourer_Swipe = 2507
-Global Const $gc_iSkillID_Devourer_Siege = 2508
-Global Const $gc_iSkillID_HYAHHHHH1 = 2509
-Global Const $gc_iSkillID_HYAHHHHH2 = 2510
-Global Const $gc_iSkillID_HYAHHHHH3 = 2511
-Global Const $gc_iSkillID_HYAHHHHH4 = 2512
-Global Const $gc_iSkillID_Dismount_Siege_Devourer = 2513
-Global Const $gc_iSkillID_The_Masters_Mark = 2514
-Global Const $gc_iSkillID_The_Snipers_Spear = 2515
-Global Const $gc_iSkillID_Mount = 2516
-Global Const $gc_iSkillID_Reverse_Polarity_Fire_Shield = 2517
-Global Const $gc_iSkillID_Tengus_Gaze = 2518
-Global Const $gc_iSkillID_Fix_Monster_Attributes = 2519
-Global Const $gc_iSkillID_Stone_Dwarf_Transformation = 2523
-Global Const $gc_iSkillID_Forgewights_Blessing = 2524
-Global Const $gc_iSkillID_Selvetarms_Blessing = 2525
-Global Const $gc_iSkillID_Thommiss_Blessing = 2526
-Global Const $gc_iSkillID_Duncans_Defense = 2527
-; Global Const $gc_iSkillID_Unknow = 2528
-Global Const $gc_iSkillID_Rands_Attack = 2529
-Global Const $gc_iSkillID_Selvetarms_Attack = 2530
-Global Const $gc_iSkillID_Thommiss_Attack = 2531
-Global Const $gc_iSkillID_Create_Spore = 2532
-; Global Const $gc_iSkillID_Unknow = 2533
-; Global Const $gc_iSkillID_Unknow = 2534
-; Global Const $gc_iSkillID_Unknow = 2535
-Global Const $gc_iSkillID_Invigorating_Mist = 2536
-Global Const $gc_iSkillID_Courageous_Was_Saidra = 2537
-Global Const $gc_iSkillID_Animate_Undead_Palawa_Joko = 2538
-Global Const $gc_iSkillID_Order_of_Unholy_Vigor_Palawa_Joko = 2539
-Global Const $gc_iSkillID_Order_of_the_Lich_Palawa_Joko = 2540
-Global Const $gc_iSkillID_Golem_Boosters = 2541
-Global Const $gc_iSkillID_Charm_Animal_monster_ = 2542
-Global Const $gc_iSkillID_Wurm_Siege_Eye_of_the_North = 2543
-Global Const $gc_iSkillID_Tongue_Whip = 2544
-Global Const $gc_iSkillID_Lit_Torch = 2545
-Global Const $gc_iSkillID_Dishonorable = 2546
-Global Const $gc_iSkillID_Hard_Mode_Dungeon_Boss = 2547
-Global Const $gc_iSkillID_Veteran_Asuran_Bodyguard = 2548
-Global Const $gc_iSkillID_Veteran_Dwarven_Raider = 2549
-Global Const $gc_iSkillID_Veteran_Vanguard_Patrol = 2550
-Global Const $gc_iSkillID_Veteran_Norn_Hunting_Party = 2551
-; Global Const $gc_iSkillID_Unknow = 2552
-; Global Const $gc_iSkillID_Unknow = 2553
-; Global Const $gc_iSkillID_Unknow = 2554
-; Global Const $gc_iSkillID_Unknow = 2555
-; Global Const $gc_iSkillID_Unknow = 2556
-; Global Const $gc_iSkillID_Unknow = 2557
-; Global Const $gc_iSkillID_Unknow = 2558
-; Global Const $gc_iSkillID_Unknow = 2559
-; Global Const $gc_iSkillID_Unknow = 2560
-; Global Const $gc_iSkillID_Unknow = 2561
-; Global Const $gc_iSkillID_Unknow = 2562
-; Global Const $gc_iSkillID_Unknow = 2563
-; Global Const $gc_iSkillID_Unknow = 2564
-Global Const $gc_iSkillID_Dwarven_Raider1 = 2565
-Global Const $gc_iSkillID_Dwarven_Raider2 = 2566
-Global Const $gc_iSkillID_Dwarven_Raider3 = 2567
-Global Const $gc_iSkillID_Dwarven_Raider4 = 2568
-; Global Const $gc_iSkillID_Unknow = 2569
-Global Const $gc_iSkillID_Great_Dwarfs_Blessing2 = 2570
-Global Const $gc_iSkillID_Boss_Bounty4 = 2571
-; Global Const $gc_iSkillID_Unknow = 2572
-; Global Const $gc_iSkillID_Unknow = 2573
-Global Const $gc_iSkillID_Hunt_Point_Bonus6 = 2574
-Global Const $gc_iSkillID_Hunt_Point_Bonus7 = 2575
-Global Const $gc_iSkillID_Hunt_Rampage5 = 2576
-Global Const $gc_iSkillID_Time_Attack3 = 2577
-Global Const $gc_iSkillID_Vanguard_Patrol = 2578
-; Global Const $gc_iSkillID_Unknow = 2579
-; Global Const $gc_iSkillID_Unknow = 2580
-; Global Const $gc_iSkillID_Unknow = 2581
-; Global Const $gc_iSkillID_Unknow = 2582
-Global Const $gc_iSkillID_Boss_Bounty5 = 2583
-; Global Const $gc_iSkillID_Unknow = 2584
-Global Const $gc_iSkillID_Hunt_Point_Bonus8 = 2585
-; Global Const $gc_iSkillID_Unknow = 2586
-; Global Const $gc_iSkillID_Unknow = 2587
-; Global Const $gc_iSkillID_Unknow = 2588
-Global Const $gc_iSkillID_Vanguard_Commendation2 = 2589
-; Global Const $gc_iSkillID_Unknow = 2590
-Global Const $gc_iSkillID_Norn_Hunting_Party5 = 2591
-Global Const $gc_iSkillID_Norn_Hunting_Party6 = 2592
-Global Const $gc_iSkillID_Norn_Hunting_Party7 = 2593
-Global Const $gc_iSkillID_Norn_Hunting_Party8 = 2594
-; Global Const $gc_iSkillID_Unknow = 2595
-Global Const $gc_iSkillID_Boss_Bounty6 = 2596
-; Global Const $gc_iSkillID_Unknow = 2597
-Global Const $gc_iSkillID_Strength_of_the_Norn2 = 2598
-Global Const $gc_iSkillID_Hunt_Point_Bonus9 = 2599
-; Global Const $gc_iSkillID_Unknow = 2600
-Global Const $gc_iSkillID_Hunt_Point_Bonus10 = 2601
-Global Const $gc_iSkillID_Hunt_Rampage6 = 2602
-Global Const $gc_iSkillID_Time_Attack4 = 2603
-Global Const $gc_iSkillID_Candy_Corn_skill = 2604
-Global Const $gc_iSkillID_Candy_Apple_skill = 2605
-Global Const $gc_iSkillID_Anton_Costume_Brawl_disguise = 2606
-Global Const $gc_iSkillID_Erys_Vasburg_Costume_Brawl_disguise = 2607
-Global Const $gc_iSkillID_Olias_Costume_Brawl_disguise = 2608
-Global Const $gc_iSkillID_Argo_Costume_Brawl_disguise = 2609
-Global Const $gc_iSkillID_Mhenlo_Costume_Brawl_disguise = 2610
-Global Const $gc_iSkillID_Lukas_Costume_Brawl_disguise = 2611
-Global Const $gc_iSkillID_Aidan_Costume_Brawl_disguise = 2612
-Global Const $gc_iSkillID_Kahmu_Costume_Brawl_disguise = 2613
-Global Const $gc_iSkillID_Razah_Costume_Brawl_disguise = 2614
-Global Const $gc_iSkillID_Morgahn_Costume_Brawl_disguise = 2615
-Global Const $gc_iSkillID_Nika_Costume_Brawl_disguise = 2616
-Global Const $gc_iSkillID_Seaguard_Hala_Costume_Brawl_disguise = 2617
-Global Const $gc_iSkillID_Livia_Costume_Brawl_disguise = 2618
-Global Const $gc_iSkillID_Cynn_Costume_Brawl_disguise = 2619
-Global Const $gc_iSkillID_Tahlkora_Costume_Brawl_disguise = 2620
-Global Const $gc_iSkillID_Devona_Costume_Brawl_disguise = 2621
-Global Const $gc_iSkillID_Zho_Costume_Brawl_disguise = 2622
-Global Const $gc_iSkillID_Melonni_Costume_Brawl_disguise = 2623
-Global Const $gc_iSkillID_Xandra_Costume_Brawl_disguise = 2624
-Global Const $gc_iSkillID_Hayda_Costume_Brawl_disguise = 2625
-; Global Const $gc_iSkillID_Unknow = 2626
-Global Const $gc_iSkillID_Reapers_Mark2 = 2627
-Global Const $gc_iSkillID_Enfeeble2 = 2628
-; Global Const $gc_iSkillID_Unknow = 2629
-; Global Const $gc_iSkillID_Signet_of_Lost_Souls = 2630
-; Global Const $gc_iSkillID_Unknow = 2631
-Global Const $gc_iSkillID_Searing_Flames2 = 2632
-Global Const $gc_iSkillID_Glowing_Gaze2 = 2633
-Global Const $gc_iSkillID_Steam2 = 2634
-Global Const $gc_iSkillID_Flame_Djinns_Haste2 = 2635
-Global Const $gc_iSkillID_Liquid_Flam2 = 2636
-; Global Const $gc_iSkillID_Unknow = 2637
-; Global Const $gc_iSkillID_Unknow = 2638
-Global Const $gc_iSkillID_Smite_Condition2 = 2639
-; Global Const $gc_iSkillID_Crippling_Slash = 2640
-; Global Const $gc_iSkillID_Sun_and_Moon_Slash = 2641
-; Global Const $gc_iSkillID_Enraging_Charge = 2642
-; Global Const $gc_iSkillID_Tiger_Stance = 2643
-; Global Const $gc_iSkillID_Burning_Arrow = 2644
-; Global Const $gc_iSkillID_Natural_Stride = 2645
-; Global Const $gc_iSkillID_Falling_Lotus_Strike = 2646
-; Global Const $gc_iSkillID_Anthem_of_Weariness = 2647
-; Global Const $gc_iSkillID_Pious_Fury = 2648
-Global Const $gc_iSkillID_Pie_Induced_Ecstasy = 2649
-Global Const $gc_iSkillID_Charm_Animal_Charr_Demolisher = 2650
-Global Const $gc_iSkillID_Togo_disguise = 2651
-Global Const $gc_iSkillID_Turai_Ossa_disguise = 2652
-Global Const $gc_iSkillID_Gwen_disguise = 2653
-Global Const $gc_iSkillID_Saul_DAlessio_disguise = 2654
-Global Const $gc_iSkillID_Dragon_Empire_Rage = 2655
-Global Const $gc_iSkillID_Call_to_the_Spirit_Realm = 2656
-Global Const $gc_iSkillID_Call_of_Haste_PvP = 2657
-Global Const $gc_iSkillID_Hide = 2658
-Global Const $gc_iSkillID_Feign_Death = 2659
-Global Const $gc_iSkillID_Flee = 2660
-Global Const $gc_iSkillID_Throw_Rock = 2661
-Global Const $gc_iSkillID_Nightmarish_Aura = 2662
-Global Const $gc_iSkillID_Siege_Strike = 2663
-Global Const $gc_iSkillID_Spike_Trap_spell = 2664
-Global Const $gc_iSkillID_Barbed_Bomb = 2665
-Global Const $gc_iSkillID_Fire_and_Brimstone = 2666
-Global Const $gc_iSkillID_Balm_Bomb = 2667
-Global Const $gc_iSkillID_Explosives = 2668
-Global Const $gc_iSkillID_Rations = 2669
-Global Const $gc_iSkillID_Form_Up_and_Advance = 2670
-Global Const $gc_iSkillID_Advance = 2671
-Global Const $gc_iSkillID_Spectral_Agony_Saul_DAlessio = 2672
-Global Const $gc_iSkillID_Stun_Bomb = 2673
-Global Const $gc_iSkillID_Banner_of_the_Unseen = 2674
-Global Const $gc_iSkillID_Signet_of_the_Unseen = 2675
-Global Const $gc_iSkillID_For_Elona = 2676
-Global Const $gc_iSkillID_Giant_Stomp_Turai_Ossa = 2677
-Global Const $gc_iSkillID_Whirlwind_Attack_Turai_Ossa = 2678
-Global Const $gc_iSkillID_Junundu_Siege2 = 2679
-Global Const $gc_iSkillID_Distortion_Gwen = 2680
-Global Const $gc_iSkillID_Shared_Burden_Gwen = 2681
-Global Const $gc_iSkillID_Sum_of_All_Fears_Gwen = 2682
-Global Const $gc_iSkillID_Castigation_Signet_Saul_DAlessio = 2683
-Global Const $gc_iSkillID_Unnatural_Signet_Saul_DAlessio = 2684
-Global Const $gc_iSkillID_Dragon_Slash_Turai_Ossa = 2685
-Global Const $gc_iSkillID_Essence_Strike_Togo = 2686
-Global Const $gc_iSkillID_Spirit_Burn_Togo = 2687
-Global Const $gc_iSkillID_Spirit_Rift_Togo = 2688
-Global Const $gc_iSkillID_Mend_Body_and_Soul_Togo = 2689
-Global Const $gc_iSkillID_Offering_of_Spirit_Togo = 2690
-Global Const $gc_iSkillID_Disenchantment_Togo = 2691
-Global Const $gc_iSkillID_Fire_Dart2 = 2692
-; Global Const $gc_iSkillID_Unknow = 2693
-; Global Const $gc_iSkillID_Unknow = 2694
-; Global Const $gc_iSkillID_Unknow = 2695
-; Global Const $gc_iSkillID_Unknow = 2696
-; Global Const $gc_iSkillID_Unknow = 2697
-; Global Const $gc_iSkillID_Unknow = 2698
-Global Const $gc_iSkillID_Corrupted_Haiju_Lagoon_Water = 2699
-Global Const $gc_iSkillID_Journey_to_the_North = 2700
-Global Const $gc_iSkillID_Rat_Form = 2701
-Global Const $gc_iSkillID_Ox_Form = 2702
-Global Const $gc_iSkillID_Tiger_Form = 2703
-Global Const $gc_iSkillID_Rabbit_Form = 2704
-Global Const $gc_iSkillID_Dragon_Form = 2705
-Global Const $gc_iSkillID_Snake_Form = 2706
-Global Const $gc_iSkillID_Horse_Form = 2707
-Global Const $gc_iSkillID_Sheep_Form = 2708
-Global Const $gc_iSkillID_Monkey_Form = 2709
-Global Const $gc_iSkillID_Rooster_Form = 2710
-Global Const $gc_iSkillID_Dog_Form = 2711
-Global Const $gc_iSkillID_Party_Time = 2712
-Global Const $gc_iSkillID_Victory_is_Ours = 2713
-Global Const $gc_iSkillID_Dark_Soul_Explosion = 2714
-Global Const $gc_iSkillID_Chaotic_Soul_Explosion = 2715
-Global Const $gc_iSkillID_Fiery_Soul_Explosion = 2716
-Global Const $gc_iSkillID_Rejuvenating_Soul_Explosion = 2717
-Global Const $gc_iSkillID_Plague_Spring = 2718
-Global Const $gc_iSkillID_Unbalancing_Soul_Explosion = 2719
-Global Const $gc_iSkillID_Shadowy_Soul_Explosion = 2720
-Global Const $gc_iSkillID_Ethereal_Soul_Explosion = 2721
-Global Const $gc_iSkillID_Redemption_of_Purity = 2722
-Global Const $gc_iSkillID_Purify_Energy = 2723
-Global Const $gc_iSkillID_Purifying_Flame = 2724
-Global Const $gc_iSkillID_Purifying_Prayer = 2725
-Global Const $gc_iSkillID_Strength_of_Purity = 2726
-Global Const $gc_iSkillID_Spring_of_Purity = 2727
-Global Const $gc_iSkillID_Way_of_the_Pure = 2728
-Global Const $gc_iSkillID_Purify_Soul = 2729
-Global Const $gc_iSkillID_Aura_of_Purity = 2730
-Global Const $gc_iSkillID_Anthem_of_Purity = 2731
-Global Const $gc_iSkillID_Falkens_Fire_Fist = 2732
-Global Const $gc_iSkillID_Falken_Quick = 2733
-Global Const $gc_iSkillID_Mind_Wrack_PvP = 2734
-Global Const $gc_iSkillID_Quickening_Terrain = 2735
-Global Const $gc_iSkillID_Massive_Damage = 2736
-Global Const $gc_iSkillID_Minion_Apocalypse = 2737
-; Global Const $gc_iSkillID_Unknow = 2738
-Global Const $gc_iSkillID_Combat_Costume_Assassin = 2739
-Global Const $gc_iSkillID_Combat_Costume_Mesmer = 2740
-Global Const $gc_iSkillID_Combat_Costume_Necromancer = 2741
-Global Const $gc_iSkillID_Combat_Costume_Elementalist = 2742
-Global Const $gc_iSkillID_Combat_Costume_Monk = 2743
-Global Const $gc_iSkillID_Combat_Costume_Warrior = 2744
-Global Const $gc_iSkillID_Combat_Costume_Ranger = 2745
-Global Const $gc_iSkillID_Combat_Costume_Dervish = 2746
-Global Const $gc_iSkillID_Combat_Costume_Ritualist = 2747
-Global Const $gc_iSkillID_Combat_Costume_Paragon = 2748
-; Global Const $gc_iSkillID_Unknow = 2749
-; Global Const $gc_iSkillID_Unknow = 2750
-; Global Const $gc_iSkillID_Unknow = 2751
-; Global Const $gc_iSkillID_Unknow = 2752
-; Global Const $gc_iSkillID_Unknow = 2753
-; Global Const $gc_iSkillID_Unknow = 2754
-Global Const $gc_iSkillID_Jade_Brotherhood_Bomb = 2755
-Global Const $gc_iSkillID_Mad_Kings_Fan = 2756
-; Global Const $gc_iSkillID_Unknow = 2757
-Global Const $gc_iSkillID_Candy_Corn_Strike = 2758
-Global Const $gc_iSkillID_Rocket_Propelled_Gobstopper = 2759
-Global Const $gc_iSkillID_Rain_of_Terror_spell = 2760
-Global Const $gc_iSkillID_Cry_of_Madness = 2761
-Global Const $gc_iSkillID_Sugar_Infusion = 2762
-Global Const $gc_iSkillID_Feast_of_Vengeance = 2763
-Global Const $gc_iSkillID_Animate_Candy_Minions = 2764
-Global Const $gc_iSkillID_Taste_of_Undeath = 2765
-Global Const $gc_iSkillID_Scourge_of_Candy = 2766
-Global Const $gc_iSkillID_Motivating_Insults = 2767
-Global Const $gc_iSkillID_Mad_King_Pony_Support = 2768
-Global Const $gc_iSkillID_Its_Good_to_Be_King = 2769
-Global Const $gc_iSkillID_Maddening_Laughter = 2770
-Global Const $gc_iSkillID_Mad_Kings_Influence = 2771
-; Global Const $gc_iSkillID_Unknow = 2772
-; Global Const $gc_iSkillID_Unknow = 2773
-; Global Const $gc_iSkillID_Unknow = 2774
-; Global Const $gc_iSkillID_Unknow = 2775
-; Global Const $gc_iSkillID_Unknow = 2776
-; Global Const $gc_iSkillID_Unknow = 2777
-; Global Const $gc_iSkillID_Unknow = 2778
-; Global Const $gc_iSkillID_Unknow = 2779
-; Global Const $gc_iSkillID_Unknow = 2780
-; Global Const $gc_iSkillID_Unknow = 2781
-; Global Const $gc_iSkillID_Unknow = 2782
-; Global Const $gc_iSkillID_Unknow = 2783
-; Global Const $gc_iSkillID_Unknow = 2784
-; Global Const $gc_iSkillID_Unknow = 2785
-; Global Const $gc_iSkillID_Unknow = 2786
-; Global Const $gc_iSkillID_Unknow = 2787
-; Global Const $gc_iSkillID_Unknow = 2788
-; Global Const $gc_iSkillID_Unknow = 2789
-; Global Const $gc_iSkillID_Unknow = 2790
-; Global Const $gc_iSkillID_Unknow = 2791
-Global Const $gc_iSkillID_Hidden_Talent = 2792
-Global Const $gc_iSkillID_Couriers_Haste = 2793
-Global Const $gc_iSkillID_Xinraes_Revenge = 2794
-; Global Const $gc_iSkillID_Unknow = 2795
-; Global Const $gc_iSkillID_Unknow = 2796
-; Global Const $gc_iSkillID_Unknow = 2797
-; Global Const $gc_iSkillID_Unknow = 2798
-; Global Const $gc_iSkillID_Unknow = 2799
-; Global Const $gc_iSkillID_Unknow = 2800
-; Global Const $gc_iSkillID_Unknow = 2801
-; Global Const $gc_iSkillID_Unknow = 2802
-Global Const $gc_iSkillID_Mind_Freeze_PvP = 2803
-Global Const $gc_iSkillID_Mind_Shock_PvP = 2804
-Global Const $gc_iSkillID_Mist_Form_PvP = 2805
-Global Const $gc_iSkillID_Ward_Against_Harm_PvP = 2806
-Global Const $gc_iSkillID_Ride_the_Lightning_PvP = 2807
-Global Const $gc_iSkillID_Enraged_Smash_PvP = 2808
-Global Const $gc_iSkillID_Obsidian_Flame_PvP = 2809
-Global Const $gc_iSkillID_Meek_Shall_Inherit = 2810
-; Global Const $gc_iSkillID_Unknow = 2811
-; Global Const $gc_iSkillID_Unknow = 2812
-Global Const $gc_iSkillID_Inverse_Ninja_Law = 2813
-; Global Const $gc_iSkillID_Unknow = 2814
-; Global Const $gc_iSkillID_Unknow = 2815
-; Global Const $gc_iSkillID_Unknow = 2816
-; Global Const $gc_iSkillID_Unknow = 2817
-; Global Const $gc_iSkillID_Unknow = 2818
-; Global Const $gc_iSkillID_Unknow = 2819
-; Global Const $gc_iSkillID_Unknow = 2820
-; Global Const $gc_iSkillID_Unknow = 2821
-; Global Const $gc_iSkillID_Unknow = 2822
-; Global Const $gc_iSkillID_Unknow = 2823
-; Global Const $gc_iSkillID_Unknow = 2824
-; Global Const $gc_iSkillID_Unknow = 2825
-; Global Const $gc_iSkillID_Unknow = 2826
-; Global Const $gc_iSkillID_Unknow = 2827
-; Global Const $gc_iSkillID_Unknow = 2828
-; Global Const $gc_iSkillID_Unknow = 2829
-; Global Const $gc_iSkillID_Unknow = 2830
-; Global Const $gc_iSkillID_Unknow = 2831
-; Global Const $gc_iSkillID_Unknow = 2832
-; Global Const $gc_iSkillID_Unknow = 2833
-; Global Const $gc_iSkillID_Unknow = 2834
-; Global Const $gc_iSkillID_Unknow = 2835
-; Global Const $gc_iSkillID_Unknow = 2836
-; Global Const $gc_iSkillID_Unknow = 2837
-; Global Const $gc_iSkillID_Unknow = 2838
-Global Const $gc_iSkillID_Abyssal_Form = 2839
-Global Const $gc_iSkillID_Asura_Form = 2840
-Global Const $gc_iSkillID_Awakened_Head_Form = 2841
-Global Const $gc_iSkillID_Spider_Form = 2842
-Global Const $gc_iSkillID_Charr_Form = 2843
-Global Const $gc_iSkillID_Golem_Form = 2844
-Global Const $gc_iSkillID_Hellhound_Form = 2845
-Global Const $gc_iSkillID_Norn_Form = 2846
-Global Const $gc_iSkillID_Ooze_Form = 2847
-Global Const $gc_iSkillID_Rift_Warden_Form = 2848
-; Global Const $gc_iSkillID_Unknow = 2849
-Global Const $gc_iSkillID_Yeti_Form = 2850
-Global Const $gc_iSkillID_Snowman_Form = 2851
-Global Const $gc_iSkillID_Energy_Drain_PvP = 2852
-Global Const $gc_iSkillID_Energy_Tap_PvP = 2853
-Global Const $gc_iSkillID_PvP_effect = 2854
-Global Const $gc_iSkillID_Ward_Against_Melee_PvP = 2855
-Global Const $gc_iSkillID_Lightning_Orb_PvP = 2856
-Global Const $gc_iSkillID_Aegis_PvP = 2857
-Global Const $gc_iSkillID_Watch_Yourself_PvP = 2858
-Global Const $gc_iSkillID_Enfeeble_PvP = 2859
-Global Const $gc_iSkillID_Ether_Renewal_PvP = 2860
-Global Const $gc_iSkillID_Penetrating_Attack_PvP = 2861
-Global Const $gc_iSkillID_Shadow_Form_PvP = 2862
-Global Const $gc_iSkillID_Discord_PvP = 2863
-Global Const $gc_iSkillID_Sundering_Attack_PvP = 2864
-Global Const $gc_iSkillID_Ritual_Lord_PvP = 2865
-Global Const $gc_iSkillID_Flesh_of_My_Flesh_PvP = 2866
-Global Const $gc_iSkillID_Ancestors_Rage_PvP = 2867
-Global Const $gc_iSkillID_Splinter_Weapon_PvP = 2868
-Global Const $gc_iSkillID_Assassins_Remedy_PvP = 2869
-Global Const $gc_iSkillID_Blinding_Surge_PvP = 2870
-Global Const $gc_iSkillID_Light_of_Deliverance_PvP = 2871
-Global Const $gc_iSkillID_Death_Pact_Signet_PvP = 2872
-Global Const $gc_iSkillID_Mystic_Sweep_PvP = 2873
-Global Const $gc_iSkillID_Eremites_Attack_PvP = 2874
-Global Const $gc_iSkillID_Harriers_Toss_PvP = 2875
-Global Const $gc_iSkillID_Defensive_Anthem_PvP = 2876
-Global Const $gc_iSkillID_Ballad_of_Restoration_PvP = 2877
-Global Const $gc_iSkillID_Song_of_Restoration_PvP = 2878
-Global Const $gc_iSkillID_Incoming_PvP = 2879
-Global Const $gc_iSkillID_Never_Surrender_PvP = 2880
-; Global Const $gc_iSkillID_Unknow = 2881
-Global Const $gc_iSkillID_Mantra_of_Inscriptions_PvP = 2882
-Global Const $gc_iSkillID_For_Great_Justice_PvP = 2883
-Global Const $gc_iSkillID_Mystic_Regeneration_PvP = 2884
-Global Const $gc_iSkillID_Enfeebling_Blood_PvP = 2885
-Global Const $gc_iSkillID_Summoning_Sickness = 2886
-Global Const $gc_iSkillID_Signet_of_Judgment_PvP = 2887
-Global Const $gc_iSkillID_Chilling_Victory_PvP = 2888
-; Global Const $gc_iSkillID_Unknow = 2889
-; Global Const $gc_iSkillID_Unknow = 2890
-Global Const $gc_iSkillID_Unyielding_Aura_PvP = 2891
-Global Const $gc_iSkillID_Spirit_Bond_PvP = 2892
-Global Const $gc_iSkillID_Weapon_of_Warding_PvP = 2893
-Global Const $gc_iSkillID_Bamph_Lite = 2894
-Global Const $gc_iSkillID_Smiters_Boon_PvP = 2895
-Global Const $gc_iSkillID_Battle_Fervor_Deactivating_ROX = 2896
-Global Const $gc_iSkillID_Cloak_of_Faith_Deactivating_ROX = 2897
-Global Const $gc_iSkillID_Dark_Aura_Deactivating_ROX = 2898
-Global Const $gc_iSkillID_Chaotic_Power_Deactivating_ROX = 2899
-Global Const $gc_iSkillID_Strength_of_the_Oak_Deactivating_ROX = 2900
-Global Const $gc_iSkillID_Sinister_Golem_Form = 2901
-Global Const $gc_iSkillID_Reactor_Blast = 2902
-Global Const $gc_iSkillID_Reactor_Blast_Timer = 2903
-Global Const $gc_iSkillID_Jade_Brotherhood_Disguise = 2904
-Global Const $gc_iSkillID_Internal_Power_Engaged = 2905
-Global Const $gc_iSkillID_Target_Acquisition = 2906
-Global Const $gc_iSkillID_NOX_Beam = 2907
-Global Const $gc_iSkillID_NOX_Field_Dash = 2908
-Global Const $gc_iSkillID_NOXion_Buster = 2909
-Global Const $gc_iSkillID_Countdown = 2910
-Global Const $gc_iSkillID_Bit_Golem_Breaker = 2911
-Global Const $gc_iSkillID_Bit_Golem_Rectifier = 2912
-Global Const $gc_iSkillID_Bit_Golem_Crash = 2913
-Global Const $gc_iSkillID_Bit_Golem_Force = 2914
-; Global Const $gc_iSkillID_Unknow = 2915
-Global Const $gc_iSkillID_NOX_Phantom = 2916
-Global Const $gc_iSkillID_NOX_Thunder = 2917
-Global Const $gc_iSkillID_NOX_Lock_On = 2918
-Global Const $gc_iSkillID_NOX_Driver = 2919
-Global Const $gc_iSkillID_NOX_Fire = 2920
-Global Const $gc_iSkillID_NOX_Knuckle = 2921
-Global Const $gc_iSkillID_NOX_Divider_Drive = 2922
-Global Const $gc_iSkillID_Yo_Ho_Ho_and_a_Bottle_of_Grog = 2923
-Global Const $gc_iSkillID_Oath_of_Protection = 2924
-Global Const $gc_iSkillID_Sloth_Hunters_Shot_PvP = 2925
-Global Const $gc_iSkillID_Bamph_Lifesteal = 2926
-Global Const $gc_iSkillID_Shrine_Backlash = 2927
-Global Const $gc_iSkillID_Amulet_of_Protection2 = 2928
-; Global Const $gc_iSkillID_Unknow = 2929
-; Global Const $gc_iSkillID_Unknow = 2930
-; Global Const $gc_iSkillID_Unknow = 2931
-; Global Const $gc_iSkillID_Unknow = 2932
-; Global Const $gc_iSkillID_Unknow = 2933
-; Global Const $gc_iSkillID_Unknow = 2934
-; Global Const $gc_iSkillID_Unknow = 2935
-; Global Const $gc_iSkillID_Unknow = 2936
-; Global Const $gc_iSkillID_Unknow = 2937
-; Global Const $gc_iSkillID_Unknow = 2938
-; Global Const $gc_iSkillID_Unknow = 2939
-; Global Const $gc_iSkillID_Unknow = 2940
-; Global Const $gc_iSkillID_Unknow = 2941
-; Global Const $gc_iSkillID_Unknow = 2942
-; Global Const $gc_iSkillID_Unknow = 2943
-; Global Const $gc_iSkillID_Unknow = 2944
-; Global Const $gc_iSkillID_Unknow = 2945
-; Global Const $gc_iSkillID_Unknow = 2946
-; Global Const $gc_iSkillID_Unknow = 2947
-; Global Const $gc_iSkillID_Unknow = 2948
-; Global Const $gc_iSkillID_Unknow = 2949
-; Global Const $gc_iSkillID_Unknow = 2950
-; Global Const $gc_iSkillID_Unknow = 2951
-; Global Const $gc_iSkillID_Unknow = 2952
-; Global Const $gc_iSkillID_Unknow = 2953
-; Global Const $gc_iSkillID_Unknow = 2954
-; Global Const $gc_iSkillID_Unknow = 2955
-; Global Const $gc_iSkillID_Unknow = 2956
-Global Const $gc_iSkillID_Western_Health_Shrine_Bonus = 2957
-Global Const $gc_iSkillID_Eastern_Health_Shrine_Bonus = 2958
-Global Const $gc_iSkillID_Experts_Dexterity_PvP = 2959
-; Global Const $gc_iSkillID_Unknow = 2960
-Global Const $gc_iSkillID_Delayed_Blast_BAMPH = 2961
-Global Const $gc_iSkillID_Grentch_Form = 2962
-; Global Const $gc_iSkillID_Unknow = 2963
-Global Const $gc_iSkillID_Snowball2 = 2964
-Global Const $gc_iSkillID_Signet_of_Spirits_PvP = 2965
-Global Const $gc_iSkillID_Signet_of_Ghostly_Might_PvP = 2966
-Global Const $gc_iSkillID_Avatar_of_Grenth_PvP = 2967
-Global Const $gc_iSkillID_Oversized_Tonic_Warning = 2968
-Global Const $gc_iSkillID_Read_the_Wind_PvP = 2969
-Global Const $gc_iSkillID_Mursaat_Form = 2970
-Global Const $gc_iSkillID_Blue_Rock_Candy_Rush = 2971
-Global Const $gc_iSkillID_Green_Rock_Candy_Rush = 2972
-Global Const $gc_iSkillID_Red_Rock_Candy_Rush = 2973
-Global Const $gc_iSkillID_Archer_Form = 2974
-Global Const $gc_iSkillID_Avatar_of_Balthazar_Form = 2975
-Global Const $gc_iSkillID_Champion_of_Balthazar_Form = 2976
-Global Const $gc_iSkillID_Priest_of_Balthazar_Form = 2977
-Global Const $gc_iSkillID_The_Black_Beast_of_Arrgh_Form = 2978
-Global Const $gc_iSkillID_Crystal_Guardian_Form = 2979
-Global Const $gc_iSkillID_Crystal_Spider_Form = 2980
-Global Const $gc_iSkillID_Bone_Dragon_Form2 = 2981
-Global Const $gc_iSkillID_Saltspray_Dragon_Form = 2982
-Global Const $gc_iSkillID_Eye_of_Janthir_Form = 2983
-Global Const $gc_iSkillID_Footman_Form = 2984
-Global Const $gc_iSkillID_Ghostly_Hero_Form = 2985
-Global Const $gc_iSkillID_Guild_Lord_Form = 2986
-Global Const $gc_iSkillID_Gwen_Doll_Form = 2987
-Global Const $gc_iSkillID_Black_Moa_Form = 2988
-Global Const $gc_iSkillID_Black_Moa_Chick_Form = 2989
-Global Const $gc_iSkillID_Moa_Bird_Form = 2990
-Global Const $gc_iSkillID_White_Moa_Form = 2991
-Global Const $gc_iSkillID_Rainbow_Phoenix_Form = 2992
-Global Const $gc_iSkillID_Brown_Rabbit_Form = 2993
-Global Const $gc_iSkillID_White_Rabbit_Form = 2994
-Global Const $gc_iSkillID_Seer_Form = 2995
-Global Const $gc_iSkillID_Swarm_of_Bees_Form = 2996
-Global Const $gc_iSkillID_Seed_of_Resurrection2 = 2997
-Global Const $gc_iSkillID_Fragility_PvP = 2998
-Global Const $gc_iSkillID_Strength_of_Honor_PvP = 2999
-Global Const $gc_iSkillID_Gunthers_Gaze = 3000
-; Global Const $gc_iSkillID_Unknow = 3001
-Global Const $gc_iSkillID_Warriors_Endurance_PvP = 3002
-Global Const $gc_iSkillID_Armor_of_Unfeeling_PvP = 3003
-Global Const $gc_iSkillID_Signet_of_Creation_PvP = 3004
-Global Const $gc_iSkillID_Union_PvP = 3005
-Global Const $gc_iSkillID_Shadowsong_PvP = 3006
-Global Const $gc_iSkillID_Pain_PvP = 3007
-Global Const $gc_iSkillID_Destruction_PvP = 3008
-Global Const $gc_iSkillID_Soothing_PvP = 3009
-Global Const $gc_iSkillID_Displacement_PvP = 3010
-Global Const $gc_iSkillID_Preservation_PvP = 3011
-Global Const $gc_iSkillID_Life_PvP = 3012
-Global Const $gc_iSkillID_Recuperation_PvP = 3013
-Global Const $gc_iSkillID_Dissonance_PvP = 3014
-Global Const $gc_iSkillID_Earthbind_PvP = 3015
-Global Const $gc_iSkillID_Shelter_PvP = 3016
-Global Const $gc_iSkillID_Disenchantment_PvP = 3017
-Global Const $gc_iSkillID_Restoration_PvP = 3018
-Global Const $gc_iSkillID_Bloodsong_PvP = 3019
-Global Const $gc_iSkillID_Wanderlust_PvP = 3020
-Global Const $gc_iSkillID_Savannah_Heat_PvP = 3021
-Global Const $gc_iSkillID_Gaze_of_Fury_PvP = 3022
-Global Const $gc_iSkillID_Anguish_PvP = 3023
-Global Const $gc_iSkillID_Empowerment_PvP = 3024
-Global Const $gc_iSkillID_Recovery_PvP = 3025
-Global Const $gc_iSkillID_Go_for_the_Eyes_PvP = 3026
-Global Const $gc_iSkillID_Brace_Yourself_PvP = 3027
-Global Const $gc_iSkillID_Blazing_Finale_PvP = 3028
-Global Const $gc_iSkillID_Bladeturn_Refrain_PvP = 3029
-Global Const $gc_iSkillID_Signet_of_Return_PvP = 3030
-Global Const $gc_iSkillID_Cant_Touch_This_PvP = 3031
-Global Const $gc_iSkillID_Stand_Your_Ground_PvP = 3032
-Global Const $gc_iSkillID_We_Shall_Return_PvP = 3033
-Global Const $gc_iSkillID_Find_Their_Weakness_PvP = 3034
-Global Const $gc_iSkillID_Never_Give_Up_PvP = 3035
-Global Const $gc_iSkillID_Help_Me_PvP = 3036
-Global Const $gc_iSkillID_Fall_Back_PvP = 3037
-Global Const $gc_iSkillID_Agony_PvP = 3038
-Global Const $gc_iSkillID_Rejuvenation_PvP = 3039
-Global Const $gc_iSkillID_Anthem_of_Disruption_PvP = 3040
-Global Const $gc_iSkillID_Shadowsong_Master_Riyo = 3041
-; Global Const $gc_iSkillID_Pain = 3042
-; Global Const $gc_iSkillID_Wanderlust = 3043
-Global Const $gc_iSkillID_Spirit_Siphon_Master_Riyo = 3044
-Global Const $gc_iSkillID_Comfort_Animal_PvP = 3045
-; Global Const $gc_iSkillID_Unknow = 3046
-Global Const $gc_iSkillID_Melandrus_Assault_PvP = 3047
-Global Const $gc_iSkillID_Shroud_of_Distress_PvP = 3048
-Global Const $gc_iSkillID_Unseen_Fury_PvP = 3049
-Global Const $gc_iSkillID_Predatory_Bond_PvP = 3050
-Global Const $gc_iSkillID_Enraged_Lunge_PvP = 3051
-Global Const $gc_iSkillID_Conviction_PvP = 3052
-Global Const $gc_iSkillID_Signet_of_Deadly_Corruption_PvP = 3053
-Global Const $gc_iSkillID_Masochism_PvP = 3054
-Global Const $gc_iSkillID_Pain_attack_Togo1 = 3055
-Global Const $gc_iSkillID_Pain_attack_Togo2 = 3056
-Global Const $gc_iSkillID_Pain_attack_Togo3 = 3057
-Global Const $gc_iSkillID_Unholy_Feast_PvP = 3058
-Global Const $gc_iSkillID_Signet_of_Agony_PvP = 3059
-Global Const $gc_iSkillID_Escape_PvP = 3060
-Global Const $gc_iSkillID_Death_Blossom_PvP = 3061
-Global Const $gc_iSkillID_Finale_of_Restoration_PvP = 3062
-Global Const $gc_iSkillID_Mantra_of_Resolve_PvP = 3063
-Global Const $gc_iSkillID_Lesser_Hard_Mode_NPC_Buff = 3064
-Global Const $gc_iSkillID_Charm_Animal2 = 3065
-Global Const $gc_iSkillID_Charm_Animal3 = 3066
-Global Const $gc_iSkillID_Henchman = 3067
-Global Const $gc_iSkillID_Charm_Animal_Codex = 3068
-Global Const $gc_iSkillID_Agent_of_the_Mad_King = 3069
-Global Const $gc_iSkillID_Sugar_Rush_Agent_of_the_Mad_King = 3070
-Global Const $gc_iSkillID_Sticky_Ground = 3071
-Global Const $gc_iSkillID_Sugar_Shock = 3072
-Global Const $gc_iSkillID_The_Mad_Kings_Influence = 3073
-Global Const $gc_iSkillID_Bone_Spike = 3074
-Global Const $gc_iSkillID_Flurry_of_Splinters = 3075
-Global Const $gc_iSkillID_Everlasting_Mobstopper_skill = 3076
-Global Const $gc_iSkillID_Weakened_by_Dhuum = 3077
-Global Const $gc_iSkillID_Curse_of_Dhuum = 3078
-Global Const $gc_iSkillID_Dhuums_Rest_Reaper_skill = 3079
-Global Const $gc_iSkillID_Dhuum_skill = 3080
-Global Const $gc_iSkillID_Summon_Champion = 3081
-Global Const $gc_iSkillID_Summon_Minions = 3082
-Global Const $gc_iSkillID_Touch_of_Dhuum = 3083
-Global Const $gc_iSkillID_Reaping_of_Dhuum = 3084
-Global Const $gc_iSkillID_Judgment_of_Dhuum = 3085
-Global Const $gc_iSkillID_Weight_of_Dhuum_hex = 3086
-Global Const $gc_iSkillID_Dhuums_Rest = 3087
-Global Const $gc_iSkillID_Spiritual_Healing = 3088
-Global Const $gc_iSkillID_Encase_Skeletal = 3089
-Global Const $gc_iSkillID_Reversal_of_Death = 3090
-Global Const $gc_iSkillID_Ghostly_Fury = 3091
-Global Const $gc_iSkillID_Henchman_Form_Pudash = 3092
-Global Const $gc_iSkillID_Henchman_Form_Dahlia = 3093
-Global Const $gc_iSkillID_Henchman_Form_Disenmaedel = 3094
-Global Const $gc_iSkillID_Henchman_Form_Errol_Hyl = 3095
-Global Const $gc_iSkillID_Henchman_Form_Lulu_Xan = 3096
-Global Const $gc_iSkillID_Henchman_Form_Tannaros = 3097
-Global Const $gc_iSkillID_Henchman_Form_Cassie_Santi = 3098
-Global Const $gc_iSkillID_Henchman_Form_Redemptor_Frohs = 3099
-Global Const $gc_iSkillID_Henchman_Form_Julyia = 3100
-Global Const $gc_iSkillID_Henchman_Form_Bellicus = 3101
-Global Const $gc_iSkillID_Henchman_Form_Dirk_Shadowrise = 3102
-Global Const $gc_iSkillID_Henchman_Form_Vincent_Evan = 3103
-Global Const $gc_iSkillID_Henchman_Form_Luzy_Fiera = 3104
-Global Const $gc_iSkillID_Henchman_Form_Motoko_Kai = 3105
-Global Const $gc_iSkillID_Henchman_Form_Hinata = 3106
-Global Const $gc_iSkillID_Henchman_Form_Kah_Xan = 3107
-Global Const $gc_iSkillID_Henchman_Form_Narcissia = 3108
-Global Const $gc_iSkillID_Henchman_Form_Zen_Siert = 3109
-Global Const $gc_iSkillID_Henchman_Form_Blenkeh = 3110
-Global Const $gc_iSkillID_Henchman_Form_Aurora_Allesandra = 3111
-Global Const $gc_iSkillID_Henchman_Form_Teena_the_Raptor = 3112
-Global Const $gc_iSkillID_Henchman_Form_Lora_Lanaya = 3113
-Global Const $gc_iSkillID_Henchman_Form_Adepte = 3114
-Global Const $gc_iSkillID_Henchman_Form_Haldibarn_Earendul = 3115
-Global Const $gc_iSkillID_Henchman_Form_Daky = 3116
-Global Const $gc_iSkillID_Henchman_Form_Syn_Spellstrike = 3117
-Global Const $gc_iSkillID_Henchman_Form_Divinus_Tutela = 3118
-Global Const $gc_iSkillID_Henchman_Form_Blahks = 3119
-Global Const $gc_iSkillID_Henchman_Form_Erick = 3120
-Global Const $gc_iSkillID_Henchman_Form_Ghavin = 3121
-Global Const $gc_iSkillID_Henchman_Form_Hobba_Inaste = 3122
-Global Const $gc_iSkillID_Henchman_Form_Bacchi_Coi = 3123
-Global Const $gc_iSkillID_Henchman_Form_Suzu = 3124
-Global Const $gc_iSkillID_Henchman_Form_Rollo_Lowlo = 3125
-Global Const $gc_iSkillID_Henchman_Form_Fuu_Rin = 3126
-Global Const $gc_iSkillID_Henchman_Form_Nuno = 3127
-Global Const $gc_iSkillID_Henchman_Form_Alsacien = 3128
-Global Const $gc_iSkillID_Henchman_Form_Uto_Wrotki = 3129
-Global Const $gc_iSkillID_Henchman_Form_Khai_Kemnebi = 3130
-Global Const $gc_iSkillID_Henchman_Form_Cole = 3131
-; Global Const $gc_iSkillID_Unknow = 3132
-Global Const $gc_iSkillID_Weight_of_Dhuum = 3133
-Global Const $gc_iSkillID_Spirit_Form_disguise = 3134
-Global Const $gc_iSkillID_Spiritual_Healing_Reaper_skill = 3135
-Global Const $gc_iSkillID_Ghostly_Fury_Reaper_skill = 3136
-Global Const $gc_iSkillID_Reindeer_Form1 = 3137
-Global Const $gc_iSkillID_Reindeer_Form2 = 3138
-Global Const $gc_iSkillID_Reindeer_Form3 = 3139
-Global Const $gc_iSkillID_Staggering_Blow_PvP = 3140
-Global Const $gc_iSkillID_Lightning_Reflexes_PvP = 3141
-Global Const $gc_iSkillID_Fierce_Blow_PvP = 3142
-Global Const $gc_iSkillID_Renewing_Smash_PvP = 3143
-Global Const $gc_iSkillID_Heal_as_One_PvP = 3144
-Global Const $gc_iSkillID_Glass_Arrows_PvP = 3145
-Global Const $gc_iSkillID_Protective_Was_Kaolai_PvP = 3146
-Global Const $gc_iSkillID_Keen_Arrow_PvP = 3147
-Global Const $gc_iSkillID_Anthem_of_Envy_PvP = 3148
-Global Const $gc_iSkillID_Mending_Refrain_PvP = 3149
-Global Const $gc_iSkillID_Lesser_Flame_Sentinel_Resistance = 3150
-Global Const $gc_iSkillID_Empathy_PvP = 3151
-Global Const $gc_iSkillID_Crippling_Anguish_PvP = 3152
-Global Const $gc_iSkillID_Pain_attack_Signet_of_Spirits1 = 3153
-Global Const $gc_iSkillID_Pain_attack_Signet_of_Spirits2 = 3154
-Global Const $gc_iSkillID_Pain_attack_Signet_of_Spirits3 = 3155
-Global Const $gc_iSkillID_Soldiers_Stance_PvP = 3156
-Global Const $gc_iSkillID_Destructive_Was_Glaive_PvP = 3157
-; Global Const $gc_iSkillID_Unknow = 3158
-Global Const $gc_iSkillID_Charm_Drake = 3159
-; Global Const $gc_iSkillID_Unknow = 3160
-; Global Const $gc_iSkillID_Unknow = 3161
-Global Const $gc_iSkillID_Theres_not_enough_time = 3162
-Global Const $gc_iSkillID_Keirans_Sniper_Shot = 3163
-Global Const $gc_iSkillID_Falken_Punch = 3164
-Global Const $gc_iSkillID_Golem_Pilebunker = 3165
-Global Const $gc_iSkillID_Drunken_Stumbling = 3166
-; Global Const $gc_iSkillID_Unknow = 3167
-; Global Const $gc_iSkillID_Unknow = 3168
-; Global Const $gc_iSkillID_Unknow = 3169
-Global Const $gc_iSkillID_Koros_Gaze = 3170
-Global Const $gc_iSkillID_Ebon_Vanguard_Assassin_Support_NPC = 3171
-Global Const $gc_iSkillID_Ebon_Vanguard_Battle_Standard_of_Power = 3172
-Global Const $gc_iSkillID_Loose_Magic = 3173
-Global Const $gc_iSkillID_Well_Supplied = 3174
-Global Const $gc_iSkillID_Guild_Monument_Protected = 3175
-Global Const $gc_iSkillID_Strong_Natural_Resistance = 3176
-Global Const $gc_iSkillID_Elite_Regeneration1 = 3177
-Global Const $gc_iSkillID_Elite_Regeneration2 = 3178
-Global Const $gc_iSkillID_Mantra_of_Signets_PvP = 3179
-Global Const $gc_iSkillID_Shatter_Delusions_PvP = 3180
-Global Const $gc_iSkillID_Illusionary_Weaponry_PvP = 3181
-Global Const $gc_iSkillID_Panic_PvP = 3182
-Global Const $gc_iSkillID_Migraine_PvP = 3183
-Global Const $gc_iSkillID_Accumulated_Pain_PvP = 3184
-Global Const $gc_iSkillID_Psychic_Instability_PvP = 3185
-Global Const $gc_iSkillID_Shared_Burden_PvP = 3186
-Global Const $gc_iSkillID_Stolen_Speed_PvP = 3187
-Global Const $gc_iSkillID_Unnatural_Signet_PvP = 3188
-Global Const $gc_iSkillID_Spiritual_Pain_PvP = 3189
-Global Const $gc_iSkillID_Frustration_PvP = 3190
-Global Const $gc_iSkillID_Mistrust_PvP = 3191
-Global Const $gc_iSkillID_Enchanters_Conundrum_PvP = 3192
-Global Const $gc_iSkillID_Signet_of_Clumsiness_PvP = 3193
-Global Const $gc_iSkillID_Mirror_of_Disenchantment_PvP = 3194
-Global Const $gc_iSkillID_Wandering_Eye_PvP = 3195
-Global Const $gc_iSkillID_Calculated_Risk_PvP = 3196
-Global Const $gc_iSkillID_Adoration = 3197
-Global Const $gc_iSkillID_Impending_Dhuum = 3198
-Global Const $gc_iSkillID_Sacrifice_Pawn = 3199
-Global Const $gc_iSkillID_Isaiahs_Balance = 3200
-Global Const $gc_iSkillID_Toriimos_Burning_Fury = 3201
-Global Const $gc_iSkillID_Oath_of_Protection2 = 3202
-; Global Const $gc_iSkillID_Unknow = 3203
-Global Const $gc_iSkillID_Defy_Pain_PvP = 3204
-Global Const $gc_iSkillID_Entourage = 3205
-Global Const $gc_iSkillID_Spectral_Infusion = 3206
-Global Const $gc_iSkillID_Entourage_Buffer = 3207
-Global Const $gc_iSkillID_Wastrels_Demise_PvP = 3208
-; Global Const $gc_iSkillID_Unknow = 3209
-Global Const $gc_iSkillID_Shiro_Tagachi_Costume_Brawl_disguise = 3210
-Global Const $gc_iSkillID_Dunham_Costume_Brawl_disguise = 3211
-Global Const $gc_iSkillID_Palawa_Joko_Costume_Brawl_disguise = 3212
-Global Const $gc_iSkillID_Lawrence_Crafton_Costume_Brawl_disguise = 3213
-Global Const $gc_iSkillID_Saul_DAlessio_Costume_Brawl_disguise = 3214
-Global Const $gc_iSkillID_Turai_Ossa_Costume_Brawl_disguise = 3215
-Global Const $gc_iSkillID_Lieutenant_Thackeray_Costume_Brawl_disguise = 3216
-Global Const $gc_iSkillID_Gehraz_Costume_Brawl_disguise = 3217
-Global Const $gc_iSkillID_Master_Togo_Costume_Brawl_disguise = 3218
-Global Const $gc_iSkillID_Egil_Fireteller_Costume_Brawl_disguise = 3219
-Global Const $gc_iSkillID_Mysterious_Assassin_Costume_Brawl_disguise = 3220
-Global Const $gc_iSkillID_Gwen_Costume_Brawl_disguise = 3221
-Global Const $gc_iSkillID_Eve_Costume_Brawl_disguise = 3222
-Global Const $gc_iSkillID_Elementalist_Aziure_Costume_Brawl_disguise = 3223
-Global Const $gc_iSkillID_Jamei_Costume_Brawl_disguise = 3224
-Global Const $gc_iSkillID_Jora_Costume_Brawl_disguise = 3225
-Global Const $gc_iSkillID_Margrid_the_Sly_Costume_Brawl_disguise = 3226
-Global Const $gc_iSkillID_Varesh_Ossa_Costume_Brawl_disguise = 3227
-Global Const $gc_iSkillID_Headmaster_Quin_Costume_Brawl_disguise = 3228
-Global Const $gc_iSkillID_Kormir_Costume_Brawl_disguise = 3229
-; Global Const $gc_iSkillID_Unknow = 3230
-Global Const $gc_iSkillID_Barbed_Signet_PvP = 3231
-Global Const $gc_iSkillID_Heal_Party_PvP = 3232
-Global Const $gc_iSkillID_Spoil_Victor_PvP = 3233
-Global Const $gc_iSkillID_Visions_of_Regret_PvP = 3234
-Global Const $gc_iSkillID_Keirans_Sniper_Shot_Hearts_of_the_North = 3235
-Global Const $gc_iSkillID_Gravestone_Marker = 3236
-Global Const $gc_iSkillID_Terminal_Velocity = 3237
-Global Const $gc_iSkillID_Relentless_Assault = 3238
-Global Const $gc_iSkillID_Natures_Blessing = 3239
-Global Const $gc_iSkillID_Find_Their_Weakness_Thackeray = 3240
-Global Const $gc_iSkillID_Theres_Nothing_to_Fear_Thackeray = 3241
-Global Const $gc_iSkillID_Coming_of_Spring = 3242
-Global Const $gc_iSkillID_Promise_of_Death = 3243
-Global Const $gc_iSkillID_Withering_Blade = 3244
-Global Const $gc_iSkillID_Deaths_Embrace = 3245
-Global Const $gc_iSkillID_Venom_Fang = 3246
-Global Const $gc_iSkillID_Survivors_Will = 3247
-Global Const $gc_iSkillID_Keiran_Thackeray_disguise = 3248
-Global Const $gc_iSkillID_Rain_of_Arrows = 3249
-; Global Const $gc_iSkillID_Unknow = 3250
-Global Const $gc_iSkillID_Fox_Fangs_PvP = 3251
-Global Const $gc_iSkillID_Wild_Strike_PvP = 3252
-Global Const $gc_iSkillID_Ultra_Snowball = 3253
-Global Const $gc_iSkillID_Blizzard = 3254
-; Global Const $gc_iSkillID_Unknow = 3255
-; Global Const $gc_iSkillID_Unknow = 3256
-; Global Const $gc_iSkillID_Unknow = 3257
-; Global Const $gc_iSkillID_Unknow = 3258
-Global Const $gc_iSkillID_Ultra_Snowball2 = 3259
-Global Const $gc_iSkillID_Ultra_Snowball3 = 3260
-Global Const $gc_iSkillID_Ultra_Snowball4 = 3261
-Global Const $gc_iSkillID_Ultra_Snowball5 = 3262
-Global Const $gc_iSkillID_Banishing_Strike_PvP = 3263
-Global Const $gc_iSkillID_Twin_Moon_Sweep_PvP = 3264
-Global Const $gc_iSkillID_Irresistible_Sweep_PvP = 3265
-Global Const $gc_iSkillID_Pious_Assault_PvP = 3266
-Global Const $gc_iSkillID_Ebon_Dust_Aura_PvP = 3267
-Global Const $gc_iSkillID_Heart_of_Holy_Flame_PvP = 3268
-Global Const $gc_iSkillID_Guiding_Hands_PvP = 3269
-Global Const $gc_iSkillID_Avatar_of_Dwayna_PvP = 3270
-Global Const $gc_iSkillID_Avatar_of_Melandru_PvP = 3271
-Global Const $gc_iSkillID_Mystic_Healing_PvP = 3272
-Global Const $gc_iSkillID_Signet_of_Pious_Restraint_PvP = 3273
-Global Const $gc_iSkillID_Vanguard_Initiate = 3274
-; Global Const $gc_iSkillID_Unknow = 3275
-; Global Const $gc_iSkillID_Unknow = 3276
-; Global Const $gc_iSkillID_Unknow = 3277
-; Global Const $gc_iSkillID_Unknow = 3278
-; Global Const $gc_iSkillID_Unknow = 3279
-; Global Const $gc_iSkillID_Unknow = 3280
-; Global Const $gc_iSkillID_Unknow = 3281
-Global Const $gc_iSkillID_Victorious_Renewal = 3282
-Global Const $gc_iSkillID_A_Dying_Curse = 3283
-; Global Const $gc_iSkillID_Unknow = 3284
-; Global Const $gc_iSkillID_Unknow = 3285
-; Global Const $gc_iSkillID_Unknow = 3286
-; Global Const $gc_iSkillID_Unknow = 3287
-Global Const $gc_iSkillID_Rage_of_the_Djinn = 3288
-Global Const $gc_iSkillID_Fevered_Dreams_PvP = 3289
-Global Const $gc_iSkillID_Stun_Grenade = 3290
-Global Const $gc_iSkillID_Fragmentation_Grenade = 3291
-Global Const $gc_iSkillID_Tear_Gas = 3292
-Global Const $gc_iSkillID_Land_Mine = 3293
-Global Const $gc_iSkillID_Riot_Shield = 3294
-Global Const $gc_iSkillID_Club_Strike = 3295
-Global Const $gc_iSkillID_Bludgeon = 3296
-Global Const $gc_iSkillID_Tango_Down = 3297
-Global Const $gc_iSkillID_Ill_Be_Back = 3298
-Global Const $gc_iSkillID_Phased_Plasma_Burst = 3299
-Global Const $gc_iSkillID_Plasma_Shot = 3300
-Global Const $gc_iSkillID_Annihilator_Bash = 3301
-Global Const $gc_iSkillID_Sky_Net = 3302
-Global Const $gc_iSkillID_Damage_Assessment = 3303
-Global Const $gc_iSkillID_Going_Commando = 3304
-; Global Const $gc_iSkillID_Unknow = 3305
-Global Const $gc_iSkillID_Koss_Form = 3306
-Global Const $gc_iSkillID_Dunkoro_Form = 3307
-Global Const $gc_iSkillID_Melonni_Form = 3308
-Global Const $gc_iSkillID_Acolyte_Jin_Form = 3309
-Global Const $gc_iSkillID_Acolyte_Sousuke_Form = 3310
-Global Const $gc_iSkillID_Tahlkora_Form = 3311
-Global Const $gc_iSkillID_Zhed_Shadowhoof_Form = 3312
-Global Const $gc_iSkillID_Margrid_the_Sly_Form = 3313
-Global Const $gc_iSkillID_Master_of_Whispers_Form = 3314
-Global Const $gc_iSkillID_Goren_Form = 3315
-Global Const $gc_iSkillID_Norgu_Form = 3316
-Global Const $gc_iSkillID_Morgahn_Form = 3317
-Global Const $gc_iSkillID_Razah_Form = 3318
-Global Const $gc_iSkillID_Olias_Form = 3319
-Global Const $gc_iSkillID_Zenmai_Form = 3320
-Global Const $gc_iSkillID_Ogden_Form = 3321
-Global Const $gc_iSkillID_Vekk_Form = 3322
-Global Const $gc_iSkillID_Gwen_Form = 3323
-Global Const $gc_iSkillID_Xandra_Form = 3324
-Global Const $gc_iSkillID_Kahmu_Form = 3325
-Global Const $gc_iSkillID_Jora_Form = 3326
-Global Const $gc_iSkillID_Pyre_Fierceshot_Form = 3327
-Global Const $gc_iSkillID_Anton_Form = 3328
-Global Const $gc_iSkillID_Hayda_Form = 3329
-Global Const $gc_iSkillID_Livia_Form = 3330
-Global Const $gc_iSkillID_Keiran_Thackeray_Form = 3331
-Global Const $gc_iSkillID_Miku_Form = 3332
-Global Const $gc_iSkillID_MOX_Form = 3333
-Global Const $gc_iSkillID_Shiro_Tagachi_Form = 3334
-; Global Const $gc_iSkillID_Unknow = 3335
-Global Const $gc_iSkillID_Prince_Rurik_Form = 3336
-Global Const $gc_iSkillID_Margonite_Form = 3337
-Global Const $gc_iSkillID_Destroyer_Form = 3338
-Global Const $gc_iSkillID_Queen_Salma_Form = 3339
-Global Const $gc_iSkillID_Slightly_Mad_King_Thorn_Form = 3340
-Global Const $gc_iSkillID_Kuunavang_Form = 3341
-Global Const $gc_iSkillID_Lone_Wolf = 3342
-Global Const $gc_iSkillID_Stand_Together = 3343
-Global Const $gc_iSkillID_Unyielding_Spirit = 3344
-Global Const $gc_iSkillID_Reckless_Advance = 3345
-Global Const $gc_iSkillID_Aura_of_Thorns_PvP = 3346
-Global Const $gc_iSkillID_Dust_Cloak_PvP = 3347
-Global Const $gc_iSkillID_Lyssas_Haste_PvP = 3348
-Global Const $gc_iSkillID_Knight_Form = 3349
-Global Const $gc_iSkillID_Lord_Archer_Form = 3350
-Global Const $gc_iSkillID_Bodyguard_Form = 3351
-Global Const $gc_iSkillID_Guild_Thief_Form = 3352
-Global Const $gc_iSkillID_Ghostly_Priest_Form = 3353
-Global Const $gc_iSkillID_Flame_Sentinel_Form = 3354
-; Global Const $gc_iSkillID_Unknow = 3355
-Global Const $gc_iSkillID_Solidarity = 3356
-Global Const $gc_iSkillID_There_Can_Be_Only_One = 3357
-Global Const $gc_iSkillID_Fight_Against_Despair = 3358
-Global Const $gc_iSkillID_Deaths_Succor = 3359
-Global Const $gc_iSkillID_Battle_of_Attrition = 3360
-Global Const $gc_iSkillID_Fight_or_Flight = 3361
-Global Const $gc_iSkillID_Renewing_Escape = 3362
-Global Const $gc_iSkillID_Battle_Frenzy = 3363
-Global Const $gc_iSkillID_The_Way_of_One = 3364
-Global Const $gc_iSkillID_Onslaught_PvP = 3365
-Global Const $gc_iSkillID_Heart_of_Fury_PvP = 3366
-Global Const $gc_iSkillID_Wounding_Strike_PvP = 3367
-Global Const $gc_iSkillID_Pious_Fury_PvP = 3368
-Global Const $gc_iSkillID_Party_Mode = 3369
-Global Const $gc_iSkillID_Smash_of_the_Titans = 3370
-Global Const $gc_iSkillID_Mirror_Shatter = 3371
-; Global Const $gc_iSkillID_Unknow = 3372
-Global Const $gc_iSkillID_Illusion_of_Haste_PvP = 3373
-Global Const $gc_iSkillID_Illusion_of_Pain_PvP = 3374
-Global Const $gc_iSkillID_Aura_of_Restoration_PvP = 3375
-Global Const $gc_iSkillID_Shapeshift = 3376
-Global Const $gc_iSkillID_GOLEM_disguise = 3377
-Global Const $gc_iSkillID_Phase_Shield = 3378
-Global Const $gc_iSkillID_Reactor_Burst = 3379
-; Global Const $gc_iSkillID_Ill_Be_Back = 3380
-Global Const $gc_iSkillID_Annihilator_Strike = 3381
-Global Const $gc_iSkillID_Annihilator_Beam = 3382
-Global Const $gc_iSkillID_Annihilator_Knuckle = 3383
-Global Const $gc_iSkillID_Annihilator_Toss = 3384
-; Global Const $gc_iSkillID_Unknow = 3385
-Global Const $gc_iSkillID_Web_of_Disruption_PvP = 3386
-Global Const $gc_iSkillID_Chain_Combo = 3387
-; Global Const $gc_iSkillID_Unknow = 3388
-; Global Const $gc_iSkillID_Unknow = 3389
-Global Const $gc_iSkillID_All_In = 3390
-Global Const $gc_iSkillID_Jack_of_All_Trades = 3391
-Global Const $gc_iSkillID_Amateur_Hour = 3392
-Global Const $gc_iSkillID_Odrans_Razor = 3393
-Global Const $gc_iSkillID_Like_a_Boss = 3394
-Global Const $gc_iSkillID_The_Boss = 3395
-Global Const $gc_iSkillID_Lightning_Hammer_PvP = 3396
-Global Const $gc_iSkillID_Elemental_Flame_PvP = 3397
-Global Const $gc_iSkillID_Slippery_Ground_PvP = 3398
-Global Const $gc_iSkillID_Disguised_when_using_everlasting_tonics__except_Everlasting_Legionnaire_Tonic = 3399
-Global Const $gc_iSkillID_Disguised_when_using_non_everlasting_tonics = 3400
-Global Const $gc_iSkillID_Disguised_verification_requested = 3401
-Global Const $gc_iSkillID_Tonic_Tipsiness = 3402
-Global Const $gc_iSkillID_Parting_Gift = 3403
-Global Const $gc_iSkillID_Gift_of_Battle = 3404
-Global Const $gc_iSkillID_Rolling_Start = 3405
-Global Const $gc_iSkillID_Disguised_when_using_Everlasting_Legionnaire_Tonic = 3406
-; Global Const $gc_iSkillID_Unknow = 3407
-; Global Const $gc_iSkillID_Unknow = 3408
-; Global Const $gc_iSkillID_Unknow = 3409
-; Global Const $gc_iSkillID_Unknow = 3410
-; Global Const $gc_iSkillID_Unknow = 3411
-; Global Const $gc_iSkillID_Unknow = 3412
-; Global Const $gc_iSkillID_Unknow = 3413
-; Global Const $gc_iSkillID_Unknow = 3414
-; Global Const $gc_iSkillID_Unknow = 3415
-; Global Const $gc_iSkillID_Unknow = 3416
-; Global Const $gc_iSkillID_Unknow = 3417
-; Global Const $gc_iSkillID_Unknow = 3418
-; Global Const $gc_iSkillID_Unknow = 3419
-; Global Const $gc_iSkillID_Unknow = 3420
-; Global Const $gc_iSkillID_Unknow = 3421
-Global Const $gc_iSkillID_Time_Ward = 3422
-Global Const $gc_iSkillID_Soul_Taker = 3423
-Global Const $gc_iSkillID_Over_the_Limit = 3424
-Global Const $gc_iSkillID_Judgment_Strike = 3425
-Global Const $gc_iSkillID_Seven_Weapons_Stance = 3426
-Global Const $gc_iSkillID_Together_as_One = 3427
-Global Const $gc_iSkillID_Shadow_Theft = 3428
-Global Const $gc_iSkillID_Weapons_of_Three_Forges = 3429
-Global Const $gc_iSkillID_Vow_of_Revolution = 3430
-Global Const $gc_iSkillID_Heroic_Refrain = 3431
+Global Const $GC_I_SKILLID_NO_SKILL = 0
+Global Const $GC_I_SKILLID_HEALING_SIGNET = 1
+Global Const $GC_I_SKILLID_RESURRECTION_SIGNET = 2
+Global Const $GC_I_SKILLID_SIGNET_OF_CAPTURE = 3
+Global Const $GC_I_SKILLID_BAMPH = 4
+Global Const $GC_I_SKILLID_POWER_BLOCK = 5
+Global Const $GC_I_SKILLID_MANTRA_OF_EARTH = 6
+Global Const $GC_I_SKILLID_MANTRA_OF_FLAME = 7
+Global Const $GC_I_SKILLID_MANTRA_OF_FROST = 8
+Global Const $GC_I_SKILLID_MANTRA_OF_LIGHTNING = 9
+Global Const $GC_I_SKILLID_HEX_BREAKER = 10
+Global Const $GC_I_SKILLID_DISTORTION = 11
+Global Const $GC_I_SKILLID_MANTRA_OF_CELERITY = 12
+Global Const $GC_I_SKILLID_MANTRA_OF_RECOVERY = 13
+Global Const $GC_I_SKILLID_MANTRA_OF_PERSISTENCE = 14
+Global Const $GC_I_SKILLID_MANTRA_OF_INSCRIPTIONS = 15
+Global Const $GC_I_SKILLID_MANTRA_OF_CONCENTRATION = 16
+Global Const $GC_I_SKILLID_MANTRA_OF_RESOLVE = 17
+Global Const $GC_I_SKILLID_MANTRA_OF_SIGNETS = 18
+Global Const $GC_I_SKILLID_FRAGILITY = 19
+Global Const $GC_I_SKILLID_CONFUSION = 20
+Global Const $GC_I_SKILLID_INSPIRED_ENCHANTMENT = 21
+Global Const $GC_I_SKILLID_INSPIRED_HEX = 22
+Global Const $GC_I_SKILLID_POWER_SPIKE = 23
+Global Const $GC_I_SKILLID_POWER_LEAK = 24
+Global Const $GC_I_SKILLID_POWER_DRAIN = 25
+Global Const $GC_I_SKILLID_EMPATHY = 26
+Global Const $GC_I_SKILLID_SHATTER_DELUSIONS = 27
+Global Const $GC_I_SKILLID_BACKFIRE = 28
+Global Const $GC_I_SKILLID_BLACKOUT = 29
+Global Const $GC_I_SKILLID_DIVERSION = 30
+Global Const $GC_I_SKILLID_CONJURE_PHANTASM = 31
+Global Const $GC_I_SKILLID_ILLUSION_OF_WEAKNESS = 32
+Global Const $GC_I_SKILLID_ILLUSIONARY_WEAPONRY = 33
+Global Const $GC_I_SKILLID_SYMPATHETIC_VISAGE = 34
+Global Const $GC_I_SKILLID_IGNORANCE = 35
+Global Const $GC_I_SKILLID_ARCANE_CONUNDRUM = 36
+Global Const $GC_I_SKILLID_ILLUSION_OF_HASTE = 37
+Global Const $GC_I_SKILLID_CHANNELING = 38
+Global Const $GC_I_SKILLID_ENERGY_SURGE = 39
+Global Const $GC_I_SKILLID_ETHER_FEAST = 40
+Global Const $GC_I_SKILLID_ETHER_LORD = 41
+Global Const $GC_I_SKILLID_ENERGY_BURN = 42
+Global Const $GC_I_SKILLID_CLUMSINESS = 43
+Global Const $GC_I_SKILLID_PHANTOM_PAIN = 44
+Global Const $GC_I_SKILLID_ETHEREAL_BURDEN = 45
+Global Const $GC_I_SKILLID_GUILT = 46
+Global Const $GC_I_SKILLID_INEPTITUDE = 47
+Global Const $GC_I_SKILLID_SPIRIT_OF_FAILURE = 48
+Global Const $GC_I_SKILLID_MIND_WRACK = 49
+Global Const $GC_I_SKILLID_WASTRELS_WORRY = 50
+Global Const $GC_I_SKILLID_SHAME = 51
+Global Const $GC_I_SKILLID_PANIC = 52
+Global Const $GC_I_SKILLID_MIGRAINE = 53
+Global Const $GC_I_SKILLID_CRIPPLING_ANGUISH = 54
+Global Const $GC_I_SKILLID_FEVERED_DREAMS = 55
+Global Const $GC_I_SKILLID_SOOTHING_IMAGES = 56
+Global Const $GC_I_SKILLID_CRY_OF_FRUSTRATION = 57
+Global Const $GC_I_SKILLID_SIGNET_OF_MIDNIGHT = 58
+Global Const $GC_I_SKILLID_SIGNET_OF_WEARINESS = 59
+Global Const $GC_I_SKILLID_SIGNET_OF_ILLUSIONS_BETA_VERSION = 60
+Global Const $GC_I_SKILLID_LEECH_SIGNET = 61
+Global Const $GC_I_SKILLID_SIGNET_OF_HUMILITY = 62
+Global Const $GC_I_SKILLID_KEYSTONE_SIGNET = 63
+Global Const $GC_I_SKILLID_MIMIC = 64
+Global Const $GC_I_SKILLID_ARCANE_MIMICRY = 65
+Global Const $GC_I_SKILLID_SPIRIT_SHACKLES = 66
+Global Const $GC_I_SKILLID_SHATTER_HEX = 67
+Global Const $GC_I_SKILLID_DRAIN_ENCHANTMENT = 68
+Global Const $GC_I_SKILLID_SHATTER_ENCHANTMENT = 69
+Global Const $GC_I_SKILLID_DISAPPEAR = 70
+Global Const $GC_I_SKILLID_UNNATURAL_SIGNET_ALPHA_VERSION = 71
+Global Const $GC_I_SKILLID_ELEMENTAL_RESISTANCE = 72
+Global Const $GC_I_SKILLID_PHYSICAL_RESISTANCE = 73
+Global Const $GC_I_SKILLID_ECHO = 74
+Global Const $GC_I_SKILLID_ARCANE_ECHO = 75
+Global Const $GC_I_SKILLID_IMAGINED_BURDEN = 76
+Global Const $GC_I_SKILLID_CHAOS_STORM = 77
+Global Const $GC_I_SKILLID_EPIDEMIC = 78
+Global Const $GC_I_SKILLID_ENERGY_DRAIN = 79
+Global Const $GC_I_SKILLID_ENERGY_TAP = 80
+Global Const $GC_I_SKILLID_ARCANE_THIEVERY = 81
+Global Const $GC_I_SKILLID_MANTRA_OF_RECALL = 82
+Global Const $GC_I_SKILLID_ANIMATE_BONE_HORROR = 83
+Global Const $GC_I_SKILLID_ANIMATE_BONE_FIEND = 84
+Global Const $GC_I_SKILLID_ANIMATE_BONE_MINIONS = 85
+Global Const $GC_I_SKILLID_GRENTHS_BALANCE = 86
+Global Const $GC_I_SKILLID_VERATAS_GAZE = 87
+Global Const $GC_I_SKILLID_VERATAS_AURA = 88
+Global Const $GC_I_SKILLID_DEATHLY_CHILL = 89
+Global Const $GC_I_SKILLID_VERATAS_SACRIFICE = 90
+Global Const $GC_I_SKILLID_WELL_OF_POWER = 91
+Global Const $GC_I_SKILLID_WELL_OF_BLOOD = 92
+Global Const $GC_I_SKILLID_WELL_OF_SUFFERING = 93
+Global Const $GC_I_SKILLID_WELL_OF_THE_PROFANE = 94
+Global Const $GC_I_SKILLID_PUTRID_EXPLOSION = 95
+Global Const $GC_I_SKILLID_SOUL_FEAST = 96
+Global Const $GC_I_SKILLID_NECROTIC_TRAVERSAL = 97
+Global Const $GC_I_SKILLID_CONSUME_CORPSE = 98
+Global Const $GC_I_SKILLID_PARASITIC_BOND = 99
+Global Const $GC_I_SKILLID_SOUL_BARBS = 100
+Global Const $GC_I_SKILLID_BARBS = 101
+Global Const $GC_I_SKILLID_SHADOW_STRIKE = 102
+Global Const $GC_I_SKILLID_PRICE_OF_FAILURE = 103
+Global Const $GC_I_SKILLID_DEATH_NOVA = 104
+Global Const $GC_I_SKILLID_DEATHLY_SWARM = 105
+Global Const $GC_I_SKILLID_ROTTING_FLESH = 106
+Global Const $GC_I_SKILLID_VIRULENCE = 107
+Global Const $GC_I_SKILLID_SUFFERING = 108
+Global Const $GC_I_SKILLID_LIFE_SIPHON = 109
+Global Const $GC_I_SKILLID_UNHOLY_FEAST = 110
+Global Const $GC_I_SKILLID_AWAKEN_THE_BLOOD = 111
+Global Const $GC_I_SKILLID_DESECRATE_ENCHANTMENTS = 112
+Global Const $GC_I_SKILLID_TAINTED_FLESH = 113
+Global Const $GC_I_SKILLID_AURA_OF_THE_LICH = 114
+Global Const $GC_I_SKILLID_BLOOD_RENEWAL = 115
+Global Const $GC_I_SKILLID_DARK_AURA = 116
+Global Const $GC_I_SKILLID_ENFEEBLE1 = 117
+Global Const $GC_I_SKILLID_ENFEEBLING_BLOOD = 118
+Global Const $GC_I_SKILLID_BLOOD_IS_POWER = 119
+Global Const $GC_I_SKILLID_BLOOD_OF_THE_MASTER = 120
+Global Const $GC_I_SKILLID_SPITEFUL_SPIRIT = 121
+Global Const $GC_I_SKILLID_MALIGN_INTERVENTION = 122
+Global Const $GC_I_SKILLID_INSIDIOUS_PARASITE = 123
+Global Const $GC_I_SKILLID_SPINAL_SHIVERS = 124
+Global Const $GC_I_SKILLID_WITHER = 125
+Global Const $GC_I_SKILLID_LIFE_TRANSFER = 126
+Global Const $GC_I_SKILLID_MARK_OF_SUBVERSION = 127
+Global Const $GC_I_SKILLID_SOUL_LEECH = 128
+Global Const $GC_I_SKILLID_DEFILE_FLESH = 129
+Global Const $GC_I_SKILLID_DEMONIC_FLESH = 130
+Global Const $GC_I_SKILLID_BARBED_SIGNET = 131
+Global Const $GC_I_SKILLID_PLAGUE_SIGNET = 132
+Global Const $GC_I_SKILLID_DARK_PACT = 133
+Global Const $GC_I_SKILLID_ORDER_OF_PAIN = 134
+Global Const $GC_I_SKILLID_FAINTHEARTEDNESS = 135
+Global Const $GC_I_SKILLID_SHADOW_OF_FEAR = 136
+Global Const $GC_I_SKILLID_RIGOR_MORTIS = 137
+Global Const $GC_I_SKILLID_DARK_BOND = 138
+Global Const $GC_I_SKILLID_INFUSE_CONDITION = 139
+Global Const $GC_I_SKILLID_MALAISE = 140
+Global Const $GC_I_SKILLID_REND_ENCHANTMENTS = 141
+Global Const $GC_I_SKILLID_LINGERING_CURSE = 142
+Global Const $GC_I_SKILLID_STRIP_ENCHANTMENT = 143
+Global Const $GC_I_SKILLID_CHILBLAINS = 144
+Global Const $GC_I_SKILLID_SIGNET_OF_AGONY = 145
+Global Const $GC_I_SKILLID_OFFERING_OF_BLOOD = 146
+Global Const $GC_I_SKILLID_DARK_FURY = 147
+Global Const $GC_I_SKILLID_ORDER_OF_THE_VAMPIRE = 148
+Global Const $GC_I_SKILLID_PLAGUE_SENDING = 149
+Global Const $GC_I_SKILLID_MARK_OF_PAIN = 150
+Global Const $GC_I_SKILLID_FEAST_OF_CORRUPTION = 151
+Global Const $GC_I_SKILLID_TASTE_OF_DEATH = 152
+Global Const $GC_I_SKILLID_VAMPIRIC_GAZE = 153
+Global Const $GC_I_SKILLID_PLAGUE_TOUCH = 154
+Global Const $GC_I_SKILLID_VILE_TOUCH = 155
+Global Const $GC_I_SKILLID_VAMPIRIC_TOUCH = 156
+Global Const $GC_I_SKILLID_BLOOD_RITUAL = 157
+Global Const $GC_I_SKILLID_TOUCH_OF_AGONY = 158
+Global Const $GC_I_SKILLID_WEAKEN_ARMOR = 159
+Global Const $GC_I_SKILLID_WINDBORNE_SPEED = 160
+Global Const $GC_I_SKILLID_LIGHTNING_STORM = 161
+Global Const $GC_I_SKILLID_GALE = 162
+Global Const $GC_I_SKILLID_WHIRLWIND = 163
+Global Const $GC_I_SKILLID_ELEMENTAL_ATTUNEMENT = 164
+Global Const $GC_I_SKILLID_ARMOR_OF_EARTH = 165
+Global Const $GC_I_SKILLID_KINETIC_ARMOR = 166
+Global Const $GC_I_SKILLID_ERUPTION = 167
+Global Const $GC_I_SKILLID_MAGNETIC_AURA = 168
+Global Const $GC_I_SKILLID_EARTH_ATTUNEMENT = 169
+Global Const $GC_I_SKILLID_EARTHQUAKE = 170
+Global Const $GC_I_SKILLID_STONING = 171
+Global Const $GC_I_SKILLID_STONE_DAGGERS = 172
+Global Const $GC_I_SKILLID_GRASPING_EARTH = 173
+Global Const $GC_I_SKILLID_AFTERSHOCK = 174
+Global Const $GC_I_SKILLID_WARD_AGAINST_ELEMENTS = 175
+Global Const $GC_I_SKILLID_WARD_AGAINST_MELEE = 176
+Global Const $GC_I_SKILLID_WARD_AGAINST_FOES = 177
+Global Const $GC_I_SKILLID_ETHER_PRODIGY = 178
+Global Const $GC_I_SKILLID_INCENDIARY_BONDS = 179
+Global Const $GC_I_SKILLID_AURA_OF_RESTORATION = 180
+Global Const $GC_I_SKILLID_ETHER_RENEWAL = 181
+Global Const $GC_I_SKILLID_CONJURE_FLAME = 182
+Global Const $GC_I_SKILLID_INFERNO = 183
+Global Const $GC_I_SKILLID_FIRE_ATTUNEMENT = 184
+Global Const $GC_I_SKILLID_MIND_BURN = 185
+Global Const $GC_I_SKILLID_FIREBALL = 186
+Global Const $GC_I_SKILLID_METEOR = 187
+Global Const $GC_I_SKILLID_FLAME_BURST = 188
+Global Const $GC_I_SKILLID_RODGORTS_INVOCATION = 189
+Global Const $GC_I_SKILLID_MARK_OF_RODGORT = 190
+Global Const $GC_I_SKILLID_IMMOLATE = 191
+Global Const $GC_I_SKILLID_METEOR_SHOWER = 192
+Global Const $GC_I_SKILLID_PHOENIX = 193
+Global Const $GC_I_SKILLID_FLARE = 194
+Global Const $GC_I_SKILLID_LAVA_FONT = 195
+Global Const $GC_I_SKILLID_SEARING_HEAT = 196
+Global Const $GC_I_SKILLID_FIRE_STORM = 197
+Global Const $GC_I_SKILLID_GLYPH_OF_ELEMENTAL_POWER = 198
+Global Const $GC_I_SKILLID_GLYPH_OF_ENERGY = 199
+Global Const $GC_I_SKILLID_GLYPH_OF_LESSER_ENERGY = 200
+Global Const $GC_I_SKILLID_GLYPH_OF_CONCENTRATION = 201
+Global Const $GC_I_SKILLID_GLYPH_OF_SACRIFICE = 202
+Global Const $GC_I_SKILLID_GLYPH_OF_RENEWAL = 203
+Global Const $GC_I_SKILLID_RUST = 204
+Global Const $GC_I_SKILLID_LIGHTNING_SURGE = 205
+Global Const $GC_I_SKILLID_ARMOR_OF_FROST = 206
+Global Const $GC_I_SKILLID_CONJURE_FROST = 207
+Global Const $GC_I_SKILLID_WATER_ATTUNEMENT = 208
+Global Const $GC_I_SKILLID_MIND_FREEZE = 209
+Global Const $GC_I_SKILLID_ICE_PRISON = 210
+Global Const $GC_I_SKILLID_ICE_SPIKES = 211
+Global Const $GC_I_SKILLID_FROZEN_BURST = 212
+Global Const $GC_I_SKILLID_SHARD_STORM = 213
+Global Const $GC_I_SKILLID_ICE_SPEAR = 214
+Global Const $GC_I_SKILLID_MAELSTROM = 215
+Global Const $GC_I_SKILLID_IRON_MIST = 216
+Global Const $GC_I_SKILLID_CRYSTAL_WAVE = 217
+Global Const $GC_I_SKILLID_OBSIDIAN_FLESH = 218
+Global Const $GC_I_SKILLID_OBSIDIAN_FLAME = 219
+Global Const $GC_I_SKILLID_BLINDING_FLASH = 220
+Global Const $GC_I_SKILLID_CONJURE_LIGHTNING = 221
+Global Const $GC_I_SKILLID_LIGHTNING_STRIKE = 222
+Global Const $GC_I_SKILLID_CHAIN_LIGHTNING = 223
+Global Const $GC_I_SKILLID_ENERVATING_CHARGE = 224
+Global Const $GC_I_SKILLID_AIR_ATTUNEMENT = 225
+Global Const $GC_I_SKILLID_MIND_SHOCK = 226
+Global Const $GC_I_SKILLID_GLIMMERING_MARK = 227
+Global Const $GC_I_SKILLID_THUNDERCLAP = 228
+Global Const $GC_I_SKILLID_LIGHTNING_ORB1 = 229
+Global Const $GC_I_SKILLID_LIGHTNING_JAVELIN = 230
+Global Const $GC_I_SKILLID_SHOCK = 231
+Global Const $GC_I_SKILLID_LIGHTNING_TOUCH = 232
+Global Const $GC_I_SKILLID_SWIRLING_AURA = 233
+Global Const $GC_I_SKILLID_DEEP_FREEZE = 234
+Global Const $GC_I_SKILLID_BLURRED_VISION = 235
+Global Const $GC_I_SKILLID_MIST_FORM = 236
+Global Const $GC_I_SKILLID_WATER_TRIDENT = 237
+Global Const $GC_I_SKILLID_ARMOR_OF_MIST = 238
+Global Const $GC_I_SKILLID_WARD_AGAINST_HARM = 239
+Global Const $GC_I_SKILLID_SMITE = 240
+Global Const $GC_I_SKILLID_LIFE_BOND = 241
+Global Const $GC_I_SKILLID_BALTHAZARS_SPIRIT = 242
+Global Const $GC_I_SKILLID_STRENGTH_OF_HONOR = 243
+Global Const $GC_I_SKILLID_LIFE_ATTUNEMENT = 244
+Global Const $GC_I_SKILLID_PROTECTIVE_SPIRIT = 245
+Global Const $GC_I_SKILLID_DIVINE_INTERVENTION = 246
+Global Const $GC_I_SKILLID_SYMBOL_OF_WRATH = 247
+Global Const $GC_I_SKILLID_RETRIBUTION = 248
+Global Const $GC_I_SKILLID_HOLY_WRATH = 249
+Global Const $GC_I_SKILLID_ESSENCE_BOND = 250
+Global Const $GC_I_SKILLID_SCOURGE_HEALING = 251
+Global Const $GC_I_SKILLID_BANISH = 252
+Global Const $GC_I_SKILLID_SCOURGE_SACRIFICE = 253
+Global Const $GC_I_SKILLID_VIGOROUS_SPIRIT = 254
+Global Const $GC_I_SKILLID_WATCHFUL_SPIRIT = 255
+Global Const $GC_I_SKILLID_BLESSED_AURA = 256
+Global Const $GC_I_SKILLID_AEGIS = 257
+Global Const $GC_I_SKILLID_GUARDIAN = 258
+Global Const $GC_I_SKILLID_SHIELD_OF_DEFLECTION = 259
+Global Const $GC_I_SKILLID_AURA_OF_FAITH = 260
+Global Const $GC_I_SKILLID_SHIELD_OF_REGENERATION = 261
+Global Const $GC_I_SKILLID_SHIELD_OF_JUDGMENT = 262
+Global Const $GC_I_SKILLID_PROTECTIVE_BOND = 263
+Global Const $GC_I_SKILLID_PACIFISM = 264
+Global Const $GC_I_SKILLID_AMITY = 265
+Global Const $GC_I_SKILLID_PEACE_AND_HARMONY = 266
+Global Const $GC_I_SKILLID_JUDGES_INSIGHT = 267
+Global Const $GC_I_SKILLID_UNYIELDING_AURA = 268
+Global Const $GC_I_SKILLID_MARK_OF_PROTECTION = 269
+Global Const $GC_I_SKILLID_LIFE_BARRIER = 270
+Global Const $GC_I_SKILLID_ZEALOTS_FIRE = 271
+Global Const $GC_I_SKILLID_BALTHAZARS_AURA = 272
+Global Const $GC_I_SKILLID_SPELL_BREAKER = 273
+Global Const $GC_I_SKILLID_HEALING_SEED = 274
+Global Const $GC_I_SKILLID_MEND_CONDITION = 275
+Global Const $GC_I_SKILLID_RESTORE_CONDITION = 276
+Global Const $GC_I_SKILLID_MEND_AILMENT = 277
+Global Const $GC_I_SKILLID_PURGE_CONDITIONS = 278
+Global Const $GC_I_SKILLID_DIVINE_HEALING = 279
+Global Const $GC_I_SKILLID_HEAL_AREA = 280
+Global Const $GC_I_SKILLID_ORISON_OF_HEALING = 281
+Global Const $GC_I_SKILLID_WORD_OF_HEALING = 282
+Global Const $GC_I_SKILLID_DWAYNAS_KISS = 283
+Global Const $GC_I_SKILLID_DIVINE_BOON = 284
+Global Const $GC_I_SKILLID_HEALING_HANDS = 285
+Global Const $GC_I_SKILLID_HEAL_OTHER = 286
+Global Const $GC_I_SKILLID_HEAL_PARTY = 287
+Global Const $GC_I_SKILLID_HEALING_BREEZE = 288
+Global Const $GC_I_SKILLID_VITAL_BLESSING = 289
+Global Const $GC_I_SKILLID_MENDING = 290
+Global Const $GC_I_SKILLID_LIVE_VICARIOUSLY = 291
+Global Const $GC_I_SKILLID_INFUSE_HEALTH = 292
+Global Const $GC_I_SKILLID_SIGNET_OF_DEVOTION = 293
+Global Const $GC_I_SKILLID_SIGNET_OF_JUDGMENT = 294
+Global Const $GC_I_SKILLID_PURGE_SIGNET = 295
+Global Const $GC_I_SKILLID_BANE_SIGNET = 296
+Global Const $GC_I_SKILLID_BLESSED_SIGNET = 297
+Global Const $GC_I_SKILLID_MARTYR = 298
+Global Const $GC_I_SKILLID_SHIELDING_HANDS = 299
+Global Const $GC_I_SKILLID_CONTEMPLATION_OF_PURITY = 300
+Global Const $GC_I_SKILLID_REMOVE_HEX = 301
+Global Const $GC_I_SKILLID_SMITE_HEX = 302
+Global Const $GC_I_SKILLID_CONVERT_HEXES = 303
+Global Const $GC_I_SKILLID_LIGHT_OF_DWAYNA = 304
+Global Const $GC_I_SKILLID_RESURRECT = 305
+Global Const $GC_I_SKILLID_REBIRTH = 306
+Global Const $GC_I_SKILLID_REVERSAL_OF_FORTUNE = 307
+Global Const $GC_I_SKILLID_SUCCOR = 308
+Global Const $GC_I_SKILLID_HOLY_VEIL = 309
+Global Const $GC_I_SKILLID_DIVINE_SPIRIT = 310
+Global Const $GC_I_SKILLID_DRAW_CONDITIONS = 311
+Global Const $GC_I_SKILLID_HOLY_STRIKE = 312
+Global Const $GC_I_SKILLID_HEALING_TOUCH = 313
+Global Const $GC_I_SKILLID_RESTORE_LIFE = 314
+Global Const $GC_I_SKILLID_VENGEANCE = 315
+Global Const $GC_I_SKILLID_TO_THE_LIMIT = 316
+Global Const $GC_I_SKILLID_BATTLE_RAGE = 317
+Global Const $GC_I_SKILLID_DEFY_PAIN = 318
+Global Const $GC_I_SKILLID_RUSH = 319
+Global Const $GC_I_SKILLID_HAMSTRING = 320
+Global Const $GC_I_SKILLID_WILD_BLOW = 321
+Global Const $GC_I_SKILLID_POWER_ATTACK = 322
+Global Const $GC_I_SKILLID_DESPERATION_BLOW = 323
+Global Const $GC_I_SKILLID_THRILL_OF_VICTORY = 324
+Global Const $GC_I_SKILLID_DISTRACTING_BLOW = 325
+Global Const $GC_I_SKILLID_PROTECTORS_STRIKE = 326
+Global Const $GC_I_SKILLID_GRIFFONS_SWEEP = 327
+Global Const $GC_I_SKILLID_PURE_STRIKE = 328
+Global Const $GC_I_SKILLID_SKULL_CRACK = 329
+Global Const $GC_I_SKILLID_CYCLONE_AXE = 330
+Global Const $GC_I_SKILLID_HAMMER_BASH = 331
+Global Const $GC_I_SKILLID_BULLS_STRIKE = 332
+Global Const $GC_I_SKILLID_I_WILL_AVENGE_YOU = 333
+Global Const $GC_I_SKILLID_AXE_RAKE = 334
+Global Const $GC_I_SKILLID_CLEAVE = 335
+Global Const $GC_I_SKILLID_EXECUTIONERS_STRIKE = 336
+Global Const $GC_I_SKILLID_DISMEMBER = 337
+Global Const $GC_I_SKILLID_EVISCERATE = 338
+Global Const $GC_I_SKILLID_PENETRATING_BLOW = 339
+Global Const $GC_I_SKILLID_DISRUPTING_CHOP = 340
+Global Const $GC_I_SKILLID_SWIFT_CHOP = 341
+Global Const $GC_I_SKILLID_AXE_TWIST = 342
+Global Const $GC_I_SKILLID_FOR_GREAT_JUSTICE = 343
+Global Const $GC_I_SKILLID_FLURRY = 344
+Global Const $GC_I_SKILLID_DEFENSIVE_STANCE = 345
+Global Const $GC_I_SKILLID_FRENZY = 346
+Global Const $GC_I_SKILLID_ENDURE_PAIN = 347
+Global Const $GC_I_SKILLID_WATCH_YOURSELF = 348
+Global Const $GC_I_SKILLID_SPRINT = 349
+Global Const $GC_I_SKILLID_BELLY_SMASH = 350
+Global Const $GC_I_SKILLID_MIGHTY_BLOW = 351
+Global Const $GC_I_SKILLID_CRUSHING_BLOW = 352
+Global Const $GC_I_SKILLID_CRUDE_SWING = 353
+Global Const $GC_I_SKILLID_EARTH_SHAKER = 354
+Global Const $GC_I_SKILLID_DEVASTATING_HAMMER = 355
+Global Const $GC_I_SKILLID_IRRESISTIBLE_BLOW = 356
+Global Const $GC_I_SKILLID_COUNTER_BLOW = 357
+Global Const $GC_I_SKILLID_BACKBREAKER = 358
+Global Const $GC_I_SKILLID_HEAVY_BLOW = 359
+Global Const $GC_I_SKILLID_STAGGERING_BLOW = 360
+Global Const $GC_I_SKILLID_DOLYAK_SIGNET = 361
+Global Const $GC_I_SKILLID_WARRIORS_CUNNING = 362
+Global Const $GC_I_SKILLID_SHIELD_BASH = 363
+Global Const $GC_I_SKILLID_CHARGE = 364
+Global Const $GC_I_SKILLID_VICTORY_IS_MINE = 365
+Global Const $GC_I_SKILLID_FEAR_ME = 366
+Global Const $GC_I_SKILLID_SHIELDS_UP = 367
+Global Const $GC_I_SKILLID_I_WILL_SURVIVE = 368
+Global Const $GC_I_SKILLID_DONT_BELIEVE_THEIR_LIES = 369
+Global Const $GC_I_SKILLID_BERSERKER_STANCE = 370
+Global Const $GC_I_SKILLID_BALANCED_STANCE = 371
+Global Const $GC_I_SKILLID_GLADIATORS_DEFENSE = 372
+Global Const $GC_I_SKILLID_DEFLECT_ARROWS = 373
+Global Const $GC_I_SKILLID_WARRIORS_ENDURANCE = 374
+Global Const $GC_I_SKILLID_DWARVEN_BATTLE_STANCE = 375
+Global Const $GC_I_SKILLID_DISCIPLINED_STANCE = 376
+Global Const $GC_I_SKILLID_WARY_STANCE = 377
+Global Const $GC_I_SKILLID_SHIELD_STANCE = 378
+Global Const $GC_I_SKILLID_BULLS_CHARGE = 379
+Global Const $GC_I_SKILLID_BONETTIS_DEFENSE = 380
+Global Const $GC_I_SKILLID_HUNDRED_BLADES = 381
+Global Const $GC_I_SKILLID_SEVER_ARTERY = 382
+Global Const $GC_I_SKILLID_GALRATH_SLASH = 383
+Global Const $GC_I_SKILLID_GASH = 384
+Global Const $GC_I_SKILLID_FINAL_THRUST = 385
+Global Const $GC_I_SKILLID_SEEKING_BLADE = 386
+Global Const $GC_I_SKILLID_RIPOSTE = 387
+Global Const $GC_I_SKILLID_DEADLY_RIPOSTE = 388
+Global Const $GC_I_SKILLID_FLOURISH = 389
+Global Const $GC_I_SKILLID_SAVAGE_SLASH = 390
+Global Const $GC_I_SKILLID_HUNTERS_SHOT = 391
+Global Const $GC_I_SKILLID_PIN_DOWN = 392
+Global Const $GC_I_SKILLID_CRIPPLING_SHOT = 393
+Global Const $GC_I_SKILLID_POWER_SHOT = 394
+Global Const $GC_I_SKILLID_BARRAGE = 395
+Global Const $GC_I_SKILLID_DUAL_SHOT = 396
+Global Const $GC_I_SKILLID_QUICK_SHOT = 397
+Global Const $GC_I_SKILLID_PENETRATING_ATTACK = 398
+Global Const $GC_I_SKILLID_DISTRACTING_SHOT = 399
+Global Const $GC_I_SKILLID_PRECISION_SHOT = 400
+Global Const $GC_I_SKILLID_SPLINTER_SHOT_MONSTER_SKILL = 401
+Global Const $GC_I_SKILLID_DETERMINED_SHOT = 402
+Global Const $GC_I_SKILLID_CALLED_SHOT = 403
+Global Const $GC_I_SKILLID_POISON_ARROW = 404
+Global Const $GC_I_SKILLID_OATH_SHOT = 405
+Global Const $GC_I_SKILLID_DEBILITATING_SHOT = 406
+Global Const $GC_I_SKILLID_POINT_BLANK_SHOT = 407
+Global Const $GC_I_SKILLID_CONCUSSION_SHOT = 408
+Global Const $GC_I_SKILLID_PUNISHING_SHOT = 409
+Global Const $GC_I_SKILLID_CALL_OF_FEROCITY = 410
+Global Const $GC_I_SKILLID_CHARM_ANIMAL = 411
+Global Const $GC_I_SKILLID_CALL_OF_PROTECTION = 412
+Global Const $GC_I_SKILLID_CALL_OF_ELEMENTAL_PROTECTION = 413
+Global Const $GC_I_SKILLID_CALL_OF_VITALITY = 414
+Global Const $GC_I_SKILLID_CALL_OF_HASTE = 415
+Global Const $GC_I_SKILLID_CALL_OF_HEALING = 416
+Global Const $GC_I_SKILLID_CALL_OF_RESILIENCE = 417
+Global Const $GC_I_SKILLID_CALL_OF_FEEDING = 418
+Global Const $GC_I_SKILLID_CALL_OF_THE_HUNTER = 419
+Global Const $GC_I_SKILLID_CALL_OF_BRUTALITY = 420
+Global Const $GC_I_SKILLID_CALL_OF_DISRUPTION = 421
+Global Const $GC_I_SKILLID_REVIVE_ANIMAL = 422
+Global Const $GC_I_SKILLID_SYMBIOTIC_BOND = 423
+Global Const $GC_I_SKILLID_THROW_DIRT = 424
+Global Const $GC_I_SKILLID_DODGE = 425
+Global Const $GC_I_SKILLID_SAVAGE_SHOT = 426
+Global Const $GC_I_SKILLID_ANTIDOTE_SIGNET = 427
+Global Const $GC_I_SKILLID_INCENDIARY_ARROWS = 428
+Global Const $GC_I_SKILLID_MELANDRUS_ARROWS = 429
+Global Const $GC_I_SKILLID_MARKSMANS_WAGER = 430
+Global Const $GC_I_SKILLID_IGNITE_ARROWS = 431
+Global Const $GC_I_SKILLID_READ_THE_WIND = 432
+Global Const $GC_I_SKILLID_KINDLE_ARROWS = 433
+Global Const $GC_I_SKILLID_CHOKING_GAS = 434
+Global Const $GC_I_SKILLID_APPLY_POISON = 435
+Global Const $GC_I_SKILLID_COMFORT_ANIMAL = 436
+Global Const $GC_I_SKILLID_BESTIAL_POUNCE = 437
+Global Const $GC_I_SKILLID_MAIMING_STRIKE = 438
+Global Const $GC_I_SKILLID_FERAL_LUNGE = 439
+Global Const $GC_I_SKILLID_SCAVENGER_STRIKE = 440
+Global Const $GC_I_SKILLID_MELANDRUS_ASSAULT = 441
+Global Const $GC_I_SKILLID_FEROCIOUS_STRIKE = 442
+Global Const $GC_I_SKILLID_PREDATORS_POUNCE = 443
+Global Const $GC_I_SKILLID_BRUTAL_STRIKE = 444
+Global Const $GC_I_SKILLID_DISRUPTING_LUNGE = 445
+Global Const $GC_I_SKILLID_TROLL_UNGUENT = 446
+Global Const $GC_I_SKILLID_OTYUGHS_CRY = 447
+Global Const $GC_I_SKILLID_ESCAPE = 448
+Global Const $GC_I_SKILLID_PRACTICED_STANCE = 449
+Global Const $GC_I_SKILLID_WHIRLING_DEFENSE = 450
+Global Const $GC_I_SKILLID_MELANDRUS_RESILIENCE = 451
+Global Const $GC_I_SKILLID_DRYDERS_DEFENSES = 452
+Global Const $GC_I_SKILLID_LIGHTNING_REFLEXES = 453
+Global Const $GC_I_SKILLID_TIGERS_FURY = 454
+Global Const $GC_I_SKILLID_STORM_CHASER = 455
+Global Const $GC_I_SKILLID_SERPENTS_QUICKNESS = 456
+Global Const $GC_I_SKILLID_DUST_TRAP = 457
+Global Const $GC_I_SKILLID_BARBED_TRAP = 458
+Global Const $GC_I_SKILLID_FLAME_TRAP = 459
+Global Const $GC_I_SKILLID_HEALING_SPRING = 460
+Global Const $GC_I_SKILLID_SPIKE_TRAP = 461
+Global Const $GC_I_SKILLID_WINTER = 462
+Global Const $GC_I_SKILLID_WINNOWING = 463
+Global Const $GC_I_SKILLID_EDGE_OF_EXTINCTION = 464
+Global Const $GC_I_SKILLID_GREATER_CONFLAGRATION = 465
+Global Const $GC_I_SKILLID_CONFLAGRATION = 466
+Global Const $GC_I_SKILLID_FERTILE_SEASON = 467
+Global Const $GC_I_SKILLID_SYMBIOSIS = 468
+Global Const $GC_I_SKILLID_PRIMAL_ECHOES = 469
+Global Const $GC_I_SKILLID_PREDATORY_SEASON = 470
+Global Const $GC_I_SKILLID_FROZEN_SOIL = 471
+Global Const $GC_I_SKILLID_FAVORABLE_WINDS = 472
+Global Const $GC_I_SKILLID_HIGH_WINDS = 473
+Global Const $GC_I_SKILLID_ENERGIZING_WIND = 474
+Global Const $GC_I_SKILLID_QUICKENING_ZEPHYR = 475
+Global Const $GC_I_SKILLID_NATURES_RENEWAL = 476
+Global Const $GC_I_SKILLID_MUDDY_TERRAIN = 477
+Global Const $GC_I_SKILLID_BLEEDING = 478
+Global Const $GC_I_SKILLID_BLIND = 479
+Global Const $GC_I_SKILLID_BURNING = 480
+Global Const $GC_I_SKILLID_CRIPPLED = 481
+Global Const $GC_I_SKILLID_DEEP_WOUND = 482
+Global Const $GC_I_SKILLID_DISEASE = 483
+Global Const $GC_I_SKILLID_POISON = 484
+Global Const $GC_I_SKILLID_DAZED = 485
+Global Const $GC_I_SKILLID_WEAKNESS = 486
+Global Const $GC_I_SKILLID_CLEANSED = 487
+Global Const $GC_I_SKILLID_ERUPTION_ENVIRONMENT = 488
+Global Const $GC_I_SKILLID_FIRE_STORM_ENVIRONMENT = 489
+Global Const $GC_I_SKILLID_VITAL_BLESSING_MONSTER_SKILL = 490
+Global Const $GC_I_SKILLID_FOUNT_OF_MAGUUMA = 491
+Global Const $GC_I_SKILLID_HEALING_FOUNTAIN = 492
+Global Const $GC_I_SKILLID_ICY_GROUND = 493
+Global Const $GC_I_SKILLID_MAELSTROM_ENVIRONMENT = 494
+Global Const $GC_I_SKILLID_MURSAAT_TOWER_SKILL = 495
+Global Const $GC_I_SKILLID_QUICKSAND_ENVIRONMENT_EFFECT = 496
+Global Const $GC_I_SKILLID_CURSE_OF_THE_BLOODSTONE = 497
+Global Const $GC_I_SKILLID_CHAIN_LIGHTNING_ENVIRONMENT = 498
+Global Const $GC_I_SKILLID_OBELISK_LIGHTNING = 499
+Global Const $GC_I_SKILLID_TAR = 500
+Global Const $GC_I_SKILLID_SIEGE_ATTACK4 = 501
+Global Const $GC_I_SKILLID_RESURRECT_PARTY = 502
+Global Const $GC_I_SKILLID_SCEPTER_OF_ORRS_AURA = 503
+Global Const $GC_I_SKILLID_SCEPTER_OF_ORRS_POWER = 504
+Global Const $GC_I_SKILLID_BURDEN_TOTEM = 505
+Global Const $GC_I_SKILLID_SPLINTER_MINE_SKILL = 506
+Global Const $GC_I_SKILLID_ENTANGLEMENT = 507
+Global Const $GC_I_SKILLID_DWARVEN_POWDER_KEG = 508
+Global Const $GC_I_SKILLID_SEED_OF_RESURRECTION = 509
+Global Const $GC_I_SKILLID_DEAFENING_ROAR = 510
+Global Const $GC_I_SKILLID_BRUTAL_MAULING = 511
+Global Const $GC_I_SKILLID_CRIPPLING_ATTACK = 512
+Global Const $GC_I_SKILLID_CHARM_ANIMAL_MONSTER_SKILL = 513
+Global Const $GC_I_SKILLID_BREAKING_CHARM = 514
+Global Const $GC_I_SKILLID_CHARR_BUFF = 515
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE1 = 516
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE2 = 517
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE3 = 518
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE4 = 519
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE5 = 520
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE6 = 521
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE7 = 522
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE8 = 523
+Global Const $GC_I_SKILLID_DOZEN_SHOT = 524
+Global Const $GC_I_SKILLID_NIBBLE = 525
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE9 = 526
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE10 = 527
+Global Const $GC_I_SKILLID_REFLECTION = 528
+; Global Const $GC_I_SKILLIDID_UNKNOW = 529
+Global Const $GC_I_SKILLID_GIANT_STOMP = 530
+Global Const $GC_I_SKILLID_AGNARS_RAGE = 531
+Global Const $GC_I_SKILLID_HEALING_BREEZE_AGNARS_RAGE = 532
+Global Const $GC_I_SKILLID_CRYSTAL_HAZE = 533
+Global Const $GC_I_SKILLID_CRYSTAL_BONDS = 534
+Global Const $GC_I_SKILLID_JAGGED_CRYSTAL_SKIN = 535
+Global Const $GC_I_SKILLID_CRYSTAL_HIBERNATION = 536
+Global Const $GC_I_SKILLID_STUN_IMMUNITY = 537
+Global Const $GC_I_SKILLID_INVULNERABILITY = 538
+Global Const $GC_I_SKILLID_HUNGER_OF_THE_LICH = 539
+Global Const $GC_I_SKILLID_EMBRACE_THE_PAIN = 540
+Global Const $GC_I_SKILLID_LIFE_VORTEX = 541
+Global Const $GC_I_SKILLID_ORACLE_LINK = 542
+Global Const $GC_I_SKILLID_GUARDIAN_PACIFY = 543
+Global Const $GC_I_SKILLID_SOUL_VORTEX = 544
+; Global Const $GC_I_SKILLIDID_UNKNOW = 545
+Global Const $GC_I_SKILLID_SPECTRAL_AGONY = 546
+Global Const $GC_I_SKILLID_NATURAL_RESISTANCE1 = 547
+Global Const $GC_I_SKILLID_NATURAL_RESISTANCE2 = 548
+Global Const $GC_I_SKILLID_GUILD_LORD_AURA = 549
+Global Const $GC_I_SKILLID_CRITICAL_HIT_PROBABILITY = 550
+Global Const $GC_I_SKILLID_STUN_ON_CRITICAL_HIT = 551
+Global Const $GC_I_SKILLID_BLOOD_SPLATTERING = 552
+Global Const $GC_I_SKILLID_INANIMATE_OBJECT = 553
+Global Const $GC_I_SKILLID_UNDEAD_SENSITIVITY_TO_LIGHT = 554
+Global Const $GC_I_SKILLID_ENERGY_BOOST = 555
+Global Const $GC_I_SKILLID_HEALTH_DRAIN = 556
+Global Const $GC_I_SKILLID_IMMUNITY_TO_CRITICAL_HITS = 557
+Global Const $GC_I_SKILLID_TITANS_GET_PLUS_HEALTH_REGEN_AND_SET_ENEMIES_ON_FIRE_EACH_TIME_HE_IS_HIT = 558
+Global Const $GC_I_SKILLID_UNDYING1 = 559
+Global Const $GC_I_SKILLID_RESURRECT_GARGOYLE = 560
+Global Const $GC_I_SKILLID_SEAL_REGEN = 561
+Global Const $GC_I_SKILLID_LIGHTNING_ORB2 = 562
+Global Const $GC_I_SKILLID_WURM_SIEGE_DUNES_OF_DESPAIR = 563
+Global Const $GC_I_SKILLID_WURM_SIEGE = 564
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE = 565
+Global Const $GC_I_SKILLID_SHIVER_TOUCH = 566
+Global Const $GC_I_SKILLID_SPONTANEOUS_COMBUSTION = 567
+Global Const $GC_I_SKILLID_VANISH = 568
+Global Const $GC_I_SKILLID_VICTORY_OR_DEATH = 569
+Global Const $GC_I_SKILLID_MARK_OF_INSECURITY = 570
+Global Const $GC_I_SKILLID_DISRUPTING_DAGGER = 571
+Global Const $GC_I_SKILLID_DEADLY_PARADOX = 572
+Global Const $GC_I_SKILLID_TELEPORT_PLAYERS = 573
+Global Const $GC_I_SKILLID_QUEST_SKILL_FOR_COASTAL_EXAM = 574
+Global Const $GC_I_SKILLID_HOLY_BLESSING = 575
+Global Const $GC_I_SKILLID_STATUES_BLESSING = 576
+Global Const $GC_I_SKILLID_SIEGE_ATTACK1 = 577
+Global Const $GC_I_SKILLID_SIEGE_ATTACK2 = 578
+Global Const $GC_I_SKILLID_DOMAIN_OF_SKILL_DAMAGE = 579
+Global Const $GC_I_SKILLID_DOMAIN_OF_ENERGY_DRAINING = 580
+Global Const $GC_I_SKILLID_DOMAIN_OF_ELEMENTS = 581
+Global Const $GC_I_SKILLID_DOMAIN_OF_HEALTH_DRAINING = 582
+Global Const $GC_I_SKILLID_DOMAIN_OF_SLOW = 583
+Global Const $GC_I_SKILLID_DIVINE_FIRE = 584
+Global Const $GC_I_SKILLID_SWAMP_WATER = 585
+Global Const $GC_I_SKILLID_JANTHIRS_GAZE = 586
+Global Const $GC_I_SKILLID_FAKE_SPELL = 587
+Global Const $GC_I_SKILLID_CHARM_ANIMAL_MONSTER = 588
+Global Const $GC_I_SKILLID_STORMCALLER_SKILL = 589
+Global Const $GC_I_SKILLID_KNOCK = 590
+Global Const $GC_I_SKILLID_QUEST_SKILL = 591
+Global Const $GC_I_SKILLID_RURIK_MUST_LIVE = 592
+Global Const $GC_I_SKILLID_BLESSING_OF_THE_KURZICKS1 = 593
+Global Const $GC_I_SKILLID_LICHS_PHYLACTERY = 594
+Global Const $GC_I_SKILLID_RESTORE_LIFE_MONSTER_SKILL = 595
+Global Const $GC_I_SKILLID_CHIMERA_OF_INTENSITY = 596
+; Global Const $GC_I_SKILLIDID_UNKNOW = 597
+; Global Const $GC_I_SKILLIDID_UNKNOW = 598
+; Global Const $GC_I_SKILLIDID_UNKNOW = 599
+; Global Const $GC_I_SKILLIDID_UNKNOW = 600
+; Global Const $GC_I_SKILLIDID_UNKNOW = 601
+; Global Const $GC_I_SKILLIDID_UNKNOW = 602
+; Global Const $GC_I_SKILLIDID_UNKNOW = 603
+; Global Const $GC_I_SKILLIDID_UNKNOW = 604
+; Global Const $GC_I_SKILLIDID_UNKNOW = 605
+; Global Const $GC_I_SKILLIDID_UNKNOW = 606
+; Global Const $GC_I_SKILLIDID_UNKNOW = 607
+; Global Const $GC_I_SKILLIDID_UNKNOW = 608
+; Global Const $GC_I_SKILLIDID_UNKNOW = 609
+; Global Const $GC_I_SKILLIDID_UNKNOW = 610
+; Global Const $GC_I_SKILLIDID_UNKNOW = 611
+; Global Const $GC_I_SKILLIDID_UNKNOW = 612
+; Global Const $GC_I_SKILLIDID_UNKNOW = 613
+; Global Const $GC_I_SKILLIDID_UNKNOW = 614
+; Global Const $GC_I_SKILLIDID_UNKNOW = 615
+; Global Const $GC_I_SKILLIDID_UNKNOW = 616
+; Global Const $GC_I_SKILLIDID_UNKNOW = 617
+; Global Const $GC_I_SKILLIDID_UNKNOW = 618
+; Global Const $GC_I_SKILLIDID_UNKNOW = 619
+; Global Const $GC_I_SKILLIDID_UNKNOW = 620
+; Global Const $GC_I_SKILLIDID_UNKNOW = 621
+; Global Const $GC_I_SKILLIDID_UNKNOW = 622
+; Global Const $GC_I_SKILLIDID_UNKNOW = 623
+; Global Const $GC_I_SKILLIDID_UNKNOW = 624
+; Global Const $GC_I_SKILLIDID_UNKNOW = 625
+; Global Const $GC_I_SKILLIDID_UNKNOW = 626
+; Global Const $GC_I_SKILLIDID_UNKNOW = 627
+; Global Const $GC_I_SKILLIDID_UNKNOW = 628
+; Global Const $GC_I_SKILLIDID_UNKNOW = 629
+; Global Const $GC_I_SKILLIDID_UNKNOW = 630
+; Global Const $GC_I_SKILLIDID_UNKNOW = 631
+; Global Const $GC_I_SKILLIDID_UNKNOW = 632
+; Global Const $GC_I_SKILLIDID_UNKNOW = 633
+; Global Const $GC_I_SKILLIDID_UNKNOW = 634
+; Global Const $GC_I_SKILLIDID_UNKNOW = 635
+; Global Const $GC_I_SKILLIDID_UNKNOW = 636
+; Global Const $GC_I_SKILLIDID_UNKNOW = 637
+; Global Const $GC_I_SKILLIDID_UNKNOW = 638
+; Global Const $GC_I_SKILLIDID_UNKNOW = 639
+; Global Const $GC_I_SKILLIDID_UNKNOW = 640
+; Global Const $GC_I_SKILLIDID_UNKNOW = 641
+; Global Const $GC_I_SKILLIDID_UNKNOW = 642
+; Global Const $GC_I_SKILLIDID_UNKNOW = 643
+; Global Const $GC_I_SKILLIDID_UNKNOW = 644
+; Global Const $GC_I_SKILLIDID_UNKNOW = 645
+; Global Const $GC_I_SKILLIDID_UNKNOW = 646
+; Global Const $GC_I_SKILLIDID_UNKNOW = 647
+; Global Const $GC_I_SKILLIDID_UNKNOW = 648
+; Global Const $GC_I_SKILLIDID_UNKNOW = 649
+; Global Const $GC_I_SKILLIDID_UNKNOW = 650
+; Global Const $GC_I_SKILLIDID_UNKNOW = 651
+; Global Const $GC_I_SKILLIDID_UNKNOW = 652
+; Global Const $GC_I_SKILLIDID_UNKNOW = 653
+; Global Const $GC_I_SKILLIDID_UNKNOW = 654
+; Global Const $GC_I_SKILLIDID_UNKNOW = 655
+; Global Const $GC_I_SKILLIDID_UNKNOW = 656
+Global Const $GC_I_SKILLID_LIFE_DRAINING = 657
+; Global Const $GC_I_SKILLIDID_UNKNOW = 658
+; Global Const $GC_I_SKILLIDID_UNKNOW = 659
+; Global Const $GC_I_SKILLIDID_UNKNOW = 660
+; Global Const $GC_I_SKILLIDID_UNKNOW = 661
+; Global Const $GC_I_SKILLIDID_UNKNOW = 662
+; Global Const $GC_I_SKILLIDID_UNKNOW = 663
+; Global Const $GC_I_SKILLIDID_UNKNOW = 664
+; Global Const $GC_I_SKILLIDID_UNKNOW = 665
+; Global Const $GC_I_SKILLIDID_UNKNOW = 666
+; Global Const $GC_I_SKILLIDID_UNKNOW = 667
+; Global Const $GC_I_SKILLIDID_UNKNOW = 668
+; Global Const $GC_I_SKILLIDID_UNKNOW = 669
+; Global Const $GC_I_SKILLIDID_UNKNOW = 670
+; Global Const $GC_I_SKILLIDID_UNKNOW = 671
+; Global Const $GC_I_SKILLIDID_UNKNOW = 672
+; Global Const $GC_I_SKILLIDID_UNKNOW = 673
+; Global Const $GC_I_SKILLIDID_UNKNOW = 674
+; Global Const $GC_I_SKILLIDID_UNKNOW = 675
+; Global Const $GC_I_SKILLIDID_UNKNOW = 676
+; Global Const $GC_I_SKILLIDID_UNKNOW = 677
+; Global Const $GC_I_SKILLIDID_UNKNOW = 678
+; Global Const $GC_I_SKILLIDID_UNKNOW = 679
+; Global Const $GC_I_SKILLIDID_UNKNOW = 680
+; Global Const $GC_I_SKILLIDID_UNKNOW = 681
+; Global Const $GC_I_SKILLIDID_UNKNOW = 682
+; Global Const $GC_I_SKILLIDID_UNKNOW = 683
+; Global Const $GC_I_SKILLIDID_UNKNOW = 684
+; Global Const $GC_I_SKILLIDID_UNKNOW = 685
+; Global Const $GC_I_SKILLIDID_UNKNOW = 686
+; Global Const $GC_I_SKILLIDID_UNKNOW = 687
+; Global Const $GC_I_SKILLIDID_UNKNOW = 688
+; Global Const $GC_I_SKILLIDID_UNKNOW = 689
+; Global Const $GC_I_SKILLIDID_UNKNOW = 690
+; Global Const $GC_I_SKILLIDID_UNKNOW = 691
+; Global Const $GC_I_SKILLIDID_UNKNOW = 692
+; Global Const $GC_I_SKILLIDID_UNKNOW = 693
+; Global Const $GC_I_SKILLIDID_UNKNOW = 694
+; Global Const $GC_I_SKILLIDID_UNKNOW = 695
+; Global Const $GC_I_SKILLIDID_UNKNOW = 696
+; Global Const $GC_I_SKILLIDID_UNKNOW = 697
+; Global Const $GC_I_SKILLIDID_UNKNOW = 698
+; Global Const $GC_I_SKILLIDID_UNKNOW = 699
+; Global Const $GC_I_SKILLIDID_UNKNOW = 700
+; Global Const $GC_I_SKILLIDID_UNKNOW = 701
+; Global Const $GC_I_SKILLIDID_UNKNOW = 702
+; Global Const $GC_I_SKILLIDID_UNKNOW = 703
+; Global Const $GC_I_SKILLIDID_UNKNOW = 704
+; Global Const $GC_I_SKILLIDID_UNKNOW = 705
+; Global Const $GC_I_SKILLIDID_UNKNOW = 706
+; Global Const $GC_I_SKILLIDID_UNKNOW = 707
+; Global Const $GC_I_SKILLIDID_UNKNOW = 708
+; Global Const $GC_I_SKILLIDID_UNKNOW = 709
+; Global Const $GC_I_SKILLIDID_UNKNOW = 710
+; Global Const $GC_I_SKILLIDID_UNKNOW = 711
+; Global Const $GC_I_SKILLIDID_UNKNOW = 712
+; Global Const $GC_I_SKILLIDID_UNKNOW = 713
+; Global Const $GC_I_SKILLIDID_UNKNOW = 714
+; Global Const $GC_I_SKILLIDID_UNKNOW = 715
+; Global Const $GC_I_SKILLIDID_UNKNOW = 716
+; Global Const $GC_I_SKILLIDID_UNKNOW = 717
+; Global Const $GC_I_SKILLIDID_UNKNOW = 718
+; Global Const $GC_I_SKILLIDID_UNKNOW = 719
+; Global Const $GC_I_SKILLIDID_UNKNOW = 720
+; Global Const $GC_I_SKILLIDID_UNKNOW = 721
+; Global Const $GC_I_SKILLIDID_UNKNOW = 722
+; Global Const $GC_I_SKILLIDID_UNKNOW = 723
+; Global Const $GC_I_SKILLIDID_UNKNOW = 724
+; Global Const $GC_I_SKILLIDID_UNKNOW = 725
+; Global Const $GC_I_SKILLIDID_UNKNOW = 726
+; Global Const $GC_I_SKILLIDID_UNKNOW = 727
+; Global Const $GC_I_SKILLIDID_UNKNOW = 728
+; Global Const $GC_I_SKILLIDID_UNKNOW = 729
+; Global Const $GC_I_SKILLIDID_UNKNOW = 730
+; Global Const $GC_I_SKILLIDID_UNKNOW = 731
+; Global Const $GC_I_SKILLIDID_UNKNOW = 732
+; Global Const $GC_I_SKILLIDID_UNKNOW = 733
+; Global Const $GC_I_SKILLIDID_UNKNOW = 734
+; Global Const $GC_I_SKILLIDID_UNKNOW = 735
+; Global Const $GC_I_SKILLIDID_UNKNOW = 736
+; Global Const $GC_I_SKILLIDID_UNKNOW = 737
+; Global Const $GC_I_SKILLIDID_UNKNOW = 738
+; Global Const $GC_I_SKILLIDID_UNKNOW = 739
+; Global Const $GC_I_SKILLIDID_UNKNOW = 740
+; Global Const $GC_I_SKILLIDID_UNKNOW = 741
+; Global Const $GC_I_SKILLIDID_UNKNOW = 742
+; Global Const $GC_I_SKILLIDID_UNKNOW = 743
+; Global Const $GC_I_SKILLIDID_UNKNOW = 744
+; Global Const $GC_I_SKILLIDID_UNKNOW = 745
+; Global Const $GC_I_SKILLIDID_UNKNOW = 746
+; Global Const $GC_I_SKILLIDID_UNKNOW = 747
+; Global Const $GC_I_SKILLIDID_UNKNOW = 748
+; Global Const $GC_I_SKILLIDID_UNKNOW = 749
+; Global Const $GC_I_SKILLIDID_UNKNOW = 750
+; Global Const $GC_I_SKILLIDID_UNKNOW = 751
+; Global Const $GC_I_SKILLIDID_UNKNOW = 752
+; Global Const $GC_I_SKILLIDID_UNKNOW = 753
+; Global Const $GC_I_SKILLIDID_UNKNOW = 754
+; Global Const $GC_I_SKILLIDID_UNKNOW = 755
+; Global Const $GC_I_SKILLIDID_UNKNOW = 756
+; Global Const $GC_I_SKILLIDID_UNKNOW = 757
+; Global Const $GC_I_SKILLIDID_UNKNOW = 758
+; Global Const $GC_I_SKILLIDID_UNKNOW = 759
+; Global Const $GC_I_SKILLIDID_UNKNOW = 760
+; Global Const $GC_I_SKILLIDID_UNKNOW = 761
+; Global Const $GC_I_SKILLIDID_UNKNOW = 762
+Global Const $GC_I_SKILLID_JAUNDICED_GAZE = 763
+Global Const $GC_I_SKILLID_WAIL_OF_DOOM = 764
+Global Const $GC_I_SKILLID_HEROS_INSIGHT = 765
+Global Const $GC_I_SKILLID_GAZE_OF_CONTEMPT = 766
+Global Const $GC_I_SKILLID_BERSERKERS_INSIGHT = 767
+Global Const $GC_I_SKILLID_SLAYERS_INSIGHT = 768
+Global Const $GC_I_SKILLID_VIPERS_DEFENSE = 769
+Global Const $GC_I_SKILLID_RETURN = 770
+Global Const $GC_I_SKILLID_AURA_OF_DISPLACEMENT = 771
+Global Const $GC_I_SKILLID_GENEROUS_WAS_TSUNGRAI = 772
+Global Const $GC_I_SKILLID_MIGHTY_WAS_VORIZUN = 773
+Global Const $GC_I_SKILLID_TO_THE_DEATH = 774
+Global Const $GC_I_SKILLID_DEATH_BLOSSOM = 775
+Global Const $GC_I_SKILLID_TWISTING_FANGS = 776
+Global Const $GC_I_SKILLID_HORNS_OF_THE_OX = 777
+Global Const $GC_I_SKILLID_FALLING_SPIDER = 778
+Global Const $GC_I_SKILLID_BLACK_LOTUS_STRIKE = 779
+Global Const $GC_I_SKILLID_FOX_FANGS = 780
+Global Const $GC_I_SKILLID_MOEBIUS_STRIKE = 781
+Global Const $GC_I_SKILLID_JAGGED_STRIKE = 782
+Global Const $GC_I_SKILLID_UNSUSPECTING_STRIKE = 783
+Global Const $GC_I_SKILLID_ENTANGLING_ASP = 784
+Global Const $GC_I_SKILLID_MARK_OF_DEATH = 785
+Global Const $GC_I_SKILLID_IRON_PALM = 786
+Global Const $GC_I_SKILLID_RESILIENT_WEAPON = 787
+Global Const $GC_I_SKILLID_BLIND_WAS_MINGSON = 788
+Global Const $GC_I_SKILLID_GRASPING_WAS_KUURONG = 789
+Global Const $GC_I_SKILLID_VENGEFUL_WAS_KHANHEI = 790
+Global Const $GC_I_SKILLID_FLESH_OF_MY_FLESH = 791
+Global Const $GC_I_SKILLID_SPLINTER_WEAPON = 792
+Global Const $GC_I_SKILLID_WEAPON_OF_WARDING = 793
+Global Const $GC_I_SKILLID_WAILING_WEAPON = 794
+Global Const $GC_I_SKILLID_NIGHTMARE_WEAPON = 795
+Global Const $GC_I_SKILLID_SORROWS_FLAME = 796
+Global Const $GC_I_SKILLID_SORROWS_FIST = 797
+Global Const $GC_I_SKILLID_BLAST_FURNACE = 798
+Global Const $GC_I_SKILLID_BEGUILING_HAZE = 799
+Global Const $GC_I_SKILLID_ENDURING_TOXIN = 800
+Global Const $GC_I_SKILLID_SHROUD_OF_SILENCE = 801
+Global Const $GC_I_SKILLID_EXPOSE_DEFENSES = 802
+Global Const $GC_I_SKILLID_POWER_LEECH = 803
+Global Const $GC_I_SKILLID_ARCANE_LANGUOR = 804
+Global Const $GC_I_SKILLID_ANIMATE_VAMPIRIC_HORROR = 805
+Global Const $GC_I_SKILLID_CULTISTS_FERVOR = 806
+; Global Const $GC_I_SKILLIDID_UNKNOW = 807
+Global Const $GC_I_SKILLID_REAPERS_MARK1 = 808
+Global Const $GC_I_SKILLID_SHATTERSTONE = 809
+Global Const $GC_I_SKILLID_PROTECTORS_DEFENSE = 810
+Global Const $GC_I_SKILLID_RUN_AS_ONE = 811
+Global Const $GC_I_SKILLID_DEFIANT_WAS_XINRAE = 812
+Global Const $GC_I_SKILLID_LYSSAS_AURA = 813
+Global Const $GC_I_SKILLID_SHADOW_REFUGE = 814
+Global Const $GC_I_SKILLID_SCORPION_WIRE = 815
+Global Const $GC_I_SKILLID_MIRRORED_STANCE = 816
+Global Const $GC_I_SKILLID_DISCORD = 817
+Global Const $GC_I_SKILLID_WELL_OF_WEARINESS = 818
+Global Const $GC_I_SKILLID_VAMPIRIC_SPIRIT = 819
+Global Const $GC_I_SKILLID_DEPRAVITY = 820
+Global Const $GC_I_SKILLID_ICY_VEINS = 821
+Global Const $GC_I_SKILLID_WEAKEN_KNEES = 822
+Global Const $GC_I_SKILLID_BURNING_SPEED = 823
+Global Const $GC_I_SKILLID_LAVA_ARROWS = 824
+Global Const $GC_I_SKILLID_BED_OF_COALS = 825
+Global Const $GC_I_SKILLID_SHADOW_FORM = 826
+Global Const $GC_I_SKILLID_SIPHON_STRENGTH = 827
+Global Const $GC_I_SKILLID_VILE_MIASMA = 828
+Global Const $GC_I_SKILLID_VERATAS_PROMISE = 829
+Global Const $GC_I_SKILLID_RAY_OF_JUDGMENT = 830
+Global Const $GC_I_SKILLID_PRIMAL_RAGE = 831
+Global Const $GC_I_SKILLID_ANIMATE_FLESH_GOLEM = 832
+Global Const $GC_I_SKILLID_BORROWED_ENERGY = 833
+Global Const $GC_I_SKILLID_RECKLESS_HASTE = 834
+Global Const $GC_I_SKILLID_BLOOD_BOND = 835
+Global Const $GC_I_SKILLID_RIDE_THE_LIGHTNING = 836
+Global Const $GC_I_SKILLID_ENERGY_BOON = 837
+Global Const $GC_I_SKILLID_DWAYNAS_SORROW = 838
+Global Const $GC_I_SKILLID_RETREAT = 839
+Global Const $GC_I_SKILLID_POISONED_HEART = 840
+Global Const $GC_I_SKILLID_FETID_GROUND = 841
+Global Const $GC_I_SKILLID_ARC_LIGHTNING = 842
+Global Const $GC_I_SKILLID_GUST = 843
+Global Const $GC_I_SKILLID_CHURNING_EARTH = 844
+Global Const $GC_I_SKILLID_LIQUID_FLAME = 845
+Global Const $GC_I_SKILLID_STEAM1 = 846
+Global Const $GC_I_SKILLID_BOON_SIGNET = 847
+Global Const $GC_I_SKILLID_REVERSE_HEX = 848
+Global Const $GC_I_SKILLID_LACERATING_CHOP = 849
+Global Const $GC_I_SKILLID_FIERCE_BLOW = 850
+Global Const $GC_I_SKILLID_SUN_AND_MOON_SLASH = 851
+Global Const $GC_I_SKILLID_SPLINTER_SHOT = 852
+Global Const $GC_I_SKILLID_MELANDRUS_SHOT = 853
+Global Const $GC_I_SKILLID_SNARE = 854
+Global Const $GC_I_SKILLID_CHOMPER = 855
+Global Const $GC_I_SKILLID_KILROY_STONEKIN = 856
+Global Const $GC_I_SKILLID_ADVENTURERS_INSIGHT = 857
+Global Const $GC_I_SKILLID_DANCING_DAGGERS = 858
+Global Const $GC_I_SKILLID_CONJURE_NIGHTMARE = 859
+Global Const $GC_I_SKILLID_SIGNET_OF_DISRUPTION = 860
+Global Const $GC_I_SKILLID_DISSIPATION = 861
+Global Const $GC_I_SKILLID_RAVENOUS_GAZE = 862
+Global Const $GC_I_SKILLID_ORDER_OF_APOSTASY = 863
+Global Const $GC_I_SKILLID_OPPRESSIVE_GAZE = 864
+Global Const $GC_I_SKILLID_LIGHTNING_HAMMER = 865
+Global Const $GC_I_SKILLID_VAPOR_BLADE = 866
+Global Const $GC_I_SKILLID_HEALING_LIGHT = 867
+Global Const $GC_I_SKILLID_AIM_TRUE = 868
+Global Const $GC_I_SKILLID_COWARD = 869
+Global Const $GC_I_SKILLID_PESTILENCE = 870
+Global Const $GC_I_SKILLID_SHADOWSONG = 871
+Global Const $GC_I_SKILLID_SHADOWSONG_ATTACK = 872
+Global Const $GC_I_SKILLID_RESURRECT_MONSTER_SKILL = 873
+Global Const $GC_I_SKILLID_CONSUMING_FLAMES = 874
+Global Const $GC_I_SKILLID_CHAINS_OF_ENSLAVEMENT = 875
+Global Const $GC_I_SKILLID_SIGNET_OF_SHADOWS = 876
+Global Const $GC_I_SKILLID_LYSSAS_BALANCE = 877
+Global Const $GC_I_SKILLID_VISIONS_OF_REGRET = 878
+Global Const $GC_I_SKILLID_ILLUSION_OF_PAIN = 879
+Global Const $GC_I_SKILLID_STOLEN_SPEED = 880
+Global Const $GC_I_SKILLID_ETHER_SIGNET = 881
+Global Const $GC_I_SKILLID_SIGNET_OF_DISENCHANTMENT = 882
+Global Const $GC_I_SKILLID_VOCAL_MINORITY = 883
+Global Const $GC_I_SKILLID_SEARING_FLAMES1 = 884
+Global Const $GC_I_SKILLID_SHIELD_GUARDIAN = 885
+Global Const $GC_I_SKILLID_RESTFUL_BREEZE = 886
+Global Const $GC_I_SKILLID_SIGNET_OF_REJUVENATION = 887
+Global Const $GC_I_SKILLID_WHIRLING_AXE = 888
+Global Const $GC_I_SKILLID_FORCEFUL_BLOW = 889
+Global Const $GC_I_SKILLID_HEADSHOT = 890
+Global Const $GC_I_SKILLID_NONE_SHALL_PASS = 891
+Global Const $GC_I_SKILLID_QUIVERING_BLADE = 892
+Global Const $GC_I_SKILLID_SEEKING_ARROWS = 893
+Global Const $GC_I_SKILLID_RAMPAGERS_INSIGHT = 894
+Global Const $GC_I_SKILLID_HUNTERS_INSIGHT = 895
+Global Const $GC_I_SKILLID_AMULET_OF_PROTECTION = 896
+Global Const $GC_I_SKILLID_OATH_OF_HEALING = 897
+Global Const $GC_I_SKILLID_OVERLOAD = 898
+Global Const $GC_I_SKILLID_IMAGES_OF_REMORSE = 899
+Global Const $GC_I_SKILLID_SHARED_BURDEN = 900
+Global Const $GC_I_SKILLID_SOUL_BIND = 901
+Global Const $GC_I_SKILLID_BLOOD_OF_THE_AGGRESSOR = 902
+Global Const $GC_I_SKILLID_ICY_PRISM = 903
+Global Const $GC_I_SKILLID_FURIOUS_AXE = 904
+Global Const $GC_I_SKILLID_AUSPICIOUS_BLOW = 905
+Global Const $GC_I_SKILLID_ON_YOUR_KNEES = 906
+Global Const $GC_I_SKILLID_DRAGON_SLASH = 907
+Global Const $GC_I_SKILLID_MARAUDERS_SHOT = 908
+Global Const $GC_I_SKILLID_FOCUSED_SHOT = 909
+Global Const $GC_I_SKILLID_SPIRIT_RIFT = 910
+Global Const $GC_I_SKILLID_UNION = 911
+Global Const $GC_I_SKILLID_BLESSING_OF_THE_KURZICKS2 = 912
+Global Const $GC_I_SKILLID_TRANQUIL_WAS_TANASEN = 913
+Global Const $GC_I_SKILLID_CONSUME_SOUL = 914
+Global Const $GC_I_SKILLID_SPIRIT_LIGHT = 915
+Global Const $GC_I_SKILLID_LAMENTATION = 916
+Global Const $GC_I_SKILLID_RUPTURE_SOUL = 917
+Global Const $GC_I_SKILLID_SPIRIT_TO_FLESH = 918
+Global Const $GC_I_SKILLID_SPIRIT_BURN = 919
+Global Const $GC_I_SKILLID_DESTRUCTION = 920
+Global Const $GC_I_SKILLID_DISSONANCE = 921
+Global Const $GC_I_SKILLID_DISSONANCE_ATTACK = 922
+Global Const $GC_I_SKILLID_DISENCHANTMENT = 923
+Global Const $GC_I_SKILLID_DISENCHANTMENT_ATTACK = 924
+Global Const $GC_I_SKILLID_RECALL = 925
+Global Const $GC_I_SKILLID_SHARPEN_DAGGERS = 926
+Global Const $GC_I_SKILLID_SHAMEFUL_FEAR = 927
+Global Const $GC_I_SKILLID_SHADOW_SHROUD = 928
+Global Const $GC_I_SKILLID_SHADOW_OF_HASTE = 929
+Global Const $GC_I_SKILLID_AUSPICIOUS_INCANTATION = 930
+Global Const $GC_I_SKILLID_POWER_RETURN = 931
+Global Const $GC_I_SKILLID_COMPLICATE = 932
+Global Const $GC_I_SKILLID_SHATTER_STORM = 933
+Global Const $GC_I_SKILLID_UNNATURAL_SIGNET = 934
+Global Const $GC_I_SKILLID_RISING_BILE = 935
+Global Const $GC_I_SKILLID_ENVENOM_ENCHANTMENTS = 936
+Global Const $GC_I_SKILLID_SHOCKWAVE = 937
+Global Const $GC_I_SKILLID_WARD_OF_STABILITY = 938
+Global Const $GC_I_SKILLID_ICY_SHACKLES = 939
+Global Const $GC_I_SKILLID_CRY_OF_LAMENT = 940
+Global Const $GC_I_SKILLID_BLESSED_LIGHT = 941
+Global Const $GC_I_SKILLID_WITHDRAW_HEXES = 942
+Global Const $GC_I_SKILLID_EXTINGUISH = 943
+Global Const $GC_I_SKILLID_SIGNET_OF_STRENGTH = 944
+Global Const $GC_I_SKILLID_REMOVE_WITH_HASTE = 945
+Global Const $GC_I_SKILLID_TRAPPERS_FOCUS = 946
+Global Const $GC_I_SKILLID_BRAMBLES = 947
+Global Const $GC_I_SKILLID_DESPERATE_STRIKE = 948
+Global Const $GC_I_SKILLID_WAY_OF_THE_FOX = 949
+Global Const $GC_I_SKILLID_SHADOWY_BURDEN = 950
+Global Const $GC_I_SKILLID_SIPHON_SPEED = 951
+Global Const $GC_I_SKILLID_DEATHS_CHARGE = 952
+Global Const $GC_I_SKILLID_POWER_FLUX = 953
+Global Const $GC_I_SKILLID_EXPEL_HEXES = 954
+Global Const $GC_I_SKILLID_RIP_ENCHANTMENT = 955
+Global Const $GC_I_SKILLID_ENERGY_FONT = 956
+Global Const $GC_I_SKILLID_SPELL_SHIELD = 957
+Global Const $GC_I_SKILLID_HEALING_WHISPER = 958
+Global Const $GC_I_SKILLID_ETHEREAL_LIGHT = 959
+Global Const $GC_I_SKILLID_RELEASE_ENCHANTMENTS = 960
+Global Const $GC_I_SKILLID_LACERATE = 961
+Global Const $GC_I_SKILLID_SPIRIT_TRANSFER = 962
+Global Const $GC_I_SKILLID_RESTORATION = 963
+Global Const $GC_I_SKILLID_VENGEFUL_WEAPON = 964
+Global Const $GC_I_SKILLID_ARCHEMORUS_STRIKE = 965
+Global Const $GC_I_SKILLID_SPEAR_OF_ARCHEMORUS_LEVEL_1 = 966
+Global Const $GC_I_SKILLID_SPEAR_OF_ARCHEMORUS_LEVEL_2 = 967
+Global Const $GC_I_SKILLID_SPEAR_OF_ARCHEMORUS_LEVEL_3 = 968
+Global Const $GC_I_SKILLID_SPEAR_OF_ARCHEMORUS_LEVEL_4 = 969
+Global Const $GC_I_SKILLID_SPEAR_OF_ARCHEMORUS_LEVEL_5 = 970
+Global Const $GC_I_SKILLID_ARGOS_CRY = 971
+Global Const $GC_I_SKILLID_JADE_FURY = 972
+Global Const $GC_I_SKILLID_BLINDING_POWDER = 973
+Global Const $GC_I_SKILLID_MANTIS_TOUCH = 974
+Global Const $GC_I_SKILLID_EXHAUSTING_ASSAULT = 975
+Global Const $GC_I_SKILLID_REPEATING_STRIKE = 976
+Global Const $GC_I_SKILLID_WAY_OF_THE_LOTUS = 977
+Global Const $GC_I_SKILLID_MARK_OF_INSTABILITY = 978
+Global Const $GC_I_SKILLID_MISTRUST = 979
+Global Const $GC_I_SKILLID_FEAST_OF_SOULS = 980
+Global Const $GC_I_SKILLID_RECUPERATION = 981
+Global Const $GC_I_SKILLID_SHELTER = 982
+Global Const $GC_I_SKILLID_WEAPON_OF_SHADOW = 983
+Global Const $GC_I_SKILLID_TORCH_ENCHANTMENT = 984
+Global Const $GC_I_SKILLID_CALTROPS = 985
+Global Const $GC_I_SKILLID_NINE_TAIL_STRIKE = 986
+Global Const $GC_I_SKILLID_WAY_OF_THE_EMPTY_PALM = 987
+Global Const $GC_I_SKILLID_TEMPLE_STRIKE = 988
+Global Const $GC_I_SKILLID_GOLDEN_PHOENIX_STRIKE = 989
+Global Const $GC_I_SKILLID_EXPUNGE_ENCHANTMENTS = 990
+Global Const $GC_I_SKILLID_DENY_HEXES = 991
+Global Const $GC_I_SKILLID_TRIPLE_CHOP = 992
+Global Const $GC_I_SKILLID_ENRAGED_SMASH = 993
+Global Const $GC_I_SKILLID_RENEWING_SMASH = 994
+Global Const $GC_I_SKILLID_TIGER_STANCE = 995
+Global Const $GC_I_SKILLID_STANDING_SLASH = 996
+Global Const $GC_I_SKILLID_FAMINE = 997
+Global Const $GC_I_SKILLID_TORCH_HEX = 998
+Global Const $GC_I_SKILLID_TORCH_DEGENERATION_HEX = 999
+Global Const $GC_I_SKILLID_BLINDING_SNOW = 1000
+Global Const $GC_I_SKILLID_AVALANCHE_SKILL = 1001
+Global Const $GC_I_SKILLID_SNOWBALL = 1002
+Global Const $GC_I_SKILLID_MEGA_SNOWBALL = 1003
+Global Const $GC_I_SKILLID_YULETIDE = 1004
+Global Const $GC_I_SKILLID_ICE_SKATES = 1005
+Global Const $GC_I_SKILLID_ICE_FORT = 1006
+Global Const $GC_I_SKILLID_YELLOW_SNOW = 1007
+Global Const $GC_I_SKILLID_HIDDEN_ROCK = 1008
+Global Const $GC_I_SKILLID_SNOW_DOWN_THE_SHIRT = 1009
+Global Const $GC_I_SKILLID_MMMM_SNOWCONE = 1010
+Global Const $GC_I_SKILLID_HOLIDAY_BLUES = 1011
+Global Const $GC_I_SKILLID_ICICLES = 1012
+Global Const $GC_I_SKILLID_ICE_BREAKER = 1013
+Global Const $GC_I_SKILLID_LETS_GET_EM = 1014
+Global Const $GC_I_SKILLID_FLURRY_OF_ICE = 1015
+Global Const $GC_I_SKILLID_SNOWBALL_NPC = 1016
+Global Const $GC_I_SKILLID_UNDYING2 = 1017
+Global Const $GC_I_SKILLID_CRITICAL_EYE = 1018
+Global Const $GC_I_SKILLID_CRITICAL_STRIKE = 1019
+Global Const $GC_I_SKILLID_BLADES_OF_STEEL = 1020
+Global Const $GC_I_SKILLID_JUNGLE_STRIKE = 1021
+Global Const $GC_I_SKILLID_WILD_STRIKE = 1022
+Global Const $GC_I_SKILLID_LEAPING_MANTIS_STING = 1023
+Global Const $GC_I_SKILLID_BLACK_MANTIS_THRUST = 1024
+Global Const $GC_I_SKILLID_DISRUPTING_STAB = 1025
+Global Const $GC_I_SKILLID_GOLDEN_LOTUS_STRIKE = 1026
+Global Const $GC_I_SKILLID_CRITICAL_DEFENSES = 1027
+Global Const $GC_I_SKILLID_WAY_OF_PERFECTION = 1028
+Global Const $GC_I_SKILLID_DARK_APOSTASY = 1029
+Global Const $GC_I_SKILLID_LOCUSTS_FURY = 1030
+Global Const $GC_I_SKILLID_SHROUD_OF_DISTRESS = 1031
+Global Const $GC_I_SKILLID_HEART_OF_SHADOW = 1032
+Global Const $GC_I_SKILLID_IMPALE = 1033
+Global Const $GC_I_SKILLID_SEEPING_WOUND = 1034
+Global Const $GC_I_SKILLID_ASSASSINS_PROMISE = 1035
+Global Const $GC_I_SKILLID_SIGNET_OF_MALICE = 1036
+Global Const $GC_I_SKILLID_DARK_ESCAPE = 1037
+Global Const $GC_I_SKILLID_CRIPPLING_DAGGER = 1038
+Global Const $GC_I_SKILLID_STAR_STRIKE = 1039
+Global Const $GC_I_SKILLID_SPIRIT_WALK = 1040
+Global Const $GC_I_SKILLID_UNSEEN_FURY = 1041
+Global Const $GC_I_SKILLID_FLASHING_BLADES = 1042
+Global Const $GC_I_SKILLID_DASH = 1043
+Global Const $GC_I_SKILLID_DARK_PRISON = 1044
+Global Const $GC_I_SKILLID_PALM_STRIKE = 1045
+Global Const $GC_I_SKILLID_ASSASSIN_OF_LYSSA = 1046
+Global Const $GC_I_SKILLID_MESMER_OF_LYSSA = 1047
+Global Const $GC_I_SKILLID_REVEALED_ENCHANTMENT = 1048
+Global Const $GC_I_SKILLID_REVEALED_HEX = 1049
+Global Const $GC_I_SKILLID_DISCIPLE_OF_ENERGY = 1050
+Global Const $GC_I_SKILLID_EMPATHY_KORO = 1051
+Global Const $GC_I_SKILLID_ACCUMULATED_PAIN = 1052
+Global Const $GC_I_SKILLID_PSYCHIC_DISTRACTION = 1053
+Global Const $GC_I_SKILLID_ANCESTORS_VISAGE = 1054
+Global Const $GC_I_SKILLID_RECURRING_INSECURITY = 1055
+Global Const $GC_I_SKILLID_KITAHS_BURDEN = 1056
+Global Const $GC_I_SKILLID_PSYCHIC_INSTABILITY = 1057
+Global Const $GC_I_SKILLID_CHAOTIC_POWER = 1058
+Global Const $GC_I_SKILLID_HEX_EATER_SIGNET = 1059
+Global Const $GC_I_SKILLID_CELESTIAL_HASTE = 1060
+Global Const $GC_I_SKILLID_FEEDBACK = 1061
+Global Const $GC_I_SKILLID_ARCANE_LARCENY = 1062
+Global Const $GC_I_SKILLID_CHAOTIC_WARD = 1063
+Global Const $GC_I_SKILLID_FAVOR_OF_THE_GODS = 1064
+Global Const $GC_I_SKILLID_DARK_AURA_BLESSING = 1065
+Global Const $GC_I_SKILLID_SPOIL_VICTOR = 1066
+Global Const $GC_I_SKILLID_LIFEBANE_STRIKE = 1067
+Global Const $GC_I_SKILLID_BITTER_CHILL = 1068
+Global Const $GC_I_SKILLID_TASTE_OF_PAIN = 1069
+Global Const $GC_I_SKILLID_DEFILE_ENCHANTMENTS = 1070
+Global Const $GC_I_SKILLID_SHIVERS_OF_DREAD = 1071
+Global Const $GC_I_SKILLID_STAR_SERVANT = 1072
+Global Const $GC_I_SKILLID_NECROMANCER_OF_GRENTH = 1073
+Global Const $GC_I_SKILLID_RITUALIST_OF_GRENTH = 1074
+Global Const $GC_I_SKILLID_VAMPIRIC_SWARM = 1075
+Global Const $GC_I_SKILLID_BLOOD_DRINKER = 1076
+Global Const $GC_I_SKILLID_VAMPIRIC_BITE = 1077
+Global Const $GC_I_SKILLID_WALLOWS_BITE = 1078
+Global Const $GC_I_SKILLID_ENFEEBLING_TOUCH = 1079
+Global Const $GC_I_SKILLID_DISCIPLE_OF_ICE = 1080
+Global Const $GC_I_SKILLID_TEINAIS_WIND = 1081
+Global Const $GC_I_SKILLID_SHOCK_ARROW = 1082
+Global Const $GC_I_SKILLID_UNSTEADY_GROUND = 1083
+Global Const $GC_I_SKILLID_SLIVER_ARMOR = 1084
+Global Const $GC_I_SKILLID_ASH_BLAST = 1085
+Global Const $GC_I_SKILLID_DRAGONS_STOMP = 1086
+Global Const $GC_I_SKILLID_UNNATURAL_RESISTANCE = 1087
+Global Const $GC_I_SKILLID_SECOND_WIND = 1088
+Global Const $GC_I_SKILLID_CLOAK_OF_FAITH = 1089
+Global Const $GC_I_SKILLID_SMOLDERING_EMBERS = 1090
+Global Const $GC_I_SKILLID_DOUBLE_DRAGON = 1091
+Global Const $GC_I_SKILLID_DISCIPLE_OF_THE_AIR = 1092
+Global Const $GC_I_SKILLID_TEINAIS_HEAT = 1093
+Global Const $GC_I_SKILLID_BREATH_OF_FIRE = 1094
+Global Const $GC_I_SKILLID_STAR_BURST = 1095
+Global Const $GC_I_SKILLID_GLYPH_OF_ESSENCE = 1096
+Global Const $GC_I_SKILLID_TEINAIS_PRISON = 1097
+Global Const $GC_I_SKILLID_MIRROR_OF_ICE = 1098
+Global Const $GC_I_SKILLID_TEINAIS_CRYSTALS = 1099
+Global Const $GC_I_SKILLID_CELESTIAL_STORM = 1100
+Global Const $GC_I_SKILLID_MONK_OF_DWAYNA = 1101
+Global Const $GC_I_SKILLID_AURA_OF_THE_GROVE = 1102
+Global Const $GC_I_SKILLID_CATHEDRAL_COLLAPSE1 = 1103
+Global Const $GC_I_SKILLID_MIASMA = 1104
+Global Const $GC_I_SKILLID_ACID_TRAP = 1105
+Global Const $GC_I_SKILLID_SHIELD_OF_SAINT_VIKTOR = 1106
+Global Const $GC_I_SKILLID_URN_OF_SAINT_VIKTOR_LEVEL_1 = 1107
+Global Const $GC_I_SKILLID_URN_OF_SAINT_VIKTOR_LEVEL_2 = 1108
+Global Const $GC_I_SKILLID_URN_OF_SAINT_VIKTOR_LEVEL_3 = 1109
+Global Const $GC_I_SKILLID_URN_OF_SAINT_VIKTOR_LEVEL_4 = 1110
+Global Const $GC_I_SKILLID_URN_OF_SAINT_VIKTOR_LEVEL_5 = 1111
+Global Const $GC_I_SKILLID_AURA_OF_LIGHT = 1112
+Global Const $GC_I_SKILLID_KIRINS_WRATH = 1113
+Global Const $GC_I_SKILLID_SPIRIT_BOND = 1114
+Global Const $GC_I_SKILLID_AIR_OF_ENCHANTMENT = 1115
+Global Const $GC_I_SKILLID_WARRIORS_MIGHT = 1116
+Global Const $GC_I_SKILLID_HEAVENS_DELIGHT = 1117
+Global Const $GC_I_SKILLID_HEALING_BURST = 1118
+Global Const $GC_I_SKILLID_KAREIS_HEALING_CIRCLE = 1119
+Global Const $GC_I_SKILLID_JAMEIS_GAZE = 1120
+Global Const $GC_I_SKILLID_GIFT_OF_HEALTH = 1121
+Global Const $GC_I_SKILLID_BATTLE_FERVOR = 1122
+Global Const $GC_I_SKILLID_LIFE_SHEATH = 1123
+Global Const $GC_I_SKILLID_STAR_SHINE = 1124
+Global Const $GC_I_SKILLID_DISCIPLE_OF_FIRE = 1125
+Global Const $GC_I_SKILLID_EMPATHIC_REMOVAL = 1126
+Global Const $GC_I_SKILLID_WARRIOR_OF_BALTHAZAR = 1127
+Global Const $GC_I_SKILLID_RESURRECTION_CHANT = 1128
+Global Const $GC_I_SKILLID_WORD_OF_CENSURE = 1129
+Global Const $GC_I_SKILLID_SPEAR_OF_LIGHT = 1130
+Global Const $GC_I_SKILLID_STONESOUL_STRIKE = 1131
+Global Const $GC_I_SKILLID_SHIELDING_BRANCHES = 1132
+Global Const $GC_I_SKILLID_DRUNKEN_BLOW = 1133
+Global Const $GC_I_SKILLID_LEVIATHANS_SWEEP = 1134
+Global Const $GC_I_SKILLID_JAIZHENJU_STRIKE = 1135
+Global Const $GC_I_SKILLID_PENETRATING_CHOP = 1136
+Global Const $GC_I_SKILLID_YETI_SMASH = 1137
+Global Const $GC_I_SKILLID_DISCIPLE_OF_THE_EARTH = 1138
+Global Const $GC_I_SKILLID_RANGER_OF_MELANDRU = 1139
+Global Const $GC_I_SKILLID_STORM_OF_SWORDS = 1140
+Global Const $GC_I_SKILLID_YOU_WILL_DIE = 1141
+Global Const $GC_I_SKILLID_AUSPICIOUS_PARRY = 1142
+Global Const $GC_I_SKILLID_STRENGTH_OF_THE_OAK = 1143
+Global Const $GC_I_SKILLID_SILVERWING_SLASH = 1144
+Global Const $GC_I_SKILLID_DESTROY_ENCHANTMENT = 1145
+Global Const $GC_I_SKILLID_SHOVE = 1146
+Global Const $GC_I_SKILLID_BASE_DEFENSE = 1147
+Global Const $GC_I_SKILLID_CARRIER_DEFENSE = 1148
+Global Const $GC_I_SKILLID_THE_CHALICE_OF_CORRUPTION = 1149
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1150
+Global Const $GC_I_SKILLID_SONG_OF_THE_MISTS = 1151
+Global Const $GC_I_SKILLID_DEMONIC_AGILITY = 1152
+Global Const $GC_I_SKILLID_BLESSING_OF_THE_KIRIN = 1153
+Global Const $GC_I_SKILLID_EMPEROR_DEGEN = 1154
+Global Const $GC_I_SKILLID_JUGGERNAUT_TOSS = 1155
+Global Const $GC_I_SKILLID_AURA_OF_THE_JUGGERNAUT = 1156
+Global Const $GC_I_SKILLID_STAR_SHARDS = 1157
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1158
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1159
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1160
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1161
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1162
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1163
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1164
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1165
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1166
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1167
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1168
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1169
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1170
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1171
+Global Const $GC_I_SKILLID_TURTLE_SHELL = 1172
+Global Const $GC_I_SKILLID_EXPOSED_UNDERBELLY = 1173
+Global Const $GC_I_SKILLID_CATHEDRAL_COLLAPSE2 = 1174
+Global Const $GC_I_SKILLID_BLOOD_OF_ZU_HELTZER = 1175
+Global Const $GC_I_SKILLID_AFFLICTED_SOUL_EXPLOSION = 1176
+Global Const $GC_I_SKILLID_INVINCIBILITY = 1177
+Global Const $GC_I_SKILLID_LAST_STAND = 1178
+Global Const $GC_I_SKILLID_DARK_CHAIN_LIGHTNING = 1179
+Global Const $GC_I_SKILLID_SEADRAGON_HEALTH_TRIGGER = 1180
+Global Const $GC_I_SKILLID_CORRUPTED_BREATH = 1181
+Global Const $GC_I_SKILLID_RENEWING_CORRUPTION = 1182
+Global Const $GC_I_SKILLID_CORRUPTED_DRAGON_SPORES = 1183
+Global Const $GC_I_SKILLID_CORRUPTED_DRAGON_SCALES = 1184
+Global Const $GC_I_SKILLID_CONSTRUCT_POSSESSION = 1185
+Global Const $GC_I_SKILLID_SIEGE_TURTLE_ATTACK_THE_ETERNAL_GROVE = 1186
+Global Const $GC_I_SKILLID_SIEGE_TURTLE_ATTACK_FORT_ASPENWOOD = 1187
+Global Const $GC_I_SKILLID_SIEGE_TURTLE_ATTACK_GYALA_HATCHERY = 1188
+Global Const $GC_I_SKILLID_OF_ROYAL_BLOOD = 1189
+Global Const $GC_I_SKILLID_PASSAGE_TO_TAHNNAKAI = 1190
+Global Const $GC_I_SKILLID_SUNDERING_ATTACK = 1191
+Global Const $GC_I_SKILLID_ZOJUNS_SHOT = 1192
+Global Const $GC_I_SKILLID_CONSUME_SPIRIT = 1193
+Global Const $GC_I_SKILLID_PREDATORY_BOND = 1194
+Global Const $GC_I_SKILLID_HEAL_AS_ONE = 1195
+Global Const $GC_I_SKILLID_ZOJUNS_HASTE = 1196
+Global Const $GC_I_SKILLID_NEEDLING_SHOT = 1197
+Global Const $GC_I_SKILLID_BROAD_HEAD_ARROW = 1198
+Global Const $GC_I_SKILLID_GLASS_ARROWS = 1199
+Global Const $GC_I_SKILLID_ARCHERS_SIGNET = 1200
+Global Const $GC_I_SKILLID_SAVAGE_POUNCE = 1201
+Global Const $GC_I_SKILLID_ENRAGED_LUNGE = 1202
+Global Const $GC_I_SKILLID_BESTIAL_MAULING = 1203
+Global Const $GC_I_SKILLID_ENERGY_DRAIN_EFFECT = 1204
+Global Const $GC_I_SKILLID_POISONOUS_BITE = 1205
+Global Const $GC_I_SKILLID_POUNCE = 1206
+Global Const $GC_I_SKILLID_CELESTIAL_STANCE = 1207
+Global Const $GC_I_SKILLID_SHEER_EXHAUSTION = 1208
+Global Const $GC_I_SKILLID_BESTIAL_FURY = 1209
+Global Const $GC_I_SKILLID_LIFE_DRAIN = 1210
+Global Const $GC_I_SKILLID_VIPERS_NEST = 1211
+Global Const $GC_I_SKILLID_EQUINOX = 1212
+Global Const $GC_I_SKILLID_TRANQUILITY = 1213
+Global Const $GC_I_SKILLID_ACUTE_WEAKNESS = 1214
+Global Const $GC_I_SKILLID_CLAMOR_OF_SOULS = 1215
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1216
+Global Const $GC_I_SKILLID_RITUAL_LORD = 1217
+Global Const $GC_I_SKILLID_CRUEL_WAS_DAOSHEN = 1218
+Global Const $GC_I_SKILLID_PROTECTIVE_WAS_KAOLAI = 1219
+Global Const $GC_I_SKILLID_ATTUNED_WAS_SONGKAI = 1220
+Global Const $GC_I_SKILLID_RESILIENT_WAS_XIKO = 1221
+Global Const $GC_I_SKILLID_LIVELY_WAS_NAOMEI = 1222
+Global Const $GC_I_SKILLID_ANGUISHED_WAS_LINGWAH = 1223
+Global Const $GC_I_SKILLID_DRAW_SPIRIT = 1224
+Global Const $GC_I_SKILLID_CHANNELED_STRIKE = 1225
+Global Const $GC_I_SKILLID_SPIRIT_BOON_STRIKE = 1226
+Global Const $GC_I_SKILLID_ESSENCE_STRIKE = 1227
+Global Const $GC_I_SKILLID_SPIRIT_SIPHON = 1228
+Global Const $GC_I_SKILLID_EXPLOSIVE_GROWTH = 1229
+Global Const $GC_I_SKILLID_BOON_OF_CREATION = 1230
+Global Const $GC_I_SKILLID_SPIRIT_CHANNELING = 1231
+Global Const $GC_I_SKILLID_ARMOR_OF_UNFEELING = 1232
+Global Const $GC_I_SKILLID_SOOTHING_MEMORIES = 1233
+Global Const $GC_I_SKILLID_MEND_BODY_AND_SOUL = 1234
+Global Const $GC_I_SKILLID_DULLED_WEAPON = 1235
+Global Const $GC_I_SKILLID_BINDING_CHAINS = 1236
+Global Const $GC_I_SKILLID_PAINFUL_BOND = 1237
+Global Const $GC_I_SKILLID_SIGNET_OF_CREATION = 1238
+Global Const $GC_I_SKILLID_SIGNET_OF_SPIRITS = 1239
+Global Const $GC_I_SKILLID_SOUL_TWISTING = 1240
+Global Const $GC_I_SKILLID_CELESTIAL_SUMMONING = 1241
+Global Const $GC_I_SKILLID_ARCHEMORUS_STRIKE_CELESTIAL_SUMMONING = 1242
+Global Const $GC_I_SKILLID_SHIELD_OF_SAINT_VIKTOR_CELESTIAL_SUMMONING = 1243
+Global Const $GC_I_SKILLID_GHOSTLY_HASTE = 1244
+Global Const $GC_I_SKILLID_GAZE_FROM_BEYOND = 1245
+Global Const $GC_I_SKILLID_ANCESTORS_RAGE = 1246
+Global Const $GC_I_SKILLID_PAIN = 1247
+Global Const $GC_I_SKILLID_PAIN_ATTACK = 1248
+Global Const $GC_I_SKILLID_DISPLACEMENT = 1249
+Global Const $GC_I_SKILLID_PRESERVATION = 1250
+Global Const $GC_I_SKILLID_LIFE = 1251
+Global Const $GC_I_SKILLID_EARTHBIND = 1252
+Global Const $GC_I_SKILLID_BLOODSONG = 1253
+Global Const $GC_I_SKILLID_BLOODSONG_ATTACK = 1254
+Global Const $GC_I_SKILLID_WANDERLUST = 1255
+Global Const $GC_I_SKILLID_WANDERLUST_ATTACK = 1256
+Global Const $GC_I_SKILLID_SPIRIT_LIGHT_WEAPON = 1257
+Global Const $GC_I_SKILLID_BRUTAL_WEAPON = 1258
+Global Const $GC_I_SKILLID_GUIDED_WEAPON = 1259
+Global Const $GC_I_SKILLID_MEEKNESS = 1260
+Global Const $GC_I_SKILLID_FRIGID_ARMOR = 1261
+Global Const $GC_I_SKILLID_HEALING_RING = 1262
+Global Const $GC_I_SKILLID_RENEW_LIFE = 1263
+Global Const $GC_I_SKILLID_DOOM = 1264
+Global Const $GC_I_SKILLID_WIELDERS_BOON = 1265
+Global Const $GC_I_SKILLID_SOOTHING = 1266
+Global Const $GC_I_SKILLID_VITAL_WEAPON = 1267
+Global Const $GC_I_SKILLID_WEAPON_OF_QUICKENING = 1268
+Global Const $GC_I_SKILLID_SIGNET_OF_RAGE = 1269
+Global Const $GC_I_SKILLID_FINGERS_OF_CHAOS = 1270
+Global Const $GC_I_SKILLID_ECHOING_BANISHMENT = 1271
+Global Const $GC_I_SKILLID_SUICIDAL_IMPULSE = 1272
+Global Const $GC_I_SKILLID_IMPOSSIBLE_ODDS = 1273
+Global Const $GC_I_SKILLID_BATTLE_SCARS = 1274
+Global Const $GC_I_SKILLID_RIPOSTING_SHADOWS = 1275
+Global Const $GC_I_SKILLID_MEDITATION_OF_THE_REAPER1 = 1276
+Global Const $GC_I_SKILLID_BATTLE_CRY2 = 1277
+Global Const $GC_I_SKILLID_ELEMENTAL_DEFENSE_ZONE = 1278
+Global Const $GC_I_SKILLID_MELEE_DEFENSE_ZONE = 1279
+Global Const $GC_I_SKILLID_BLESSED_WATER = 1280
+Global Const $GC_I_SKILLID_DEFILED_WATER = 1281
+Global Const $GC_I_SKILLID_STONE_SPORES = 1282
+Global Const $GC_I_SKILLID_TURRET_ARROW = 1283
+Global Const $GC_I_SKILLID_BLOOD_FLOWER_SKILL = 1284
+Global Const $GC_I_SKILLID_FIRE_FLOWER_SKILL = 1285
+Global Const $GC_I_SKILLID_POISON_ARROW_FLOWER = 1286
+Global Const $GC_I_SKILLID_HAIJU_LAGOON_WATER = 1287
+Global Const $GC_I_SKILLID_ASPECT_OF_EXHAUSTION = 1288
+Global Const $GC_I_SKILLID_ASPECT_OF_EXPOSURE = 1289
+Global Const $GC_I_SKILLID_ASPECT_OF_SURRENDER = 1290
+Global Const $GC_I_SKILLID_ASPECT_OF_DEATH = 1291
+Global Const $GC_I_SKILLID_ASPECT_OF_SOOTHING = 1292
+Global Const $GC_I_SKILLID_ASPECT_OF_PAIN = 1293
+Global Const $GC_I_SKILLID_ASPECT_OF_LETHARGY = 1294
+Global Const $GC_I_SKILLID_ASPECT_OF_DEPLETION_ENERGY_LOSS = 1295
+Global Const $GC_I_SKILLID_ASPECT_OF_FAILURE = 1296
+Global Const $GC_I_SKILLID_ASPECT_OF_SHADOWS = 1297
+Global Const $GC_I_SKILLID_SCORPION_ASPECT = 1298
+Global Const $GC_I_SKILLID_ASPECT_OF_FEAR = 1299
+Global Const $GC_I_SKILLID_ASPECT_OF_DEPLETION_ENERGY_DEPLETION_DAMAGE = 1300
+Global Const $GC_I_SKILLID_ASPECT_OF_DECAY = 1301
+Global Const $GC_I_SKILLID_ASPECT_OF_TORMENT = 1302
+Global Const $GC_I_SKILLID_NIGHTMARE_ASPECT = 1303
+Global Const $GC_I_SKILLID_SPIKED_CORAL = 1304
+Global Const $GC_I_SKILLID_SHIELDING_URN_SKILL = 1305
+Global Const $GC_I_SKILLID_EXTENSIVE_PLAGUE_EXPOSURE = 1306
+Global Const $GC_I_SKILLID_FORESTS_BINDING = 1307
+Global Const $GC_I_SKILLID_EXPLODING_SPORES = 1308
+Global Const $GC_I_SKILLID_SUICIDE_ENERGY = 1309
+Global Const $GC_I_SKILLID_SUICIDE_HEALTH = 1310
+Global Const $GC_I_SKILLID_NIGHTMARE_REFUGE = 1311
+Global Const $GC_I_SKILLID_ONI_HEALTH_LOCK = 1312
+Global Const $GC_I_SKILLID_ONI_SHADOW_HEALTH_LOCK = 1313
+Global Const $GC_I_SKILLID_SIGNET_OF_ATTAINMENT = 1314
+Global Const $GC_I_SKILLID_RAGE_OF_THE_SEA = 1315
+Global Const $GC_I_SKILLID_MEDITATION_OF_THE_REAPER2 = 1316
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1317
+Global Const $GC_I_SKILLID_FIREBALL_OBELISK = 1318
+; Global Const $GC_I_SKILLIDID_FINAL_THRUST = 1319
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1320
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1321
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1322
+Global Const $GC_I_SKILLID_SUGAR_RUSH_MEDIUM = 1323
+Global Const $GC_I_SKILLID_TORMENT_SLASH = 1324
+Global Const $GC_I_SKILLID_SPIRIT_OF_THE_FESTIVAL = 1325
+Global Const $GC_I_SKILLID_TRADE_WINDS = 1326
+Global Const $GC_I_SKILLID_DRAGON_BLAST = 1327
+Global Const $GC_I_SKILLID_IMPERIAL_MAJESTY = 1328
+Global Const $GC_I_SKILLID_MONSTER_DOESNT_GET_DEATH_PENALTY = 1329
+Global Const $GC_I_SKILLID_TWISTED_SPIKES = 1330
+Global Const $GC_I_SKILLID_MARBLE_TRAP = 1331
+Global Const $GC_I_SKILLID_SHADOW_TRIPWIRE = 1332
+Global Const $GC_I_SKILLID_EXTEND_CONDITIONS = 1333
+Global Const $GC_I_SKILLID_HYPOCHONDRIA = 1334
+Global Const $GC_I_SKILLID_WASTRELS_DEMISE = 1335
+Global Const $GC_I_SKILLID_SPIRITUAL_PAIN = 1336
+Global Const $GC_I_SKILLID_DRAIN_DELUSIONS = 1337
+Global Const $GC_I_SKILLID_PERSISTENCE_OF_MEMORY = 1338
+Global Const $GC_I_SKILLID_SYMBOLS_OF_INSPIRATION = 1339
+Global Const $GC_I_SKILLID_SYMBOLIC_CELERITY = 1340
+Global Const $GC_I_SKILLID_FRUSTRATION = 1341
+Global Const $GC_I_SKILLID_TEASE = 1342
+Global Const $GC_I_SKILLID_ETHER_PHANTOM = 1343
+Global Const $GC_I_SKILLID_WEB_OF_DISRUPTION = 1344
+Global Const $GC_I_SKILLID_ENCHANTERS_CONUNDRUM = 1345
+Global Const $GC_I_SKILLID_SIGNET_OF_ILLUSIONS = 1346
+Global Const $GC_I_SKILLID_DISCHARGE_ENCHANTMENT = 1347
+Global Const $GC_I_SKILLID_HEX_EATER_VORTEX = 1348
+Global Const $GC_I_SKILLID_MIRROR_OF_DISENCHANTMENT = 1349
+Global Const $GC_I_SKILLID_SIMPLE_THIEVERY = 1350
+Global Const $GC_I_SKILLID_ANIMATE_SHAMBLING_HORROR = 1351
+Global Const $GC_I_SKILLID_ORDER_OF_UNDEATH = 1352
+Global Const $GC_I_SKILLID_PUTRID_FLESH = 1353
+Global Const $GC_I_SKILLID_FEAST_FOR_THE_DEAD = 1354
+Global Const $GC_I_SKILLID_JAGGED_BONES = 1355
+Global Const $GC_I_SKILLID_CONTAGION = 1356
+Global Const $GC_I_SKILLID_BLOODLETTING = 1357
+Global Const $GC_I_SKILLID_ULCEROUS_LUNGS = 1358
+Global Const $GC_I_SKILLID_PAIN_OF_DISENCHANTMENT = 1359
+Global Const $GC_I_SKILLID_MARK_OF_FURY = 1360
+Global Const $GC_I_SKILLID_RECURRING_SCOURGE = 1361
+Global Const $GC_I_SKILLID_CORRUPT_ENCHANTMENT = 1362
+Global Const $GC_I_SKILLID_SIGNET_OF_SORROW = 1363
+Global Const $GC_I_SKILLID_SIGNET_OF_SUFFERING = 1364
+Global Const $GC_I_SKILLID_SIGNET_OF_LOST_SOULS = 1365
+Global Const $GC_I_SKILLID_WELL_OF_DARKNESS = 1366
+Global Const $GC_I_SKILLID_BLINDING_SURGE = 1367
+Global Const $GC_I_SKILLID_CHILLING_WINDS = 1368
+Global Const $GC_I_SKILLID_LIGHTNING_BOLT = 1369
+Global Const $GC_I_SKILLID_STORM_DJINNS_HASTE = 1370
+Global Const $GC_I_SKILLID_STONE_STRIKER = 1371
+Global Const $GC_I_SKILLID_SANDSTORM = 1372
+Global Const $GC_I_SKILLID_STONE_SHEATH = 1373
+Global Const $GC_I_SKILLID_EBON_HAWK = 1374
+Global Const $GC_I_SKILLID_STONEFLESH_AURA = 1375
+Global Const $GC_I_SKILLID_GLYPH_OF_RESTORATION = 1376
+Global Const $GC_I_SKILLID_ETHER_PRISM = 1377
+Global Const $GC_I_SKILLID_MASTER_OF_MAGIC = 1378
+Global Const $GC_I_SKILLID_GLOWING_GAZE1 = 1379
+Global Const $GC_I_SKILLID_SAVANNAH_HEAT = 1380
+Global Const $GC_I_SKILLID_FLAME_DJINNS_HASTE1 = 1381
+Global Const $GC_I_SKILLID_FREEZING_GUST = 1382
+Global Const $GC_I_SKILLID_ROCKY_GROUND = 1383
+Global Const $GC_I_SKILLID_SULFUROUS_HAZE = 1384
+Global Const $GC_I_SKILLID_SIEGE_ATTACK3 = 1385
+Global Const $GC_I_SKILLID_SENTRY_TRAP_SKILL = 1386
+Global Const $GC_I_SKILLID_CALTROPS_MONSTER = 1387
+Global Const $GC_I_SKILLID_SACRED_BRANCH = 1388
+Global Const $GC_I_SKILLID_LIGHT_OF_SEBORHIN = 1389
+Global Const $GC_I_SKILLID_JUDGES_INTERVENTION = 1390
+Global Const $GC_I_SKILLID_SUPPORTIVE_SPIRIT = 1391
+Global Const $GC_I_SKILLID_WATCHFUL_HEALING = 1392
+Global Const $GC_I_SKILLID_HEALERS_BOON = 1393
+Global Const $GC_I_SKILLID_HEALERS_COVENANT = 1394
+Global Const $GC_I_SKILLID_BALTHAZARS_PENDULUM = 1395
+Global Const $GC_I_SKILLID_WORDS_OF_COMFORT = 1396
+Global Const $GC_I_SKILLID_LIGHT_OF_DELIVERANCE = 1397
+Global Const $GC_I_SKILLID_SCOURGE_ENCHANTMENT = 1398
+Global Const $GC_I_SKILLID_SHIELD_OF_ABSORPTION = 1399
+Global Const $GC_I_SKILLID_REVERSAL_OF_DAMAGE = 1400
+Global Const $GC_I_SKILLID_MENDING_TOUCH = 1401
+Global Const $GC_I_SKILLID_CRITICAL_CHOP = 1402
+Global Const $GC_I_SKILLID_AGONIZING_CHOP = 1403
+Global Const $GC_I_SKILLID_FLAIL = 1404
+Global Const $GC_I_SKILLID_CHARGING_STRIKE = 1405
+Global Const $GC_I_SKILLID_HEADBUTT = 1406
+Global Const $GC_I_SKILLID_LIONS_COMFORT = 1407
+Global Const $GC_I_SKILLID_RAGE_OF_THE_NTOUKA = 1408
+Global Const $GC_I_SKILLID_MOKELE_SMASH = 1409
+Global Const $GC_I_SKILLID_OVERBEARING_SMASH = 1410
+Global Const $GC_I_SKILLID_SIGNET_OF_STAMINA = 1411
+Global Const $GC_I_SKILLID_YOURE_ALL_ALONE = 1412
+Global Const $GC_I_SKILLID_BURST_OF_AGGRESSION = 1413
+Global Const $GC_I_SKILLID_ENRAGING_CHARGE = 1414
+Global Const $GC_I_SKILLID_CRIPPLING_SLASH = 1415
+Global Const $GC_I_SKILLID_BARBAROUS_SLICE = 1416
+Global Const $GC_I_SKILLID_VIAL_OF_PURIFIED_WATER = 1417
+Global Const $GC_I_SKILLID_DISARM_TRAP = 1418
+Global Const $GC_I_SKILLID_FEEDING_FRENZY_SKILL = 1419
+Global Const $GC_I_SKILLID_QUAKE_OF_AHDASHIM = 1420
+Global Const $GC_I_SKILLID_SHIELD_OF_MADNESS1 = 1421
+Global Const $GC_I_SKILLID_CREATE_LIGHT_OF_SEBORHIN = 1422
+Global Const $GC_I_SKILLID_UNLOCK_CELL = 1423
+Global Const $GC_I_SKILLID_STOP_PUMP = 1424
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1425
+Global Const $GC_I_SKILLID_SHIELD_OF_MADNESS2 = 1426
+Global Const $GC_I_SKILLID_SHIELD_OF_ETHER = 1427
+Global Const $GC_I_SKILLID_SHIELD_OF_IRON = 1428
+Global Const $GC_I_SKILLID_SHIELD_OF_STRENGTH = 1429
+Global Const $GC_I_SKILLID_WAVE_OF_TORMENT = 1430
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1431
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1432
+Global Const $GC_I_SKILLID_CORSAIRS_NET = 1433
+Global Const $GC_I_SKILLID_CORRUPTED_HEALING = 1434
+Global Const $GC_I_SKILLID_CORRUPTED_ROOTS = 1435
+Global Const $GC_I_SKILLID_CORRUPTED_STRENGTH = 1436
+Global Const $GC_I_SKILLID_DESERT_WURM_DISGUISE = 1437
+Global Const $GC_I_SKILLID_JUNUNDU_FEAST = 1438
+Global Const $GC_I_SKILLID_JUNUNDU_STRIKE = 1439
+Global Const $GC_I_SKILLID_JUNUNDU_SMASH = 1440
+Global Const $GC_I_SKILLID_JUNUNDU_SIEGE1 = 1441
+Global Const $GC_I_SKILLID_JUNUNDU_TUNNEL = 1442
+Global Const $GC_I_SKILLID_LEAVE_JUNUNDU = 1443
+Global Const $GC_I_SKILLID_SUMMON_TORMENT = 1444
+Global Const $GC_I_SKILLID_SIGNAL_FLARE = 1445
+Global Const $GC_I_SKILLID_THE_ELIXIR_OF_STRENGTH = 1446
+Global Const $GC_I_SKILLID_EHZAH_FROM_ABOVE = 1447
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1448
+Global Const $GC_I_SKILLID_LAST_RITES_OF_TORMENT = 1449
+Global Const $GC_I_SKILLID_ABADDONS_CONSPIRACY = 1450
+Global Const $GC_I_SKILLID_HUNGERS_BITE = 1451
+Global Const $GC_I_SKILLID_FROM_HELL = 1452
+Global Const $GC_I_SKILLID_PAINS_EMBRACE = 1453
+Global Const $GC_I_SKILLID_CALL_TO_THE_TORMENT = 1454
+Global Const $GC_I_SKILLID_COMMAND_OF_TORMENT = 1455
+Global Const $GC_I_SKILLID_ABADDONS_FAVOR = 1456
+Global Const $GC_I_SKILLID_ABADDONS_CHOSEN = 1457
+Global Const $GC_I_SKILLID_ENCHANTMENT_COLLAPSE = 1458
+Global Const $GC_I_SKILLID_CALL_OF_SACRIFICE = 1459
+Global Const $GC_I_SKILLID_ENEMIES_MUST_DIE = 1460
+Global Const $GC_I_SKILLID_EARTH_VORTEX = 1461
+Global Const $GC_I_SKILLID_FROST_VORTEX = 1462
+Global Const $GC_I_SKILLID_ROUGH_CURRENT = 1463
+Global Const $GC_I_SKILLID_TURBULENT_FLOW = 1464
+Global Const $GC_I_SKILLID_PREPARED_SHOT = 1465
+Global Const $GC_I_SKILLID_BURNING_ARROW = 1466
+Global Const $GC_I_SKILLID_ARCING_SHOT = 1467
+Global Const $GC_I_SKILLID_STRIKE_AS_ONE = 1468
+Global Const $GC_I_SKILLID_CROSSFIRE = 1469
+Global Const $GC_I_SKILLID_BARBED_ARROWS = 1470
+Global Const $GC_I_SKILLID_SCAVENGERS_FOCUS = 1471
+Global Const $GC_I_SKILLID_TOXICITY = 1472
+Global Const $GC_I_SKILLID_QUICKSAND = 1473
+Global Const $GC_I_SKILLID_STORMS_EMBRACE = 1474
+Global Const $GC_I_SKILLID_TRAPPERS_SPEED = 1475
+Global Const $GC_I_SKILLID_TRIPWIRE = 1476
+Global Const $GC_I_SKILLID_KOURNAN_GUARDSMAN = 1477
+Global Const $GC_I_SKILLID_RENEWING_SURGE = 1478
+Global Const $GC_I_SKILLID_OFFERING_OF_SPIRIT = 1479
+Global Const $GC_I_SKILLID_SPIRITS_GIFT = 1480
+Global Const $GC_I_SKILLID_DEATH_PACT_SIGNET = 1481
+Global Const $GC_I_SKILLID_RECLAIM_ESSENCE = 1482
+Global Const $GC_I_SKILLID_BANISHING_STRIKE = 1483
+Global Const $GC_I_SKILLID_MYSTIC_SWEEP = 1484
+Global Const $GC_I_SKILLID_EREMITES_ATTACK = 1485
+Global Const $GC_I_SKILLID_REAP_IMPURITIES = 1486
+Global Const $GC_I_SKILLID_TWIN_MOON_SWEEP = 1487
+Global Const $GC_I_SKILLID_VICTORIOUS_SWEEP = 1488
+Global Const $GC_I_SKILLID_IRRESISTIBLE_SWEEP = 1489
+Global Const $GC_I_SKILLID_PIOUS_ASSAULT = 1490
+Global Const $GC_I_SKILLID_MYSTIC_TWISTER = 1491
+Global Const $GC_I_SKILLID_REMOVE_WIND_PRAYERS_SKILL = 1492
+Global Const $GC_I_SKILLID_GRENTHS_FINGERS = 1493
+Global Const $GC_I_SKILLID_REMOVE_BOON_OF_THE_GODS = 1494
+Global Const $GC_I_SKILLID_AURA_OF_THORNS = 1495
+Global Const $GC_I_SKILLID_BALTHAZARS_RAGE = 1496
+Global Const $GC_I_SKILLID_DUST_CLOAK = 1497
+Global Const $GC_I_SKILLID_STAGGERING_FORCE = 1498
+Global Const $GC_I_SKILLID_PIOUS_RENEWAL = 1499
+Global Const $GC_I_SKILLID_MIRAGE_CLOAK = 1500
+Global Const $GC_I_SKILLID_REMOVE_BALTHAZARS_RAGE = 1501
+Global Const $GC_I_SKILLID_ARCANE_ZEAL = 1502
+Global Const $GC_I_SKILLID_MYSTIC_VIGOR = 1503
+Global Const $GC_I_SKILLID_WATCHFUL_INTERVENTION = 1504
+Global Const $GC_I_SKILLID_VOW_OF_PIETY = 1505
+Global Const $GC_I_SKILLID_VITAL_BOON = 1506
+Global Const $GC_I_SKILLID_HEART_OF_HOLY_FLAME = 1507
+Global Const $GC_I_SKILLID_EXTEND_ENCHANTMENTS = 1508
+Global Const $GC_I_SKILLID_FAITHFUL_INTERVENTION = 1509
+Global Const $GC_I_SKILLID_SAND_SHARDS = 1510
+Global Const $GC_I_SKILLID_INTIMIDATING_AURA_BETA_VERSION = 1511
+Global Const $GC_I_SKILLID_LYSSAS_HASTE = 1512
+Global Const $GC_I_SKILLID_GUIDING_HANDS = 1513
+Global Const $GC_I_SKILLID_FLEETING_STABILITY = 1514
+Global Const $GC_I_SKILLID_ARMOR_OF_SANCTITY = 1515
+Global Const $GC_I_SKILLID_MYSTIC_REGENERATION = 1516
+Global Const $GC_I_SKILLID_VOW_OF_SILENCE = 1517
+Global Const $GC_I_SKILLID_AVATAR_OF_BALTHAZAR = 1518
+Global Const $GC_I_SKILLID_AVATAR_OF_DWAYNA = 1519
+Global Const $GC_I_SKILLID_AVATAR_OF_GRENTH = 1520
+Global Const $GC_I_SKILLID_AVATAR_OF_LYSSA = 1521
+Global Const $GC_I_SKILLID_AVATAR_OF_MELANDRU = 1522
+Global Const $GC_I_SKILLID_MEDITATION = 1523
+Global Const $GC_I_SKILLID_EREMITES_ZEAL = 1524
+Global Const $GC_I_SKILLID_NATURAL_HEALING = 1525
+Global Const $GC_I_SKILLID_IMBUE_HEALTH = 1526
+Global Const $GC_I_SKILLID_MYSTIC_HEALING = 1527
+Global Const $GC_I_SKILLID_DWAYNAS_TOUCH = 1528
+Global Const $GC_I_SKILLID_PIOUS_RESTORATION = 1529
+Global Const $GC_I_SKILLID_SIGNET_OF_PIOUS_LIGHT = 1530
+Global Const $GC_I_SKILLID_INTIMIDATING_AURA = 1531
+Global Const $GC_I_SKILLID_MYSTIC_SANDSTORM = 1532
+Global Const $GC_I_SKILLID_WINDS_OF_DISENCHANTMENT = 1533
+Global Const $GC_I_SKILLID_RENDING_TOUCH = 1534
+Global Const $GC_I_SKILLID_CRIPPLING_SWEEP = 1535
+Global Const $GC_I_SKILLID_WOUNDING_STRIKE = 1536
+Global Const $GC_I_SKILLID_WEARYING_STRIKE = 1537
+Global Const $GC_I_SKILLID_LYSSAS_ASSAULT = 1538
+Global Const $GC_I_SKILLID_CHILLING_VICTORY = 1539
+Global Const $GC_I_SKILLID_CONVICTION = 1540
+Global Const $GC_I_SKILLID_ENCHANTED_HASTE = 1541
+Global Const $GC_I_SKILLID_PIOUS_CONCENTRATION = 1542
+Global Const $GC_I_SKILLID_PIOUS_HASTE = 1543
+Global Const $GC_I_SKILLID_WHIRLING_CHARGE = 1544
+Global Const $GC_I_SKILLID_TEST_OF_FAITH = 1545
+Global Const $GC_I_SKILLID_BLAZING_SPEAR = 1546
+Global Const $GC_I_SKILLID_MIGHTY_THROW = 1547
+Global Const $GC_I_SKILLID_CRUEL_SPEAR = 1548
+Global Const $GC_I_SKILLID_HARRIERS_TOSS = 1549
+Global Const $GC_I_SKILLID_UNBLOCKABLE_THROW = 1550
+Global Const $GC_I_SKILLID_SPEAR_OF_LIGHTNING = 1551
+Global Const $GC_I_SKILLID_WEARYING_SPEAR = 1552
+Global Const $GC_I_SKILLID_ANTHEM_OF_FURY = 1553
+Global Const $GC_I_SKILLID_CRIPPLING_ANTHEM = 1554
+Global Const $GC_I_SKILLID_DEFENSIVE_ANTHEM = 1555
+Global Const $GC_I_SKILLID_GODSPEED = 1556
+Global Const $GC_I_SKILLID_ANTHEM_OF_FLAME = 1557
+Global Const $GC_I_SKILLID_GO_FOR_THE_EYES = 1558
+Global Const $GC_I_SKILLID_ANTHEM_OF_ENVY = 1559
+Global Const $GC_I_SKILLID_SONG_OF_POWER = 1560
+Global Const $GC_I_SKILLID_ZEALOUS_ANTHEM = 1561
+Global Const $GC_I_SKILLID_ARIA_OF_ZEAL = 1562
+Global Const $GC_I_SKILLID_LYRIC_OF_ZEAL = 1563
+Global Const $GC_I_SKILLID_BALLAD_OF_RESTORATION = 1564
+Global Const $GC_I_SKILLID_CHORUS_OF_RESTORATION = 1565
+Global Const $GC_I_SKILLID_ARIA_OF_RESTORATION = 1566
+Global Const $GC_I_SKILLID_SONG_OF_CONCENTRATION = 1567
+Global Const $GC_I_SKILLID_ANTHEM_OF_GUIDANCE = 1568
+Global Const $GC_I_SKILLID_ENERGIZING_CHORUS = 1569
+Global Const $GC_I_SKILLID_SONG_OF_PURIFICATION = 1570
+Global Const $GC_I_SKILLID_HEXBREAKER_ARIA = 1571
+Global Const $GC_I_SKILLID_BRACE_YOURSELF = 1572
+Global Const $GC_I_SKILLID_AWE = 1573
+Global Const $GC_I_SKILLID_ENDURING_HARMONY = 1574
+Global Const $GC_I_SKILLID_BLAZING_FINALE = 1575
+Global Const $GC_I_SKILLID_BURNING_REFRAIN = 1576
+Global Const $GC_I_SKILLID_FINALE_OF_RESTORATION = 1577
+Global Const $GC_I_SKILLID_MENDING_REFRAIN = 1578
+Global Const $GC_I_SKILLID_PURIFYING_FINALE = 1579
+Global Const $GC_I_SKILLID_BLADETURN_REFRAIN = 1580
+Global Const $GC_I_SKILLID_GLOWING_SIGNET = 1581
+Global Const $GC_I_SKILLID_REMOVE_LEADERSHIP_SKILL = 1582
+Global Const $GC_I_SKILLID_LEADERS_ZEAL = 1583
+Global Const $GC_I_SKILLID_LEADERS_COMFORT = 1584
+Global Const $GC_I_SKILLID_SIGNET_OF_SYNERGY = 1585
+Global Const $GC_I_SKILLID_ANGELIC_PROTECTION = 1586
+Global Const $GC_I_SKILLID_ANGELIC_BOND = 1587
+Global Const $GC_I_SKILLID_CAUTERY_SIGNET = 1588
+Global Const $GC_I_SKILLID_STAND_YOUR_GROUND = 1589
+Global Const $GC_I_SKILLID_LEAD_THE_WAY = 1590
+Global Const $GC_I_SKILLID_MAKE_HASTE = 1591
+Global Const $GC_I_SKILLID_WE_SHALL_RETURN = 1592
+Global Const $GC_I_SKILLID_NEVER_GIVE_UP = 1593
+Global Const $GC_I_SKILLID_HELP_ME = 1594
+Global Const $GC_I_SKILLID_FALL_BACK = 1595
+Global Const $GC_I_SKILLID_INCOMING = 1596
+Global Const $GC_I_SKILLID_THEYRE_ON_FIRE = 1597
+Global Const $GC_I_SKILLID_NEVER_SURRENDER = 1598
+Global Const $GC_I_SKILLID_ITS_JUST_A_FLESH_WOUND = 1599
+Global Const $GC_I_SKILLID_BARBED_SPEAR = 1600
+Global Const $GC_I_SKILLID_VICIOUS_ATTACK = 1601
+Global Const $GC_I_SKILLID_STUNNING_STRIKE = 1602
+Global Const $GC_I_SKILLID_MERCILESS_SPEAR = 1603
+Global Const $GC_I_SKILLID_DISRUPTING_THROW = 1604
+Global Const $GC_I_SKILLID_WILD_THROW = 1605
+Global Const $GC_I_SKILLID_CURSE_OF_THE_STAFF_OF_THE_MISTS = 1606
+Global Const $GC_I_SKILLID_AURA_OF_THE_STAFF_OF_THE_MISTS = 1607
+Global Const $GC_I_SKILLID_POWER_OF_THE_STAFF_OF_THE_MISTS = 1608
+Global Const $GC_I_SKILLID_SCEPTER_OF_ETHER = 1609
+Global Const $GC_I_SKILLID_SUMMONING_OF_THE_SCEPTER = 1610
+Global Const $GC_I_SKILLID_RISE_FROM_YOUR_GRAVE = 1611
+Global Const $GC_I_SKILLID_SUGAR_RUSH_LONG = 1612
+Global Const $GC_I_SKILLID_CORSAIR_DISGUISE = 1613
+Global Const $GC_I_SKILLID_REMOVE_QUEEN_WAIL = 1614
+Global Const $GC_I_SKILLID_REMOVE_QUEEN_ARMOR = 1615
+Global Const $GC_I_SKILLID_QUEEN_HEAL = 1616
+Global Const $GC_I_SKILLID_QUEEN_WAIL = 1617
+Global Const $GC_I_SKILLID_QUEEN_ARMOR = 1618
+Global Const $GC_I_SKILLID_QUEEN_BITE = 1619
+Global Const $GC_I_SKILLID_QUEEN_THUMP = 1620
+Global Const $GC_I_SKILLID_QUEEN_SIEGE = 1621
+Global Const $GC_I_SKILLID_JUNUNDU_TUNNEL_MONSTER_SKILL = 1622
+Global Const $GC_I_SKILLID_SKIN_OF_STONE = 1623
+Global Const $GC_I_SKILLID_DERVISH_OF_THE_MYSTIC = 1624
+Global Const $GC_I_SKILLID_DERVISH_OF_THE_WIND = 1625
+Global Const $GC_I_SKILLID_PARAGON_OF_LEADERSHIP = 1626
+Global Const $GC_I_SKILLID_PARAGON_OF_MOTIVATION = 1627
+Global Const $GC_I_SKILLID_DERVISH_OF_THE_BLADE = 1628
+Global Const $GC_I_SKILLID_PARAGON_OF_COMMAND = 1629
+Global Const $GC_I_SKILLID_PARAGON_OF_THE_SPEAR = 1630
+Global Const $GC_I_SKILLID_DERVISH_OF_THE_EARTH = 1631
+Global Const $GC_I_SKILLID_MASTER_OF_DPS = 1632
+Global Const $GC_I_SKILLID_MALICIOUS_STRIKE = 1633
+Global Const $GC_I_SKILLID_SHATTERING_ASSAULT = 1634
+Global Const $GC_I_SKILLID_GOLDEN_SKULL_STRIKE = 1635
+Global Const $GC_I_SKILLID_BLACK_SPIDER_STRIKE = 1636
+Global Const $GC_I_SKILLID_GOLDEN_FOX_STRIKE = 1637
+Global Const $GC_I_SKILLID_DEADLY_HASTE = 1638
+Global Const $GC_I_SKILLID_ASSASSINS_REMEDY = 1639
+Global Const $GC_I_SKILLID_FOXS_PROMISE = 1640
+Global Const $GC_I_SKILLID_FEIGNED_NEUTRALITY = 1641
+Global Const $GC_I_SKILLID_HIDDEN_CALTROPS = 1642
+Global Const $GC_I_SKILLID_ASSAULT_ENCHANTMENTS = 1643
+Global Const $GC_I_SKILLID_WASTRELS_COLLAPSE = 1644
+Global Const $GC_I_SKILLID_LIFT_ENCHANTMENT = 1645
+Global Const $GC_I_SKILLID_AUGURY_OF_DEATH = 1646
+Global Const $GC_I_SKILLID_SIGNET_OF_TOXIC_SHOCK = 1647
+Global Const $GC_I_SKILLID_SIGNET_OF_TWILIGHT = 1648
+Global Const $GC_I_SKILLID_WAY_OF_THE_ASSASSIN = 1649
+Global Const $GC_I_SKILLID_SHADOW_WALK = 1650
+Global Const $GC_I_SKILLID_DEATHS_RETREAT = 1651
+Global Const $GC_I_SKILLID_SHADOW_PRISON = 1652
+Global Const $GC_I_SKILLID_SWAP = 1653
+Global Const $GC_I_SKILLID_SHADOW_MELD = 1654
+Global Const $GC_I_SKILLID_PRICE_OF_PRIDE = 1655
+Global Const $GC_I_SKILLID_AIR_OF_DISENCHANTMENT = 1656
+Global Const $GC_I_SKILLID_SIGNET_OF_CLUMSINESS = 1657
+Global Const $GC_I_SKILLID_SYMBOLIC_POSTURE = 1658
+Global Const $GC_I_SKILLID_TOXIC_CHILL = 1659
+Global Const $GC_I_SKILLID_WELL_OF_SILENCE = 1660
+Global Const $GC_I_SKILLID_GLOWSTONE = 1661
+Global Const $GC_I_SKILLID_MIND_BLAST = 1662
+Global Const $GC_I_SKILLID_ELEMENTAL_FLAME = 1663
+Global Const $GC_I_SKILLID_INVOKE_LIGHTNING = 1664
+Global Const $GC_I_SKILLID_BATTLE_CRY1 = 1665
+Global Const $GC_I_SKILLID_MENDING_SHRINE_BONUS = 1666
+Global Const $GC_I_SKILLID_ENERGY_SHRINE_BONUS = 1667
+Global Const $GC_I_SKILLID_NORTHERN_HEALTH_SHRINE_BONUS = 1668
+Global Const $GC_I_SKILLID_SOUTHERN_HEALTH_SHRINE_BONUS = 1669
+Global Const $GC_I_SKILLID_SIEGE_ATTACK_BOMBARDMENT = 1670
+Global Const $GC_I_SKILLID_CURSE_OF_SILENCE = 1671
+Global Const $GC_I_SKILLID_TO_THE_PAIN_HERO_BATTLES = 1672
+Global Const $GC_I_SKILLID_EDGE_OF_REASON = 1673
+Global Const $GC_I_SKILLID_DEPTHS_OF_MADNESS_ENVIRONMENT_EFFECT = 1674
+Global Const $GC_I_SKILLID_COWER_IN_FEAR = 1675
+Global Const $GC_I_SKILLID_DREADFUL_PAIN = 1676
+Global Const $GC_I_SKILLID_VEILED_NIGHTMARE = 1677
+Global Const $GC_I_SKILLID_BASE_PROTECTION = 1678
+Global Const $GC_I_SKILLID_KOURNAN_SIEGE_FLAME = 1679
+Global Const $GC_I_SKILLID_DRAKE_SKIN = 1680
+Global Const $GC_I_SKILLID_SKALE_VIGOR = 1681
+Global Const $GC_I_SKILLID_PAHNAI_SALAD_ITEM_EFFECT = 1682
+Global Const $GC_I_SKILLID_PENSIVE_GUARDIAN = 1683
+Global Const $GC_I_SKILLID_SCRIBES_INSIGHT = 1684
+Global Const $GC_I_SKILLID_HOLY_HASTE = 1685
+Global Const $GC_I_SKILLID_GLIMMER_OF_LIGHT = 1686
+Global Const $GC_I_SKILLID_ZEALOUS_BENEDICTION = 1687
+Global Const $GC_I_SKILLID_DEFENDERS_ZEAL = 1688
+Global Const $GC_I_SKILLID_SIGNET_OF_MYSTIC_WRATH = 1689
+Global Const $GC_I_SKILLID_SIGNET_OF_REMOVAL = 1690
+Global Const $GC_I_SKILLID_DISMISS_CONDITION = 1691
+Global Const $GC_I_SKILLID_DIVERT_HEXES = 1692
+Global Const $GC_I_SKILLID_COUNTERATTACK = 1693
+Global Const $GC_I_SKILLID_MAGEHUNTER_STRIKE = 1694
+Global Const $GC_I_SKILLID_SOLDIERS_STRIKE = 1695
+Global Const $GC_I_SKILLID_DECAPITATE = 1696
+Global Const $GC_I_SKILLID_MAGEHUNTERS_SMASH = 1697
+Global Const $GC_I_SKILLID_SOLDIERS_STANCE = 1698
+Global Const $GC_I_SKILLID_SOLDIERS_DEFENSE = 1699
+Global Const $GC_I_SKILLID_FRENZIED_DEFENSE = 1700
+Global Const $GC_I_SKILLID_STEADY_STANCE = 1701
+Global Const $GC_I_SKILLID_STEELFANG_SLASH = 1702
+Global Const $GC_I_SKILLID_SUNSPEAR_BATTLE_CALL = 1703
+Global Const $GC_I_SKILLID_UNTOUCHABLE = 1704
+Global Const $GC_I_SKILLID_EARTH_SHATTERING_BLOW = 1705
+Global Const $GC_I_SKILLID_CORRUPT_POWER = 1706
+Global Const $GC_I_SKILLID_WORDS_OF_MADNESS_QWYTZYLKAK = 1707
+Global Const $GC_I_SKILLID_GAZE_OF_MOAVUKAAL = 1708
+Global Const $GC_I_SKILLID_PRESENCE_OF_THE_SKALE_LORD = 1709
+Global Const $GC_I_SKILLID_MADNESS_DART = 1710
+Global Const $GC_I_SKILLID_THE_APOCRYPHA_IS_CHANGING_TO_ANOTHER_FORM = 1711
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1712
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1713
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1714
+Global Const $GC_I_SKILLID_REFORM_CARVINGS = 1715
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1716
+Global Const $GC_I_SKILLID_SUNSPEAR_SIEGE = 1717
+Global Const $GC_I_SKILLID_SOUL_TORTURE = 1718
+Global Const $GC_I_SKILLID_SCREAMING_SHOT = 1719
+Global Const $GC_I_SKILLID_KEEN_ARROW = 1720
+Global Const $GC_I_SKILLID_RAMPAGE_AS_ONE = 1721
+Global Const $GC_I_SKILLID_FORKED_ARROW = 1722
+Global Const $GC_I_SKILLID_DISRUPTING_ACCURACY = 1723
+Global Const $GC_I_SKILLID_EXPERTS_DEXTERITY = 1724
+Global Const $GC_I_SKILLID_ROARING_WINDS = 1725
+Global Const $GC_I_SKILLID_MAGEBANE_SHOT = 1726
+Global Const $GC_I_SKILLID_NATURAL_STRIDE = 1727
+Global Const $GC_I_SKILLID_HEKETS_RAMPAGE = 1728
+Global Const $GC_I_SKILLID_SMOKE_TRAP = 1729
+Global Const $GC_I_SKILLID_INFURIATING_HEAT = 1730
+Global Const $GC_I_SKILLID_VOCAL_WAS_SOGOLON = 1731
+Global Const $GC_I_SKILLID_DESTRUCTIVE_WAS_GLAIVE = 1732
+Global Const $GC_I_SKILLID_WIELDERS_STRIKE = 1733
+Global Const $GC_I_SKILLID_GAZE_OF_FURY = 1734
+Global Const $GC_I_SKILLID_GAZE_OF_FURY_ATTACK = 1735
+Global Const $GC_I_SKILLID_SPIRITS_STRENGTH = 1736
+Global Const $GC_I_SKILLID_WIELDERS_ZEAL = 1737
+Global Const $GC_I_SKILLID_SIGHT_BEYOND_SIGHT = 1738
+Global Const $GC_I_SKILLID_RENEWING_MEMORIES = 1739
+Global Const $GC_I_SKILLID_WIELDERS_REMEDY = 1740
+Global Const $GC_I_SKILLID_GHOSTMIRROR_LIGHT = 1741
+Global Const $GC_I_SKILLID_SIGNET_OF_GHOSTLY_MIGHT = 1742
+Global Const $GC_I_SKILLID_SIGNET_OF_BINDING = 1743
+Global Const $GC_I_SKILLID_CARETAKERS_CHARGE = 1744
+Global Const $GC_I_SKILLID_ANGUISH = 1745
+Global Const $GC_I_SKILLID_ANGUISH_ATTACK = 1746
+Global Const $GC_I_SKILLID_EMPOWERMENT = 1747
+Global Const $GC_I_SKILLID_RECOVERY = 1748
+Global Const $GC_I_SKILLID_WEAPON_OF_FURY = 1749
+Global Const $GC_I_SKILLID_XINRAES_WEAPON = 1750
+Global Const $GC_I_SKILLID_WARMONGERS_WEAPON = 1751
+Global Const $GC_I_SKILLID_WEAPON_OF_REMEDY = 1752
+Global Const $GC_I_SKILLID_RENDING_SWEEP = 1753
+Global Const $GC_I_SKILLID_ONSLAUGHT = 1754
+Global Const $GC_I_SKILLID_MYSTIC_CORRUPTION = 1755
+Global Const $GC_I_SKILLID_GRENTHS_GRASP = 1756
+Global Const $GC_I_SKILLID_VEIL_OF_THORNS = 1757
+Global Const $GC_I_SKILLID_HARRIERS_GRASP = 1758
+Global Const $GC_I_SKILLID_VOW_OF_STRENGTH = 1759
+Global Const $GC_I_SKILLID_EBON_DUST_AURA = 1760
+Global Const $GC_I_SKILLID_ZEALOUS_VOW = 1761
+Global Const $GC_I_SKILLID_HEART_OF_FURY = 1762
+Global Const $GC_I_SKILLID_ZEALOUS_RENEWAL = 1763
+Global Const $GC_I_SKILLID_ATTACKERS_INSIGHT = 1764
+Global Const $GC_I_SKILLID_RENDING_AURA = 1765
+Global Const $GC_I_SKILLID_FEATHERFOOT_GRACE = 1766
+Global Const $GC_I_SKILLID_REAPERS_SWEEP = 1767
+Global Const $GC_I_SKILLID_HARRIERS_HASTE = 1768
+Global Const $GC_I_SKILLID_FOCUSED_ANGER = 1769
+Global Const $GC_I_SKILLID_NATURAL_TEMPER = 1770
+Global Const $GC_I_SKILLID_SONG_OF_RESTORATION = 1771
+Global Const $GC_I_SKILLID_LYRIC_OF_PURIFICATION = 1772
+Global Const $GC_I_SKILLID_SOLDIERS_FURY = 1773
+Global Const $GC_I_SKILLID_AGGRESSIVE_REFRAIN = 1774
+Global Const $GC_I_SKILLID_ENERGIZING_FINALE = 1775
+Global Const $GC_I_SKILLID_SIGNET_OF_AGGRESSION = 1776
+Global Const $GC_I_SKILLID_REMEDY_SIGNET = 1777
+Global Const $GC_I_SKILLID_SIGNET_OF_RETURN = 1778
+Global Const $GC_I_SKILLID_MAKE_YOUR_TIME = 1779
+Global Const $GC_I_SKILLID_CANT_TOUCH_THIS = 1780
+Global Const $GC_I_SKILLID_FIND_THEIR_WEAKNESS = 1781
+Global Const $GC_I_SKILLID_THE_POWER_IS_YOURS = 1782
+Global Const $GC_I_SKILLID_SLAYERS_SPEAR = 1783
+Global Const $GC_I_SKILLID_SWIFT_JAVELIN = 1784
+Global Const $GC_I_SKILLID_NATURES_SPEED = 1785
+Global Const $GC_I_SKILLID_WEAPON_OF_MASTERY = 1786
+Global Const $GC_I_SKILLID_ACCELERATED_GROWTH = 1787
+Global Const $GC_I_SKILLID_FORGE_THE_WAY = 1788
+Global Const $GC_I_SKILLID_ANTHEM_OF_AGGRESSION = 1789
+Global Const $GC_I_SKILLID_SKALE_HUNT7 = 1790
+Global Const $GC_I_SKILLID_MANDRAGOR_HUNT6 = 1791
+Global Const $GC_I_SKILLID_SKREE_BATTLE = 1792
+Global Const $GC_I_SKILLID_INSECT_HUNT3 = 1793
+Global Const $GC_I_SKILLID_CORSAIR_BOUNTY1 = 1794
+Global Const $GC_I_SKILLID_PLANT_HUNT7 = 1795
+Global Const $GC_I_SKILLID_UNDEAD_HUNT1 = 1796
+Global Const $GC_I_SKILLID_ETERNAL_SUFFERING1 = 1797
+Global Const $GC_I_SKILLID_ETERNAL_SUFFERING2 = 1798
+Global Const $GC_I_SKILLID_ETERNAL_SUFFERING3 = 1799
+Global Const $GC_I_SKILLID_ETERNAL_LANGUOR1 = 1800
+Global Const $GC_I_SKILLID_ETERNAL_LANGUOR2 = 1801
+Global Const $GC_I_SKILLID_ETERNAL_LANGUOR3 = 1802
+Global Const $GC_I_SKILLID_ETERNAL_LETHARGY1 = 1803
+Global Const $GC_I_SKILLID_ETERNAL_LETHARGY2 = 1804
+Global Const $GC_I_SKILLID_ETERNAL_LETHARGY3 = 1805
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1806
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1807
+Global Const $GC_I_SKILLID_THIRST_OF_THE_DROUGHT1 = 1808
+Global Const $GC_I_SKILLID_THIRST_OF_THE_DROUGHT2 = 1809
+Global Const $GC_I_SKILLID_THIRST_OF_THE_DROUGHT3 = 1810
+Global Const $GC_I_SKILLID_THIRST_OF_THE_DROUGHT4 = 1811
+Global Const $GC_I_SKILLID_THIRST_OF_THE_DROUGHT5 = 1812
+Global Const $GC_I_SKILLID_LIGHTBRINGER = 1813
+Global Const $GC_I_SKILLID_LIGHTBRINGERS_GAZE = 1814
+Global Const $GC_I_SKILLID_LIGHTBRINGER_SIGNET = 1815
+Global Const $GC_I_SKILLID_SUNSPEAR_REBIRTH_SIGNET = 1816
+Global Const $GC_I_SKILLID_WISDOM = 1817
+Global Const $GC_I_SKILLID_MADDENED_STRIKE = 1818
+Global Const $GC_I_SKILLID_MADDENED_STANCE = 1819
+Global Const $GC_I_SKILLID_SPIRIT_FORM_REMAINS_OF_SAHLAHJA = 1820
+Global Const $GC_I_SKILLID_GODS_BLESSING = 1821
+Global Const $GC_I_SKILLID_MONSTER_HUNT1 = 1822
+Global Const $GC_I_SKILLID_MONSTER_HUNT2 = 1823
+Global Const $GC_I_SKILLID_MONSTER_HUNT3 = 1824
+Global Const $GC_I_SKILLID_MONSTER_HUNT4 = 1825
+Global Const $GC_I_SKILLID_ELEMENTAL_HUNT1 = 1826
+Global Const $GC_I_SKILLID_ELEMENTAL_HUNT2 = 1827
+Global Const $GC_I_SKILLID_SKREE_BATTLE1 = 1828
+Global Const $GC_I_SKILLID_INSECT_HUNT1 = 1829
+Global Const $GC_I_SKILLID_INSECT_HUNT2 = 1830
+Global Const $GC_I_SKILLID_DEMON_HUNT = 1831
+Global Const $GC_I_SKILLID_MINOTAUR_HUNT1 = 1832
+Global Const $GC_I_SKILLID_PLANT_HUNT1 = 1833
+Global Const $GC_I_SKILLID_PLANT_HUNT2 = 1834
+Global Const $GC_I_SKILLID_SKALE_HUNT3 = 1835
+Global Const $GC_I_SKILLID_SKALE_HUNT4 = 1836
+Global Const $GC_I_SKILLID_HEKET_HUNT5 = 1837
+Global Const $GC_I_SKILLID_HEKET_HUNT6 = 1838
+Global Const $GC_I_SKILLID_KOURNAN_BOUNTY1 = 1839
+Global Const $GC_I_SKILLID_MANDRAGOR_HUNT1 = 1840
+Global Const $GC_I_SKILLID_MANDRAGOR_HUNT2 = 1841
+Global Const $GC_I_SKILLID_CORSAIR_BOUNTY2 = 1842
+Global Const $GC_I_SKILLID_KOURNAN_BOUNTY2 = 1843
+Global Const $GC_I_SKILLID_DHUUM_BATTLE = 1844
+Global Const $GC_I_SKILLID_MENZIES_BATTLE1 = 1845
+Global Const $GC_I_SKILLID_ELEMENTAL_HUNT3 = 1846
+Global Const $GC_I_SKILLID_MONOLITH_HUNT1 = 1847
+Global Const $GC_I_SKILLID_MONOLITH_HUNT2 = 1848
+Global Const $GC_I_SKILLID_MARGONITE_BATTLE1 = 1849
+Global Const $GC_I_SKILLID_MONSTER_HUNT5 = 1850
+Global Const $GC_I_SKILLID_TITAN_HUNT1 = 1851
+Global Const $GC_I_SKILLID_MANDRAGOR_HUNT3 = 1852
+Global Const $GC_I_SKILLID_GIANT_HUNT1 = 1853
+Global Const $GC_I_SKILLID_UNDEAD_HUNT2 = 1854
+Global Const $GC_I_SKILLID_KOURNAN_SIEGE = 1855
+Global Const $GC_I_SKILLID_LOSE_YOUR_HEAD = 1856
+Global Const $GC_I_SKILLID_WANDERING_MIND = 1857
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1858
+Global Const $GC_I_SKILLID_ALTAR_BUFF = 1859
+Global Const $GC_I_SKILLID_SUGAR_RUSH_SHORT = 1860
+Global Const $GC_I_SKILLID_CHOKING_BREATH = 1861
+Global Const $GC_I_SKILLID_JUNUNDU_BITE = 1862
+Global Const $GC_I_SKILLID_BLINDING_BREATH = 1863
+Global Const $GC_I_SKILLID_BURNING_BREATH = 1864
+Global Const $GC_I_SKILLID_JUNUNDU_WAIL = 1865
+Global Const $GC_I_SKILLID_CAPTURE_POINT = 1866
+Global Const $GC_I_SKILLID_APPROACHING_THE_VORTEX = 1867
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1868
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1869
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1870
+Global Const $GC_I_SKILLID_AVATAR_OF_SWEETNESS = 1871
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1872
+Global Const $GC_I_SKILLID_CORRUPTED_LANDS = 1873
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1874
+Global Const $GC_I_SKILLID_WORDS_OF_MADNESS = 1875
+Global Const $GC_I_SKILLID_UNKNOWN_JUNUNDU_ABILITY = 1876
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1877
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1878
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1879
+Global Const $GC_I_SKILLID_TORMENT_SLASH_SMOTHERING_TENDRILS = 1880
+Global Const $GC_I_SKILLID_BONDS_OF_TORMENT = 1881
+Global Const $GC_I_SKILLID_SHADOW_SMASH = 1882
+Global Const $GC_I_SKILLID_BONDS_OF_TORMENT_EFFECT = 1883
+Global Const $GC_I_SKILLID_CONSUME_TORMENT = 1884
+Global Const $GC_I_SKILLID_BANISH_ENCHANTMENT = 1885
+Global Const $GC_I_SKILLID_SUMMONING_SHADOWS = 1886
+Global Const $GC_I_SKILLID_LIGHTBRINGERS_INSIGHT = 1887
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1888
+Global Const $GC_I_SKILLID_REPRESSIVE_ENERGY = 1889
+Global Const $GC_I_SKILLID_ENDURING_TORMENT = 1890
+Global Const $GC_I_SKILLID_SHROUD_OF_DARKNESS = 1891
+Global Const $GC_I_SKILLID_DEMONIC_MIASMA = 1892
+Global Const $GC_I_SKILLID_ENRAGED = 1893
+Global Const $GC_I_SKILLID_TOUCH_OF_AAAAARRRRRRGGGHHH = 1894
+Global Const $GC_I_SKILLID_WILD_SMASH = 1895
+Global Const $GC_I_SKILLID_UNYIELDING_ANGUISH = 1896
+Global Const $GC_I_SKILLID_JADOTHS_STORM_OF_JUDGMENT = 1897
+Global Const $GC_I_SKILLID_ANGUISH_HUNT1 = 1898
+Global Const $GC_I_SKILLID_AVATAR_OF_HOLIDAY_CHEER = 1899
+Global Const $GC_I_SKILLID_SIDE_STEP = 1900
+Global Const $GC_I_SKILLID_JACK_FROST = 1901
+Global Const $GC_I_SKILLID_AVATAR_OF_GRENTH_SNOW_FIGHTING_SKILL = 1902
+Global Const $GC_I_SKILLID_AVATAR_OF_DWAYNA_SNOW_FIGHTING_SKILL = 1903
+Global Const $GC_I_SKILLID_STEADY_AIM = 1904
+Global Const $GC_I_SKILLID_RUDIS_RED_NOSE = 1905
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1906
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1907
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1908
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1909
+Global Const $GC_I_SKILLID_CHARM_ANIMAL_WHITE_MANTLE = 1910
+Global Const $GC_I_SKILLID_VOLATILE_CHARR_CRYSTAL = 1911
+Global Const $GC_I_SKILLID_HARD_MODE1 = 1912
+Global Const $GC_I_SKILLID_CLAIM_RESOURCE_HEROES_ASCENT = 1913
+Global Const $GC_I_SKILLID_HARD_MODE2 = 1914
+Global Const $GC_I_SKILLID_HARD_MODE_NPC_BUFF = 1915
+Global Const $GC_I_SKILLID_SUGAR_JOLT_SHORT = 1916
+Global Const $GC_I_SKILLID_ROLLERBEETLE_RACER = 1917
+Global Const $GC_I_SKILLID_RAM = 1918
+Global Const $GC_I_SKILLID_HARDEN_SHELL = 1919
+Global Const $GC_I_SKILLID_ROLLERBEETLE_DASH = 1920
+Global Const $GC_I_SKILLID_SUPER_ROLLERBEETLE = 1921
+Global Const $GC_I_SKILLID_ROLLERBEETLE_ECHO = 1922
+Global Const $GC_I_SKILLID_DISTRACTING_LUNGE = 1923
+Global Const $GC_I_SKILLID_ROLLERBEETLE_BLAST = 1924
+Global Const $GC_I_SKILLID_SPIT_ROCKS = 1925
+Global Const $GC_I_SKILLID_LUNAR_BLESSING = 1926
+Global Const $GC_I_SKILLID_LUCKY_AURA = 1927
+Global Const $GC_I_SKILLID_SPIRITUAL_POSSESSION = 1928
+Global Const $GC_I_SKILLID_WATER = 1929
+Global Const $GC_I_SKILLID_PIG_FORM = 1930
+Global Const $GC_I_SKILLID_BEETLE_METAMORPHOSIS = 1931
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1932
+Global Const $GC_I_SKILLID_SUGAR_JOLT_LONG = 1933
+Global Const $GC_I_SKILLID_GOLDEN_EGG_SKILL = 1934
+Global Const $GC_I_SKILLID_TORTUROUS_EMBERS = 1935
+Global Const $GC_I_SKILLID_TEST_BUFF = 1936
+Global Const $GC_I_SKILLID_INFERNAL_RAGE = 1937
+Global Const $GC_I_SKILLID_PUTRID_FLAMES = 1938
+Global Const $GC_I_SKILLID_SHROUD_OF_ASH = 1939
+Global Const $GC_I_SKILLID_FLAME_CALL = 1940
+Global Const $GC_I_SKILLID_TORTURERS_INFERNO = 1941
+Global Const $GC_I_SKILLID_WHIRLING_FIRES = 1942
+Global Const $GC_I_SKILLID_CHARR_SIEGE_ATTACK_WHAT_MUST_BE_DONE = 1943
+Global Const $GC_I_SKILLID_CHARR_SIEGE_ATTACK_AGAINST_THE_CHARR = 1944
+Global Const $GC_I_SKILLID_BIRTHDAY_CUPCAKE_SKILL = 1945
+Global Const $GC_I_SKILLID_SHADOW_SANCTUARY_LUXON1 = 1946
+Global Const $GC_I_SKILLID_BLESSING_OF_THE_LUXONS = 1947
+Global Const $GC_I_SKILLID_SHADOW_SANCTUARY_LUXON2 = 1948
+Global Const $GC_I_SKILLID_ETHER_NIGHTMARE_LUXON = 1949
+Global Const $GC_I_SKILLID_SIGNET_OF_CORRUPTION_LUXON = 1950
+Global Const $GC_I_SKILLID_ELEMENTAL_LORD_LUXON = 1951
+Global Const $GC_I_SKILLID_SELFLESS_SPIRIT_LUXON = 1952
+Global Const $GC_I_SKILLID_TRIPLE_SHOT_LUXON = 1953
+Global Const $GC_I_SKILLID_SAVE_YOURSELVES_LUXON = 1954
+Global Const $GC_I_SKILLID_AURA_OF_HOLY_MIGHT_LUXON = 1955
+; Global Const $GC_I_SKILLIDID_UNKNOW = 1956
+Global Const $GC_I_SKILLID_SPEAR_OF_FURY_LUXON = 1957
+Global Const $GC_I_SKILLID_ATTRIBUTE_BALANCE = 1958
+Global Const $GC_I_SKILLID_MONSTER_HUNT6 = 1959
+Global Const $GC_I_SKILLID_MONSTER_HUNT7 = 1960
+Global Const $GC_I_SKILLID_MANDRAGOR_HUNT4 = 1961
+Global Const $GC_I_SKILLID_MANDRAGOR_HUNT5 = 1962
+Global Const $GC_I_SKILLID_GIANT_HUNT2 = 1963
+Global Const $GC_I_SKILLID_GIANT_HUNT3 = 1964
+Global Const $GC_I_SKILLID_SKREE_BATTLE2 = 1965
+Global Const $GC_I_SKILLID_SKREE_BATTLE3 = 1966
+Global Const $GC_I_SKILLID_INSECT_HUNT4 = 1967
+Global Const $GC_I_SKILLID_INSECT_HUNT5 = 1968
+Global Const $GC_I_SKILLID_MINOTAUR_HUNT2 = 1969
+Global Const $GC_I_SKILLID_MINOTAUR_HUNT3 = 1970
+Global Const $GC_I_SKILLID_CORSAIR_BOUNTY3 = 1971
+Global Const $GC_I_SKILLID_CORSAIR_BOUNTY4 = 1972
+Global Const $GC_I_SKILLID_PLANT_HUNT8 = 1973
+Global Const $GC_I_SKILLID_PLANT_HUNT9 = 1974
+Global Const $GC_I_SKILLID_SKALE_HUNT8 = 1975
+Global Const $GC_I_SKILLID_SKALE_HUNT9 = 1976
+Global Const $GC_I_SKILLID_HEKET_HUNT10 = 1977
+Global Const $GC_I_SKILLID_HEKET_HUNT11 = 1978
+Global Const $GC_I_SKILLID_KOURNAN_BOUNTY3 = 1979
+Global Const $GC_I_SKILLID_KOURNAN_BOUNTY4 = 1980
+Global Const $GC_I_SKILLID_UNDEAD_HUNT3 = 1981
+Global Const $GC_I_SKILLID_UNDEAD_HUNT4 = 1982
+Global Const $GC_I_SKILLID_FIRE_DART = 1983
+Global Const $GC_I_SKILLID_ICE_DART = 1984
+Global Const $GC_I_SKILLID_POISON_DART = 1985
+Global Const $GC_I_SKILLID_VAMPIRIC_ASSAULT = 1986
+Global Const $GC_I_SKILLID_LOTUS_STRIKE = 1987
+Global Const $GC_I_SKILLID_GOLDEN_FANG_STRIKE = 1988
+Global Const $GC_I_SKILLID_WAY_OF_THE_MANTIS = 1989
+Global Const $GC_I_SKILLID_FALLING_LOTUS_STRIKE = 1990
+Global Const $GC_I_SKILLID_SADISTS_SIGNET = 1991
+Global Const $GC_I_SKILLID_SIGNET_OF_DISTRACTION = 1992
+Global Const $GC_I_SKILLID_SIGNET_OF_RECALL = 1993
+Global Const $GC_I_SKILLID_POWER_LOCK = 1994
+Global Const $GC_I_SKILLID_WASTE_NOT_WANT_NOT = 1995
+Global Const $GC_I_SKILLID_SUM_OF_ALL_FEARS = 1996
+Global Const $GC_I_SKILLID_WITHERING_AURA = 1997
+Global Const $GC_I_SKILLID_CACOPHONY = 1998
+Global Const $GC_I_SKILLID_WINTERS_EMBRACE = 1999
+Global Const $GC_I_SKILLID_EARTHEN_SHACKLES = 2000
+Global Const $GC_I_SKILLID_WARD_OF_WEAKNESS = 2001
+Global Const $GC_I_SKILLID_GLYPH_OF_SWIFTNESS = 2002
+Global Const $GC_I_SKILLID_CURE_HEX = 2003
+Global Const $GC_I_SKILLID_SMITE_CONDITION = 2004
+Global Const $GC_I_SKILLID_SMITERS_BOON = 2005
+Global Const $GC_I_SKILLID_CASTIGATION_SIGNET = 2006
+Global Const $GC_I_SKILLID_PURIFYING_VEIL = 2007
+Global Const $GC_I_SKILLID_PULVERIZING_SMASH = 2008
+Global Const $GC_I_SKILLID_KEEN_CHOP = 2009
+Global Const $GC_I_SKILLID_KNEE_CUTTER = 2010
+Global Const $GC_I_SKILLID_GRAPPLE = 2011
+Global Const $GC_I_SKILLID_RADIANT_SCYTHE = 2012
+Global Const $GC_I_SKILLID_GRENTHS_AURA = 2013
+Global Const $GC_I_SKILLID_SIGNET_OF_PIOUS_RESTRAINT = 2014
+Global Const $GC_I_SKILLID_FARMERS_SCYTHE = 2015
+Global Const $GC_I_SKILLID_ENERGETIC_WAS_LEE_SA = 2016
+Global Const $GC_I_SKILLID_ANTHEM_OF_WEARINESS = 2017
+Global Const $GC_I_SKILLID_ANTHEM_OF_DISRUPTION = 2018
+Global Const $GC_I_SKILLID_BURNING_GROUND = 2019
+Global Const $GC_I_SKILLID_FREEZING_GROUND = 2020
+Global Const $GC_I_SKILLID_POISON_GROUND = 2021
+Global Const $GC_I_SKILLID_FIRE_JET = 2022
+Global Const $GC_I_SKILLID_ICE_JET = 2023
+Global Const $GC_I_SKILLID_POISON_JET = 2024
+Global Const $GC_I_SKILLID_LAVA_POOL = 2025
+Global Const $GC_I_SKILLID_WATER_POOL = 2026
+Global Const $GC_I_SKILLID_FIRE_SPOUT = 2027
+Global Const $GC_I_SKILLID_ICE_SPOUT = 2028
+Global Const $GC_I_SKILLID_POISON_SPOUT = 2029
+Global Const $GC_I_SKILLID_DHUUM_BATTLE1 = 2030
+Global Const $GC_I_SKILLID_DHUUM_BATTLE2 = 2031
+Global Const $GC_I_SKILLID_ELEMENTAL_HUNT4 = 2032
+Global Const $GC_I_SKILLID_ELEMENTAL_HUNT5 = 2033
+Global Const $GC_I_SKILLID_MONOLITH_HUNT3 = 2034
+Global Const $GC_I_SKILLID_MONOLITH_HUNT4 = 2035
+Global Const $GC_I_SKILLID_MARGONITE_BATTLE2 = 2036
+Global Const $GC_I_SKILLID_MARGONITE_BATTLE3 = 2037
+Global Const $GC_I_SKILLID_MENZIES_BATTLE2 = 2038
+Global Const $GC_I_SKILLID_MENZIES_BATTLE3 = 2039
+Global Const $GC_I_SKILLID_ANGUISH_HUNT2 = 2040
+Global Const $GC_I_SKILLID_TITAN_HUNT2 = 2041
+Global Const $GC_I_SKILLID_TITAN_HUNT3 = 2042
+Global Const $GC_I_SKILLID_MONSTER_HUNT8 = 2043
+Global Const $GC_I_SKILLID_MONSTER_HUNT9 = 2044
+Global Const $GC_I_SKILLID_SARCOPHAGUS_SPORES = 2045
+Global Const $GC_I_SKILLID_EXPLODING_BARREL = 2046
+Global Const $GC_I_SKILLID_GREATER_HARD_MODE_NPC_BUFF = 2047
+Global Const $GC_I_SKILLID_FIRE_BOULDER = 2048
+Global Const $GC_I_SKILLID_DIRE_SNOWBALL = 2049
+Global Const $GC_I_SKILLID_BOULDER = 2050
+Global Const $GC_I_SKILLID_SUMMON_SPIRITS_LUXON = 2051
+Global Const $GC_I_SKILLID_SHADOW_FANG = 2052
+Global Const $GC_I_SKILLID_CALCULATED_RISK = 2053
+Global Const $GC_I_SKILLID_SHRINKING_ARMOR = 2054
+Global Const $GC_I_SKILLID_ANEURYSM = 2055
+Global Const $GC_I_SKILLID_WANDERING_EYE = 2056
+Global Const $GC_I_SKILLID_FOUL_FEAST = 2057
+Global Const $GC_I_SKILLID_PUTRID_BILE = 2058
+Global Const $GC_I_SKILLID_SHELL_SHOCK = 2059
+Global Const $GC_I_SKILLID_GLYPH_OF_IMMOLATION = 2060
+Global Const $GC_I_SKILLID_PATIENT_SPIRIT = 2061
+Global Const $GC_I_SKILLID_HEALING_RIBBON = 2062
+Global Const $GC_I_SKILLID_AURA_OF_STABILITY = 2063
+Global Const $GC_I_SKILLID_SPOTLESS_MIND = 2064
+Global Const $GC_I_SKILLID_SPOTLESS_SOUL = 2065
+Global Const $GC_I_SKILLID_DISARM = 2066
+Global Const $GC_I_SKILLID_I_MEANT_TO_DO_THAT = 2067
+Global Const $GC_I_SKILLID_RAPID_FIRE = 2068
+Global Const $GC_I_SKILLID_SLOTH_HUNTERS_SHOT = 2069
+Global Const $GC_I_SKILLID_AURA_SLICER = 2070
+Global Const $GC_I_SKILLID_ZEALOUS_SWEEP = 2071
+Global Const $GC_I_SKILLID_PURE_WAS_LI_MING = 2072
+Global Const $GC_I_SKILLID_WEAPON_OF_AGGRESSION = 2073
+Global Const $GC_I_SKILLID_CHEST_THUMPER = 2074
+Global Const $GC_I_SKILLID_HASTY_REFRAIN = 2075
+Global Const $GC_I_SKILLID_DRAIN_MINION = 2076
+Global Const $GC_I_SKILLID_CRACKED_ARMOR = 2077
+Global Const $GC_I_SKILLID_BERSERK = 2078
+Global Const $GC_I_SKILLID_FLESHREAVERS_ESCAPE = 2079
+Global Const $GC_I_SKILLID_CHOMP = 2080
+Global Const $GC_I_SKILLID_TWISTING_JAWS = 2081
+Global Const $GC_I_SKILLID_BURNING_IMMUNITY = 2082
+Global Const $GC_I_SKILLID_MANDRAGORS_CHARGE = 2083
+Global Const $GC_I_SKILLID_ROCK_SLIDE = 2084
+Global Const $GC_I_SKILLID_AVALANCHE_EFFECT = 2085
+Global Const $GC_I_SKILLID_SNARING_WEB = 2086
+Global Const $GC_I_SKILLID_CEILING_COLLAPSE = 2087
+Global Const $GC_I_SKILLID_TRAMPLE = 2088
+Global Const $GC_I_SKILLID_WURM_BILE = 2089
+Global Const $GC_I_SKILLID_GROUND_COVER = 2090
+Global Const $GC_I_SKILLID_SHADOW_SANCTUARY_KURZICK = 2091
+Global Const $GC_I_SKILLID_ETHER_NIGHTMARE_KURZICK = 2092
+Global Const $GC_I_SKILLID_SIGNET_OF_CORRUPTION_KURZICK = 2093
+Global Const $GC_I_SKILLID_ELEMENTAL_LORD_KURZICK = 2094
+Global Const $GC_I_SKILLID_SELFLESS_SPIRIT_KURZICK = 2095
+Global Const $GC_I_SKILLID_TRIPLE_SHOT_KURZICK = 2096
+Global Const $GC_I_SKILLID_SAVE_YOURSELVES_KURZICK  = 2097
+Global Const $GC_I_SKILLID_AURA_OF_HOLY_MIGHT_KURZICK = 2098
+Global Const $GC_I_SKILLID_SPEAR_OF_FURY_KURZICK = 2099
+Global Const $GC_I_SKILLID_SUMMON_SPIRITS_KURZICK = 2100
+Global Const $GC_I_SKILLID_CRITICAL_AGILITY = 2101
+Global Const $GC_I_SKILLID_CRY_OF_PAIN = 2102
+Global Const $GC_I_SKILLID_NECROSIS = 2103
+Global Const $GC_I_SKILLID_INTENSITY = 2104
+Global Const $GC_I_SKILLID_SEED_OF_LIFE = 2105
+Global Const $GC_I_SKILLID_CALL_OF_THE_EYE = 2106
+Global Const $GC_I_SKILLID_WHIRLWIND_ATTACK = 2107
+Global Const $GC_I_SKILLID_NEVER_RAMPAGE_ALONE = 2108
+Global Const $GC_I_SKILLID_ETERNAL_AURA = 2109
+Global Const $GC_I_SKILLID_VAMPIRISM = 2110
+Global Const $GC_I_SKILLID_VAMPIRISM_ATTACK = 2111
+Global Const $GC_I_SKILLID_THERES_NOTHING_TO_FEAR = 2112
+Global Const $GC_I_SKILLID_URSAN_RAGE_BLOOD_WASHES_BLOOD = 2113
+Global Const $GC_I_SKILLID_URSAN_STRIKE_BLOOD_WASHES_BLOOD = 2114
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2115
+Global Const $GC_I_SKILLID_SNEAK_ATTACK = 2116
+Global Const $GC_I_SKILLID_FIREBOMB_EXPLOSION = 2117
+Global Const $GC_I_SKILLID_FIREBOMB = 2118
+Global Const $GC_I_SKILLID_SHIELD_OF_FIRE = 2119
+Global Const $GC_I_SKILLID_RESPAWN = 2120
+Global Const $GC_I_SKILLID_MARKED_FOR_DEATH = 2121
+Global Const $GC_I_SKILLID_SPIRIT_WORLD_RETREAT = 2122
+Global Const $GC_I_SKILLID_LONG_CLAWS1 = 2123
+Global Const $GC_I_SKILLID_SHATTERED_SPIRIT = 2124
+Global Const $GC_I_SKILLID_SPIRIT_ROAR = 2125
+Global Const $GC_I_SKILLID_SPIRIT_SENSES = 2126
+Global Const $GC_I_SKILLID_UNSEEN_AGGRESSION = 2127
+Global Const $GC_I_SKILLID_VOLFEN_POUNCE_CURSE_OF_THE_NORNBEAR = 2128
+Global Const $GC_I_SKILLID_VOLFEN_CLAW_CURSE_OF_THE_NORNBEAR = 2129
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2130
+Global Const $GC_I_SKILLID_VOLFEN_BLOODLUST_CURSE_OF_THE_NORNBEAR = 2131
+Global Const $GC_I_SKILLID_VOLFEN_AGILITY_CURSE_OF_THE_NORNBEAR = 2132
+Global Const $GC_I_SKILLID_VOLFEN_BLESSING_CURSE_OF_THE_NORNBEAR = 2133
+Global Const $GC_I_SKILLID_CHARGING_SPIRIT = 2134
+Global Const $GC_I_SKILLID_TRAMPLING_OX = 2135
+Global Const $GC_I_SKILLID_SMOKE_POWDER_DEFENSE = 2136
+Global Const $GC_I_SKILLID_CONFUSING_IMAGES = 2137
+Global Const $GC_I_SKILLID_HEXERS_VIGOR = 2138
+Global Const $GC_I_SKILLID_MASOCHISM = 2139
+Global Const $GC_I_SKILLID_PIERCING_TRAP = 2140
+Global Const $GC_I_SKILLID_COMPANIONSHIP = 2141
+Global Const $GC_I_SKILLID_FERAL_AGGRESSION = 2142
+Global Const $GC_I_SKILLID_DISRUPTING_SHOT = 2143
+Global Const $GC_I_SKILLID_VOLLEY = 2144
+Global Const $GC_I_SKILLID_EXPERT_FOCUS = 2145
+Global Const $GC_I_SKILLID_PIOUS_FURY = 2146
+Global Const $GC_I_SKILLID_CRIPPLING_VICTORY = 2147
+Global Const $GC_I_SKILLID_SUNDERING_WEAPON = 2148
+Global Const $GC_I_SKILLID_WEAPON_OF_RENEWAL = 2149
+Global Const $GC_I_SKILLID_MAIMING_SPEAR = 2150
+Global Const $GC_I_SKILLID_TEMPORAL_SHEEN = 2151
+Global Const $GC_I_SKILLID_FLUX_OVERLOAD = 2152
+Global Const $GC_I_SKILLID_A_POOL_OF_WATER = 2153
+Global Const $GC_I_SKILLID_PHASE_SHIELD_EFFECT = 2154
+Global Const $GC_I_SKILLID_PHASE_SHIELD_MONSTER_SKILL = 2155
+Global Const $GC_I_SKILLID_VITALITY_TRANSFER = 2156
+Global Const $GC_I_SKILLID_GOLEM_STRIKE = 2157
+Global Const $GC_I_SKILLID_BLOODSTONE_SLASH = 2158
+Global Const $GC_I_SKILLID_ENERGY_BLAST_GOLEM = 2159
+Global Const $GC_I_SKILLID_CHAOTIC_ENERGY = 2160
+Global Const $GC_I_SKILLID_GOLEM_FIRE_SHIELD = 2161
+Global Const $GC_I_SKILLID_THE_WAY_OF_DUTY = 2162
+Global Const $GC_I_SKILLID_THE_WAY_OF_KINSHIP = 2163
+Global Const $GC_I_SKILLID_DIAMONDSHARD_MIST_ENVIRONMENT_EFFECT = 2164
+Global Const $GC_I_SKILLID_DIAMONDSHARD_GRAVE = 2165
+Global Const $GC_I_SKILLID_THE_WAY_OF_STRENGTH = 2166
+Global Const $GC_I_SKILLID_DIAMONDSHARD_MIST = 2167
+Global Const $GC_I_SKILLID_RAVEN_BLESSING_A_GATE_TOO_FAR = 2168
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2169
+Global Const $GC_I_SKILLID_RAVEN_FLIGHT_A_GATE_TOO_FAR = 2170
+Global Const $GC_I_SKILLID_RAVEN_SHRIEK_A_GATE_TOO_FAR = 2171
+Global Const $GC_I_SKILLID_RAVEN_SWOOP_A_GATE_TOO_FAR = 2172
+Global Const $GC_I_SKILLID_RAVEN_TALONS_A_GATE_TOO_FAR = 2173
+Global Const $GC_I_SKILLID_ASPECT_OF_OAK = 2174
+Global Const $GC_I_SKILLID_LONG_CLAWS2 = 2175
+Global Const $GC_I_SKILLID_TREMOR = 2176
+Global Const $GC_I_SKILLID_RAGE_OF_THE_JOTUN = 2177
+Global Const $GC_I_SKILLID_THUNDERING_ROAR = 2178
+Global Const $GC_I_SKILLID_SUNDERING_SOULCRUSH = 2179
+Global Const $GC_I_SKILLID_PYROCLASTIC_SHOT = 2180
+Global Const $GC_I_SKILLID_EXPLOSIVE_FORCE = 2181
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2182
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2183
+Global Const $GC_I_SKILLID_ROLLING_SHIFT = 2184
+Global Const $GC_I_SKILLID_POWDER_KEG_EXPLOSION = 2185
+Global Const $GC_I_SKILLID_SIGNET_OF_DEADLY_CORRUPTION = 2186
+Global Const $GC_I_SKILLID_WAY_OF_THE_MASTER = 2187
+Global Const $GC_I_SKILLID_DEFILE_DEFENSES = 2188
+Global Const $GC_I_SKILLID_ANGORODONS_GAZE = 2189
+Global Const $GC_I_SKILLID_MAGNETIC_SURGE = 2190
+Global Const $GC_I_SKILLID_SLIPPERY_GROUND = 2191
+Global Const $GC_I_SKILLID_GLOWING_ICE = 2192
+Global Const $GC_I_SKILLID_ENERGY_BLAST = 2193
+Global Const $GC_I_SKILLID_DISTRACTING_STRIKE = 2194
+Global Const $GC_I_SKILLID_SYMBOLIC_STRIKE = 2195
+Global Const $GC_I_SKILLID_SOLDIERS_SPEED = 2196
+Global Const $GC_I_SKILLID_BODY_BLOW = 2197
+Global Const $GC_I_SKILLID_BODY_SHOT = 2198
+Global Const $GC_I_SKILLID_POISON_TIP_SIGNET = 2199
+Global Const $GC_I_SKILLID_SIGNET_OF_MYSTIC_SPEED = 2200
+Global Const $GC_I_SKILLID_SHIELD_OF_FORCE = 2201
+Global Const $GC_I_SKILLID_MENDING_GRIP = 2202
+Global Const $GC_I_SKILLID_SPIRITLEECH_AURA = 2203
+Global Const $GC_I_SKILLID_REJUVENATION = 2204
+Global Const $GC_I_SKILLID_AGONY = 2205
+Global Const $GC_I_SKILLID_GHOSTLY_WEAPON = 2206
+Global Const $GC_I_SKILLID_INSPIRATIONAL_SPEECH = 2207
+Global Const $GC_I_SKILLID_BURNING_SHIELD = 2208
+Global Const $GC_I_SKILLID_HOLY_SPEAR = 2209
+Global Const $GC_I_SKILLID_SPEAR_SWIPE = 2210
+Global Const $GC_I_SKILLID_ALKARS_ALCHEMICAL_ACID = 2211
+Global Const $GC_I_SKILLID_LIGHT_OF_DELDRIMOR = 2212
+Global Const $GC_I_SKILLID_EAR_BITE = 2213
+Global Const $GC_I_SKILLID_LOW_BLOW = 2214
+Global Const $GC_I_SKILLID_BRAWLING_HEADBUTT = 2215
+Global Const $GC_I_SKILLID_DONT_TRIP = 2216
+Global Const $GC_I_SKILLID_BY_URALS_HAMMER = 2217
+Global Const $GC_I_SKILLID_DRUNKEN_MASTER = 2218
+Global Const $GC_I_SKILLID_GREAT_DWARF_WEAPON = 2219
+Global Const $GC_I_SKILLID_GREAT_DWARF_ARMOR = 2220
+Global Const $GC_I_SKILLID_BREATH_OF_THE_GREAT_DWARF = 2221
+Global Const $GC_I_SKILLID_SNOW_STORM = 2222
+Global Const $GC_I_SKILLID_BLACK_POWDER_MINE = 2223
+Global Const $GC_I_SKILLID_SUMMON_MURSAAT = 2224
+Global Const $GC_I_SKILLID_SUMMON_RUBY_DJINN = 2225
+Global Const $GC_I_SKILLID_SUMMON_ICE_IMP = 2226
+Global Const $GC_I_SKILLID_SUMMON_NAGA_SHAMAN = 2227
+Global Const $GC_I_SKILLID_DEFT_STRIKE = 2228
+Global Const $GC_I_SKILLID_SIGNET_OF_INFECTION = 2229
+Global Const $GC_I_SKILLID_TRYPTOPHAN_SIGNET = 2230
+Global Const $GC_I_SKILLID_EBON_BATTLE_STANDARD_OF_COURAGE = 2231
+Global Const $GC_I_SKILLID_EBON_BATTLE_STANDARD_OF_WISDOM = 2232
+Global Const $GC_I_SKILLID_EBON_BATTLE_STANDARD_OF_HONOR = 2233
+Global Const $GC_I_SKILLID_EBON_VANGUARD_SNIPER_SUPPORT = 2234
+Global Const $GC_I_SKILLID_EBON_VANGUARD_ASSASSIN_SUPPORT = 2235
+Global Const $GC_I_SKILLID_WELL_OF_RUIN = 2236
+Global Const $GC_I_SKILLID_ATROPHY = 2237
+Global Const $GC_I_SKILLID_SPEAR_OF_REDEMPTION = 2238
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2239
+Global Const $GC_I_SKILLID_GELATINOUS_MATERIAL_EXPLOSION = 2240
+Global Const $GC_I_SKILLID_GELATINOUS_CORPSE_CONSUMPTION = 2241
+Global Const $GC_I_SKILLID_GELATINOUS_MUTATION = 2242
+Global Const $GC_I_SKILLID_GELATINOUS_ABSORPTION = 2243
+Global Const $GC_I_SKILLID_UNSTABLE_OOZE_EXPLOSION = 2244
+Global Const $GC_I_SKILLID_GOLEM_SHRAPNEL = 2245
+Global Const $GC_I_SKILLID_UNSTABLE_AURA = 2246
+Global Const $GC_I_SKILLID_UNSTABLE_PULSE = 2247
+Global Const $GC_I_SKILLID_POLYMOCK_POWER_DRAIN = 2248
+Global Const $GC_I_SKILLID_POLYMOCK_BLOCK = 2249
+Global Const $GC_I_SKILLID_POLYMOCK_GLYPH_OF_CONCENTRATION = 2250
+Global Const $GC_I_SKILLID_POLYMOCK_ETHER_SIGNET = 2251
+Global Const $GC_I_SKILLID_POLYMOCK_GLYPH_OF_POWER = 2252
+Global Const $GC_I_SKILLID_POLYMOCK_OVERLOAD = 2253
+Global Const $GC_I_SKILLID_POLYMOCK_GLYPH_DESTABILIZATION = 2254
+Global Const $GC_I_SKILLID_POLYMOCK_MIND_WRECK = 2255
+Global Const $GC_I_SKILLID_ORDER_OF_UNHOLY_VIGOR = 2256
+Global Const $GC_I_SKILLID_ORDER_OF_THE_LICH = 2257
+Global Const $GC_I_SKILLID_MASTER_OF_NECROMANCY = 2258
+Global Const $GC_I_SKILLID_ANIMATE_UNDEAD = 2259
+Global Const $GC_I_SKILLID_POLYMOCK_DEATHLY_CHILL = 2260
+Global Const $GC_I_SKILLID_POLYMOCK_RISING_BILE = 2261
+Global Const $GC_I_SKILLID_POLYMOCK_ROTTING_FLESH = 2262
+Global Const $GC_I_SKILLID_POLYMOCK_LIGHTNING_STRIKE = 2263
+Global Const $GC_I_SKILLID_POLYMOCK_LIGHTNING_ORB = 2264
+Global Const $GC_I_SKILLID_POLYMOCK_LIGHTNING_DJINNS_HASTE = 2265
+Global Const $GC_I_SKILLID_POLYMOCK_FLARE = 2266
+Global Const $GC_I_SKILLID_POLYMOCK_IMMOLATE = 2267
+Global Const $GC_I_SKILLID_POLYMOCK_METEOR = 2268
+Global Const $GC_I_SKILLID_POLYMOCK_ICE_SPEAR = 2269
+Global Const $GC_I_SKILLID_POLYMOCK_ICY_PRISON = 2270
+Global Const $GC_I_SKILLID_POLYMOCK_MIND_FREEZE = 2271
+Global Const $GC_I_SKILLID_POLYMOCK_ICE_SHARD_STORM = 2272
+Global Const $GC_I_SKILLID_POLYMOCK_FROZEN_TRIDENT = 2273
+Global Const $GC_I_SKILLID_POLYMOCK_SMITE = 2274
+Global Const $GC_I_SKILLID_POLYMOCK_SMITE_HEX = 2275
+Global Const $GC_I_SKILLID_POLYMOCK_BANE_SIGNET = 2276
+Global Const $GC_I_SKILLID_POLYMOCK_STONE_DAGGERS = 2277
+Global Const $GC_I_SKILLID_POLYMOCK_OBSIDIAN_FLAME = 2278
+Global Const $GC_I_SKILLID_POLYMOCK_EARTHQUAKE = 2279
+Global Const $GC_I_SKILLID_POLYMOCK_FROZEN_ARMOR = 2280
+Global Const $GC_I_SKILLID_POLYMOCK_GLYPH_FREEZE = 2281
+Global Const $GC_I_SKILLID_POLYMOCK_FIREBALL = 2282
+Global Const $GC_I_SKILLID_POLYMOCK_RODGORTS_INVOCATION = 2283
+Global Const $GC_I_SKILLID_POLYMOCK_CALCULATED_RISK = 2284
+Global Const $GC_I_SKILLID_POLYMOCK_RECURRING_INSECURITY = 2285
+Global Const $GC_I_SKILLID_POLYMOCK_BACKFIRE = 2286
+Global Const $GC_I_SKILLID_POLYMOCK_GUILT = 2287
+Global Const $GC_I_SKILLID_POLYMOCK_LAMENTATION = 2288
+Global Const $GC_I_SKILLID_POLYMOCK_SPIRIT_RIFT = 2289
+Global Const $GC_I_SKILLID_POLYMOCK_PAINFUL_BOND = 2290
+Global Const $GC_I_SKILLID_POLYMOCK_SIGNET_OF_CLUMSINESS = 2291
+Global Const $GC_I_SKILLID_POLYMOCK_MIGRAINE = 2292
+Global Const $GC_I_SKILLID_POLYMOCK_GLOWING_GAZE = 2293
+Global Const $GC_I_SKILLID_POLYMOCK_SEARING_FLAMES = 2294
+Global Const $GC_I_SKILLID_POLYMOCK_SIGNET_OF_REVENGE = 2295
+Global Const $GC_I_SKILLID_POLYMOCK_SIGNET_OF_SMITING = 2296
+Global Const $GC_I_SKILLID_POLYMOCK_STONING = 2297
+Global Const $GC_I_SKILLID_POLYMOCK_ERUPTION = 2298
+Global Const $GC_I_SKILLID_POLYMOCK_SHOCK_ARROW = 2299
+Global Const $GC_I_SKILLID_POLYMOCK_MIND_SHOCK = 2300
+Global Const $GC_I_SKILLID_POLYMOCK_PIERCING_LIGHT_SPEAR = 2301
+Global Const $GC_I_SKILLID_POLYMOCK_MIND_BLAST = 2302
+Global Const $GC_I_SKILLID_POLYMOCK_SAVANNAH_HEAT = 2303
+Global Const $GC_I_SKILLID_POLYMOCK_DIVERSION = 2304
+Global Const $GC_I_SKILLID_POLYMOCK_LIGHTNING_BLAST = 2305
+Global Const $GC_I_SKILLID_POLYMOCK_POISONED_GROUND = 2306
+Global Const $GC_I_SKILLID_POLYMOCK_ICY_BONDS = 2307
+Global Const $GC_I_SKILLID_POLYMOCK_SANDSTORM = 2308
+Global Const $GC_I_SKILLID_POLYMOCK_BANISH = 2309
+Global Const $GC_I_SKILLID_MERGOYLE_FORM = 2310
+Global Const $GC_I_SKILLID_SKALE_FORM = 2311
+Global Const $GC_I_SKILLID_GARGOYLE_FORM = 2312
+Global Const $GC_I_SKILLID_ICE_IMP_FORM = 2313
+Global Const $GC_I_SKILLID_FIRE_IMP_FORM = 2314
+Global Const $GC_I_SKILLID_KAPPA_FORM = 2315
+Global Const $GC_I_SKILLID_ALOE_SEED_FORM = 2316
+Global Const $GC_I_SKILLID_EARTH_ELEMENTAL_FORM = 2317
+Global Const $GC_I_SKILLID_FIRE_ELEMENTAL_FORM = 2318
+Global Const $GC_I_SKILLID_ICE_ELEMENTAL_FORM = 2319
+Global Const $GC_I_SKILLID_MIRAGE_IBOGA_FORM = 2320
+Global Const $GC_I_SKILLID_WIND_RIDER_FORM = 2321
+Global Const $GC_I_SKILLID_NAGA_SHAMAN_FORM = 2322
+Global Const $GC_I_SKILLID_MANTIS_DREAMWEAVER_FORM = 2323
+Global Const $GC_I_SKILLID_RUBY_DJINN_FORM = 2324
+Global Const $GC_I_SKILLID_GAKI_FORM = 2325
+Global Const $GC_I_SKILLID_STONE_RAIN_FORM = 2326
+Global Const $GC_I_SKILLID_MURSAAT_ELEMENTALIST_FORM = 2327
+Global Const $GC_I_SKILLID_CRYSTAL_SHIELD = 2328
+Global Const $GC_I_SKILLID_CRYSTAL_SNARE = 2329
+Global Const $GC_I_SKILLID_PARANOID_INDIGNATION = 2330
+Global Const $GC_I_SKILLID_SEARING_BREATH = 2331
+Global Const $GC_I_SKILLID_KRAKS_CHARGE = 2332
+Global Const $GC_I_SKILLID_BRAWLING = 2333
+Global Const $GC_I_SKILLID_BRAWLING_BLOCK = 2334
+Global Const $GC_I_SKILLID_BRAWLING_JAB1 = 2335
+Global Const $GC_I_SKILLID_BRAWLING_JAB2 = 2336
+Global Const $GC_I_SKILLID_BRAWLING_STRAIGHT_RIGHT = 2337
+Global Const $GC_I_SKILLID_BRAWLING_HOOK1 = 2338
+Global Const $GC_I_SKILLID_BRAWLING_HOOK2 = 2339
+Global Const $GC_I_SKILLID_BRAWLING_UPPERCUT = 2340
+Global Const $GC_I_SKILLID_BRAWLING_COMBO_PUNCH = 2341
+Global Const $GC_I_SKILLID_BRAWLING_HEADBUTT_BRAWLING_SKILL = 2342
+Global Const $GC_I_SKILLID_STAND_UP = 2343
+Global Const $GC_I_SKILLID_CALL_OF_DESTRUCTION = 2344
+Global Const $GC_I_SKILLID_FLAME_JET = 2345
+Global Const $GC_I_SKILLID_LAVA_GROUND = 2346
+Global Const $GC_I_SKILLID_LAVA_WAVE = 2347
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2348
+Global Const $GC_I_SKILLID_SPIRIT_SHIELD = 2349
+Global Const $GC_I_SKILLID_SUMMONING_LORD = 2350
+Global Const $GC_I_SKILLID_CHARM_ANIMAL_ASHLYN_SPIDERFRIEND = 2351
+Global Const $GC_I_SKILLID_CHARR_SIEGE_ATTACK_ASSAULT_ON_THE_STRONGHOLD = 2352
+Global Const $GC_I_SKILLID_FINISH_HIM = 2353
+Global Const $GC_I_SKILLID_DODGE_THIS = 2354
+Global Const $GC_I_SKILLID_I_AM_THE_STRONGEST = 2355
+Global Const $GC_I_SKILLID_I_AM_UNSTOPPABLE = 2356
+Global Const $GC_I_SKILLID_A_TOUCH_OF_GUILE = 2357
+Global Const $GC_I_SKILLID_YOU_MOVE_LIKE_A_DWARF = 2358
+Global Const $GC_I_SKILLID_YOU_ARE_ALL_WEAKLINGS = 2359
+Global Const $GC_I_SKILLID_FEEL_NO_PAIN = 2360
+Global Const $GC_I_SKILLID_CLUB_OF_A_THOUSAND_BEARS = 2361
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2362
+Global Const $GC_I_SKILLID_TALON_STRIKE = 2363
+Global Const $GC_I_SKILLID_LAVA_BLAST = 2364
+Global Const $GC_I_SKILLID_THUNDERFIST_STRIKE = 2365
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2366
+Global Const $GC_I_SKILLID_ALKARS_CONCOCTION = 2367
+Global Const $GC_I_SKILLID_MURAKAIS_CONSUMPTION = 2368
+Global Const $GC_I_SKILLID_MURAKAIS_CENSURE = 2369
+Global Const $GC_I_SKILLID_MURAKAIS_CALAMITY = 2370
+Global Const $GC_I_SKILLID_MURAKAIS_STORM_OF_SOULS = 2371
+Global Const $GC_I_SKILLID_EDIFICATION = 2372
+Global Const $GC_I_SKILLID_HEART_OF_THE_NORN = 2373
+Global Const $GC_I_SKILLID_URSAN_BLESSING = 2374
+Global Const $GC_I_SKILLID_URSAN_STRIKE = 2375
+Global Const $GC_I_SKILLID_URSAN_RAGE = 2376
+Global Const $GC_I_SKILLID_URSAN_ROAR = 2377
+Global Const $GC_I_SKILLID_URSAN_FORCE = 2378
+Global Const $GC_I_SKILLID_VOLFEN_BLESSING = 2379
+Global Const $GC_I_SKILLID_VOLFEN_CLAW = 2380
+Global Const $GC_I_SKILLID_VOLFEN_POUNCE = 2381
+Global Const $GC_I_SKILLID_VOLFEN_BLOODLUST = 2382
+Global Const $GC_I_SKILLID_VOLFEN_AGILITY = 2383
+Global Const $GC_I_SKILLID_RAVEN_BLESSING = 2384
+Global Const $GC_I_SKILLID_RAVEN_TALONS = 2385
+Global Const $GC_I_SKILLID_RAVEN_SWOOP = 2386
+Global Const $GC_I_SKILLID_RAVEN_SHRIEK = 2387
+Global Const $GC_I_SKILLID_RAVEN_FLIGHT = 2388
+Global Const $GC_I_SKILLID_TOTEM_OF_MAN = 2389
+Global Const $GC_I_SKILLID_FILTHY_EXPLOSION = 2390
+Global Const $GC_I_SKILLID_MURAKAIS_CALL = 2391
+Global Const $GC_I_SKILLID_SPAWN_PODS = 2392
+Global Const $GC_I_SKILLID_ENRAGED_BLAST = 2393
+Global Const $GC_I_SKILLID_SPAWN_HATCHLING = 2394
+Global Const $GC_I_SKILLID_URSAN_ROAR_BLOOD_WASHES_BLOOD = 2395
+Global Const $GC_I_SKILLID_URSAN_FORCE_BLOOD_WASHES_BLOOD = 2396
+Global Const $GC_I_SKILLID_URSAN_AURA = 2397
+Global Const $GC_I_SKILLID_CONSUME_FLAMES = 2398
+Global Const $GC_I_SKILLID_AURA_OF_THE_GREAT_DESTROYER = 2399
+Global Const $GC_I_SKILLID_DESTROY_THE_HUMANS = 2400
+Global Const $GC_I_SKILLID_CHARR_FLAME_KEEPER_FORM = 2401
+Global Const $GC_I_SKILLID_TITAN_FORM = 2402
+Global Const $GC_I_SKILLID_SKELETAL_MAGE_FORM = 2403
+Global Const $GC_I_SKILLID_SMOKE_WRAITH_FORM = 2404
+Global Const $GC_I_SKILLID_BONE_DRAGON_FORM = 2405
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2406
+Global Const $GC_I_SKILLID_DWARVEN_ARCANIST_FORM = 2407
+Global Const $GC_I_SKILLID_DOLYAK_RIDER_FORM = 2408
+Global Const $GC_I_SKILLID_EXTRACT_INSCRIPTION = 2409
+Global Const $GC_I_SKILLID_CHARR_SHAMAN_FORM = 2410
+Global Const $GC_I_SKILLID_MINDBENDER = 2411
+Global Const $GC_I_SKILLID_SMOOTH_CRIMINAL = 2412
+Global Const $GC_I_SKILLID_TECHNOBABBLE = 2413
+Global Const $GC_I_SKILLID_RADIATION_FIELD = 2414
+Global Const $GC_I_SKILLID_ASURAN_SCAN = 2415
+Global Const $GC_I_SKILLID_AIR_OF_SUPERIORITY = 2416
+Global Const $GC_I_SKILLID_MENTAL_BLOCK = 2417
+Global Const $GC_I_SKILLID_PAIN_INVERTER = 2418
+Global Const $GC_I_SKILLID_HEALING_SALVE = 2419
+Global Const $GC_I_SKILLID_EBON_ESCAPE = 2420
+Global Const $GC_I_SKILLID_WEAKNESS_TRAP = 2421
+Global Const $GC_I_SKILLID_WINDS = 2422
+Global Const $GC_I_SKILLID_DWARVEN_STABILITY = 2423
+Global Const $GC_I_SKILLID_STOUT_HEARTED = 2424
+Global Const $GC_I_SKILLID_INSCRIBED_ETTIN_AURA = 2425
+Global Const $GC_I_SKILLID_DECIPHER_INSCRIPTIONS = 2426
+Global Const $GC_I_SKILLID_REBEL_YELL = 2427
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2428
+Global Const $GC_I_SKILLID_ASURAN_FLAME_STAFF = 2429
+Global Const $GC_I_SKILLID_AURA_OF_THE_BLOODSTONE1 = 2430
+Global Const $GC_I_SKILLID_AURA_OF_THE_BLOODSTONE2 = 2431
+Global Const $GC_I_SKILLID_AURA_OF_THE_BLOODSTONE3 = 2432
+Global Const $GC_I_SKILLID_HAUNTED_GROUND = 2433
+Global Const $GC_I_SKILLID_ASURAN_BODYGUARD1 = 2434
+Global Const $GC_I_SKILLID_ASURAN_BODYGUARD2 = 2435
+Global Const $GC_I_SKILLID_ASURAN_BODYGUARD3 = 2436
+Global Const $GC_I_SKILLID_ENERGY_CHANNEL = 2437
+Global Const $GC_I_SKILLID_HUNT_RAMPAGE1 = 2438
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2439
+Global Const $GC_I_SKILLID_BOSS_BOUNTY1 = 2440
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS1 = 2441
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS2 = 2442
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS3 = 2443
+Global Const $GC_I_SKILLID_TIME_ATTACK1 = 2444
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER5 = 2445
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER6 = 2446
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER7 = 2447
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER8 = 2448
+Global Const $GC_I_SKILLID_GREAT_DWARFS_BLESSING1 = 2449
+Global Const $GC_I_SKILLID_HUNT_RAMPAGE2 = 2450
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2451
+Global Const $GC_I_SKILLID_BOSS_BOUNTY2 = 2452
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS4 = 2453
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS5 = 2454
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2455
+Global Const $GC_I_SKILLID_TIME_ATTACK2 = 2456
+Global Const $GC_I_SKILLID_VANGUARD_PATROL1 = 2457
+Global Const $GC_I_SKILLID_VANGUARD_PATROL2 = 2458
+Global Const $GC_I_SKILLID_VANGUARD_PATROL3 = 2459
+Global Const $GC_I_SKILLID_VANGUARD_PATROL4 = 2460
+Global Const $GC_I_SKILLID_VANGUARD_COMMENDATION1 = 2461
+Global Const $GC_I_SKILLID_HUNT_RAMPAGE3 = 2462
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2463
+Global Const $GC_I_SKILLID_BOSS_BOUNTY3 = 2464
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2465
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2466
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2467
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2468
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY1 = 2469
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY2 = 2470
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY3 = 2471
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY4 = 2472
+Global Const $GC_I_SKILLID_STRENGTH_OF_THE_NORN1 = 2473
+Global Const $GC_I_SKILLID_HUNT_RAMPAGE4 = 2474
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2475
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2476
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2477
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2478
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2479
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2480
+Global Const $GC_I_SKILLID_ASURAN_BODYGUARD = 2481
+Global Const $GC_I_SKILLID_DESPERATE_HOWL = 2482
+Global Const $GC_I_SKILLID_GLOAT = 2483
+Global Const $GC_I_SKILLID_METAMORPHOSIS = 2484
+Global Const $GC_I_SKILLID_INNER_FIRE = 2485
+Global Const $GC_I_SKILLID_ELEMENTAL_SHIFT = 2486
+Global Const $GC_I_SKILLID_DRYDERS_FEAST = 2487
+Global Const $GC_I_SKILLID_FUNGAL_EXPLOSION = 2488
+Global Const $GC_I_SKILLID_BLOOD_RAGE = 2489
+Global Const $GC_I_SKILLID_PARASITIC_BITE = 2490
+Global Const $GC_I_SKILLID_FALSE_DEATH = 2491
+Global Const $GC_I_SKILLID_OOZE_COMBINATION = 2492
+Global Const $GC_I_SKILLID_OOZE_DIVISION = 2493
+Global Const $GC_I_SKILLID_BEAR_FORM = 2494
+Global Const $GC_I_SKILLID_SWEEPING_STRIKES = 2495
+Global Const $GC_I_SKILLID_SPORE_EXPLOSION = 2496
+Global Const $GC_I_SKILLID_DORMANT_HUSK = 2497
+Global Const $GC_I_SKILLID_MONKEY_SEE__MONKEY_DO = 2498
+Global Const $GC_I_SKILLID_FEEDING_FRENZY = 2499
+Global Const $GC_I_SKILLID_TENGUS_MIMICRY = 2500
+Global Const $GC_I_SKILLID_TONGUE_LASH = 2501
+Global Const $GC_I_SKILLID_SOULRENDING_SHRIEK = 2502
+Global Const $GC_I_SKILLID_UNRELIABLE = 2503
+Global Const $GC_I_SKILLID_SIEGE_DEVOURER = 2504
+Global Const $GC_I_SKILLID_SIEGE_DEVOURER_FEAST = 2505
+Global Const $GC_I_SKILLID_DEVOURER_BITE = 2506
+Global Const $GC_I_SKILLID_SIEGE_DEVOURER_SWIPE = 2507
+Global Const $GC_I_SKILLID_DEVOURER_SIEGE = 2508
+Global Const $GC_I_SKILLID_HYAHHHHH1 = 2509
+Global Const $GC_I_SKILLID_HYAHHHHH2 = 2510
+Global Const $GC_I_SKILLID_HYAHHHHH3 = 2511
+Global Const $GC_I_SKILLID_HYAHHHHH4 = 2512
+Global Const $GC_I_SKILLID_DISMOUNT_SIEGE_DEVOURER = 2513
+Global Const $GC_I_SKILLID_THE_MASTERS_MARK = 2514
+Global Const $GC_I_SKILLID_THE_SNIPERS_SPEAR = 2515
+Global Const $GC_I_SKILLID_MOUNT = 2516
+Global Const $GC_I_SKILLID_REVERSE_POLARITY_FIRE_SHIELD = 2517
+Global Const $GC_I_SKILLID_TENGUS_GAZE = 2518
+Global Const $GC_I_SKILLID_FIX_MONSTER_ATTRIBUTES = 2519
+Global Const $GC_I_SKILLID_STONE_DWARF_TRANSFORMATION = 2523
+Global Const $GC_I_SKILLID_FORGEWIGHTS_BLESSING = 2524
+Global Const $GC_I_SKILLID_SELVETARMS_BLESSING = 2525
+Global Const $GC_I_SKILLID_THOMMISS_BLESSING = 2526
+Global Const $GC_I_SKILLID_DUNCANS_DEFENSE = 2527
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2528
+Global Const $GC_I_SKILLID_RANDS_ATTACK = 2529
+Global Const $GC_I_SKILLID_SELVETARMS_ATTACK = 2530
+Global Const $GC_I_SKILLID_THOMMISS_ATTACK = 2531
+Global Const $GC_I_SKILLID_CREATE_SPORE = 2532
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2533
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2534
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2535
+Global Const $GC_I_SKILLID_INVIGORATING_MIST = 2536
+Global Const $GC_I_SKILLID_COURAGEOUS_WAS_SAIDRA = 2537
+Global Const $GC_I_SKILLID_ANIMATE_UNDEAD_PALAWA_JOKO = 2538
+Global Const $GC_I_SKILLID_ORDER_OF_UNHOLY_VIGOR_PALAWA_JOKO = 2539
+Global Const $GC_I_SKILLID_ORDER_OF_THE_LICH_PALAWA_JOKO = 2540
+Global Const $GC_I_SKILLID_GOLEM_BOOSTERS = 2541
+Global Const $GC_I_SKILLID_CHARM_ANIMAL_MONSTER_ = 2542
+Global Const $GC_I_SKILLID_WURM_SIEGE_EYE_OF_THE_NORTH = 2543
+Global Const $GC_I_SKILLID_TONGUE_WHIP = 2544
+Global Const $GC_I_SKILLID_LIT_TORCH = 2545
+Global Const $GC_I_SKILLID_DISHONORABLE = 2546
+Global Const $GC_I_SKILLID_HARD_MODE_DUNGEON_BOSS = 2547
+Global Const $GC_I_SKILLID_VETERAN_ASURAN_BODYGUARD = 2548
+Global Const $GC_I_SKILLID_VETERAN_DWARVEN_RAIDER = 2549
+Global Const $GC_I_SKILLID_VETERAN_VANGUARD_PATROL = 2550
+Global Const $GC_I_SKILLID_VETERAN_NORN_HUNTING_PARTY = 2551
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2552
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2553
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2554
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2555
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2556
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2557
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2558
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2559
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2560
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2561
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2562
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2563
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2564
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER1 = 2565
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER2 = 2566
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER3 = 2567
+Global Const $GC_I_SKILLID_DWARVEN_RAIDER4 = 2568
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2569
+Global Const $GC_I_SKILLID_GREAT_DWARFS_BLESSING2 = 2570
+Global Const $GC_I_SKILLID_BOSS_BOUNTY4 = 2571
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2572
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2573
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS6 = 2574
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS7 = 2575
+Global Const $GC_I_SKILLID_HUNT_RAMPAGE5 = 2576
+Global Const $GC_I_SKILLID_TIME_ATTACK3 = 2577
+Global Const $GC_I_SKILLID_VANGUARD_PATROL = 2578
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2579
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2580
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2581
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2582
+Global Const $GC_I_SKILLID_BOSS_BOUNTY5 = 2583
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2584
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS8 = 2585
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2586
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2587
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2588
+Global Const $GC_I_SKILLID_VANGUARD_COMMENDATION2 = 2589
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2590
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY5 = 2591
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY6 = 2592
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY7 = 2593
+Global Const $GC_I_SKILLID_NORN_HUNTING_PARTY8 = 2594
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2595
+Global Const $GC_I_SKILLID_BOSS_BOUNTY6 = 2596
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2597
+Global Const $GC_I_SKILLID_STRENGTH_OF_THE_NORN2 = 2598
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS9 = 2599
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2600
+Global Const $GC_I_SKILLID_HUNT_POINT_BONUS10 = 2601
+Global Const $GC_I_SKILLID_HUNT_RAMPAGE6 = 2602
+Global Const $GC_I_SKILLID_TIME_ATTACK4 = 2603
+Global Const $GC_I_SKILLID_CANDY_CORN_SKILL = 2604
+Global Const $GC_I_SKILLID_CANDY_APPLE_SKILL = 2605
+Global Const $GC_I_SKILLID_ANTON_COSTUME_BRAWL_DISGUISE = 2606
+Global Const $GC_I_SKILLID_ERYS_VASBURG_COSTUME_BRAWL_DISGUISE = 2607
+Global Const $GC_I_SKILLID_OLIAS_COSTUME_BRAWL_DISGUISE = 2608
+Global Const $GC_I_SKILLID_ARGO_COSTUME_BRAWL_DISGUISE = 2609
+Global Const $GC_I_SKILLID_MHENLO_COSTUME_BRAWL_DISGUISE = 2610
+Global Const $GC_I_SKILLID_LUKAS_COSTUME_BRAWL_DISGUISE = 2611
+Global Const $GC_I_SKILLID_AIDAN_COSTUME_BRAWL_DISGUISE = 2612
+Global Const $GC_I_SKILLID_KAHMU_COSTUME_BRAWL_DISGUISE = 2613
+Global Const $GC_I_SKILLID_RAZAH_COSTUME_BRAWL_DISGUISE = 2614
+Global Const $GC_I_SKILLID_MORGAHN_COSTUME_BRAWL_DISGUISE = 2615
+Global Const $GC_I_SKILLID_NIKA_COSTUME_BRAWL_DISGUISE = 2616
+Global Const $GC_I_SKILLID_SEAGUARD_HALA_COSTUME_BRAWL_DISGUISE = 2617
+Global Const $GC_I_SKILLID_LIVIA_COSTUME_BRAWL_DISGUISE = 2618
+Global Const $GC_I_SKILLID_CYNN_COSTUME_BRAWL_DISGUISE = 2619
+Global Const $GC_I_SKILLID_TAHLKORA_COSTUME_BRAWL_DISGUISE = 2620
+Global Const $GC_I_SKILLID_DEVONA_COSTUME_BRAWL_DISGUISE = 2621
+Global Const $GC_I_SKILLID_ZHO_COSTUME_BRAWL_DISGUISE = 2622
+Global Const $GC_I_SKILLID_MELONNI_COSTUME_BRAWL_DISGUISE = 2623
+Global Const $GC_I_SKILLID_XANDRA_COSTUME_BRAWL_DISGUISE = 2624
+Global Const $GC_I_SKILLID_HAYDA_COSTUME_BRAWL_DISGUISE = 2625
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2626
+Global Const $GC_I_SKILLID_REAPERS_MARK2 = 2627
+Global Const $GC_I_SKILLID_ENFEEBLE2 = 2628
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2629
+; Global Const $GC_I_SKILLIDID_SIGNET_OF_LOST_SOULS = 2630
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2631
+Global Const $GC_I_SKILLID_SEARING_FLAMES2 = 2632
+Global Const $GC_I_SKILLID_GLOWING_GAZE2 = 2633
+Global Const $GC_I_SKILLID_STEAM2 = 2634
+Global Const $GC_I_SKILLID_FLAME_DJINNS_HASTE2 = 2635
+Global Const $GC_I_SKILLID_LIQUID_FLAM2 = 2636
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2637
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2638
+Global Const $GC_I_SKILLID_SMITE_CONDITION2 = 2639
+; Global Const $GC_I_SKILLIDID_CRIPPLING_SLASH = 2640
+; Global Const $GC_I_SKILLIDID_SUN_AND_MOON_SLASH = 2641
+; Global Const $GC_I_SKILLIDID_ENRAGING_CHARGE = 2642
+; Global Const $GC_I_SKILLIDID_TIGER_STANCE = 2643
+; Global Const $GC_I_SKILLIDID_BURNING_ARROW = 2644
+; Global Const $GC_I_SKILLIDID_NATURAL_STRIDE = 2645
+; Global Const $GC_I_SKILLIDID_FALLING_LOTUS_STRIKE = 2646
+; Global Const $GC_I_SKILLIDID_ANTHEM_OF_WEARINESS = 2647
+; Global Const $GC_I_SKILLIDID_PIOUS_FURY = 2648
+Global Const $GC_I_SKILLID_PIE_INDUCED_ECSTASY = 2649
+Global Const $GC_I_SKILLID_CHARM_ANIMAL_CHARR_DEMOLISHER = 2650
+Global Const $GC_I_SKILLID_TOGO_DISGUISE = 2651
+Global Const $GC_I_SKILLID_TURAI_OSSA_DISGUISE = 2652
+Global Const $GC_I_SKILLID_GWEN_DISGUISE = 2653
+Global Const $GC_I_SKILLID_SAUL_DALESSIO_DISGUISE = 2654
+Global Const $GC_I_SKILLID_DRAGON_EMPIRE_RAGE = 2655
+Global Const $GC_I_SKILLID_CALL_TO_THE_SPIRIT_REALM = 2656
+Global Const $GC_I_SKILLID_CALL_OF_HASTE_PVP = 2657
+Global Const $GC_I_SKILLID_HIDE = 2658
+Global Const $GC_I_SKILLID_FEIGN_DEATH = 2659
+Global Const $GC_I_SKILLID_FLEE = 2660
+Global Const $GC_I_SKILLID_THROW_ROCK = 2661
+Global Const $GC_I_SKILLID_NIGHTMARISH_AURA = 2662
+Global Const $GC_I_SKILLID_SIEGE_STRIKE = 2663
+Global Const $GC_I_SKILLID_SPIKE_TRAP_SPELL = 2664
+Global Const $GC_I_SKILLID_BARBED_BOMB = 2665
+Global Const $GC_I_SKILLID_FIRE_AND_BRIMSTONE = 2666
+Global Const $GC_I_SKILLID_BALM_BOMB = 2667
+Global Const $GC_I_SKILLID_EXPLOSIVES = 2668
+Global Const $GC_I_SKILLID_RATIONS = 2669
+Global Const $GC_I_SKILLID_FORM_UP_AND_ADVANCE = 2670
+Global Const $GC_I_SKILLID_ADVANCE = 2671
+Global Const $GC_I_SKILLID_SPECTRAL_AGONY_SAUL_DALESSIO = 2672
+Global Const $GC_I_SKILLID_STUN_BOMB = 2673
+Global Const $GC_I_SKILLID_BANNER_OF_THE_UNSEEN = 2674
+Global Const $GC_I_SKILLID_SIGNET_OF_THE_UNSEEN = 2675
+Global Const $GC_I_SKILLID_FOR_ELONA = 2676
+Global Const $GC_I_SKILLID_GIANT_STOMP_TURAI_OSSA = 2677
+Global Const $GC_I_SKILLID_WHIRLWIND_ATTACK_TURAI_OSSA = 2678
+Global Const $GC_I_SKILLID_JUNUNDU_SIEGE2 = 2679
+Global Const $GC_I_SKILLID_DISTORTION_GWEN = 2680
+Global Const $GC_I_SKILLID_SHARED_BURDEN_GWEN = 2681
+Global Const $GC_I_SKILLID_SUM_OF_ALL_FEARS_GWEN = 2682
+Global Const $GC_I_SKILLID_CASTIGATION_SIGNET_SAUL_DALESSIO = 2683
+Global Const $GC_I_SKILLID_UNNATURAL_SIGNET_SAUL_DALESSIO = 2684
+Global Const $GC_I_SKILLID_DRAGON_SLASH_TURAI_OSSA = 2685
+Global Const $GC_I_SKILLID_ESSENCE_STRIKE_TOGO = 2686
+Global Const $GC_I_SKILLID_SPIRIT_BURN_TOGO = 2687
+Global Const $GC_I_SKILLID_SPIRIT_RIFT_TOGO = 2688
+Global Const $GC_I_SKILLID_MEND_BODY_AND_SOUL_TOGO = 2689
+Global Const $GC_I_SKILLID_OFFERING_OF_SPIRIT_TOGO = 2690
+Global Const $GC_I_SKILLID_DISENCHANTMENT_TOGO = 2691
+Global Const $GC_I_SKILLID_FIRE_DART2 = 2692
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2693
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2694
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2695
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2696
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2697
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2698
+Global Const $GC_I_SKILLID_CORRUPTED_HAIJU_LAGOON_WATER = 2699
+Global Const $GC_I_SKILLID_JOURNEY_TO_THE_NORTH = 2700
+Global Const $GC_I_SKILLID_RAT_FORM = 2701
+Global Const $GC_I_SKILLID_OX_FORM = 2702
+Global Const $GC_I_SKILLID_TIGER_FORM = 2703
+Global Const $GC_I_SKILLID_RABBIT_FORM = 2704
+Global Const $GC_I_SKILLID_DRAGON_FORM = 2705
+Global Const $GC_I_SKILLID_SNAKE_FORM = 2706
+Global Const $GC_I_SKILLID_HORSE_FORM = 2707
+Global Const $GC_I_SKILLID_SHEEP_FORM = 2708
+Global Const $GC_I_SKILLID_MONKEY_FORM = 2709
+Global Const $GC_I_SKILLID_ROOSTER_FORM = 2710
+Global Const $GC_I_SKILLID_DOG_FORM = 2711
+Global Const $GC_I_SKILLID_PARTY_TIME = 2712
+Global Const $GC_I_SKILLID_VICTORY_IS_OURS = 2713
+Global Const $GC_I_SKILLID_DARK_SOUL_EXPLOSION = 2714
+Global Const $GC_I_SKILLID_CHAOTIC_SOUL_EXPLOSION = 2715
+Global Const $GC_I_SKILLID_FIERY_SOUL_EXPLOSION = 2716
+Global Const $GC_I_SKILLID_REJUVENATING_SOUL_EXPLOSION = 2717
+Global Const $GC_I_SKILLID_PLAGUE_SPRING = 2718
+Global Const $GC_I_SKILLID_UNBALANCING_SOUL_EXPLOSION = 2719
+Global Const $GC_I_SKILLID_SHADOWY_SOUL_EXPLOSION = 2720
+Global Const $GC_I_SKILLID_ETHEREAL_SOUL_EXPLOSION = 2721
+Global Const $GC_I_SKILLID_REDEMPTION_OF_PURITY = 2722
+Global Const $GC_I_SKILLID_PURIFY_ENERGY = 2723
+Global Const $GC_I_SKILLID_PURIFYING_FLAME = 2724
+Global Const $GC_I_SKILLID_PURIFYING_PRAYER = 2725
+Global Const $GC_I_SKILLID_STRENGTH_OF_PURITY = 2726
+Global Const $GC_I_SKILLID_SPRING_OF_PURITY = 2727
+Global Const $GC_I_SKILLID_WAY_OF_THE_PURE = 2728
+Global Const $GC_I_SKILLID_PURIFY_SOUL = 2729
+Global Const $GC_I_SKILLID_AURA_OF_PURITY = 2730
+Global Const $GC_I_SKILLID_ANTHEM_OF_PURITY = 2731
+Global Const $GC_I_SKILLID_FALKENS_FIRE_FIST = 2732
+Global Const $GC_I_SKILLID_FALKEN_QUICK = 2733
+Global Const $GC_I_SKILLID_MIND_WRACK_PVP = 2734
+Global Const $GC_I_SKILLID_QUICKENING_TERRAIN = 2735
+Global Const $GC_I_SKILLID_MASSIVE_DAMAGE = 2736
+Global Const $GC_I_SKILLID_MINION_APOCALYPSE = 2737
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2738
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_ASSASSIN = 2739
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_MESMER = 2740
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_NECROMANCER = 2741
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_ELEMENTALIST = 2742
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_MONK = 2743
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_WARRIOR = 2744
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_RANGER = 2745
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_DERVISH = 2746
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_RITUALIST = 2747
+Global Const $GC_I_SKILLID_COMBAT_COSTUME_PARAGON = 2748
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2749
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2750
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2751
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2752
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2753
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2754
+Global Const $GC_I_SKILLID_JADE_BROTHERHOOD_BOMB = 2755
+Global Const $GC_I_SKILLID_MAD_KINGS_FAN = 2756
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2757
+Global Const $GC_I_SKILLID_CANDY_CORN_STRIKE = 2758
+Global Const $GC_I_SKILLID_ROCKET_PROPELLED_GOBSTOPPER = 2759
+Global Const $GC_I_SKILLID_RAIN_OF_TERROR_SPELL = 2760
+Global Const $GC_I_SKILLID_CRY_OF_MADNESS = 2761
+Global Const $GC_I_SKILLID_SUGAR_INFUSION = 2762
+Global Const $GC_I_SKILLID_FEAST_OF_VENGEANCE = 2763
+Global Const $GC_I_SKILLID_ANIMATE_CANDY_MINIONS = 2764
+Global Const $GC_I_SKILLID_TASTE_OF_UNDEATH = 2765
+Global Const $GC_I_SKILLID_SCOURGE_OF_CANDY = 2766
+Global Const $GC_I_SKILLID_MOTIVATING_INSULTS = 2767
+Global Const $GC_I_SKILLID_MAD_KING_PONY_SUPPORT = 2768
+Global Const $GC_I_SKILLID_ITS_GOOD_TO_BE_KING = 2769
+Global Const $GC_I_SKILLID_MADDENING_LAUGHTER = 2770
+Global Const $GC_I_SKILLID_MAD_KINGS_INFLUENCE = 2771
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2772
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2773
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2774
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2775
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2776
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2777
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2778
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2779
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2780
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2781
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2782
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2783
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2784
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2785
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2786
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2787
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2788
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2789
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2790
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2791
+Global Const $GC_I_SKILLID_HIDDEN_TALENT = 2792
+Global Const $GC_I_SKILLID_COURIERS_HASTE = 2793
+Global Const $GC_I_SKILLID_XINRAES_REVENGE = 2794
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2795
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2796
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2797
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2798
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2799
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2800
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2801
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2802
+Global Const $GC_I_SKILLID_MIND_FREEZE_PVP = 2803
+Global Const $GC_I_SKILLID_MIND_SHOCK_PVP = 2804
+Global Const $GC_I_SKILLID_MIST_FORM_PVP = 2805
+Global Const $GC_I_SKILLID_WARD_AGAINST_HARM_PVP = 2806
+Global Const $GC_I_SKILLID_RIDE_THE_LIGHTNING_PVP = 2807
+Global Const $GC_I_SKILLID_ENRAGED_SMASH_PVP = 2808
+Global Const $GC_I_SKILLID_OBSIDIAN_FLAME_PVP = 2809
+Global Const $GC_I_SKILLID_MEEK_SHALL_INHERIT = 2810
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2811
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2812
+Global Const $GC_I_SKILLID_INVERSE_NINJA_LAW = 2813
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2814
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2815
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2816
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2817
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2818
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2819
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2820
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2821
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2822
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2823
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2824
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2825
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2826
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2827
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2828
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2829
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2830
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2831
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2832
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2833
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2834
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2835
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2836
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2837
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2838
+Global Const $GC_I_SKILLID_ABYSSAL_FORM = 2839
+Global Const $GC_I_SKILLID_ASURA_FORM = 2840
+Global Const $GC_I_SKILLID_AWAKENED_HEAD_FORM = 2841
+Global Const $GC_I_SKILLID_SPIDER_FORM = 2842
+Global Const $GC_I_SKILLID_CHARR_FORM = 2843
+Global Const $GC_I_SKILLID_GOLEM_FORM = 2844
+Global Const $GC_I_SKILLID_HELLHOUND_FORM = 2845
+Global Const $GC_I_SKILLID_NORN_FORM = 2846
+Global Const $GC_I_SKILLID_OOZE_FORM = 2847
+Global Const $GC_I_SKILLID_RIFT_WARDEN_FORM = 2848
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2849
+Global Const $GC_I_SKILLID_YETI_FORM = 2850
+Global Const $GC_I_SKILLID_SNOWMAN_FORM = 2851
+Global Const $GC_I_SKILLID_ENERGY_DRAIN_PVP = 2852
+Global Const $GC_I_SKILLID_ENERGY_TAP_PVP = 2853
+Global Const $GC_I_SKILLID_PVP_EFFECT = 2854
+Global Const $GC_I_SKILLID_WARD_AGAINST_MELEE_PVP = 2855
+Global Const $GC_I_SKILLID_LIGHTNING_ORB_PVP = 2856
+Global Const $GC_I_SKILLID_AEGIS_PVP = 2857
+Global Const $GC_I_SKILLID_WATCH_YOURSELF_PVP = 2858
+Global Const $GC_I_SKILLID_ENFEEBLE_PVP = 2859
+Global Const $GC_I_SKILLID_ETHER_RENEWAL_PVP = 2860
+Global Const $GC_I_SKILLID_PENETRATING_ATTACK_PVP = 2861
+Global Const $GC_I_SKILLID_SHADOW_FORM_PVP = 2862
+Global Const $GC_I_SKILLID_DISCORD_PVP = 2863
+Global Const $GC_I_SKILLID_SUNDERING_ATTACK_PVP = 2864
+Global Const $GC_I_SKILLID_RITUAL_LORD_PVP = 2865
+Global Const $GC_I_SKILLID_FLESH_OF_MY_FLESH_PVP = 2866
+Global Const $GC_I_SKILLID_ANCESTORS_RAGE_PVP = 2867
+Global Const $GC_I_SKILLID_SPLINTER_WEAPON_PVP = 2868
+Global Const $GC_I_SKILLID_ASSASSINS_REMEDY_PVP = 2869
+Global Const $GC_I_SKILLID_BLINDING_SURGE_PVP = 2870
+Global Const $GC_I_SKILLID_LIGHT_OF_DELIVERANCE_PVP = 2871
+Global Const $GC_I_SKILLID_DEATH_PACT_SIGNET_PVP = 2872
+Global Const $GC_I_SKILLID_MYSTIC_SWEEP_PVP = 2873
+Global Const $GC_I_SKILLID_EREMITES_ATTACK_PVP = 2874
+Global Const $GC_I_SKILLID_HARRIERS_TOSS_PVP = 2875
+Global Const $GC_I_SKILLID_DEFENSIVE_ANTHEM_PVP = 2876
+Global Const $GC_I_SKILLID_BALLAD_OF_RESTORATION_PVP = 2877
+Global Const $GC_I_SKILLID_SONG_OF_RESTORATION_PVP = 2878
+Global Const $GC_I_SKILLID_INCOMING_PVP = 2879
+Global Const $GC_I_SKILLID_NEVER_SURRENDER_PVP = 2880
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2881
+Global Const $GC_I_SKILLID_MANTRA_OF_INSCRIPTIONS_PVP = 2882
+Global Const $GC_I_SKILLID_FOR_GREAT_JUSTICE_PVP = 2883
+Global Const $GC_I_SKILLID_MYSTIC_REGENERATION_PVP = 2884
+Global Const $GC_I_SKILLID_ENFEEBLING_BLOOD_PVP = 2885
+Global Const $GC_I_SKILLID_SUMMONING_SICKNESS = 2886
+Global Const $GC_I_SKILLID_SIGNET_OF_JUDGMENT_PVP = 2887
+Global Const $GC_I_SKILLID_CHILLING_VICTORY_PVP = 2888
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2889
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2890
+Global Const $GC_I_SKILLID_UNYIELDING_AURA_PVP = 2891
+Global Const $GC_I_SKILLID_SPIRIT_BOND_PVP = 2892
+Global Const $GC_I_SKILLID_WEAPON_OF_WARDING_PVP = 2893
+Global Const $GC_I_SKILLID_BAMPH_LITE = 2894
+Global Const $GC_I_SKILLID_SMITERS_BOON_PVP = 2895
+Global Const $GC_I_SKILLID_BATTLE_FERVOR_DEACTIVATING_ROX = 2896
+Global Const $GC_I_SKILLID_CLOAK_OF_FAITH_DEACTIVATING_ROX = 2897
+Global Const $GC_I_SKILLID_DARK_AURA_DEACTIVATING_ROX = 2898
+Global Const $GC_I_SKILLID_CHAOTIC_POWER_DEACTIVATING_ROX = 2899
+Global Const $GC_I_SKILLID_STRENGTH_OF_THE_OAK_DEACTIVATING_ROX = 2900
+Global Const $GC_I_SKILLID_SINISTER_GOLEM_FORM = 2901
+Global Const $GC_I_SKILLID_REACTOR_BLAST = 2902
+Global Const $GC_I_SKILLID_REACTOR_BLAST_TIMER = 2903
+Global Const $GC_I_SKILLID_JADE_BROTHERHOOD_DISGUISE = 2904
+Global Const $GC_I_SKILLID_INTERNAL_POWER_ENGAGED = 2905
+Global Const $GC_I_SKILLID_TARGET_ACQUISITION = 2906
+Global Const $GC_I_SKILLID_NOX_BEAM = 2907
+Global Const $GC_I_SKILLID_NOX_FIELD_DASH = 2908
+Global Const $GC_I_SKILLID_NOXION_BUSTER = 2909
+Global Const $GC_I_SKILLID_COUNTDOWN = 2910
+Global Const $GC_I_SKILLID_BIT_GOLEM_BREAKER = 2911
+Global Const $GC_I_SKILLID_BIT_GOLEM_RECTIFIER = 2912
+Global Const $GC_I_SKILLID_BIT_GOLEM_CRASH = 2913
+Global Const $GC_I_SKILLID_BIT_GOLEM_FORCE = 2914
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2915
+Global Const $GC_I_SKILLID_NOX_PHANTOM = 2916
+Global Const $GC_I_SKILLID_NOX_THUNDER = 2917
+Global Const $GC_I_SKILLID_NOX_LOCK_ON = 2918
+Global Const $GC_I_SKILLID_NOX_DRIVER = 2919
+Global Const $GC_I_SKILLID_NOX_FIRE = 2920
+Global Const $GC_I_SKILLID_NOX_KNUCKLE = 2921
+Global Const $GC_I_SKILLID_NOX_DIVIDER_DRIVE = 2922
+Global Const $GC_I_SKILLID_YO_HO_HO_AND_A_BOTTLE_OF_GROG = 2923
+Global Const $GC_I_SKILLID_OATH_OF_PROTECTION = 2924
+Global Const $GC_I_SKILLID_SLOTH_HUNTERS_SHOT_PVP = 2925
+Global Const $GC_I_SKILLID_BAMPH_LIFESTEAL = 2926
+Global Const $GC_I_SKILLID_SHRINE_BACKLASH = 2927
+Global Const $GC_I_SKILLID_AMULET_OF_PROTECTION2 = 2928
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2929
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2930
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2931
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2932
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2933
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2934
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2935
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2936
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2937
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2938
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2939
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2940
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2941
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2942
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2943
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2944
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2945
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2946
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2947
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2948
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2949
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2950
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2951
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2952
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2953
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2954
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2955
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2956
+Global Const $GC_I_SKILLID_WESTERN_HEALTH_SHRINE_BONUS = 2957
+Global Const $GC_I_SKILLID_EASTERN_HEALTH_SHRINE_BONUS = 2958
+Global Const $GC_I_SKILLID_EXPERTS_DEXTERITY_PVP = 2959
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2960
+Global Const $GC_I_SKILLID_DELAYED_BLAST_BAMPH = 2961
+Global Const $GC_I_SKILLID_GRENTCH_FORM = 2962
+; Global Const $GC_I_SKILLIDID_UNKNOW = 2963
+Global Const $GC_I_SKILLID_SNOWBALL2 = 2964
+Global Const $GC_I_SKILLID_SIGNET_OF_SPIRITS_PVP = 2965
+Global Const $GC_I_SKILLID_SIGNET_OF_GHOSTLY_MIGHT_PVP = 2966
+Global Const $GC_I_SKILLID_AVATAR_OF_GRENTH_PVP = 2967
+Global Const $GC_I_SKILLID_OVERSIZED_TONIC_WARNING = 2968
+Global Const $GC_I_SKILLID_READ_THE_WIND_PVP = 2969
+Global Const $GC_I_SKILLID_MURSAAT_FORM = 2970
+Global Const $GC_I_SKILLID_BLUE_ROCK_CANDY_RUSH = 2971
+Global Const $GC_I_SKILLID_GREEN_ROCK_CANDY_RUSH = 2972
+Global Const $GC_I_SKILLID_RED_ROCK_CANDY_RUSH = 2973
+Global Const $GC_I_SKILLID_ARCHER_FORM = 2974
+Global Const $GC_I_SKILLID_AVATAR_OF_BALTHAZAR_FORM = 2975
+Global Const $GC_I_SKILLID_CHAMPION_OF_BALTHAZAR_FORM = 2976
+Global Const $GC_I_SKILLID_PRIEST_OF_BALTHAZAR_FORM = 2977
+Global Const $GC_I_SKILLID_THE_BLACK_BEAST_OF_ARRGH_FORM = 2978
+Global Const $GC_I_SKILLID_CRYSTAL_GUARDIAN_FORM = 2979
+Global Const $GC_I_SKILLID_CRYSTAL_SPIDER_FORM = 2980
+Global Const $GC_I_SKILLID_BONE_DRAGON_FORM2 = 2981
+Global Const $GC_I_SKILLID_SALTSPRAY_DRAGON_FORM = 2982
+Global Const $GC_I_SKILLID_EYE_OF_JANTHIR_FORM = 2983
+Global Const $GC_I_SKILLID_FOOTMAN_FORM = 2984
+Global Const $GC_I_SKILLID_GHOSTLY_HERO_FORM = 2985
+Global Const $GC_I_SKILLID_GUILD_LORD_FORM = 2986
+Global Const $GC_I_SKILLID_GWEN_DOLL_FORM = 2987
+Global Const $GC_I_SKILLID_BLACK_MOA_FORM = 2988
+Global Const $GC_I_SKILLID_BLACK_MOA_CHICK_FORM = 2989
+Global Const $GC_I_SKILLID_MOA_BIRD_FORM = 2990
+Global Const $GC_I_SKILLID_WHITE_MOA_FORM = 2991
+Global Const $GC_I_SKILLID_RAINBOW_PHOENIX_FORM = 2992
+Global Const $GC_I_SKILLID_BROWN_RABBIT_FORM = 2993
+Global Const $GC_I_SKILLID_WHITE_RABBIT_FORM = 2994
+Global Const $GC_I_SKILLID_SEER_FORM = 2995
+Global Const $GC_I_SKILLID_SWARM_OF_BEES_FORM = 2996
+Global Const $GC_I_SKILLID_SEED_OF_RESURRECTION2 = 2997
+Global Const $GC_I_SKILLID_FRAGILITY_PVP = 2998
+Global Const $GC_I_SKILLID_STRENGTH_OF_HONOR_PVP = 2999
+Global Const $GC_I_SKILLID_GUNTHERS_GAZE = 3000
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3001
+Global Const $GC_I_SKILLID_WARRIORS_ENDURANCE_PVP = 3002
+Global Const $GC_I_SKILLID_ARMOR_OF_UNFEELING_PVP = 3003
+Global Const $GC_I_SKILLID_SIGNET_OF_CREATION_PVP = 3004
+Global Const $GC_I_SKILLID_UNION_PVP = 3005
+Global Const $GC_I_SKILLID_SHADOWSONG_PVP = 3006
+Global Const $GC_I_SKILLID_PAIN_PVP = 3007
+Global Const $GC_I_SKILLID_DESTRUCTION_PVP = 3008
+Global Const $GC_I_SKILLID_SOOTHING_PVP = 3009
+Global Const $GC_I_SKILLID_DISPLACEMENT_PVP = 3010
+Global Const $GC_I_SKILLID_PRESERVATION_PVP = 3011
+Global Const $GC_I_SKILLID_LIFE_PVP = 3012
+Global Const $GC_I_SKILLID_RECUPERATION_PVP = 3013
+Global Const $GC_I_SKILLID_DISSONANCE_PVP = 3014
+Global Const $GC_I_SKILLID_EARTHBIND_PVP = 3015
+Global Const $GC_I_SKILLID_SHELTER_PVP = 3016
+Global Const $GC_I_SKILLID_DISENCHANTMENT_PVP = 3017
+Global Const $GC_I_SKILLID_RESTORATION_PVP = 3018
+Global Const $GC_I_SKILLID_BLOODSONG_PVP = 3019
+Global Const $GC_I_SKILLID_WANDERLUST_PVP = 3020
+Global Const $GC_I_SKILLID_SAVANNAH_HEAT_PVP = 3021
+Global Const $GC_I_SKILLID_GAZE_OF_FURY_PVP = 3022
+Global Const $GC_I_SKILLID_ANGUISH_PVP = 3023
+Global Const $GC_I_SKILLID_EMPOWERMENT_PVP = 3024
+Global Const $GC_I_SKILLID_RECOVERY_PVP = 3025
+Global Const $GC_I_SKILLID_GO_FOR_THE_EYES_PVP = 3026
+Global Const $GC_I_SKILLID_BRACE_YOURSELF_PVP = 3027
+Global Const $GC_I_SKILLID_BLAZING_FINALE_PVP = 3028
+Global Const $GC_I_SKILLID_BLADETURN_REFRAIN_PVP = 3029
+Global Const $GC_I_SKILLID_SIGNET_OF_RETURN_PVP = 3030
+Global Const $GC_I_SKILLID_CANT_TOUCH_THIS_PVP = 3031
+Global Const $GC_I_SKILLID_STAND_YOUR_GROUND_PVP = 3032
+Global Const $GC_I_SKILLID_WE_SHALL_RETURN_PVP = 3033
+Global Const $GC_I_SKILLID_FIND_THEIR_WEAKNESS_PVP = 3034
+Global Const $GC_I_SKILLID_NEVER_GIVE_UP_PVP = 3035
+Global Const $GC_I_SKILLID_HELP_ME_PVP = 3036
+Global Const $GC_I_SKILLID_FALL_BACK_PVP = 3037
+Global Const $GC_I_SKILLID_AGONY_PVP = 3038
+Global Const $GC_I_SKILLID_REJUVENATION_PVP = 3039
+Global Const $GC_I_SKILLID_ANTHEM_OF_DISRUPTION_PVP = 3040
+Global Const $GC_I_SKILLID_SHADOWSONG_MASTER_RIYO = 3041
+; Global Const $GC_I_SKILLIDID_PAIN = 3042
+; Global Const $GC_I_SKILLIDID_WANDERLUST = 3043
+Global Const $GC_I_SKILLID_SPIRIT_SIPHON_MASTER_RIYO = 3044
+Global Const $GC_I_SKILLID_COMFORT_ANIMAL_PVP = 3045
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3046
+Global Const $GC_I_SKILLID_MELANDRUS_ASSAULT_PVP = 3047
+Global Const $GC_I_SKILLID_SHROUD_OF_DISTRESS_PVP = 3048
+Global Const $GC_I_SKILLID_UNSEEN_FURY_PVP = 3049
+Global Const $GC_I_SKILLID_PREDATORY_BOND_PVP = 3050
+Global Const $GC_I_SKILLID_ENRAGED_LUNGE_PVP = 3051
+Global Const $GC_I_SKILLID_CONVICTION_PVP = 3052
+Global Const $GC_I_SKILLID_SIGNET_OF_DEADLY_CORRUPTION_PVP = 3053
+Global Const $GC_I_SKILLID_MASOCHISM_PVP = 3054
+Global Const $GC_I_SKILLID_PAIN_ATTACK_TOGO1 = 3055
+Global Const $GC_I_SKILLID_PAIN_ATTACK_TOGO2 = 3056
+Global Const $GC_I_SKILLID_PAIN_ATTACK_TOGO3 = 3057
+Global Const $GC_I_SKILLID_UNHOLY_FEAST_PVP = 3058
+Global Const $GC_I_SKILLID_SIGNET_OF_AGONY_PVP = 3059
+Global Const $GC_I_SKILLID_ESCAPE_PVP = 3060
+Global Const $GC_I_SKILLID_DEATH_BLOSSOM_PVP = 3061
+Global Const $GC_I_SKILLID_FINALE_OF_RESTORATION_PVP = 3062
+Global Const $GC_I_SKILLID_MANTRA_OF_RESOLVE_PVP = 3063
+Global Const $GC_I_SKILLID_LESSER_HARD_MODE_NPC_BUFF = 3064
+Global Const $GC_I_SKILLID_CHARM_ANIMAL2 = 3065
+Global Const $GC_I_SKILLID_CHARM_ANIMAL3 = 3066
+Global Const $GC_I_SKILLID_HENCHMAN = 3067
+Global Const $GC_I_SKILLID_CHARM_ANIMAL_CODEX = 3068
+Global Const $GC_I_SKILLID_AGENT_OF_THE_MAD_KING = 3069
+Global Const $GC_I_SKILLID_SUGAR_RUSH_AGENT_OF_THE_MAD_KING = 3070
+Global Const $GC_I_SKILLID_STICKY_GROUND = 3071
+Global Const $GC_I_SKILLID_SUGAR_SHOCK = 3072
+Global Const $GC_I_SKILLID_THE_MAD_KINGS_INFLUENCE = 3073
+Global Const $GC_I_SKILLID_BONE_SPIKE = 3074
+Global Const $GC_I_SKILLID_FLURRY_OF_SPLINTERS = 3075
+Global Const $GC_I_SKILLID_EVERLASTING_MOBSTOPPER_SKILL = 3076
+Global Const $GC_I_SKILLID_WEAKENED_BY_DHUUM = 3077
+Global Const $GC_I_SKILLID_CURSE_OF_DHUUM = 3078
+Global Const $GC_I_SKILLID_DHUUMS_REST_REAPER_SKILL = 3079
+Global Const $GC_I_SKILLID_DHUUM_SKILL = 3080
+Global Const $GC_I_SKILLID_SUMMON_CHAMPION = 3081
+Global Const $GC_I_SKILLID_SUMMON_MINIONS = 3082
+Global Const $GC_I_SKILLID_TOUCH_OF_DHUUM = 3083
+Global Const $GC_I_SKILLID_REAPING_OF_DHUUM = 3084
+Global Const $GC_I_SKILLID_JUDGMENT_OF_DHUUM = 3085
+Global Const $GC_I_SKILLID_WEIGHT_OF_DHUUM_HEX = 3086
+Global Const $GC_I_SKILLID_DHUUMS_REST = 3087
+Global Const $GC_I_SKILLID_SPIRITUAL_HEALING = 3088
+Global Const $GC_I_SKILLID_ENCASE_SKELETAL = 3089
+Global Const $GC_I_SKILLID_REVERSAL_OF_DEATH = 3090
+Global Const $GC_I_SKILLID_GHOSTLY_FURY = 3091
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_PUDASH = 3092
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_DAHLIA = 3093
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_DISENMAEDEL = 3094
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_ERROL_HYL = 3095
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_LULU_XAN = 3096
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_TANNAROS = 3097
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_CASSIE_SANTI = 3098
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_REDEMPTOR_FROHS = 3099
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_JULYIA = 3100
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_BELLICUS = 3101
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_DIRK_SHADOWRISE = 3102
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_VINCENT_EVAN = 3103
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_LUZY_FIERA = 3104
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_MOTOKO_KAI = 3105
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_HINATA = 3106
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_KAH_XAN = 3107
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_NARCISSIA = 3108
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_ZEN_SIERT = 3109
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_BLENKEH = 3110
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_AURORA_ALLESANDRA = 3111
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_TEENA_THE_RAPTOR = 3112
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_LORA_LANAYA = 3113
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_ADEPTE = 3114
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_HALDIBARN_EARENDUL = 3115
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_DAKY = 3116
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_SYN_SPELLSTRIKE = 3117
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_DIVINUS_TUTELA = 3118
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_BLAHKS = 3119
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_ERICK = 3120
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_GHAVIN = 3121
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_HOBBA_INASTE = 3122
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_BACCHI_COI = 3123
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_SUZU = 3124
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_ROLLO_LOWLO = 3125
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_FUU_RIN = 3126
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_NUNO = 3127
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_ALSACIEN = 3128
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_UTO_WROTKI = 3129
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_KHAI_KEMNEBI = 3130
+Global Const $GC_I_SKILLID_HENCHMAN_FORM_COLE = 3131
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3132
+Global Const $GC_I_SKILLID_WEIGHT_OF_DHUUM = 3133
+Global Const $GC_I_SKILLID_SPIRIT_FORM_DISGUISE = 3134
+Global Const $GC_I_SKILLID_SPIRITUAL_HEALING_REAPER_SKILL = 3135
+Global Const $GC_I_SKILLID_GHOSTLY_FURY_REAPER_SKILL = 3136
+Global Const $GC_I_SKILLID_REINDEER_FORM1 = 3137
+Global Const $GC_I_SKILLID_REINDEER_FORM2 = 3138
+Global Const $GC_I_SKILLID_REINDEER_FORM3 = 3139
+Global Const $GC_I_SKILLID_STAGGERING_BLOW_PVP = 3140
+Global Const $GC_I_SKILLID_LIGHTNING_REFLEXES_PVP = 3141
+Global Const $GC_I_SKILLID_FIERCE_BLOW_PVP = 3142
+Global Const $GC_I_SKILLID_RENEWING_SMASH_PVP = 3143
+Global Const $GC_I_SKILLID_HEAL_AS_ONE_PVP = 3144
+Global Const $GC_I_SKILLID_GLASS_ARROWS_PVP = 3145
+Global Const $GC_I_SKILLID_PROTECTIVE_WAS_KAOLAI_PVP = 3146
+Global Const $GC_I_SKILLID_KEEN_ARROW_PVP = 3147
+Global Const $GC_I_SKILLID_ANTHEM_OF_ENVY_PVP = 3148
+Global Const $GC_I_SKILLID_MENDING_REFRAIN_PVP = 3149
+Global Const $GC_I_SKILLID_LESSER_FLAME_SENTINEL_RESISTANCE = 3150
+Global Const $GC_I_SKILLID_EMPATHY_PVP = 3151
+Global Const $GC_I_SKILLID_CRIPPLING_ANGUISH_PVP = 3152
+Global Const $GC_I_SKILLID_PAIN_ATTACK_SIGNET_OF_SPIRITS1 = 3153
+Global Const $GC_I_SKILLID_PAIN_ATTACK_SIGNET_OF_SPIRITS2 = 3154
+Global Const $GC_I_SKILLID_PAIN_ATTACK_SIGNET_OF_SPIRITS3 = 3155
+Global Const $GC_I_SKILLID_SOLDIERS_STANCE_PVP = 3156
+Global Const $GC_I_SKILLID_DESTRUCTIVE_WAS_GLAIVE_PVP = 3157
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3158
+Global Const $GC_I_SKILLID_CHARM_DRAKE = 3159
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3160
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3161
+Global Const $GC_I_SKILLID_THERES_NOT_ENOUGH_TIME = 3162
+Global Const $GC_I_SKILLID_KEIRANS_SNIPER_SHOT = 3163
+Global Const $GC_I_SKILLID_FALKEN_PUNCH = 3164
+Global Const $GC_I_SKILLID_GOLEM_PILEBUNKER = 3165
+Global Const $GC_I_SKILLID_DRUNKEN_STUMBLING = 3166
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3167
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3168
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3169
+Global Const $GC_I_SKILLID_KOROS_GAZE = 3170
+Global Const $GC_I_SKILLID_EBON_VANGUARD_ASSASSIN_SUPPORT_NPC = 3171
+Global Const $GC_I_SKILLID_EBON_VANGUARD_BATTLE_STANDARD_OF_POWER = 3172
+Global Const $GC_I_SKILLID_LOOSE_MAGIC = 3173
+Global Const $GC_I_SKILLID_WELL_SUPPLIED = 3174
+Global Const $GC_I_SKILLID_GUILD_MONUMENT_PROTECTED = 3175
+Global Const $GC_I_SKILLID_STRONG_NATURAL_RESISTANCE = 3176
+Global Const $GC_I_SKILLID_ELITE_REGENERATION1 = 3177
+Global Const $GC_I_SKILLID_ELITE_REGENERATION2 = 3178
+Global Const $GC_I_SKILLID_MANTRA_OF_SIGNETS_PVP = 3179
+Global Const $GC_I_SKILLID_SHATTER_DELUSIONS_PVP = 3180
+Global Const $GC_I_SKILLID_ILLUSIONARY_WEAPONRY_PVP = 3181
+Global Const $GC_I_SKILLID_PANIC_PVP = 3182
+Global Const $GC_I_SKILLID_MIGRAINE_PVP = 3183
+Global Const $GC_I_SKILLID_ACCUMULATED_PAIN_PVP = 3184
+Global Const $GC_I_SKILLID_PSYCHIC_INSTABILITY_PVP = 3185
+Global Const $GC_I_SKILLID_SHARED_BURDEN_PVP = 3186
+Global Const $GC_I_SKILLID_STOLEN_SPEED_PVP = 3187
+Global Const $GC_I_SKILLID_UNNATURAL_SIGNET_PVP = 3188
+Global Const $GC_I_SKILLID_SPIRITUAL_PAIN_PVP = 3189
+Global Const $GC_I_SKILLID_FRUSTRATION_PVP = 3190
+Global Const $GC_I_SKILLID_MISTRUST_PVP = 3191
+Global Const $GC_I_SKILLID_ENCHANTERS_CONUNDRUM_PVP = 3192
+Global Const $GC_I_SKILLID_SIGNET_OF_CLUMSINESS_PVP = 3193
+Global Const $GC_I_SKILLID_MIRROR_OF_DISENCHANTMENT_PVP = 3194
+Global Const $GC_I_SKILLID_WANDERING_EYE_PVP = 3195
+Global Const $GC_I_SKILLID_CALCULATED_RISK_PVP = 3196
+Global Const $GC_I_SKILLID_ADORATION = 3197
+Global Const $GC_I_SKILLID_IMPENDING_DHUUM = 3198
+Global Const $GC_I_SKILLID_SACRIFICE_PAWN = 3199
+Global Const $GC_I_SKILLID_ISAIAHS_BALANCE = 3200
+Global Const $GC_I_SKILLID_TORIIMOS_BURNING_FURY = 3201
+Global Const $GC_I_SKILLID_OATH_OF_PROTECTION2 = 3202
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3203
+Global Const $GC_I_SKILLID_DEFY_PAIN_PVP = 3204
+Global Const $GC_I_SKILLID_ENTOURAGE = 3205
+Global Const $GC_I_SKILLID_SPECTRAL_INFUSION = 3206
+Global Const $GC_I_SKILLID_ENTOURAGE_BUFFER = 3207
+Global Const $GC_I_SKILLID_WASTRELS_DEMISE_PVP = 3208
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3209
+Global Const $GC_I_SKILLID_SHIRO_TAGACHI_COSTUME_BRAWL_DISGUISE = 3210
+Global Const $GC_I_SKILLID_DUNHAM_COSTUME_BRAWL_DISGUISE = 3211
+Global Const $GC_I_SKILLID_PALAWA_JOKO_COSTUME_BRAWL_DISGUISE = 3212
+Global Const $GC_I_SKILLID_LAWRENCE_CRAFTON_COSTUME_BRAWL_DISGUISE = 3213
+Global Const $GC_I_SKILLID_SAUL_DALESSIO_COSTUME_BRAWL_DISGUISE = 3214
+Global Const $GC_I_SKILLID_TURAI_OSSA_COSTUME_BRAWL_DISGUISE = 3215
+Global Const $GC_I_SKILLID_LIEUTENANT_THACKERAY_COSTUME_BRAWL_DISGUISE = 3216
+Global Const $GC_I_SKILLID_GEHRAZ_COSTUME_BRAWL_DISGUISE = 3217
+Global Const $GC_I_SKILLID_MASTER_TOGO_COSTUME_BRAWL_DISGUISE = 3218
+Global Const $GC_I_SKILLID_EGIL_FIRETELLER_COSTUME_BRAWL_DISGUISE = 3219
+Global Const $GC_I_SKILLID_MYSTERIOUS_ASSASSIN_COSTUME_BRAWL_DISGUISE = 3220
+Global Const $GC_I_SKILLID_GWEN_COSTUME_BRAWL_DISGUISE = 3221
+Global Const $GC_I_SKILLID_EVE_COSTUME_BRAWL_DISGUISE = 3222
+Global Const $GC_I_SKILLID_ELEMENTALIST_AZIURE_COSTUME_BRAWL_DISGUISE = 3223
+Global Const $GC_I_SKILLID_JAMEI_COSTUME_BRAWL_DISGUISE = 3224
+Global Const $GC_I_SKILLID_JORA_COSTUME_BRAWL_DISGUISE = 3225
+Global Const $GC_I_SKILLID_MARGRID_THE_SLY_COSTUME_BRAWL_DISGUISE = 3226
+Global Const $GC_I_SKILLID_VARESH_OSSA_COSTUME_BRAWL_DISGUISE = 3227
+Global Const $GC_I_SKILLID_HEADMASTER_QUIN_COSTUME_BRAWL_DISGUISE = 3228
+Global Const $GC_I_SKILLID_KORMIR_COSTUME_BRAWL_DISGUISE = 3229
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3230
+Global Const $GC_I_SKILLID_BARBED_SIGNET_PVP = 3231
+Global Const $GC_I_SKILLID_HEAL_PARTY_PVP = 3232
+Global Const $GC_I_SKILLID_SPOIL_VICTOR_PVP = 3233
+Global Const $GC_I_SKILLID_VISIONS_OF_REGRET_PVP = 3234
+Global Const $GC_I_SKILLID_KEIRANS_SNIPER_SHOT_HEARTS_OF_THE_NORTH = 3235
+Global Const $GC_I_SKILLID_GRAVESTONE_MARKER = 3236
+Global Const $GC_I_SKILLID_TERMINAL_VELOCITY = 3237
+Global Const $GC_I_SKILLID_RELENTLESS_ASSAULT = 3238
+Global Const $GC_I_SKILLID_NATURES_BLESSING = 3239
+Global Const $GC_I_SKILLID_FIND_THEIR_WEAKNESS_THACKERAY = 3240
+Global Const $GC_I_SKILLID_THERES_NOTHING_TO_FEAR_THACKERAY = 3241
+Global Const $GC_I_SKILLID_COMING_OF_SPRING = 3242
+Global Const $GC_I_SKILLID_PROMISE_OF_DEATH = 3243
+Global Const $GC_I_SKILLID_WITHERING_BLADE = 3244
+Global Const $GC_I_SKILLID_DEATHS_EMBRACE = 3245
+Global Const $GC_I_SKILLID_VENOM_FANG = 3246
+Global Const $GC_I_SKILLID_SURVIVORS_WILL = 3247
+Global Const $GC_I_SKILLID_KEIRAN_THACKERAY_DISGUISE = 3248
+Global Const $GC_I_SKILLID_RAIN_OF_ARROWS = 3249
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3250
+Global Const $GC_I_SKILLID_FOX_FANGS_PVP = 3251
+Global Const $GC_I_SKILLID_WILD_STRIKE_PVP = 3252
+Global Const $GC_I_SKILLID_ULTRA_SNOWBALL = 3253
+Global Const $GC_I_SKILLID_BLIZZARD = 3254
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3255
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3256
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3257
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3258
+Global Const $GC_I_SKILLID_ULTRA_SNOWBALL2 = 3259
+Global Const $GC_I_SKILLID_ULTRA_SNOWBALL3 = 3260
+Global Const $GC_I_SKILLID_ULTRA_SNOWBALL4 = 3261
+Global Const $GC_I_SKILLID_ULTRA_SNOWBALL5 = 3262
+Global Const $GC_I_SKILLID_BANISHING_STRIKE_PVP = 3263
+Global Const $GC_I_SKILLID_TWIN_MOON_SWEEP_PVP = 3264
+Global Const $GC_I_SKILLID_IRRESISTIBLE_SWEEP_PVP = 3265
+Global Const $GC_I_SKILLID_PIOUS_ASSAULT_PVP = 3266
+Global Const $GC_I_SKILLID_EBON_DUST_AURA_PVP = 3267
+Global Const $GC_I_SKILLID_HEART_OF_HOLY_FLAME_PVP = 3268
+Global Const $GC_I_SKILLID_GUIDING_HANDS_PVP = 3269
+Global Const $GC_I_SKILLID_AVATAR_OF_DWAYNA_PVP = 3270
+Global Const $GC_I_SKILLID_AVATAR_OF_MELANDRU_PVP = 3271
+Global Const $GC_I_SKILLID_MYSTIC_HEALING_PVP = 3272
+Global Const $GC_I_SKILLID_SIGNET_OF_PIOUS_RESTRAINT_PVP = 3273
+Global Const $GC_I_SKILLID_VANGUARD_INITIATE = 3274
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3275
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3276
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3277
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3278
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3279
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3280
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3281
+Global Const $GC_I_SKILLID_VICTORIOUS_RENEWAL = 3282
+Global Const $GC_I_SKILLID_A_DYING_CURSE = 3283
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3284
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3285
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3286
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3287
+Global Const $GC_I_SKILLID_RAGE_OF_THE_DJINN = 3288
+Global Const $GC_I_SKILLID_FEVERED_DREAMS_PVP = 3289
+Global Const $GC_I_SKILLID_STUN_GRENADE = 3290
+Global Const $GC_I_SKILLID_FRAGMENTATION_GRENADE = 3291
+Global Const $GC_I_SKILLID_TEAR_GAS = 3292
+Global Const $GC_I_SKILLID_LAND_MINE = 3293
+Global Const $GC_I_SKILLID_RIOT_SHIELD = 3294
+Global Const $GC_I_SKILLID_CLUB_STRIKE = 3295
+Global Const $GC_I_SKILLID_BLUDGEON = 3296
+Global Const $GC_I_SKILLID_TANGO_DOWN = 3297
+Global Const $GC_I_SKILLID_ILL_BE_BACK = 3298
+Global Const $GC_I_SKILLID_PHASED_PLASMA_BURST = 3299
+Global Const $GC_I_SKILLID_PLASMA_SHOT = 3300
+Global Const $GC_I_SKILLID_ANNIHILATOR_BASH = 3301
+Global Const $GC_I_SKILLID_SKY_NET = 3302
+Global Const $GC_I_SKILLID_DAMAGE_ASSESSMENT = 3303
+Global Const $GC_I_SKILLID_GOING_COMMANDO = 3304
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3305
+Global Const $GC_I_SKILLID_KOSS_FORM = 3306
+Global Const $GC_I_SKILLID_DUNKORO_FORM = 3307
+Global Const $GC_I_SKILLID_MELONNI_FORM = 3308
+Global Const $GC_I_SKILLID_ACOLYTE_JIN_FORM = 3309
+Global Const $GC_I_SKILLID_ACOLYTE_SOUSUKE_FORM = 3310
+Global Const $GC_I_SKILLID_TAHLKORA_FORM = 3311
+Global Const $GC_I_SKILLID_ZHED_SHADOWHOOF_FORM = 3312
+Global Const $GC_I_SKILLID_MARGRID_THE_SLY_FORM = 3313
+Global Const $GC_I_SKILLID_MASTER_OF_WHISPERS_FORM = 3314
+Global Const $GC_I_SKILLID_GOREN_FORM = 3315
+Global Const $GC_I_SKILLID_NORGU_FORM = 3316
+Global Const $GC_I_SKILLID_MORGAHN_FORM = 3317
+Global Const $GC_I_SKILLID_RAZAH_FORM = 3318
+Global Const $GC_I_SKILLID_OLIAS_FORM = 3319
+Global Const $GC_I_SKILLID_ZENMAI_FORM = 3320
+Global Const $GC_I_SKILLID_OGDEN_FORM = 3321
+Global Const $GC_I_SKILLID_VEKK_FORM = 3322
+Global Const $GC_I_SKILLID_GWEN_FORM = 3323
+Global Const $GC_I_SKILLID_XANDRA_FORM = 3324
+Global Const $GC_I_SKILLID_KAHMU_FORM = 3325
+Global Const $GC_I_SKILLID_JORA_FORM = 3326
+Global Const $GC_I_SKILLID_PYRE_FIERCESHOT_FORM = 3327
+Global Const $GC_I_SKILLID_ANTON_FORM = 3328
+Global Const $GC_I_SKILLID_HAYDA_FORM = 3329
+Global Const $GC_I_SKILLID_LIVIA_FORM = 3330
+Global Const $GC_I_SKILLID_KEIRAN_THACKERAY_FORM = 3331
+Global Const $GC_I_SKILLID_MIKU_FORM = 3332
+Global Const $GC_I_SKILLID_MOX_FORM = 3333
+Global Const $GC_I_SKILLID_SHIRO_TAGACHI_FORM = 3334
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3335
+Global Const $GC_I_SKILLID_PRINCE_RURIK_FORM = 3336
+Global Const $GC_I_SKILLID_MARGONITE_FORM = 3337
+Global Const $GC_I_SKILLID_DESTROYER_FORM = 3338
+Global Const $GC_I_SKILLID_QUEEN_SALMA_FORM = 3339
+Global Const $GC_I_SKILLID_SLIGHTLY_MAD_KING_THORN_FORM = 3340
+Global Const $GC_I_SKILLID_KUUNAVANG_FORM = 3341
+Global Const $GC_I_SKILLID_LONE_WOLF = 3342
+Global Const $GC_I_SKILLID_STAND_TOGETHER = 3343
+Global Const $GC_I_SKILLID_UNYIELDING_SPIRIT = 3344
+Global Const $GC_I_SKILLID_RECKLESS_ADVANCE = 3345
+Global Const $GC_I_SKILLID_AURA_OF_THORNS_PVP = 3346
+Global Const $GC_I_SKILLID_DUST_CLOAK_PVP = 3347
+Global Const $GC_I_SKILLID_LYSSAS_HASTE_PVP = 3348
+Global Const $GC_I_SKILLID_KNIGHT_FORM = 3349
+Global Const $GC_I_SKILLID_LORD_ARCHER_FORM = 3350
+Global Const $GC_I_SKILLID_BODYGUARD_FORM = 3351
+Global Const $GC_I_SKILLID_GUILD_THIEF_FORM = 3352
+Global Const $GC_I_SKILLID_GHOSTLY_PRIEST_FORM = 3353
+Global Const $GC_I_SKILLID_FLAME_SENTINEL_FORM = 3354
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3355
+Global Const $GC_I_SKILLID_SOLIDARITY = 3356
+Global Const $GC_I_SKILLID_THERE_CAN_BE_ONLY_ONE = 3357
+Global Const $GC_I_SKILLID_FIGHT_AGAINST_DESPAIR = 3358
+Global Const $GC_I_SKILLID_DEATHS_SUCCOR = 3359
+Global Const $GC_I_SKILLID_BATTLE_OF_ATTRITION = 3360
+Global Const $GC_I_SKILLID_FIGHT_OR_FLIGHT = 3361
+Global Const $GC_I_SKILLID_RENEWING_ESCAPE = 3362
+Global Const $GC_I_SKILLID_BATTLE_FRENZY = 3363
+Global Const $GC_I_SKILLID_THE_WAY_OF_ONE = 3364
+Global Const $GC_I_SKILLID_ONSLAUGHT_PVP = 3365
+Global Const $GC_I_SKILLID_HEART_OF_FURY_PVP = 3366
+Global Const $GC_I_SKILLID_WOUNDING_STRIKE_PVP = 3367
+Global Const $GC_I_SKILLID_PIOUS_FURY_PVP = 3368
+Global Const $GC_I_SKILLID_PARTY_MODE = 3369
+Global Const $GC_I_SKILLID_SMASH_OF_THE_TITANS = 3370
+Global Const $GC_I_SKILLID_MIRROR_SHATTER = 3371
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3372
+Global Const $GC_I_SKILLID_ILLUSION_OF_HASTE_PVP = 3373
+Global Const $GC_I_SKILLID_ILLUSION_OF_PAIN_PVP = 3374
+Global Const $GC_I_SKILLID_AURA_OF_RESTORATION_PVP = 3375
+Global Const $GC_I_SKILLID_SHAPESHIFT = 3376
+Global Const $GC_I_SKILLID_GOLEM_DISGUISE = 3377
+Global Const $GC_I_SKILLID_PHASE_SHIELD = 3378
+Global Const $GC_I_SKILLID_REACTOR_BURST = 3379
+; Global Const $GC_I_SKILLIDID_ILL_BE_BACK = 3380
+Global Const $GC_I_SKILLID_ANNIHILATOR_STRIKE = 3381
+Global Const $GC_I_SKILLID_ANNIHILATOR_BEAM = 3382
+Global Const $GC_I_SKILLID_ANNIHILATOR_KNUCKLE = 3383
+Global Const $GC_I_SKILLID_ANNIHILATOR_TOSS = 3384
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3385
+Global Const $GC_I_SKILLID_WEB_OF_DISRUPTION_PVP = 3386
+Global Const $GC_I_SKILLID_CHAIN_COMBO = 3387
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3388
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3389
+Global Const $GC_I_SKILLID_ALL_IN = 3390
+Global Const $GC_I_SKILLID_JACK_OF_ALL_TRADES = 3391
+Global Const $GC_I_SKILLID_AMATEUR_HOUR = 3392
+Global Const $GC_I_SKILLID_ODRANS_RAZOR = 3393
+Global Const $GC_I_SKILLID_LIKE_A_BOSS = 3394
+Global Const $GC_I_SKILLID_THE_BOSS = 3395
+Global Const $GC_I_SKILLID_LIGHTNING_HAMMER_PVP = 3396
+Global Const $GC_I_SKILLID_ELEMENTAL_FLAME_PVP = 3397
+Global Const $GC_I_SKILLID_SLIPPERY_GROUND_PVP = 3398
+Global Const $GC_I_SKILLID_DISGUISED_WHEN_USING_EVERLASTING_TONICS__EXCEPT_EVERLASTING_LEGIONNAIRE_TONIC = 3399
+Global Const $GC_I_SKILLID_DISGUISED_WHEN_USING_NON_EVERLASTING_TONICS = 3400
+Global Const $GC_I_SKILLID_DISGUISED_VERIFICATION_REQUESTED = 3401
+Global Const $GC_I_SKILLID_TONIC_TIPSINESS = 3402
+Global Const $GC_I_SKILLID_PARTING_GIFT = 3403
+Global Const $GC_I_SKILLID_GIFT_OF_BATTLE = 3404
+Global Const $GC_I_SKILLID_ROLLING_START = 3405
+Global Const $GC_I_SKILLID_DISGUISED_WHEN_USING_EVERLASTING_LEGIONNAIRE_TONIC = 3406
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3407
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3408
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3409
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3410
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3411
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3412
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3413
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3414
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3415
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3416
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3417
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3418
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3419
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3420
+; Global Const $GC_I_SKILLIDID_UNKNOW = 3421
+Global Const $GC_I_SKILLID_TIME_WARD = 3422
+Global Const $GC_I_SKILLID_SOUL_TAKER = 3423
+Global Const $GC_I_SKILLID_OVER_THE_LIMIT = 3424
+Global Const $GC_I_SKILLID_JUDGMENT_STRIKE = 3425
+Global Const $GC_I_SKILLID_SEVEN_WEAPONS_STANCE = 3426
+Global Const $GC_I_SKILLID_TOGETHER_AS_ONE = 3427
+Global Const $GC_I_SKILLID_SHADOW_THEFT = 3428
+Global Const $GC_I_SKILLID_WEAPONS_OF_THREE_FORGES = 3429
+Global Const $GC_I_SKILLID_VOW_OF_REVOLUTION = 3430
+Global Const $GC_I_SKILLID_HEROIC_REFRAIN = 3431
 #EndRegion SkillIDs
+
+#Region Skill Array Info
+;~ 0: SkillID
+
+;~ 1: SkillName
+
+;~ 2: Energy
+
+;~ 3: Energy +30%
+
+;~ 4: Campaign
+;~     0 = Core
+;~     1 = Prophecy
+;~     2 = Faction
+;~     3 = Nightfall
+;~     4 = EotN
+
+;~ 5: Type
+;~     3 = Stance
+;~     4 = Hex
+;~     5 = Spell
+;~     6 = Enchantment Spell
+;~     7 = Signet
+;~     8 = Condition
+;~     9 = Well
+;~     10 = Skill
+;~     11 = Ward
+;~     12 = Glyph
+;~     14 = Attack
+;~     15 = Shout
+;~     19 = Preparation
+;~     21 = Trap
+;~     22 = Ritual
+;~     24 = Item Spell
+;~     25 = Weapon Spell
+;~     26 = Form
+;~     27 = Chant
+;~     28 = EchoRefrain
+;~     29 = Disguise
+
+;~ 6: Special
+;~     1 = Exhaustion
+;~     2 = Touch Skill
+;~     3 = Touch Skill with Exhaustion
+;~     4 = Elite Skill
+;~     5 = Elite Skill with Exhaustion
+;~     6 = Elite Touch Skill
+;~     8 = Half Range Skill
+;~     12 = Elite Skill Half Range
+;~     32 = easily interrupted
+;~     64 = 50% failire below 4 attribute
+;~     65 = 50% failire below 4 attribute causes Knockdown
+;~     68 = 50% failire below 4 attribute Elite Skill
+;~     128 = -40 Armor while using
+;~     256 = preparation, traps or ritual
+;~     260 = preparation, traps or ritual Elite Skill
+;~     288 = Traps dealing Piercing Damage
+;~     292 = Smoke Trap (not sure why)
+;~     384 = Preparation -40 Armorw while using
+;~     512 = Hex Health Degeneration
+;~     516 = Elite Hex Health Degeneration
+;~     2048 = Ressurection Spell
+;~     2050 = Touch Ressurection Spell
+;~     2052 = Elite Ressurcetion Spell
+;~     2056 = Ressurection Spell half range
+;~     2304 = Ressurection Spirit
+;~     4100 = 50% failure below 8 Expertise
+;~     8192 = Condition
+;~     32768 = Skill Must follow Off-Hand Attack
+;~     32772 = Elite Skill Must follow Off-Hand Attack
+;~     262144 = Skill Exploits Fresh Corpse
+;~     262148 = Elite Skill Exploits Fresh Corpse
+;~     262208 = Skill Exploits Fresh Corpse 50% failure below 5 Death Magic
+;~     262656 = Skill Exploits Fresh Corpse - Health Degeneration
+;~     524288 = PVE Skill
+;~     524290 = PVE Skill Touch
+;~     524292 = PVE Elite Skill
+;~     524304 = Caps Elite Skill
+;~     524544 = PVE Ritual Spkill
+;~     524576 = PVE Trap SKill
+;~     524800 = PVE HEx Health Degen Spell
+;~     526336 = Ressurection Spell Sunspear
+;~     8388608 = Flash Enchantment Skill
+;~     8388612 = Elite Flash Enchantment Skill
+;~     8388672 = Flash Enchantment Skill 50% failure below 5 Windprayer
+;~     1048576 = boss skill ?
+
+;~ 7: ComboReq
+;~     1 = Skill must follow a Dual Attack
+;~     2 = Skill must follow a Lead Attack
+;~     4 = Skill must follow a Off-Hand Attack
+;~     16 = Skill must strike a Hexed foe
+
+;~ 8: Effect1
+;~     1 = Bleeding
+;~     2 = Blinded
+;~     4 = Burning
+;~     8 = Crippled
+;~     16 = Deep Wound
+;~     32 = Diseased
+;~     64 = 50% slower Movement
+;~     128 = Knock Down
+;~     256 = Poisoned
+;~     512 = Dazed
+;~     1024 = Weakness
+;~     2048 = Slowed (nr 64 could be included here)
+;~     4096 = Remove condition and heal (Only heal ?)
+
+;~ 9: Effect2
+;~     0 = all others that are not categorized but could maybe
+;~     1 = Interrupting Skill
+;~     2 = Healing Spells that cant be casted on oneself (Blood Bond is wrong at this point)
+;~     4 = Healing Skills that are only Selftargetable
+;~     6 = Healing Skills (not sure if there is smth in common between all of those)
+;~     8 = Ressurection Skill
+;~     16 = Ressurection Signets
+;~     32 = Sacrificing Skills (think Blood of the Aggressor is wrong here)
+;~     36 = Sacrificing Skills with Selfheal effect
+;~     38 = Sacrificing Skills with Healing others Effect
+;~     128 = Blocking Skill
+;~     256 = Energy Gain Skill
+;~     257 = Energy Gain Interrupting Spell (could be added elsewhere)
+;~     288 = Energy Gain Spells (could be added Elsewhere)
+;~     320 = Energy Steal Skills
+;~     512 = Close Range Spells
+;~     516 = Still Close but a bit wider Range Spells
+;~     544 = Touch Skills (but just 3 - can be put elsewhere)
+;~     768 = Energy Degen with Energy Gain (just one skill can be put elsewhere)
+;~     1024 = Skill effecting surrounding Enemies (just one - can be put elsewhere)
+;~     2048 = Plain Hex Removal Skills
+;~     2054 = Hex Removal Skill with Healing (just one spell can be put elsewhere)
+;~     2304 = Hex Removal Skill with Energy gain or replacement of skill with removed Hex (jsut 2 Skills)
+;~     4096 = Plain Condition Removal Skills
+;~     4102 = Condition Removal Skills under certain circumstances (just 2 Skills - can be put elsewhere)
+;~     4608 = Condition Transfer Skill (only one - can be put elsewhere)
+;~     6144 = Condition and Hex Removal Skills without any requirement (only 2 Skills)
+;~     6150 = Healing Skill with Condition and Hex Remove (only 1 Skill)
+;~     8192 = Remove of Dervish Enchantments Skills (Destructive was Glaive is wrong here)
+;~     8196 = Dervish Heal Skill with Derv Ench Removal + Hex Removal (just 1 Skill)
+;~     8198 = Dervish Heal Signet with Derv Ench Removal + Faster Recast (just 1 Skill)
+;~     8448 = Elementalist Loose all Enchantment Skill + Energy Regen (just 1 Skill)
+;~     14336 = Heal Spell with Cond and Hex Removal + Loose all Enchantments
+;~     16384 = Reversal of Damage Spells (a lot are missing in this category)
+;~     32768 = Attack Speed and Movement Speed Skills (a lot are missing in this category)
+;~     65536 = Attack that knocks you down when Foe has one of many conditions (just 2 Skills)
+;~     131072 = Elemental Attunement Enchantment
+
+;~ 10: Requirement
+;~     1 = Bleeding
+;~     2 = Blinded
+;~     4 = Burning
+;~     8 = Crippled
+;~     9 = Crippled + Bleeding
+;~     16 = Deep Wound
+;~     17 = Bleeding + Deep Wound
+;~     25 = Deep Wound or Crippled or Bleeding or Weakness (this warrior skills that include one of these randomly)
+;~     32 = Diseased
+;~     64 = 50% slower Movement
+;~     128 = Knock Down
+;~     136 = Crippled + Knock Down
+;~     256 = Poisoned
+;~     512 = Dazed
+;~     514 = Dazed + Blinded
+;~     1024 = Weakness
+;~     1040 = Weakness + Deep Wound
+;~     1152 = Knock Down + Weakness
+;~     2048 = Slowed (64 could be included here)
+
+;~ 11: WeaponReq
+;~     1 = all Axe Attacks
+;~     2 = all Bow Attacks
+;~     8 = all Dagger Attacks
+;~     16 = all Hammer Attacks
+;~     32 = all Scythe Attacks
+;~     64 = all Spear Attacks
+;~     70 = Ranged Attack non Weapon Requirement
+;~     128 = all Sword Attacks
+;~     185 = all Melee Attack non Weapon Requirement
+
+;~ 12: Profession
+;~     0 = No class
+;~     1 = Warrior
+;~     2 = Ranger
+;~     3 = Monk
+;~     4 = Necromancer
+;~     5 = Mesmer
+;~     6 = Elementalist
+;~     7 = Assassin
+;~     8 = Ritualist
+;~     9 = Paragon
+;~     10 = Dervish
+
+;~ 13: Attribute
+;~     Fast_Casting = 0
+;~     Illusion_Magic = 1
+;~     Domination_Magic = 2
+;~     Inspiration_Magic = 3
+;~     Blood_Magic = 4
+;~     Death_Magic = 5
+;~     Soul_Reaping = 6
+;~     Curses = 7
+;~     Air_Magic = 8
+;~     Earth_Magic = 9
+;~     Fire_Magic = 10
+;~     Water_Magic = 11
+;~     Energy_Storage = 12
+;~     Healing_Prayers = 13
+;~     Smiting_Prayers = 14
+;~     Protection_Prayers = 15
+;~     Divine_Favor = 16
+;~     Strength = 17
+;~     Axe_Mastery = 18
+;~     Hammer_Mastery = 19
+;~     Swordsmanship = 20
+;~     Tactics = 21
+;~     Beast_Mastery = 22
+;~     Expertise = 23
+;~     Wilderness_Survival = 24
+;~     Marksmanship = 25
+;~     Dagger_Mastery = 29
+;~     Deadly_Arts = 30
+;~     Shadow_Arts = 31
+;~     Communing = 32
+;~     Restoration_Magic = 33
+;~     Channeling_Magic = 34
+;~     Critical_Strikes = 35
+;~     Spawning_Power = 36
+;~     Spear_Mastery = 37
+;~     Command = 38
+;~     Motivation = 39
+;~     Leadership = 40
+;~     Scythe_Mastery = 41
+;~     Wind_Prayers = 42
+;~     Earth_Prayers = 43
+;~     Mysticism = 44
+;~     AttrID_None = 0xFF
+
+;~ 14: PvPID
+
+;~ 15: Combo
+;~     1 = Lead Attack
+;~     2 = Off-Hand Attack
+;~     3 = Dual Attack
+
+;~ 16: Target
+;~     0 = Self
+;~     1 = Spirit, Animal, Corpse
+;~     3 = Ally (Player included)
+;~     4 = Other ally
+;~     5 = Enemy
+;~     6 = Dead Ally
+;~     14 = Minion
+;~     16 = Ground
+
+;~ 17: EquipType
+;~     0 =
+;~     1 =
+;~     2 =
+
+;~ 18: Adrenaline
+
+;~ 19: Activation
+
+;~ 20: Aftercast
+
+;~ 21: Duration0
+;~     131072 = Bonds
+
+;~ 22: Duration15
+;~     131072 = Bonds
+    
+;~ 23: Recharge
+
+;~ 24: Scale0
+
+;~ 25: Scale15
+
+;~ 26: BonusScale0
+
+;~ 27: BonusScale15
+
+;~ 28: AoERange
+;~     Adjacent = 156
+;~     Nearby = 240
+;~     Area = 312
+;~     Earshot = 1000
+;~     Spell_casting = 1085
+;~     Spirit = 2500
+;~     Compass = 5000
+
+;~ 29: ConstEffect
+;~     Adjacent = 156
+;~     Nearby = 240
+;~     Area = 312
+;~     Earshot = 1000
+;~     Spell_casting = 1085
+;~     Spirit = 2500
+;~     Compass = 5000
+#EndRegion Skill Array Info
+
+#Region Skill Array
+Global Enum	$GC_I_SKILL_ID, $GC_S_SKILL_NAME, $GC_I_SKILL_ENERGY_REQ, $GC_F_SKILL_ENERGY_REQ_QZ, $GC_I_SKILL_CAMPAIGN, _
+    $GC_I_SKILL_TYPE, $GC_I_SKILL_SPECIAL, $GC_I_SKILL_COMBO_REQ, $GC_I_SKILL_EFFECT_1, $GC_I_SKILL_EFFECT_2, _
+	$GC_I_SKILL_REQ, $GC_I_SKILL_WEAPON_REQ, $GC_I_SKILL_PROFESSION, $GC_I_SKILL_ATTRIBUTE, $GC_I_SKILL_PVP_ID, _
+    $GC_I_SKILL_COMBO_TYPE, $GC_I_SKILL_TARGET_TYPE, $GC_I_SKILL_EQUIP_TYPE, $GC_I_SKILL_ADRENALINE_REQ, $GC_F_SKILL_ACTIVATION_TIME, _
+    $GC_F_SKILL_AFTERCAST, $GC_I_SKILL_DURATION_0, $GC_I_SKILL_DURATION_15, $GC_I_SKILL_RECHARGE_TIME, $GC_I_SKILL_SCALE_0, _
+    $GC_I_SKILL_SCALE_15, $GC_I_SKILL_BONUS_SCALE_0, $GC_I_SKILL_BONUS_SCALE_15, $GC_I_SKILL_AOE_RANGE, $GC_I_SKILL_CONST_EFFECT
+
+Global Const $GC_I_SKILL_DATA_ROWS = 3433
+Global Const $GC_I_SKILL_DATA_COLUMNS = 30
+
+Global Const $GC_AMX2_SKILL_DATA[$GC_I_SKILL_DATA_ROWS][$GC_I_SKILL_DATA_COLUMNS] = [ _
+[0, "No Skill", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1, "Healing Signet", 0, 0, 0, 7, 128, 0, 0, 4, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 2, 0.75, 0, 0, 4, 82, 172, 0, 0, 0, 0], _
+[2, "Resurrection Signet", 0, 0, 0, 7, 2048, 0, 0, 16, 0, 0, 0, 51, 3433, 0, 6, 1, 0, 3, 0, 0, 0, 0, 100, 100, 25, 25, 0, 0], _
+[3, "Signet of Capture", 0, 0, 0, 7, 524304, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 2, 0.25, 0, 0, 2, 0, 0, 0, 0, 2000, 0], _
+[4, "BAMPH", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 0, 0, 0, 999, 999, 0, 0, 0, 0], _
+[5, "Power Block", 15, 19.5, 1, 5, 4, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 20, 1, 12, 0, 0, 0, 0], _
+[6, "Mantra of Earth", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 30, 90, 20, 26, 50, 2, 2, 0, 0], _
+[7, "Mantra of Flame", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 30, 90, 20, 26, 50, 2, 2, 0, 0], _
+[8, "Mantra of Frost", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 30, 90, 20, 26, 50, 2, 2, 0, 0], _
+[9, "Mantra of Lightning", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 30, 90, 20, 26, 50, 2, 2, 0, 0], _
+[10, "Hex Breaker", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 0, 1, 0, 0, 0, 5, 80, 15, 10, 46, 0, 0, 0, 0], _
+[11, "Distortion", 5, 6.5, 1, 3, 0, 0, 0, 128, 0, 0, 5, 1, 3433, 0, 0, 1, 0, 0, 0, 1, 5, 8, 75, 75, 2, 2, 0, 0], _
+[12, "Mantra of Celerity", 15, 19.5, 1, 3, 4, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 0, 2, 0, 0, 0, 30, 90, 20, 50, 50, 3, 3, 0, 0], _
+[13, "Mantra of Recovery", 5, 6.5, 0, 3, 4, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 0, 1, 0, 0, 0, 5, 20, 15, 33, 33, 0, 0, 0, 0], _
+[14, "Mantra of Persistence", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 5, 25, 15, 10, 40, 0, 0, 0, 0], _
+[15, "Mantra of Inscriptions", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 5, 25, 20, 10, 40, 0, 0, 0, 0], _
+[16, "Mantra of Concentration", 5, 6.5, 1, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 1, 38, 30, 0, 0, 0, 0, 0, 0], _
+[17, "Mantra of Resolve", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3063, 0, 0, 1, 0, 0, 0, 30, 90, 20, 10, 4, 0, 0, 0, 0], _
+[18, "Mantra of Signets", 5, 6.5, 1, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3179, 0, 0, 1, 0, 0, 0, 10, 40, 20, 3, 3, 5, 60, 0, 0], _
+[19, "Fragility", 5, 6.5, 0, 4, 0, 0, 0, 0, 0, 0, 5, 1, 2998, 0, 5, 1, 0, 1, 0.75, 8, 20, 5, 5, 20, 0, 0, 156, 0], _
+[20, "Confusion", 15, 19.5, 1, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 2, 0, 2, 0.75, 8, 20, 20, 0, 0, 0, 0, 0, 0], _
+[21, "Inspired Enchantment", 10, 13, 1, 5, 0, 0, 0, 256, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 1, 0.75, 20, 20, 0, 3, 15, 0, 0, 0, 0], _
+[22, "Inspired Hex", 5, 6.5, 1, 5, 0, 0, 0, 2304, 0, 0, 5, 3, 3433, 0, 3, 1, 0, 1, 0.75, 20, 20, 0, 4, 10, 0, 0, 0, 0], _
+[23, "Power Spike", 5, 6.5, 0, 5, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 12, 30, 120, 0, 0, 0, 0], _
+[24, "Power Leak", 10, 13, 1, 5, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 20, 3, 17, 0, 0, 0, 0], _
+[25, "Power Drain", 5, 6.5, 0, 5, 0, 0, 0, 257, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 20, 1, 31, 0, 0, 0, 0], _
+[26, "Empathy", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3151, 0, 5, 1, 0, 2, 0.75, 5, 15, 10, 10, 55, 1, 15, 0, 0], _
+[27, "Shatter Delusions", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3180, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 6, 15, 75, 0, 0, 156, 0], _
+[28, "Backfire", 15, 19.5, 0, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 3, 0.75, 10, 10, 20, 35, 140, 0, 0, 0, 0], _
+[29, "Blackout", 10, 13, 1, 10, 2, 0, 0, 512, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 12, 2, 6, 5, 5, 0, 0], _
+[30, "Diversion", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 3, 0.75, 6, 6, 12, 10, 56, 0, 0, 0, 0], _
+[31, "Conjure Phantasm", 10, 13, 0, 4, 512, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1, 0.75, 2, 16, 5, 5, 5, 0, 0, 0, 0], _
+[32, "Illusion of Weakness", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 0, 1, 0, 2, 0.75, 196608, 196608, 30, 50, 240, 25, 25, 0, 0], _
+[33, "Illusionary Weaponry", 5, 6.5, 1, 6, 4, 0, 0, 512, 0, 0, 5, 1, 3181, 0, 0, 1, 0, 1, 0.75, 30, 30, 25, 8, 40, 5, 5, 0, 0], _
+[34, "Sympathetic Visage", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 3, 1, 0, 1, 0.75, 4, 10, 20, 3, 3, 0, 0, 156, 0], _
+[35, "Ignorance", 15, 19.5, 0, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 1, 0.75, 8, 20, 10, 0, 0, 0, 0, 0, 0], _
+[36, "Arcane Conundrum", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 2, 0.75, 5, 15, 20, 200, 200, 1, 7, 156, 0], _
+[37, "Illusion of Haste", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 5, 1, 3373, 0, 0, 1, 0, 1, 0.75, 5, 11, 5, 33, 33, 3, 3, 0, 0], _
+[38, "Channeling", 5, 6.5, 1, 6, 0, 0, 0, 256, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 1, 0.75, 8, 56, 15, 1, 1, 0, 0, 312, 0], _
+[39, "Energy Surge", 5, 6.5, 0, 5, 4, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 15, 1, 10, 9, 9, 240, 0], _
+[40, "Ether Feast", 5, 6.5, 0, 5, 0, 0, 0, 4, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 3, 3, 20, 65, 0, 0], _
+[41, "Ether Lord", 5, 6.5, 1, 4, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 2, 0.75, 5, 10, 20, 1, 3, 0, 0, 0, 0], _
+[42, "Energy Burn", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 20, 1, 10, 9, 9, 0, 0], _
+[43, "Clumsiness", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 2, 0.75, 4, 4, 8, 10, 92, 0, 0, 156, 0], _
+[44, "Phantom Pain", 5, 6.5, 1, 4, 512, 0, 16, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 2, 0.75, 10, 10, 15, 1, 4, 5, 20, 0, 0], _
+[45, "Ethereal Burden", 15, 19.5, 1, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1.5, 0.75, 10, 10, 30, 50, 50, 10, 18, 0, 0], _
+[46, "Guilt", 5, 6.5, 1, 4, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 2, 0.75, 6, 6, 25, 5, 14, 0, 0, 0, 0], _
+[47, "Ineptitude", 10, 13, 1, 4, 4, 0, 2, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1, 0.75, 4, 4, 15, 30, 135, 0, 0, 156, 0], _
+[48, "Spirit of Failure", 15, 19.5, 1, 4, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 3, 0.75, 30, 30, 20, 25, 25, 1, 3, 0, 0], _
+[49, "Mind Wrack", 5, 6.5, 0, 4, 0, 0, 0, 0, 0, 0, 5, 2, 2734, 0, 5, 1, 0, 1, 0.75, 5, 40, 7, 15, 100, 5, 25, 0, 1], _
+[50, "Wastrels Worry", 5, 6.5, 1, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 3, 3, 1, 20, 100, 0, 0, 156, 0], _
+[51, "Shame", 10, 13, 1, 4, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 2, 0.75, 6, 6, 30, 5, 14, 0, 0, 0, 0], _
+[52, "Panic", 10, 13, 1, 4, 4, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 16, 1, 0, 1, 0.75, 1, 10, 15, 2, 2, 10, 82, 240, 240], _
+[53, "Migraine", 10, 13, 1, 4, 516, 0, 0, 0, 0, 0, 5, 1, 3183, 0, 5, 1, 0, 2, 0.75, 5, 20, 12, 1, 8, 200, 200, 0, 0], _
+[54, "Crippling Anguish", 5, 6.5, 0, 4, 516, 0, 0, 0, 0, 0, 5, 1, 3152, 0, 5, 1, 0, 1, 0.75, 5, 20, 12, 1, 8, 50, 50, 0, 50], _
+[55, "Fevered Dreams", 10, 13, 1, 4, 4, 0, 0, 0, 0, 0, 5, 1, 3289, 0, 5, 1, 0, 2, 0.75, 10, 25, 10, 0, 0, 1, 3, 312, 0], _
+[56, "Soothing Images", 15, 19.5, 0, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 16, 1, 0, 2, 0.75, 8, 20, 8, 0, 0, 0, 0, 156, 0], _
+[57, "Cry of Frustration", 10, 13, 0, 5, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 15, 15, 75, 0, 0, 312, 0], _
+[58, "Signet of Midnight", 0, 0, 1, 7, 6, 0, 2, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 10, 0, 0, 15, 15, 0, 0], _
+[59, "Signet of Weariness", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 30, 3, 8, 1, 12, 240, 0], _
+[60, "Signet of Illusions beta version", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 0, 2, 0, 1, 0.75, 3, 15, 10, 0, 0, 0, 0, 0, 0], _
+[61, "Leech Signet", 0, 0, 0, 7, 0, 0, 0, 1, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 30, 3, 15, 0, 0, 0, 0], _
+[62, "Signet of Humility", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 3, 0.75, 0, 0, 20, 1, 16, 10, 10, 0, 0], _
+[63, "Keystone Signet", 0, 0, 1, 7, 4, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 0, 1, 0, 1, 0.75, 20, 20, 15, 15, 60, 0, 6, 156, 0], _
+[64, "Mimic", 15, 19.5, 1, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 2, 0, 3, 0.75, 20, 20, 10, 0, 0, 0, 0, 0, 0], _
+[65, "Arcane Mimicry", 15, 19.5, 0, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 4, 1, 0, 2, 0.75, 20, 20, 60, 0, 0, 0, 0, 0, 0], _
+[66, "Spirit Shackles", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 3, 0.75, 5, 20, 8, 5, 5, 0, 0, 0, 0], _
+[67, "Shatter Hex", 10, 13, 0, 5, 0, 0, 0, 2048, 0, 0, 5, 2, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 10, 30, 120, 0, 0, 240, 0], _
+[68, "Drain Enchantment", 5, 6.5, 0, 5, 0, 0, 0, 256, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 20, 8, 17, 40, 120, 0, 0], _
+[69, "Shatter Enchantment", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 14, 100, 0, 0, 0, 0], _
+[70, "Disappear", 15, 19.5, 1, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 2, 0, 1, 0.75, 10, 10, 60, 0, 0, 0, 0, 0, 0], _
+[71, "Unnatural Signet alpha version", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 0, 2, 0, 15, 0.75, 60, 30, 75, 0, 0, 0, 0, 0, 0], _
+[72, "Elemental Resistance", 10, 13, 1, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 30, 90, 20, 40, 40, 24, 12, 0, 0], _
+[73, "Physical Resistance", 10, 13, 1, 3, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 0, 0, 30, 90, 20, 40, 40, 24, 12, 0, 0], _
+[74, "Echo", 5, 6.5, 0, 6, 4, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 1, 0, 1, 0.75, 30, 30, 10, 30, 30, 0, 0, 0, 0], _
+[75, "Arcane Echo", 15, 19.5, 0, 6, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 1, 0, 2, 0.75, 20, 20, 20, 20, 20, 0, 0, 0, 0], _
+[76, "Imagined Burden", 15, 19.5, 0, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1, 0.75, 8, 20, 30, 50, 50, 0, 0, 156, 0], _
+[77, "Chaos Storm", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 16, 1, 0, 2, 0.75, 10, 10, 30, 5, 25, 0, 2, 156, 0], _
+[78, "Epidemic", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 5, 0, 0, 0, 0, 156, 0], _
+[79, "Energy Drain", 5, 6.5, 0, 5, 4, 0, 0, 320, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 30, 2, 9, 3, 3, 0, 0], _
+[80, "Energy Tap", 5, 6.5, 0, 5, 0, 0, 0, 320, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 30, 4, 7, 2, 2, 0, 0], _
+[81, "Arcane Thievery", 10, 13, 1, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 1, 0.75, 5, 35, 0, 0, 0, 0, 0, 0, 0], _
+[82, "Mantra of Recall", 10, 13, 1, 6, 4, 0, 0, 256, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 1, 0.75, 20, 20, 30, 10, 25, 0, 0, 0, 0], _
+[83, "Animate Bone Horror", 10, 13, 1, 5, 262144, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 3, 0.75, 0, 0, 5, 1, 17, 0, 0, 0, 0], _
+[84, "Animate Bone Fiend", 25, 32.5, 0, 5, 262144, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 3, 0.75, 0, 0, 5, 1, 17, 0, 0, 0, 0], _
+[85, "Animate Bone Minions", 15, 19.5, 0, 5, 262144, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 3, 0.75, 0, 0, 5, 0, 12, 0, 0, 0, 0], _
+[86, "Grenths Balance", 10, 13, 0, 5, 4, 0, 0, 4, 0, 0, 4, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[87, "Veratas Gaze", 5, 6.5, 1, 5, 64, 0, 0, 32, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[88, "Veratas Aura", 15, 19.5, 1, 6, 64, 0, 0, 32, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 0.75, 0.75, 120, 300, 30, 33, 33, 0, 0, 312, 0], _
+[89, "Deathly Chill", 10, 13, 1, 5, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 5, 50, 5, 50, 0, 0], _
+[90, "Veratas Sacrifice", 10, 13, 1, 5, 0, 0, 0, 32, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 2, 0.75, 5, 10, 60, 10, 10, 15, 15, 5000, 3], _
+[91, "Well of Power", 5, 6.5, 1, 9, 262148, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 1, 0.75, 8, 20, 15, 1, 6, 2, 2, 312, 33], _
+[92, "Well of Blood", 10, 13, 0, 9, 262144, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 1, 0.75, 8, 20, 2, 1, 6, 33, 33, 312, 0], _
+[93, "Well of Suffering", 10, 13, 1, 9, 262656, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 1, 0.75, 10, 30, 10, 1, 6, 0, 0, 312, 0], _
+[94, "Well of the Profane", 25, 32.5, 0, 9, 262208, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 3, 0.75, 8, 20, 10, 40, 40, 0, 0, 312, 0], _
+[95, "Putrid Explosion", 10, 13, 0, 5, 262144, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 1, 1, 0, 1, 0.75, 0, 0, 5, 24, 120, 0, 0, 240, 0], _
+[96, "Soul Feast", 10, 13, 0, 5, 262144, 0, 0, 4, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 0, 50, 280, 0, 0, 0, 0], _
+[97, "Necrotic Traversal", 5, 6.5, 1, 5, 262144, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 0, 5, 20, 0, 0, 240, 0], _
+[98, "Consume Corpse", 10, 13, 1, 5, 262144, 0, 0, 288, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 0, 25, 100, 5, 20, 0, 0], _
+[99, "Parasitic Bond", 5, 6.5, 0, 4, 512, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 20, 20, 2, 1, 1, 30, 120, 0, 0], _
+[100, "Soul Barbs", 10, 13, 1, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 30, 30, 20, 15, 30, 0, 0, 0, 0], _
+[101, "Barbs", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 30, 30, 5, 1, 15, 0, 0, 0, 0], _
+[102, "Shadow Strike", 10, 13, 1, 5, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 15, 12, 48, 12, 48, 0, 0], _
+[103, "Price of Failure", 15, 19.5, 1, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 30, 30, 20, 1, 46, 25, 25, 0, 0], _
+[104, "Death Nova", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 3, 1, 0, 2, 0.75, 30, 30, 0, 26, 100, 15, 15, 156, 90], _
+[105, "Deathly Swarm", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 2, 0.75, 10, 10, 6, 30, 90, 0, 0, 312, 0], _
+[106, "Rotting Flesh", 15, 19.5, 0, 5, 0, 0, 32, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 3, 0.75, 0, 0, 3, 0, 0, 10, 25, 0, 0], _
+[107, "Virulence", 5, 6.5, 1, 5, 4, 0, 32, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 0, 0, 3, 15, 0, 0], _
+[108, "Suffering", 15, 19.5, 0, 4, 512, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 16, 1, 0, 1, 0.75, 6, 30, 10, 0, 3, 0, 0, 240, 0], _
+[109, "Life Siphon", 10, 13, 0, 4, 512, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 12, 24, 5, 1, 3, 0, 0, 0, 0], _
+[110, "Unholy Feast", 15, 19.5, 0, 5, 0, 0, 0, 516, 0, 0, 4, 4, 3058, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 8, 10, 65, 1, 4, 312, 0], _
+[111, "Awaken the Blood", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 1, 0.75, 20, 44, 45, 2, 2, 50, 50, 0, 0], _
+[112, "Desecrate Enchantments", 10, 13, 1, 5, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 16, 1, 0, 2, 0.75, 0, 0, 15, 6, 60, 4, 20, 240, 0], _
+[113, "Tainted Flesh", 5, 6.5, 0, 6, 4, 0, 32, 0, 0, 0, 4, 5, 3433, 0, 3, 1, 0, 1, 0.75, 20, 44, 0, 0, 0, 3, 15, 0, 0], _
+[114, "Aura of the Lich", 15, 19.5, 1, 6, 4, 0, 0, 131072, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 2, 0.75, 5, 45, 45, 1, 17, 1, 1, 0, 0], _
+[115, "Blood Renewal", 1, 1.3, 1, 6, 0, 0, 0, 36, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 1, 0.75, 7, 7, 7, 3, 6, 40, 190, 25, 0], _
+[116, "Dark Aura", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 3, 1, 0, 1, 0.75, 30, 30, 10, 5, 50, 5, 20, 156, 0], _
+[117, "Enfeeble", 5, 6.5, 1, 5, 0, 0, 1024, 0, 0, 0, 4, 7, 2859, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 5, 0, 0, 10, 30, 0, 0], _
+[118, "Enfeebling Blood", 1, 1.3, 0, 5, 0, 0, 1024, 32, 0, 0, 4, 7, 2885, 0, 16, 1, 0, 1, 0.75, 0, 0, 8, 10, 10, 5, 20, 240, 0], _
+[119, "Blood is Power", 1, 1.3, 0, 6, 4, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 4, 1, 0, 0.25, 0.75, 10, 10, 0, 33, 33, 3, 6, 0, 0], _
+[120, "Blood of the Master", 5, 6.5, 0, 5, 0, 0, 0, 32, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 2, 30, 116, 5, 5, 5000, 2], _
+[121, "Spiteful Spirit", 15, 19.5, 1, 4, 4, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 8, 20, 10, 5, 35, 0, 0, 156, 0], _
+[122, "Malign Intervention", 10, 13, 1, 4, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 5, 1, 17, 80, 80, 0, 0], _
+[123, "Insidious Parasite", 15, 19.5, 1, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 5, 15, 12, 15, 45, 0, 0, 0, 0], _
+[124, "Spinal Shivers", 10, 13, 1, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 10, 40, 15, 10, 5, 0, 0, 0, 0], _
+[125, "Wither", 10, 13, 1, 4, 516, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 5, 35, 10, 2, 4, 15, 75, 1, 0], _
+[126, "Life Transfer", 5, 6.5, 1, 4, 516, 0, 0, 4, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 6, 12, 20, 3, 8, 0, 0, 156, 0], _
+[127, "Mark of Subversion", 10, 13, 1, 4, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 2, 0.75, 6, 6, 30, 10, 92, 0, 0, 0, 0], _
+[128, "Soul Leech", 10, 13, 1, 4, 4, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 2, 0.75, 10, 10, 15, 16, 80, 0, 0, 0, 0], _
+[129, "Defile Flesh", 10, 13, 0, 4, 0, 0, 0, 32, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 5, 35, 10, 10, 10, 66, 66, 0, 0], _
+[130, "Demonic Flesh", 5, 6.5, 0, 6, 0, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 1, 0.75, 30, 60, 30, 5, 20, 80, 200, 156, 0], _
+[131, "Barbed Signet", 0, 0, 0, 7, 0, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 3, 15, 8, 8, 156, 0], _
+[132, "Plague Signet", 0, 0, 0, 7, 68, 0, 0, 4096, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 4, 100, 200, 0, 0, 0, 0], _
+[133, "Dark Pact", 1, 1.3, 0, 5, 0, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 2, 10, 10, 10, 48, 0, 0], _
+[134, "Order of Pain", 10, 13, 0, 6, 0, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 2, 0.75, 5, 5, 0, 17, 17, 3, 16, 5000, 0], _
+[135, "Faintheartedness", 10, 13, 0, 4, 512, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 3, 16, 8, 50, 50, 0, 3, 0, 0], _
+[136, "Shadow of Fear", 10, 13, 1, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 16, 1, 0, 2, 0.75, 5, 30, 5, 50, 50, 0, 0, 156, 0], _
+[137, "Rigor Mortis", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 8, 20, 20, 0, 0, 0, 0, 0, 0], _
+[138, "Dark Bond", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 2, 0.75, 30, 60, 20, 75, 75, 0, 0, 0, 0], _
+[139, "Infuse Condition", 5, 6.5, 1, 6, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 1, 0.75, 15, 60, 20, 75, 75, 0, 0, 0, 0], _
+[140, "Malaise", 5, 6.5, 1, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 5, 35, 2, 1, 1, 5, 50, 0, 0], _
+[141, "Rend Enchantments", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 20, 55, 25, 5, 9, 0, 0], _
+[142, "Lingering Curse", 15, 19.5, 0, 4, 516, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 6, 30, 10, 0, 3, 20, 20, 240, 0], _
+[143, "Strip Enchantment", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 0, 2, 5, 65, 0, 0], _
+[144, "Chilblains", 25, 32.5, 0, 5, 0, 0, 32, 32, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 8, 10, 44, 1, 2, 312, 10], _
+[145, "Signet of Agony", 0, 0, 0, 7, 0, 0, 0, 32, 0, 0, 4, 4, 3059, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 8, 10, 70, 10, 10, 240, 0], _
+[146, "Offering of Blood", 1, 1.3, 1, 5, 4, 0, 0, 288, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 15, 20, 20, 8, 20, 0, 0], _
+[147, "Dark Fury", 10, 13, 1, 6, 64, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 0.75, 0.75, 5, 5, 5, 17, 17, 25, 25, 5000, 0], _
+[148, "Order of the Vampire", 5, 6.5, 1, 6, 4, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 2, 0.75, 5, 5, 5, 3, 16, 17, 17, 5000, 0], _
+[149, "Plague Sending", 1, 1.3, 1, 5, 0, 0, 0, 32, 0, 0, 4, 7, 3433, 0, 16, 1, 0, 1, 0.75, 0, 0, 5, 10, 10, 1, 3, 156, 0], _
+[150, "Mark of Pain", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 30, 30, 20, 10, 40, 0, 0, 156, 0], _
+[151, "Feast of Corruption", 15, 19.5, 1, 5, 4, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 16, 1, 0, 2, 0.75, 0, 0, 20, 16, 80, 8, 40, 156, 0], _
+[152, "Taste of Death", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 14, 1, 0, 0.25, 0.75, 0, 0, 0, 100, 400, 0, 0, 0, 0], _
+[153, "Vampiric Gaze", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 18, 60, 0, 0, 0, 0], _
+[154, "Plague Touch", 5, 6.5, 0, 10, 2, 0, 0, 4608, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[155, "Vile Touch", 10, 13, 0, 10, 2, 0, 0, 512, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 2, 20, 65, 0, 0, 0, 0], _
+[156, "Vampiric Touch", 15, 19.5, 1, 10, 2, 0, 0, 544, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 2, 29, 74, 0, 0, 0, 0], _
+[157, "Blood Ritual", 5, 6.5, 1, 6, 2, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 4, 1, 0, 2, 0.75, 8, 14, 2, 17, 17, 3, 3, 0, 0], _
+[158, "Touch of Agony", 1, 1.3, 1, 10, 2, 0, 0, 544, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 3, 10, 10, 20, 58, 0, 0], _
+[159, "Weaken Armor", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 5, 0, 0, 0, 0, 156, 0], _
+[160, "Windborne Speed", 10, 13, 1, 6, 0, 0, 0, 32768, 0, 0, 6, 8, 3433, 0, 3, 1, 0, 0.75, 0.75, 5, 13, 5, 33, 33, 0, 0, 0, 0], _
+[161, "Lightning Storm", 25, 32.5, 1, 5, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 2, 0, 3, 0.75, 0, 0, 0, 14, 88, 0, 0, 240, 0], _
+[162, "Gale", 10, 13, 0, 5, 65, 0, 128, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 3, 3, 5, 0, 0, 0, 0, 0, 0], _
+[163, "Whirlwind", 5, 6.5, 1, 5, 0, 0, 128, 512, 0, 0, 6, 8, 3433, 0, 0, 1, 0, 0.75, 0.75, 2, 2, 8, 15, 75, 0, 0, 156, 240], _
+[164, "Elemental Attunement", 10, 13, 0, 6, 4, 0, 0, 131072, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 1, 0.75, 25, 60, 20, 50, 50, 1, 2, 0, 0], _
+[165, "Armor of Earth", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 0.75, 0.75, 30, 30, 15, 24, 60, 50, 14, 0, 0], _
+[166, "Kinetic Armor", 15, 19.5, 1, 6, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 3, 0.75, 8, 8, 60, 20, 80, 0, 0, 0, 0], _
+[167, "Eruption", 25, 32.5, 1, 5, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 16, 1, 0, 2, 0.75, 5, 5, 30, 10, 40, 10, 10, 240, 0], _
+[168, "Magnetic Aura", 10, 13, 1, 6, 0, 0, 0, 128, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 1, 5, 12, 100, 100, 10, 50, 1000, 312], _
+[169, "Earth Attunement", 10, 13, 0, 6, 0, 0, 0, 131072, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 36, 60, 30, 30, 30, 1, 1, 0, 0], _
+[170, "Earthquake", 25, 32.5, 1, 5, 1, 0, 128, 0, 0, 0, 6, 9, 3433, 0, 16, 1, 0, 3, 0.75, 0, 0, 15, 26, 100, 0, 0, 240, 0], _
+[171, "Stoning", 15, 19.5, 0, 5, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 45, 105, 1800, 1800, 0, 0], _
+[172, "Stone Daggers", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 1, 0.75, 1, 5, 0, 8, 33, 1800, 1800, 0, 0], _
+[173, "Grasping Earth", 10, 13, 1, 4, 0, 0, 64, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 0.75, 0.75, 5, 20, 12, 0, 0, 50, 50, 240, 0], _
+[174, "Aftershock", 10, 13, 0, 5, 0, 0, 0, 512, 128, 0, 6, 9, 3433, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 10, 26, 100, 10, 68, 240, 0], _
+[175, "Ward Against Elements", 15, 19.5, 1, 11, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 8, 20, 20, 24, 24, 0, 0, 312, 0], _
+[176, "Ward Against Melee", 15, 19.5, 0, 11, 0, 0, 0, 128, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 30, 50, 50, 0, 0, 312, 0], _
+[177, "Ward Against Foes", 15, 19.5, 0, 11, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 8, 20, 20, 50, 50, 0, 0, 312, 0], _
+[178, "Ether Prodigy", 5, 6.5, 1, 6, 5, 0, 0, 8448, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 1, 0.75, 8, 20, 5, 6, 6, 2, 2, 0, 0], _
+[179, "Incendiary Bonds", 10, 13, 1, 4, 1, 0, 4, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 3, 3, 7, 20, 80, 1, 3, 240, 0], _
+[180, "Aura of Restoration", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 6, 12, 3375, 0, 0, 1, 0, 0.25, 0.75, 60, 60, 20, 200, 500, 0, 1, 0, 0], _
+[181, "Ether Renewal", 10, 13, 1, 6, 4, 0, 0, 256, 0, 0, 6, 12, 2860, 0, 0, 1, 0, 1, 0.75, 5, 20, 30, 1, 4, 5, 20, 0, 0], _
+[182, "Conjure Flame", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 1, 0.75, 60, 60, 45, 5, 20, 0, 0, 0, 0], _
+[183, "Inferno", 10, 13, 0, 5, 0, 0, 0, 512, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 10, 30, 135, 0, 0, 156, 0], _
+[184, "Fire Attunement", 10, 13, 0, 6, 0, 0, 0, 131072, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 1, 0.75, 36, 60, 30, 30, 30, 1, 1, 0, 0], _
+[185, "Mind Burn", 5, 6.5, 0, 5, 5, 0, 4, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 15, 60, 1, 10, 156, 0], _
+[186, "Fireball", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 1.5, 0.75, 0, 0, 7, 7, 112, 1800, 1800, 156, 0], _
+[187, "Meteor", 5, 6.5, 0, 5, 1, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 2, 0.75, 0, 0, 30, 7, 112, 0, 0, 156, 0], _
+[188, "Flame Burst", 15, 19.5, 1, 5, 0, 0, 0, 512, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 5, 15, 120, 0, 0, 240, 0], _
+[189, "Rodgorts Invocation", 25, 32.5, 1, 5, 0, 0, 4, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 2, 0.75, 0, 0, 8, 15, 120, 1, 3, 240, 0], _
+[190, "Mark of Rodgort", 15, 19.5, 1, 4, 0, 0, 4, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 10, 35, 15, 0, 0, 1, 4, 240, 0], _
+[191, "Immolate", 10, 13, 0, 5, 0, 0, 4, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 20, 75, 1, 3, 0, 0], _
+[192, "Meteor Shower", 25, 32.5, 1, 5, 1, 0, 128, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 5, 0.75, 9, 9, 60, 7, 112, 3, 3, 156, 0], _
+[193, "Phoenix", 10, 13, 1, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 1.5, 0.75, 0, 0, 7, 20, 80, 10, 60, 240, 240], _
+[194, "Flare", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 0, 20, 65, 1800, 1800, 156, 0], _
+[195, "Lava Font", 10, 13, 1, 5, 0, 0, 0, 512, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 1.5, 0.75, 5, 5, 4, 5, 50, 0, 0, 156, 240], _
+[196, "Searing Heat", 15, 19.5, 1, 5, 0, 0, 4, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 2, 0.75, 5, 5, 25, 10, 40, 0, 0, 240, 0], _
+[197, "Fire Storm", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 2, 0.75, 10, 10, 20, 5, 35, 33, 33, 156, 0], _
+[198, "Glyph of Elemental Power", 5, 6.5, 0, 12, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 1, 0.75, 25, 25, 5, 0, 0, 10, 10, 0, 0], _
+[199, "Glyph of Energy", 5, 6.5, 1, 12, 4, 0, 0, 256, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 1, 0.75, 1, 3, 25, 10, 25, 1, 2, 3, 0], _
+[200, "Glyph of Lesser Energy", 5, 6.5, 0, 12, 0, 0, 0, 256, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 30, 10, 18, 2, 2, 0, 0], _
+[201, "Glyph of Concentration", 5, 6.5, 1, 12, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 10, 50, 50, 1, 1, 0, 0], _
+[202, "Glyph of Sacrifice", 5, 6.5, 1, 12, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 15, 30, 30, 0, 0, 0, 0], _
+[203, "Glyph of Renewal", 5, 6.5, 1, 12, 4, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 10, 0, 0, 0, 0, 0, 0], _
+[204, "Rust", 10, 13, 0, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 16, 1, 0, 1, 0.75, 5, 20, 8, 1, 10, 10, 70, 156, 200], _
+[205, "Lightning Surge", 10, 13, 0, 4, 4, 0, 128, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 3, 3, 10, 14, 100, 5, 20, 0, 25], _
+[206, "Armor of Frost", 5, 6.5, 1, 6, 0, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 0, 1, 0, 1, 0.75, 10, 34, 20, 40, 40, 1, 1, 0, 0], _
+[207, "Conjure Frost", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 0, 1, 0, 1, 0.75, 60, 60, 45, 5, 20, 0, 0, 0, 0], _
+[208, "Water Attunement", 10, 13, 0, 6, 0, 0, 0, 131072, 0, 0, 6, 11, 3433, 0, 0, 1, 0, 1, 0.75, 36, 60, 30, 30, 30, 1, 1, 0, 0], _
+[209, "Mind Freeze", 5, 6.5, 0, 4, 5, 0, 2048, 0, 0, 0, 6, 11, 2803, 0, 5, 1, 0, 1, 0.75, 1, 5, 5, 10, 60, 90, 90, 0, 0], _
+[210, "Ice Prison", 10, 13, 1, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 2, 0.75, 8, 20, 30, 66, 66, 0, 0, 0, 0], _
+[211, "Ice Spikes", 15, 19.5, 0, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 16, 1, 0, 1.5, 0.75, 2, 6, 10, 20, 80, 66, 66, 156, 0], _
+[212, "Frozen Burst", 15, 19.5, 1, 4, 0, 0, 2048, 512, 0, 0, 6, 11, 3433, 0, 0, 1, 0, 0.75, 0.75, 3, 8, 8, 10, 85, 66, 66, 240, 0], _
+[213, "Shard Storm", 10, 13, 1, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 2, 6, 10, 10, 85, 66, 66, 1800, 0], _
+[214, "Ice Spear", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 5, 5, 0, 10, 60, 1, 4, 240, 0], _
+[215, "Maelstrom", 25, 32.5, 0, 5, 1, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 16, 1, 0, 2, 0.75, 10, 10, 30, 10, 25, 0, 0, 156, 0], _
+[216, "Iron Mist", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 8, 15, 20, 25, 25, 15, 15, 0, 3], _
+[217, "Crystal Wave", 15, 19.5, 1, 5, 0, 0, 0, 512, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 15, 10, 70, 5, 15, 156, 0], _
+[218, "Obsidian Flesh", 25, 32.5, 0, 6, 4, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 8, 20, 30, 20, 20, 50, 50, 2, 0], _
+[219, "Obsidian Flame", 5, 6.5, 0, 5, 1, 0, 0, 0, 0, 0, 6, 9, 2809, 0, 5, 1, 0, 1.5, 0.75, 0, 0, 5, 22, 112, 0, 0, 0, 0], _
+[220, "Blinding Flash", 10, 13, 0, 5, 0, 0, 2, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 8, 0, 0, 3, 8, 0, 0], _
+[221, "Conjure Lightning", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 0, 1, 0, 1, 0.75, 60, 60, 45, 5, 20, 0, 0, 0, 0], _
+[222, "Lightning Strike", 5, 6.5, 0, 4, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 3, 3, 5, 5, 50, 0, 0, 0, 0], _
+[223, "Chain Lightning", 10, 13, 1, 5, 1, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 6, 10, 85, 0, 0, 240, 0], _
+[224, "Enervating Charge", 10, 13, 0, 5, 0, 0, 1024, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 25, 50, 5, 20, 0, 0], _
+[225, "Air Attunement", 10, 13, 0, 6, 0, 0, 0, 131072, 0, 0, 6, 8, 3433, 0, 0, 1, 0, 1, 0.75, 36, 60, 30, 30, 30, 1, 1, 0, 0], _
+[226, "Mind Shock", 5, 6.5, 1, 5, 5, 0, 128, 0, 0, 0, 6, 8, 2804, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 10, 50, 0, 0, 0, 0], _
+[227, "Glimmering Mark", 10, 13, 1, 4, 4, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 10, 10, 15, 5, 25, 3, 3, 156, 0], _
+[228, "Thunderclap", 10, 13, 1, 5, 4, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 3, 3, 8, 10, 50, 5, 20, 156, 25], _
+[229, "Lightning Orb", 15, 19.5, 0, 5, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 5, 10, 100, 1800, 1800, 0, 0], _
+[230, "Lightning Javelin", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 15, 50, 1, 10, 100, 0], _
+[231, "Shock", 5, 6.5, 1, 10, 3, 0, 128, 512, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 10, 10, 60, 0, 0, 0, 0], _
+[232, "Lightning Touch", 5, 6.5, 0, 10, 2, 0, 0, 0, 2048, 0, 6, 8, 3433, 0, 5, 1, 0, 0.75, 0.75, 1, 10, 10, 10, 60, 1, 4, 156, 0], _
+[233, "Swirling Aura", 10, 13, 1, 6, 0, 0, 0, 128, 0, 0, 6, 11, 3433, 0, 0, 1, 0, 1, 0.75, 5, 5, 15, 1, 6, 50, 50, 1000, 312], _
+[234, "Deep Freeze", 25, 32.5, 0, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 16, 1, 0, 2, 0.75, 10, 10, 15, 10, 85, 66, 66, 312, 0], _
+[235, "Blurred Vision", 10, 13, 0, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 4, 10, 12, 50, 50, 0, 0, 156, 0], _
+[236, "Mist Form", 5, 6.5, 1, 6, 4, 0, 0, 0, 0, 0, 6, 11, 2805, 0, 0, 1, 0, 1, 0.75, 10, 45, 20, 33, 33, 50, 250, 1000, 105], _
+[237, "Water Trident", 5, 6.5, 1, 5, 4, 0, 128, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 3, 10, 90, 0, 0, 2400, 156], _
+[238, "Armor of Mist", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 0, 1, 0, 1, 0.75, 8, 20, 30, 10, 40, 33, 33, 0, 0], _
+[239, "Ward Against Harm", 15, 19.5, 1, 11, 4, 0, 0, 0, 0, 0, 6, 11, 2806, 0, 0, 1, 0, 1, 0.75, 5, 15, 20, 12, 24, 1, 3, 312, 20], _
+[240, "Smite", 10, 13, 1, 5, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 10, 55, 10, 35, 156, 0], _
+[241, "Life Bond", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 2, 0.75, 131072, 131072, 0, 3, 30, 0, 0, 0, 0], _
+[242, "Balthazars Spirit", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 0, 1, 1, 2, 5, 0, 0], _
+[243, "Strength of Honor", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 3, 14, 2999, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 15, 5, 25, 0, 0, 0, 0], _
+[244, "Life Attunement", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 0, 14, 50, 0, 0, 0, 0], _
+[245, "Protective Spirit", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 5, 23, 5, 10, 10, 0, 0, 0, 0], _
+[246, "Divine Intervention", 5, 6.5, 0, 6, 0, 0, 0, 16384, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 0.25, 0.75, 10, 10, 30, 26, 240, 0, 0, 0, 0], _
+[247, "Symbol of Wrath", 5, 6.5, 1, 5, 0, 0, 0, 512, 0, 0, 3, 14, 3433, 0, 0, 1, 0, 2, 0.75, 5, 5, 30, 8, 32, 0, 0, 156, 0], _
+[248, "Retribution", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 0, 33, 33, 5, 20, 0, 0], _
+[249, "Holy Wrath", 10, 13, 1, 6, 0, 0, 0, 16384, 0, 0, 3, 14, 3433, 0, 4, 1, 0, 1, 0.75, 10, 30, 10, 1, 10, 5, 50, 66, 0], _
+[250, "Essence Bond", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 0, 1, 1, 0, 0, 0, 0], _
+[251, "Scourge Healing", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 2, 0.75, 30, 30, 5, 15, 80, 0, 0, 0, 0], _
+[252, "Banish", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 20, 56, 0, 0, 0, 0], _
+[253, "Scourge Sacrifice", 10, 13, 1, 4, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 8, 20, 5, 100, 100, 0, 0, 156, 0], _
+[254, "Vigorous Spirit", 5, 6.5, 1, 6, 0, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.25, 0.75, 30, 30, 4, 5, 20, 0, 0, 0, 0], _
+[255, "Watchful Spirit", 15, 19.5, 1, 6, 0, 0, 4096, 6, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 1, 0.75, 131072, 131072, 5, 2, 2, 30, 180, 0, 0], _
+[256, "Blessed Aura", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 2, 0.75, 131072, 131072, 2, 10, 35, 0, 0, 0, 0], _
+[257, "Aegis", 10, 13, 0, 6, 0, 0, 0, 128, 0, 0, 3, 15, 2857, 0, 0, 1, 0, 2, 0.75, 5, 11, 30, 50, 50, 0, 0, 1000, 0], _
+[258, "Guardian", 5, 6.5, 0, 6, 0, 0, 0, 128, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 1, 0.75, 2, 7, 4, 50, 50, 0, 0, 0, 0], _
+[259, "Shield of Deflection", 10, 13, 1, 6, 4, 0, 0, 128, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 3, 10, 10, 75, 75, 15, 30, 0, 0], _
+[260, "Aura of Faith", 5, 6.5, 1, 6, 4, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 3, 3, 8, 50, 100, 5, 50, 0, 0], _
+[261, "Shield of Regeneration", 15, 19.5, 0, 6, 4, 0, 0, 6, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 5, 13, 8, 3, 10, 40, 40, 0, 0], _
+[262, "Shield of Judgment", 15, 19.5, 1, 6, 4, 0, 0, 16384, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 1, 0.75, 8, 20, 45, 5, 50, 0, 0, 0, 0], _
+[263, "Protective Bond", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 0, 5, 5, 6, 3, 0, 0], _
+[264, "Pacifism", 10, 13, 1, 4, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 5, 1, 0, 2, 0.75, 8, 20, 30, 0, 0, 0, 0, 0, 0], _
+[265, "Amity", 5, 6.5, 1, 4, 4, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 0, 1, 0, 0.25, 0.75, 8, 20, 45, 0, 0, 0, 0, 156, 0], _
+[266, "Peace and Harmony", 5, 6.5, 1, 6, 4, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 0.25, 0.75, 1, 3, 10, 0, 9, 90, 90, 20, 0], _
+[267, "Judges Insight", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 2, 0.75, 8, 20, 10, 20, 20, 0, 0, 0, 0], _
+[268, "Unyielding Aura", 5, 6.5, 1, 6, 2052, 0, 0, 8, 0, 0, 3, 16, 2891, 0, 0, 1, 0, 0.25, 0.75, 131072, 131072, 10, 15, 60, 0, 0, 0, 0], _
+[269, "Mark of Protection", 10, 13, 1, 6, 4, 0, 4096, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 1, 0.75, 10, 10, 45, 6, 60, 5, 5, 0, 0], _
+[270, "Life Barrier", 15, 19.5, 1, 6, 4, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 2, 0.75, 131072, 131072, 5, 50, 50, 20, 50, 0, 0], _
+[271, "Zealots Fire", 10, 13, 0, 6, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 0, 1, 0, 0.25, 0.75, 60, 60, 30, 5, 35, 1, 1, 156, 0], _
+[272, "Balthazars Aura", 25, 32.5, 0, 6, 0, 0, 0, 1024, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 2, 0.75, 8, 8, 25, 10, 25, 1, 1, 156, 0], _
+[273, "Spell Breaker", 15, 19.5, 0, 6, 4, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 1, 0.75, 5, 17, 45, 0, 0, 0, 0, 0, 0], _
+[274, "Healing Seed", 10, 13, 0, 6, 0, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 2, 0.75, 10, 10, 25, 3, 30, 0, 0, 156, 0], _
+[275, "Mend Condition", 5, 6.5, 1, 5, 0, 0, 4096, 4096, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 0.75, 0.75, 0, 0, 2, 5, 70, 0, 0, 0, 0], _
+[276, "Restore Condition", 5, 6.5, 1, 5, 4, 0, 4096, 4096, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 0.75, 0.75, 0, 0, 2, 10, 70, 0, 0, 0, 0], _
+[277, "Mend Ailment", 5, 6.5, 0, 5, 0, 0, 4096, 4096, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 5, 5, 70, 0, 0, 0, 0], _
+[278, "Purge Conditions", 5, 6.5, 0, 5, 0, 0, 0, 4096, 0, 0, 3, 51, 3433, 0, 3, 1, 0, 0.25, 0.75, 0, 0, 20, 0, 0, 0, 0, 0, 0], _
+[279, "Divine Healing", 5, 6.5, 1, 5, 0, 0, 4096, 6, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 12, 15, 60, 0, 0, 1000, 0], _
+[280, "Heal Area", 10, 13, 1, 5, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 5, 30, 180, 0, 0, 156, 0], _
+[281, "Orison of Healing", 5, 6.5, 0, 5, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 2, 20, 70, 0, 0, 0, 0], _
+[282, "Word of Healing", 5, 6.5, 0, 5, 4, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 3, 5, 100, 30, 115, 0, 0], _
+[283, "Dwaynas Kiss", 5, 6.5, 1, 5, 0, 0, 4096, 2, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 1, 0.75, 0, 0, 3, 15, 60, 10, 35, 0, 0], _
+[284, "Divine Boon", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 0.25, 0.75, 131072, 131072, 10, 15, 60, 1, 1, 0, 0], _
+[285, "Healing Hands", 5, 6.5, 1, 6, 4, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.25, 0.75, 10, 10, 25, 5, 35, 0, 0, 0, 0], _
+[286, "Heal Other", 10, 13, 1, 5, 0, 0, 4096, 2, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 0.75, 0.75, 0, 0, 3, 35, 180, 0, 0, 0, 0], _
+[287, "Heal Party", 15, 19.5, 0, 5, 0, 0, 4096, 6, 0, 0, 3, 13, 3232, 0, 0, 1, 0, 2, 0.75, 0, 0, 2, 30, 75, 0, 0, 5000, 0], _
+[288, "Healing Breeze", 10, 13, 0, 6, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 15, 15, 5, 4, 9, 0, 0, 0, 0], _
+[289, "Vital Blessing", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.75, 0.75, 131072, 131072, 2, 40, 200, 0, 0, 0, 0], _
+[290, "Mending", 10, 13, 0, 6, 0, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 0, 1, 4, 0, 0, 0, 0], _
+[291, "Live Vicariously", 5, 6.5, 1, 6, 0, 0, 0, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 2, 0.75, 131072, 131072, 0, 2, 17, 0, 0, 0, 0], _
+[292, "Infuse Health", 10, 13, 0, 5, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 0.25, 0.75, 0, 0, 0, 100, 136, 0, 0, 0, 0], _
+[293, "Signet of Devotion", 0, 0, 0, 7, 0, 0, 4096, 6, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 2, 0.75, 0, 0, 5, 14, 100, 0, 0, 0, 0], _
+[294, "Signet of Judgment", 0, 0, 0, 7, 4, 0, 128, 0, 0, 0, 3, 14, 2887, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 15, 75, 0, 0, 156, 0], _
+[295, "Purge Signet", 0, 0, 0, 7, 0, 0, 0, 6144, 0, 0, 3, 51, 3433, 0, 3, 1, 0, 2, 0.75, 0, 0, 20, 10, 10, 0, 0, 0, 0], _
+[296, "Bane Signet", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 26, 56, 0, 0, 0, 0], _
+[297, "Blessed Signet", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 2, 0.75, 0, 0, 10, 3, 24, 3, 3, 0, 0], _
+[298, "Martyr", 5, 6.5, 0, 5, 4, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 10, 0, 0, 0, 0, 5000, 0], _
+[299, "Shielding Hands", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 15, 3, 18, 5, 50, 0, 0], _
+[300, "Contemplation of Purity", 5, 6.5, 1, 10, 0, 0, 4096, 14336, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 10, 0, 80, 1, 8, 0, 0], _
+[301, "Remove Hex", 5, 6.5, 0, 5, 0, 0, 0, 2048, 0, 0, 3, 51, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[302, "Smite Hex", 5, 6.5, 0, 5, 0, 0, 0, 2048, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 12, 10, 85, 0, 0, 312, 0], _
+[303, "Convert Hexes", 15, 19.5, 0, 5, 0, 0, 0, 2048, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 1, 0.75, 8, 20, 12, 10, 10, 0, 0, 0, 0], _
+[304, "Light of Dwayna", 25, 32.5, 1, 5, 2048, 0, 0, 8, 0, 0, 3, 51, 3433, 0, 0, 1, 0, 4, 0.75, 0, 0, 20, 0, 0, 0, 0, 312, 0], _
+[305, "Resurrect", 10, 13, 0, 5, 2048, 0, 0, 8, 0, 0, 3, 51, 3433, 0, 6, 1, 0, 5, 0.75, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[306, "Rebirth", 10, 13, 0, 5, 2048, 0, 0, 8, 0, 0, 3, 15, 3433, 0, 6, 1, 0, 5, 0.75, 0, 0, 0, 10, 3, 0, 0, 0, 0], _
+[307, "Reversal of Fortune", 5, 6.5, 0, 6, 0, 0, 4096, 6, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 2, 15, 80, 0, 0, 0, 0], _
+[308, "Succor", 5, 6.5, 1, 6, 0, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 4, 1, 0, 1, 0.75, 131072, 131072, 10, 1, 1, 1, 1, 0, 0], _
+[309, "Holy Veil", 5, 6.5, 0, 6, 0, 0, 0, 2048, 0, 0, 3, 51, 3433, 0, 3, 1, 0, 1, 0.75, 131072, 131072, 12, 200, 200, 0, 0, 0, 0], _
+[310, "Divine Spirit", 10, 13, 1, 6, 0, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 0.25, 0.75, 1, 14, 60, 5, 5, 1, 1, 0, 0], _
+[311, "Draw Conditions", 5, 6.5, 0, 5, 0, 0, 0, 4096, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 0.25, 0.75, 0, 0, 4, 6, 26, 0, 0, 0, 0], _
+[312, "Holy Strike", 5, 6.5, 1, 10, 2, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 8, 10, 55, 10, 55, 0, 0], _
+[313, "Healing Touch", 5, 6.5, 0, 5, 2, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 5, 16, 60, 2, 2, 0, 0], _
+[314, "Restore Life", 10, 13, 1, 5, 2050, 0, 0, 8, 0, 0, 3, 13, 3433, 0, 6, 1, 0, 4, 0.75, 0, 0, 8, 20, 65, 42, 90, 0, 0], _
+[315, "Vengeance", 10, 13, 1, 6, 2048, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 6, 1, 0, 4, 0.75, 30, 30, 30, 25, 25, 0, 0, 0, 0], _
+[316, "To the Limit", 5, 6.5, 1, 15, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 10, 20, 15, 10, 60, 1, 6, 1000, 0], _
+[317, "Battle Rage", 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 80, 0, 0, 5, 20, 0, 33, 33, 0, 0, 0, 0], _
+[318, "Defy Pain", 0, 0, 1, 16, 4, 0, 0, 0, 0, 0, 1, 17, 3204, 0, 0, 1, 120, 0, 0, 20, 20, 0, 90, 300, 1, 10, 20, 0], _
+[319, "Rush", 0, 0, 1, 3, 0, 0, 0, 32768, 0, 0, 1, 17, 3433, 0, 0, 1, 80, 0, 0, 8, 20, 0, 25, 25, 0, 0, 0, 0], _
+[320, "Hamstring", 10, 13, 0, 14, 0, 0, 8, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 15, 0, 0, 3, 15, 0, 0], _
+[321, "Wild Blow", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 185, 1, 51, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[322, "Power Attack", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 3, 10, 40, 0, 0, 0, 0], _
+[323, "Desperation Blow", 5, 6.5, 1, 14, 0, 0, 25, 65536, 0, 185, 1, 21, 3433, 0, 5, 1, 0, 0, 0, 2, 2, 7, 10, 40, 0, 0, 0, 0], _
+[324, "Thrill of Victory", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 185, 1, 21, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 20, 40, 1, 2, 0, 0], _
+[325, "Distracting Blow", 5, 6.5, 0, 14, 0, 0, 0, 1, 0, 185, 1, 51, 3433, 0, 5, 1, 0, 0.5, 0, 0, 0, 10, 0, 0, 0, 0, 72, 0], _
+[326, "Protectors Strike", 5, 6.5, 1, 14, 0, 0, 0, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 0, 0.5, 0, 0, 0, 3, 10, 40, 0, 0, 0, 0], _
+[327, "Griffons Sweep", 5, 6.5, 1, 14, 0, 0, 128, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 5, 20, 10, 34, 0, 0], _
+[328, "Pure Strike", 5, 6.5, 1, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 1, 30, 0, 0, 0, 0], _
+[329, "Skull Crack", 0, 0, 1, 14, 4, 0, 512, 1, 0, 185, 1, 51, 3433, 0, 5, 1, 220, 0.5, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0], _
+[330, "Cyclone Axe", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 4, 12, 0, 0, 156, 0], _
+[331, "Hammer Bash", 0, 0, 0, 14, 0, 0, 128, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 130, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0], _
+[332, "Bulls Strike", 5, 6.5, 0, 14, 0, 0, 128, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 0, 0, 0, 2, 2, 10, 5, 30, 0, 0, 0, 0], _
+[333, "I Will Avenge You", 5, 6.5, 1, 15, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 45, 3, 7, 25, 25, 5000, 0], _
+[334, "Axe Rake", 0, 0, 0, 14, 0, 0, 8, 0, 16, 1, 1, 18, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 1, 10, 0, 0, 0, 0], _
+[335, "Cleave", 0, 0, 0, 14, 4, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 80, 0, 0, 0, 0, 0, 10, 30, 0, 0, 0, 0], _
+[336, "Executioners Strike", 0, 0, 0, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 10, 40, 0, 0, 0, 0], _
+[337, "Dismember", 0, 0, 0, 14, 0, 0, 16, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 0, 0, 5, 20, 0, 0], _
+[338, "Eviscerate", 0, 0, 1, 14, 4, 0, 16, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 1, 31, 5, 20, 0, 0], _
+[339, "Penetrating Blow", 0, 0, 1, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 5, 20, 20, 20, 0, 0], _
+[340, "Disrupting Chop", 0, 0, 0, 14, 0, 0, 0, 1, 0, 1, 1, 18, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[341, "Swift Chop", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 1, 20, 1, 20, 0, 0], _
+[342, "Axe Twist", 0, 0, 1, 14, 0, 0, 1024, 0, 16, 1, 1, 18, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 1, 20, 0, 0, 0, 0], _
+[343, "For Great Justice", 5, 6.5, 0, 15, 0, 0, 0, 0, 0, 0, 1, 51, 2883, 0, 0, 1, 0, 0, 0, 20, 20, 45, 100, 100, 0, 0, 0, 0], _
+[344, "Flurry", 5, 6.5, 1, 3, 0, 0, 0, 32768, 0, 0, 1, 51, 3433, 0, 0, 1, 0, 0, 0, 5, 5, 5, 16, 16, 33, 33, 0, 0], _
+[345, "Defensive Stance", 0, 0, 0, 3, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 120, 0, 0, 1, 5, 8, 75, 75, 0, 4, 0, 0], _
+[346, "Frenzy", 5, 6.5, 0, 3, 0, 0, 0, 32768, 0, 0, 1, 51, 3433, 0, 0, 1, 0, 0, 0, 8, 8, 4, 33, 33, 0, 0, 0, 0], _
+[347, "Endure Pain", 5, 6.5, 0, 16, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 7, 18, 30, 90, 300, 0, 0, 0, 0], _
+[348, "Watch Yourself", 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 1, 21, 2858, 0, 0, 1, 80, 0, 0, 10, 10, 4, 5, 25, 10, 10, 1000, 0], _
+[349, "Sprint", 5, 6.5, 0, 3, 0, 0, 0, 32768, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 8, 14, 15, 25, 25, 0, 0, 0, 0], _
+[350, "Belly Smash", 5, 6.5, 1, 14, 0, 0, 2, 0, 128, 16, 1, 19, 3433, 0, 5, 1, 0, 1, 0, 0, 0, 10, 0, 0, 3, 7, 156, 0], _
+[351, "Mighty Blow", 0, 0, 0, 14, 0, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 160, 0, 0, 0, 0, 0, 10, 40, 0, 0, 0, 0], _
+[352, "Crushing Blow", 5, 6.5, 1, 14, 0, 0, 16, 0, 128, 16, 1, 19, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 1, 20, 5, 20, 0, 0], _
+[353, "Crude Swing", 5, 6.5, 1, 14, 0, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 5, 1, 20, 0, 0, 156, 0], _
+[354, "Earth Shaker", 0, 0, 1, 14, 68, 0, 128, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 200, 0, 0, 2, 2, 0, 0, 0, 0, 0, 156, 0], _
+[355, "Devastating Hammer", 0, 0, 0, 14, 4, 0, 1152, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 160, 0, 0, 0, 0, 0, 0, 0, 5, 20, 0, 0], _
+[356, "Irresistible Blow", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 5, 20, 0, 0, 0, 0], _
+[357, "Counter Blow", 0, 0, 0, 14, 0, 0, 128, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 100, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0], _
+[358, "Backbreaker", 0, 0, 1, 14, 4, 0, 128, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 220, 0, 0, 2, 4, 0, 1, 20, 0, 0, 0, 0], _
+[359, "Heavy Blow", 0, 0, 0, 14, 0, 0, 128, 0, 1024, 16, 1, 19, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 1, 30, 0, 0, 0, 0], _
+[360, "Staggering Blow", 0, 0, 0, 14, 0, 0, 1024, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 80, 1, 0, 0, 0, 0, 0, 0, 5, 20, 0, 0], _
+[361, "Dolyak Signet", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 8, 20, 20, 10, 40, 75, 75, 0, 0], _
+[362, "Warriors Cunning", 10, 13, 0, 16, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 60, 0, 0, 0, 0, 0, 0], _
+[363, "Shield Bash", 5, 6.5, 0, 16, 0, 0, 128, 128, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 20, 15, 15, 0, 0, 0, 0], _
+[364, "Charge", 5, 6.5, 0, 15, 4, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 5, 13, 20, 33, 33, 0, 0, 1000, 0], _
+[365, "Victory Is Mine", 5, 6.5, 1, 15, 4, 0, 0, 4, 0, 0, 1, 21, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 15, 10, 68, 3, 7, 312, 0], _
+[366, "Fear Me", 0, 0, 1, 15, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 80, 0, 0, 1, 15, 6, 1, 4, 5, 30, 240, 0], _
+[367, "Shields Up", 10, 13, 0, 15, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 30, 60, 60, 0, 0, 1000, 0], _
+[368, "I Will Survive", 5, 6.5, 1, 15, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 30, 3, 3, 0, 0, 0, 0], _
+[369, "Dont Believe Their Lies", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 30, 50, 50, 0, 0, 312, 0], _
+[370, "Berserker Stance", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 20, 33, 33, 50, 50, 0, 0], _
+[371, "Balanced Stance", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 8, 20, 30, 0, 0, 0, 0, 0, 0], _
+[372, "Gladiators Defense", 5, 6.5, 1, 3, 4, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 30, 75, 75, 5, 35, 0, 0], _
+[373, "Deflect Arrows", 0, 0, 1, 3, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 120, 0, 0, 1, 6, 12, 75, 75, 5, 15, 156, 0], _
+[374, "Warriors Endurance", 5, 6.5, 1, 16, 4, 0, 0, 0, 0, 0, 1, 17, 3002, 0, 0, 1, 0, 0, 0, 5, 35, 30, 3, 3, 10, 25, 0, 0], _
+[375, "Dwarven Battle Stance", 5, 6.5, 1, 3, 4, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 20, 33, 33, 40, 40, 0, 0], _
+[376, "Disciplined Stance", 5, 6.5, 1, 3, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 1, 4, 15, 75, 75, 10, 10, 0, 0], _
+[377, "Wary Stance", 10, 13, 1, 3, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 1, 6, 10, 5, 5, 35, 35, 0, 0], _
+[378, "Shield Stance", 5, 6.5, 1, 3, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 1, 6, 15, 75, 75, 15, 15, 0, 0], _
+[379, "Bulls Charge", 5, 6.5, 1, 3, 4, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 20, 33, 33, 0, 0, 0, 0], _
+[380, "Bonettis Defense", 0, 0, 1, 3, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 200, 0, 0, 5, 11, 0, 75, 75, 5, 5, 0, 0], _
+[381, "Hundred Blades", 5, 6.5, 0, 16, 4, 0, 0, 0, 0, 0, 1, 20, 3433, 0, 0, 1, 0, 0, 0, 15, 15, 25, 10, 25, 0, 0, 156, 0], _
+[382, "Sever Artery", 0, 0, 0, 14, 0, 0, 1, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 100, 0, 0, 0, 0, 0, 0, 0, 5, 25, 0, 0], _
+[383, "Galrath Slash", 0, 0, 1, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 1, 40, 0, 0, 0, 0], _
+[384, "Gash", 0, 0, 0, 14, 0, 0, 16, 0, 1, 128, 1, 20, 3433, 0, 5, 1, 140, 0, 0, 0, 0, 0, 5, 20, 5, 20, 0, 0], _
+[385, "Final Thrust", 0, 0, 0, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 240, 0, 0, 0, 0, 0, 1, 40, 50, 50, 0, 0], _
+[386, "Seeking Blade", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 1, 20, 1, 20, 0, 0], _
+[387, "Riposte", 0, 0, 1, 16, 0, 0, 0, 128, 0, 128, 1, 21, 3433, 0, 0, 1, 80, 0, 0, 8, 8, 0, 20, 80, 1, 10, 0, 0], _
+[388, "Deadly Riposte", 5, 6.5, 1, 16, 0, 0, 1, 128, 0, 128, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 8, 8, 10, 15, 90, 3, 25, 0, 0], _
+[389, "Flourish", 5, 6.5, 1, 10, 4, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 8, 2, 7, 0, 0, 0, 0], _
+[390, "Savage Slash", 5, 6.5, 0, 14, 0, 0, 0, 1, 0, 128, 1, 20, 3433, 0, 5, 1, 0, 0.5, 0, 0, 0, 15, 1, 40, 0, 0, 0, 0], _
+[391, "Hunters Shot", 5, 6.5, 0, 14, 0, 0, 1, 0, 128, 2, 2, 25, 3433, 0, 5, 1, 0, 1, 1, 0, 0, 10, 3, 25, 0, 0, 0, 0], _
+[392, "Pin Down", 15, 19.5, 0, 14, 0, 0, 8, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 0, 0, 3, 15, 0, 0], _
+[393, "Crippling Shot", 10, 13, 1, 14, 4, 0, 8, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 0, 0, 1, 11, 0, 0], _
+[394, "Power Shot", 10, 13, 0, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 3, 25, 50, 0, 0, 0, 0], _
+[395, "Barrage", 5, 6.5, 0, 14, 4, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 1, 5, 5, 5, 20, 156, 0], _
+[396, "Dual Shot", 10, 13, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 16, 16, 0, 0, 0, 0], _
+[397, "Quick Shot", 5, 6.5, 0, 14, 4, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0], _
+[398, "Penetrating Attack", 10, 13, 1, 14, 0, 0, 0, 0, 0, 2, 2, 25, 2861, 0, 5, 1, 0, 0.75, 0.600000023841858, 0, 0, 4, 5, 25, 10, 10, 0, 0], _
+[399, "Distracting Shot", 5, 6.5, 0, 14, 0, 0, 0, 1, 0, 2, 2, 23, 3433, 0, 5, 1, 0, 0.5, 1.5, 0, 0, 10, 1, 16, 20, 20, 0, 0], _
+[400, "Precision Shot", 10, 13, 0, 14, 32, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 1, 1, 0, 0, 6, 3, 10, 0, 0, 0, 0], _
+[401, "Splinter Shot monster skill", 10, 13, 1, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 2, 0, 0, 0, 0, 0, 10, 1, 14, 0, 0, 156, 0], _
+[402, "Determined Shot", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 5, 20, 0, 0, 0, 0], _
+[403, "Called Shot", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 3, 4800, 4800, 0, 0, 0, 0], _
+[404, "Poison Arrow", 5, 6.5, 1, 14, 4, 0, 256, 0, 0, 2, 2, 24, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 1, 0, 0, 5, 20, 0, 0], _
+[405, "Oath Shot", 10, 13, 1, 14, 4100, 0, 0, 0, 0, 2, 2, 23, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 25, 10, 4, 0, 0, 0, 0], _
+[406, "Debilitating Shot", 10, 13, 0, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 1, 10, 0, 0, 0, 0], _
+[407, "Point Blank Shot", 5, 6.5, 1, 14, 8, 0, 0, 0, 0, 2, 2, 23, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 3, 10, 40, 0, 0, 0, 0], _
+[408, "Concussion Shot", 25, 32.5, 0, 14, 0, 0, 512, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0.5, 1.5, 10, 10, 5, 1, 16, 5, 20, 0, 0], _
+[409, "Punishing Shot", 10, 13, 1, 14, 4, 0, 0, 1, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0.5, 1.5, 0, 0, 5, 10, 20, 0, 0, 0, 0], _
+[410, "Call of Ferocity", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 60, 60, 55, 5, 50, 25, 25, 5000, 0], _
+[411, "Charm Animal", 10, 13, 0, 10, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 1, 1, 0, 10, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[412, "Call of Protection", 5, 6.5, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0.75, 120, 120, 90, 5, 20, 0, 0, 5000, 0], _
+[413, "Call of Elemental Protection", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 60, 60, 55, 1, 14, 20, 32, 5000, 0], _
+[414, "Call of Vitality", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 60, 60, 55, 1, 14, 50, 280, 5000, 0], _
+[415, "Call of Haste", 10, 13, 0, 15, 0, 0, 0, 32768, 0, 0, 2, 22, 2657, 0, 0, 1, 0, 0, 0.75, 30, 30, 25, 33, 33, 33, 33, 5000, 0], _
+[416, "Call of Healing", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 60, 60, 55, 1, 14, 1, 4, 5000, 0], _
+[417, "Call of Resilience", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 0, 0, 60, 0, 0, 0, 0, 5000, 0], _
+[418, "Call of Feeding", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 60, 60, 55, 1, 14, 5, 20, 5000, 0], _
+[419, "Call of the Hunter", 5, 6.5, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 60, 60, 55, 5, 50, 1, 14, 5000, 0], _
+[420, "Call of Brutality", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 30, 30, 25, 5, 50, 1, 14, 5000, 0], _
+[421, "Call of Disruption", 10, 13, 1, 15, 0, 0, 0, 1, 0, 0, 2, 22, 3433, 0, 0, 2, 0, 0, 0.75, 30, 30, 25, 5, 50, 8, 20, 5000, 0], _
+[422, "Revive Animal", 5, 6.5, 1, 10, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 6, 0.75, 0, 0, 20, 10, 94, 0, 0, 240, 0], _
+[423, "Symbiotic Bond", 10, 13, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 120, 300, 55, 1, 3, 0, 0, 0, 0], _
+[424, "Throw Dirt", 5, 6.5, 0, 10, 2, 0, 2, 0, 0, 0, 2, 23, 3433, 0, 5, 1, 0, 1, 0.75, 3, 10, 30, 0, 0, 3, 15, 72, 0], _
+[425, "Dodge", 5, 6.5, 1, 3, 0, 0, 0, 128, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 30, 27, 75, 33, 33, 0, 0], _
+[426, "Savage Shot", 10, 13, 0, 14, 0, 0, 0, 1, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0.5, 1.5, 0, 0, 5, 13, 28, 0, 0, 0, 0], _
+[427, "Antidote Signet", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 4, 0, 0, 0, 0, 0, 0], _
+[428, "Incendiary Arrows", 5, 6.5, 1, 14, 4, 0, 4, 0, 0, 2, 2, 24, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 5, 2, 2, 1, 3, 240, 0], _
+[429, "Melandrus Arrows", 5, 6.5, 1, 19, 260, 0, 1, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0, 18, 18, 12, 8, 28, 3, 25, 0, 0], _
+[430, "Marksmans Wager", 5, 6.5, 1, 19, 260, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 2, 0, 18, 18, 24, 5, 10, 10, 10, 0, 0], _
+[431, "Ignite Arrows", 10, 13, 1, 19, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0, 24, 24, 12, 3, 18, 0, 0, 156, 0], _
+[432, "Read the Wind", 5, 6.5, 0, 19, 256, 0, 0, 0, 0, 0, 2, 25, 2969, 0, 0, 1, 0, 2, 0, 24, 24, 12, 4800, 4800, 3, 10, 0, 0], _
+[433, "Kindle Arrows", 5, 6.5, 0, 19, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0, 24, 24, 12, 3, 24, 0, 0, 0, 0], _
+[434, "Choking Gas", 15, 19.5, 0, 19, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0, 1, 12, 24, 1, 8, 0, 0, 156, 0], _
+[435, "Apply Poison", 15, 19.5, 0, 19, 256, 0, 256, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0, 24, 24, 12, 0, 0, 3, 15, 0, 0], _
+[436, "Comfort Animal", 5, 6.5, 0, 10, 0, 0, 0, 0, 0, 0, 2, 22, 3045, 0, 0, 1, 0, 1, 0.75, 0, 0, 1, 20, 104, 10, 58, 5000, 8], _
+[437, "Bestial Pounce", 5, 6.5, 1, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 5, 20, 0, 0, 5000, 0], _
+[438, "Maiming Strike", 10, 13, 0, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 5, 5, 20, 3, 15, 5000, 0], _
+[439, "Feral Lunge", 5, 6.5, 1, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 5, 35, 5, 25, 5000, 0], _
+[440, "Scavenger Strike", 5, 6.5, 0, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 10, 25, 3, 15, 5000, 0], _
+[441, "Melandrus Assault", 10, 13, 1, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3047, 0, 0, 1, 0, 0, 0, 10, 10, 5, 5, 20, 0, 0, 5000, 240], _
+[442, "Ferocious Strike", 5, 6.5, 0, 20, 4, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 8, 13, 28, 3, 10, 5000, 25], _
+[443, "Predators Pounce", 5, 6.5, 1, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 5, 5, 35, 5, 50, 5000, 0], _
+[444, "Brutal Strike", 10, 13, 1, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 5, 5, 35, 5, 35, 5000, 0], _
+[445, "Disrupting Lunge", 5, 6.5, 0, 20, 0, 0, 0, 1, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 20, 1, 12, 20, 20, 5000, 0], _
+[446, "Troll Unguent", 5, 6.5, 0, 10, 0, 0, 0, 4, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 3, 0.75, 13, 13, 10, 3, 10, 0, 0, 0, 0], _
+[447, "Otyughs Cry", 5, 6.5, 1, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0.75, 10, 25, 30, 24, 24, 0, 0, 5000, 0], _
+[448, "Escape", 5, 6.5, 0, 3, 4, 0, 0, 128, 0, 0, 2, 23, 3060, 0, 0, 1, 0, 0, 0, 1, 8, 12, 33, 33, 75, 75, 0, 0], _
+[449, "Practiced Stance", 5, 6.5, 1, 3, 4, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 0, 0, 20, 35, 15, 50, 50, 30, 150, 0, 0], _
+[450, "Whirling Defense", 10, 13, 0, 3, 0, 0, 0, 128, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 0, 0, 8, 20, 60, 75, 75, 5, 11, 156, 0], _
+[451, "Melandrus Resilience", 5, 6.5, 1, 3, 4, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 0, 0, 8, 20, 15, 4, 4, 1, 1, 0, 0], _
+[452, "Dryders Defenses", 5, 6.5, 1, 3, 0, 0, 0, 128, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 60, 34, 60, 75, 75, 0, 0], _
+[453, "Lightning Reflexes", 10, 13, 0, 3, 0, 0, 0, 128, 0, 0, 2, 23, 3141, 0, 0, 1, 0, 0, 0, 5, 11, 30, 75, 75, 33, 33, 0, 0], _
+[454, "Tigers Fury", 10, 13, 1, 3, 0, 0, 0, 32768, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 10, 25, 25, 5, 5, 0, 0], _
+[455, "Storm Chaser", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 0, 0, 8, 20, 20, 1, 5, 25, 25, 0, 0], _
+[456, "Serpents Quickness", 5, 6.5, 1, 3, 0, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 0, 0, 15, 30, 45, 33, 33, 0, 0, 0, 0], _
+[457, "Dust Trap", 25, 32.5, 1, 21, 256, 0, 2, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 30, 10, 25, 3, 8, 156, 240], _
+[458, "Barbed Trap", 15, 19.5, 0, 21, 256, 0, 9, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 20, 7, 23, 3, 25, 156, 240], _
+[459, "Flame Trap", 10, 13, 0, 21, 256, 0, 4, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 20, 5, 20, 1, 3, 156, 240], _
+[460, "Healing Spring", 10, 13, 1, 21, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 10, 10, 20, 15, 60, 0, 0, 156, 240], _
+[461, "Spike Trap", 10, 13, 0, 21, 260, 0, 136, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 20, 10, 40, 3, 25, 156, 240], _
+[462, "Winter", 5, 6.5, 1, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 3, 0.75, 30, 150, 60, 1, 10, 1, 16, 2500, 0], _
+[463, "Winnowing", 5, 6.5, 0, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 4, 4, 2500, 0], _
+[464, "Edge of Extinction", 5, 6.5, 1, 22, 256, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 14, 50, 2500, 0], _
+[465, "Greater Conflagration", 5, 6.5, 1, 22, 260, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 3, 0.75, 30, 150, 15, 1, 10, 0, 0, 2500, 0], _
+[466, "Conflagration", 5, 6.5, 2, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 0, 0, 2500, 0], _
+[467, "Fertile Season", 15, 19.5, 1, 22, 256, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 5, 0.75, 15, 45, 60, 1, 10, 50, 150, 2500, 8], _
+[468, "Symbiosis", 5, 6.5, 1, 22, 256, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 27, 150, 2500, 0], _
+[469, "Primal Echoes", 5, 6.5, 0, 22, 256, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 10, 10, 2500, 0], _
+[470, "Predatory Season", 5, 6.5, 1, 22, 256, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 80, 80, 2500, 5], _
+[471, "Frozen Soil", 10, 13, 1, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 90, 30, 1, 10, 0, 0, 2500, 0], _
+[472, "Favorable Winds", 5, 6.5, 0, 22, 256, 0, 0, 0, 0, 0, 2, 25, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 6, 6, 2500, 0], _
+[473, "High Winds", 5, 6.5, 1, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 3, 0, 5, 0.75, 30, 90, 30, 1, 10, 120, 120, 2500, 0], _
+[474, "Energizing Wind", 15, 19.5, 0, 22, 256, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 5, 0.75, 1, 31, 60, 1, 6, 15, 15, 2500, 10], _
+[475, "Quickening Zephyr", 25, 32.5, 0, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 15, 45, 60, 1, 10, 30, 30, 2500, 0], _
+[476, "Natures Renewal", 5, 6.5, 0, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 200, 200, 2500, 0], _
+[477, "Muddy Terrain", 5, 6.5, 1, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 90, 30, 1, 10, 10, 10, 2500, 0], _
+[478, "Bleeding", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0], _
+[479, "Blind", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 10, 10, 0, 90, 90, 64, 64, 0, 0], _
+[480, "Burning", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 3, 3, 0, 7, 7, 0, 0, 0, 0], _
+[481, "Crippled", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 15, 15, 0, 50, 50, 0, 0, 0, 0], _
+[482, "Deep Wound", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 20, 20, 0, 20, 20, 80, 80, 100, 0], _
+[483, "Disease", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 15, 15, 0, 0, 0, 0, 0, 0, 0], _
+[484, "Poison", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 15, 15, 0, 0, 0, 0, 0, 0, 0], _
+[485, "Dazed", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 20, 20, 0, 200, 200, 0, 0, 0, 0], _
+[486, "Weakness", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 20, 20, 0, 64, 64, 0, 0, 0, 0], _
+[487, "Cleansed", 0, 0, 1, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 33, 33, 0, 0, 0, 0], _
+[488, "Eruption environment", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 100, 5, 5, 240, 0], _
+[489, "Fire Storm environment", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 90, 10, 10, 156, 0], _
+[490, "Vital Blessing monster skill", 0, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 200, 200, 0, 0, 0, 0], _
+[491, "Fount Of Maguuma", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 0, 0, 0, 0], _
+[492, "Healing Fountain", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 0, 0, 0, 0], _
+[493, "Icy Ground", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 75, 75, 0, 0, 0, 0], _
+[494, "Maelstrom environment", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 100, 10, 10, 156, 0], _
+[495, "Mursaat Tower skill", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0, 0, 10, 10, 0, 20, 20, 50, 50, 1500, 0], _
+[496, "Quicksand environment effect", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 15, 15, 1, 1, 0, 0], _
+[497, "Curse of the Bloodstone", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[498, "Chain Lightning environment", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 200, 5, 5, 312, 0], _
+[499, "Obelisk Lightning", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 120, 0, 0, 0, 0], _
+[500, "Tar", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 33, 33, 0, 0, 0, 0], _
+[501, "Siege Attack", 0, 0, 1, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 50, 550, 1050], _
+[502, "Resurrect Party", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.25, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[503, "Scepter of Orrs Aura", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 10, 10, 0, 0, 0, 0], _
+[504, "Scepter of Orrs Power", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 0, 0, 0, 0], _
+[505, "Burden Totem", 0, 0, 1, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 75, 75, 0, 0, 0, 0], _
+[506, "Splinter Mine skill", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 312, 0], _
+[507, "Entanglement", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 12, 12, 156, 0], _
+[508, "Dwarven Powder Keg", 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 256, 0], _
+[509, "Seed of Resurrection", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 50, 600, 0], _
+[510, "Deafening Roar", 5, 6.5, 1, 10, 0, 0, 512, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 20, 0, 0, 0, 0, 312, 0], _
+[511, "Brutal Mauling", 0, 0, 1, 14, 0, 0, 1, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 100, 4, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0], _
+[512, "Crippling Attack", 5, 6.5, 1, 14, 0, 0, 8, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[513, "Charm Animal monster skill", 0, 0, 1, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 3, 0, 0.25, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[514, "Breaking Charm", 0, 0, 1, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[515, "Charr Buff", 0, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 3, 0, 0, 0, 196608, 196608, 0, 100, 100, 0, 0, 0, 0], _
+[516, "Claim Resource", 5, 6.5, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[517, "Claim Resource", 5, 6.5, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[518, "Claim Resource", 5, 6.5, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[519, "Claim Resource", 5, 6.5, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[520, "Claim Resource", 5, 6.5, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[521, "Claim Resource", 5, 6.5, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[522, "Claim Resource", 5, 6.5, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[523, "Claim Resource", 5, 6.5, 1, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[524, "Dozen Shot", 5, 6.5, 1, 14, 0, 0, 0, 0, 0, 2, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0], _
+[525, "Nibble", 5, 6.5, 1, 5, 2, 0, 0, 4, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[526, "Claim Resource", 5, 6.5, 1, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[527, "Claim Resource", 5, 6.5, 1, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[528, "Reflection", 5, 6.5, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[529, "Unknow", 5, 6.5, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0, 196608, 196608, 0, 3, 18, 0, 0, 0, 0], _
+[530, "Giant Stomp", 10, 13, 1, 14, 0, 0, 128, 0, 0, 255, 0, 51, 3433, 0, 0, 3, 0, 4, 0, 0, 0, 32, 25, 25, 0, 0, 1000, 0], _
+[531, "Agnars Rage", 10, 13, 1, 14, 0, 0, 128, 0, 0, 255, 0, 51, 3433, 0, 0, 3, 0, 6, 0, 0, 0, 15, 25, 25, 10, 10, 1000, 0], _
+[532, "Healing Breeze Agnars Rage", 5, 6.5, 1, 6, 0, 0, 0, 6, 0, 0, 0, 51, 3433, 0, 3, 3, 0, 1, 0.75, 5, 5, 0, 10, 10, 0, 0, 0, 0], _
+[533, "Crystal Haze", 5, 6.5, 1, 4, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 30, 30, 0, 1, 1, 0, 0, 1000, 0], _
+[534, "Crystal Bonds", 5, 6.5, 1, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 15, 15, 8, 70, 70, 0, 0, 0, 0], _
+[535, "Jagged Crystal Skin", 5, 6.5, 1, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 10, 100, 100, 0, 0, 256, 0], _
+[536, "Crystal Hibernation", 5, 6.5, 1, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 20, 20, 10, 7, 7, 0, 0, 0, 0], _
+[537, "Stun Immunity", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[538, "Invulnerability", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[539, "Hunger of the Lich", 5, 6.5, 1, 14, 16384, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 0, 0, 0, 100, 100, 5, 5, 0, 0], _
+[540, "Embrace the Pain", 5, 6.5, 1, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 10, 0, 0, 0, 0, 256, 0], _
+[541, "Life Vortex", 5, 6.5, 1, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 10, 200, 200, 0, 0, 312, 0], _
+[542, "Oracle Link", 5, 6.5, 1, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 0.75, 0.75, 196608, 196608, 0, 1, 1, 0, 0, 0, 0], _
+[543, "Guardian Pacify", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[544, "Soul Vortex", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[545, "Unknow", 10, 13, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 4, 0.75, 30, 30, 60, 0, 0, 0, 0, 0, 0], _
+[546, "Spectral Agony", 0, 0, 1, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.25, 0.75, 5, 5, 15, 3, 100, 1, 30, 2, 80], _
+[547, "Natural Resistance", 0, 0, 1, 17, 2097152, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 100, 100, 3, 3, 0, 0], _
+[548, "Natural Resistance", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 800, 800, 6, 6, 0, 0], _
+[549, "Guild Lord Aura", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 250, 250, 5, 5, 50, 0], _
+[550, "Critical Hit Probability", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0], _
+[551, "Stun on Critical Hit", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[552, "Blood Splattering", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[553, "Inanimate Object", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[554, "Undead sensitivity to Light", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0], _
+[555, "Energy Boost", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 12, 12, 0, 0, 0, 0], _
+[556, "Health Drain", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0], _
+[557, "Immunity to Critical Hits", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[558, "Titans get plus Health regen and set enemies on fire each time he is hit", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 156, 0], _
+[559, "Undying", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 120, 120, 0, 0, 0, 0], _
+[560, "Resurrect Gargoyle", 5, 6.5, 0, 5, 2048, 0, 0, 8, 0, 0, 0, 51, 3433, 0, 6, 3, 0, 2, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[561, "Seal Regen", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 30, 30, 0, 0, 0, 0], _
+[562, "Lightning Orb", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 3, 0.75, 10, 10, 0, 40, 40, 1200, 1200, 0, 0], _
+[563, "Wurm Siege Dunes of Despair", 0, 0, 1, 5, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2.5, 0.75, 0, 0, 0, 50, 50, 60, 60, 256, 1050], _
+[564, "Wurm Siege", 0, 0, 1, 5, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2.5, 0.75, 0, 0, 0, 50, 50, 60, 60, 256, 1050], _
+[565, "Claim Resource", 5, 6.5, 1, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[566, "Shiver Touch", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 0, 15, 15, 0, 0, 0, 0], _
+[567, "Spontaneous Combustion", 5, 6.5, 1, 4, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 196608, 196608, 0, 10, 10, 1000, 1000, 144, 0], _
+[568, "Vanish", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 0, 0, 16, 0, 0, 0, 0, 0, 0], _
+[569, "Victory or Death", 5, 6.5, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 90, 90, 0, 50, 50, 30, 30, 250, 50], _
+[570, "Mark of Insecurity", 5, 6.5, 3, 4, 516, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 5, 25, 10, 1, 3, 30, 80, 10, 0], _
+[571, "Disrupting Dagger", 5, 6.5, 3, 5, 8, 0, 0, 1, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 10, 10, 35, 0, 0, 0, 0], _
+[572, "Deadly Paradox", 15, 19.5, 3, 3, 0, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 0, 1, 0, 0, 0, 5, 15, 10, 33, 33, 10, 10, 0, 0], _
+[573, "Teleport Players", 0, 0, 1, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 2, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[574, "Quest skill for Coastal Exam", 0, 0, 1, 7, 0, 0, 0, 8, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1.75, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0], _
+[575, "Holy Blessing", 5, 6.5, 1, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 0, 0, 2, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[576, "Statues Blessing", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[577, "Siege Attack", 0, 0, 1, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 100, 100, 550, 1050], _
+[578, "Siege Attack", 0, 0, 1, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 75, 150, 150, 550, 1050], _
+[579, "Domain of Skill Damage", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5, 5, 0, 0, 0, 0], _
+[580, "Domain of Energy Draining", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 0, 0, 0, 0], _
+[581, "Domain of Elements", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5, 5, 0, 0, 0, 0], _
+[582, "Domain of Health Draining", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 0, 0, 0, 0], _
+[583, "Domain of Slow", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 30, 30, 0, 0, 0, 0], _
+[584, "Divine Fire", 0, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[585, "Swamp Water", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0], _
+[586, "Janthirs Gaze", 0, 0, 1, 5, 0, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0.75, 0.75, 196608, 196608, 5, 0, 0, 0, 0, 450, 0], _
+[587, "Fake Spell", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[588, "Charm Animal monster", 10, 13, 1, 10, 0, 0, 0, 0, 0, 0, 0, 22, 3433, 0, 5, 0, 0, 10, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[589, "Stormcaller skill", 5, 6.5, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 15, 0, 196608, 196608, 0, 50, 50, 0, 0, 0, 0], _
+[590, "Knock", 5, 6.5, 1, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1200, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[591, "Quest Skill", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 10, 0.75, 0, 0, 0, 0, 0, 0, 0, 2500, 0], _
+[592, "Rurik Must Live", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 0, 0, 0, 0, 0, 0], _
+[593, "Blessing of the Kurzicks", 0, 0, 2, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 20, 20, 250, 250, 25, 3], _
+[594, "Lichs Phylactery", 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[595, "Restore Life monster skill", 5, 6.5, 1, 5, 2050, 0, 0, 8, 0, 0, 0, 13, 3433, 0, 11, 0, 0, 1, 0.75, 0, 0, 0, 26, 50, 42, 90, 0, 0], _
+[596, "Chimera of Intensity", 5, 6.5, 1, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0.75, 0.75, 120, 120, 0, 50, 50, 50, 50, 50, 0], _
+[597, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[598, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[599, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[600, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[601, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[602, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[603, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[604, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[605, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[606, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[607, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[608, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[609, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[610, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[611, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[612, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[613, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[614, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[615, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[616, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[617, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[618, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[619, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[620, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[621, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[622, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[623, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[624, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[625, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[626, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[627, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[628, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[629, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[630, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[631, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[632, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[633, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[634, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[635, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[636, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[637, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[638, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[639, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[640, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[641, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[642, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[643, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[644, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[645, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[646, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[647, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[648, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[649, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[650, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[651, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[652, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[653, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[654, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[655, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[656, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 0, 0, 0, 0], _
+[657, "Life Draining", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 0, 0, 0, 0], _
+[658, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[659, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[660, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[661, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[662, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[663, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[664, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[665, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[666, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[667, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[668, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[669, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0], _
+[670, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0, 0, 0], _
+[671, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[672, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[673, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[674, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[675, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[676, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[677, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[678, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0], _
+[679, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[680, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[681, "Unknow", 0, 0, 1, 17, 139264, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[682, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[683, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[684, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[685, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[686, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[687, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[688, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0, 0, 0], _
+[689, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[690, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[691, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[692, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[693, "Unknow", 0, 0, 1, 17, 139264, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[694, "Unknow", 0, 0, 1, 17, 139264, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[695, "Unknow", 0, 0, 1, 17, 139264, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], _
+[696, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[697, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[698, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[699, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[700, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[701, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[702, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[703, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[704, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[705, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[706, "Unknow", 0, 0, 1, 17, 139264, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 50, 0, 0, 0, 0], _
+[707, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[708, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[709, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[710, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[711, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0], _
+[712, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[713, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[714, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[715, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[716, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 0, 0, 0, 0], _
+[717, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[718, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0], _
+[719, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], _
+[720, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 0, 0, 0, 0], _
+[721, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[722, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[723, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0], _
+[724, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[725, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[726, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[727, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0], _
+[728, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[729, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0], _
+[730, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[731, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 15, 15, 0, 0], _
+[732, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[733, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0], _
+[734, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[735, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0], _
+[736, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[737, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0], _
+[738, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], _
+[739, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[740, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], _
+[741, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[742, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], _
+[743, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[744, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0], _
+[745, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[746, "Unknow", 0, 0, 1, 17, 139264, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[747, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 0, 0, 0, 0], _
+[748, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 20, 0, 0, 0, 0], _
+[749, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[750, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[751, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[752, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[753, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[754, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[755, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[756, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 33, 0, 0, 0, 0], _
+[757, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[758, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0], _
+[759, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0], _
+[760, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[761, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0], _
+[762, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[763, "Jaundiced Gaze", 10, 13, 2, 6, 0, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 1, 15, 15, 0, 1, 1, 10, 10, 0], _
+[764, "Wail of Doom", 1, 1.3, 2, 4, 4, 0, 0, 32, 0, 0, 4, 6, 3433, 0, 5, 1, 0, 0.25, 0.75, 1, 4, 15, 10, 10, 0, 0, 0, 0], _
+[765, "Heros Insight", 0, 0, 0, 2, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 200, 200, 0, 0, 0, 0], _
+[766, "Gaze of Contempt", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 15, 50, 50, 0, 0, 0, 0], _
+[767, "Berserkers Insight", 0, 0, 0, 2, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 300, 300, 0, 0, 0, 0], _
+[768, "Slayers Insight", 0, 0, 0, 2, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 250, 250, 0, 0, 0, 0], _
+[769, "Vipers Defense", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 1, 1, 0, 0.25, 0, 5, 20, 10, 5, 20, 156, 156, 312, 800], _
+[770, "Return", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 4, 1, 0, 0.25, 0, 0, 0, 15, 3, 8, 0, 0, 156, 0], _
+[771, "Aura of Displacement", 10, 13, 2, 6, 4, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 131072, 131072, 20, 0, 0, 0, 0, 0, 0], _
+[772, "Generous Was Tsungrai", 5, 6.5, 2, 24, 0, 0, 0, 36, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 15, 60, 15, 50, 140, 100, 280, 10, 10], _
+[773, "Mighty Was Vorizun", 5, 6.5, 2, 24, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 0, 1, 0, 2, 0.75, 15, 60, 30, 15, 15, 30, 30, 0, 0], _
+[774, "To the Death", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 196608, 196608, 0, 33, 33, 33, 33, 0, 0], _
+[775, "Death Blossom", 5, 6.5, 2, 14, 32768, 4, 0, 0, 0, 8, 7, 29, 3061, 3, 5, 1, 0, 0, 0, 0, 0, 2, 20, 45, 0, 0, 156, 0], _
+[776, "Twisting Fangs", 10, 13, 2, 14, 32768, 4, 0, 0, 0, 8, 7, 35, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 15, 10, 20, 5, 20, 0, 0], _
+[777, "Horns of the Ox", 5, 6.5, 2, 14, 32768, 4, 0, 0, 0, 8, 7, 29, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 12, 1, 11, 0, 0, 156, 0], _
+[778, "Falling Spider", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 0, 0, 8, 15, 35, 5, 20, 0, 0], _
+[779, "Black Lotus Strike", 10, 13, 2, 14, 0, 0, 0, 0, 0, 8, 7, 35, 3433, 1, 5, 1, 0, 0, 0, 0, 0, 6, 10, 31, 5, 13, 0, 0], _
+[780, "Fox Fangs", 5, 6.5, 2, 14, 0, 2, 0, 0, 0, 8, 7, 29, 3251, 2, 5, 1, 0, 0.5, 0, 0, 0, 3, 10, 35, 0, 0, 0, 0], _
+[781, "Moebius Strike", 5, 6.5, 2, 14, 4, 1, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 0, 0, 2, 10, 35, 0, 0, 0, 0], _
+[782, "Jagged Strike", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 1, 5, 1, 0, 0.5, 0, 0, 0, 1, 5, 20, 0, 0, 0, 0], _
+[783, "Unsuspecting Strike", 10, 13, 2, 14, 0, 0, 0, 0, 0, 8, 7, 35, 3433, 1, 5, 1, 0, 0, 0, 0, 0, 2, 19, 31, 15, 75, 0, 0], _
+[784, "Entangling Asp", 10, 13, 2, 5, 0, 2, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 5, 20, 0, 0, 0, 0], _
+[785, "Mark of Death", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.25, 0.75, 4, 10, 20, 33, 33, 0, 0, 0, 0], _
+[786, "Iron Palm", 5, 6.5, 2, 10, 2, 0, 0, 512, 0, 0, 7, 30, 3433, 1, 5, 1, 0, 0.75, 0.75, 0, 0, 20, 5, 50, 0, 0, 0, 0], _
+[787, "Resilient Weapon", 10, 13, 2, 25, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 1, 0.75, 3, 12, 6, 1, 6, 24, 24, 0, 0], _
+[788, "Blind Was Mingson", 5, 6.5, 2, 24, 0, 0, 0, 512, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 15, 60, 20, 3, 8, 0, 0, 240, 0], _
+[789, "Grasping Was Kuurong", 15, 19.5, 2, 24, 4, 0, 128, 512, 0, 0, 8, 34, 3433, 0, 0, 1, 0, 1, 0.75, 15, 60, 20, 15, 75, 0, 0, 240, 0], _
+[790, "Vengeful Was Khanhei", 5, 6.5, 2, 24, 4, 0, 0, 16384, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 0.75, 0.75, 5, 11, 20, 5, 35, 0, 0, 0, 0], _
+[791, "Flesh of My Flesh", 5, 6.5, 2, 5, 2048, 0, 0, 8, 0, 0, 8, 33, 2866, 0, 6, 1, 0, 4, 0.75, 0, 0, 0, 5, 20, 0, 0, 0, 0], _
+[792, "Splinter Weapon", 5, 6.5, 2, 25, 0, 0, 0, 0, 0, 0, 8, 34, 2868, 0, 3, 1, 0, 1, 0.75, 20, 20, 5, 5, 50, 1, 5, 156, 3], _
+[793, "Weapon of Warding", 10, 13, 2, 25, 0, 0, 0, 128, 0, 0, 8, 33, 2893, 0, 3, 1, 0, 1, 0.75, 3, 8, 5, 50, 50, 2, 4, 0, 0], _
+[794, "Wailing Weapon", 5, 6.5, 2, 25, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 3, 1, 0, 1, 0.75, 3, 9, 25, 0, 0, 0, 0, 0, 0], _
+[795, "Nightmare Weapon", 5, 6.5, 2, 25, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 3, 1, 0, 1, 0.75, 12, 12, 10, 10, 50, 3, 3, 0, 0], _
+[796, "Sorrows Flame", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 120, 120, 0, 0, 312, 312], _
+[797, "Sorrows Fist", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 480, 0, 0, 312, 375], _
+[798, "Blast Furnace", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 113, 1, 3, 2781, 0], _
+[799, "Beguiling Haze", 15, 19.5, 2, 5, 4, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 0.25, 0.75, 3, 9, 20, 3, 9, 0, 0, 0, 0], _
+[800, "Enduring Toxin", 5, 6.5, 2, 4, 512, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.25, 0.75, 5, 5, 10, 1, 5, 0, 0, 0, 0], _
+[801, "Shroud of Silence", 10, 13, 2, 4, 6, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.75, 0.75, 1, 3, 30, 15, 15, 0, 0, 0, 0], _
+[802, "Expose Defenses", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 1, 11, 25, 0, 0, 0, 0, 0, 0], _
+[803, "Power Leech", 5, 6.5, 2, 4, 4, 0, 0, 1, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 0.25, 0.75, 10, 10, 20, 5, 15, 0, 0, 0, 0], _
+[804, "Arcane Languor", 10, 13, 2, 4, 4, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 5, 1, 0, 2, 0.75, 1, 10, 15, 0, 0, 0, 0, 0, 0], _
+[805, "Animate Vampiric Horror", 15, 19.5, 2, 5, 262144, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 3, 0.75, 196608, 196608, 15, 1, 17, 0, 0, 0, 0], _
+[806, "Cultists Fervor", 5, 6.5, 2, 6, 4, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 1, 0.75, 5, 5, 25, 1, 6, 10, 10, 3, 0], _
+[807, "Unknow", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 0, 2, 0, 1, 0.75, 30, 30, 10, 5, 50, 0, 0, 0, 0], _
+[808, "Reapers Mark", 5, 6.5, 3, 4, 516, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 5, 1, 0, 1, 0.75, 30, 30, 15, 1, 5, 5, 15, 0, 0], _
+[809, "Shatterstone", 10, 13, 2, 4, 4, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 2, 0.75, 3, 3, 8, 25, 100, 25, 100, 240, 0], _
+[810, "Protectors Defense", 5, 6.5, 2, 10, 0, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 30, 75, 75, 0, 0, 156, 0], _
+[811, "Run as One", 5, 6.5, 2, 3, 0, 0, 0, 32768, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 5, 15, 15, 25, 25, 0, 0, 0, 0], _
+[812, "Defiant Was Xinrae", 5, 6.5, 2, 24, 4, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 15, 60, 20, 20, 20, 5, 50, 240, 0], _
+[813, "Lyssas Aura", 5, 6.5, 2, 6, 4, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 30, 0, 5, 0, 0, 0, 0], _
+[814, "Shadow Refuge", 5, 6.5, 2, 6, 0, 0, 0, 4, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 1, 0.75, 6, 6, 8, 40, 100, 5, 10, 0, 0], _
+[815, "Scorpion Wire", 5, 6.5, 2, 4, 8, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 8, 20, 10, 0, 0, 0, 0, 0, 0], _
+[816, "Mirrored Stance", 5, 6.5, 2, 4, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 0.25, 0.75, 10, 35, 15, 0, 0, 0, 0, 0, 0], _
+[817, "Discord", 5, 6.5, 2, 5, 4, 0, 0, 0, 0, 0, 4, 5, 2863, 0, 5, 1, 0, 1, 0.75, 0, 0, 2, 30, 110, 0, 0, 0, 0], _
+[818, "Well of Weariness", 5, 6.5, 2, 9, 262144, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 0, 1, 0, 1, 0.75, 10, 55, 5, 1, 1, 20, 20, 312, 0], _
+[819, "Vampiric Spirit", 5, 6.5, 2, 6, 4, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 2, 0.75, 10, 10, 8, 5, 50, 5, 10, 240, 0], _
+[820, "Depravity", 10, 13, 3, 4, 4, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 5, 20, 15, 1, 5, 0, 0, 240, 0], _
+[821, "Icy Veins", 10, 13, 2, 4, 4, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 5, 1, 0, 1, 0.75, 10, 35, 5, 10, 90, 20, 110, 240, 0], _
+[822, "Weaken Knees", 5, 6.5, 2, 4, 516, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 1, 16, 10, 1, 4, 5, 10, 0, 0], _
+[823, "Burning Speed", 10, 13, 2, 6, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 0.25, 0.75, 7, 7, 0, 30, 45, 3, 9, 156, 0], _
+[824, "Lava Arrows", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 2, 20, 65, 3, 3, 240, 0], _
+[825, "Bed of Coals", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 5, 5, 15, 5, 29, 3, 7, 156, 0], _
+[826, "Shadow Form", 5, 6.5, 2, 6, 4, 0, 0, 128, 0, 0, 7, 31, 2862, 0, 0, 1, 0, 1, 0.75, 5, 21, 30, 5, 25, 5, 5, 1, 0], _
+[827, "Siphon Strength", 10, 13, 2, 4, 4, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 10, 5, 50, 33, 33, 0, 0], _
+[828, "Vile Miasma", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 10, 10, 15, 10, 65, 1, 5, 0, 0], _
+[829, "Veratas Promise", 15, 19.5, 3, 6, 0, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 0, 2, 0, 1, 0.75, 10, 60, 30, 33, 33, 10, 10, 0, 0], _
+[830, "Ray of Judgment", 10, 13, 2, 5, 4, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 16, 1, 0, 2, 0.75, 5, 5, 20, 5, 45, 1, 3, 156, 0], _
+[831, "Primal Rage", 0, 0, 2, 3, 4, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 80, 0, 0, 1, 15, 10, 33, 33, 25, 25, 0, 0], _
+[832, "Animate Flesh Golem", 10, 13, 2, 5, 262148, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 3, 0.75, 0, 0, 30, 3, 25, 0, 0, 0, 0], _
+[833, "Borrowed Energy", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 2, 0, 2, 0.75, 30, 30, 20, 4, 10, 0, 0, 0, 0], _
+[834, "Reckless Haste", 15, 19.5, 2, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 6, 12, 12, 50, 50, 25, 25, 156, 0], _
+[835, "Blood Bond", 5, 6.5, 2, 4, 0, 0, 0, 2, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 3, 12, 8, 5, 20, 20, 100, 156, 0], _
+[836, "Ride the Lightning", 10, 13, 2, 5, 5, 0, 0, 0, 0, 0, 6, 8, 2807, 0, 1, 1, 0, 1, 0.75, 0, 0, 5, 10, 70, 1, 5, 156, 0], _
+[837, "Energy Boon", 10, 13, 2, 6, 4, 0, 0, 256, 0, 0, 6, 12, 3433, 0, 3, 1, 0, 1, 0.75, 36, 60, 20, 1, 12, 1, 3, 2, 2], _
+[838, "Dwaynas Sorrow", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 30, 30, 5, 5, 50, 0, 0, 5000, 240], _
+[839, "Retreat", 5, 6.5, 2, 15, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 20, 33, 33, 0, 0, 1000, 5000], _
+[840, "Poisoned Heart", 5, 6.5, 3, 5, 0, 0, 256, 0, 0, 0, 4, 7, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 10, 12, 5, 15, 0, 0, 156, 0], _
+[841, "Fetid Ground", 5, 6.5, 2, 5, 0, 0, 0, 0, 128, 0, 4, 5, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 10, 15, 65, 5, 20, 0, 0], _
+[842, "Arc Lightning", 5, 6.5, 2, 5, 0, 0, 0, 0, 2048, 0, 6, 8, 3433, 0, 5, 1, 0, 1.5, 0.75, 0, 0, 8, 5, 40, 15, 85, 240, 2], _
+[843, "Gust", 10, 13, 2, 6, 4, 0, 128, 0, 0, 0, 6, 8, 3433, 0, 1, 1, 0, 0.75, 0.75, 5, 11, 10, 15, 70, 33, 33, 240, 0], _
+[844, "Churning Earth", 15, 19.5, 2, 5, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 16, 1, 0, 2, 0.75, 5, 5, 30, 10, 40, 10, 10, 240, 0], _
+[845, "Liquid Flame", 10, 13, 3, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 7, 112, 0, 0, 240, 0], _
+[846, "Steam", 5, 6.5, 3, 5, 0, 0, 2, 0, 4, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 5, 10, 8, 20, 60, 0, 0, 0, 0], _
+[847, "Boon Signet", 0, 0, 2, 7, 4, 0, 4096, 0, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 1, 0.75, 196608, 196608, 8, 20, 80, 20, 80, 0, 0], _
+[848, "Reverse Hex", 10, 13, 2, 6, 0, 0, 0, 2048, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 5, 10, 10, 5, 50, 0, 0, 0, 0], _
+[849, "Lacerating Chop", 0, 0, 2, 14, 0, 0, 128, 0, 1, 1, 1, 18, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 5, 20, 5, 20, 0, 0], _
+[850, "Fierce Blow", 0, 0, 2, 14, 0, 0, 0, 0, 1024, 16, 1, 19, 3433, 0, 5, 1, 140, 0, 0, 0, 0, 0, 5, 20, 1, 8, 0, 0], _
+[851, "Sun and Moon Slash", 0, 0, 2, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[852, "Splinter Shot", 10, 13, 2, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 5, 3, 15, 5, 65, 156, 0], _
+[853, "Melandrus Shot", 5, 6.5, 2, 14, 4, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 1, 1, 5, 15, 8, 10, 25, 5, 25, 0, 0], _
+[854, "Snare", 5, 6.5, 2, 21, 288, 0, 8, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 20, 3, 15, 0, 0, 156, 240], _
+[855, "Chomper", 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 256, 0], _
+[856, "Kilroy Stonekin", 0, 0, 1, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 60, 60, 45, 50, 50, 50, 50, 50, 5000], _
+[857, "Adventurers Insight", 0, 0, 0, 2, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 150, 150, 0, 0, 0, 0], _
+[858, "Dancing Daggers", 5, 6.5, 2, 5, 8, 0, 0, 0, 0, 0, 7, 30, 3433, 1, 5, 1, 0, 1, 0.75, 0, 0, 5, 5, 35, 1800, 1800, 0, 0], _
+[859, "Conjure Nightmare", 15, 19.5, 2, 4, 512, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1, 0.75, 2, 16, 5, 8, 8, 0, 0, 0, 0], _
+[860, "Signet of Disruption", 0, 0, 2, 7, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 15, 10, 51, 50, 50, 0, 0], _
+[861, "Dissipation", 15, 19.5, 3, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 2, 0, 2, 0.75, 5, 10, 15, 15, 75, 3, 3, 240, 0], _
+[862, "Ravenous Gaze", 1, 1.3, 3, 5, 4, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 16, 1, 0, 1, 0.75, 0, 0, 10, 15, 30, 15, 30, 240, 0], _
+[863, "Order of Apostasy", 25, 32.5, 2, 6, 4, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 0, 1, 0, 2, 0.75, 5, 5, 0, 25, 15, 0, 0, 5000, 0], _
+[864, "Oppressive Gaze", 10, 13, 2, 5, 0, 0, 0, 0, 1024, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 10, 30, 3, 12, 156, 50], _
+[865, "Lightning Hammer", 25, 32.5, 2, 5, 0, 0, 0, 0, 0, 0, 6, 8, 3396, 0, 5, 1, 0, 2, 0.75, 5, 20, 4, 10, 100, 25, 25, 0, 0], _
+[866, "Vapor Blade", 10, 13, 2, 5, 1, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1.5, 0.75, 0, 0, 7, 15, 135, 0, 0, 0, 0], _
+[867, "Healing Light", 5, 6.5, 2, 5, 4, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 4, 40, 100, 1, 3, 0, 0], _
+[868, "Aim True", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 2, 0, 0, 0, 5, 10, 20, 0, 0, 0, 0, 240, 0], _
+[869, "Coward", 0, 0, 2, 15, 4, 0, 128, 0, 0, 0, 1, 51, 3433, 0, 5, 1, 100, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0], _
+[870, "Pestilence", 5, 6.5, 3, 22, 0, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 90, 60, 1, 10, 0, 0, 2500, 312], _
+[871, "Shadowsong", 15, 19.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3006, 0, 0, 1, 0, 1, 0.75, 1, 6, 30, 1, 10, 5, 20, 2500, 30], _
+[872, "Shadowsong attack", 0, 0, 2, 14, 16384, 0, 2, 0, 0, 70, 8, 32, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 5, 20, 1, 6, 0, 0], _
+[873, "Resurrect monster skill", 10, 13, 0, 5, 2048, 0, 0, 8, 0, 0, 0, 51, 3433, 0, 15, 3, 0, 8, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[874, "Consuming Flames", 0, 0, 1, 14, 16384, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 3, 0, 2, 0, 0, 0, 4, 400, 400, 0, 0, 156, 0], _
+[875, "Chains of Enslavement", 0, 0, 1, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[876, "Signet of Shadows", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 30, 5, 35, 15, 60, 0, 0], _
+[877, "Lyssas Balance", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 0, 0, 0, 0, 0, 0], _
+[878, "Visions of Regret", 10, 13, 3, 4, 4, 0, 0, 0, 0, 0, 5, 2, 3234, 0, 5, 1, 0, 2, 0.75, 10, 10, 20, 15, 45, 5, 50, 156, 0], _
+[879, "Illusion of Pain", 10, 13, 2, 4, 512, 0, 0, 0, 0, 0, 5, 1, 3374, 0, 5, 1, 0, 2, 0.75, 8, 8, 5, 3, 10, 36, 120, 0, 0], _
+[880, "Stolen Speed", 5, 6.5, 2, 4, 4, 0, 0, 0, 0, 0, 5, 0, 3187, 0, 5, 1, 0, 1, 0.75, 1, 10, 12, 200, 200, 50, 50, 156, 0], _
+[881, "Ether Signet", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 45, 5, 10, 10, 20, 0, 0], _
+[882, "Signet of Disenchantment", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 0, 0, 0, 0, 0, 0], _
+[883, "Vocal Minority", 10, 13, 3, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 20, 0, 0, 0, 0, 240, 0], _
+[884, "Searing Flames", 15, 19.5, 3, 5, 4, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 1, 0.75, 0, 0, 2, 10, 100, 1, 7, 240, 0], _
+[885, "Shield Guardian", 5, 6.5, 2, 6, 0, 0, 0, 128, 0, 0, 3, 15, 3433, 0, 0, 1, 0, 1.5, 0.75, 1, 4, 20, 10, 40, 75, 75, 1000, 10], _
+[886, "Restful Breeze", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 8, 18, 8, 10, 10, 0, 0, 0, 0], _
+[887, "Signet of Rejuvenation", 0, 0, 2, 7, 0, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 8, 15, 75, 15, 75, 0, 0], _
+[888, "Whirling Axe", 0, 0, 2, 14, 4, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 100, 0, 0, 0, 0, 0, 5, 20, 0, 0, 0, 0], _
+[889, "Forceful Blow", 0, 0, 2, 14, 4, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 10, 30, 5, 20, 0, 0], _
+[890, "Headshot", 0, 0, 3, 15, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 2, 100, 0, 0, 5, 20, 0, 0, 0, 0, 0, 240, 0], _
+[891, "None Shall Pass", 5, 6.5, 2, 15, 0, 0, 128, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 0, 0, 45, 1, 8, 25, 25, 240, 0], _
+[892, "Quivering Blade", 0, 0, 2, 14, 4, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 120, 0, 0, 5, 5, 0, 10, 40, 5, 5, 0, 0], _
+[893, "Seeking Arrows", 15, 19.5, 2, 19, 256, 0, 0, 0, 0, 0, 2, 25, 3433, 0, 0, 1, 0, 2, 0.75, 3, 14, 20, 0, 0, 0, 0, 0, 0], _
+[894, "Rampagers Insight", 0, 0, 0, 2, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 200, 200, 0, 0, 0, 0], _
+[895, "Hunters Insight", 0, 0, 0, 2, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 175, 175, 0, 0, 0, 0], _
+[896, "Amulet of Protection", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[897, "Oath of Healing", 0, 0, 0, 5, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 0.75, 0.25, 0, 0, 0, 200, 200, 0, 0, 0, 0], _
+[898, "Overload", 5, 6.5, 2, 4, 512, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 5, 5, 5, 1, 3, 15, 75, 156, 0], _
+[899, "Images of Remorse", 5, 6.5, 2, 4, 512, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 2, 0.75, 5, 10, 5, 1, 3, 10, 52, 0, 0], _
+[900, "Shared Burden", 5, 6.5, 2, 4, 4, 0, 0, 0, 0, 0, 5, 1, 3186, 0, 5, 1, 0, 2, 0.75, 5, 20, 15, 50, 50, 0, 0, 240, 0], _
+[901, "Soul Bind", 10, 13, 2, 4, 4, 0, 128, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 30, 30, 5, 20, 80, 0, 0, 0, 0], _
+[902, "Blood of the Aggressor", 5, 6.5, 3, 5, 0, 0, 0, 32, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 5, 45, 3, 12, 0, 0], _
+[903, "Icy Prism", 10, 13, 2, 5, 1, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 15, 75, 15, 75, 240, 0], _
+[904, "Furious Axe", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 5, 35, 75, 75, 0, 0], _
+[905, "Auspicious Blow", 0, 0, 2, 14, 0, 0, 0, 0, 1024, 16, 1, 19, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 5, 20, 3, 8, 0, 0], _
+[906, "On Your Knees", 0, 0, 2, 15, 0, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 1, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 156, 0], _
+[907, "Dragon Slash", 0, 0, 2, 14, 4, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 240, 0, 0, 0, 0, 0, 10, 40, 1, 5, 0, 0], _
+[908, "Marauders Shot", 10, 13, 2, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 10, 35, 10, 10, 0, 0], _
+[909, "Focused Shot", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 2, 10, 25, 5, 3, 0, 0], _
+[910, "Spirit Rift", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 16, 1, 0, 2, 0.75, 3, 3, 5, 25, 125, 1, 20, 156, 0], _
+[911, "Union", 15, 19.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3005, 0, 0, 1, 0, 0.75, 0.75, 30, 60, 45, 1, 12, 15, 15, 2500, 0], _
+[912, "Blessing of the Kurzicks", 0, 0, 2, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 10, 10, 125, 125, 25, 3], _
+[913, "Tranquil Was Tanasen", 10, 13, 2, 24, 4, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 10, 25, 0, 0, 0, 0], _
+[914, "Consume Soul", 5, 6.5, 2, 5, 4, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 5, 60, 25, 125, 312, 0], _
+[915, "Spirit Light", 5, 6.5, 2, 5, 0, 0, 4096, 38, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 4, 60, 180, 0, 0, 17, 1000], _
+[916, "Lamentation", 10, 13, 2, 4, 512, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 15, 0, 3, 10, 50, 240, 0], _
+[917, "Rupture Soul", 10, 13, 2, 5, 0, 0, 2, 0, 0, 0, 8, 36, 3433, 0, 1, 1, 0, 0.75, 0.75, 0, 0, 5, 50, 140, 3, 12, 240, 0], _
+[918, "Spirit to Flesh", 10, 13, 2, 5, 2, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 1, 1, 0, 0.75, 0.75, 0, 0, 15, 30, 240, 0, 0, 240, 0], _
+[919, "Spirit Burn", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 6, 5, 50, 1, 5, 1000, 0], _
+[920, "Destruction", 10, 13, 2, 22, 256, 0, 0, 0, 0, 0, 8, 34, 3008, 0, 0, 1, 0, 0.75, 0.75, 30, 30, 20, 1, 14, 5, 25, 312, 150], _
+[921, "Dissonance", 25, 32.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3014, 0, 0, 1, 0, 1, 0.75, 10, 25, 45, 1, 12, 5, 20, 2500, 0], _
+[922, "Dissonance attack", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 32, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 20, 0, 0], _
+[923, "Disenchantment", 15, 19.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3017, 0, 0, 1, 0, 1, 0.75, 10, 35, 30, 1, 12, 5, 20, 2500, 0], _
+[924, "Disenchantment attack", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 32, 3433, 0, 5, 0, 0, 2, 0, 30, 60, 0, 1, 8, 5, 20, 0, 0], _
+[925, "Recall", 15, 19.5, 2, 6, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 4, 1, 0, 1, 0.75, 131072, 131072, 10, 10, 10, 0, 0, 0, 0], _
+[926, "Sharpen Daggers", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 1, 0.75, 5, 30, 20, 5, 15, 0, 0, 0, 0], _
+[927, "Shameful Fear", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 2, 0.75, 10, 10, 10, 10, 10, 5, 20, 0, 0], _
+[928, "Shadow Shroud", 10, 13, 2, 4, 4, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 1, 0.75, 3, 9, 20, 0, 0, 0, 0, 0, 0], _
+[929, "Shadow of Haste", 5, 6.5, 2, 3, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 0, 0, 10, 40, 45, 15, 15, 0, 0, 0, 0], _
+[930, "Auspicious Incantation", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 1, 0.75, 20, 20, 25, 10, 5, 110, 200, 0, 0], _
+[931, "Power Return", 5, 6.5, 2, 5, 0, 0, 0, 1, 0, 0, 5, 0, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 7, 10, 5, 50, 50, 0, 0], _
+[932, "Complicate", 10, 13, 2, 5, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 20, 8, 8, 5, 12, 312, 0], _
+[933, "Shatter Storm", 10, 13, 2, 5, 4, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 0, 7, 7, 0, 0, 0, 0], _
+[934, "Unnatural Signet", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 5, 2, 3188, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 15, 75, 5, 50, 156, 0], _
+[935, "Rising Bile", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 20, 20, 20, 1, 6, 0, 0, 312, 0], _
+[936, "Envenom Enchantments", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 3, 10, 0, 0, 0, 0], _
+[937, "Shockwave", 10, 13, 2, 5, 4, 0, 0, 512, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 1, 10, 15, 15, 60, 156, 156, 240, 312], _
+[938, "Ward of Stability", 10, 13, 2, 11, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 10, 25, 30, 0, 0, 0, 0, 312, 0], _
+[939, "Icy Shackles", 10, 13, 3, 4, 4, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 1, 10, 12, 66, 66, 90, 90, 0, 0], _
+[940, "Cry of Lament", 15, 19.5, 3, 5, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 0, 2, 0, 1, 0.75, 0, 0, 5, 10, 40, 5, 65, 5000, 0], _
+[941, "Blessed Light", 10, 13, 2, 5, 4, 0, 4096, 6150, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 3, 10, 140, 0, 0, 0, 0], _
+[942, "Withdraw Hexes", 15, 19.5, 2, 5, 4, 0, 0, 2048, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 5, 20, 5, 0, 0, 156, 0], _
+[943, "Extinguish", 15, 19.5, 2, 5, 0, 0, 0, 4096, 0, 0, 3, 15, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 12, 10, 100, 0, 0, 5000, 0], _
+[944, "Signet of Strength", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 1, 0.75, 196608, 196608, 45, 1, 16, 5, 5, 0, 0], _
+[945, "REMOVE With Haste", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 2, 0, 0, 0, 5, 11, 20, 10, 10, 0, 0, 468, 0], _
+[946, "Trappers Focus", 5, 6.5, 2, 19, 260, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 2, 0.75, 12, 24, 12, 0, 2, 0, 0, 0, 0], _
+[947, "Brambles", 10, 13, 2, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 150, 60, 1, 10, 5, 20, 5, 0], _
+[948, "Desperate Strike", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 1, 5, 1, 0, 0, 0, 0, 0, 6, 50, 80, 15, 60, 0, 0], _
+[949, "Way of the Fox", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 35, 45, 1, 6, 0, 0, 0, 0], _
+[950, "Shadowy Burden", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 0.25, 0.75, 3, 15, 15, 25, 25, 20, 20, 0, 0], _
+[951, "Siphon Speed", 5, 6.5, 2, 4, 8, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 5, 15, 30, 33, 33, 50, 50, 0, 0], _
+[952, "Deaths Charge", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 30, 65, 200, 0, 0, 0, 0], _
+[953, "Power Flux", 10, 13, 3, 4, 4, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 4, 10, 10, 2, 2, 0, 0, 0, 0], _
+[954, "Expel Hexes", 5, 6.5, 2, 5, 4, 0, 0, 2048, 0, 0, 5, 51, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[955, "Rip Enchantment", 5, 6.5, 3, 5, 0, 0, 0, 32, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 1, 1, 5, 25, 0, 0], _
+[956, "Energy Font", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 6, 12, 3433, 0, 0, 2, 0, 0.25, 0.75, 15, 60, 10, 2, 2, 0, 0, 0, 0], _
+[957, "Spell Shield", 10, 13, 2, 6, 0, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 2, 0.75, 5, 20, 30, 10, 5, 0, 0, 0, 0], _
+[958, "Healing Whisper", 5, 6.5, 2, 5, 8, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 1, 0.75, 0, 0, 1, 40, 100, 0, 0, 0, 0], _
+[959, "Ethereal Light", 5, 6.5, 2, 5, 32, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 5, 25, 100, 0, 0, 0, 0], _
+[960, "Release Enchantments", 5, 6.5, 2, 5, 0, 0, 4096, 8192, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 5, 5, 35, 0, 0, 5000, 0], _
+[961, "Lacerate", 10, 13, 2, 22, 260, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 3, 0.75, 30, 150, 15, 1, 10, 5, 25, 2, 90], _
+[962, "Spirit Transfer", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 0.25, 0.75, 0, 0, 5, 5, 50, 5, 5, 1000, 0], _
+[963, "Restoration", 10, 13, 2, 22, 2304, 0, 0, 8, 0, 0, 8, 32, 3018, 0, 0, 1, 0, 1, 0.75, 30, 30, 30, 1, 14, 5, 50, 312, 0], _
+[964, "Vengeful Weapon", 5, 6.5, 2, 25, 0, 0, 0, 6, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 3, 15, 60, 0, 0, 0, 0], _
+[965, "Archemorus Strike", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0], _
+[966, "Spear of Archemorus Level 1", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[967, "Spear of Archemorus Level 2", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0], _
+[968, "Spear of Archemorus Level 3", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55, 55, 0, 0, 0, 0], _
+[969, "Spear of Archemorus Level 4", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 115, 115, 0, 0, 0, 0], _
+[970, "Spear of Archemorus Level 5", 0, 0, 2, 5, 0, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 235, 235, 0, 0, 0, 0], _
+[971, "Argos Cry", 5, 6.5, 2, 5, 0, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 16, 3, 0, 5, 0.75, 9, 9, 15, 120, 120, 3, 3, 156, 0], _
+[972, "Jade Fury", 5, 6.5, 2, 5, 16384, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 10, 0, 500, 500, 8, 50, 50, 150, 150, 1400, 312], _
+[973, "Blinding Powder", 5, 6.5, 2, 5, 0, 4, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 20, 3, 15, 0, 0, 156, 0], _
+[974, "Mantis Touch", 5, 6.5, 2, 5, 0, 2, 0, 512, 0, 0, 7, 30, 3433, 2, 5, 1, 0, 0.75, 0.75, 0, 0, 15, 5, 20, 0, 0, 0, 0], _
+[975, "Exhausting Assault", 5, 6.5, 2, 14, 32768, 2, 0, 0, 0, 8, 7, 29, 3433, 3, 5, 1, 0, 0.5, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[976, "Repeating Strike", 5, 6.5, 2, 14, 0, 4, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 0, 0, 0, 10, 30, 15, 15, 0, 0], _
+[977, "Way of the Lotus", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 0.25, 0.75, 20, 20, 20, 5, 20, 0, 0, 0, 0], _
+[978, "Mark of Instability", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 20, 20, 20, 0, 0, 0, 0, 0, 0], _
+[979, "Mistrust", 10, 13, 3, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3191, 0, 5, 1, 0, 2, 0.75, 6, 6, 12, 10, 100, 0, 0, 240, 0], _
+[980, "Feast of Souls", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 10, 50, 100, 0, 0, 240, 0], _
+[981, "Recuperation", 25, 32.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 33, 3013, 0, 0, 1, 0, 0.75, 0.75, 15, 45, 45, 1, 14, 1, 3, 2500, 0], _
+[982, "Shelter", 25, 32.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3016, 0, 0, 1, 0, 1, 0.75, 30, 60, 45, 1, 12, 75, 45, 10, 0], _
+[983, "Weapon of Shadow", 10, 13, 2, 25, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 1, 0.75, 1, 7, 20, 5, 5, 1, 3, 0, 0], _
+[984, "Torch Enchantment", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0], _
+[985, "Caltrops", 10, 13, 2, 5, 8, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 10, 5, 15, 0, 0, 156, 0], _
+[986, "Nine Tail Strike", 5, 6.5, 2, 14, 32768, 4, 0, 0, 0, 8, 7, 29, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 8, 15, 40, 0, 0, 0, 0], _
+[987, "Way of the Empty Palm", 5, 6.5, 2, 6, 4, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 0, 1, 0, 0.25, 0.75, 5, 20, 10, 0, 0, 0, 0, 0, 0], _
+[988, "Temple Strike", 15, 19.5, 2, 14, 4, 2, 514, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 1, 10, 20, 0, 0, 0, 0, 0, 0], _
+[989, "Golden Phoenix Strike", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 0, 0, 8, 10, 30, 10, 30, 156, 0], _
+[990, "Expunge Enchantments", 10, 13, 2, 10, 2, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.75, 0.75, 10, 5, 30, 0, 0, 0, 0, 0, 0], _
+[991, "Deny Hexes", 5, 6.5, 2, 5, 0, 0, 0, 2048, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 12, 0, 0, 0, 0, 0, 0], _
+[992, "Triple Chop", 5, 6.5, 2, 14, 4, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 10, 40, 0, 0, 156, 0], _
+[993, "Enraged Smash", 5, 6.5, 2, 14, 4, 0, 0, 0, 0, 16, 1, 19, 2808, 0, 5, 1, 0, 0, 0, 0, 0, 5, 1, 4, 10, 40, 0, 0], _
+[994, "Renewing Smash", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 16, 1, 19, 3143, 0, 5, 1, 0, 1, 0, 0, 0, 30, 10, 40, 3, 3, 0, 0], _
+[995, "Tiger Stance", 5, 6.5, 2, 3, 0, 0, 0, 32768, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 4, 10, 20, 33, 33, 0, 0, 0, 0], _
+[996, "Standing Slash", 0, 0, 2, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 140, 0, 0, 0, 0, 0, 5, 20, 5, 20, 0, 0], _
+[997, "Famine", 10, 13, 2, 22, 260, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 3, 0.75, 30, 90, 15, 1, 10, 10, 35, 5, 0], _
+[998, "Torch Hex", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0], _
+[999, "Torch Degeneration Hex", 0, 0, 0, 4, 512, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 0, 1, 1, 0, 0, 0, 0], _
+[1000, "Blinding Snow", 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 5, 51, 3433, 0, 5, 2, 0, 0.25, 0.75, 0, 0, 10, 10, 10, 0, 0, 0, 0], _
+[1001, "Avalanche skill", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.75, 0.75, 0, 0, 30, 7, 7, 0, 0, 240, 0], _
+[1002, "Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 0, 50, 50, 1, 1, 1000, 0], _
+[1003, "Mega Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 100, 1, 0.75, 0, 0, 0, 75, 75, 800, 800, 0, 0], _
+[1004, "Yuletide", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 500, 500, 40, 40, 4, 0], _
+[1005, "Ice Skates", 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 60, 33, 33, 0, 0, 0, 0], _
+[1006, "Ice Fort", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 10, 10, 60, 0, 0, 0, 0, 0, 0], _
+[1007, "Yellow Snow", 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.75, 0.75, 196608, 196608, 12, 10, 10, 0, 0, 0, 0], _
+[1008, "Hidden Rock", 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 196608, 196608, 10, 10, 10, 0, 0, 0, 0], _
+[1009, "Snow Down the Shirt", 0, 0, 0, 4, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.75, 0.75, 20, 20, 30, 0, 0, 0, 0, 0, 0], _
+[1010, "Mmmm Snowcone", 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 60, 300, 300, 10, 10, 0, 0], _
+[1011, "Holiday Blues", 0, 0, 0, 5, 262144, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 2, 0, 1, 0.75, 30, 30, 45, 15, 15, 50, 50, 312, 240], _
+[1012, "Icicles", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 5, 2, 0, 2, 0.75, 5, 5, 25, 75, 75, 66, 66, 156, 0], _
+[1013, "Ice Breaker", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 3, 2, 0, 1, 0.75, 10, 10, 45, 5, 5, 0, 0, 0, 0], _
+[1014, "Lets Get Em", 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 0, 0, 0, 5, 5, 30, 10, 10, 1, 1, 1000, 0], _
+[1015, "Flurry of Ice", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 5, 2, 0, 0.75, 0.75, 0, 0, 0, 4, 4, 50, 50, 156, 1000], _
+[1016, "Snowball NPC", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 2, 0, 1, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1017, "Undying", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[1018, "Critical Eye", 5, 6.5, 2, 16, 0, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 0, 0.75, 10, 35, 30, 3, 15, 1, 1, 0, 0], _
+[1019, "Critical Strike", 5, 6.5, 2, 14, 32768, 4, 0, 0, 0, 8, 7, 35, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 6, 10, 30, 1, 3, 0, 0], _
+[1020, "Blades of Steel", 5, 6.5, 2, 14, 32768, 4, 0, 0, 0, 8, 7, 29, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 8, 5, 16, 60, 60, 0, 0], _
+[1021, "Jungle Strike", 5, 6.5, 2, 14, 0, 2, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0.5, 0, 0, 0, 10, 10, 25, 1, 31, 156, 0], _
+[1022, "Wild Strike", 5, 6.5, 2, 14, 0, 2, 0, 0, 0, 8, 7, 29, 3252, 2, 5, 1, 0, 0, 0, 0, 0, 4, 10, 35, 0, 0, 0, 0], _
+[1023, "Leaping Mantis Sting", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 1, 5, 1, 0, 0.5, 0, 0, 0, 8, 5, 15, 3, 15, 0, 0], _
+[1024, "Black Mantis Thrust", 5, 6.5, 2, 14, 0, 0, 8, 0, 0, 8, 7, 29, 3433, 1, 5, 1, 0, 1, 0, 0, 0, 6, 8, 20, 3, 15, 0, 0], _
+[1025, "Disrupting Stab", 5, 6.5, 2, 14, 0, 0, 0, 1, 0, 8, 7, 29, 3433, 1, 5, 1, 0, 0, 0, 0, 0, 10, 3, 10, 0, 0, 0, 0], _
+[1026, "Golden Lotus Strike", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 1, 5, 1, 0, 0, 0, 0, 0, 5, 5, 20, 5, 8, 0, 0], _
+[1027, "Critical Defenses", 10, 13, 2, 6, 0, 0, 0, 128, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 1, 0.75, 4, 10, 30, 75, 75, 0, 0, 0, 0], _
+[1028, "Way of Perfection", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 0.25, 0.75, 60, 60, 30, 10, 40, 0, 0, 0, 0], _
+[1029, "Dark Apostasy", 10, 13, 2, 6, 4, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 0.25, 0.75, 3, 17, 15, 10, 4, 0, 0, 0, 0], _
+[1030, "Locusts Fury", 10, 13, 2, 6, 4, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 1, 0.75, 10, 35, 10, 50, 50, 0, 0, 0, 0], _
+[1031, "Shroud of Distress", 10, 13, 2, 6, 0, 0, 0, 0, 0, 0, 7, 31, 3048, 0, 0, 1, 0, 1, 0.75, 30, 60, 45, 3, 8, 75, 75, 0, 0], _
+[1032, "Heart of Shadow", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 1, 1, 0, 0.25, 0, 60, 60, 15, 30, 150, 0, 0, 312, 800], _
+[1033, "Impale", 5, 6.5, 2, 10, 0, 1, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 20, 20, 15, 25, 100, 5, 20, 0, 0], _
+[1034, "Seeping Wound", 15, 19.5, 2, 4, 12, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 5, 1, 0, 0.25, 0.75, 1, 7, 12, 33, 33, 5, 25, 0, 0], _
+[1035, "Assassins Promise", 5, 6.5, 2, 4, 4, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.75, 0.75, 5, 15, 45, 5, 20, 0, 0, 0, 0], _
+[1036, "Signet of Malice", 0, 0, 2, 7, 0, 0, 0, 4096, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[1037, "Dark Escape", 5, 6.5, 2, 3, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 0, 0.75, 5, 15, 30, 25, 25, 50, 50, 0, 0], _
+[1038, "Crippling Dagger", 5, 6.5, 2, 5, 8, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 15, 60, 3, 15, 0, 0], _
+[1039, "Star Strike", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 1, 0.75, 10, 10, 0, 20, 20, 6, 6, 6, 0], _
+[1040, "Spirit Walk", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 1, 1, 0, 0.25, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[1041, "Unseen Fury", 5, 6.5, 2, 3, 0, 0, 0, 0, 0, 0, 7, 31, 3049, 0, 0, 1, 0, 0, 0, 10, 30, 20, 0, 0, 3, 10, 156, 0], _
+[1042, "Flashing Blades", 10, 13, 2, 3, 4, 0, 0, 128, 0, 0, 7, 29, 3433, 0, 0, 1, 0, 0, 0, 5, 30, 30, 75, 75, 5, 20, 0, 0], _
+[1043, "Dash", 5, 6.5, 2, 3, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 1, 0, 0, 0, 3, 3, 8, 50, 50, 0, 0, 0, 0], _
+[1044, "Dark Prison", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.25, 0.75, 1, 6, 30, 33, 33, 0, 0, 0, 0], _
+[1045, "Palm Strike", 5, 6.5, 2, 10, 6, 0, 0, 512, 0, 0, 7, 35, 3433, 2, 5, 1, 0, 0.75, 0.75, 0, 0, 7, 10, 65, 1, 5, 0, 0], _
+[1046, "Assassin of Lyssa", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1047, "Mesmer of Lyssa", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1048, "Revealed Enchantment", 10, 13, 2, 5, 0, 0, 0, 256, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 1, 0.75, 20, 20, 0, 3, 15, 0, 0, 0, 0], _
+[1049, "Revealed Hex", 5, 6.5, 2, 5, 0, 0, 0, 2304, 0, 0, 5, 3, 3433, 0, 3, 1, 0, 1, 0.75, 20, 20, 0, 4, 10, 0, 0, 0, 0], _
+[1050, "Disciple of Energy", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1051, "Empathy Koro", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 2, 0, 2, 0.75, 8, 20, 10, 10, 30, 0, 0, 0, 0], _
+[1052, "Accumulated Pain", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 5, 1, 3184, 0, 5, 1, 0, 2, 0.75, 5, 20, 12, 15, 75, 2, 2, 0, 0], _
+[1053, "Psychic Distraction", 10, 13, 2, 5, 4, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 2, 8, 8, 5, 12, 312, 0], _
+[1054, "Ancestors Visage", 10, 13, 2, 6, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 3, 1, 0, 1, 0.75, 4, 10, 20, 3, 3, 0, 0, 156, 0], _
+[1055, "Recurring Insecurity", 10, 13, 2, 4, 516, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1, 0.75, 10, 10, 10, 1, 5, 0, 0, 240, 0], _
+[1056, "Kitahs Burden", 15, 19.5, 2, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1.5, 0.75, 10, 10, 30, 50, 50, 10, 18, 0, 0], _
+[1057, "Psychic Instability", 5, 6.5, 2, 5, 68, 0, 0, 0, 0, 0, 5, 0, 3185, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 12, 2, 4, 0, 0, 240, 0], _
+[1058, "Chaotic Power", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 10, 10, 0, 0, 0, 50], _
+[1059, "Hex Eater Signet", 0, 0, 2, 7, 2, 0, 0, 2048, 0, 0, 5, 3, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 25, 2, 5, 1, 4, 156, 0], _
+[1060, "Celestial Haste", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 2, 0, 1, 0.75, 15, 15, 0, 50, 50, 25, 25, 5000, 0], _
+[1061, "Feedback", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 30, 4, 10, 0, 0, 0, 0], _
+[1062, "Arcane Larceny", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 1, 0.75, 5, 35, 0, 0, 0, 0, 0, 0, 0], _
+[1063, "Chaotic Ward", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 20, 20, 0, 0, 0, 100], _
+[1064, "Favor of the Gods", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 75], _
+[1065, "Dark Aura blessing", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 3, 3, 0, 0, 0, 100], _
+[1066, "Spoil Victor", 10, 13, 2, 4, 4, 0, 0, 0, 0, 0, 4, 4, 3233, 0, 5, 1, 0, 1, 0.75, 3, 15, 10, 25, 100, 0, 0, 0, 0], _
+[1067, "Lifebane Strike", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 15, 12, 48, 12, 48, 0, 0], _
+[1068, "Bitter Chill", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 15, 60, 0, 0, 0, 0], _
+[1069, "Taste of Pain", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 10, 50, 50, 30, 150, 0, 0], _
+[1070, "Defile Enchantments", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 16, 1, 0, 2, 0.75, 0, 0, 15, 6, 60, 4, 20, 240, 0], _
+[1071, "Shivers of Dread", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 10, 40, 15, 10, 5, 0, 0, 0, 0], _
+[1072, "Star Servant", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 2, 0, 1, 0.75, 0, 0, 0, 25, 25, 3, 3, 0, 0], _
+[1073, "Necromancer of Grenth", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1074, "Ritualist of Grenth", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1075, "Vampiric Swarm", 15, 19.5, 2, 5, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 2, 0.75, 15, 60, 8, 15, 60, 0, 0, 312, 0], _
+[1076, "Blood Drinker", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 2, 0.75, 10, 10, 8, 20, 65, 50, 50, 0, 0], _
+[1077, "Vampiric Bite", 15, 19.5, 2, 10, 2, 0, 0, 4, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 2, 29, 74, 0, 0, 0, 0], _
+[1078, "Wallows Bite", 1, 1.3, 2, 10, 2, 0, 0, 544, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 3, 10, 10, 20, 58, 0, 0], _
+[1079, "Enfeebling Touch", 5, 6.5, 2, 10, 2, 0, 0, 512, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 0.75, 0.75, 5, 20, 5, 5, 50, 5, 20, 0, 0], _
+[1080, "Disciple of Ice", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1081, "Teinais Wind", 5, 6.5, 2, 5, 0, 0, 128, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 2, 2, 8, 10, 40, 40, 80, 156, 0], _
+[1082, "Shock Arrow", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 5, 50, 5, 5, 2400, 0], _
+[1083, "Unsteady Ground", 10, 13, 2, 5, 4, 0, 128, 0, 0, 0, 6, 9, 3433, 0, 16, 1, 0, 2, 0.75, 5, 5, 15, 10, 40, 0, 0, 240, 0], _
+[1084, "Sliver Armor", 10, 13, 2, 6, 0, 0, 0, 128, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 5, 11, 30, 25, 50, 5, 35, 240, 0], _
+[1085, "Ash Blast", 5, 6.5, 2, 4, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 1, 0.75, 5, 5, 15, 35, 65, 20, 75, 156, 0], _
+[1086, "Dragons Stomp", 25, 32.5, 2, 5, 1, 0, 128, 0, 0, 0, 6, 9, 3433, 0, 16, 1, 0, 3, 0.75, 0, 0, 15, 26, 100, 0, 0, 240, 0], _
+[1087, "Unnatural Resistance", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 20, 20, 0, 0, 0, 50], _
+[1088, "Second Wind", 5, 6.5, 2, 5, 5, 0, 0, 256, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 5, 1, 1, 5, 5, 0, 0], _
+[1089, "Cloak of Faith", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 10, 10, 0, 0, 0, 100], _
+[1090, "Smoldering Embers", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1.5, 0.75, 3, 3, 7, 10, 70, 5, 25, 156, 0], _
+[1091, "Double Dragon", 10, 13, 2, 6, 4, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 1, 1, 0, 1, 0.75, 8, 8, 20, 0, 3, 5, 30, 240, 156], _
+[1092, "Disciple of the Air", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1093, "Teinais Heat", 15, 19.5, 2, 11, 0, 0, 4, 0, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 1, 0.75, 10, 15, 20, 2, 5, 33, 33, 312, 0], _
+[1094, "Breath of Fire", 5, 6.5, 2, 5, 1, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 16, 1, 0, 2, 0.75, 5, 5, 10, 10, 40, 0, 0, 156, 0], _
+[1095, "Star Burst", 5, 6.5, 2, 5, 6, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 7, 7, 112, 1, 4, 312, 2], _
+[1096, "Glyph of Essence", 5, 6.5, 2, 12, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 20, 0, 0, 0, 0, 0, 0], _
+[1097, "Teinais Prison", 10, 13, 2, 4, 512, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 1, 6, 15, 66, 66, 5, 9, 0, 0], _
+[1098, "Mirror of Ice", 10, 13, 2, 4, 4, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 1, 1, 0, 0.75, 0.75, 2, 6, 15, 15, 70, 66, 66, 240, 50], _
+[1099, "Teinais Crystals", 5, 6.5, 2, 5, 0, 0, 0, 512, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 1, 0.75, 5, 15, 8, 20, 40, 20, 40, 240, 0], _
+[1100, "Celestial Storm", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 16, 2, 0, 1, 0.75, 15, 15, 0, 40, 40, 0, 0, 312, 0], _
+[1101, "Monk of Dwayna", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1102, "Aura of the Grove", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0], _
+[1103, "Cathedral Collapse", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 35, 0, 0, 0, 0], _
+[1104, "Miasma", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 15, 15, 0, 5, 5, 0, 0, 156, 0], _
+[1105, "Acid Trap", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1, 1, 0, 20, 20, 0, 0, 0, 0], _
+[1106, "Shield of Saint Viktor", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 312, 0], _
+[1107, "Urn of Saint Viktor Level 1", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[1108, "Urn of Saint Viktor Level 2", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0], _
+[1109, "Urn of Saint Viktor Level 3", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55, 55, 0, 0, 0, 0], _
+[1110, "Urn of Saint Viktor Level 4", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 115, 115, 0, 0, 0, 0], _
+[1111, "Urn of Saint Viktor Level 5", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 235, 235, 0, 0, 0, 0], _
+[1112, "Aura of Light", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 50], _
+[1113, "Kirins Wrath", 5, 6.5, 2, 5, 0, 0, 0, 512, 0, 0, 3, 14, 3433, 0, 0, 1, 0, 2, 0.75, 5, 5, 30, 8, 32, 0, 0, 156, 0], _
+[1114, "Spirit Bond", 10, 13, 2, 6, 0, 0, 0, 0, 0, 0, 3, 15, 2892, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 2, 50, 50, 30, 90, 10, 0], _
+[1115, "Air of Enchantment", 5, 6.5, 2, 6, 4, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 0.25, 0.75, 4, 10, 8, 5, 5, 1, 1, 0, 0], _
+[1116, "Warriors Might", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 10, 10, 0, 0, 0, 100], _
+[1117, "Heavens Delight", 5, 6.5, 2, 5, 0, 0, 4096, 6, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 12, 15, 60, 0, 0, 1000, 0], _
+[1118, "Healing Burst", 5, 6.5, 2, 5, 4, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 4, 10, 160, 0, 0, 1000, 0], _
+[1119, "Kareis Healing Circle", 10, 13, 2, 5, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 5, 30, 180, 0, 0, 156, 0], _
+[1120, "Jameis Gaze", 10, 13, 2, 5, 0, 0, 4096, 2, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 0.75, 0.75, 0, 0, 3, 35, 180, 0, 0, 0, 0], _
+[1121, "Gift of Health", 5, 6.5, 2, 5, 0, 0, 4096, 2, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 0.75, 0.75, 0, 0, 5, 15, 150, 10, 5, 0, 0], _
+[1122, "Battle Fervor", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 10, 10, 0, 0, 0, 50], _
+[1123, "Life Sheath", 5, 6.5, 2, 6, 4, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 2, 0, 2, 20, 100, 0, 0], _
+[1124, "Star Shine", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 2, 0, 1, 0.75, 0, 0, 0, 0, 0, 0, 0, 5000, 0], _
+[1125, "Disciple of Fire", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1126, "Empathic Removal", 5, 6.5, 2, 5, 4, 0, 0, 6144, 0, 0, 3, 51, 3433, 0, 4, 1, 0, 1, 0.75, 0, 0, 7, 50, 50, 0, 0, 0, 0], _
+[1127, "Warrior of Balthazar", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1128, "Resurrection Chant", 10, 13, 2, 5, 2056, 0, 0, 8, 0, 0, 3, 13, 3433, 0, 6, 1, 0, 6, 0.75, 0, 0, 15, 5, 35, 0, 0, 0, 0], _
+[1129, "Word of Censure", 10, 13, 2, 5, 4, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 2, 15, 75, 20, 20, 33, 0], _
+[1130, "Spear of Light", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 26, 56, 15, 60, 0, 0], _
+[1131, "Stonesoul Strike", 5, 6.5, 2, 10, 2, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 8, 10, 55, 10, 55, 0, 0], _
+[1132, "Shielding Branches", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 20, 20, 0, 0, 0, 100], _
+[1133, "Drunken Blow", 5, 6.5, 2, 14, 0, 0, 25, 65536, 0, 185, 1, 21, 3433, 0, 5, 1, 0, 0, 0, 2, 2, 7, 10, 40, 0, 0, 0, 0], _
+[1134, "Leviathans Sweep", 5, 6.5, 2, 14, 0, 0, 128, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 5, 20, 10, 34, 0, 0], _
+[1135, "Jaizhenju Strike", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 1, 30, 0, 0, 0, 0], _
+[1136, "Penetrating Chop", 0, 0, 2, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 5, 20, 20, 20, 0, 0], _
+[1137, "Yeti Smash", 0, 0, 2, 14, 64, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 5, 20, 5, 50, 156, 0], _
+[1138, "Disciple of the Earth", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1139, "Ranger of Melandru", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1140, "Storm of Swords", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 0, 1, 0.75, 15, 15, 0, 25, 25, 0, 0, 156, 312], _
+[1141, "You Will Die", 5, 6.5, 2, 15, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 15, 50, 50, 1, 3, 0, 0], _
+[1142, "Auspicious Parry", 0, 0, 2, 3, 4, 0, 0, 128, 0, 0, 1, 21, 3433, 0, 0, 1, 25, 0, 0, 8, 8, 2, 1, 4, 50, 50, 0, 0], _
+[1143, "Strength of the Oak", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 50, 50, 0, 0, 0, 50], _
+[1144, "Silverwing Slash", 0, 0, 2, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 1, 40, 0, 0, 0, 0], _
+[1145, "Destroy Enchantment", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 0, 50, 50, 0, 0, 0, 0], _
+[1146, "Shove", 5, 6.5, 2, 10, 6, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 5, 1, 0, 0.75, 0, 0, 0, 15, 15, 75, 0, 0, 0, 0], _
+[1147, "Base Defense", 5, 6.5, 2, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.25, 0.75, 0, 0, 1, 999, 999, 5, 5, 1250, 0], _
+[1148, "Carrier Defense", 0, 0, 2, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 0, 0, 1, 100, 100, 2, 2, 312, 800], _
+[1149, "The Chalice of Corruption", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1150, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 25, 25, 3, 3, 0, 0], _
+[1151, "Song of the Mists", 5, 6.5, 2, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 15, 6, 6, 20, 20, 312, 0], _
+[1152, "Demonic Agility", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 30, 30, 45, 100, 100, 0, 0, 0, 0], _
+[1153, "Blessing of the Kirin", 5, 6.5, 2, 6, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 30, 30, 15, 0, 0, 0, 0, 5000, 0], _
+[1154, "Emperor Degen", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1155, "Juggernaut Toss", 0, 0, 2, 10, 16386, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 50, 0.75, 0.75, 5, 5, 15, 50, 50, 0, 0, 0, 0], _
+[1156, "Aura of the Juggernaut", 5, 6.5, 2, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 35, 35, 30, 1, 1, 0, 0, 312, 0], _
+[1157, "Star Shards", 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0], _
+[1158, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 312, 0], _
+[1159, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1160, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1161, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1162, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1163, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1164, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1165, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1166, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1167, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1168, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1169, "Unknow", 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1170, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1171, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1172, "Turtle Shell", 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 20, 20, 0, 1, 23, 0, 0, 0, 0], _
+[1173, "Exposed Underbelly", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 5, 5, 0, 2, 2, 0, 0, 0, 0], _
+[1174, "Cathedral Collapse", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 5, 5, 15, 35, 35, 3, 3, 1000, 312], _
+[1175, "Blood of zu Heltzer", 0, 0, 2, 5, 32, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 10, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1176, "Afflicted Soul Explosion", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 112, 0, 0, 240, 0], _
+[1177, "Invincibility", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1178, "Last Stand", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1179, "Dark Chain Lightning", 5, 6.5, 2, 14, 16384, 0, 128, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 0, 0, 15, 300, 300, 30, 30, 468, 0], _
+[1180, "Seadragon Health Trigger", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1181, "Corrupted Breath", 5, 6.5, 2, 19, 256, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 20, 20, 30, 50, 50, 0, 0, 312, 0], _
+[1182, "Renewing Corruption", 0, 0, 2, 3, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 5, 200, 200, 0, 0, 0, 0], _
+[1183, "Corrupted Dragon Spores", 5, 6.5, 2, 5, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 4, 0.75, 30, 30, 30, 200, 200, 2, 2, 468, 312], _
+[1184, "Corrupted Dragon Scales", 5, 6.5, 2, 5, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 4, 0.75, 30, 30, 30, 80, 80, 10, 10, 468, 312], _
+[1185, "Construct Possession", 5, 6.5, 2, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 30, 30, 1, 0, 0, 0, 0, 0, 0], _
+[1186, "Siege Turtle Attack The Eternal Grove", 5, 6.5, 2, 10, 17408, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 3, 0, 3, 0.759999990463257, 0, 0, 15, 50, 50, 80, 80, 312, 1050], _
+[1187, "Siege Turtle Attack Fort Aspenwood", 5, 6.5, 2, 10, 17408, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 3, 0, 3, 0.75, 0, 0, 10, 80, 80, 250, 250, 156, 1050], _
+[1188, "Siege Turtle Attack Gyala Hatchery", 5, 6.5, 2, 10, 17408, 0, 0, 32768, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 80, 80, 15, 80, 80, 250, 250, 156, 1050], _
+[1189, "Of Royal Blood", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1190, "Passage to Tahnnakai", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1191, "Sundering Attack", 10, 13, 2, 14, 0, 0, 0, 0, 0, 2, 2, 25, 2864, 0, 5, 1, 0, 0.75, 0.600000023841858, 0, 0, 4, 5, 25, 10, 10, 0, 0], _
+[1192, "Zojuns Shot", 5, 6.5, 2, 14, 8, 0, 0, 0, 0, 2, 2, 23, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 3, 10, 40, 0, 0, 0, 0], _
+[1193, "Consume Spirit", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 15, 15, 0, 8, 8, 0, 0, 0, 0], _
+[1194, "Predatory Bond", 10, 13, 2, 15, 0, 0, 0, 0, 0, 0, 2, 22, 3050, 0, 0, 1, 0, 0, 0, 5, 20, 30, 1, 31, 25, 25, 0, 0], _
+[1195, "Heal as One", 5, 6.5, 2, 10, 4, 0, 0, 4, 0, 0, 2, 22, 3144, 0, 0, 1, 0, 1, 0, 15, 15, 5, 1, 20, 20, 104, 50, 0], _
+[1196, "Zojuns Haste", 5, 6.5, 2, 3, 0, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 30, 27, 75, 33, 33, 0, 0], _
+[1197, "Needling Shot", 5, 6.5, 2, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0.75, 0.600000023841858, 0, 0, 4, 50, 50, 10, 30, 4800, 0], _
+[1198, "Broad Head Arrow", 15, 19.5, 2, 14, 4, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 5, 20, 15, 1800, 1800, 0, 0, 800, 0], _
+[1199, "Glass Arrows", 5, 6.5, 2, 19, 260, 0, 0, 0, 0, 0, 2, 23, 3145, 0, 0, 1, 0, 2, 0.75, 10, 35, 12, 5, 20, 10, 20, 0, 0], _
+[1200, "Archers Signet", 0, 0, 2, 7, 4, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 1, 0.75, 1, 24, 12, 100, 100, 0, 0, 0, 0], _
+[1201, "Savage Pounce", 5, 6.5, 2, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 5, 20, 0, 0, 5000, 0], _
+[1202, "Enraged Lunge", 5, 6.5, 2, 20, 4, 0, 0, 0, 0, 0, 2, 22, 3051, 0, 0, 1, 0, 0, 0.75, 5, 20, 5, 10, 50, 0, 0, 5000, 0], _
+[1203, "Bestial Mauling", 5, 6.5, 2, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0.75, 4, 10, 20, 5, 20, 0, 0, 5000, 0], _
+[1204, "Energy Drain effect", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1, 1, 0, 4, 4, 0, 0, 0, 0], _
+[1205, "Poisonous Bite", 5, 6.5, 2, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 5, 20, 7, 0, 0, 0, 0, 5000, 0], _
+[1206, "Pounce", 5, 6.5, 2, 20, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0.75, 10, 10, 20, 5, 20, 0, 0, 5000, 0], _
+[1207, "Celestial Stance", 0, 0, 2, 10, 0, 0, 0, 128, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0.75, 15, 15, 0, 75, 75, 3, 3, 5000, 0], _
+[1208, "Sheer Exhaustion", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0], _
+[1209, "Bestial Fury", 10, 13, 2, 3, 0, 0, 0, 32768, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 10, 25, 25, 5, 5, 0, 0], _
+[1210, "Life Drain", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1, 1, 0, 15, 15, 0, 0, 0, 0], _
+[1211, "Vipers Nest", 10, 13, 2, 21, 288, 0, 256, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 20, 5, 35, 5, 20, 156, 240], _
+[1212, "Equinox", 10, 13, 2, 22, 260, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 3, 0.75, 30, 150, 15, 1, 10, 0, 0, 0, 0], _
+[1213, "Tranquility", 15, 19.5, 2, 22, 256, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 15, 60, 60, 1, 10, 20, 50, 2500, 0], _
+[1214, "Acute Weakness", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0], _
+[1215, "Clamor of Souls", 10, 13, 2, 5, 4, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 10, 65, 10, 10, 240, 1000], _
+[1216, "Unknow", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0], _
+[1217, "Ritual Lord", 0, 0, 2, 16, 4, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 0, 0.75, 5, 35, 45, 10, 60, 2, 4, 0, 0], _
+[1218, "Cruel Was Daoshen", 15, 19.5, 2, 24, 0, 0, 0, 512, 0, 0, 8, 34, 3433, 0, 0, 1, 0, 2, 0.75, 15, 60, 30, 15, 85, 10, 10, 240, 10], _
+[1219, "Protective Was Kaolai", 10, 13, 2, 24, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 15, 60, 25, 10, 10, 10, 85, 5000, 0], _
+[1220, "Attuned Was Songkai", 10, 13, 2, 24, 4, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 2, 0.75, 45, 45, 60, 5, 50, 0, 0, 0, 0], _
+[1221, "Resilient Was Xiko", 5, 6.5, 2, 24, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 10, 3, 3, 1, 4, 0, 0], _
+[1222, "Lively Was Naomei", 15, 19.5, 2, 24, 2048, 0, 0, 8, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 6, 0.75, 45, 45, 20, 15, 75, 0, 0, 312, 0], _
+[1223, "Anguished Was Lingwah", 5, 6.5, 2, 24, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 2, 0.75, 10, 60, 30, 1, 5, 33, 33, 0, 0], _
+[1224, "Draw Spirit", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 1, 1, 0, 0.25, 0.75, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[1225, "Channeled Strike", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 4, 5, 95, 5, 35, 0, 0], _
+[1226, "Spirit Boon Strike", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 3, 20, 65, 20, 65, 1000, 0], _
+[1227, "Essence Strike", 5, 6.5, 2, 5, 0, 0, 0, 256, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 15, 60, 1, 9, 1000, 0], _
+[1228, "Spirit Siphon", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 3, 15, 50, 0, 0, 0, 0], _
+[1229, "Explosive Growth", 5, 6.5, 2, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 2, 0.75, 15, 60, 45, 20, 65, 5, 5, 240, 0], _
+[1230, "Boon of Creation", 10, 13, 2, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 2, 0.75, 15, 60, 45, 5, 50, 1, 6, 0, 0], _
+[1231, "Spirit Channeling", 5, 6.5, 2, 6, 4, 0, 0, 256, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 12, 12, 30, 1, 6, 3, 12, 1000, 5], _
+[1232, "Armor of Unfeeling", 5, 6.5, 2, 10, 0, 0, 0, 0, 0, 0, 8, 32, 3003, 0, 0, 1, 0, 1, 0.75, 10, 35, 20, 50, 50, 0, 0, 1000, 0], _
+[1233, "Soothing Memories", 5, 6.5, 2, 5, 0, 0, 4096, 6, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 4, 10, 100, 3, 3, 0, 0], _
+[1234, "Mend Body and Soul", 5, 6.5, 2, 5, 0, 0, 4096, 4102, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 3, 20, 115, 0, 0, 1000, 0], _
+[1235, "Dulled Weapon", 15, 19.5, 2, 4, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 5, 1, 0, 1, 0.75, 5, 15, 20, 1, 15, 0, 0, 156, 0], _
+[1236, "Binding Chains", 10, 13, 2, 4, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 5, 1, 0, 1, 0.75, 3, 3, 15, 90, 90, 1, 30, 240, 0], _
+[1237, "Painful Bond", 15, 19.5, 2, 4, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 10, 20, 12, 8, 20, 0, 0, 240, 0], _
+[1238, "Signet of Creation", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 20, 4, 4, 3, 12, 1000, 0], _
+[1239, "Signet of Spirits", 0, 0, 2, 7, 4, 0, 0, 0, 0, 0, 8, 34, 2965, 0, 0, 1, 0, 1, 0.75, 60, 60, 30, 1, 12, 5, 20, 1000, 0], _
+[1240, "Soul Twisting", 5, 6.5, 2, 16, 4, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 0, 0.75, 5, 45, 15, 15, 15, 1, 3, 10, 0], _
+[1241, "Celestial Summoning", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 1, 0.75, 6, 6, 0, 0, 0, 0, 0, 0, 0], _
+[1242, "Archemorus Strike Celestial Summoning", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 200, 0, 0, 1000, 0], _
+[1243, "Shield of Saint Viktor Celestial Summoning", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1280, 1280, 0, 0, 312, 0], _
+[1244, "Ghostly Haste", 10, 13, 2, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 25, 25, 0, 0, 1000, 0], _
+[1245, "Gaze from Beyond", 5, 6.5, 2, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 20, 65, 2, 6, 1000, 0], _
+[1246, "Ancestors Rage", 5, 6.5, 2, 10, 0, 0, 0, 0, 0, 0, 8, 34, 2867, 0, 3, 1, 0, 0.25, 0.75, 1, 1, 10, 5, 110, 0, 0, 156, 0], _
+[1247, "Pain", 5, 6.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3007, 0, 0, 1, 0, 0.75, 0.75, 30, 150, 30, 1, 12, 5, 30, 0, 0], _
+[1248, "Pain attack", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 32, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 30, 0, 0], _
+[1249, "Displacement", 15, 19.5, 2, 22, 256, 0, 0, 128, 0, 0, 8, 32, 3010, 0, 0, 1, 0, 0.75, 0.75, 30, 60, 45, 1, 14, 60, 60, 75, 0], _
+[1250, "Preservation", 5, 6.5, 2, 22, 260, 0, 0, 0, 0, 0, 8, 33, 3011, 0, 0, 1, 0, 0.75, 0.75, 90, 90, 20, 1, 14, 10, 115, 312, 0], _
+[1251, "Life", 10, 13, 2, 22, 256, 0, 0, 0, 0, 0, 8, 33, 3012, 0, 0, 1, 0, 0.75, 0.75, 20, 20, 20, 1, 14, 1, 7, 2500, 0], _
+[1252, "Earthbind", 15, 19.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3015, 0, 0, 1, 0, 1, 0.75, 15, 45, 30, 1, 14, 50, 25, 2500, 3], _
+[1253, "Bloodsong", 5, 6.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 34, 3019, 0, 0, 1, 0, 0.75, 0.75, 30, 150, 30, 1, 12, 5, 25, 0, 0], _
+[1254, "Bloodsong attack", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 0, 0, 196608, 196608, 0, 1, 8, 5, 25, 0, 0], _
+[1255, "Wanderlust", 10, 13, 2, 22, 260, 0, 0, 0, 0, 0, 8, 32, 3020, 0, 0, 1, 0, 1, 0.75, 30, 60, 45, 1, 12, 70, 50, 0, 0], _
+[1256, "Wanderlust attack", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 32, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 70, 50, 0, 0], _
+[1257, "Spirit Light Weapon", 5, 6.5, 2, 25, 4, 0, 0, 6, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 1, 0.75, 10, 10, 5, 1, 15, 1, 15, 1000, 0], _
+[1258, "Brutal Weapon", 10, 13, 2, 25, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 3, 1, 0, 1, 0.75, 10, 40, 15, 5, 15, 0, 0, 0, 0], _
+[1259, "Guided Weapon", 15, 19.5, 2, 25, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 3, 1, 0, 2, 0.75, 4, 10, 5, 0, 0, 0, 0, 0, 0], _
+[1260, "Meekness", 15, 19.5, 3, 4, 0, 0, 0, 32, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 5, 30, 15, 17, 17, 50, 50, 312, 0], _
+[1261, "Frigid Armor", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 0, 1, 0, 1, 0.75, 10, 25, 20, 10, 40, 0, 0, 0, 0], _
+[1262, "Healing Ring", 5, 6.5, 3, 5, 0, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 10, 30, 180, 0, 0, 156, 0], _
+[1263, "Renew Life", 15, 19.5, 3, 5, 2050, 0, 0, 8, 0, 0, 3, 13, 3433, 0, 6, 1, 0, 4, 0.75, 0, 0, 5, 5, 20, 55, 130, 50, 1000], _
+[1264, "Doom", 10, 13, 2, 5, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 10, 40, 135, 135, 0, 0], _
+[1265, "Wielders Boon", 5, 6.5, 2, 5, 0, 0, 4096, 6, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 0.25, 0.75, 0, 0, 4, 15, 60, 15, 75, 0, 0], _
+[1266, "Soothing", 15, 19.5, 2, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3009, 0, 0, 1, 0, 1, 0.75, 15, 45, 45, 1, 12, 0, 0, 0, 0], _
+[1267, "Vital Weapon", 5, 6.5, 2, 25, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 3, 1, 0, 1, 0.75, 5, 30, 2, 40, 175, 0, 0, 0, 0], _
+[1268, "Weapon of Quickening", 10, 13, 2, 25, 4, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 3, 1, 0, 2, 0.75, 5, 25, 5, 33, 33, 0, 0, 0, 0], _
+[1269, "Signet of Rage", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 5, 50, 5, 10, 0, 0], _
+[1270, "Fingers of Chaos", 5, 6.5, 0, 3, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 5, 5, 15, 10, 10, 0, 0, 0, 0], _
+[1271, "Echoing Banishment", 0, 0, 2, 15, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 2500, 0], _
+[1272, "Suicidal Impulse", 5, 6.5, 2, 4, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0, 10, 10, 25, 50, 50, 0, 0, 2500, 0], _
+[1273, "Impossible Odds", 0, 0, 2, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.5, 0.25, 15, 15, 5, 0, 0, 0, 0, 312, 0], _
+[1274, "Battle Scars", 0, 0, 2, 3, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 7, 7, 11, 0, 0, 0, 0, 0, 0], _
+[1275, "Riposting Shadows", 5, 6.5, 2, 3, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 5, 5, 10, 0, 0, 0, 0, 0, 0], _
+[1276, "Meditation of the Reaper", 0, 0, 2, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 30, 30, 60, 500, 500, 20, 20, 2500, 0], _
+[1277, "Battle Cry", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 33, 33, 0, 25, 25, 15, 15, 0, 0], _
+[1278, "Elemental Defense Zone", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 24, 0, 0, 0, 0], _
+[1279, "Melee Defense Zone", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[1280, "Blessed Water", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[1281, "Defiled Water", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[1282, "Stone Spores", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 0, 33, 33, 33, 33, 2, 0], _
+[1283, "Turret Arrow", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 15, 15, 0, 0], _
+[1284, "Blood Flower skill", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0], _
+[1285, "Fire Flower skill", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 5, 5, 312, 0], _
+[1286, "Poison Arrow flower", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 0, 0], _
+[1287, "Haiju Lagoon Water", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0], _
+[1288, "Aspect of Exhaustion", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0], _
+[1289, "Aspect of Exposure", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1290, "Aspect of Surrender", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1291, "Aspect of Death", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[1292, "Aspect of Soothing", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 200, 0, 0, 0, 0], _
+[1293, "Aspect of Pain", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 2, 2, 0, 0, 0, 0], _
+[1294, "Aspect of Lethargy", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[1295, "Aspect of Depletion energy loss", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 10, 10, 8, 8, 0, 0], _
+[1296, "Aspect of Failure", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1297, "Aspect of Shadows", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1298, "Scorpion Aspect", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 1500, 0], _
+[1299, "Aspect of Fear", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 25, 25, 0, 0], _
+[1300, "Aspect of Depletion energy depletion damage", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[1301, "Aspect of Decay", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0], _
+[1302, "Aspect of Torment", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[1303, "Nightmare Aspect", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0], _
+[1304, "Spiked Coral", 0, 0, 2, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 25, 25, 0, 0], _
+[1305, "Shielding Urn skill", 0, 0, 2, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500, 500, 0, 0, 312, 0], _
+[1306, "Extensive Plague Exposure", 0, 0, 2, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1307, "Forests Binding", 0, 0, 2, 10, 17408, 0, 0, 0, 0, 70, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 3, 3, 0, 50, 50, 20, 20, 0, 0], _
+[1308, "Exploding Spores", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 0, 30, 30, 0, 0, 156, 0], _
+[1309, "Suicide Energy", 0, 0, 2, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1310, "Suicide Health", 0, 0, 2, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1311, "Nightmare Refuge", 5, 6.5, 2, 6, 16384, 0, 0, 128, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 10, 10, 10, 1000, 1000, 50, 50, 50, 0], _
+[1312, "Oni Health Lock", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[1313, "Oni Shadow Health Lock", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0], _
+[1314, "Signet of Attainment", 0, 0, 0, 7, 524304, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.25, 0, 0, 2, 0, 0, 0, 0, 2000, 0], _
+[1315, "Rage of the Sea", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 2, 0.75, 2, 2, 0, 4, 4, 1, 1, 33, 0], _
+[1316, "Meditation of the Reaper", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0], _
+[1317, "Unknow", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 5, 5, 0, 0, 0, 0, 0, 0, 0], _
+[1318, "Fireball obelisk", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 80, 80, 1800, 1800, 156, 0], _
+[1319, "Final Thrust", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 1, 3, 0, 1.25, 0, 0, 0, 0, 1, 40, 50, 50, 0, 0], _
+[1320, "Unknow", 0, 0, 2, 17, 2097152, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 100, 100, 3, 3, 200, 50], _
+[1321, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1322, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1323, "Sugar Rush medium", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 25, 25, 0, 0, 0, 0], _
+[1324, "Torment Slash", 5, 6.5, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 3.25, 0.75, 0, 0, 8, 150, 150, 0, 0, 156, 3], _
+[1325, "Spirit of the Festival", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 100, 100, 60, 60, 0, 0], _
+[1326, "Trade Winds", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 2, 0, 0.75, 0.75, 10, 10, 5, 33, 33, 0, 0, 0, 0], _
+[1327, "Dragon Blast", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 5, 0, 0, 1800, 1800, 0, 0], _
+[1328, "Imperial Majesty", 0, 0, 0, 10, 16386, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.75, 0.75, 0, 0, 10, 80, 80, 0, 0, 0, 0], _
+[1329, "Monster doesnt get death penalty", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1330, "Twisted Spikes", 5, 6.5, 3, 21, 288, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 0, 2, 0, 2, 0.75, 90, 90, 30, 3, 15, 0, 0, 156, 240], _
+[1331, "Marble Trap", 5, 6.5, 3, 21, 288, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 0, 2, 0, 2, 0.75, 90, 90, 30, 4, 10, 0, 0, 156, 240], _
+[1332, "Shadow Tripwire", 5, 6.5, 3, 21, 288, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 0, 2, 0, 2, 0.75, 90, 90, 30, 3, 15, 0, 0, 156, 240], _
+[1333, "Extend Conditions", 5, 6.5, 3, 5, 4, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 5, 5, 100, 30, 30, 240, 0], _
+[1334, "Hypochondria", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 7, 0, 0, 0, 0, 312, 0], _
+[1335, "Wastrels Demise", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 5, 5, 3, 1, 10, 1, 3, 156, 0], _
+[1336, "Spiritual Pain", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3189, 0, 5, 1, 0, 1, 0.75, 0, 0, 7, 15, 75, 25, 125, 312, 0], _
+[1337, "Drain Delusions", 5, 6.5, 3, 5, 0, 0, 0, 256, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 12, 1, 5, 4, 4, 0, 0], _
+[1338, "Persistence of Memory", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 0, 0, 0, 0, 0, 0], _
+[1339, "Symbols of Inspiration", 5, 6.5, 3, 10, 4, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 5, 1, 0, 1, 0.75, 1, 31, 15, 0, 0, 0, 0, 0, 0], _
+[1340, "Symbolic Celerity", 15, 19.5, 3, 6, 0, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 0, 1, 0, 1, 0.75, 36, 60, 30, 25, 50, 0, 0, 0, 0], _
+[1341, "Frustration", 10, 13, 3, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3190, 0, 5, 1, 0, 1, 0.75, 5, 20, 7, 50, 50, 5, 50, 0, 0], _
+[1342, "Tease", 5, 6.5, 3, 5, 4, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 15, 0, 5, 0, 0, 312, 0], _
+[1343, "Ether Phantom", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 1, 0.75, 10, 10, 10, 1, 5, 1, 1, 0, 0], _
+[1344, "Web of Disruption", 5, 6.5, 3, 4, 0, 0, 0, 1, 0, 0, 5, 51, 3386, 0, 5, 1, 0, 0.25, 0.75, 10, 10, 15, 0, 0, 0, 0, 0, 0], _
+[1345, "Enchanters Conundrum", 10, 13, 3, 4, 4, 0, 0, 0, 0, 0, 5, 2, 3192, 0, 5, 1, 0, 2, 0.75, 10, 10, 10, 10, 100, 100, 200, 156, 0], _
+[1346, "Signet of Illusions", 0, 0, 3, 7, 4, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 0, 1, 0, 2, 0.75, 0, 0, 5, 1, 3, 1, 3, 0, 0], _
+[1347, "Discharge Enchantment", 10, 13, 3, 5, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 20, 50, 0, 0, 0, 0], _
+[1348, "Hex Eater Vortex", 10, 13, 3, 5, 4, 0, 0, 2048, 0, 0, 5, 2, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 15, 30, 90, 0, 0, 240, 0], _
+[1349, "Mirror of Disenchantment", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3194, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 0, 0, 0, 0, 0, 0], _
+[1350, "Simple Thievery", 10, 13, 3, 5, 4, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 5, 20, 10, 0, 0, 0, 0, 0, 0], _
+[1351, "Animate Shambling Horror", 15, 19.5, 3, 5, 262144, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 3, 0.75, 0, 0, 25, 1, 17, 0, 15, 0, 0], _
+[1352, "Order of Undeath", 10, 13, 3, 5, 4, 0, 0, 32, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 1, 0.75, 5, 5, 5, 3, 16, 2, 2, 5000, 2], _
+[1353, "Putrid Flesh", 10, 13, 3, 5, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 1, 1, 0, 0.25, 0.75, 5, 15, 0, 0, 0, 0, 0, 240, 0], _
+[1354, "Feast for the Dead", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 1, 1, 0, 0.25, 0.75, 0, 0, 10, 10, 100, 0, 0, 5000, 0], _
+[1355, "Jagged Bones", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 14, 1, 0, 1, 0.75, 30, 30, 15, 0, 15, 0, 0, 0, 0], _
+[1356, "Contagion", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 0, 1, 0, 1, 0.75, 60, 60, 20, 10, 5, 0, 0, 312, 0], _
+[1357, "Bloodletting", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 0, 2, 0, 1, 0.75, 10, 10, 5, 1, 6, 1, 4, 240, 0], _
+[1358, "Ulcerous Lungs", 15, 19.5, 3, 4, 512, 0, 1, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 10, 25, 10, 4, 4, 3, 15, 240, 0], _
+[1359, "Pain of Disenchantment", 10, 13, 3, 5, 4, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 1, 3, 10, 100, 156, 0], _
+[1360, "Mark of Fury", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 5, 1, 0, 0.75, 0.75, 5, 5, 10, 0, 2, 1, 15, 0, 0], _
+[1361, "Recurring Scourge", 25, 32.5, 3, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 2, 0, 5, 0.75, 10, 10, 10, 1, 4, 0, 0, 0, 0], _
+[1362, "Corrupt Enchantment", 5, 6.5, 3, 4, 516, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 0.75, 0.75, 10, 10, 10, 1, 8, 0, 0, 0, 0], _
+[1363, "Signet of Sorrow", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 30, 15, 75, 0, 0, 240, 0], _
+[1364, "Signet of Suffering", 0, 0, 3, 7, 4, 0, 0, 0, 0, 0, 4, 4, 3433, 0, 0, 1, 0, 0, 0, 196608, 196608, 4, 2, 16, 6, 6, 0, 0], _
+[1365, "Signet of Lost Souls", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 8, 10, 100, 1, 10, 0, 0], _
+[1366, "Well of Darkness", 10, 13, 3, 9, 262144, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 0, 1, 0, 1, 0.75, 5, 50, 20, 50, 50, 30, 30, 312, 0], _
+[1367, "Blinding Surge", 10, 13, 3, 5, 4, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 6, 5, 50, 3, 8, 156, 0], _
+[1368, "Chilling Winds", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 10, 10, 8, 30, 60, 25, 100, 156, 0], _
+[1369, "Lightning Bolt", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 5, 50, 5, 50, 2400, 0], _
+[1370, "Storm Djinns Haste", 5, 6.5, 3, 6, 0, 0, 0, 32768, 0, 0, 6, 8, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 25, 10, 25, 25, 1, 1, 0, 0], _
+[1371, "Stone Striker", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 0.25, 0.75, 5, 30, 20, 0, 0, 0, 0, 0, 0], _
+[1372, "Sandstorm", 15, 19.5, 3, 5, 4, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 16, 1, 0, 2, 0.75, 10, 10, 25, 10, 30, 10, 30, 240, 0], _
+[1373, "Stone Sheath", 10, 13, 3, 6, 4, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 1, 1, 0, 1, 0.75, 5, 20, 15, 15, 70, 1, 30, 240, 24], _
+[1374, "Ebon Hawk", 10, 13, 3, 5, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 10, 85, 5, 15, 1800, 0], _
+[1375, "Stoneflesh Aura", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 2, 0.75, 5, 15, 15, 1, 31, 0, 0, 0, 0], _
+[1376, "Glyph of Restoration", 5, 6.5, 3, 12, 0, 0, 0, 4, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 8, 30, 105, 150, 400, 2, 0], _
+[1377, "Ether Prism", 5, 6.5, 3, 16, 4, 0, 0, 256, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 0, 0.75, 3, 3, 25, 75, 75, 5, 20, 0, 0], _
+[1378, "Master of Magic", 5, 6.5, 3, 6, 4, 0, 0, 256, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 1, 0.75, 1, 61, 10, 8, 14, 0, 0, 30, 0], _
+[1379, "Glowing Gaze", 5, 6.5, 3, 5, 0, 0, 0, 256, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 5, 50, 5, 5, 0, 0], _
+[1380, "Savannah Heat", 5, 6.5, 3, 5, 4, 0, 0, 0, 0, 0, 6, 10, 3021, 0, 16, 1, 0, 2, 0.75, 5, 5, 25, 5, 20, 5, 20, 240, 0], _
+[1381, "Flame Djinns Haste", 10, 13, 3, 6, 0, 0, 0, 512, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 0.75, 0.75, 8, 14, 20, 15, 120, 25, 25, 156, 50], _
+[1382, "Freezing Gust", 10, 13, 3, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 1, 5, 8, 20, 80, 66, 66, 0, 0], _
+[1383, "Rocky Ground", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 128, 0], _
+[1384, "Sulfurous Haze", 0, 0, 3, 23, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 50, 50, 0, 0, 128, 0], _
+[1385, "Siege Attack", 0, 0, 3, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 120, 350, 350, 1050, 0], _
+[1386, "Sentry Trap skill", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0], _
+[1387, "Caltrops monster", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 12, 12, 240, 0], _
+[1388, "Sacred Branch", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 312, 0], _
+[1389, "Light of Seborhin", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300, 300, 50, 50, 156, 240], _
+[1390, "Judges Intervention", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 0.25, 0.75, 10, 10, 8, 30, 180, 1, 3, 240, 0], _
+[1391, "Supportive Spirit", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.75, 0.75, 5, 23, 8, 5, 35, 0, 0, 0, 0], _
+[1392, "Watchful Healing", 5, 6.5, 3, 6, 0, 0, 0, 6, 0, 0, 3, 16, 3433, 0, 3, 1, 0, 1, 0.75, 10, 10, 10, 1, 4, 30, 120, 0, 0], _
+[1393, "Healers Boon", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 55, 10, 50, 50, 9999, 9999, 0, 0], _
+[1394, "Healers Covenant", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 3, 13, 3433, 0, 0, 1, 0, 0.25, 0.75, 131072, 131072, 5, 25, 25, 1, 3, 0, 0], _
+[1395, "Balthazars Pendulum", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 0.25, 0.75, 5, 10, 5, 5, 75, 0, 0, 0, 0], _
+[1396, "Words of Comfort", 5, 6.5, 3, 5, 0, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 4, 15, 60, 15, 45, 0, 0], _
+[1397, "Light of Deliverance", 5, 6.5, 3, 5, 4, 0, 4096, 6, 0, 0, 3, 13, 2871, 0, 0, 1, 0, 1, 0.75, 0, 0, 6, 101, 101, 5, 70, 5000, 0], _
+[1398, "Scourge Enchantment", 10, 13, 3, 4, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 2, 0.75, 30, 30, 5, 15, 75, 0, 0, 0, 0], _
+[1399, "Shield of Absorption", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 1, 0.75, 3, 7, 10, 5, 5, 0, 0, 0, 0], _
+[1400, "Reversal of Damage", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 3, 5, 75, 0, 0, 0, 0], _
+[1401, "Mending Touch", 5, 6.5, 3, 5, 2, 0, 4096, 4096, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 6, 15, 60, 0, 0, 0, 0], _
+[1402, "Critical Chop", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 0, 1, 0, 0, 0, 15, 5, 20, 0, 0, 0, 0], _
+[1403, "Agonizing Chop", 0, 0, 3, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 150, 1, 0, 0, 0, 0, 5, 20, 0, 0, 0, 0], _
+[1404, "Flail", 0, 0, 3, 3, 0, 0, 0, 32768, 0, 0, 1, 17, 3433, 0, 0, 1, 100, 0, 0, 1, 15, 0, 33, 33, 33, 33, 0, 0], _
+[1405, "Charging Strike", 5, 6.5, 3, 3, 4, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 1, 10, 5, 33, 33, 10, 40, 0, 0], _
+[1406, "Headbutt", 15, 19.5, 3, 10, 6, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 20, 40, 100, 5, 20, 0, 0], _
+[1407, "Lions Comfort", 0, 0, 3, 10, 0, 0, 0, 4, 0, 0, 1, 17, 3433, 0, 0, 1, 80, 1, 0.75, 0, 0, 1, 50, 110, 0, 3, 12, 0], _
+[1408, "Rage of the Ntouka", 5, 6.5, 3, 16, 4, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 15, 1, 7, 5, 5, 0, 0], _
+[1409, "Mokele Smash", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 12, 5, 20, 2, 2, 0, 0], _
+[1410, "Overbearing Smash", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 20, 1, 20, 1, 8, 0, 0], _
+[1411, "Signet of Stamina", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0.25, 0.75, 196608, 196608, 20, 50, 300, 0, 0, 0, 0], _
+[1412, "Youre All Alone", 5, 6.5, 3, 15, 4, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 5, 1, 0, 0, 0, 8, 8, 10, 8, 8, 8, 8, 0, 240], _
+[1413, "Burst of Aggression", 5, 6.5, 3, 3, 0, 0, 0, 32768, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 2, 10, 12, 33, 33, 0, 0, 0, 0], _
+[1414, "Enraging Charge", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 5, 15, 20, 25, 25, 0, 3, 0, 0], _
+[1415, "Crippling Slash", 0, 0, 3, 14, 4, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 130, 0, 0, 0, 0, 0, 5, 15, 10, 25, 0, 0], _
+[1416, "Barbarous Slice", 0, 0, 3, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 5, 30, 5, 15, 0, 0], _
+[1417, "Vial of Purified Water", 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 2, 0.75, 10, 10, 15, 50, 50, 0, 0, 0, 0], _
+[1418, "Disarm Trap", 0, 0, 3, 10, 32, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1419, "Feeding Frenzy skill", 0, 0, 3, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 3, 0, 0.25, 0.75, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[1420, "Quake Of Ahdashim", 0, 0, 3, 14, 16384, 0, 128, 0, 0, 255, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 0, 0, 18, 4, 4, 100, 100, 312, 0], _
+[1421, "Shield of Madness", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1422, "Create Light of Seborhin", 0, 0, 3, 10, 16416, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 10, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1423, "Unlock Cell", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 4, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1424, "Stop Pump", 0, 0, 3, 5, 32, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 10, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1425, "Unknow", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 25, 25, 50, 50, 75, 0], _
+[1426, "Shield of Madness", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1427, "Shield of Ether", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1428, "Shield of Iron", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1429, "Shield of Strength", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1430, "Wave of Torment", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 0, 0, 5, 150, 150, 0, 0, 312, 0], _
+[1431, "Unknow", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 90, 90, 1000, 0], _
+[1432, "Unknow", 0, 0, 3, 17, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1433, "Corsairs Net", 10, 13, 3, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 3, 0, 1.5, 0, 5, 5, 20, 70, 70, 0, 0, 156, 700], _
+[1434, "Corrupted Healing", 5, 6.5, 3, 5, 0, 0, 0, 6, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 2, 0.75, 0, 0, 3, 300, 300, 0, 0, 0, 0], _
+[1435, "Corrupted Roots", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 312, 0], _
+[1436, "Corrupted Strength", 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 75, 0, 0, 10, 10, 0, 0, 0, 0, 0, 312, 0], _
+[1437, "Desert Wurm disguise", 0, 0, 3, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 3000, 3000, 60, 60, 100, 0], _
+[1438, "Junundu Feast", 5, 6.5, 3, 10, 0, 0, 0, 4, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1.5, 1.5, 120, 120, 0, 200, 200, 0, 0, 0, 0], _
+[1439, "Junundu Strike", 0, 0, 3, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 1, 0, 0, 4, 150, 150, 75, 75, 0, 0], _
+[1440, "Junundu Smash", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 100, 2, 2, 4, 4, 0, 250, 250, 0, 0, 156, 0], _
+[1441, "Junundu Siege", 5, 6.5, 3, 10, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 2, 0, 0, 8, 400, 400, 0, 0, 0, 0], _
+[1442, "Junundu Tunnel", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 30, 66, 66, 3, 3, 156, 0], _
+[1443, "Leave Junundu", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 6.75, 15, 15, 0, 0, 0, 0, 0, 0, 0], _
+[1444, "Summon Torment", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 1, 120, 120, 3, 3, 156, 0], _
+[1445, "Signal Flare", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 6, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1446, "The Elixir of Strength", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1447, "Ehzah from Above", 0, 0, 3, 10, 2, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 20, 2, 0.75, 10, 10, 30, 3, 3, 0, 0, 0, 0], _
+[1448, "Unknow", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 12, 12, 0, 25, 25, 60, 60, 2000, 0], _
+[1449, "Last Rites of Torment", 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 12, 12, 0, 25, 25, 60, 60, 2000, 0], _
+[1450, "Abaddons Conspiracy", 5, 6.5, 3, 6, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 1, 0.75, 3, 3, 0, 100, 100, 500, 500, 0, 0], _
+[1451, "Hungers Bite", 0, 0, 3, 14, 16384, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 15, 15, 0, 30, 30, 0, 0, 0, 0], _
+[1452, "From Hell", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1453, "Pains Embrace", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 50, 4, 4, 20, 60], _
+[1454, "Call to the Torment", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 5, 5, 20, 0, 0, 0, 0, 0, 0], _
+[1455, "Command of Torment", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0], _
+[1456, "Abaddons Favor", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 3, 0, 6, 0.75, 0, 0, 4, 70, 70, 70, 70, 312, 0], _
+[1457, "Abaddons Chosen", 0, 0, 3, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 10, 10, 90, 0, 0, 0, 0, 0, 0], _
+[1458, "Enchantment Collapse", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 196608, 196608, 20, 0, 0, 0, 0, 0, 0], _
+[1459, "Call of Sacrifice", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 20, 20, 10, 20, 20, 20, 20, 0, 0], _
+[1460, "Enemies Must Die", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0.75, 10, 10, 20, 0, 0, 0, 0, 2500, 0], _
+[1461, "Earth Vortex", 0, 0, 3, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 200, 0, 0.75, 30, 30, 30, 15, 15, 0, 0, 312, 0], _
+[1462, "Frost Vortex", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 0, 0.75, 30, 30, 30, 50, 50, 40, 40, 312, 10], _
+[1463, "Rough Current", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1464, "Turbulent Flow", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 0, 0], _
+[1465, "Prepared Shot", 5, 6.5, 3, 14, 4, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 10, 25, 1, 9, 0, 0], _
+[1466, "Burning Arrow", 10, 13, 3, 14, 4, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 5, 10, 30, 1, 7, 0, 0], _
+[1467, "Arcing Shot", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 10, 25, 50, 50, 1600, 0], _
+[1468, "Strike as One", 5, 6.5, 3, 15, 4, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 1, 1, 0, 0, 0, 30, 30, 10, 5, 15, 5, 15, 0, 0], _
+[1469, "Crossfire", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 5, 20, 0, 0, 240, 0], _
+[1470, "Barbed Arrows", 10, 13, 3, 19, 384, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 24, 24, 12, 3, 15, 0, 0, 0, 0], _
+[1471, "Scavengers Focus", 5, 6.5, 3, 10, 4, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 20, 3, 12, 0, 0, 0, 0], _
+[1472, "Toxicity", 15, 19.5, 3, 22, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 5, 0.75, 30, 90, 60, 1, 10, 2, 2, 2500, 0], _
+[1473, "Quicksand", 10, 13, 3, 22, 4, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 90, 30, 1, 10, 1, 1, 2500, 0], _
+[1474, "Storms Embrace", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 1, 0, 0, 0.75, 10, 10, 30, 25, 25, 0, 0, 0, 0], _
+[1475, "Trappers Speed", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 0, 0, 5, 30, 20, 25, 25, 25, 25, 0, 0], _
+[1476, "Tripwire", 10, 13, 3, 21, 288, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 30, 5, 20, 0, 0, 156, 240], _
+[1477, "Kournan Guardsman", 0, 0, 3, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1478, "Renewing Surge", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 8, 8, 15, 2, 12, 1, 8, 0, 0], _
+[1479, "Offering of Spirit", 5, 6.5, 3, 5, 4, 0, 0, 256, 0, 0, 8, 34, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 15, 17, 17, 8, 17, 1000, 0], _
+[1480, "Spirits Gift", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 60, 60, 45, 5, 50, 0, 0, 240, 0], _
+[1481, "Death Pact Signet", 0, 0, 3, 7, 2048, 0, 0, 8, 0, 0, 8, 33, 2872, 0, 6, 1, 0, 3, 0.75, 120, 120, 12, 0, 0, 15, 100, 0, 0], _
+[1482, "Reclaim Essence", 5, 6.5, 3, 5, 4, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 30, 5, 20, 0, 0, 5000, 0], _
+[1483, "Banishing Strike", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 185, 10, 44, 3263, 0, 5, 1, 0, 1, 0, 0, 0, 3, 0, 0, 10, 60, 240, 0], _
+[1484, "Mystic Sweep", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 185, 10, 44, 3433, 0, 5, 1, 0, 1, 0, 0, 0, 6, 3, 12, 3, 12, 0, 0], _
+[1485, "Eremites Attack", 5, 6.5, 3, 14, 0, 0, 0, 8192, 0, 32, 10, 41, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 1, 10, 1, 10, 156, 0], _
+[1486, "Reap Impurities", 0, 0, 3, 14, 0, 0, 0, 0, 0, 185, 10, 41, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 0, 3, 15, 10, 40, 156, 0], _
+[1487, "Twin Moon Sweep", 0, 0, 3, 14, 0, 0, 0, 8192, 0, 185, 10, 41, 3264, 0, 5, 1, 160, 0, 0, 0, 0, 0, 10, 50, 10, 70, 0, 0], _
+[1488, "Victorious Sweep", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 185, 10, 41, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 5, 25, 30, 80, 0, 0], _
+[1489, "Irresistible Sweep", 5, 6.5, 3, 14, 0, 0, 0, 8192, 0, 32, 10, 41, 3265, 0, 5, 1, 0, 0, 0, 0, 0, 6, 3, 15, 3, 15, 0, 0], _
+[1490, "Pious Assault", 5, 6.5, 3, 14, 0, 0, 0, 8192, 0, 185, 10, 41, 3266, 0, 5, 1, 0, 0, 0, 5, 20, 12, 10, 20, 10, 30, 156, 75], _
+[1491, "Mystic Twister", 0, 0, 3, 5, 0, 0, 0, 512, 0, 0, 10, 42, 3433, 0, 0, 1, 120, 1, 0.75, 0, 0, 8, 10, 60, 10, 60, 240, 240], _
+[1492, "REMOVE Wind Prayers skill", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 10, 42, 3433, 0, 0, 2, 0, 0.75, 0.75, 30, 30, 20, 4, 10, 0, 0, 240, 0], _
+[1493, "Grenths Fingers", 5, 6.5, 3, 6, 8388608, 0, 0, 512, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 10, 10, 40, 1, 2, 240, 0], _
+[1494, "REMOVE Boon of the Gods", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 2, 0, 1, 0.75, 5, 20, 30, 1, 1, 0, 0, 0, 0], _
+[1495, "Aura of Thorns", 5, 6.5, 3, 6, 8388608, 0, 9, 512, 0, 0, 10, 43, 3346, 0, 0, 1, 0, 0, 0, 30, 30, 10, 3, 8, 5, 15, 240, 0], _
+[1496, "Balthazars Rage", 10, 13, 3, 6, 8388608, 0, 0, 512, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0, 0, 20, 20, 10, 1, 2, 1, 3, 240, 1000], _
+[1497, "Dust Cloak", 10, 13, 3, 6, 8388608, 0, 2, 512, 0, 0, 10, 43, 3347, 0, 0, 1, 0, 0, 0, 30, 30, 6, 10, 40, 1, 4, 240, 0], _
+[1498, "Staggering Force", 10, 13, 3, 6, 8388608, 0, 1024, 512, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 6, 10, 40, 1, 10, 240, 0], _
+[1499, "Pious Renewal", 5, 6.5, 3, 6, 8388612, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0, 0, 8, 8, 8, 0, 5, 0, 30, 0, 0], _
+[1500, "Mirage Cloak", 10, 13, 3, 6, 8388608, 0, 0, 128, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 1, 7, 10, 40, 80, 10, 40, 240, 0], _
+[1501, "REMOVE Balthazars Rage", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 2, 0, 0.25, 0.75, 30, 30, 8, 1, 3, 0, 0, 240, 0], _
+[1502, "Arcane Zeal", 10, 13, 3, 6, 4, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 5, 1, 1, 1, 7, 0, 1], _
+[1503, "Mystic Vigor", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0.25, 0.75, 20, 20, 15, 3, 15, 25, 25, 0, 0], _
+[1504, "Watchful Intervention", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 3, 1, 0, 1, 0.75, 60, 60, 15, 25, 25, 50, 200, 0, 0], _
+[1505, "Vow of Piety", 15, 19.5, 3, 6, 0, 0, 0, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0.25, 0.75, 20, 20, 45, 1, 4, 24, 24, 0, 0], _
+[1506, "Vital Boon", 5, 6.5, 3, 6, 0, 0, 0, 4, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 1, 0.75, 20, 20, 8, 75, 200, 40, 100, 0, 0], _
+[1507, "Heart of Holy Flame", 10, 13, 3, 6, 8388608, 0, 4, 512, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 10, 5, 30, 2, 5, 240, 0], _
+[1508, "Extend Enchantments", 5, 6.5, 3, 16, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 10, 150, 0, 0, 0, 0], _
+[1509, "Faithful Intervention", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 2, 0.75, 196608, 196608, 20, 30, 150, 50, 50, 0, 0], _
+[1510, "Sand Shards", 10, 13, 3, 6, 8388608, 0, 0, 0, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 10, 10, 60, 1, 5, 156, 0], _
+[1511, "Intimidating Aura beta version", 15, 19.5, 3, 6, 0, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 1, 0.75, 30, 30, 10, 0, 0, 0, 0, 0, 0], _
+[1512, "Lyssas Haste", 10, 13, 3, 6, 8388672, 0, 0, 512, 0, 0, 10, 42, 3348, 0, 0, 1, 0, 0, 0, 3, 15, 15, 33, 33, 0, 0, 156, 0], _
+[1513, "Guiding Hands", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 10, 42, 3269, 0, 0, 1, 0, 0.25, 0.75, 20, 20, 10, 0, 3, 0, 0, 0, 0], _
+[1514, "Fleeting Stability", 5, 6.5, 3, 6, 8388608, 0, 0, 0, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 2, 6, 10, 25, 25, 0, 0, 0, 0], _
+[1515, "Armor of Sanctity", 5, 6.5, 3, 6, 0, 0, 1024, 512, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0.25, 0.75, 15, 15, 15, 5, 20, 5, 15, 156, 0], _
+[1516, "Mystic Regeneration", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 10, 43, 2884, 0, 0, 1, 0, 0.25, 0.75, 5, 20, 10, 1, 4, 0, 0, 8, 0], _
+[1517, "Vow of Silence", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0.25, 0.75, 5, 10, 10, 0, 0, 0, 0, 0, 0], _
+[1518, "Avatar of Balthazar", 5, 6.5, 3, 26, 4, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 2, 0.75, 10, 90, 20, 1, 3, 25, 25, 240, 20], _
+[1519, "Avatar of Dwayna", 5, 6.5, 3, 26, 4, 0, 0, 0, 0, 0, 10, 44, 3270, 0, 0, 1, 0, 2, 0.75, 10, 90, 20, 0, 0, 5, 50, 1000, 0], _
+[1520, "Avatar of Grenth", 5, 6.5, 3, 26, 4, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 2, 0.75, 10, 90, 20, 0, 12, 3, 3, 156, 0], _
+[1521, "Avatar of Lyssa", 5, 6.5, 3, 26, 4, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 2, 0.75, 10, 90, 20, 1, 1, 50, 50, 240, 0], _
+[1522, "Avatar of Melandru", 5, 6.5, 3, 26, 4, 0, 0, 0, 0, 0, 10, 44, 3271, 0, 0, 1, 0, 2, 0.75, 10, 90, 20, 150, 150, 30, 30, 1000, 1], _
+[1523, "Meditation", 10, 13, 3, 6, 0, 0, 0, 256, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0.25, 0.75, 20, 20, 20, 1, 4, 0, 0, 0, 0], _
+[1524, "Eremites Zeal", 5, 6.5, 3, 6, 0, 0, 0, 256, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 10, 15, 1, 3, 8, 8, 1000, 0], _
+[1525, "Natural Healing", 5, 6.5, 3, 5, 0, 0, 0, 4, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 2, 0.75, 0, 0, 6, 50, 170, 0, 0, 0, 0], _
+[1526, "Imbue Health", 10, 13, 3, 5, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 4, 1, 0, 0.25, 0.75, 0, 0, 10, 5, 50, 300, 300, 0, 0], _
+[1527, "Mystic Healing", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 10, 42, 3272, 0, 0, 1, 0, 1, 0.75, 0, 0, 4, 5, 65, 5, 65, 5000, 0], _
+[1528, "Dwaynas Touch", 5, 6.5, 3, 5, 2, 0, 0, 6, 0, 0, 10, 42, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 5, 15, 60, 150, 150, 0, 0], _
+[1529, "Pious Restoration", 5, 6.5, 3, 5, 0, 0, 0, 8196, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 8, 80, 150, 1, 2, 0, 0], _
+[1530, "Signet of Pious Light", 0, 0, 3, 7, 0, 0, 0, 8198, 0, 0, 10, 43, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 20, 30, 150, 75, 75, 0, 0], _
+[1531, "Intimidating Aura", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0.75, 0.75, 60, 60, 20, 40, 100, 1, 10, 0, 0], _
+[1532, "Mystic Sandstorm", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 10, 43, 3433, 0, 0, 1, 120, 1, 0.75, 3, 3, 8, 10, 20, 10, 20, 240, 5], _
+[1533, "Winds of Disenchantment", 10, 13, 3, 5, 0, 0, 0, 8192, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 15, 20, 80, 1, 1, 240, 0], _
+[1534, "Rending Touch", 5, 6.5, 3, 5, 2, 0, 0, 8192, 0, 0, 10, 44, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 12, 1, 1, 15, 65, 0, 0], _
+[1535, "Crippling Sweep", 5, 6.5, 3, 14, 0, 0, 8, 0, 0, 32, 10, 41, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 3, 12, 3, 15, 0, 0], _
+[1536, "Wounding Strike", 5, 6.5, 3, 14, 4, 0, 17, 8192, 0, 32, 10, 41, 3367, 0, 5, 1, 0, 0, 0, 0, 0, 3, 5, 20, 5, 20, 0, 0], _
+[1537, "Wearying Strike", 0, 0, 3, 14, 0, 0, 16, 8192, 0, 32, 10, 41, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 0, 0, 3, 10, 10, 0], _
+[1538, "Lyssas Assault", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 32, 10, 41, 3433, 0, 5, 1, 0, 0.5, 0, 0, 0, 15, 1, 10, 50, 50, 0, 0], _
+[1539, "Chilling Victory", 0, 0, 3, 14, 0, 0, 0, 0, 0, 32, 10, 41, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 3, 15, 10, 30, 156, 0], _
+[1540, "Conviction", 5, 6.5, 3, 6, 8388608, 0, 0, 0, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 1, 3, 1, 2, 0, 10], _
+[1541, "Enchanted Haste", 10, 13, 3, 6, 8388608, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 1, 0, 0, 0, 7, 7, 15, 25, 25, 1, 1, 0, 1], _
+[1542, "Pious Concentration", 10, 13, 3, 3, 0, 0, 0, 8192, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 5, 20, 10, 0, 0, 0, 0, 0, 0], _
+[1543, "Pious Haste", 5, 6.5, 3, 3, 0, 0, 0, 8192, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0, 0, 1, 7, 12, 25, 25, 50, 50, 0, 0], _
+[1544, "Whirling Charge", 10, 13, 3, 6, 8388608, 0, 0, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 1, 6, 6, 33, 33, 10, 60, 240, 75], _
+[1545, "Test of Faith", 0, 0, 3, 5, 2, 0, 512, 0, 0, 0, 10, 42, 3433, 0, 5, 1, 160, 0.75, 0.75, 0, 0, 5, 15, 65, 1, 4, 0, 0], _
+[1546, "Blazing Spear", 0, 0, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 5, 25, 1, 3, 0, 0], _
+[1547, "Mighty Throw", 0, 0, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 50, 3, 0, 0, 0, 0, 10, 40, 0, 0, 4800, 0], _
+[1548, "Cruel Spear", 0, 0, 3, 14, 4, 0, 16, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 175, 0, 0, 0, 0, 0, 1, 31, 5, 20, 0, 0], _
+[1549, "Harriers Toss", 10, 13, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 2875, 0, 5, 1, 0, 0.5, 1, 0, 0, 10, 5, 20, 5, 30, 0, 0], _
+[1550, "Unblockable Throw", 0, 0, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 175, 3, 0, 0, 0, 0, 10, 40, 0, 0, 0, 0], _
+[1551, "Spear of Lightning", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 8, 20, 25, 25, 0, 0], _
+[1552, "Wearying Spear", 0, 0, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 75, 0, 0, 5, 5, 0, 10, 40, 0, 0, 0, 0], _
+[1553, "Anthem of Fury", 5, 6.5, 3, 27, 4, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 10, 1, 4, 0, 0, 1000, 0], _
+[1554, "Crippling Anthem", 0, 0, 3, 27, 4, 0, 8, 0, 0, 0, 9, 38, 3433, 0, 0, 1, 100, 1, 0.75, 10, 10, 0, 0, 0, 5, 15, 1000, 0], _
+[1555, "Defensive Anthem", 10, 13, 3, 27, 4, 0, 0, 128, 0, 0, 9, 40, 2876, 0, 0, 1, 0, 1, 0.75, 4, 10, 25, 50, 50, 0, 0, 1000, 0], _
+[1556, "Godspeed", 10, 13, 3, 15, 0, 0, 4, 32768, 0, 0, 9, 38, 3433, 0, 0, 1, 0, 0, 0.75, 5, 20, 30, 25, 25, 0, 0, 1000, 0], _
+[1557, "Anthem of Flame", 5, 6.5, 3, 27, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 10, 1, 3, 0, 0, 1000, 0], _
+[1558, "Go for the Eyes", 0, 0, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3026, 0, 0, 1, 100, 0, 0.75, 10, 10, 0, 30, 100, 0, 0, 1000, 0], _
+[1559, "Anthem of Envy", 0, 0, 3, 27, 0, 0, 0, 0, 0, 0, 9, 38, 3148, 0, 0, 1, 150, 1, 0.75, 10, 10, 0, 10, 25, 0, 0, 1000, 0], _
+[1560, "Song of Power", 25, 32.5, 3, 27, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 30, 4, 4, 0, 0, 1000, 0], _
+[1561, "Zealous Anthem", 10, 13, 3, 27, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 20, 1, 8, 0, 0, 1000, 0], _
+[1562, "Aria of Zeal", 10, 13, 3, 27, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 0, 1, 0, 2, 0.75, 10, 10, 20, 1, 6, 0, 0, 1000, 0], _
+[1563, "Lyric of Zeal", 0, 0, 3, 27, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 0, 1, 150, 1, 0.75, 10, 10, 5, 1, 8, 0, 0, 1000, 0], _
+[1564, "Ballad of Restoration", 10, 13, 3, 27, 0, 0, 0, 6, 0, 0, 9, 39, 2877, 0, 0, 1, 0, 1, 0.75, 10, 10, 20, 15, 75, 0, 0, 1000, 0], _
+[1565, "Chorus of Restoration", 0, 0, 3, 27, 0, 0, 0, 6, 0, 0, 9, 39, 3433, 0, 0, 1, 100, 1, 0.75, 10, 10, 5, 30, 90, 0, 0, 1000, 0], _
+[1566, "Aria of Restoration", 10, 13, 3, 27, 0, 0, 0, 6, 0, 0, 9, 39, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 20, 30, 90, 0, 0, 1000, 0], _
+[1567, "Song of Concentration", 0, 0, 3, 27, 0, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 1, 200, 2, 0.75, 10, 10, 5, 0, 0, 0, 0, 1000, 0], _
+[1568, "Anthem of Guidance", 0, 0, 3, 27, 4, 0, 0, 0, 0, 0, 9, 38, 3433, 0, 0, 1, 100, 1, 0.75, 10, 10, 0, 0, 0, 0, 0, 1000, 0], _
+[1569, "Energizing Chorus", 0, 0, 3, 27, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 0, 1, 100, 1, 0.75, 10, 10, 0, 3, 7, 0, 0, 1000, 0], _
+[1570, "Song of Purification", 0, 0, 3, 27, 4, 0, 0, 4096, 0, 0, 9, 39, 3433, 0, 0, 1, 125, 2, 0.75, 20, 20, 0, 1, 3, 0, 0, 1000, 0], _
+[1571, "Hexbreaker Aria", 0, 0, 3, 27, 0, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 1, 200, 2, 0.75, 10, 10, 0, 50, 100, 0, 0, 1000, 0], _
+[1572, "Brace Yourself", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3027, 0, 4, 1, 0, 0, 0, 5, 15, 4, 15, 75, 0, 0, 240, 0], _
+[1573, "Awe", 10, 13, 3, 10, 8, 0, 512, 0, 0, 0, 9, 40, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 10, 5, 15, 0, 0, 0, 0], _
+[1574, "Enduring Harmony", 5, 6.5, 3, 28, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 3, 1, 0, 1, 0.75, 10, 35, 10, 50, 50, 0, 0, 0, 0], _
+[1575, "Blazing Finale", 5, 6.5, 3, 28, 0, 0, 4, 0, 0, 0, 9, 40, 3028, 0, 3, 1, 0, 1, 0.75, 10, 35, 8, 1, 7, 0, 0, 156, 0], _
+[1576, "Burning Refrain", 10, 13, 3, 28, 0, 0, 4, 0, 0, 0, 9, 40, 3433, 0, 3, 1, 0, 1, 0.75, 20, 20, 10, 1, 3, 0, 0, 0, 0], _
+[1577, "Finale of Restoration", 5, 6.5, 3, 28, 0, 0, 0, 6, 0, 0, 9, 39, 3062, 0, 3, 1, 0, 1, 0.75, 10, 35, 10, 15, 75, 0, 0, 0, 0], _
+[1578, "Mending Refrain", 10, 13, 3, 28, 0, 0, 0, 6, 0, 0, 9, 39, 3149, 0, 3, 1, 0, 1, 0.75, 15, 15, 8, 2, 3, 0, 0, 0, 0], _
+[1579, "Purifying Finale", 5, 6.5, 3, 28, 0, 0, 0, 4096, 0, 0, 9, 39, 3433, 0, 3, 1, 0, 1, 0.75, 10, 35, 10, 0, 0, 0, 0, 0, 0], _
+[1580, "Bladeturn Refrain", 5, 6.5, 3, 28, 0, 0, 0, 0, 0, 0, 9, 38, 3029, 0, 3, 1, 0, 1, 0.75, 20, 20, 8, 5, 20, 0, 0, 0, 0], _
+[1581, "Glowing Signet", 0, 0, 3, 7, 0, 0, 0, 256, 0, 0, 9, 40, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 20, 5, 15, 0, 0, 0, 0], _
+[1582, "REMOVE Leadership skill", 5, 6.5, 0, 3, 4, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 2, 0, 0, 0, 15, 60, 45, 2, 2, 8, 8, 0, 0], _
+[1583, "Leaders Zeal", 5, 6.5, 3, 10, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 0, 1, 0, 0, 0, 0, 0, 12, 2, 2, 8, 12, 240, 0], _
+[1584, "Leaders Comfort", 5, 6.5, 3, 10, 0, 0, 0, 4, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 2, 0.75, 0, 0, 8, 30, 75, 10, 20, 140, 1000], _
+[1585, "Signet of Synergy", 0, 0, 3, 7, 0, 0, 0, 2, 0, 0, 9, 39, 3433, 0, 4, 1, 0, 1, 0.75, 0, 0, 10, 40, 100, 0, 0, 0, 0], _
+[1586, "Angelic Protection", 5, 6.5, 3, 10, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 4, 1, 0, 0, 0.75, 10, 10, 30, 250, 100, 0, 0, 0, 0], _
+[1587, "Angelic Bond", 5, 6.5, 3, 10, 4, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 30, 20, 200, 0, 0, 1000, 0], _
+[1588, "Cautery Signet", 0, 0, 3, 7, 4, 0, 0, 4096, 0, 0, 9, 51, 3433, 0, 0, 1, 0, 2, 0.75, 0, 0, 15, 1, 1, 0, 0, 5000, 0], _
+[1589, "Stand Your Ground", 10, 13, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3032, 0, 0, 1, 0, 0, 0, 5, 20, 20, 24, 24, 0, 0, 1000, 0], _
+[1590, "Lead the Way", 10, 13, 3, 15, 0, 0, 0, 32768, 0, 0, 9, 40, 3433, 0, 3, 1, 0, 0, 0, 1, 5, 8, 20, 20, 25, 25, 1000, 0], _
+[1591, "Make Haste", 5, 6.5, 3, 15, 0, 0, 0, 32768, 0, 0, 9, 38, 3433, 0, 4, 1, 0, 0, 0, 5, 20, 10, 33, 33, 0, 0, 0, 0], _
+[1592, "We Shall Return", 25, 32.5, 3, 15, 2048, 0, 0, 8, 0, 0, 9, 38, 3033, 0, 0, 1, 0, 0, 0, 0, 0, 30, 25, 50, 5, 20, 1000, 0], _
+[1593, "Never Give Up", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3035, 0, 0, 1, 0, 0, 0, 0, 0, 15, 75, 75, 1, 10, 1000, 0], _
+[1594, "Help Me", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3036, 0, 0, 1, 0, 0, 0, 1, 10, 10, 50, 50, 15, 90, 0, 0], _
+[1595, "Fall Back", 10, 13, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3037, 0, 0, 1, 0, 0, 0, 4, 10, 20, 33, 33, 5, 15, 1000, 0], _
+[1596, "Incoming", 5, 6.5, 3, 15, 4, 0, 0, 0, 0, 0, 9, 38, 2879, 0, 0, 1, 0, 0, 0, 4, 10, 20, 33, 33, 5, 15, 1000, 0], _
+[1597, "Theyre on Fire", 10, 13, 3, 15, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 5, 35, 0, 0, 1000, 0], _
+[1598, "Never Surrender", 5, 6.5, 3, 15, 0, 0, 0, 6, 0, 0, 9, 38, 2880, 0, 0, 1, 0, 0, 0, 15, 15, 15, 75, 75, 1, 5, 1000, 0], _
+[1599, "Its Just a Flesh Wound", 5, 6.5, 3, 15, 4, 0, 0, 4096, 0, 0, 9, 39, 3433, 0, 4, 1, 0, 0, 0, 1, 10, 2, 0, 0, 25, 25, 0, 0], _
+[1600, "Barbed Spear", 0, 0, 3, 14, 0, 0, 1, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 50, 0, 0, 0, 0, 0, 0, 0, 5, 20, 0, 0], _
+[1601, "Vicious Attack", 5, 6.5, 3, 14, 0, 0, 16, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 5, 20, 5, 15, 0, 0], _
+[1602, "Stunning Strike", 0, 0, 3, 14, 4, 0, 512, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 250, 0, 0, 0, 0, 0, 5, 30, 4, 10, 0, 0], _
+[1603, "Merciless Spear", 0, 0, 3, 14, 0, 0, 16, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 50, 50, 5, 20, 0, 0], _
+[1604, "Disrupting Throw", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 0, 0.5, 1, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[1605, "Wild Throw", 0, 0, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 175, 0, 0, 0, 0, 0, 5, 20, 3, 3, 3, 0], _
+[1606, "Curse of the Staff of the Mists", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 4, 4, 312, 0], _
+[1607, "Aura of the Staff of the Mists", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 4, 4, 312, 0], _
+[1608, "Power of the Staff of the Mists", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0], _
+[1609, "Scepter of Ether", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.5, 0.75, 0, 0, 2, 200, 200, 0, 0, 312, 0], _
+[1610, "Summoning of the Scepter", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 6, 0.75, 0, 0, 0, 0, 0, 0, 0, 312, 0], _
+[1611, "Rise From Your Grave", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 6, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1612, "Sugar Rush long", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 25, 25, 0, 0, 0, 0], _
+[1613, "Corsair disguise", 0, 0, 3, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1614, "REMOVE Queen Wail", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 5, 5, 20, 15, 15, 0, 0, 1000, 0], _
+[1615, "REMOVE Queen Armor", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 30, 30, 0, 20, 20, 10, 10, 240, 0], _
+[1616, "Queen Heal", 5, 6.5, 3, 10, 0, 0, 0, 4, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 30, 30, 0, 200, 200, 0, 0, 0, 0], _
+[1617, "Queen Wail", 5, 6.5, 3, 15, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 5, 5, 20, 15, 15, 0, 0, 1000, 0], _
+[1618, "Queen Armor", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 30, 30, 0, 20, 20, 10, 10, 240, 0], _
+[1619, "Queen Bite", 5, 6.5, 3, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 0, 0, 8, 80, 80, 0, 0, 0, 0], _
+[1620, "Queen Thump", 10, 13, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 4, 4, 25, 80, 80, 0, 0, 240, 0], _
+[1621, "Queen Siege", 5, 6.5, 3, 10, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 3, 0.75, 0, 0, 20, 100, 100, 0, 0, 0, 0], _
+[1622, "Junundu Tunnel monster skill", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 30, 30, 0, 33, 33, 2, 2, 0, 0], _
+[1623, "Skin of Stone", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1624, "Dervish of the Mystic", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1625, "Dervish of the Wind", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1626, "Paragon of Leadership", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1627, "Paragon of Motivation", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1628, "Dervish of the Blade", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1629, "Paragon of Command", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1630, "Paragon of the Spear", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1631, "Dervish of the Earth", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 1, 1, 0, 0, 0, 150], _
+[1632, "Master of DPS", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 5, 10, 10, 0, 0], _
+[1633, "Malicious Strike", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 185, 7, 35, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 10, 30, 0, 0, 0, 0], _
+[1634, "Shattering Assault", 10, 13, 3, 14, 32772, 4, 0, 0, 0, 8, 7, 35, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 6, 5, 50, 0, 0, 0, 0], _
+[1635, "Golden Skull Strike", 10, 13, 3, 14, 4, 0, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 1, 5, 15, 0, 0, 0, 0, 0, 0], _
+[1636, "Black Spider Strike", 10, 13, 3, 14, 0, 16, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 0, 0, 12, 5, 20, 5, 20, 0, 0], _
+[1637, "Golden Fox Strike", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 1, 5, 1, 0, 0, 0, 0, 0, 4, 10, 30, 0, 0, 0, 0], _
+[1638, "Deadly Haste", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 1, 0.75, 10, 35, 20, 5, 50, 5, 50, 0, 0], _
+[1639, "Assassins Remedy", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 7, 35, 2869, 0, 0, 1, 0, 1, 0.75, 30, 30, 20, 1, 10, 0, 0, 0, 0], _
+[1640, "Foxs Promise", 10, 13, 3, 6, 4, 0, 0, 0, 0, 0, 7, 29, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 0, 0, 0, 0, 0, 0], _
+[1641, "Feigned Neutrality", 5, 6.5, 3, 6, 0, 0, 0, 4, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 0.25, 0.75, 4, 10, 25, 7, 7, 80, 80, 0, 0], _
+[1642, "Hidden Caltrops", 5, 6.5, 3, 4, 4, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 1, 0, 1, 0.75, 1, 10, 12, 1, 15, 50, 50, 10, 0], _
+[1643, "Assault Enchantments", 5, 6.5, 3, 10, 4, 1, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 10, 35, 8, 0, 0, 0, 0, 0, 0], _
+[1644, "Wastrels Collapse", 5, 6.5, 3, 10, 4, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 20, 10, 10, 0, 0, 0, 0], _
+[1645, "Lift Enchantment", 5, 6.5, 3, 10, 2, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 5, 20, 10, 0, 0, 0, 0, 0, 0], _
+[1646, "Augury of Death", 5, 6.5, 3, 4, 8, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 5, 35, 20, 50, 50, 5, 20, 0, 0], _
+[1647, "Signet of Toxic Shock", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 10, 100, 0, 0, 0, 0], _
+[1648, "Signet of Twilight", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 20, 0, 0, 0, 0, 0, 0], _
+[1649, "Way of the Assassin", 5, 6.5, 3, 3, 4, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 0, 0, 20, 20, 12, 5, 20, 5, 35, 0, 0], _
+[1650, "Shadow Walk", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 1, 0, 0, 0, 15, 15, 30, 1, 1, 10, 10, 0, 0], _
+[1651, "Deaths Retreat", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 4, 1, 0, 0.25, 0, 0, 0, 20, 40, 130, 0, 0, 0, 0], _
+[1652, "Shadow Prison", 10, 13, 3, 4, 4, 0, 0, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.25, 0.75, 1, 7, 25, 66, 66, 0, 0, 0, 0], _
+[1653, "Swap", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 1, 1, 0, 0.25, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[1654, "Shadow Meld", 10, 13, 3, 6, 4, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 4, 1, 0, 0.25, 0, 131072, 131072, 20, 0, 0, 0, 0, 0, 0], _
+[1655, "Price of Pride", 5, 6.5, 3, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 2, 0.75, 5, 20, 8, 1, 7, 0, 0, 0, 0], _
+[1656, "Air of Disenchantment", 10, 13, 3, 4, 4, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 10, 150, 300, 0, 0, 240, 0], _
+[1657, "Signet of Clumsiness", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 5, 1, 3193, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 8, 15, 60, 0, 0, 156, 0], _
+[1658, "Symbolic Posture", 10, 13, 3, 3, 0, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 0, 1, 0, 0, 0, 5, 20, 20, 20, 80, 0, 0, 0, 0], _
+[1659, "Toxic Chill", 5, 6.5, 3, 5, 4, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 10, 25, 5, 15, 75, 0, 0, 0, 0], _
+[1660, "Well of Silence", 10, 13, 3, 9, 262656, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 0, 1, 0, 1, 0.75, 10, 30, 20, 1, 4, 20, 20, 312, 0], _
+[1661, "Glowstone", 5, 6.5, 3, 5, 0, 0, 0, 256, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 0.75, 0.75, 0, 0, 7, 5, 50, 5, 5, 0, 0], _
+[1662, "Mind Blast", 5, 6.5, 3, 5, 4, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 2, 15, 60, 1, 8, 0, 0], _
+[1663, "Elemental Flame", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 6, 10, 3397, 0, 0, 1, 0, 1, 0.75, 10, 35, 30, 1, 5, 0, 0, 0, 0], _
+[1664, "Invoke Lightning", 10, 13, 3, 5, 5, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 6, 10, 90, 25, 25, 240, 0], _
+[1665, "Battle Cry", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 15, 15, 0, 25, 25, 15, 15, 0, 0], _
+[1666, "Mending Shrine Bonus", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 0, 0, 0, 0], _
+[1667, "Energy Shrine Bonus", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 20, 20, 0, 0, 0, 0], _
+[1668, "Northern Health Shrine Bonus", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 120, 120, 0, 0, 0, 0], _
+[1669, "Southern Health Shrine Bonus", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 120, 120, 0, 0, 0, 0], _
+[1670, "Siege Attack Bombardment", 0, 0, 3, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 1000, 0], _
+[1671, "Curse of Silence", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1672, "To the Pain Hero Battles", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 10, 0, 0], _
+[1673, "Edge of Reason", 0, 0, 3, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 0, 0, 0, 0], _
+[1674, "Depths of Madness environment effect", 0, 0, 3, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 15, 15, 0, 0, 0, 0], _
+[1675, "Cower in Fear", 0, 0, 3, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 15, 15, 0, 0, 0, 0], _
+[1676, "Dreadful Pain", 0, 0, 3, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 20, 20, 0, 0, 0, 0], _
+[1677, "Veiled Nightmare", 0, 0, 3, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 40, 40, 0, 0, 0, 0], _
+[1678, "Base Protection", 0, 0, 3, 18, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 50, 50, 50, 50, 0, 0], _
+[1679, "Kournan Siege Flame", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0], _
+[1680, "Drake Skin", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 5, 5, 0, 0, 0, 0], _
+[1681, "Skale Vigor", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 1, 1, 0, 0, 0, 0], _
+[1682, "Pahnai Salad item effect", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 10, 10, 0, 0, 0, 0], _
+[1683, "Pensive Guardian", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 1, 0.75, 5, 11, 5, 50, 50, 0, 0, 0, 0], _
+[1684, "Scribes Insight", 5, 6.5, 3, 6, 4, 0, 0, 256, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 35, 20, 3, 3, 0, 0, 0, 0], _
+[1685, "Holy Haste", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 3, 16, 3433, 0, 0, 1, 0, 1, 0.75, 1, 60, 10, 50, 50, 0, 0, 0, 0], _
+[1686, "Glimmer of Light", 5, 6.5, 3, 5, 4, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.25, 0.75, 0, 0, 1, 10, 115, 0, 0, 0, 0], _
+[1687, "Zealous Benediction", 10, 13, 3, 5, 4, 0, 4096, 6, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 4, 30, 180, 7, 7, 0, 0], _
+[1688, "Defenders Zeal", 5, 6.5, 3, 4, 4, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 5, 25, 5, 2, 2, 1, 4, 0, 0], _
+[1689, "Signet of Mystic Wrath", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 2, 0.75, 0, 0, 20, 5, 35, 100, 100, 0, 0], _
+[1690, "Signet of Removal", 0, 0, 3, 7, 4, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[1691, "Dismiss Condition", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 0.75, 0.75, 0, 0, 3, 15, 75, 0, 0, 0, 0], _
+[1692, "Divert Hexes", 10, 13, 3, 5, 4, 0, 4096, 2048, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 5, 1, 3, 15, 75, 0, 0], _
+[1693, "Counterattack", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 6, 5, 35, 2, 6, 0, 0], _
+[1694, "Magehunter Strike", 5, 6.5, 3, 14, 4, 0, 0, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 0, 0.5, 0, 0, 0, 3, 5, 20, 0, 0, 0, 0], _
+[1695, "Soldiers Strike", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 185, 1, 21, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 10, 40, 0, 0, 0, 0], _
+[1696, "Decapitate", 0, 0, 3, 14, 4, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 5, 50, 5, 20, 0, 0], _
+[1697, "Magehunters Smash", 0, 0, 3, 14, 4, 0, 0, 0, 0, 16, 1, 19, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1698, "Soldiers Stance", 5, 6.5, 3, 3, 4, 0, 0, 32768, 0, 0, 1, 21, 3156, 0, 0, 1, 0, 0, 0, 5, 15, 15, 33, 33, 75, 75, 0, 0], _
+[1699, "Soldiers Defense", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 1, 6, 15, 75, 75, 0, 0, 0, 0], _
+[1700, "Frenzied Defense", 5, 6.5, 3, 3, 0, 0, 0, 128, 0, 0, 1, 51, 3433, 0, 0, 1, 0, 0, 0, 8, 8, 10, 75, 75, 0, 0, 0, 0], _
+[1701, "Steady Stance", 5, 6.5, 3, 3, 4, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 6, 1, 3, 1, 7, 0, 0], _
+[1702, "Steelfang Slash", 0, 0, 3, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 1, 1, 31, 1, 5, 0, 0], _
+[1703, "Sunspear Battle Call", 0, 0, 3, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 600, 600, 80, 80, 0, 0], _
+[1704, "Untouchable", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0], _
+[1705, "Earth Shattering Blow", 0, 0, 3, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 0, 0.75, 0, 0, 0, 100, 100, 40, 40, 400, 1400], _
+[1706, "Corrupt Power", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0.75, 3, 3, 0, 30, 30, 5, 5, 0, 0], _
+[1707, "Words of Madness Qwytzylkak", 0, 0, 3, 4, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.25, 8, 8, 2, 30, 30, 20, 20, 1200, 0], _
+[1708, "Gaze of MoavuKaal", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 3, 0.75, 0, 0, 15, 1000, 1000, 0, 0, 0, 0], _
+[1709, "Presence of the Skale Lord", 0, 0, 3, 27, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 60, 60, 50, 50, 50, 0, 0, 1000, 0], _
+[1710, "Madness Dart", 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0.75, 10, 10, 10, 1, 1, 0, 0, 0, 0], _
+[1711, "The Apocrypha is changing to another form", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 3, 3, 10, 0, 0, 0, 0, 0, 0], _
+[1712, "Unknow", 0, 0, 3, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1713, "Unknow", 0, 0, 3, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1714, "Unknow", 0, 0, 3, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1715, "Reform Carvings", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 3, 3, 10, 0, 0, 0, 0, 1000, 0], _
+[1716, "Unknow", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1717, "Sunspear Siege", 0, 0, 3, 5, 32, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 30, 0.75, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[1718, "Soul Torture", 0, 0, 3, 10, 32, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 30, 0.75, 0, 0, 45, 0, 0, 0, 0, 0, 0], _
+[1719, "Screaming Shot", 10, 13, 3, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 10, 25, 5, 20, 1000, 0], _
+[1720, "Keen Arrow", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3147, 0, 5, 1, 0, 0, 0, 0, 0, 6, 5, 20, 5, 25, 0, 0], _
+[1721, "Rampage as One", 25, 32.5, 3, 16, 4, 0, 0, 32768, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 3, 15, 10, 33, 33, 25, 25, 0, 0], _
+[1722, "Forked Arrow", 10, 13, 3, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[1723, "Disrupting Accuracy", 5, 6.5, 3, 19, 0, 0, 0, 0, 0, 0, 2, 25, 3433, 0, 0, 1, 0, 2, 0.75, 36, 36, 12, 0, 0, 0, 0, 0, 0], _
+[1724, "Experts Dexterity", 5, 6.5, 3, 3, 4, 0, 0, 0, 0, 0, 2, 23, 2959, 0, 0, 1, 0, 0, 0.75, 1, 20, 20, 33, 33, 2, 2, 0, 0], _
+[1725, "Roaring Winds", 10, 13, 3, 22, 0, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 5, 0.75, 30, 60, 60, 1, 10, 1, 5, 0, 0], _
+[1726, "Magebane Shot", 10, 13, 3, 14, 4, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 1, 0, 0.5, 1.5, 0, 0, 5, 10, 10, 0, 0, 0, 0], _
+[1727, "Natural Stride", 5, 6.5, 3, 3, 0, 0, 0, 128, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 0, 0, 1, 8, 12, 33, 33, 50, 50, 0, 0], _
+[1728, "Hekets Rampage", 5, 6.5, 3, 3, 0, 0, 0, 32768, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 5, 11, 10, 33, 33, 0, 0, 0, 0], _
+[1729, "Smoke Trap", 10, 13, 3, 21, 292, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 20, 0, 0, 5, 10, 156, 240], _
+[1730, "Infuriating Heat", 5, 6.5, 3, 22, 4, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 3, 0.75, 30, 60, 15, 1, 10, 0, 0, 2500, 0], _
+[1731, "Vocal Was Sogolon", 10, 13, 3, 24, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 60, 60, 30, 20, 50, 0, 0, 0, 0], _
+[1732, "Destructive Was Glaive", 5, 6.5, 3, 24, 4, 0, 0, 8192, 0, 0, 8, 34, 3157, 0, 0, 1, 0, 0.75, 0.75, 30, 60, 5, 15, 85, 20, 20, 312, 20], _
+[1733, "Wielders Strike", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 6, 5, 50, 10, 40, 0, 0], _
+[1734, "Gaze of Fury", 10, 13, 3, 22, 256, 0, 0, 0, 0, 0, 8, 34, 3022, 0, 1, 1, 0, 0.75, 0.75, 30, 60, 20, 1, 14, 5, 20, 0, 0], _
+[1735, "Gaze of Fury attack", 0, 0, 3, 14, 0, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 0, 0, 5, 20, 0, 0], _
+[1736, "Spirits Strength", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 15, 60, 30, 5, 35, 0, 0, 0, 0], _
+[1737, "Wielders Zeal", 10, 13, 3, 6, 4, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 10, 30, 10, 1, 5, 0, 0, 0, 0], _
+[1738, "Sight Beyond Sight", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 0.25, 0.75, 8, 20, 15, 0, 0, 0, 0, 0, 0], _
+[1739, "Renewing Memories", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 5, 35, 0, 0, 0, 0], _
+[1740, "Wielders Remedy", 5, 6.5, 3, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 1, 0.75, 10, 30, 10, 0, 0, 0, 0, 0, 0], _
+[1741, "Ghostmirror Light", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 4, 1, 0, 1, 0.75, 0, 0, 3, 15, 90, 0, 0, 1000, 0], _
+[1742, "Signet of Ghostly Might", 0, 0, 3, 7, 4, 0, 0, 0, 0, 0, 8, 32, 2966, 0, 0, 1, 0, 1, 0.75, 5, 20, 15, 33, 33, 5, 10, 1000, 0], _
+[1743, "Signet of Binding", 0, 0, 3, 7, 64, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 1, 1, 0, 2, 0.75, 0, 0, 15, 200, 50, 0, 0, 0, 0], _
+[1744, "Caretakers Charge", 5, 6.5, 3, 5, 4, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 4, 20, 75, 5, 50, 5, 0], _
+[1745, "Anguish", 15, 19.5, 3, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3023, 0, 0, 1, 0, 0.75, 0.75, 15, 45, 45, 1, 11, 5, 20, 2500, 0], _
+[1746, "Anguish attack", 0, 0, 3, 14, 16384, 0, 0, 0, 0, 70, 8, 32, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 7, 5, 20, 0, 0], _
+[1747, "Empowerment", 5, 6.5, 3, 22, 256, 0, 0, 0, 0, 0, 8, 36, 3024, 0, 0, 1, 0, 0.75, 0.75, 15, 60, 30, 1, 14, 15, 45, 2500, 10], _
+[1748, "Recovery", 15, 19.5, 3, 22, 256, 0, 0, 0, 0, 0, 8, 33, 3025, 0, 0, 1, 0, 0.75, 0.75, 30, 60, 30, 1, 14, 20, 50, 0, 0], _
+[1749, "Weapon of Fury", 5, 6.5, 3, 25, 4, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 3, 1, 0, 1, 0.75, 5, 20, 8, 5, 50, 1, 1, 0, 0], _
+[1750, "Xinraes Weapon", 5, 6.5, 3, 25, 4, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 3, 5, 5, 20, 80, 0, 0], _
+[1751, "Warmongers Weapon", 10, 13, 3, 25, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 3, 1, 0, 1, 0.75, 3, 13, 30, 0, 0, 0, 0, 0, 0], _
+[1752, "Weapon of Remedy", 5, 6.5, 3, 25, 4, 0, 0, 4102, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 0.25, 0.75, 8, 8, 3, 15, 75, 0, 0, 0, 0], _
+[1753, "Rending Sweep", 0, 0, 3, 14, 0, 0, 0, 8192, 0, 32, 10, 41, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 5, 20, 0, 0, 0, 0], _
+[1754, "Onslaught", 10, 13, 3, 6, 8388612, 0, 0, 0, 0, 0, 10, 42, 3365, 0, 0, 1, 0, 0, 0, 3, 15, 10, 25, 25, 25, 25, 0, 25], _
+[1755, "Mystic Corruption", 10, 13, 3, 6, 8388608, 0, 32, 512, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0, 0, 20, 20, 10, 1, 2, 0, 0, 156, 1000], _
+[1756, "Grenths Grasp", 5, 6.5, 3, 6, 8388612, 0, 8, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 20, 20, 10, 1, 1, 1, 11, 156, 0], _
+[1757, "Veil of Thorns", 10, 13, 3, 6, 8388608, 0, 0, 512, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 5, 25, 15, 5, 50, 5, 35, 240, 0], _
+[1758, "Harriers Grasp", 10, 13, 3, 6, 8388608, 0, 8, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 5, 20, 15, 1, 3, 2, 9, 0, 0], _
+[1759, "Vow of Strength", 5, 6.5, 3, 6, 4, 0, 0, 0, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0.25, 0.75, 15, 15, 20, 10, 25, 0, 0, 156, 0], _
+[1760, "Ebon Dust Aura", 10, 13, 3, 6, 8388612, 0, 2, 0, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 20, 3, 15, 1, 7, 240, 0], _
+[1761, "Zealous Vow", 5, 6.5, 3, 6, 4, 0, 0, 256, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0.25, 0.75, 20, 20, 12, 3, 3, 1, 6, 0, 0], _
+[1762, "Heart of Fury", 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 10, 44, 3366, 0, 0, 1, 80, 0, 0, 2, 10, 0, 25, 25, 0, 0, 0, 25], _
+[1763, "Zealous Renewal", 5, 6.5, 3, 6, 8388608, 0, 0, 768, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 0, 0, 5, 25, 10, 5, 30, 1, 5, 240, 0], _
+[1764, "Attackers Insight", 10, 13, 3, 6, 8388608, 0, 1024, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 3, 10, 10, 50, 50, 3, 15, 156, 0], _
+[1765, "Rending Aura", 10, 13, 3, 6, 8388608, 0, 0, 512, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 6, 10, 40, 1, 10, 240, 0], _
+[1766, "Featherfoot Grace", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0.25, 0.75, 5, 20, 15, 25, 25, 25, 25, 0, 0], _
+[1767, "Reapers Sweep", 0, 0, 3, 14, 4, 0, 128, 8192, 0, 32, 10, 41, 3433, 0, 5, 1, 200, 0, 0, 0, 0, 0, 2, 3, 3, 15, 0, 0], _
+[1768, "Harriers Haste", 10, 13, 3, 6, 8388608, 0, 0, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 2, 8, 10, 25, 25, 3, 12, 0, 0], _
+[1769, "Focused Anger", 10, 13, 3, 16, 4, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 0, 0, 45, 45, 60, 0, 150, 0, 0, 0, 0], _
+[1770, "Natural Temper", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 75, 0, 0, 4, 10, 0, 33, 33, 0, 0, 0, 0], _
+[1771, "Song of Restoration", 10, 13, 3, 27, 4, 0, 0, 6, 0, 0, 9, 39, 2878, 0, 0, 1, 0, 1, 0.75, 10, 10, 20, 45, 110, 0, 0, 1000, 0], _
+[1772, "Lyric of Purification", 5, 6.5, 3, 27, 0, 0, 0, 4096, 0, 0, 9, 39, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 0, 0, 0, 0, 1000, 0], _
+[1773, "Soldiers Fury", 5, 6.5, 3, 28, 4, 0, 0, 32768, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 1, 0.75, 10, 35, 5, 33, 33, 33, 33, 0, 0], _
+[1774, "Aggressive Refrain", 25, 32.5, 3, 28, 0, 0, 0, 32768, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 2, 0.75, 5, 25, 20, 25, 25, 20, 20, 0, 0], _
+[1775, "Energizing Finale", 10, 13, 3, 28, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 3, 1, 0, 1, 0.75, 10, 35, 5, 1, 1, 0, 0, 0, 0], _
+[1776, "Signet of Aggression", 0, 0, 3, 7, 0, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 5, 2, 2, 0, 0, 0, 0], _
+[1777, "Remedy Signet", 0, 0, 3, 7, 0, 0, 0, 4096, 0, 0, 9, 51, 3433, 0, 0, 1, 0, 1, 0.75, 0, 0, 4, 0, 0, 0, 0, 0, 0], _
+[1778, "Signet of Return", 0, 0, 3, 7, 2048, 0, 0, 8, 0, 0, 9, 40, 3030, 0, 6, 1, 0, 5, 0.75, 0, 0, 5, 5, 15, 1, 4, 1000, 0], _
+[1779, "Make Your Time", 10, 13, 3, 15, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 0, 0, 0, 0, 30, 1, 5, 0, 0, 1000, 0], _
+[1780, "Cant Touch This", 5, 6.5, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3031, 0, 0, 1, 0, 0, 0, 20, 20, 20, 1, 5, 0, 0, 1000, 0], _
+[1781, "Find Their Weakness", 10, 13, 3, 15, 0, 0, 0, 0, 0, 0, 9, 38, 3034, 0, 3, 1, 0, 0, 0, 5, 20, 15, 5, 50, 5, 20, 0, 0], _
+[1782, "The Power Is Yours", 0, 0, 3, 15, 4, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 0, 1, 100, 0, 0, 3, 3, 0, 0, 1, 0, 0, 1000, 0], _
+[1783, "Slayers Spear", 10, 13, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 4, 5, 25, 5, 20, 0, 0], _
+[1784, "Swift Javelin", 5, 6.5, 3, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 5, 20, 0, 0, 0, 0], _
+[1785, "Natures Speed", 5, 6.5, 3, 3, 0, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 2, 0, 0, 0, 5, 20, 30, 25, 25, 50, 100, 0, 0], _
+[1786, "Weapon of Mastery", 10, 13, 3, 25, 4, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 3, 2, 0, 1, 0.75, 15, 60, 45, 0, 0, 0, 0, 0, 0], _
+[1787, "Accelerated Growth", 10, 13, 3, 6, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 2, 0, 1, 0.75, 15, 60, 45, 5, 50, 0, 0, 0, 0], _
+[1788, "Forge the Way", 5, 6.5, 0, 15, 4, 0, 0, 0, 0, 0, 9, 38, 3433, 0, 4, 2, 0, 0, 0, 5, 20, 20, 25, 25, 40, 40, 0, 0], _
+[1789, "Anthem of Aggression", 10, 13, 0, 27, 4, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 2, 0, 1, 0.75, 10, 10, 20, 25, 25, 0, 0, 1000, 0], _
+[1790, "Skale Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1791, "Mandragor Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1792, "Skree Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1793, "Insect Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1794, "Corsair Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1795, "Plant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1796, "Undead Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1797, "Eternal Suffering", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], _
+[1798, "Eternal Suffering", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0], _
+[1799, "Eternal Suffering", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0], _
+[1800, "Eternal Languor", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[1801, "Eternal Languor", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[1802, "Eternal Languor", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[1803, "Eternal Lethargy", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[1804, "Eternal Lethargy", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[1805, "Eternal Lethargy", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[1806, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1807, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1808, "Thirst of the Drought", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[1809, "Thirst of the Drought", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0], _
+[1810, "Thirst of the Drought", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[1811, "Thirst of the Drought", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 0, 0], _
+[1812, "Thirst of the Drought", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[1813, "Lightbringer", 0, 0, 3, 13, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5, 5, 1, 1, 0, 0], _
+[1814, "Lightbringers Gaze", 5, 6.5, 3, 10, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 15, 100, 100, 1, 1, 312, 0], _
+[1815, "Lightbringer Signet", 0, 0, 3, 7, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 25, 3, 5, 16, 24, 312, 0], _
+[1816, "Sunspear Rebirth Signet", 0, 0, 3, 7, 526336, 0, 0, 16, 0, 0, 0, 51, 3433, 0, 6, 1, 0, 3, 0.75, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[1817, "Wisdom", 0, 0, 3, 13, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 2, 2, 0, 0, 0, 0], _
+[1818, "Maddened Strike", 0, 0, 3, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0.25, 0, 0, 2, 700, 700, 0, 0, 0, 0], _
+[1819, "Maddened Stance", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 1, 0, 0, 0, 0, 0, 0], _
+[1820, "Spirit Form Remains of Sahlahja", 0, 0, 3, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 15, 15, 0, 75, 75, 0, 0, 0, 0], _
+[1821, "Gods Blessing", 0, 0, 3, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1822, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1823, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1824, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1825, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1826, "Elemental Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1827, "Elemental Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1828, "Skree Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1829, "Insect Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1830, "Insect Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1831, "Demon Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1832, "Minotaur Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1833, "Plant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1834, "Plant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1835, "Skale Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1836, "Skale Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1837, "Heket Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1838, "Heket Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1839, "Kournan Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1840, "Mandragor Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 200, 200, 0, 0], _
+[1841, "Mandragor Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1842, "Corsair Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 200, 200, 0, 0], _
+[1843, "Kournan Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1844, "Dhuum Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1845, "Menzies Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1846, "Elemental Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1847, "Monolith Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1848, "Monolith Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1849, "Margonite Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1850, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1851, "Titan Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1852, "Mandragor Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1853, "Giant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1854, "Undead Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 7, 7, 200, 200, 0, 0], _
+[1855, "Kournan Siege", 0, 0, 3, 10, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 6, 0.75, 12, 12, 0, 40, 40, 3, 3, 1050, 0], _
+[1856, "Lose your Head", 0, 0, 3, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1857, "Wandering Mind", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1858, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1859, "Altar Buff", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 10, 10, 0, 0, 0, 0], _
+[1860, "Sugar Rush short", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 180, 180, 0, 25, 25, 0, 0, 0, 0], _
+[1861, "Choking Breath", 5, 6.5, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 1, 4, 4, 1, 300, 300, 0, 0, 0, 0], _
+[1862, "Junundu Bite", 0, 0, 3, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 1, 0, 0, 8, 375, 375, 500, 500, 0, 0], _
+[1863, "Blinding Breath", 10, 13, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 1, 15, 15, 2, 400, 400, 0, 0, 156, 0], _
+[1864, "Burning Breath", 5, 6.5, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 2, 5, 5, 2, 250, 250, 0, 0, 156, 0], _
+[1865, "Junundu Wail", 15, 19.5, 3, 10, 2048, 0, 0, 12, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 3, 10, 10, 10, 500, 500, 0, 0, 1000, 0], _
+[1866, "Capture Point", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1867, "Approaching the Vortex", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[1868, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1869, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1870, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1871, "Avatar of Sweetness", 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[1872, "Unknow", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1873, "Corrupted Lands", 0, 0, 3, 18, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 0, 0, 0, 0], _
+[1874, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 312, 0], _
+[1875, "Words of Madness", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0.75, 10, 10, 2, 120, 120, 5, 5, 0, 0], _
+[1876, "Unknown Junundu Ability", 5, 6.5, 3, 10, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[1877, "Unknow", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1878, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1879, "Unknow", 0, 0, 1, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1880, "Torment Slash Smothering Tendrils", 5, 6.5, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 3.25, 0.75, 0, 0, 2, 200, 200, 0, 0, 250, 6], _
+[1881, "Bonds of Torment", 10, 13, 3, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 30, 30, 20, 0, 0, 0, 0, 0, 0], _
+[1882, "Shadow Smash", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 150, 150, 0, 0, 1000, 0], _
+[1883, "Bonds of Torment effect", 0, 0, 3, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0], _
+[1884, "Consume Torment", 0, 0, 3, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 0, 0, 7, 300, 300, 0, 0, 0, 0], _
+[1885, "Banish Enchantment", 5, 6.5, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 16, 16, 4, 0, 0, 0, 0, 2000, 0], _
+[1886, "Summoning Shadows", 10, 13, 3, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 2, 3, 3, 20, 0, 0, 0, 0, 5000, 700], _
+[1887, "Lightbringers Insight", 0, 0, 0, 2, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 300, 300, 0, 0, 0, 0], _
+[1888, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1889, "Repressive Energy", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 0, 0, 0, 0], _
+[1890, "Enduring Torment", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 10, 10, 0, 0, 0, 0], _
+[1891, "Shroud of Darkness", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 50, 50, 0, 0, 0, 0], _
+[1892, "Demonic Miasma", 0, 0, 3, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 50, 50, 0, 0, 0, 0], _
+[1893, "Enraged", 0, 0, 3, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 196608, 196608, 10, 25, 25, 25, 25, 0, 0], _
+[1894, "Touch of Aaaaarrrrrrggghhh", 5, 6.5, 3, 10, 16386, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1.75, 0.75, 20, 20, 10, 0, 0, 0, 0, 1000, 0], _
+[1895, "Wild Smash", 0, 0, 3, 14, 16384, 0, 128, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 0.5, 0, 5, 5, 8, 10, 10, 0, 0, 0, 0], _
+[1896, "Unyielding Anguish", 10, 13, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 0, 0, 30, 0, 0, 0, 0, 5000, 0], _
+[1897, "Jadoths Storm of Judgment", 0, 0, 3, 14, 0, 0, 0, 0, 0, 64, 0, 51, 3433, 0, 5, 3, 25, 0.5, 0.75, 0, 0, 0, 60, 60, 3, 3, 1000, 0], _
+[1898, "Anguish Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 200, 200, 0, 0], _
+[1899, "Avatar of Holiday Cheer", 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[1900, "Side Step", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 25, 0, 0, 250, 250, 312, 312], _
+[1901, "Jack Frost", 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 3, 0.75, 60, 60, 20, 5, 5, 50, 50, 0, 0], _
+[1902, "Avatar of Grenth snow fighting skill", 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 1, 0.75, 30, 30, 10, 15, 15, 0, 0, 0, 60], _
+[1903, "Avatar of Dwayna snow fighting skill", 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 1, 0.75, 30, 30, 10, 30, 30, 0, 0, 0, 60], _
+[1904, "Steady Aim", 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 5, 100, 100, 0, 0, 1000, 0], _
+[1905, "Rudis Red Nose", 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1906, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1907, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1908, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1909, "Unknow", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1910, "Charm Animal White Mantle", 0, 0, 3, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1911, "Volatile Charr Crystal", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 10, 10, 500, 0], _
+[1912, "Hard mode", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 150, 150, 0, 0, 0, 0], _
+[1913, "Claim Resource Heroes Ascent", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 0, 0, 0, 0, 0, 0, 0, 60, 0], _
+[1914, "Hard mode", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1915, "Hard Mode NPC Buff", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 5, 50, 50, 20, 0], _
+[1916, "Sugar Jolt short", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 120, 120, 0, 50, 50, 0, 0, 0, 0], _
+[1917, "Rollerbeetle Racer", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1918, "Ram", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 2, 2, 2147483647, 0, 0, 0, 0, 156, 0], _
+[1919, "Harden Shell", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 4, 4, 2147483647, 0, 0, 0, 0, 0, 0], _
+[1920, "Rollerbeetle Dash", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 5, 5, 2147483647, 0, 0, 0, 0, 0, 0], _
+[1921, "Super Rollerbeetle", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 2147483647, 0, 0, 0, 0, 0, 0], _
+[1922, "Rollerbeetle Echo", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 20, 20, 2147483647, 30, 30, 0, 0, 0, 0], _
+[1923, "Distracting Lunge", 0, 0, 0, 16, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 5, 5, 2147483647, 5, 5, 0, 0, 0, 0], _
+[1924, "Rollerbeetle Blast", 0, 0, 0, 16, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 2, 2, 2147483647, 0, 0, 0, 0, 0, 0], _
+[1925, "Spit Rocks", 0, 0, 0, 16, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 2, 2, 2147483647, 0, 0, 0, 0, 0, 0], _
+[1926, "Lunar Blessing", 0, 0, 0, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 1, 1, 0, 0, 0, 0], _
+[1927, "Lucky Aura", 0, 0, 0, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1928, "Spiritual Possession", 0, 0, 0, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1929, "Water", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0], _
+[1930, "Pig Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[1931, "Beetle Metamorphosis", 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[1932, "Unknow", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[1933, "Sugar Jolt long", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 50, 50, 0, 0, 0, 0], _
+[1934, "Golden Egg skill", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 1, 1, 0, 0, 0, 0], _
+[1935, "Torturous Embers", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 0, 0, 8, 30, 30, 0, 0, 0, 0], _
+[1936, "Test Buff", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 50, 50, 500, 500, 50, 1], _
+[1937, "Infernal Rage", 10, 13, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 45, 45, 45, 1000, 1000, 33, 33, 240, 0], _
+[1938, "Putrid Flames", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 10, 100, 100, 10, 10, 156, 0], _
+[1939, "Shroud of Ash", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 5, 0, 0, 0, 0, 156, 0], _
+[1940, "Flame Call", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 4, 0.75, 0, 0, 2147483647, 0, 0, 0, 0, 0, 0], _
+[1941, "Torturers Inferno", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 45, 45, 45, 33, 33, 3000, 3000, 0, 0], _
+[1942, "Whirling Fires", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 125, 0, 0, 0, 0, 0, 120, 120, 0, 0, 312, 0], _
+[1943, "Charr Siege Attack What Must Be Done", 5, 6.5, 4, 10, 17408, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 0, 3, 0.75, 0, 0, 3, 300, 300, 10, 10, 312, 1050], _
+[1944, "Charr Siege Attack Against the Charr", 0, 0, 4, 10, 17408, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 10, 0.75, 0, 0, 15, 100, 100, 10, 10, 312, 1050], _
+[1945, "Birthday Cupcake skill", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 100, 100, 10, 10, 25, 0], _
+[1946, "Unknow", 0, 0, 2, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 20, 20, 250, 250, 25, 3], _
+[1947, "Blessing of the Luxons", 0, 0, 2, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 10, 10, 125, 125, 25, 3], _
+[1948, "Shadow Sanctuary Luxon", 5, 6.5, 2, 6, 524288, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 10, 30, 7, 10, 5, 5, 40, 0], _
+[1949, "Ether Nightmare Luxon", 10, 13, 2, 4, 524800, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 3, 0.75, 10, 10, 25, 5, 8, 1, 1, 312, 0], _
+[1950, "Signet of Corruption", 0, 0, 2, 7, 524288, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 5, 1, 0, 1, 0.75, 12, 20, 20, 20, 30, 2, 2, 240, 0], _
+[1951, "Elemental Lord Luxon", 5, 6.5, 0, 6, 524288, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 40, 60, 45, 100, 300, 1, 1, 1, 0], _
+[1952, "Selfless Spirit Luxon", 5, 6.5, 2, 6, 524288, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 15, 20, 45, 3, 3, 0, 0, 0, 0], _
+[1953, "Triple Shot Luxon", 10, 13, 2, 14, 524288, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 40, 25, 0, 0, 0, 0], _
+[1954, "Save Yourselves Luxon", 0, 0, 2, 15, 524288, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 1, 200, 0, 0, 4, 6, 0, 100, 100, 0, 0, 1000, 0], _
+[1955, "Aura of Holy Might Luxon", 10, 13, 2, 6, 524288, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 1, 0, 0.75, 0.75, 45, 45, 30, 0, 0, 20, 25, 156, 0], _
+[1956, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 100, 100, 3, 3, 150, 50], _
+[1957, "Spear of Fury Luxon", 5, 6.5, 0, 14, 524288, 0, 0, 0, 0, 64, 9, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 30, 40, 3, 6, 0, 0], _
+[1958, "Attribute Balance", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0], _
+[1959, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1960, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1961, "Mandragor Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1962, "Mandragor Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1963, "Giant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1964, "Giant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1965, "Skree Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1966, "Skree Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1967, "Insect Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1968, "Insect Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1969, "Minotaur Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1970, "Minotaur Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1971, "Corsair Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1972, "Corsair Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1973, "Plant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1974, "Plant Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1975, "Skale Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1976, "Skale Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1977, "Heket Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1978, "Heket Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1979, "Kournan Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1980, "Kournan Bounty", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1981, "Undead Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[1982, "Undead Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 200, 200, 0, 0], _
+[1983, "Fire Dart", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 5, 33, 33, 4, 4, 900, 0], _
+[1984, "Ice Dart", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 6, 6, 5, 33, 33, 33, 33, 900, 0], _
+[1985, "Poison Dart", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 5, 33, 33, 8, 8, 900, 0], _
+[1986, "Vampiric Assault", 5, 6.5, 4, 14, 32768, 4, 0, 0, 0, 8, 7, 30, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 8, 10, 40, 0, 0, 0, 0], _
+[1987, "Lotus Strike", 10, 13, 4, 14, 0, 2, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 0, 0, 12, 10, 25, 5, 20, 0, 0], _
+[1988, "Golden Fang Strike", 5, 6.5, 4, 14, 0, 2, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 5, 20, 4, 0, 0, 0, 0, 0, 0], _
+[1989, "Way of the Mantis", 10, 13, 4, 6, 0, 0, 8, 0, 0, 0, 7, 30, 3433, 0, 0, 0, 0, 1, 0.75, 5, 20, 12, 1, 7, 0, 0, 0, 0], _
+[1990, "Falling Lotus Strike", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 1, 0, 0, 0, 0, 0, 12, 15, 35, 1, 12, 0, 0], _
+[1991, "Sadists Signet", 0, 0, 4, 7, 0, 0, 0, 4, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 10, 40, 0, 0, 0, 0], _
+[1992, "Signet of Distraction", 0, 0, 4, 7, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 15, 1, 5, 0, 0, 0, 0], _
+[1993, "Signet of Recall", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 1, 0, 1, 0.75, 10, 10, 20, 4, 4, 13, 20, 0, 0], _
+[1994, "Power Lock", 5, 6.5, 4, 5, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 12, 5, 13, 0, 0, 0, 0], _
+[1995, "Waste Not Want Not", 5, 6.5, 4, 5, 0, 0, 0, 256, 0, 0, 5, 3, 3433, 0, 5, 1, 0, 0.25, 0.75, 0, 0, 15, 8, 13, 0, 0, 0, 0], _
+[1996, "Sum of All Fears", 10, 13, 4, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 2, 0.75, 1, 10, 10, 33, 33, 0, 0, 0, 0], _
+[1997, "Withering Aura", 5, 6.5, 4, 6, 0, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 3, 1, 0, 1, 0.75, 5, 20, 3, 5, 20, 0, 0, 0, 0], _
+[1998, "Cacophony", 10, 13, 4, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 2, 0.75, 10, 10, 15, 30, 105, 0, 0, 0, 0], _
+[1999, "Winters Embrace", 10, 13, 4, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 0.75, 0.75, 2, 6, 15, 66, 66, 5, 15, 0, 0], _
+[2000, "Earthen Shackles", 10, 13, 4, 4, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 1, 0.75, 3, 3, 15, 90, 90, 5, 20, 240, 0], _
+[2001, "Ward of Weakness", 10, 13, 4, 11, 0, 0, 0, 128, 0, 0, 6, 9, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 5, 20, 0, 0, 312, 0], _
+[2002, "Glyph of Swiftness", 5, 6.5, 4, 12, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 10, 1, 5, 25, 25, 200, 0], _
+[2003, "Cure Hex", 5, 6.5, 4, 5, 0, 0, 4096, 2054, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 12, 30, 120, 0, 0, 0, 0], _
+[2004, "Smite Condition", 5, 6.5, 4, 5, 0, 0, 0, 4096, 0, 0, 3, 14, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 7, 10, 60, 0, 0, 240, 0], _
+[2005, "Smiters Boon", 5, 6.5, 4, 6, 0, 0, 0, 0, 0, 0, 3, 16, 2895, 0, 0, 1, 0, 0.25, 0.75, 30, 30, 10, 1, 5, 10, 33, 5, 0], _
+[2006, "Castigation Signet", 0, 0, 4, 7, 0, 0, 0, 256, 0, 0, 3, 14, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 26, 56, 1, 10, 0, 0], _
+[2007, "Purifying Veil", 5, 6.5, 4, 6, 0, 0, 0, 4096, 0, 0, 3, 15, 3433, 0, 3, 1, 0, 1, 0.75, 131072, 131072, 6, 5, 50, 0, 0, 0, 0], _
+[2008, "Pulverizing Smash", 0, 0, 4, 14, 0, 0, 1040, 0, 128, 16, 1, 19, 3433, 0, 5, 1, 80, 0, 0, 0, 0, 0, 5, 20, 0, 0, 0, 0], _
+[2009, "Keen Chop", 0, 0, 4, 14, 0, 0, 0, 0, 0, 1, 1, 18, 3433, 0, 5, 1, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2010, "Knee Cutter", 0, 0, 4, 14, 0, 0, 0, 256, 8, 128, 1, 20, 3433, 0, 5, 1, 120, 0, 0, 0, 0, 1, 2, 7, 1, 3, 0, 0], _
+[2011, "Grapple", 5, 6.5, 4, 10, 2, 0, 128, 0, 0, 0, 1, 51, 3433, 0, 5, 1, 0, 0.75, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0], _
+[2012, "Radiant Scythe", 0, 0, 4, 14, 0, 0, 0, 256, 0, 32, 10, 41, 3433, 0, 5, 1, 150, 0, 0, 0, 0, 0, 1, 7, 5, 30, 1, 0], _
+[2013, "Grenths Aura", 10, 13, 4, 6, 8388608, 0, 0, 512, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 0, 0, 20, 20, 10, 5, 25, 5, 25, 156, 0], _
+[2014, "Signet of Pious Restraint", 0, 0, 4, 7, 0, 0, 8, 8192, 0, 0, 10, 42, 3273, 0, 5, 1, 0, 1, 0.75, 0, 0, 20, 5, 15, 75, 75, 240, 0], _
+[2015, "Farmers Scythe", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 32, 10, 41, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 12, 5, 20, 0, 0, 0, 0], _
+[2016, "Energetic Was Lee Sa", 10, 13, 4, 24, 0, 0, 0, 256, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 2, 0.75, 5, 15, 20, 2, 2, 1, 10, 0, 0], _
+[2017, "Anthem of Weariness", 5, 6.5, 4, 27, 0, 0, 0, 0, 0, 0, 9, 38, 3433, 0, 0, 1, 0, 1, 0.75, 8, 8, 10, 1, 16, 0, 0, 1000, 0], _
+[2018, "Anthem of Disruption", 10, 13, 4, 27, 0, 0, 0, 0, 0, 0, 9, 38, 3040, 0, 0, 1, 0, 1, 0.75, 1, 10, 15, 0, 0, 0, 0, 1000, 0], _
+[2019, "Burning Ground", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 5, 0, 0, 0, 0], _
+[2020, "Freezing Ground", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 2, 50, 50, 50, 50, 0, 0], _
+[2021, "Poison Ground", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 2, 50, 50, 5, 5, 0, 0], _
+[2022, "Fire Jet", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 10, 66, 66, 5, 5, 0, 0], _
+[2023, "Ice Jet", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 10, 66, 66, 6, 6, 50, 0], _
+[2024, "Poison Jet", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 10, 66, 66, 10, 10, 0, 0], _
+[2025, "Lava Pool", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 1, 0, 0, 0, 0, 0, 0], _
+[2026, "Water Pool", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 1, 90, 90, 0, 0, 0, 0], _
+[2027, "Fire Spout", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 10, 50, 50, 6, 6, 0, 0], _
+[2028, "Ice Spout", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 10, 50, 50, 6, 6, 66, 0], _
+[2029, "Poison Spout", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 10, 50, 50, 12, 12, 0, 0], _
+[2030, "Dhuum Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[2031, "Dhuum Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 6, 6, 150, 150, 0, 0], _
+[2032, "Elemental Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[2033, "Elemental Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 6, 6, 150, 150, 0, 0], _
+[2034, "Monolith Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[2035, "Monolith Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 6, 6, 150, 150, 0, 0], _
+[2036, "Margonite Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[2037, "Margonite Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 6, 6, 150, 150, 0, 0], _
+[2038, "Menzies Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[2039, "Menzies Battle", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 6, 6, 150, 150, 0, 0], _
+[2040, "Anguish Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 8, 8, 100, 100, 0, 0], _
+[2041, "Titan Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[2042, "Titan Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 6, 6, 150, 150, 0, 0], _
+[2043, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 100, 100, 0, 0], _
+[2044, "Monster Hunt", 0, 0, 3, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 6, 6, 150, 150, 0, 0], _
+[2045, "Sarcophagus Spores", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 312, 0], _
+[2046, "Exploding Barrel", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 312, 0], _
+[2047, "Greater Hard Mode NPC Buff", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 5, 75, 75, 40, 0], _
+[2048, "Fire Boulder", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 156, 0], _
+[2049, "Dire Snowball", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 156, 0], _
+[2050, "Boulder", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 156, 0], _
+[2051, "Summon Spirits Luxon", 5, 6.5, 2, 5, 524288, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 5, 60, 100, 0, 0, 5000, 72], _
+[2052, "Shadow Fang", 10, 13, 4, 4, 0, 0, 16, 0, 0, 0, 7, 30, 3433, 0, 5, 1, 0, 0.25, 0.75, 10, 10, 45, 5, 20, 0, 0, 0, 0], _
+[2053, "Calculated Risk", 5, 6.5, 4, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3196, 0, 5, 1, 0, 1, 0.75, 3, 24, 7, 50, 50, 15, 100, 0, 10], _
+[2054, "Shrinking Armor", 5, 6.5, 4, 4, 512, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 1, 0.75, 10, 10, 8, 1, 4, 5, 20, 0, 0], _
+[2055, "Aneurysm", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 5, 1, 3, 1, 30, 156, 1], _
+[2056, "Wandering Eye", 5, 6.5, 4, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3195, 0, 5, 1, 0, 2, 0.75, 4, 4, 12, 30, 110, 0, 0, 240, 0], _
+[2057, "Foul Feast", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 4, 1, 0, 0.25, 0.75, 0, 0, 4, 0, 45, 0, 2, 0, 0], _
+[2058, "Putrid Bile", 10, 13, 4, 4, 512, 0, 0, 0, 0, 0, 4, 5, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 12, 1, 3, 25, 85, 240, 0], _
+[2059, "Shell Shock", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 6, 8, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 10, 30, 5, 20, 156, 156], _
+[2060, "Glyph of Immolation", 5, 6.5, 4, 12, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 0, 1, 0, 1, 0.75, 15, 15, 10, 1, 4, 1, 4, 0, 0], _
+[2061, "Patient Spirit", 5, 6.5, 4, 6, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 3, 1, 0, 0.25, 0.75, 2, 2, 4, 30, 120, 0, 0, 0, 0], _
+[2062, "Healing Ribbon", 10, 13, 4, 5, 0, 0, 4096, 6, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 1, 0.75, 0, 0, 5, 20, 110, 10, 100, 240, 0], _
+[2063, "Aura of Stability", 5, 6.5, 4, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 4, 1, 0, 0.25, 0.75, 3, 8, 12, 0, 0, 0, 0, 0, 0], _
+[2064, "Spotless Mind", 5, 6.5, 4, 6, 0, 0, 0, 2048, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 0.25, 0.75, 1, 15, 12, 5, 5, 0, 0, 0, 0], _
+[2065, "Spotless Soul", 5, 6.5, 4, 6, 0, 0, 0, 4096, 0, 0, 3, 13, 3433, 0, 4, 1, 0, 0.25, 0.75, 1, 15, 12, 3, 3, 0, 0, 0, 0], _
+[2066, "Disarm", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 128, 1, 17, 3433, 0, 5, 1, 0, 0.5, 0, 0, 0, 20, 0, 3, 0, 0, 0, 0], _
+[2067, "I Meant to Do That", 5, 6.5, 4, 15, 0, 0, 0, 0, 128, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 0, 0, 8, 1, 5, 0, 0, 0, 0], _
+[2068, "Rapid Fire", 5, 6.5, 4, 19, 256, 0, 0, 0, 0, 0, 2, 25, 3433, 0, 0, 1, 0, 2, 0.75, 5, 25, 12, 33, 33, 0, 0, 0, 0], _
+[2069, "Sloth Hunters Shot", 10, 13, 4, 14, 0, 0, 0, 0, 0, 2, 2, 25, 2925, 0, 5, 1, 0, 0, 0, 0, 0, 8, 10, 25, 10, 35, 0, 0], _
+[2070, "Aura Slicer", 0, 0, 4, 14, 0, 0, 1, 0, 0, 185, 10, 44, 3433, 0, 5, 1, 80, 0, 0, 0, 0, 0, 1, 10, 5, 15, 0, 0], _
+[2071, "Zealous Sweep", 5, 6.5, 4, 14, 0, 0, 0, 256, 0, 32, 10, 41, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 3, 3, 5, 20, 0, 1], _
+[2072, "Pure Was Li Ming", 10, 13, 4, 24, 0, 0, 0, 4096, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 1, 0.75, 5, 20, 20, 10, 50, 1, 4, 1000, 0], _
+[2073, "Weapon of Aggression", 10, 13, 4, 25, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 0, 1, 0, 0.25, 0.75, 5, 15, 10, 25, 25, 0, 0, 0, 0], _
+[2074, "Chest Thumper", 5, 6.5, 4, 14, 0, 0, 16, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 5, 5, 20, 0, 0, 0, 0], _
+[2075, "Hasty Refrain", 5, 6.5, 4, 28, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 3, 1, 0, 1, 0.75, 3, 11, 10, 25, 25, 0, 0, 0, 0], _
+[2076, "Drain Minion", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 3, 0, 2, 0.75, 0, 0, 25, 300, 300, 0, 0, 5000, 0], _
+[2077, "Cracked Armor", 0, 0, 0, 8, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 0, 0, 0, 0, 20, 20, 0, 20, 20, 60, 60, 0, 0], _
+[2078, "Berserk", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 60, 0, 0, 10, 10, 15, 0, 0, 0, 0, 0, 0], _
+[2079, "Fleshreavers Escape", 10, 13, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0, 0, 0, 30, 10, 10, 0, 0, 156, 312], _
+[2080, "Chomp", 10, 13, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 3, 0, 2, 0.75, 0, 0, 30, 500, 500, 0, 0, 0, 0], _
+[2081, "Twisting Jaws", 15, 19.5, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 0, 0, 20, 120, 120, 10, 10, 0, 0], _
+[2082, "Burning Immunity", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2083, "Mandragors Charge", 5, 6.5, 4, 5, 8, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0, 0, 0, 20, 60, 60, 0, 0, 0, 0], _
+[2084, "Rock Slide", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 2147483647, 140, 140, 0, 0, 0, 0], _
+[2085, "Avalanche effect", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 4, 4, 2147483647, 100, 100, 50, 50, 0, 0], _
+[2086, "Snaring Web", 5, 6.5, 4, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 3, 0, 2, 0.75, 15, 15, 30, 0, 0, 0, 0, 240, 0], _
+[2087, "Ceiling Collapse", 10, 13, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 30, 50, 50, 0, 0, 1000, 0], _
+[2088, "Trample", 5, 6.5, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 15, 80, 80, 0, 0, 156, 0], _
+[2089, "Wurm Bile", 5, 6.5, 4, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 20, 20, 12, 40, 40, 12, 12, 240, 0], _
+[2090, "Ground Cover", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[2091, "Shadow Sanctuary Kurzick", 5, 6.5, 2, 6, 524288, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 10, 30, 7, 10, 5, 5, 40, 0], _
+[2092, "Ether Nightmare Kurzick", 10, 13, 2, 4, 524800, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 3, 0.75, 10, 10, 25, 5, 8, 1, 1, 312, 0], _
+[2093, "Signet of Corruption", 0, 0, 2, 7, 524288, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 5, 1, 0, 1, 0.75, 12, 20, 20, 20, 30, 2, 2, 240, 0], _
+[2094, "Elemental Lord Kurzick", 5, 6.5, 0, 6, 524288, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 40, 60, 45, 100, 300, 1, 1, 1, 0], _
+[2095, "Selfless Spirit Kurzick", 5, 6.5, 2, 6, 524288, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 15, 20, 45, 3, 3, 0, 0, 0, 0], _
+[2096, "Triple Shot Kurzick", 10, 13, 2, 14, 524288, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 10, 40, 25, 0, 0, 0, 0], _
+[2097, "Save Yourselves Kurzick", 0, 0, 2, 15, 524288, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 1, 200, 0, 0, 4, 6, 0, 100, 100, 0, 0, 1000, 0], _
+[2098, "Aura of Holy Might Kurzick", 10, 13, 2, 6, 524288, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 1, 0, 0.75, 0.75, 45, 45, 30, 0, 0, 20, 25, 156, 0], _
+[2099, "Spear of Fury Kurzick", 5, 6.5, 0, 14, 524288, 0, 0, 0, 0, 64, 9, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 30, 40, 3, 6, 0, 0], _
+[2100, "Summon Spirits Kurzick", 5, 6.5, 2, 5, 524288, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 5, 60, 100, 0, 0, 5000, 72], _
+[2101, "Critical Agility", 5, 6.5, 3, 6, 524288, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 1, 0, 1, 0.75, 4, 4, 30, 33, 33, 15, 25, 0, 0], _
+[2102, "Cry of Pain", 10, 13, 3, 5, 524288, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 1, 0, 0.25, 0.75, 10, 10, 15, 25, 50, 3, 5, 312, 0], _
+[2103, "Necrosis", 5, 6.5, 3, 10, 524288, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 2, 60, 90, 0, 0, 0, 0], _
+[2104, "Intensity", 5, 6.5, 0, 16, 524288, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 1, 0, 0, 0, 10, 10, 10, 0, 0, 60, 70, 312, 0], _
+[2105, "Seed of Life", 5, 6.5, 3, 6, 524288, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 4, 1, 0, 0.25, 0.75, 2, 5, 20, 2, 2, 0, 0, 5000, 0], _
+[2106, "Call of the Eye", 0, 0, 4, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2107, "Whirlwind Attack", 0, 0, 3, 14, 524288, 0, 0, 0, 0, 185, 1, 51, 3433, 0, 5, 1, 130, 0, 0, 0, 0, 1, 13, 20, 0, 0, 156, 0], _
+[2108, "Never Rampage Alone", 15, 19.5, 3, 16, 524288, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 1, 0, 0, 0.75, 18, 25, 20, 25, 25, 1, 3, 0, 0], _
+[2109, "Eternal Aura", 15, 19.5, 3, 6, 524288, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 1, 0, 4, 0.75, 196608, 196608, 30, 40, 50, 20, 30, 312, 100], _
+[2110, "Vampirism", 10, 13, 3, 22, 524544, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 1, 0, 0.75, 0.75, 75, 150, 30, 4, 14, 10, 20, 0, 0], _
+[2111, "Vampirism attack", 0, 0, 3, 14, 540672, 0, 0, 0, 0, 70, 8, 51, 3433, 0, 5, 0, 0, 2, 0, 0, 0, 0, 0, 0, 10, 20, 0, 0], _
+[2112, "Theres Nothing to Fear", 15, 19.5, 0, 15, 524288, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 1, 0, 0, 0.75, 4, 4, 20, 20, 35, 35, 60, 1000, 0], _
+[2113, "Ursan Rage Blood Washes Blood", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1, 0.75, 2, 2, 10, 120, 120, 0, 0, 156, 0], _
+[2114, "Ursan Strike Blood Washes Blood", 0, 0, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 3, 70, 70, 0, 0, 0, 0], _
+[2115, "Unknow", 0, 0, 4, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2116, "Sneak Attack", 5, 6.5, 4, 14, 524288, 0, 2, 0, 0, 185, 0, 51, 3433, 1, 5, 1, 0, 0, 0, 5, 8, 5, 0, 0, 0, 0, 0, 0], _
+[2117, "Firebomb Explosion", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 200, 5, 5, 240, 0], _
+[2118, "Firebomb", 0, 0, 4, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.25, 0.75, 0, 0, 3, 0, 0, 800, 800, 0, 0], _
+[2119, "Shield of Fire", 0, 0, 4, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 20, 20, 20, 20, 20, 0, 0, 0, 0], _
+[2120, "Respawn", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0], _
+[2121, "Marked For Death", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2122, "Spirit World Retreat", 5, 6.5, 4, 4, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0, 3, 3, 20, 2, 2, 75, 75, 1000, 0], _
+[2123, "Long Claws", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0], _
+[2124, "Shattered Spirit", 0, 0, 4, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 10, 2, 2, 50, 50, 0, 0], _
+[2125, "Spirit Roar", 0, 0, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 16, 50, 50, 25, 25, 240, 0], _
+[2126, "Spirit Senses", 0, 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 15, 15, 75, 75, 75, 0, 0, 0, 0], _
+[2127, "Unseen Aggression", 0, 0, 4, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 225, 225, 0, 0, 0, 0], _
+[2128, "Volfen Pounce Curse of the Nornbear", 0, 0, 4, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0.75, 0.75, 18, 18, 15, 30, 30, 90, 90, 156, 0], _
+[2129, "Volfen Claw Curse of the Nornbear", 0, 0, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.75, 0.75, 4, 4, 2, 55, 55, 0, 0, 0, 0], _
+[2130, "Unknow", 0, 0, 4, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2131, "Volfen Bloodlust Curse of the Nornbear", 0, 0, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 6, 6, 10, 33, 33, 0, 0, 240, 0], _
+[2132, "Volfen Agility Curse of the Nornbear", 0, 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0.25, 0.75, 18, 18, 30, 66, 66, 0, 0, 0, 0], _
+[2133, "Volfen Blessing Curse of the Nornbear", 10, 13, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 2, 30, 3, 3, 90, 90, 0, 0], _
+[2134, "Charging Spirit", 0, 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 5, 5, 20, 25, 25, 50, 50, 156, 0], _
+[2135, "Trampling Ox", 5, 6.5, 4, 14, 32768, 4, 0, 0, 0, 8, 7, 29, 3433, 3, 5, 1, 0, 0, 0, 0, 0, 8, 5, 20, 0, 0, 0, 0], _
+[2136, "Smoke Powder Defense", 5, 6.5, 4, 3, 0, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 0, 1, 0, 0, 0, 8, 8, 20, 2, 6, 0, 0, 156, 0], _
+[2137, "Confusing Images", 10, 13, 4, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 1, 0, 2, 0.75, 2, 10, 20, 0, 0, 0, 0, 0, 0], _
+[2138, "Hexers Vigor", 5, 6.5, 4, 6, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 0, 1, 0, 0.25, 0.75, 10, 10, 10, 1, 8, 0, 0, 0, 0], _
+[2139, "Masochism", 5, 6.5, 4, 6, 0, 0, 0, 131072, 0, 0, 4, 6, 3054, 0, 0, 1, 0, 1, 0.75, 10, 40, 20, 2, 2, 5, 3, 0, 0], _
+[2140, "Piercing Trap", 10, 13, 4, 21, 288, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 30, 5, 50, 15, 60, 156, 240], _
+[2141, "Companionship", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 2, 0.75, 0, 0, 10, 30, 120, 30, 120, 0, 0], _
+[2142, "Feral Aggression", 15, 19.5, 4, 10, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 0, 1, 0, 0, 0, 5, 20, 20, 33, 33, 3, 10, 0, 0], _
+[2143, "Disrupting Shot", 10, 13, 4, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0.5, 1.5, 0, 0, 15, 10, 40, 0, 0, 0, 0], _
+[2144, "Volley", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 2, 3, 3, 1, 10, 156, 0], _
+[2145, "Expert Focus", 10, 13, 4, 19, 256, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 2, 0.75, 24, 24, 12, 1, 2, 1, 10, 0, 0], _
+[2146, "Pious Fury", 5, 6.5, 4, 3, 0, 0, 0, 8192, 0, 0, 10, 44, 3368, 0, 0, 1, 0, 0, 0, 1, 7, 10, 25, 25, 0, 0, 0, 0], _
+[2147, "Crippling Victory", 0, 0, 4, 14, 0, 0, 8, 0, 0, 32, 10, 41, 3433, 0, 5, 1, 150, 0, 0, 3, 8, 0, 0, 0, 10, 30, 156, 0], _
+[2148, "Sundering Weapon", 5, 6.5, 4, 25, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 3, 1, 0, 1, 0.75, 4, 10, 10, 5, 20, 10, 10, 3, 0], _
+[2149, "Weapon of Renewal", 5, 6.5, 4, 25, 0, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 3, 1, 0, 1, 0.75, 4, 10, 10, 1, 7, 0, 0, 0, 0], _
+[2150, "Maiming Spear", 5, 6.5, 4, 14, 0, 0, 8, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 5, 5, 20, 0, 0, 0, 0], _
+[2151, "Temporal Sheen", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2152, "Flux Overload", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1337, 1337, 0, 0, 240, 0], _
+[2153, "A pool of water", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 7, 7, 0, 2, 2, 0, 0, 0, 0], _
+[2154, "Phase Shield effect", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 10, 250, 250, 0, 0, 0, 0], _
+[2155, "Phase Shield monster skill", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 196608, 196608, 15, 750, 750, 0, 0, 240, 0], _
+[2156, "Vitality Transfer", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 2, 0, 2, 0.75, 196608, 196608, 0, 100, 100, 0, 0, 1200, 0], _
+[2157, "Golem Strike", 0, 0, 4, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 2, 140, 0, 0, 0, 0, 0, 180, 180, 3, 3, 0, 0], _
+[2158, "Bloodstone Slash", 0, 0, 4, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 2, 0, 0, 0, 0, 0, 0, 75, 75, 0, 0, 0, 0], _
+[2159, "Energy Blast golem", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 3, 0.75, 0, 0, 0, 100, 100, 0, 0, 0, 0], _
+[2160, "Chaotic Energy", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 3, 0.75, 0, 0, 25, 5, 5, 125, 125, 1200, 0], _
+[2161, "Golem Fire Shield", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 312, 0], _
+[2162, "The Way of Duty", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2163, "The Way of Kinship", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2164, "Diamondshard Mist environment effect", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 33, 33, 0, 0, 0, 0], _
+[2165, "Diamondshard Grave", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 10, 10, 0, 140, 140, 10, 10, 0, 0], _
+[2166, "The Way of Strength", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2167, "Diamondshard Mist", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 0, 0, 5, 4, 4, 0, 0, 0, 0], _
+[2168, "Raven Blessing A Gate Too Far", 10, 13, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 2, 30, 20, 20, 90, 90, 0, 0], _
+[2169, "Unknow", 0, 0, 4, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2170, "Raven Flight A Gate Too Far", 0, 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 13, 13, 15, 0, 0, 0, 0, 0, 0], _
+[2171, "Raven Shriek A Gate Too Far", 0, 0, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 9, 9, 20, 0, 0, 0, 0, 1000, 240], _
+[2172, "Raven Swoop A Gate Too Far", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.75, 0.75, 0, 0, 4, 90, 90, 0, 0, 156, 0], _
+[2173, "Raven Talons A Gate Too Far", 0, 0, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.75, 0.75, 9, 9, 1, 0, 0, 0, 0, 0, 0], _
+[2174, "Aspect of Oak", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 20, 20, 20, 300, 300, 0, 0, 0, 0], _
+[2175, "Long Claws", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0], _
+[2176, "Tremor", 5, 6.5, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 4, 4, 12, 0, 0, 0, 0, 1000, 0], _
+[2177, "Rage of the Jotun", 0, 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 30, 30, 5, 0, 0, 0, 0, 0, 0], _
+[2178, "Thundering Roar", 0, 0, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 5, 0, 0, 0, 0, 0, 0], _
+[2179, "Sundering Soulcrush", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 0, 0, 5, 50, 50, 50, 50, 156, 0], _
+[2180, "Pyroclastic Shot", 5, 6.5, 4, 10, 17408, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 0, 0, 6, 80, 80, 7, 7, 156, 10], _
+[2181, "Explosive Force", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 240, 0], _
+[2182, "Unknow", 0, 0, 4, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[2183, "Unknow", 0, 0, 4, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[2184, "Rolling Shift", 0, 0, 4, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[2185, "Powder Keg Explosion", 15, 19.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 0, 0, 30, 50, 50, 0, 0, 240, 0], _
+[2186, "Signet of Deadly Corruption", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 7, 30, 3053, 0, 5, 1, 0, 1, 0.75, 0, 0, 12, 5, 35, 130, 130, 0, 0], _
+[2187, "Way of the Master", 5, 6.5, 4, 6, 0, 0, 0, 0, 0, 0, 7, 35, 3433, 0, 0, 1, 0, 0.25, 0.75, 60, 60, 30, 3, 33, 0, 0, 0, 0], _
+[2188, "Defile Defenses", 5, 6.5, 4, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 5, 20, 5, 30, 120, 0, 0, 0, 0], _
+[2189, "Angorodons Gaze", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 10, 50, 3, 12, 0, 0], _
+[2190, "Magnetic Surge", 10, 13, 4, 6, 0, 0, 0, 0, 0, 0, 6, 9, 3433, 0, 5, 1, 0, 1.5, 0.75, 1, 5, 15, 15, 75, 5, 15, 1000, 0], _
+[2191, "Slippery Ground", 5, 6.5, 4, 5, 64, 0, 0, 0, 0, 0, 6, 11, 3398, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 0, 0, 0, 0, 156, 0], _
+[2192, "Glowing Ice", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 8, 5, 50, 5, 5, 0, 0], _
+[2193, "Energy Blast", 10, 13, 4, 5, 0, 0, 0, 0, 0, 0, 6, 12, 3433, 0, 5, 1, 0, 1.5, 0.75, 0, 0, 20, 1, 2, 130, 130, 0, 0], _
+[2194, "Distracting Strike", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 185, 1, 51, 3433, 0, 5, 1, 0, 0.5, 0, 0, 0, 15, 20, 20, 0, 0, 0, 0], _
+[2195, "Symbolic Strike", 0, 0, 4, 14, 0, 0, 0, 0, 0, 185, 1, 51, 3433, 0, 5, 1, 80, 0, 0, 0, 0, 0, 12, 12, 70, 70, 0, 0], _
+[2196, "Soldiers Speed", 5, 6.5, 4, 3, 0, 0, 0, 0, 0, 0, 1, 21, 3433, 0, 0, 1, 0, 0, 0, 3, 18, 12, 15, 15, 15, 15, 0, 0], _
+[2197, "Body Blow", 0, 0, 4, 14, 0, 0, 0, 0, 0, 185, 1, 17, 3433, 0, 5, 1, 160, 0, 0, 0, 0, 0, 10, 40, 0, 15, 0, 0], _
+[2198, "Body Shot", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 8, 5, 20, 5, 10, 0, 0], _
+[2199, "Poison Tip Signet", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 2, 24, 3433, 0, 0, 1, 0, 1, 0.75, 60, 60, 6, 8, 15, 0, 0, 0, 0], _
+[2200, "Signet of Mystic Speed", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 10, 42, 3433, 0, 0, 1, 0, 1, 0.75, 30, 30, 20, 1, 3, 0, 0, 0, 0], _
+[2201, "Shield of Force", 10, 13, 4, 6, 8388608, 0, 1152, 0, 0, 0, 10, 43, 3433, 0, 0, 1, 0, 0, 0, 1, 16, 12, 5, 20, 1, 1, 156, 0], _
+[2202, "Mending Grip", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 3, 1, 0, 1, 0.75, 0, 0, 6, 15, 75, 0, 0, 0, 0], _
+[2203, "Spiritleech Aura", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 8, 33, 3433, 0, 0, 1, 0, 0.25, 0.75, 5, 20, 20, 5, 20, 5, 20, 1000, 0], _
+[2204, "Rejuvenation", 10, 13, 4, 22, 256, 0, 0, 0, 0, 0, 8, 33, 3039, 0, 0, 1, 0, 0.75, 0.75, 30, 90, 30, 1, 20, 3, 10, 1000, 0], _
+[2205, "Agony", 10, 13, 4, 22, 256, 0, 0, 0, 0, 0, 8, 34, 3038, 0, 0, 1, 0, 0.75, 0.75, 30, 90, 30, 1, 12, 3, 10, 1000, 0], _
+[2206, "Ghostly Weapon", 5, 6.5, 4, 25, 0, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 4, 1, 0, 0.25, 0.75, 5, 20, 1, 0, 0, 0, 0, 0, 0], _
+[2207, "Inspirational Speech", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 9, 39, 3433, 0, 4, 1, 0, 0, 0, 0, 0, 20, 1, 4, 0, 0, 0, 0], _
+[2208, "Burning Shield", 5, 6.5, 4, 16, 0, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 0, 1, 0, 0, 0, 3, 9, 20, 1, 6, 0, 0, 0, 0], _
+[2209, "Holy Spear", 0, 0, 4, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 100, 0, 0, 3, 3, 0, 5, 20, 15, 90, 240, 0], _
+[2210, "Spear Swipe", 10, 13, 4, 14, 2, 0, 0, 0, 0, 64, 9, 40, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 20, 5, 20, 4, 10, 0, 0], _
+[2211, "Alkars Alchemical Acid", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 14, 20, 10, 45, 70, 40, 50, 156, 0], _
+[2212, "Light of Deldrimor", 5, 6.5, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0.75, 0.75, 0, 0, 20, 55, 80, 50, 50, 312, 0], _
+[2213, "Ear Bite", 0, 0, 4, 10, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 100, 0.75, 0.75, 0, 0, 0, 15, 25, 50, 70, 0, 0], _
+[2214, "Low Blow", 0, 0, 4, 10, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 150, 0.75, 0, 14, 20, 0, 45, 70, 30, 50, 0, 0], _
+[2215, "Brawling Headbutt", 0, 0, 4, 10, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 175, 0.75, 0, 0, 0, 0, 45, 70, 0, 0, 0, 0], _
+[2216, "Dont Trip", 5, 6.5, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 3, 5, 20, 0, 0, 0, 0, 1000, 0], _
+[2217, "By Urals Hammer", 5, 6.5, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 60, 25, 33, 0, 0, 1000, 2], _
+[2218, "Drunken Master", 5, 6.5, 4, 3, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0.75, 72, 90, 60, 10, 15, 25, 33, 0, 0], _
+[2219, "Great Dwarf Weapon", 10, 13, 4, 25, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 1, 0, 1, 0.75, 20, 20, 5, 15, 20, 28, 40, 0, 0], _
+[2220, "Great Dwarf Armor", 5, 6.5, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 1, 0, 1, 0.75, 22, 40, 10, 24, 24, 24, 24, 60, 0], _
+[2221, "Breath of the Great Dwarf", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0.25, 0.75, 0, 0, 15, 50, 60, 0, 0, 5000, 0], _
+[2222, "Snow Storm", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 1, 0, 1, 0.75, 5, 5, 10, 30, 40, 0, 0, 156, 0], _
+[2223, "Black Powder Mine", 10, 13, 4, 21, 524576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 20, 20, 30, 7, 10, 156, 240], _
+[2224, "Summon Mursaat", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 3, 0.75, 40, 60, 60, 14, 20, 0, 0, 0, 0], _
+[2225, "Summon Ruby Djinn", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 3, 0.75, 40, 60, 60, 14, 20, 0, 0, 0, 0], _
+[2226, "Summon Ice Imp", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 3, 0.75, 40, 60, 60, 14, 20, 0, 0, 0, 0], _
+[2227, "Summon Naga Shaman", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 3, 0.75, 40, 60, 60, 14, 20, 0, 0, 0, 0], _
+[2228, "Deft Strike", 5, 6.5, 4, 14, 524288, 0, 0, 0, 0, 70, 0, 51, 3433, 0, 5, 1, 0, 0.5, 0, 18, 30, 8, 0, 0, 18, 30, 0, 0], _
+[2229, "Signet of Infection", 0, 0, 4, 7, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 10, 13, 20, 0, 0, 0, 0], _
+[2230, "Tryptophan Signet", 0, 0, 4, 7, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 14, 20, 15, 23, 40, 0, 0, 156, 0], _
+[2231, "Ebon Battle Standard of Courage", 10, 13, 4, 11, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 1, 0.75, 14, 20, 20, 24, 24, 24, 24, 312, 0], _
+[2232, "Ebon Battle Standard of Wisdom", 10, 13, 4, 11, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 1, 0.75, 14, 20, 20, 44, 60, 0, 0, 312, 0], _
+[2233, "Ebon Battle Standard of Honor", 10, 13, 4, 11, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 1, 0.75, 14, 20, 20, 8, 15, 7, 10, 312, 0], _
+[2234, "Ebon Vanguard Sniper Support", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 5, 25, 15, 54, 90, 540, 900, 10, 25], _
+[2235, "Ebon Vanguard Assassin Support", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 24, 30, 30, 14, 20, 12, 15, 0, 0], _
+[2236, "Well of Ruin", 10, 13, 4, 9, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 0, 1, 0, 1, 0.75, 5, 30, 20, 5, 20, 20, 20, 312, 0], _
+[2237, "Atrophy", 10, 13, 4, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 1, 0, 1, 0.75, 3, 7, 20, 0, 0, 0, 0, 0, 0], _
+[2238, "Spear of Redemption", 0, 0, 4, 14, 0, 0, 0, 0, 0, 64, 9, 37, 3433, 0, 5, 1, 75, 0, 0, 0, 0, 0, 5, 20, 0, 0, 0, 0], _
+[2239, "Unknow", 0, 0, 4, 14, 524288, 0, 0, 0, 0, 128, 0, 51, 3433, 0, 0, 2, 0, 0, 0.200000002980232, 0, 0, 0, 230, 230, 0, 0, 0, 0], _
+[2240, "Gelatinous Material Explosion", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 200, 0, 0, 240, 0], _
+[2241, "Gelatinous Corpse Consumption", 5, 6.5, 4, 10, 262144, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 0, 0, 5, 3, 3, 0, 0, 156, 0], _
+[2242, "Gelatinous Mutation", 5, 6.5, 4, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 0, 0, 4, 4, 4, 0, 0, 0, 0], _
+[2243, "Gelatinous Absorption", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 15, 15, 30, 0, 0, 0, 0, 0, 0], _
+[2244, "Unstable Ooze Explosion", 0, 0, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 0, 133, 133, 0, 0, 240, 0], _
+[2245, "Golem Shrapnel", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 156, 0], _
+[2246, "Unstable Aura", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 0, 0], _
+[2247, "Unstable Pulse", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 10, 175, 175, 0, 0, 156, 0], _
+[2248, "Polymock Power Drain", 3, 4, 4, 5, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 20, 3, 3, 0, 0, 0, 0], _
+[2249, "Polymock Block", 2, 2.6, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0.25, 0.75, 2, 2, 12, 0, 0, 0, 0, 0, 0], _
+[2250, "Polymock Glyph of Concentration", 1, 1.3, 4, 12, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1, 0.75, 15, 15, 30, 15, 15, 1, 1, 0, 0], _
+[2251, "Polymock Ether Signet", 0, 0, 4, 7, 524288, 0, 0, 256, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1, 0.75, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[2252, "Polymock Glyph of Power", 1, 1.3, 4, 12, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1, 0.75, 196608, 196608, 10, 200, 200, 25, 25, 2, 0], _
+[2253, "Polymock Overload", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 100, 100, 50, 50, 0, 0], _
+[2254, "Polymock Glyph Destabilization", 4, 5.2, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 12, 12, 20, 10, 10, 0, 0, 0, 0], _
+[2255, "Polymock Mind Wreck", 2, 2.6, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 15, 15, 30, 75, 75, 2, 2, 0, 0], _
+[2256, "Order of Unholy Vigor", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 15, 15, 12, 0, 0, 33, 33, 5000, 0], _
+[2257, "Order of the Lich", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 15, 15, 12, 15, 15, 3, 3, 5000, 0], _
+[2258, "Master of Necromancy", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 12, 12, 10, 10, 10, 5, 5, 5000, 0], _
+[2259, "Animate Undead", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 50, 50, 12, 5, 5, 100, 100, 5000, 0], _
+[2260, "Polymock Deathly Chill", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 100, 100, 50, 50, 0, 0], _
+[2261, "Polymock Rising Bile", 6, 8, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 10, 10, 20, 80, 80, 0, 0, 0, 0], _
+[2262, "Polymock Rotting Flesh", 2, 2.6, 4, 5, 524288, 0, 32, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 20, 20, 20, 0, 0, 0, 0, 0, 0], _
+[2263, "Polymock Lightning Strike", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 120, 120, 0, 0, 0, 0], _
+[2264, "Polymock Lightning Orb", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 800, 800, 1200, 1200, 0, 0], _
+[2265, "Polymock Lightning Djinns Haste", 2, 2.6, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 2, 0.75, 15, 15, 30, 50, 50, 0, 0, 0, 0], _
+[2266, "Polymock Flare", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 120, 120, 0, 0, 0, 0], _
+[2267, "Polymock Immolate", 2, 2.6, 4, 5, 524288, 0, 4, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 20, 20, 20, 0, 0, 0, 0, 0, 0], _
+[2268, "Polymock Meteor", 6, 8, 4, 5, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 1, 0.75, 0, 0, 20, 600, 600, 0, 0, 156, 0], _
+[2269, "Polymock Ice Spear", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 120, 120, 0, 0, 0, 0], _
+[2270, "Polymock Icy Prison", 2, 2.6, 4, 5, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 30, 200, 200, 5, 5, 0, 0], _
+[2271, "Polymock Mind Freeze", 4, 5.2, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 15, 400, 400, 400, 400, 0, 0], _
+[2272, "Polymock Ice Shard Storm", 2, 2.6, 4, 5, 524288, 0, 1, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 20, 20, 20, 0, 0, 0, 0, 0, 0], _
+[2273, "Polymock Frozen Trident", 6, 8, 4, 5, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 600, 600, 0, 0, 0, 0], _
+[2274, "Polymock Smite", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 120, 120, 0, 0, 0, 0], _
+[2275, "Polymock Smite Hex", 2, 2.6, 4, 5, 524288, 0, 0, 2048, 0, 0, 0, 51, 3433, 0, 3, 0, 0, 2, 0.75, 0, 0, 30, 400, 400, 0, 0, 0, 0], _
+[2276, "Polymock Bane Signet", 0, 0, 4, 7, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 20, 150, 150, 0, 0, 0, 0], _
+[2277, "Polymock Stone Daggers", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 60, 60, 0, 0, 0, 0], _
+[2278, "Polymock Obsidian Flame", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 800, 800, 0, 0, 0, 0], _
+[2279, "Polymock Earthquake", 6, 8, 4, 5, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 1, 0.75, 0, 0, 20, 650, 650, 0, 0, 240, 0], _
+[2280, "Polymock Frozen Armor", 2, 2.6, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 2, 0.75, 30, 30, 20, 1000, 1000, 0, 0, 0, 0], _
+[2281, "Polymock Glyph Freeze", 6, 8, 4, 4, 524288, 0, 2048, 0, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 1, 0.75, 10, 10, 20, 600, 600, 1, 1, 312, 0], _
+[2282, "Polymock Fireball", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 1, 0.75, 0, 0, 20, 800, 800, 0, 0, 156, 0], _
+[2283, "Polymock Rodgorts Invocation", 2, 2.6, 4, 5, 524288, 0, 4, 0, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 2, 0.75, 15, 15, 20, 200, 200, 0, 0, 240, 0], _
+[2284, "Polymock Calculated Risk", 2, 2.6, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 15, 15, 30, 1, 1, 40, 40, 0, 0], _
+[2285, "Polymock Recurring Insecurity", 6, 8, 4, 4, 524800, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 8, 8, 20, 100, 100, 0, 0, 0, 0], _
+[2286, "Polymock Backfire", 2, 2.6, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 15, 15, 30, 50, 50, 0, 0, 0, 0], _
+[2287, "Polymock Guilt", 6, 8, 4, 4, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 6, 6, 20, 600, 600, 0, 0, 0, 0], _
+[2288, "Polymock Lamentation", 1, 1.3, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 1, 120, 120, 0, 0, 0, 0], _
+[2289, "Polymock Spirit Rift", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 1, 0.75, 3, 3, 20, 850, 850, 0, 0, 156, 0], _
+[2290, "Polymock Painful Bond", 6, 8, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 10, 10, 20, 80, 80, 0, 0, 0, 0], _
+[2291, "Polymock Signet of Clumsiness", 0, 0, 4, 7, 524288, 0, 0, 1, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 20, 150, 150, 0, 0, 0, 0], _
+[2292, "Polymock Migraine", 2, 2.6, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 15, 15, 20, 1, 1, 0, 0, 0, 0], _
+[2293, "Polymock Glowing Gaze", 2, 2.6, 4, 5, 524288, 0, 0, 256, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 10, 150, 150, 6, 6, 0, 0], _
+[2294, "Polymock Searing Flames", 4, 5.2, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 2, 800, 800, 5, 5, 240, 0], _
+[2295, "Polymock Signet of Revenge", 0, 0, 4, 7, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 500, 500, 200, 200, 0, 0], _
+[2296, "Polymock Signet of Smiting", 0, 0, 4, 7, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 20, 150, 150, 150, 150, 0, 0], _
+[2297, "Polymock Stoning", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 800, 800, 0, 0, 0, 0], _
+[2298, "Polymock Eruption", 2, 2.6, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 2, 0.75, 15, 15, 30, 400, 400, 0, 0, 240, 0], _
+[2299, "Polymock Shock Arrow", 2, 2.6, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 8, 150, 150, 200, 200, 0, 0], _
+[2300, "Polymock Mind Shock", 4, 5.2, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 10, 400, 400, 400, 400, 0, 0], _
+[2301, "Polymock Piercing Light Spear", 2, 2.6, 4, 5, 524288, 0, 1, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 20, 20, 5, 0, 0, 0, 0, 0, 0], _
+[2302, "Polymock Mind Blast", 2, 2.6, 4, 5, 524288, 0, 0, 256, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 0, 0, 4, 300, 300, 8, 8, 0, 0], _
+[2303, "Polymock Savannah Heat", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 1, 0.75, 5, 5, 20, 100, 100, 50, 50, 240, 0], _
+[2304, "Polymock Diversion", 2, 2.6, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 6, 6, 10, 4, 4, 0, 0, 0, 0], _
+[2305, "Polymock Lightning Blast", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 800, 800, 0, 0, 0, 0], _
+[2306, "Polymock Poisoned Ground", 2, 2.6, 4, 5, 524288, 0, 256, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 20, 20, 5, 0, 0, 0, 0, 0, 0], _
+[2307, "Polymock Icy Bonds", 2, 2.6, 4, 4, 524288, 0, 2048, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 2, 0.75, 15, 15, 20, 1, 1, 0, 0, 0, 0], _
+[2308, "Polymock Sandstorm", 2, 2.6, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 0, 0, 2, 0.75, 10, 10, 30, 40, 40, 20, 20, 240, 0], _
+[2309, "Polymock Banish", 6, 8, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 10, 800, 800, 0, 0, 0, 0], _
+[2310, "Mergoyle Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3000, 3000, 30, 30, 0, 0], _
+[2311, "Skale Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3000, 3000, 30, 30, 0, 0], _
+[2312, "Gargoyle Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3000, 3000, 30, 30, 0, 0], _
+[2313, "Ice Imp Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3000, 3000, 30, 30, 0, 0], _
+[2314, "Fire Imp Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3000, 3000, 30, 30, 0, 0], _
+[2315, "Kappa Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2316, "Aloe Seed Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2317, "Earth Elemental Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2318, "Fire Elemental Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2319, "Ice Elemental Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2320, "Mirage Iboga Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2321, "Wind Rider Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2322, "Naga Shaman Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2323, "Mantis Dreamweaver Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2324, "Ruby Djinn Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2325, "Gaki Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2326, "Stone Rain Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2327, "Mursaat Elementalist Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2328, "Crystal Shield", 0, 0, 4, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.5, 0.75, 10, 10, 10, 250, 250, 0, 0, 0, 0], _
+[2329, "Crystal Snare", 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.5, 0.75, 10, 10, 5, 50, 50, 100, 100, 0, 0], _
+[2330, "Paranoid Indignation", 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.5, 0.75, 20, 20, 10, 2, 2, 10, 10, 0, 0], _
+[2331, "Searing Breath", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 3, 0.75, 80, 80, 15, 80, 80, 40, 40, 1250, 0], _
+[2332, "Kraks Charge", 0, 0, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 20, 20, 20, 33, 33, 0, 0, 1000, 0], _
+[2333, "Brawling", 0, 0, 0, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2334, "Brawling Block", 0, 0, 0, 3, 524288, 0, 0, 128, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 2, 4, 0, 0, 0, 0, 0, 0], _
+[2335, "Brawling Jab1", 0, 0, 0, 14, 524288, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[2336, "Brawling Jab2", 0, 0, 0, 14, 524288, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 0, 0], _
+[2337, "Brawling Straight Right", 0, 0, 0, 14, 524288, 0, 0, 1, 0, 185, 0, 51, 3433, 0, 5, 0, 0, 0.5, 0, 0, 0, 8, 25, 25, 0, 0, 0, 0], _
+[2338, "Brawling Hook1", 0, 0, 0, 14, 524288, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 100, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2339, "Brawling Hook2", 0, 0, 0, 14, 524288, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 100, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2340, "Brawling Uppercut", 0, 0, 0, 14, 524288, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 250, 0, 0, 0, 0, 0, 80, 80, 0, 0, 0, 0], _
+[2341, "Brawling Combo Punch", 0, 0, 0, 14, 557056, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 0, 0, 0, 0, 0, 45, 50, 50, 0, 0, 0, 0], _
+[2342, "Brawling Headbutt Brawling skill", 0, 0, 0, 14, 524288, 0, 128, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 175, 0, 0, 3, 3, 0, 30, 30, 0, 0, 0, 0], _
+[2343, "STAND UP", 0, 0, 0, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2344, "Call of Destruction", 10, 13, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 60, 0, 0, 0, 0, 0, 0], _
+[2345, "Flame Jet", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 0, 0, 8, 600, 600, 0, 0, 5000, 0], _
+[2346, "Lava Ground", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 0, 0, 60, 0, 0, 0, 0, 2.5, 0], _
+[2347, "Lava Wave", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 12, 12, 25, 100, 100, 300, 300, 1000, 0], _
+[2348, "Unknow", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0], _
+[2349, "Spirit Shield", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 30, 30, 10, 50, 50, 0, 0, 312, 0], _
+[2350, "Summoning Lord", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 30, 30, 15, 0, 0, 0, 0, 0, 0], _
+[2351, "Charm Animal Ashlyn Spiderfriend", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2352, "Charr Siege Attack Assault on the Stronghold", 0, 0, 4, 10, 17408, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 10, 0.75, 0, 0, 0, 100, 100, 10, 10, 312, 1050], _
+[2353, "Finish Him", 10, 13, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 0, 0, 12, 20, 15, 44, 80, 0, 0, 0, 0], _
+[2354, "Dodge This", 0, 0, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 100, 0, 0, 16, 20, 0, 14, 20, 0, 0, 0, 0], _
+[2355, "I Am the Strongest", 5, 6.5, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 999999, 999999, 20, 5, 8, 14, 20, 0, 0], _
+[2356, "I Am Unstoppable", 5, 6.5, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 16, 20, 30, 24, 24, 0, 0, 0, 0], _
+[2357, "A Touch of Guile", 5, 6.5, 4, 4, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 0.75, 0.75, 5, 8, 15, 44, 80, 0, 0, 0, 0], _
+[2358, "You Move Like a Dwarf", 10, 13, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 0, 0, 8, 15, 10, 44, 80, 0, 0, 0, 0], _
+[2359, "You Are All Weaklings", 5, 6.5, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 0, 0, 8, 12, 12, 0, 0, 0, 0, 156, 0], _
+[2360, "Feel No Pain", 5, 6.5, 4, 16, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 30, 30, 20, 2, 3, 200, 300, 0, 0], _
+[2361, "Club of a Thousand Bears", 5, 6.5, 4, 14, 524288, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 1, 0, 0, 0, 0, 0, 12, 6, 9, 60, 60, 156, 0], _
+[2362, "Unknow", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 1, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2363, "Talon Strike", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0, 0, 10, 10, 5, 0, 0, 0, 0, 0, 0], _
+[2364, "Lava Blast", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 25, 75, 75, 0, 0, 0, 0], _
+[2365, "Thunderfist Strike", 0, 0, 4, 14, 524288, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 0, 0, 0, 0, 0, 0, 15, 100, 100, 0, 0, 0, 0], _
+[2366, "Unknow", 0, 0, 4, 7, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0, 0.75, 0, 0, 0, 100, 100, 0, 0, 240, 0], _
+[2367, "Alkars Concoction", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 0, 0, 0, 0, 0, 0], _
+[2368, "Murakais Consumption", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 20, 60, 60, 20, 20, 312, 0], _
+[2369, "Murakais Censure", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 10, 10, 18, 80, 80, 0, 0, 5000, 0], _
+[2370, "Murakais Calamity", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 10, 10, 14, 90, 90, 1, 1, 5000, 0], _
+[2371, "Murakais Storm of Souls", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 10, 10, 10, 100, 100, 1, 1, 5000, 0], _
+[2372, "Edification", 0, 0, 4, 13, 1572864, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5, 15, 0, 0, 0, 0], _
+[2373, "Heart of the Norn", 0, 0, 4, 13, 1572864, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 100, 0, 0, 0, 0], _
+[2374, "Ursan Blessing", 10, 13, 4, 26, 524292, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 60, 60, 60, 20, 20, 750, 800, 60, 60], _
+[2375, "Ursan Strike", 0, 0, 4, 10, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 3, 40, 75, 40, 75, 0, 0], _
+[2376, "Ursan Rage", 0, 0, 4, 10, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 2, 2, 10, 60, 135, 0, 0, 156, 0], _
+[2377, "Ursan Roar", 0, 0, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 5, 15, 5, 15, 0, 0, 1000, 0], _
+[2378, "Ursan Force", 0, 0, 4, 16, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 8, 14, 12, 20, 33, 0, 0, 0, 0], _
+[2379, "Volfen Blessing", 10, 13, 4, 26, 524292, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 60, 60, 60, 2, 4, 660, 700, 60, 60], _
+[2380, "Volfen Claw", 0, 0, 4, 10, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.75, 0.75, 2, 5, 2, 40, 60, 0, 0, 0, 0], _
+[2381, "Volfen Pounce", 0, 0, 4, 3, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0.75, 0.75, 10, 20, 15, 15, 33, 60, 100, 156, 0], _
+[2382, "Volfen Bloodlust", 0, 0, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 7, 10, 33, 33, 0, 0, 240, 0], _
+[2383, "Volfen Agility", 0, 0, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0.25, 0.75, 10, 20, 30, 66, 66, 0, 0, 0, 0], _
+[2384, "Raven Blessing", 10, 13, 4, 26, 524292, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0, 60, 60, 60, 20, 30, 660, 700, 60, 60], _
+[2385, "Raven Talons", 0, 0, 4, 10, 524290, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.75, 0.75, 4, 10, 1, 20, 35, 20, 35, 0, 0], _
+[2386, "Raven Swoop", 0, 0, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 0.75, 0.75, 0, 0, 4, 60, 100, 0, 0, 156, 0], _
+[2387, "Raven Shriek", 0, 0, 4, 15, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 4, 10, 20, 0, 0, 0, 0, 1000, 240], _
+[2388, "Raven Flight", 0, 0, 4, 3, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 15, 15, 0, 0, 0, 0, 0, 0], _
+[2389, "Totem of Man", 0, 0, 4, 10, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0], _
+[2390, "Filthy Explosion", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 1.75, 8, 8, 12, 80, 80, 4, 4, 240, 0], _
+[2391, "Murakais Call", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 0, 0, 45, 3, 3, 0, 0, 0, 0], _
+[2392, "Spawn Pods", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 80, 3, 0.75, 0, 0, 15, 2, 2, 0, 0, 0, 0], _
+[2393, "Enraged Blast", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 0, 0, 0, 115, 115, 0, 0, 3000, 0], _
+[2394, "Spawn Hatchling", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 8, 1, 0, 0, 8, 0, 0, 0, 0, 0, 0], _
+[2395, "Ursan Roar Blood Washes Blood", 0, 0, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 4, 4, 15, 13, 13, 0, 0, 1000, 0], _
+[2396, "Ursan Force Blood Washes Blood", 0, 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 13, 13, 12, 30, 30, 0, 0, 0, 0], _
+[2397, "Ursan Aura", 10, 13, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 2, 30, 20, 20, 180, 180, 0, 0], _
+[2398, "Consume Flames", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 10, 0.75, 0, 0, 5, 15, 15, 0, 0, 0, 0], _
+[2399, "Aura of the Great Destroyer", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2400, "Destroy the Humans", 5, 6.5, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 15, 33, 33, 0, 0, 1000, 0], _
+[2401, "Charr Flame Keeper Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2402, "Titan Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2403, "Skeletal Mage Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2404, "Smoke Wraith Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2405, "Bone Dragon Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2406, "Unknow", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2407, "Dwarven Arcanist Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2408, "Dolyak Rider Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5000, 5000, 40, 40, 0, 0], _
+[2409, "Extract Inscription", 0, 0, 4, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 750, 0], _
+[2410, "Charr Shaman Form", 0, 0, 4, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4000, 4000, 35, 35, 0, 0], _
+[2411, "Mindbender", 5, 6.5, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 1, 0.75, 10, 16, 24, 20, 33, 20, 20, 0, 0], _
+[2412, "Smooth Criminal", 5, 6.5, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 10, 20, 20, 5, 10, 0, 0, 0, 0], _
+[2413, "Technobabble", 10, 13, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 3, 5, 10, 30, 40, 0, 0, 156, 0], _
+[2414, "Radiation Field", 15, 19.5, 4, 11, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 2, 0.75, 12, 20, 12, 4, 6, 5, 5, 312, 0], _
+[2415, "Asuran Scan", 5, 6.5, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 0, 0.75, 9, 12, 5, 0, 0, 5, 5, 0, 0], _
+[2416, "Air of Superiority", 5, 6.5, 4, 10, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0, 0.75, 20, 30, 20, 0, 0, 0, 0, 0, 0], _
+[2417, "Mental Block", 10, 13, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 1, 0.75, 5, 11, 15, 50, 50, 0, 0, 0, 0], _
+[2418, "Pain Inverter", 10, 13, 4, 4, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 6, 10, 20, 100, 140, 80, 80, 0, 0], _
+[2419, "Healing Salve", 0, 0, 4, 7, 0, 0, 4096, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300, 300, 0, 0, 156, 0], _
+[2420, "Ebon Escape", 5, 6.5, 4, 5, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 1, 0, 0.25, 0, 0, 0, 10, 70, 110, 0, 0, 0, 0], _
+[2421, "Weakness Trap", 10, 13, 4, 21, 524576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 2, 0.75, 90, 90, 30, 10, 20, 24, 50, 156, 240], _
+[2422, "Winds", 5, 6.5, 4, 22, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 5, 0.75, 54, 90, 30, 4, 10, 15, 15, 2500, 0], _
+[2423, "Dwarven Stability", 5, 6.5, 4, 6, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 0.25, 0, 24, 30, 30, 55, 100, 0, 0, 0, 0], _
+[2424, "Stout Hearted", 0, 0, 4, 13, 1572864, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5, 15, 5, 15, 0, 0], _
+[2425, "Inscribed Ettin Aura", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2426, "Decipher Inscriptions", 0, 0, 4, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 1000, 0], _
+[2427, "Rebel Yell", 0, 0, 4, 13, 1572864, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 2, 2, 0, 5, 10, 25, 100, 0, 0], _
+[2428, "Unknow", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2429, "Asuran Flame Staff", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2430, "Aura of the Bloodstone", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40, 40, 0, 0, 240, 0], _
+[2431, "Aura of the Bloodstone", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 60, 60, 0, 0, 240, 0], _
+[2432, "Aura of the Bloodstone", 0, 0, 4, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 20, 20, 0, 0, 240, 0], _
+[2433, "Haunted Ground", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2434, "Asuran Bodyguard", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2435, "Asuran Bodyguard", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2436, "Asuran Bodyguard", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2437, "Energy Channel", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 5, 5, 0, 0, 0, 0], _
+[2438, "Hunt Rampage", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 45, 45, 0, 200, 200, 0, 0, 0, 0], _
+[2439, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2440, "Boss Bounty", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 200, 200, 0, 0, 0, 0], _
+[2441, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 4, 4, 0, 0, 0, 0], _
+[2442, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 6, 6, 0, 0, 0, 0], _
+[2443, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2444, "Time Attack", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 150, 150, 0, 10, 10, 200, 200, 0, 0], _
+[2445, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 25, 25, 0, 0], _
+[2446, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2447, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2448, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2449, "Great Dwarfs Blessing", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 20, 20, 0, 0, 0, 0], _
+[2450, "Hunt Rampage", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 45, 45, 0, 200, 200, 0, 0, 0, 0], _
+[2451, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2452, "Boss Bounty", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 200, 200, 0, 0, 0, 0], _
+[2453, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 4, 4, 0, 0, 0, 0], _
+[2454, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 6, 6, 0, 0, 0, 0], _
+[2455, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2456, "Time Attack", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 150, 150, 0, 10, 10, 200, 200, 0, 0], _
+[2457, "Vanguard Patrol", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 25, 25, 0, 0], _
+[2458, "Vanguard Patrol", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2459, "Vanguard Patrol", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2460, "Vanguard Patrol", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2461, "Vanguard Commendation", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 4, 4, 0, 0, 0, 0], _
+[2462, "Hunt Rampage", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 45, 45, 0, 200, 200, 0, 0, 0, 0], _
+[2463, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2464, "Boss Bounty", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 200, 200, 0, 0, 0, 0], _
+[2465, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 4, 4, 0, 0, 0, 0], _
+[2466, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 6, 6, 0, 0, 0, 0], _
+[2467, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2468, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 150, 150, 0, 10, 10, 200, 200, 0, 0], _
+[2469, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 25, 25, 0, 0], _
+[2470, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2471, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2472, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2473, "Strength of the Norn", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 100, 100, 100, 100, 0, 0], _
+[2474, "Hunt Rampage", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 45, 45, 0, 200, 200, 0, 0, 0, 0], _
+[2475, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2476, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 200, 200, 0, 0, 0, 0], _
+[2477, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 4, 4, 0, 0, 0, 0], _
+[2478, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 6, 6, 0, 0, 0, 0], _
+[2479, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2480, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 150, 150, 0, 10, 10, 200, 200, 0, 0], _
+[2481, "Asuran Bodyguard", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 1, 1, 25, 25, 0, 0], _
+[2482, "Desperate Howl", 5, 6.5, 4, 27, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 30, 0, 0, 0, 0, 1000, 0], _
+[2483, "Gloat", 0, 0, 4, 10, 262144, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 11, 3, 0, 2, 0, 0, 0, 20, 10, 10, 5, 5, 1000, 0], _
+[2484, "Metamorphosis", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 3, 3, 9999, 0, 0, 0, 0, 0, 0], _
+[2485, "Inner Fire", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 20, 30, 30, 0, 0, 0, 0], _
+[2486, "Elemental Shift", 5, 6.5, 4, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 0, 0, 30, 0, 0, 0, 0, 0, 0], _
+[2487, "Dryders Feast", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 0, 0, 10, 30, 30, 0, 0, 0, 0], _
+[2488, "Fungal Explosion", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 3, 0.75, 12, 12, 10, 0, 0, 0, 0, 0, 0], _
+[2489, "Blood Rage", 10, 13, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 15, 15, 30, 25, 25, 25, 25, 0, 0], _
+[2490, "Parasitic Bite", 5, 6.5, 4, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 5, 5, 1, 0, 0, 0, 0, 0, 0], _
+[2491, "False Death", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 0, 25, 25, 25, 25, 0, 0], _
+[2492, "Ooze Combination", 5, 6.5, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 3, 0, 2, 0.75, 0, 0, 15, 0, 0, 0, 0, 0, 0], _
+[2493, "Ooze Division", 15, 19.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 0, 0, 45, 0, 0, 0, 0, 0, 0], _
+[2494, "Bear Form", 10, 13, 4, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 60, 60, 120, 250, 250, 25, 25, 0, 0], _
+[2495, "Sweeping Strikes", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2496, "Spore Explosion", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 12, 12, 10, 0, 0, 0, 0, 0, 0], _
+[2497, "Dormant Husk", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 9999, 40, 40, 20, 20, 0, 0], _
+[2498, "Monkey See  Monkey Do", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.25, 0.75, 20, 20, 40, 0, 0, 0, 0, 0, 0], _
+[2499, "Feeding Frenzy", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2500, "Tengus Mimicry", 0, 0, 4, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 20, 20, 30, 0, 0, 0, 0, 0, 0], _
+[2501, "Tongue Lash", 5, 6.5, 4, 4, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 4, 4, 12, 12, 12, 25, 25, 0, 0], _
+[2502, "Soulrending Shriek", 10, 13, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 1, 0.75, 8, 8, 15, 40, 40, 0, 0, 0, 0], _
+[2503, "Unreliable", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2504, "Siege Devourer", 0, 0, 4, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2505, "Siege Devourer Feast", 5, 6.5, 4, 10, 262144, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.75, 0.75, 0, 0, 10, 200, 200, 0, 0, 0, 0], _
+[2506, "Devourer Bite", 5, 6.5, 4, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 10, 100, 100, 0, 0, 0, 0], _
+[2507, "Siege Devourer Swipe", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 0, 0, 10, 100, 100, 0, 0, 240, 0], _
+[2508, "Devourer Siege", 5, 6.5, 4, 10, 1, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.75, 0.75, 0, 0, 10, 150, 150, 0, 0, 240, 240], _
+[2509, "HYAHHHHH", 5, 6.5, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 1, 11, 11, 0, 0, 0, 0], _
+[2510, "HYAHHHHH", 5, 6.5, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 1, 11, 11, 0, 0, 0, 0], _
+[2511, "HYAHHHHH", 5, 6.5, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 1, 22, 22, 0, 0, 0, 0], _
+[2512, "HYAHHHHH", 5, 6.5, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 1, 33, 33, 0, 0, 0, 0], _
+[2513, "Dismount Siege Devourer", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 5, 0.75, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[2514, "The Masters Mark", 0, 0, 4, 4, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 4, 0.75, 24, 24, 8, 1, 1, 0, 0, 0, 0], _
+[2515, "The Snipers Spear", 0, 0, 4, 14, 0, 0, 0, 0, 0, 70, 0, 51, 3433, 0, 5, 3, 0, 0.5, 0.75, 20, 20, 0, 120, 120, 0, 0, 0, 0], _
+[2516, "Mount", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2517, "Reverse Polarity Fire Shield", 0, 0, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 312, 0], _
+[2518, "Tengus Gaze", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2519, "Fix Monster Attributes", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 16, 16, 0, 0, 0, 0], _
+[2520, "Armor of Salvation item effect", 0, 0, 4, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 5, 5, 0, 10, 10, 1, 1, 0, 0], _
+[2521, "Grail of Might item effect", 0, 0, 4, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1, 1, 0, 100, 100, 10, 10, 0, 0], _
+[2522, "Essence of Celerity item effect", 0, 0, 4, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 20, 20, 0, 0], _
+[2523, "Stone Dwarf Transformation", 0, 0, 4, 29, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2524, "Forgewights Blessing", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0], _
+[2525, "Selvetarms Blessing", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[2526, "Thommiss Blessing", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[2527, "Duncans Defense", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 0, 0], _
+[2528, "Unknow", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 100, 100, 10, 10, 156, 0], _
+[2529, "Rands Attack", 5, 6.5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0.75, 0.75, 10, 10, 10, 5, 5, 0, 0, 240, 0], _
+[2530, "Selvetarms Attack", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 0], _
+[2531, "Thommiss Attack", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 5, 100, 100, 0, 0], _
+[2532, "Create Spore", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 156, 240], _
+[2533, "Unknow", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 10, 10, 0, 0, 156, 240], _
+[2534, "Unknow", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2535, "Unknow", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2536, "Invigorating Mist", 0, 0, 4, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 156, 0], _
+[2537, "Courageous Was Saidra", 0, 0, 4, 24, 0, 0, 4096, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 30, 30, 200, 200, 0, 0], _
+[2538, "Animate Undead Palawa Joko", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 50, 50, 12, 5, 5, 100, 100, 5000, 0], _
+[2539, "Order of Unholy Vigor Palawa Joko", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 15, 15, 12, 0, 0, 33, 33, 5000, 0], _
+[2540, "Order of the Lich Palawa Joko", 5, 6.5, 4, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 15, 15, 12, 15, 15, 3, 3, 5000, 0], _
+[2541, "Golem Boosters", 5, 6.5, 4, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 8, 8, 30, 100, 100, 0, 0, 0, 0], _
+[2542, "Charm Animal monster", 0, 0, 4, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2543, "Wurm Siege Eye of the North", 0, 0, 4, 5, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 15, 125, 125, 75, 75, 256, 1050], _
+[2544, "Tongue Whip", 0, 0, 4, 4, 8, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.25, 0.75, 5, 5, 2, 12, 12, 50, 50, 0, 0], _
+[2545, "Lit Torch", 0, 0, 4, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2546, "Dishonorable", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2547, "Hard Mode Dungeon Boss", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 5, 50, 50, 0, 0], _
+[2548, "Veteran Asuran Bodyguard", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2549, "Veteran Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2550, "Veteran Vanguard Patrol", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2551, "Veteran Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2552, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2553, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2554, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2555, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2556, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2557, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 300, 300, 0, 0, 0, 0], _
+[2558, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2559, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 5, 5, 0, 0, 0, 0], _
+[2560, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 15, 15, 0, 0, 0, 0], _
+[2561, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2562, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 5, 5, 0, 0, 0, 0], _
+[2563, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2564, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 200, 200, 0, 10, 10, 300, 300, 0, 0], _
+[2565, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2566, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2567, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2568, "Dwarven Raider", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2569, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2570, "Great Dwarfs Blessing", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 20, 20, 0, 0, 0, 0], _
+[2571, "Boss Bounty", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 300, 300, 0, 0, 0, 0], _
+[2572, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2573, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 15, 15, 0, 0, 0, 0], _
+[2574, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2575, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 5, 5, 0, 0, 0, 0], _
+[2576, "Hunt Rampage", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2577, "Time Attack", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 200, 200, 0, 10, 10, 300, 300, 0, 0], _
+[2578, "Vanguard Patrol", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2579, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2580, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2581, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2582, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2583, "Boss Bounty", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 300, 300, 0, 0, 0, 0], _
+[2584, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2585, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 15, 15, 0, 0, 0, 0], _
+[2586, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2587, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 5, 5, 0, 0, 0, 0], _
+[2588, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2589, "Vanguard Commendation", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 4, 4, 0, 0, 0, 0], _
+[2590, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 200, 200, 0, 10, 10, 300, 300, 0, 0], _
+[2591, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2592, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 2, 2, 25, 25, 0, 0], _
+[2593, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 0, 0], _
+[2594, "Norn Hunting Party", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 4, 4, 25, 25, 0, 0], _
+[2595, "Unknow", 0, 0, 4, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 25, 25, 0, 0], _
+[2596, "Boss Bounty", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 300, 300, 0, 0, 0, 0], _
+[2597, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2598, "Strength of the Norn", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 100, 100, 100, 100, 0, 0], _
+[2599, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 15, 15, 0, 0, 0, 0], _
+[2600, "Unknow", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 10, 10, 0, 0, 0, 0], _
+[2601, "Hunt Point Bonus", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 5, 5, 0, 0, 0, 0], _
+[2602, "Hunt Rampage", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 60, 60, 0, 200, 200, 0, 0, 0, 0], _
+[2603, "Time Attack", 0, 0, 4, 1, 524288, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 200, 200, 0, 10, 10, 300, 300, 0, 0], _
+[2604, "Candy Corn skill", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 1, 1, 0, 0, 0, 0], _
+[2605, "Candy Apple skill", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 100, 100, 10, 10, 0, 0], _
+[2606, "Anton Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2607, "Erys Vasburg Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2608, "Olias Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2609, "Argo Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 80, 80, 0, 0], _
+[2610, "Mhenlo Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2611, "Lukas Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 20, 20, 0, 0], _
+[2612, "Aidan Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0, 80, 80, 0, 600, 600, 25, 25, 0, 0], _
+[2613, "Kahmu Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2614, "Razah Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2615, "Morgahn Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 30, 30, 0, 0], _
+[2616, "Nika Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2617, "Seaguard Hala Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2618, "Livia Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2619, "Cynn Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 80, 80, 0, 0], _
+[2620, "Tahlkora Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2621, "Devona Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 20, 20, 0, 0], _
+[2622, "Zho Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0, 80, 80, 0, 600, 600, 25, 25, 0, 0], _
+[2623, "Melonni Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2624, "Xandra Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2625, "Hayda Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 30, 30, 0, 0], _
+[2626, "Unknow", 10, 13, 0, 5, 0, 0, 0, 1, 0, 0, 5, 2, 3433, 0, 5, 2, 0, 0.25, 0.75, 0, 0, 20, 1, 16, 0, 0, 312, 0], _
+[2627, "Reapers Mark", 5, 6.5, 0, 4, 516, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 5, 2, 0, 1, 0.75, 30, 30, 15, 1, 5, 5, 15, 0, 0], _
+[2628, "Enfeeble", 5, 6.5, 0, 5, 0, 0, 1024, 0, 0, 0, 4, 7, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 5, 0, 0, 5, 20, 0, 0], _
+[2629, "Unknow", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 16, 2, 0, 2, 0.75, 0, 0, 15, 6, 60, 4, 20, 240, 0], _
+[2630, "Signet of Lost Souls", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 5, 2, 0, 0.25, 0.75, 0, 0, 8, 10, 100, 1, 10, 0, 0], _
+[2631, "Unknow", 15, 19.5, 0, 4, 0, 0, 0, 0, 0, 0, 4, 7, 3433, 0, 5, 2, 0, 1, 0.75, 5, 15, 12, 15, 45, 0, 0, 0, 0], _
+[2632, "Searing Flames", 15, 19.5, 0, 5, 4, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 2, 10, 100, 1, 7, 240, 0], _
+[2633, "Glowing Gaze", 5, 6.5, 0, 5, 0, 0, 0, 256, 0, 0, 6, 10, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 8, 5, 50, 1, 9, 0, 0], _
+[2634, "Steam", 5, 6.5, 0, 5, 0, 0, 2, 0, 4, 0, 6, 11, 3433, 0, 5, 2, 0, 1, 0.75, 5, 10, 8, 40, 100, 25, 70, 0, 0], _
+[2635, "Flame Djinns Haste", 10, 13, 0, 6, 0, 0, 0, 512, 0, 0, 6, 10, 3433, 0, 0, 2, 0, 0.75, 0.75, 5, 20, 10, 15, 120, 33, 33, 156, 0], _
+[2636, "Liquid Flame", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 15, 7, 112, 0, 0, 240, 0], _
+[2637, "Unknow", 10, 13, 0, 5, 4, 0, 4096, 6150, 0, 0, 3, 16, 3433, 0, 3, 2, 0, 0.75, 0.75, 0, 0, 3, 10, 115, 0, 0, 0, 0], _
+[2638, "Unknow", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 3, 15, 3433, 0, 3, 2, 0, 1, 0.75, 3, 7, 10, 5, 5, 0, 0, 0, 0], _
+[2639, "Smite Condition", 5, 6.5, 0, 5, 0, 0, 0, 4096, 0, 0, 3, 14, 3433, 0, 3, 2, 0, 1, 0.75, 0, 0, 7, 10, 60, 0, 0, 240, 0], _
+[2640, "Crippling Slash", 0, 0, 0, 14, 4, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 2, 130, 0, 0, 0, 0, 0, 5, 15, 10, 25, 0, 0], _
+[2641, "Sun and Moon Slash", 0, 0, 0, 14, 0, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 2, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2642, "Enraging Charge", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 2, 0, 0, 0, 5, 15, 20, 25, 25, 0, 4, 0, 0], _
+[2643, "Tiger Stance", 5, 6.5, 0, 3, 0, 0, 0, 32768, 0, 0, 1, 17, 3433, 0, 0, 2, 0, 0, 0, 4, 10, 20, 33, 33, 0, 0, 0, 0], _
+[2644, "Burning Arrow", 10, 13, 0, 14, 4, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 2, 0, 0, 0, 0, 0, 5, 10, 30, 1, 5, 0, 0], _
+[2645, "Natural Stride", 5, 6.5, 0, 3, 0, 0, 0, 128, 0, 0, 2, 24, 3433, 0, 0, 2, 0, 0, 0, 1, 8, 12, 33, 33, 50, 50, 0, 0], _
+[2646, "Falling Lotus Strike", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 2, 0, 0, 0, 0, 0, 12, 15, 35, 1, 12, 0, 0], _
+[2647, "Anthem of Weariness", 5, 6.5, 0, 27, 0, 0, 0, 0, 0, 0, 9, 38, 3433, 0, 0, 2, 0, 1, 0.75, 8, 8, 10, 1, 16, 0, 0, 1000, 0], _
+[2648, "Pious Fury", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 2, 0, 0, 0, 2, 6, 10, 33, 33, 0, 0, 0, 0], _
+[2649, "Pie Induced Ecstasy", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 25, 25, 15, 15, 0, 0], _
+[2650, "Charm Animal Charr Demolisher", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2651, "Togo disguise", 0, 0, 5, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2652, "Turai Ossa disguise", 0, 0, 5, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2653, "Gwen disguise", 0, 0, 5, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2654, "Saul DAlessio disguise", 0, 0, 5, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2655, "Dragon Empire Rage", 15, 19.5, 5, 6, 0, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 1, 0.75, 15, 15, 30, 300, 300, 200, 200, 240, 0], _
+[2656, "Call to the Spirit Realm", 25, 32.5, 5, 22, 256, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 0, 2, 0, 3, 0.75, 60, 60, 30, 7, 7, 30, 30, 0, 0], _
+[2657, "Call of Haste PvP", 10, 13, 0, 15, 4194304, 0, 0, 32768, 0, 0, 2, 22, 415, 0, 0, 0, 0, 0, 0.75, 30, 30, 25, 25, 25, 25, 25, 5000, 0], _
+[2658, "Hide", 0, 0, 5, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 60, 60, 0, 0, 0, 0, 0, 0, 0], _
+[2659, "Feign Death", 0, 0, 5, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.25, 1, 196608, 196608, 300, 0, 0, 0, 0, 0, 0], _
+[2660, "Flee", 0, 0, 5, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 30, 33, 33, 0, 0, 0, 0], _
+[2661, "Throw Rock", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.75, 0.75, 10, 10, 0, 33, 33, 0, 0, 800, 0], _
+[2662, "Nightmarish Aura", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2663, "Siege Strike", 5, 6.5, 5, 10, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 5, 0.75, 0, 0, 10, 200, 200, 0, 0, 0, 0], _
+[2664, "Spike Trap spell", 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 2147483647, 25, 25, 10, 10, 0, 0], _
+[2665, "Barbed Bomb", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 100, 100, 5, 5, 256, 0], _
+[2666, "Fire and Brimstone", 5, 6.5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 5, 400, 400, 0, 0, 156, 0], _
+[2667, "Balm Bomb", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 156, 0], _
+[2668, "Explosives", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 256, 0], _
+[2669, "Rations", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0, 156, 0], _
+[2670, "Form Up and Advance", 10, 13, 5, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0.75, 10, 10, 15, 33, 33, 15, 15, 5000, 0], _
+[2671, "Advance", 10, 13, 5, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0.75, 7, 7, 25, 7, 7, 33, 33, 156, 0], _
+[2672, "Spectral Agony Saul DAlessio", 5, 6.5, 5, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 5, 5, 8, 4, 4, 80, 80, 80, 0], _
+[2673, "Stun Bomb", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3, 3, 0, 3, 3, 0, 0, 256, 0], _
+[2674, "Banner of the Unseen", 15, 19.5, 5, 11, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 5, 5, 10, 25, 25, 100, 100, 312, 312], _
+[2675, "Signet of the Unseen", 0, 0, 5, 7, 4, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 6, 6, 7, 80, 80, 0, 0, 240, 0], _
+[2676, "For Elona", 0, 0, 5, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 80, 0, 0, 10, 10, 4, 25, 25, 33, 33, 1000, 0], _
+[2677, "Giant Stomp Turai Ossa", 5, 6.5, 5, 10, 0, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.75, 1.25, 0, 0, 30, 100, 100, 0, 0, 1000, 0], _
+[2678, "Whirlwind Attack Turai Ossa", 0, 0, 5, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 2, 130, 0, 0, 0, 0, 1, 20, 20, 0, 0, 156, 0], _
+[2679, "Junundu Siege", 5, 6.5, 5, 10, 1024, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 2, 0, 0, 8, 150, 150, 0, 0, 0, 0], _
+[2680, "Distortion Gwen", 5, 6.5, 5, 3, 0, 0, 0, 128, 0, 0, 5, 1, 3433, 0, 0, 2, 0, 0, 0, 1, 5, 5, 75, 75, 2, 2, 0, 0], _
+[2681, "Shared Burden Gwen", 10, 13, 5, 4, 4, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 2, 0, 2, 0.75, 5, 25, 25, 50, 50, 0, 0, 240, 0], _
+[2682, "Sum of All Fears Gwen", 10, 13, 5, 4, 0, 0, 0, 0, 0, 0, 5, 1, 3433, 0, 5, 2, 0, 2, 0.75, 5, 20, 10, 20, 20, 0, 0, 0, 0], _
+[2683, "Castigation Signet Saul DAlessio", 0, 0, 5, 7, 0, 0, 0, 256, 0, 0, 3, 14, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 15, 26, 56, 1, 10, 0, 0], _
+[2684, "Unnatural Signet Saul DAlessio", 0, 0, 5, 7, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 10, 15, 75, 5, 50, 156, 0], _
+[2685, "Dragon Slash Turai Ossa", 0, 0, 5, 14, 4, 0, 0, 0, 0, 128, 1, 20, 3433, 0, 5, 2, 240, 0, 0, 0, 0, 0, 10, 40, 1, 5, 0, 0], _
+[2686, "Essence Strike Togo", 5, 6.5, 5, 5, 0, 0, 0, 256, 0, 0, 8, 34, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 8, 15, 60, 1, 9, 1000, 0], _
+[2687, "Spirit Burn Togo", 5, 6.5, 5, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 6, 5, 50, 1, 3, 1000, 0], _
+[2688, "Spirit Rift Togo", 10, 13, 5, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 16, 2, 0, 2, 0.75, 3, 3, 5, 25, 135, 0, 0, 156, 0], _
+[2689, "Mend Body and Soul Togo", 5, 6.5, 5, 5, 0, 0, 4096, 4102, 0, 0, 8, 33, 3433, 0, 3, 2, 0, 0.75, 0.75, 0, 0, 3, 20, 115, 0, 0, 1000, 0], _
+[2690, "Offering of Spirit Togo", 5, 6.5, 5, 5, 4, 0, 0, 256, 0, 0, 8, 34, 3433, 0, 0, 2, 0, 0.25, 0.75, 0, 0, 15, 17, 17, 8, 17, 1000, 0], _
+[2691, "Disenchantment Togo", 25, 32.5, 5, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 0, 2, 0, 5, 0.75, 10, 35, 45, 1, 8, 5, 20, 2500, 0], _
+[2692, "Fire Dart", 0, 0, 5, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 5, 33, 33, 4, 4, 900, 0], _
+[2693, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2694, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2695, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2696, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2697, "Unknow", 0, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 150, 0, 0, 0, 0], _
+[2698, "Unknow", 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0], _
+[2699, "Corrupted Haiju Lagoon Water", 0, 0, 4, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2700, "Journey to the North", 0, 0, 0, 17, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 50, 50, 0, 0, 0, 0, 0, 1080, 1140], _
+[2701, "Rat Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2702, "Ox Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2703, "Tiger Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2704, "Rabbit Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2705, "Dragon Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2706, "Snake Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2707, "Horse Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2708, "Sheep Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2709, "Monkey Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2710, "Rooster Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2711, "Dog Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2712, "Party Time", 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 180, 180, 0, 0, 0, 0, 0, 0, 0], _
+[2713, "Victory is Ours", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2714, "Dark Soul Explosion", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 5, 25, 75, 240, 0], _
+[2715, "Chaotic Soul Explosion", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 25, 75, 1, 5, 240, 2], _
+[2716, "Fiery Soul Explosion", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 100, 4, 8, 240, 0], _
+[2717, "Rejuvenating Soul Explosion", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 150, 25, 75, 312, 0], _
+[2718, "Plague Spring", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 10, 10, 0, 35, 80, 0, 0, 240, 2], _
+[2719, "Unbalancing Soul Explosion", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 100, 0, 0, 240, 0], _
+[2720, "Shadowy Soul Explosion", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 25, 75, 10, 15, 312, 0], _
+[2721, "Ethereal Soul Explosion", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 50, 75, 4, 8, 2500, 0], _
+[2722, "Redemption of Purity", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 3433, 0, 5, 2, 0, 0, 0, 150, 150, 25, 12, 12, 30, 30, 0, 0], _
+[2723, "Purify Energy", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 3433, 0, 0, 2, 0, 0.25, 0.75, 0, 0, 25, 1, 1, 1, 5, 240, 0], _
+[2724, "Purifying Flame", 15, 19.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 12, 3433, 0, 0, 2, 0, 0.5, 0.75, 5, 5, 25, 10, 40, 1, 1, 240, 0], _
+[2725, "Purifying Prayer", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 16, 3433, 0, 3, 2, 0, 0.5, 0.25, 0, 0, 25, 2, 5, 0, 0, 240, 0], _
+[2726, "Strength of Purity", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 0, 17, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 25, 1, 5, 1, 15, 0, 0], _
+[2727, "Spring of Purity", 10, 13, 0, 21, 0, 0, 0, 0, 0, 0, 0, 23, 3433, 0, 0, 2, 0, 2, 0.75, 10, 10, 25, 1, 1, 0, 0, 156, 0], _
+[2728, "Way of the Pure", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 0, 35, 3433, 0, 0, 2, 0, 0, 0, 5, 15, 25, 25, 25, 0, 0, 0, 0], _
+[2729, "Purify Soul", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 0, 36, 3433, 0, 0, 2, 0, 1, 0.75, 3, 7, 25, 1, 4, 0, 0, 1000, 0], _
+[2730, "Aura of Purity", 10, 13, 0, 6, 8388608, 0, 0, 0, 0, 0, 0, 44, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 25, 1, 15, 1, 1, 156, 156], _
+[2731, "Anthem of Purity", 10, 13, 0, 27, 0, 0, 0, 0, 0, 0, 0, 40, 3433, 0, 0, 2, 0, 1, 0.75, 0, 0, 25, 1, 1, 1, 1, 1000, 0], _
+[2732, "Falkens Fire Fist", 0, 0, 0, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 3, 200, 3, 0, 0, 0, 0, 100, 100, 5, 5, 0, 0], _
+[2733, "Falken Quick", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 50, 50, 0, 0, 0, 0], _
+[2734, "Mind Wrack PvP", 5, 6.5, 0, 4, 4194304, 0, 0, 0, 0, 0, 5, 2, 49, 0, 5, 0, 0, 1, 0.75, 5, 40, 7, 15, 100, 5, 25, 0, 1], _
+[2735, "Quickening Terrain", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 15, 15, 10, 10, 0, 0], _
+[2736, "Massive Damage", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 200, 200, 20, 0], _
+[2737, "Minion Apocalypse", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 50, 50, 20, 20, 240, 0], _
+[2738, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2739, "Combat Costume Assassin", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2740, "Combat Costume Mesmer", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2741, "Combat Costume Necromancer", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2742, "Combat Costume Elementalist", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 90, 90, 0, 0], _
+[2743, "Combat Costume Monk", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2744, "Combat Costume Warrior", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 20, 20, 0, 0], _
+[2745, "Combat Costume Ranger", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0, 80, 80, 0, 600, 600, 25, 25, 0, 0], _
+[2746, "Combat Costume Dervish", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2747, "Combat Costume Ritualist", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2748, "Combat Costume Paragon", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 30, 30, 0, 0], _
+[2749, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2750, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2751, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2752, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2753, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2754, "Unknow", 0, 0, 0, 17, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 120, 120, 0, 25, 25, 0, 0, 0, 0], _
+[2755, "Jade Brotherhood Bomb", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 0, 0, 8, 250, 250, 5, 5, 156, 240], _
+[2756, "Mad Kings Fan", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2757, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2758, "Candy Corn Strike", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.75, 0, 0, 1, 50, 50, 1, 1, 0, 0], _
+[2759, "Rocket Propelled Gobstopper", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 100, 1, 0.75, 0, 0, 5, 100, 100, 0, 0, 240, 240], _
+[2760, "Rain of Terror spell", 15, 19.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 0, 2, 0.75, 5, 5, 30, 30, 30, 0, 0, 312, 312], _
+[2761, "Cry of Madness", 0, 0, 0, 15, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 75, 0, 0, 10, 10, 30, 10, 10, 5, 5, 1000, 1000], _
+[2762, "Sugar Infusion", 10, 13, 0, 5, 0, 0, 0, 2, 0, 0, 0, 51, 3433, 0, 4, 2, 0, 0.25, 0, 0, 0, 12, 150, 150, 200, 200, 0, 0], _
+[2763, "Feast of Vengeance", 5, 6.5, 0, 5, 0, 0, 0, 4, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 8, 150, 150, 0, 0, 0, 0], _
+[2764, "Animate Candy Minions", 10, 13, 0, 5, 262144, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 0, 0, 15, 20, 20, 0, 0, 0, 0], _
+[2765, "Taste of Undeath", 10, 13, 0, 5, 4, 0, 0, 4, 0, 0, 0, 51, 3433, 0, 4, 2, 0, 0.25, 0.75, 0, 0, 4, 500, 500, 0, 0, 0, 0], _
+[2766, "Scourge of Candy", 5, 6.5, 0, 5, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.75, 5, 5, 5, 200, 200, 5, 5, 240, 240], _
+[2767, "Motivating Insults", 5, 6.5, 0, 15, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 15, 8, 8, 33, 33, 1000, 1000], _
+[2768, "Mad King Pony Support", 10, 13, 0, 5, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.5, 0.75, 15, 15, 60, 20, 20, 60, 60, 0, 0], _
+[2769, "Its Good to Be King", 10, 13, 0, 15, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 20, 20, 60, 50, 50, 50, 50, 1000, 1000], _
+[2770, "Maddening Laughter", 0, 0, 0, 15, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 75, 0, 0, 5, 5, 12, 100, 100, 5, 5, 1000, 1000], _
+[2771, "Mad Kings Influence", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2772, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2773, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2774, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 90, 90, 0, 0], _
+[2775, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2776, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 20, 20, 0, 0], _
+[2777, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 80, 80, 0, 600, 600, 25, 25, 0, 0], _
+[2778, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[2779, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[2780, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 30, 30, 0, 0], _
+[2781, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 50, 50, 5, 5, 240, 20], _
+[2782, "Unknow", 0, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2783, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2784, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2785, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2786, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2787, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2788, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0], _
+[2789, "Unknow", 10, 13, 0, 5, 262144, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 0, 0, 15, 20, 20, 0, 0, 0, 0], _
+[2790, "Unknow", 10, 13, 0, 5, 262144, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 10, 10, 30, 5, 5, 25, 25, 0, 0], _
+[2791, "Unknow", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.25, 0.75, 30, 30, 5, 100, 100, 15, 15, 240, 90], _
+[2792, "Hidden Talent", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 2, 2, 0, 0, 0, 0], _
+[2793, "Couriers Haste", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 33, 33, 0, 0], _
+[2794, "Xinraes Revenge", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 3, 3, 0, 0, 312, 0], _
+[2795, "Unknow", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.5, 0.25, 0, 0, 0, 75, 75, 1, 1, 1000, 0], _
+[2796, "Unknow", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 100, 1, 0.75, 0, 0, 0, 150, 150, 800, 800, 156, 0], _
+[2797, "Unknow", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.25, 0.25, 10, 10, 60, 250, 250, 10, 10, 0, 0], _
+[2798, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 1000, 1000, 40, 40, 4, 0], _
+[2799, "Unknow", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 150, 1, 0.75, 5, 5, 10, 25, 25, 2, 2, 312, 0], _
+[2800, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 20, 20, 0, 0, 0, 0], _
+[2801, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 0, 0, 0, 0], _
+[2802, "Unknow", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0], _
+[2803, "Mind Freeze PvP", 10, 13, 0, 4, 4194309, 0, 2048, 0, 0, 0, 6, 11, 209, 0, 5, 0, 0, 1, 0.75, 1, 5, 5, 10, 40, 90, 90, 0, 0], _
+[2804, "Mind Shock PvP", 5, 6.5, 1, 5, 4194309, 0, 128, 0, 0, 0, 6, 8, 226, 0, 5, 0, 0, 1, 0.75, 0, 0, 8, 10, 50, 0, 0, 0, 0], _
+[2805, "Mist Form PvP", 5, 6.5, 1, 6, 4194308, 0, 0, 0, 0, 0, 6, 11, 236, 0, 0, 0, 0, 1, 0.75, 10, 45, 20, 33, 33, 50, 250, 1000, 80], _
+[2806, "Ward Against Harm PvP", 15, 19.5, 1, 11, 4194308, 0, 0, 0, 0, 0, 6, 11, 239, 0, 0, 0, 0, 1, 0.75, 5, 15, 30, 12, 24, 1, 3, 312, 30], _
+[2807, "Ride the Lightning PvP", 15, 19.5, 2, 5, 4194309, 0, 0, 0, 0, 0, 6, 8, 836, 0, 1, 0, 0, 1, 0.75, 0, 0, 10, 10, 70, 1, 5, 156, 0], _
+[2808, "Enraged Smash PvP", 5, 6.5, 2, 14, 4194308, 0, 0, 0, 0, 16, 1, 19, 993, 0, 5, 0, 0, 0, 0, 0, 0, 10, 1, 4, 10, 40, 0, 0], _
+[2809, "Obsidian Flame PvP", 5, 6.5, 0, 5, 4194305, 0, 0, 0, 0, 0, 6, 9, 219, 0, 5, 0, 0, 1.5, 0.75, 0, 0, 5, 22, 92, 0, 0, 0, 0], _
+[2810, "Meek Shall Inherit", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 2, 2, 2, 2, 1, 0], _
+[2811, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 5, 5, 0, 0, 312, 0], _
+[2812, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2813, "Inverse Ninja Law", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 5, 5, 5, 5, 1000, 0], _
+[2814, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 50, 50, 20, 20, 0, 0], _
+[2815, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 50, 50, 5, 5, 0, 0], _
+[2816, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2817, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 15, 15, 100, 100, 0, 0], _
+[2818, "Unknow", 0, 0, 0, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2819, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2820, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2821, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2822, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2823, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2824, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2825, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2826, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2827, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2828, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2829, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2830, "Unknow", 0, 0, 4, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5000, 0], _
+[2831, "Unknow", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.5, 0.75, 10, 10, 0, 300, 300, 10, 10, 0, 0], _
+[2832, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2833, "Unknow", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 0, 0.5, 0.75, 0, 0, 8, 300, 300, 10, 10, 312, 312], _
+[2834, "Unknow", 0, 0, 0, 21, 256, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 90, 90, 8, 300, 300, 5, 5, 240, 240], _
+[2835, "Unknow", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 30, 30, 30, 0, 0, 0, 0, 0, 0], _
+[2836, "Unknow", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 5, 0.75, 30, 30, 30, 0, 0, 0, 0, 0, 0], _
+[2837, "Unknow", 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0], _
+[2838, "Unknow", 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2839, "Abyssal Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2840, "Asura Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2841, "Awakened Head Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2842, "Spider Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2843, "Charr Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2844, "Golem Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2845, "Hellhound Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2846, "Norn Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2847, "Ooze Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2848, "Rift Warden Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2849, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2850, "Yeti Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2851, "Snowman Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2852, "Energy Drain PvP", 5, 6.5, 0, 5, 4194308, 0, 0, 320, 0, 0, 5, 3, 79, 0, 5, 0, 0, 1, 0.75, 0, 0, 25, 2, 9, 2, 2, 0, 0], _
+[2853, "Energy Tap PvP", 5, 6.5, 0, 5, 4194304, 0, 0, 320, 0, 0, 5, 3, 80, 0, 5, 0, 0, 3, 0.75, 0, 0, 25, 4, 7, 2, 2, 0, 0], _
+[2854, "PvP effect", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2855, "Ward Against Melee PvP", 15, 19.5, 0, 11, 4194304, 0, 0, 128, 0, 0, 6, 9, 176, 0, 0, 0, 0, 1, 0.75, 1, 18, 30, 50, 50, 0, 0, 312, 0], _
+[2856, "Lightning Orb PvP", 15, 19.5, 0, 5, 4194304, 0, 0, 0, 0, 0, 6, 8, 229, 0, 5, 0, 0, 2, 0.75, 0, 0, 5, 10, 100, 1800, 1800, 0, 0], _
+[2857, "Aegis PvP", 10, 13, 0, 6, 4194304, 0, 0, 128, 0, 0, 3, 15, 257, 0, 4, 0, 0, 0.25, 0.75, 1, 3, 30, 0, 0, 0, 0, 1000, 0], _
+[2858, "Watch Yourself PvP", 0, 0, 0, 15, 4194304, 0, 0, 0, 0, 0, 1, 21, 348, 0, 0, 0, 80, 0, 0, 10, 10, 4, 5, 25, 1, 3, 1000, 0], _
+[2859, "Enfeeble PvP", 5, 6.5, 1, 5, 4194304, 0, 1024, 0, 0, 0, 4, 7, 117, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 10, 0, 0, 10, 30, 0, 0], _
+[2860, "Ether Renewal PvP", 10, 13, 1, 6, 4194308, 0, 0, 256, 0, 0, 6, 12, 181, 0, 0, 0, 0, 1, 0.75, 7, 7, 30, 1, 3, 5, 20, 0, 0], _
+[2861, "Penetrating Attack PvP", 10, 13, 1, 14, 4194304, 0, 0, 0, 0, 2, 2, 25, 398, 0, 5, 0, 0, 1, 1, 0, 0, 4, 3, 10, 10, 10, 0, 0], _
+[2862, "Shadow Form PvP", 10, 13, 2, 6, 4194308, 0, 0, 128, 0, 0, 7, 31, 826, 0, 0, 0, 0, 1, 0.75, 5, 15, 60, 5, 50, 0, 0, 0, 0], _
+[2863, "Discord PvP", 5, 6.5, 2, 5, 4194308, 0, 0, 0, 0, 0, 4, 5, 817, 0, 5, 0, 0, 2, 0.75, 0, 0, 2, 30, 110, 0, 0, 0, 0], _
+[2864, "Sundering Attack PvP", 10, 13, 2, 14, 4194304, 0, 0, 0, 0, 2, 2, 25, 1191, 0, 5, 0, 0, 1, 1, 0, 0, 4, 3, 10, 10, 10, 0, 0], _
+[2865, "Ritual Lord PvP", 10, 13, 2, 16, 4194308, 0, 0, 0, 0, 0, 8, 36, 1217, 0, 0, 0, 0, 0, 0.75, 5, 35, 30, 15, 60, 2, 4, 0, 0], _
+[2866, "Flesh of My Flesh PvP", 5, 6.5, 2, 5, 4196352, 0, 0, 8, 0, 0, 8, 33, 791, 0, 6, 0, 0, 4, 0.75, 0, 0, 10, 5, 20, 0, 0, 0, 0], _
+[2867, "Ancestors Rage PvP", 5, 6.5, 2, 10, 4194304, 0, 0, 0, 0, 0, 8, 34, 1246, 0, 3, 0, 0, 1, 0.75, 3, 3, 8, 1, 41, 0, 0, 156, 0], _
+[2868, "Splinter Weapon PvP", 5, 6.5, 2, 25, 4194304, 0, 0, 0, 0, 0, 8, 34, 792, 0, 3, 0, 0, 1, 0.75, 20, 20, 8, 5, 30, 1, 5, 156, 3], _
+[2869, "Assassins Remedy PvP", 10, 13, 3, 6, 4194304, 0, 0, 0, 0, 0, 7, 35, 1639, 0, 0, 0, 0, 1, 0.75, 30, 30, 20, 1, 10, 0, 0, 0, 0], _
+[2870, "Blinding Surge PvP", 10, 13, 3, 5, 4194308, 0, 0, 0, 0, 0, 6, 8, 1367, 0, 5, 0, 0, 0.75, 0.75, 0, 0, 6, 5, 50, 3, 8, 156, 0], _
+[2871, "Light of Deliverance PvP", 5, 6.5, 3, 5, 4194308, 0, 4096, 6, 0, 0, 3, 13, 1397, 0, 0, 0, 0, 1, 0.75, 0, 0, 10, 101, 101, 5, 70, 5000, 20], _
+[2872, "Death Pact Signet PvP", 0, 0, 3, 7, 4196352, 0, 0, 8, 0, 0, 8, 33, 1481, 0, 6, 0, 0, 4, 0.75, 120, 120, 12, 0, 0, 15, 100, 0, 0], _
+[2873, "Mystic Sweep PvP", 5, 6.5, 3, 14, 4194304, 0, 0, 0, 0, 185, 10, 41, 1484, 0, 5, 0, 0, 1, 0, 0, 0, 4, 5, 10, 30, 30, 0, 0], _
+[2874, "Eremites Attack PvP", 5, 6.5, 3, 14, 4194304, 0, 0, 0, 0, 185, 10, 41, 1485, 0, 5, 0, 0, 1, 0, 0, 0, 4, 5, 10, 30, 30, 156, 0], _
+[2875, "Harriers Toss PvP", 10, 13, 3, 14, 4194304, 0, 0, 0, 0, 64, 9, 37, 1549, 0, 5, 0, 0, 1, 1, 0, 0, 10, 5, 20, 5, 30, 0, 0], _
+[2876, "Defensive Anthem PvP", 15, 19.5, 3, 27, 4194308, 0, 0, 128, 0, 0, 9, 40, 1555, 0, 0, 0, 0, 2, 0.75, 4, 10, 25, 50, 50, 0, 0, 1000, 0], _
+[2877, "Ballad of Restoration PvP", 10, 13, 3, 27, 4194304, 0, 0, 6, 0, 0, 9, 39, 1564, 0, 0, 0, 0, 1, 0.75, 10, 10, 30, 15, 75, 0, 0, 1000, 0], _
+[2878, "Song of Restoration PvP", 10, 13, 3, 27, 4194308, 0, 0, 6, 0, 0, 9, 39, 1771, 0, 0, 0, 0, 1, 0.75, 10, 10, 30, 45, 110, 0, 0, 1000, 0], _
+[2879, "Incoming PvP", 10, 13, 3, 15, 4194308, 0, 0, 0, 0, 0, 9, 38, 1596, 0, 0, 0, 0, 0, 0, 4, 10, 25, 33, 33, 5, 15, 1000, 0], _
+[2880, "Never Surrender PvP", 5, 6.5, 3, 15, 4194304, 0, 0, 6, 0, 0, 9, 38, 1598, 0, 0, 0, 0, 0, 0, 10, 10, 20, 75, 75, 1, 5, 1000, 0], _
+[2881, "Unknow", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 3, 0.75, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[2882, "Mantra of Inscriptions PvP", 10, 13, 0, 3, 4194304, 0, 0, 0, 0, 0, 5, 3, 15, 0, 0, 0, 0, 0, 0, 30, 90, 20, 5, 35, 0, 0, 0, 0], _
+[2883, "For Great Justice PvP", 5, 6.5, 0, 15, 4194304, 0, 0, 0, 0, 0, 1, 51, 343, 0, 0, 0, 0, 0, 0, 8, 8, 45, 1, 1, 0, 0, 0, 0], _
+[2884, "Mystic Regeneration PvP", 10, 13, 3, 6, 4194304, 0, 0, 0, 0, 0, 10, 43, 1516, 0, 0, 0, 0, 0.25, 0.75, 5, 20, 12, 1, 4, 0, 0, 3, 0], _
+[2885, "Enfeebling Blood PvP", 1, 1.3, 0, 5, 4194304, 0, 1024, 32, 0, 0, 4, 7, 118, 0, 16, 0, 0, 1, 0.75, 0, 0, 8, 17, 17, 1, 16, 240, 0], _
+[2886, "Summoning Sickness", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2887, "Signet of Judgment PvP", 0, 0, 0, 7, 4194316, 0, 128, 0, 0, 0, 3, 14, 294, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 5, 50, 0, 0, 156, 0], _
+[2888, "Chilling Victory PvP", 0, 0, 3, 14, 4194304, 0, 0, 0, 0, 32, 10, 42, 1539, 0, 5, 0, 120, 0, 0, 0, 0, 1, 3, 15, 10, 30, 156, 0], _
+[2889, "Unknow", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0], _
+[2890, "Unknow", 0, 0, 0, 17, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2891, "Unyielding Aura PvP", 5, 6.5, 1, 6, 4196420, 0, 0, 0, 0, 0, 3, 16, 268, 0, 6, 0, 0, 3, 0.75, 131072, 131072, 15, 0, 0, 0, 0, 0, 0], _
+[2892, "Spirit Bond PvP", 10, 13, 2, 6, 4194304, 0, 0, 0, 0, 0, 3, 15, 1114, 0, 3, 0, 0, 0.25, 0.75, 8, 8, 5, 50, 50, 30, 90, 10, 0], _
+[2893, "Weapon of Warding PvP", 10, 13, 2, 25, 4194304, 0, 0, 128, 0, 0, 8, 33, 793, 0, 3, 0, 0, 1, 0.75, 3, 8, 8, 50, 50, 2, 4, 0, 0], _
+[2894, "Bamph Lite", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2895, "Smiters Boon PvP", 25, 32.5, 4, 6, 4194304, 0, 0, 0, 0, 0, 3, 16, 2005, 0, 0, 0, 0, 0.25, 0.75, 5, 5, 90, 1, 5, 10, 33, 5, 0], _
+[2896, "Battle Fervor Deactivating ROX", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 10, 30, 0, 0, 0, 0], _
+[2897, "Cloak of Faith Deactivating ROX", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 10, 30, 0, 0, 0, 0], _
+[2898, "Dark Aura Deactivating ROX", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 5, 10, 0, 0, 0, 0], _
+[2899, "Chaotic Power Deactivating ROX", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 10, 30, 0, 0, 0, 0], _
+[2900, "Strength of the Oak Deactivating ROX", 0, 0, 0, 1, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 50, 100, 0, 0, 0, 0], _
+[2901, "Sinister Golem Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2902, "Reactor Blast", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 10, 0.25, 10, 10, 10, 200, 200, 10, 10, 312, 0], _
+[2903, "Reactor Blast Timer", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.25, 7, 7, 15, 0, 0, 0, 0, 0, 0], _
+[2904, "Jade Brotherhood Disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2905, "Internal Power Engaged", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 2, 2, 0, 0, 0, 0], _
+[2906, "Target Acquisition", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0, 5, 5, 8, 15, 15, 0, 0, 0, 0], _
+[2907, "NOX Beam", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 15, 200, 200, 0, 0, 312, 5], _
+[2908, "NOX Field Dash", 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 10, 10, 15, 50, 50, 50, 50, 312, 0], _
+[2909, "NOXion Buster", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 10, 0.75, 0, 0, 10, 350, 350, 0, 0, 0, 0], _
+[2910, "Countdown", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.25, 12, 12, 15, 0, 0, 0, 0, 0, 0], _
+[2911, "Bit Golem Breaker", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0.75, 0.75, 15, 15, 3, 30, 30, 0, 0, 0, 0], _
+[2912, "Bit Golem Rectifier", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 3, 0.75, 131072, 131072, 30, 10, 10, 0, 0, 0, 0], _
+[2913, "Bit Golem Crash", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 10, 250, 250, 0, 0, 312, 0], _
+[2914, "Bit Golem Force", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 0, 0, 5, 150, 150, 0, 0, 312, 0], _
+[2915, "Unknow", 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 1, 0.75, 131072, 131072, 15, 3, 3, 0, 0, 0, 0], _
+[2916, "NOX Phantom", 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 60, 60, 10, 200, 200, 0, 0, 2000, 0], _
+[2917, "NOX Thunder", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 5, 2, 2, 100, 100, 2000, 1200], _
+[2918, "NOX Lock On", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 30, 30, 30, 0, 0, 0, 0, 0, 0], _
+[2919, "NOX Driver", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 8500, 8500, 0, 0, 0, 0], _
+[2920, "NOX Fire", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 2, 0.75, 0, 0, 10, 150, 150, 0, 0, 312, 0], _
+[2921, "NOX Knuckle", 0, 0, 0, 5, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 0, 0.75, 0, 0, 15, 150, 150, 0, 0, 156, 0], _
+[2922, "NOX Divider Drive", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 3, 0, 2, 0.75, 0, 0, 20, 900, 900, 0, 0, 312, 0], _
+[2923, "Yo Ho Ho and a Bottle of Grog", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 180, 180, 0, 0, 0, 0, 0, 0, 0], _
+[2924, "Oath of Protection", 0, 0, 0, 16, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 0, 0, 12, 12, 10, 0, 0, 25, 25, 0, 9999], _
+[2925, "Sloth Hunters Shot PvP", 10, 13, 4, 14, 4194304, 0, 0, 0, 0, 2, 2, 25, 2069, 0, 5, 0, 0, 0, 0, 0, 0, 15, 5, 15, 5, 20, 0, 0], _
+[2926, "Bamph Lifesteal", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2927, "Shrine Backlash", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0], _
+[2928, "Amulet of Protection", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2929, "Unknow", 0, 0, 0, 14, 4, 0, 16, 0, 0, 1, 1, 18, 3433, 0, 5, 0, 200, 0, 0, 0, 0, 0, 1, 31, 5, 20, 0, 0], _
+[2930, "Unknow", 0, 0, 0, 3, 0, 0, 0, 32768, 0, 0, 1, 17, 3433, 0, 0, 0, 80, 0, 0, 8, 20, 0, 25, 25, 0, 0, 0, 0], _
+[2931, "Unknow", 0, 0, 0, 10, 0, 0, 0, 4, 0, 0, 1, 17, 3433, 0, 0, 0, 80, 1, 0.75, 0, 0, 1, 50, 110, 0, 3, 12, 0], _
+[2932, "Unknow", 5, 6.5, 0, 14, 4, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 0, 0, 1, 0, 5, 15, 8, 10, 25, 5, 25, 0, 0], _
+[2933, "Unknow", 10, 13, 0, 14, 0, 0, 0, 0, 0, 2, 2, 25, 3433, 0, 5, 0, 0, 0, 0, 0, 0, 8, 5, 20, 5, 25, 0, 0], _
+[2934, "Unknow", 5, 6.5, 0, 6, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 3, 0, 0, 0.25, 0.75, 8, 8, 3, 5, 75, 0, 0, 0, 0], _
+[2935, "Unknow", 5, 6.5, 0, 5, 4, 0, 0, 6144, 0, 0, 3, 51, 3433, 0, 4, 0, 0, 1, 0.75, 0, 0, 7, 50, 50, 0, 0, 0, 0], _
+[2936, "Unknow", 0, 0, 0, 7, 0, 0, 0, 256, 0, 0, 3, 14, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 15, 26, 56, 1, 10, 0, 0], _
+[2937, "Unknow", 1, 1.3, 0, 4, 4, 0, 0, 32, 0, 0, 4, 6, 3433, 0, 5, 0, 0, 0.25, 0.75, 1, 4, 10, 10, 10, 0, 0, 0, 0], _
+[2938, "Unknow", 5, 6.5, 0, 5, 0, 0, 0, 32, 0, 0, 4, 7, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 10, 1, 1, 5, 25, 0, 0], _
+[2939, "Unknow", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 4, 0, 0, 0.25, 0.75, 0, 0, 2, 0, 45, 0, 3, 0, 0], _
+[2940, "Unknow", 1, 1.3, 0, 5, 0, 0, 0, 32, 0, 0, 4, 7, 3433, 0, 16, 0, 0, 1, 0.75, 0, 0, 5, 10, 10, 1, 3, 156, 0], _
+[2941, "Unknow", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 3, 5, 40, 5, 50, 0, 0], _
+[2942, "Unknow", 5, 6.5, 0, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 0, 0, 0.25, 0.75, 3, 3, 1, 20, 100, 0, 0, 0, 0], _
+[2943, "Unknow", 5, 6.5, 0, 6, 4, 0, 0, 0, 0, 0, 5, 3, 3433, 0, 0, 0, 0, 1, 0.75, 10, 10, 30, 0, 5, 0, 0, 0, 0], _
+[2944, "Unknow", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 5, 2, 3433, 0, 5, 0, 0, 2, 0.75, 5, 15, 10, 10, 55, 0, 0, 0, 0], _
+[2945, "Unknow", 15, 19.5, 0, 4, 4, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 0, 0, 2, 0.75, 3, 3, 8, 25, 100, 25, 100, 0, 0], _
+[2946, "Unknow", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 6, 11, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 8, 5, 50, 5, 5, 0, 0], _
+[2947, "Unknow", 10, 13, 0, 4, 0, 0, 2048, 0, 0, 0, 6, 11, 3433, 0, 5, 0, 0, 1, 0.75, 1, 6, 5, 20, 80, 66, 66, 0, 0], _
+[2948, "Unknow", 5, 6.5, 0, 12, 0, 0, 0, 0, 0, 0, 6, 10, 3433, 0, 0, 0, 0, 1, 0.75, 15, 15, 10, 1, 4, 3, 3, 0, 0], _
+[2949, "Unknow", 5, 6.5, 0, 12, 0, 0, 0, 4, 0, 0, 6, 12, 3433, 0, 0, 0, 0, 1, 0.75, 15, 15, 8, 30, 105, 150, 400, 2, 0], _
+[2950, "Unknow", 5, 6.5, 0, 4, 4, 0, 0, 0, 0, 0, 7, 31, 3433, 0, 5, 0, 0, 1, 0.75, 1, 10, 12, 1, 15, 50, 50, 0, 0], _
+[2951, "Unknow", 10, 13, 0, 14, 0, 16, 0, 0, 0, 8, 7, 29, 3433, 2, 5, 0, 0, 0, 0, 0, 0, 12, 5, 20, 5, 20, 0, 0], _
+[2952, "Unknow", 5, 6.5, 0, 5, 4, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 4, 20, 75, 5, 50, 5, 0], _
+[2953, "Unknow", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 10, 42, 3433, 0, 0, 0, 0, 0, 0, 5, 20, 20, 15, 15, 33, 33, 0, 0], _
+[2954, "Unknow", 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 3, 14, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 5, 50, 5, 10, 0, 0], _
+[2955, "Unknow", 0, 0, 0, 7, 4, 0, 128, 0, 0, 0, 3, 14, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 15, 75, 0, 0, 156, 0], _
+[2956, "Unknow", 5, 6.5, 0, 6, 0, 0, 4096, 0, 0, 0, 3, 13, 3433, 0, 3, 0, 0, 0.25, 0.75, 30, 30, 4, 5, 20, 0, 0, 0, 0], _
+[2957, "Western Health Shrine Bonus", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 120, 120, 0, 0, 0, 0], _
+[2958, "Eastern Health Shrine Bonus", 0, 0, 3, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 120, 120, 0, 0, 0, 0], _
+[2959, "Experts Dexterity PvP", 5, 6.5, 3, 3, 4194308, 0, 0, 0, 0, 0, 2, 23, 1724, 0, 0, 0, 0, 0, 0.75, 1, 20, 20, 15, 15, 1, 1, 0, 0], _
+[2960, "Unknow", 5, 6.5, 2, 10, 17408, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 3, 0, 3, 0.75, 0, 0, 15, 50, 50, 80, 80, 156, 312], _
+[2961, "Delayed Blast BAMPH", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2962, "Grentch Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2963, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[2964, "Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 1, 0, 0, 0, 50, 50, 1, 1, 1000, 0], _
+[2965, "Signet of Spirits PvP", 0, 0, 2, 7, 4194308, 0, 0, 0, 0, 0, 8, 34, 1239, 0, 0, 0, 0, 1, 0.75, 0, 0, 20, 3, 12, 0, 0, 1000, 0], _
+[2966, "Signet of Ghostly Might PvP", 0, 0, 3, 7, 4194308, 0, 0, 0, 0, 0, 8, 32, 1742, 0, 1, 0, 0, 1, 0.75, 10, 10, 5, 5, 35, 0, 0, 0, 0], _
+[2967, "Avatar of Grenth PvP", 15, 19.5, 3, 26, 4194308, 0, 0, 0, 0, 0, 10, 44, 1520, 0, 0, 0, 0, 2, 0.75, 10, 90, 30, 0, 0, 0, 0, 0, 120], _
+[2968, "Oversized Tonic Warning", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[2969, "Read the Wind PvP", 5, 6.5, 0, 19, 4194560, 0, 0, 0, 0, 0, 2, 25, 432, 0, 0, 0, 0, 2, 0, 24, 24, 12, 4800, 4800, 0, 0, 0, 0], _
+[2970, "Mursaat Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2971, "Blue Rock Candy Rush", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1200, 1200, 0, 25, 25, 20, 20, 0, 0], _
+[2972, "Green Rock Candy Rush", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 15, 15, 15, 15, 0, 0], _
+[2973, "Red Rock Candy Rush", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 1800, 1800, 0, 33, 33, 25, 25, 0, 0], _
+[2974, "Archer Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2975, "Avatar of Balthazar Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2976, "Champion of Balthazar Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2977, "Priest of Balthazar Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2978, "The Black Beast of Arrgh Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2979, "Crystal Guardian Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2980, "Crystal Spider Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2981, "Bone Dragon Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2982, "Saltspray Dragon Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2983, "Eye of Janthir Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2984, "Footman Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2985, "Ghostly Hero Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2986, "Guild Lord Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2987, "Gwen Doll Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2988, "Black Moa Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2989, "Black Moa Chick Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2990, "Moa Bird Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2991, "White Moa Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2992, "Rainbow Phoenix Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2993, "Brown Rabbit Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2994, "White Rabbit Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2995, "Seer Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2996, "Swarm of Bees Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[2997, "Seed of Resurrection", 0, 0, 2, 7, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 50, 50, 50, 600, 0], _
+[2998, "Fragility PvP", 5, 6.5, 0, 4, 4194304, 0, 0, 0, 0, 0, 5, 1, 19, 0, 5, 0, 0, 1, 0.75, 8, 20, 8, 5, 20, 0, 0, 0, 0], _
+[2999, "Strength of Honor PvP", 10, 13, 0, 6, 4194304, 0, 0, 0, 0, 0, 3, 14, 243, 0, 3, 0, 0, 2, 0.75, 131072, 131072, 15, 1, 5, 0, 0, 0, 0], _
+[3000, "Gunthers Gaze", 5, 6.5, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0.25, 0.75, 0, 0, 5, 0, 0, 0, 0, 1000, 0], _
+[3001, "Unknow", 0, 0, 0, 17, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3002, "Warriors Endurance PvP", 5, 6.5, 1, 3, 4194308, 0, 0, 0, 0, 0, 1, 17, 374, 0, 0, 0, 0, 0, 0, 5, 35, 30, 3, 3, 10, 25, 0, 0], _
+[3003, "Armor of Unfeeling PvP", 10, 13, 2, 6, 4194304, 0, 0, 0, 0, 0, 8, 32, 1232, 0, 0, 0, 0, 1, 0.75, 10, 35, 20, 10, 10, 5, 20, 0, 0], _
+[3004, "Signet of Creation PvP", 0, 0, 2, 7, 4194304, 0, 0, 0, 0, 0, 8, 36, 1238, 0, 0, 0, 0, 2, 0.75, 30, 30, 10, 1, 7, 0, 0, 312, 0], _
+[3005, "Union PvP", 15, 19.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 911, 0, 0, 0, 0, 3, 0.75, 30, 60, 45, 1, 8, 15, 15, 2500, 0], _
+[3006, "Shadowsong PvP", 15, 19.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 871, 0, 0, 0, 0, 5, 0.75, 1, 6, 45, 1, 6, 5, 20, 2500, 30], _
+[3007, "Pain PvP", 5, 6.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 1247, 0, 0, 0, 0, 3, 0.75, 30, 150, 30, 1, 8, 5, 30, 0, 0], _
+[3008, "Destruction PvP", 10, 13, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 34, 920, 0, 0, 0, 0, 3, 0.75, 30, 30, 20, 1, 10, 1, 10, 312, 150], _
+[3009, "Soothing PvP", 25, 32.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 1266, 0, 0, 0, 0, 5, 0.75, 15, 45, 60, 1, 8, 0, 0, 0, 0], _
+[3010, "Displacement PvP", 15, 19.5, 2, 22, 4194560, 0, 0, 128, 0, 0, 8, 32, 1249, 0, 0, 0, 0, 3, 0.75, 30, 60, 45, 1, 10, 60, 60, 75, 0], _
+[3011, "Preservation PvP", 5, 6.5, 2, 22, 4194564, 0, 0, 0, 0, 0, 8, 33, 1250, 0, 0, 0, 0, 3, 0.75, 90, 90, 20, 1, 10, 10, 115, 312, 0], _
+[3012, "Life PvP", 10, 13, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 33, 1251, 0, 0, 0, 0, 3, 0.75, 20, 20, 20, 1, 10, 1, 7, 2500, 0], _
+[3013, "Recuperation PvP", 25, 32.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 33, 981, 0, 0, 0, 0, 3, 0.75, 15, 45, 45, 1, 10, 1, 3, 2500, 0], _
+[3014, "Dissonance PvP", 25, 32.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 921, 0, 0, 0, 0, 5, 0.75, 10, 25, 45, 1, 8, 5, 20, 2500, 0], _
+[3015, "Earthbind PvP", 15, 19.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 1252, 0, 0, 0, 0, 5, 0.75, 15, 45, 60, 1, 10, 50, 25, 2500, 3], _
+[3016, "Shelter PvP", 25, 32.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 982, 0, 0, 0, 0, 5, 0.75, 30, 60, 45, 1, 8, 75, 45, 10, 0], _
+[3017, "Disenchantment PvP", 25, 32.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 923, 0, 0, 0, 0, 5, 0.75, 10, 35, 45, 1, 8, 5, 20, 2500, 0], _
+[3018, "Restoration PvP", 10, 13, 2, 22, 4196608, 0, 0, 8, 0, 0, 8, 32, 963, 0, 0, 0, 0, 5, 0.75, 30, 30, 45, 1, 10, 5, 50, 312, 0], _
+[3019, "Bloodsong PvP", 5, 6.5, 2, 22, 4194560, 0, 0, 0, 0, 0, 8, 34, 1253, 0, 0, 0, 0, 3, 0.75, 30, 150, 30, 1, 8, 5, 25, 0, 0], _
+[3020, "Wanderlust PvP", 10, 13, 2, 22, 4194564, 0, 0, 0, 0, 0, 8, 32, 1255, 0, 0, 0, 0, 5, 0.75, 30, 60, 45, 1, 8, 70, 50, 0, 0], _
+[3021, "Savannah Heat PvP", 15, 19.5, 3, 5, 4194308, 0, 0, 0, 0, 0, 6, 10, 1380, 0, 16, 0, 0, 2, 0.75, 5, 5, 25, 5, 20, 5, 20, 240, 0], _
+[3022, "Gaze of Fury PvP", 10, 13, 3, 22, 4194560, 0, 0, 0, 0, 0, 8, 34, 1734, 0, 1, 0, 0, 2, 0.75, 30, 60, 20, 1, 10, 5, 20, 0, 0], _
+[3023, "Anguish PvP", 25, 32.5, 3, 22, 4194560, 0, 0, 0, 0, 0, 8, 32, 1745, 0, 0, 0, 0, 3, 0.75, 15, 45, 45, 1, 7, 5, 20, 2500, 0], _
+[3024, "Empowerment PvP", 5, 6.5, 3, 22, 4194560, 0, 0, 0, 0, 0, 8, 36, 1747, 0, 0, 0, 0, 3, 0.75, 15, 60, 30, 1, 10, 15, 45, 2500, 10], _
+[3025, "Recovery PvP", 15, 19.5, 3, 22, 4194560, 0, 0, 0, 0, 0, 8, 33, 1748, 0, 0, 0, 0, 3, 0.75, 30, 60, 30, 1, 10, 20, 50, 0, 0], _
+[3026, "Go for the Eyes PvP", 0, 0, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1558, 0, 0, 0, 100, 0, 0.75, 10, 10, 4, 30, 75, 0, 0, 1000, 0], _
+[3027, "Brace Yourself PvP", 5, 6.5, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1572, 0, 4, 0, 0, 0, 0, 5, 15, 12, 15, 75, 0, 0, 240, 0], _
+[3028, "Blazing Finale PvP", 5, 6.5, 3, 28, 4194304, 0, 4, 0, 0, 0, 9, 40, 1575, 0, 3, 0, 0, 1, 0.75, 10, 35, 8, 1, 3, 0, 0, 156, 0], _
+[3029, "Bladeturn Refrain PvP", 5, 6.5, 3, 28, 4194304, 0, 0, 0, 0, 0, 9, 38, 1580, 0, 3, 0, 0, 1, 0.75, 20, 20, 8, 10, 40, 0, 0, 0, 0], _
+[3030, "Signet of Return PvP", 0, 0, 3, 7, 4196352, 0, 0, 8, 0, 0, 9, 40, 1778, 0, 6, 0, 0, 5, 0.75, 0, 0, 20, 5, 15, 1, 4, 1000, 0], _
+[3031, "Cant Touch This PvP", 5, 6.5, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1780, 0, 0, 0, 0, 0, 0, 20, 20, 20, 1, 5, 0, 0, 0, 0], _
+[3032, "Stand Your Ground PvP", 15, 19.5, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1589, 0, 0, 0, 0, 0, 0, 5, 20, 30, 24, 24, 0, 0, 1000, 0], _
+[3033, "We Shall Return PvP", 5, 6.5, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1592, 0, 0, 0, 0, 0, 0, 10, 10, 15, 10, 75, 5, 50, 1000, 0], _
+[3034, "Find Their Weakness PvP", 10, 13, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1781, 0, 3, 0, 0, 0, 0, 5, 20, 15, 0, 0, 5, 20, 0, 0], _
+[3035, "Never Give Up PvP", 5, 6.5, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1593, 0, 0, 0, 0, 0, 0, 0, 0, 20, 75, 75, 1, 10, 1000, 0], _
+[3036, "Help Me PvP", 5, 6.5, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1594, 0, 0, 0, 0, 0, 0, 1, 10, 15, 50, 50, 5, 50, 0, 0], _
+[3037, "Fall Back PvP", 10, 13, 3, 15, 4194304, 0, 0, 0, 0, 0, 9, 38, 1595, 0, 0, 0, 0, 0, 0, 4, 10, 25, 33, 33, 5, 15, 1000, 0], _
+[3038, "Agony PvP", 10, 13, 4, 22, 4194560, 0, 0, 0, 0, 0, 8, 34, 2205, 0, 0, 0, 0, 3, 0.75, 30, 90, 30, 1, 8, 3, 10, 1000, 0], _
+[3039, "Rejuvenation PvP", 10, 13, 4, 22, 4194560, 0, 0, 0, 0, 0, 8, 33, 2204, 0, 0, 0, 0, 3, 0.75, 30, 90, 30, 1, 16, 3, 10, 1000, 0], _
+[3040, "Anthem of Disruption PvP", 10, 13, 4, 27, 4194304, 0, 0, 0, 0, 0, 9, 38, 2018, 0, 0, 0, 0, 2, 0.75, 1, 10, 15, 0, 0, 0, 0, 1000, 0], _
+[3041, "Shadowsong Master Riyo", 15, 19.5, 5, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 0, 2, 0, 5, 0.75, 30, 30, 45, 1, 6, 1, 6, 2500, 0], _
+[3042, "Pain", 5, 6.5, 5, 22, 256, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 0, 2, 0, 3, 0.75, 30, 150, 30, 1, 8, 5, 30, 0, 0], _
+[3043, "Wanderlust", 10, 13, 5, 22, 260, 0, 0, 0, 0, 0, 8, 32, 3433, 0, 0, 2, 0, 5, 0.75, 30, 60, 45, 1, 8, 70, 50, 0, 0], _
+[3044, "Spirit Siphon Master Riyo", 5, 6.5, 5, 5, 0, 0, 0, 0, 0, 0, 8, 34, 3433, 0, 1, 2, 0, 0.25, 0.75, 0, 0, 3, 15, 30, 0, 0, 0, 0], _
+[3045, "Comfort Animal PvP", 10, 13, 0, 10, 4194304, 0, 0, 0, 0, 0, 2, 22, 436, 0, 0, 0, 0, 1, 0.75, 0, 0, 1, 20, 104, 10, 58, 5000, 8], _
+[3046, "Unknow", 0, 0, 0, 17, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 33, 33, 33, 0, 0], _
+[3047, "Melandrus Assault PvP", 10, 13, 1, 20, 4194304, 0, 0, 0, 0, 0, 2, 22, 441, 0, 0, 0, 0, 0, 0, 10, 10, 5, 5, 20, 5, 35, 5000, 156], _
+[3048, "Shroud of Distress PvP", 10, 13, 2, 6, 4194304, 0, 0, 0, 0, 0, 7, 31, 1031, 0, 0, 0, 0, 1, 0.75, 30, 60, 45, 50, 50, 75, 75, 0, 0], _
+[3049, "Unseen Fury PvP", 5, 6.5, 2, 3, 4194304, 0, 0, 0, 0, 0, 7, 31, 1041, 0, 0, 0, 0, 0, 0, 15, 60, 45, 0, 0, 0, 0, 0, 0], _
+[3050, "Predatory Bond PvP", 10, 13, 2, 15, 4194304, 0, 0, 0, 0, 0, 2, 22, 1194, 0, 0, 0, 0, 0, 0, 5, 20, 30, 1, 31, 0, 0, 0, 0], _
+[3051, "Enraged Lunge PvP", 5, 6.5, 2, 20, 4194308, 0, 0, 0, 0, 0, 2, 22, 1202, 0, 0, 0, 0, 0, 0.75, 10, 10, 5, 3, 23, 80, 80, 5000, 0], _
+[3052, "Conviction PvP", 5, 6.5, 3, 3, 4194304, 0, 0, 0, 0, 0, 10, 43, 1540, 0, 0, 0, 0, 0, 0, 10, 35, 20, 24, 24, 1, 4, 0, 0], _
+[3053, "Signet of Deadly Corruption PvP", 0, 0, 4, 7, 4194304, 1, 0, 0, 0, 0, 7, 30, 2186, 0, 5, 0, 0, 1, 0.75, 0, 0, 12, 5, 35, 130, 130, 0, 0], _
+[3054, "Masochism PvP", 5, 6.5, 4, 6, 4194304, 0, 0, 0, 0, 0, 4, 6, 2139, 0, 0, 0, 0, 1, 0.75, 30, 30, 20, 1, 3, 0, 0, 0, 0], _
+[3055, "Pain attack Togo", 0, 0, 5, 14, 16384, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 32, 0, 0], _
+[3056, "Pain attack Togo", 0, 0, 5, 14, 16384, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 32, 0, 0], _
+[3057, "Pain attack Togo", 0, 0, 5, 14, 16384, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 32, 0, 0], _
+[3058, "Unholy Feast PvP", 15, 19.5, 0, 5, 4194304, 0, 0, 4, 0, 0, 4, 4, 110, 0, 0, 0, 0, 0.75, 0.75, 0, 0, 20, 10, 65, 1, 4, 312, 0], _
+[3059, "Signet of Agony PvP", 0, 0, 0, 7, 4194304, 0, 0, 32, 0, 0, 4, 4, 145, 0, 0, 0, 0, 0.75, 0.75, 0, 0, 20, 10, 70, 10, 10, 240, 0], _
+[3060, "Escape PvP", 5, 6.5, 0, 3, 4194308, 0, 0, 128, 0, 0, 2, 23, 448, 0, 0, 0, 0, 0, 0, 1, 8, 12, 33, 33, 75, 75, 0, 0], _
+[3061, "Death Blossom PvP", 5, 6.5, 2, 14, 4227072, 4, 0, 0, 0, 8, 7, 29, 775, 3, 5, 0, 0, 0, 0, 0, 0, 6, 20, 45, 0, 0, 156, 0], _
+[3062, "Finale of Restoration PvP", 5, 6.5, 3, 28, 4194304, 0, 0, 6, 0, 0, 9, 39, 1577, 0, 3, 0, 0, 1, 0.75, 10, 35, 20, 15, 75, 5, 5, 0, 0], _
+[3063, "Mantra of Resolve PvP", 10, 13, 0, 3, 4194304, 0, 0, 0, 0, 0, 5, 3, 17, 0, 0, 0, 0, 0, 0, 5, 5, 20, 10, 4, 0, 0, 0, 0], _
+[3064, "Lesser Hard Mode NPC Buff", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 75, 75, 40, 0], _
+[3065, "Charm Animal", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3066, "Charm Animal", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3067, "Henchman", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 75, 75, 40, 0], _
+[3068, "Charm Animal Codex", 10, 13, 0, 10, 0, 0, 0, 0, 0, 0, 2, 22, 3433, 0, 1, 0, 0, 10, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3069, "Agent of the Mad King", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3070, "Sugar Rush Agent of the Mad King", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 15, 50, 50, 0, 0, 0, 0], _
+[3071, "Sticky Ground", 10, 13, 0, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0, 0, 10, 10, 20, 90, 90, 0, 0, 1000, 0], _
+[3072, "Sugar Shock", 5, 6.5, 0, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0, 0, 10, 10, 1, 0, 0, 0, 0, 0, 0], _
+[3073, "The Mad Kings Influence", 15, 19.5, 0, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 20, 20, 25, 0, 0, 0, 0, 2500, 0], _
+[3074, "Bone Spike", 0, 0, 0, 14, 0, 0, 0, 0, 0, 2, 0, 51, 3433, 0, 5, 2, 0, 1, 0, 0, 0, 5, 100, 100, 0, 0, 0, 0], _
+[3075, "Flurry of Splinters", 15, 19.5, 0, 14, 0, 0, 0, 0, 0, 2, 0, 51, 3433, 0, 5, 2, 0, 2, 0.75, 3, 3, 10, 35, 35, 5, 5, 1250, 0], _
+[3076, "Everlasting Mobstopper skill", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 3, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3077, "Weakened by Dhuum", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 0, 0, 0, 0, 0, 0], _
+[3078, "Curse of Dhuum", 0, 0, 0, 5, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 50, 50, 0, 0, 0, 0], _
+[3079, "Dhuums Rest Reaper skill", 0, 0, 0, 5, 32, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 3, 0, 0, 0, 5, 10, 10, 0, 0, 0, 0], _
+[3080, "Dhuum skill", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3081, "Summon Champion", 0, 0, 0, 5, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.25, 0.75, 0, 0, 35, 0, 0, 0, 0, 0, 0], _
+[3082, "Summon Minions", 0, 0, 0, 5, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.25, 0.75, 0, 0, 45, 0, 0, 0, 0, 0, 0], _
+[3083, "Touch of Dhuum", 0, 0, 0, 10, 16386, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0, 0, 0, 20, 100, 100, 15, 15, 0, 0], _
+[3084, "Reaping of Dhuum", 0, 0, 0, 14, 16384, 0, 0, 0, 0, 32, 0, 51, 3433, 0, 5, 2, 0, 1, 0, 0, 0, 45, 200, 200, 0, 0, 1000, 0], _
+[3085, "Judgment of Dhuum", 0, 0, 0, 5, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0, 4, 4, 45, 75, 75, 0, 0, 2000, 0], _
+[3086, "Weight of Dhuum hex", 0, 0, 0, 4, 16896, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0, 0, 5, 5, 15, 75, 75, 10, 10, 0, 0], _
+[3087, "Dhuums Rest", 5, 6.5, 0, 5, 32, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0, 10, 10, 5, 20, 20, 0, 0, 0, 0], _
+[3088, "Spiritual Healing", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 2, 0, 0.75, 0, 0, 0, 5, 250, 250, 0, 0, 0, 0], _
+[3089, "Encase Skeletal", 1, 1.3, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.75, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0], _
+[3090, "Reversal of Death", 1, 1.3, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 2, 0, 0.25, 0, 0, 0, 7, 5, 5, 0, 0, 0, 0], _
+[3091, "Ghostly Fury", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0, 10, 10, 5, 250, 250, 0, 0, 0, 0], _
+[3092, "Henchman Form Pudash", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3093, "Henchman Form Dahlia", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3094, "Henchman Form Disenmaedel", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3095, "Henchman Form Errol Hyl", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3096, "Henchman Form Lulu Xan", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3097, "Henchman Form Tannaros", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3098, "Henchman Form Cassie Santi", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3099, "Henchman Form Redemptor Frohs", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3100, "Henchman Form Julyia", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3101, "Henchman Form Bellicus", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3102, "Henchman Form Dirk Shadowrise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3103, "Henchman Form Vincent Evan", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3104, "Henchman Form Luzy Fiera", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3105, "Henchman Form Motoko Kai", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3106, "Henchman Form Hinata", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3107, "Henchman Form Kah Xan", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3108, "Henchman Form Narcissia", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3109, "Henchman Form Zen Siert", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3110, "Henchman Form Blenkeh", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3111, "Henchman Form Aurora Allesandra", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3112, "Henchman Form Teena the Raptor", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3113, "Henchman Form Lora Lanaya", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3114, "Henchman Form Adepte", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3115, "Henchman Form Haldibarn Earendul", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3116, "Henchman Form Daky", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3117, "Henchman Form Syn Spellstrike", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3118, "Henchman Form Divinus Tutela", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3119, "Henchman Form Blahks", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3120, "Henchman Form Erick", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3121, "Henchman Form Ghavin", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3122, "Henchman Form Hobba Inaste", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3123, "Henchman Form Bacchi Coi", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3124, "Henchman Form Suzu", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3125, "Henchman Form Rollo Lowlo", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3126, "Henchman Form Fuu Rin", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3127, "Henchman Form Nuno", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3128, "Henchman Form Alsacien", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3129, "Henchman Form Uto Wrotki", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3130, "Henchman Form Khai Kemnebi", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3131, "Henchman Form Cole", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3132, "Unknow", 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3133, "Weight of Dhuum", 0, 0, 0, 14, 16384, 0, 0, 0, 0, 32, 0, 51, 3433, 0, 5, 2, 0, 0.75, 0, 5, 5, 15, 75, 75, 10, 10, 0, 0], _
+[3134, "Spirit Form disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3135, "Spiritual Healing Reaper skill", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 2, 0, 0.75, 0, 0, 0, 10, 125, 125, 0, 0, 0, 0], _
+[3136, "Ghostly Fury Reaper skill", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0, 10, 10, 10, 125, 125, 0, 0, 0, 0], _
+[3137, "Reindeer Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3138, "Reindeer Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3139, "Reindeer Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3140, "Staggering Blow PvP", 0, 0, 0, 14, 4194304, 0, 1024, 0, 0, 16, 1, 19, 360, 0, 5, 0, 80, 0, 0, 0, 0, 0, 0, 0, 5, 20, 0, 0], _
+[3141, "Lightning Reflexes PvP", 10, 13, 0, 3, 4194304, 0, 0, 128, 0, 0, 2, 23, 453, 0, 0, 0, 0, 0, 0, 5, 11, 45, 75, 75, 33, 33, 0, 0], _
+[3142, "Fierce Blow PvP", 0, 0, 2, 14, 4194304, 0, 0, 0, 1024, 16, 1, 19, 850, 0, 5, 0, 140, 0, 0, 0, 0, 0, 10, 40, 5, 20, 0, 0], _
+[3143, "Renewing Smash PvP", 5, 6.5, 2, 14, 4194304, 0, 0, 0, 0, 16, 1, 19, 994, 0, 5, 0, 0, 0, 0, 0, 0, 30, 5, 20, 3, 3, 0, 0], _
+[3144, "Heal as One PvP", 5, 6.5, 2, 10, 4194308, 0, 0, 4, 0, 0, 2, 22, 1195, 0, 0, 0, 0, 1, 0, 0, 0, 8, 75, 75, 25, 145, 50, 0], _
+[3145, "Glass Arrows PvP", 5, 6.5, 2, 19, 4194564, 0, 0, 0, 0, 0, 2, 23, 1199, 0, 0, 0, 0, 2, 0.75, 10, 35, 12, 5, 12, 10, 20, 0, 0], _
+[3146, "Protective Was Kaolai PvP", 10, 13, 2, 24, 4194304, 0, 0, 0, 0, 0, 8, 33, 1219, 0, 0, 0, 0, 1, 0.75, 15, 60, 25, 10, 10, 10, 85, 5000, 0], _
+[3147, "Keen Arrow PvP", 5, 6.5, 3, 14, 4194304, 0, 0, 0, 0, 2, 2, 25, 1720, 0, 5, 0, 0, 0, 0, 0, 0, 12, 1, 5, 5, 30, 0, 0], _
+[3148, "Anthem of Envy PvP", 0, 0, 3, 27, 4194304, 0, 0, 0, 0, 0, 9, 38, 1559, 0, 0, 0, 150, 1, 0.75, 10, 10, 6, 10, 20, 0, 0, 1000, 0], _
+[3149, "Mending Refrain PvP", 10, 13, 3, 28, 4194304, 0, 0, 6, 0, 0, 9, 39, 1578, 0, 0, 0, 0, 1, 0.75, 15, 15, 8, 2, 3, 0, 0, 0, 0], _
+[3150, "Lesser Flame Sentinel Resistance", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 250, 250, 5, 5, 50, 0], _
+[3151, "Empathy PvP", 10, 13, 0, 4, 4194304, 0, 0, 0, 0, 0, 5, 2, 26, 0, 5, 0, 0, 2, 0.75, 5, 15, 10, 15, 45, 0, 0, 0, 0], _
+[3152, "Crippling Anguish PvP", 15, 19.5, 0, 4, 4194820, 0, 0, 0, 0, 0, 5, 1, 54, 0, 5, 0, 0, 1, 0.75, 5, 20, 20, 1, 5, 50, 50, 0, 0], _
+[3153, "Pain attack Signet of Spirits", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 20, 0, 0], _
+[3154, "Pain attack Signet of Spirits", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 20, 0, 0], _
+[3155, "Pain attack Signet of Spirits", 0, 0, 2, 14, 16384, 0, 0, 0, 0, 70, 8, 34, 3433, 0, 5, 0, 0, 2, 0, 196608, 196608, 0, 1, 8, 5, 20, 0, 0], _
+[3156, "Soldiers Stance PvP", 5, 6.5, 3, 3, 4194308, 0, 0, 32768, 0, 0, 1, 21, 1698, 0, 0, 0, 0, 0, 0, 4, 10, 8, 33, 33, 0, 0, 0, 0], _
+[3157, "Destructive Was Glaive PvP", 10, 13, 3, 24, 4194308, 0, 0, 8192, 0, 0, 8, 34, 1732, 0, 0, 0, 0, 1, 0.75, 30, 60, 10, 15, 85, 10, 10, 312, 10], _
+[3158, "Unknow", 0, 0, 0, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3159, "Charm Drake", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3160, "Unknow", 5, 6.5, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 5, 0.75, 0, 0, 120, 1, 1, 3, 3, 0, 0], _
+[3161, "Unknow", 5, 6.5, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 15, 0, 0, 0, 0, 0, 0], _
+[3162, "Theres not enough time", 10, 13, 0, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 20, 20, 20, 100, 100, 0, 0, 1000, 1000], _
+[3163, "Keirans Sniper Shot", 10, 13, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 2, 0, 0, 0, 0, 0, 20, 50, 50, 900, 900, 25, 25], _
+[3164, "Falken Punch", 0, 0, 0, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 2, 200, 3, 0, 0, 0, 0, 100, 100, 5, 5, 0, 0], _
+[3165, "Golem Pilebunker", 10, 13, 0, 5, 8, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 2, 0.75, 0, 0, 15, 100, 100, 50, 50, 156, 5], _
+[3166, "Drunken Stumbling", 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 80, 0, 0, 10, 10, 0, 33, 33, 50, 50, 156, 0], _
+[3167, "Unknow", 15, 19.5, 0, 5, 0, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 5, 2, 0, 3, 0.75, 10, 10, 15, 10, 10, 10, 10, 240, 240], _
+[3168, "Unknow", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 5, 2, 0, 2, 0.75, 10, 10, 20, 10, 10, 100, 100, 156, 17], _
+[3169, "Unknow", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 5, 2, 0, 0.25, 0.75, 0, 0, 5, 75, 75, 3, 3, 0, 25], _
+[3170, "Koros Gaze", 5, 6.5, 0, 5, 0, 0, 4096, 2, 0, 0, 5, 51, 3433, 0, 4, 2, 0, 0.75, 0.75, 0, 0, 3, 150, 150, 80, 80, 240, 0], _
+[3171, "Ebon Vanguard Assassin Support NPC", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 5, 2, 0, 1, 0.25, 20, 20, 30, 20, 20, 20, 20, 0, 0], _
+[3172, "Ebon Vanguard Battle Standard of Power", 10, 13, 0, 11, 0, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 2, 0, 1, 0.75, 20, 20, 20, 15, 15, 24, 24, 312, 0], _
+[3173, "Loose Magic", 0, 0, 0, 23, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3174, "Well Supplied", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 300, 300, 0, 5, 5, 1, 1, 0, 0], _
+[3175, "Guild Monument Protected", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 8, 8, 6, 66, 66, 5, 5, 5, 1000], _
+[3176, "Strong Natural Resistance", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 250, 250, 5, 5, 50, 0], _
+[3177, "Elite Regeneration", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 20, 20, 7, 7, 0, 0], _
+[3178, "Elite Regeneration", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 5, 7, 7, 0, 0], _
+[3179, "Mantra of Signets PvP", 5, 6.5, 1, 3, 4194304, 0, 0, 0, 0, 0, 5, 3, 18, 0, 0, 0, 0, 0, 0, 10, 40, 20, 0, 0, 5, 60, 0, 0], _
+[3180, "Shatter Delusions PvP", 5, 6.5, 1, 5, 4194304, 0, 0, 0, 0, 0, 5, 2, 27, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 10, 15, 75, 0, 0, 156, 0], _
+[3181, "Illusionary Weaponry PvP", 5, 6.5, 1, 6, 4194308, 0, 0, 512, 0, 0, 5, 1, 33, 0, 0, 0, 0, 1, 0.75, 30, 30, 25, 8, 40, 0, 0, 0, 0], _
+[3182, "Panic PvP", 15, 19.5, 1, 4, 4194308, 0, 0, 0, 0, 0, 5, 2, 52, 0, 16, 0, 0, 2, 0.75, 1, 10, 15, 2, 2, 10, 82, 240, 240], _
+[3183, "Migraine PvP", 10, 13, 1, 4, 4194820, 0, 0, 0, 0, 0, 5, 1, 53, 0, 5, 0, 0, 2, 0.75, 3, 12, 12, 1, 8, 200, 200, 0, 0], _
+[3184, "Accumulated Pain PvP", 5, 6.5, 2, 5, 4194304, 0, 0, 0, 0, 0, 5, 1, 1052, 0, 5, 0, 0, 2, 0.75, 5, 20, 15, 10, 35, 2, 2, 0, 0], _
+[3185, "Psychic Instability PvP", 5, 6.5, 2, 5, 4194372, 0, 0, 0, 0, 0, 5, 0, 1057, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 12, 2, 3, 0, 0, 156, 0], _
+[3186, "Shared Burden PvP", 10, 13, 2, 4, 4194308, 0, 0, 0, 0, 0, 5, 1, 900, 0, 5, 0, 0, 2, 0.75, 5, 20, 20, 33, 33, 0, 0, 240, 0], _
+[3187, "Stolen Speed PvP", 5, 6.5, 2, 4, 4194308, 0, 0, 0, 0, 0, 5, 0, 880, 0, 5, 0, 0, 1, 0.75, 1, 10, 12, 200, 200, 50, 50, 156, 0], _
+[3188, "Unnatural Signet PvP", 0, 0, 2, 7, 4194304, 0, 0, 0, 0, 0, 5, 2, 934, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 10, 60, 10, 60, 156, 10], _
+[3189, "Spiritual Pain PvP", 5, 6.5, 3, 5, 4194304, 0, 0, 0, 0, 0, 5, 2, 1336, 0, 5, 0, 0, 1, 0.75, 0, 0, 12, 5, 40, 25, 125, 312, 0], _
+[3190, "Frustration PvP", 10, 13, 3, 4, 4194304, 0, 0, 0, 0, 0, 5, 1, 1341, 0, 5, 0, 0, 1, 0.75, 5, 20, 15, 50, 50, 5, 50, 0, 0], _
+[3191, "Mistrust PvP", 10, 13, 3, 4, 4194304, 0, 0, 0, 0, 0, 5, 2, 979, 0, 5, 0, 0, 2, 0.75, 6, 6, 12, 10, 75, 0, 0, 240, 0], _
+[3192, "Enchanters Conundrum PvP", 10, 13, 3, 4, 4194308, 0, 0, 0, 0, 0, 5, 2, 1345, 0, 5, 0, 0, 2, 0.75, 10, 10, 20, 10, 100, 100, 200, 156, 0], _
+[3193, "Signet of Clumsiness PvP", 0, 0, 3, 7, 4194304, 0, 0, 0, 0, 0, 5, 1, 1657, 0, 5, 0, 0, 0.25, 0.75, 0, 0, 12, 15, 60, 0, 0, 156, 0], _
+[3194, "Mirror of Disenchantment PvP", 15, 19.5, 3, 5, 4194304, 0, 0, 0, 0, 0, 5, 51, 1349, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 0, 0, 0, 0, 0, 0], _
+[3195, "Wandering Eye PvP", 10, 13, 4, 4, 4194304, 0, 0, 0, 0, 0, 5, 1, 2056, 0, 5, 0, 0, 2, 0.75, 4, 4, 12, 10, 92, 0, 0, 240, 0], _
+[3196, "Calculated Risk PvP", 10, 13, 4, 4, 4194304, 0, 0, 0, 0, 0, 5, 1, 2053, 0, 5, 0, 0, 1, 0.75, 3, 12, 12, 50, 50, 15, 60, 0, 10], _
+[3197, "Adoration", 5, 6.5, 0, 5, 0, 0, 4096, 6, 0, 0, 0, 51, 3433, 0, 3, 2, 0, 1, 0.75, 0, 0, 6, 75, 75, 0, 0, 0, 0], _
+[3198, "Impending Dhuum", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3199, "Sacrifice Pawn", 5, 6.5, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 3, 2, 0, 0.75, 0.75, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[3200, "Isaiahs Balance", 5, 6.5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.75, 20, 20, 30, 25, 25, 90, 90, 240, 0], _
+[3201, "Toriimos Burning Fury", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 20, 20, 20, 33, 33, 75, 75, 240, 5], _
+[3202, "Oath of Protection", 0, 0, 0, 16, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 4, 3, 0, 0, 0, 4, 4, 10, 0, 0, 25, 25, 0, 9999], _
+[3203, "Unknow", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1], _
+[3204, "Defy Pain PvP", 0, 0, 1, 3, 4194308, 0, 0, 0, 0, 0, 1, 17, 318, 0, 0, 0, 120, 0, 0, 20, 20, 0, 90, 300, 0, 0, 20, 0], _
+[3205, "Entourage", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 11, 11, 10, 30, 30, 30, 30, 1500, 0], _
+[3206, "Spectral Infusion", 0, 0, 0, 16, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 300, 300, 0, 50, 50, 0, 0, 312, 0], _
+[3207, "Entourage Buffer", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 4, 4, 10, 30, 30, 30, 30, 1500, 0], _
+[3208, "Wastrels Demise PvP", 5, 6.5, 3, 4, 4194816, 0, 0, 0, 0, 0, 5, 2, 1335, 0, 5, 0, 0, 0.25, 0.75, 10, 10, 15, 5, 40, 1, 3, 0, 0], _
+[3209, "Unknow", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 9999, 9999, 0, 0, 0, 0, 0, 0, 0], _
+[3210, "Shiro Tagachi Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[3211, "Dunham Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3212, "Palawa Joko Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3213, "Lawrence Crafton Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 80, 80, 0, 0], _
+[3214, "Saul DAlessio Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3215, "Turai Ossa Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 20, 20, 0, 0], _
+[3216, "Lieutenant Thackeray Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0, 80, 80, 0, 600, 600, 25, 25, 0, 0], _
+[3217, "Gehraz Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[3218, "Master Togo Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3219, "Egil Fireteller Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 30, 30, 0, 0], _
+[3220, "Mysterious Assassin Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[3221, "Gwen Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 5, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3222, "Eve Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 4, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3223, "Elementalist Aziure Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 6, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 80, 80, 0, 0], _
+[3224, "Jamei Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 3, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3225, "Jora Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 1, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 20, 20, 0, 0], _
+[3226, "Margrid the Sly Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0, 80, 80, 0, 600, 600, 25, 25, 0, 0], _
+[3227, "Varesh Ossa Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 10, 51, 3433, 0, 0, 2, 0, 0, 0, 70, 70, 0, 600, 600, 25, 25, 0, 0], _
+[3228, "Headmaster Quin Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 8, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 0, 600, 600, 50, 50, 0, 0], _
+[3229, "Kormir Costume Brawl disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 9, 51, 3433, 0, 0, 2, 0, 0, 0, 96, 96, 0, 600, 600, 30, 30, 0, 0], _
+[3230, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3231, "Barbed Signet PvP", 0, 0, 0, 7, 4194304, 0, 0, 0, 0, 0, 4, 4, 131, 0, 0, 0, 0, 0, 0, 196608, 196608, 4, 2, 16, 6, 6, 0, 0], _
+[3232, "Heal Party PvP", 15, 19.5, 0, 5, 4194304, 0, 4096, 6, 0, 0, 3, 13, 287, 0, 0, 0, 0, 1, 0.75, 0, 0, 20, 30, 75, 0, 0, 5000, 0], _
+[3233, "Spoil Victor PvP", 10, 13, 2, 4, 4194308, 0, 0, 0, 0, 0, 4, 4, 1066, 0, 5, 0, 0, 1, 0.75, 3, 15, 10, 15, 75, 0, 0, 0, 0], _
+[3234, "Visions of Regret PvP", 10, 13, 3, 4, 4194308, 0, 0, 0, 0, 0, 5, 2, 878, 0, 5, 0, 0, 2, 0.75, 10, 10, 30, 10, 30, 5, 40, 156, 0], _
+[3235, "Keirans Sniper Shot Hearts of the North", 10, 13, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 2, 0, 0, 0, 0, 0, 15, 50, 50, 900, 900, 25, 25], _
+[3236, "Gravestone Marker", 10, 13, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 2, 0, 0, 0, 3, 3, 8, 35, 35, 15, 15, 0, 0], _
+[3237, "Terminal Velocity", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 2, 0, 0.5, 0, 0, 0, 2, 30, 30, 20, 20, 0, 0], _
+[3238, "Relentless Assault", 15, 19.5, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 2, 0, 0, 0, 20, 20, 10, 20, 20, 3, 3, 0, 0], _
+[3239, "Natures Blessing", 10, 13, 0, 3, 0, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0.75, 10, 10, 20, 50, 50, 1, 1, 1000, 0], _
+[3240, "Find Their Weakness Thackeray", 10, 13, 0, 15, 0, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 3, 2, 0, 0, 0, 20, 20, 15, 20, 20, 50, 50, 0, 0], _
+[3241, "Theres Nothing to Fear Thackeray", 15, 19.5, 0, 15, 0, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 0, 2, 0, 0, 0, 60, 60, 20, 10, 10, 35, 35, 1000, 0], _
+[3242, "Coming of Spring", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 2, 51, 3433, 0, 6, 2, 0, 4, 0.75, 0, 0, 10, 50, 50, 50, 50, 0, 0], _
+[3243, "Promise of Death", 5, 6.5, 0, 4, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 5, 2, 0, 0.75, 0.75, 10, 10, 15, 0, 0, 0, 0, 0, 0], _
+[3244, "Withering Blade", 5, 6.5, 0, 14, 0, 2, 0, 0, 0, 8, 7, 51, 3433, 2, 5, 2, 0, 0, 0, 0, 0, 5, 50, 50, 20, 20, 0, 0], _
+[3245, "Deaths Embrace", 5, 6.5, 0, 5, 0, 0, 4096, 0, 0, 0, 7, 51, 3433, 0, 5, 2, 0, 0, 0.75, 0, 0, 15, 250, 250, 0, 0, 0, 0], _
+[3246, "Venom Fang", 5, 6.5, 0, 14, 32768, 4, 0, 0, 0, 8, 7, 51, 3433, 3, 5, 2, 0, 0, 0, 0, 0, 8, 80, 80, 20, 20, 0, 0], _
+[3247, "Survivors Will", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 7, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 25, 90, 90, 50, 50, 0, 0], _
+[3248, "Keiran Thackeray disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3249, "Rain of Arrows", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 2, 2, 51, 3433, 0, 5, 2, 0, 1, 0, 0, 0, 4, 3, 3, 20, 20, 240, 0], _
+[3250, "Unknow", 10, 13, 0, 14, 0, 2, 514, 0, 0, 8, 7, 29, 3433, 2, 5, 2, 0, 0, 0, 1, 10, 10, 0, 0, 0, 0, 0, 0], _
+[3251, "Fox Fangs PvP", 5, 6.5, 2, 14, 4194304, 2, 0, 0, 0, 8, 7, 29, 780, 2, 5, 0, 0, 0.5, 0, 0, 0, 6, 10, 25, 0, 0, 0, 0], _
+[3252, "Wild Strike PvP", 5, 6.5, 2, 14, 4194304, 2, 0, 0, 0, 8, 7, 29, 1022, 2, 5, 0, 0, 0, 0, 0, 0, 6, 10, 35, 0, 0, 0, 0], _
+[3253, "Ultra Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.25, 0, 0, 0, 100, 100, 1, 1, 1400, 0], _
+[3254, "Blizzard", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 100, 1, 0.75, 10, 10, 8, 50, 50, 5, 5, 312, 0], _
+[3255, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 3, 15, 15, 0, 0], _
+[3256, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 3, 15, 15, 0, 0], _
+[3257, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 3, 15, 15, 0, 0], _
+[3258, "Unknow", 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 3, 15, 15, 0, 0], _
+[3259, "Ultra Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.25, 0, 0, 0, 100, 100, 1, 1, 1400, 0], _
+[3260, "Ultra Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.25, 0, 0, 0, 100, 100, 1, 1, 1400, 0], _
+[3261, "Ultra Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.25, 0, 0, 0, 100, 100, 1, 1, 1400, 0], _
+[3262, "Ultra Snowball", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.25, 0.25, 0, 0, 0, 100, 100, 1, 1, 1400, 0], _
+[3263, "Banishing Strike PvP", 5, 6.5, 3, 14, 4194304, 0, 0, 0, 0, 185, 10, 44, 1483, 0, 5, 0, 0, 0, 0, 0, 0, 3, 0, 0, 10, 60, 240, 0], _
+[3264, "Twin Moon Sweep PvP", 0, 0, 3, 14, 4194304, 0, 0, 8192, 0, 185, 10, 41, 1487, 0, 5, 0, 160, 0, 0, 0, 0, 0, 10, 20, 10, 30, 25, 0], _
+[3265, "Irresistible Sweep PvP", 0, 0, 3, 14, 4194304, 0, 0, 8192, 0, 32, 10, 41, 1489, 0, 5, 0, 120, 0, 0, 0, 0, 0, 3, 15, 0, 0, 0, 0], _
+[3266, "Pious Assault PvP", 5, 6.5, 3, 14, 4194304, 0, 0, 8192, 0, 185, 10, 41, 1490, 0, 5, 0, 0, 0, 0, 5, 20, 12, 0, 0, 10, 30, 156, 75], _
+[3267, "Ebon Dust Aura PvP", 10, 13, 3, 6, 4194308, 0, 2, 0, 0, 0, 10, 43, 1760, 0, 0, 0, 0, 0.25, 0.75, 5, 35, 20, 0, 0, 3, 8, 0, 0], _
+[3268, "Heart of Holy Flame PvP", 5, 6.5, 3, 6, 12582912, 0, 4, 512, 0, 0, 10, 44, 1507, 0, 0, 0, 0, 0, 0, 30, 30, 10, 5, 30, 1, 4, 240, 0], _
+[3269, "Guiding Hands PvP", 10, 13, 3, 6, 4194304, 0, 0, 0, 0, 0, 10, 42, 1513, 0, 0, 0, 0, 0.25, 0.75, 20, 20, 30, 0, 3, 0, 0, 0, 0], _
+[3270, "Avatar of Dwayna PvP", 5, 6.5, 3, 26, 4194308, 0, 0, 0, 0, 0, 10, 44, 1519, 0, 0, 0, 0, 2, 0.75, 10, 90, 20, 0, 0, 5, 50, 5, 0], _
+[3271, "Avatar of Melandru PvP", 5, 6.5, 3, 26, 4194308, 0, 0, 0, 0, 0, 10, 44, 1522, 0, 0, 0, 0, 2, 0.75, 10, 90, 20, 100, 100, 30, 30, 5, 2], _
+[3272, "Mystic Healing PvP", 5, 6.5, 3, 5, 4194304, 0, 0, 0, 0, 0, 10, 42, 1527, 0, 0, 0, 0, 1, 0.75, 0, 0, 20, 5, 65, 5, 65, 5000, 0], _
+[3273, "Signet of Pious Restraint PvP", 0, 0, 4, 7, 4194304, 0, 8, 8192, 0, 0, 10, 42, 2014, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 5, 15, 75, 75, 0, 0], _
+[3274, "Vanguard Initiate", 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3275, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 2, 2, 0, 0, 0, 0], _
+[3276, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 15, 15, 0, 0, 0, 0], _
+[3277, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 50, 50, 0, 0, 0, 0], _
+[3278, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 0, 0, 0, 0], _
+[3279, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 0, 0, 0, 0], _
+[3280, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 0, 0, 0, 0], _
+[3281, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 0, 0, 0, 0], _
+[3282, "Victorious Renewal", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 50, 50, 0, 0, 0, 0], _
+[3283, "A Dying Curse", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 85, 85, 15, 15, 0, 0], _
+[3284, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 15, 15, 0, 0, 0, 0], _
+[3285, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 33, 33, 33, 33, 0, 0], _
+[3286, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 10, 10, 0, 0, 0, 0], _
+[3287, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 0, 0, 0, 0], _
+[3288, "Rage of the Djinn", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 10, 10, 0, 0, 0, 0], _
+[3289, "Fevered Dreams PvP", 10, 13, 1, 4, 4194308, 0, 0, 0, 0, 0, 5, 1, 55, 0, 5, 0, 0, 2, 0.75, 5, 15, 20, 0, 0, 1, 3, 312, 0], _
+[3290, "Stun Grenade", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 0, 0.5, 0.75, 0, 0, 15, 50, 50, 10, 10, 156, 312], _
+[3291, "Fragmentation Grenade", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 0, 0.5, 0.75, 0, 0, 8, 100, 100, 5, 5, 156, 240], _
+[3292, "Tear Gas", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 16, 2, 0, 0.5, 0.75, 10, 10, 20, 50, 50, 10, 10, 156, 312], _
+[3293, "Land Mine", 10, 13, 0, 21, 256, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 2, 0.75, 60, 60, 30, 500, 500, 0, 0, 240, 240], _
+[3294, "Riot Shield", 5, 6.5, 0, 3, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 25, 100, 100, 0, 0, 0, 0], _
+[3295, "Club Strike", 0, 0, 0, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 2, 75, 0, 0, 0, 0, 0, 25, 25, 25, 25, 0, 0], _
+[3296, "Bludgeon", 0, 0, 0, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 2, 150, 0, 0, 10, 10, 0, 50, 50, 50, 50, 0, 0], _
+[3297, "Tango Down", 5, 6.5, 0, 15, 4, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 5, 5, 15, 6, 6, 25, 25, 1000, 1], _
+[3298, "Ill Be Back", 5, 6.5, 0, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 15, 15, 45, 500, 500, 0, 0, 0, 0], _
+[3299, "Phased Plasma Burst", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 6, 100, 100, 50, 50, 240, 0], _
+[3300, "Plasma Shot", 5, 6.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.5, 0.75, 0, 0, 4, 75, 75, 0, 0, 0, 0], _
+[3301, "Annihilator Bash", 0, 0, 0, 14, 0, 0, 0, 0, 0, 185, 0, 51, 3433, 0, 5, 2, 50, 0, 0.75, 0, 0, 0, 50, 50, 0, 0, 0, 0], _
+[3302, "Sky Net", 10, 13, 0, 4, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0.5, 0.5, 10, 10, 20, 70, 70, 0, 0, 156, 700], _
+[3303, "Damage Assessment", 10, 13, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 0, 1, 0, 0, 10, 0, 0, 0, 0, 0, 0], _
+[3304, "Going Commando", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3305, "Unknow", 0, 0, 0, 10, 16777216, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3306, "Koss Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3307, "Dunkoro Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3308, "Melonni Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3309, "Acolyte Jin Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3310, "Acolyte Sousuke Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3311, "Tahlkora Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3312, "Zhed Shadowhoof Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3313, "Margrid the Sly Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3314, "Master of Whispers Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3315, "Goren Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3316, "Norgu Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3317, "Morgahn Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3318, "Razah Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3319, "Olias Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3320, "Zenmai Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3321, "Ogden Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3322, "Vekk Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3323, "Gwen Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3324, "Xandra Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3325, "Kahmu Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3326, "Jora Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3327, "Pyre Fierceshot Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3328, "Anton Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3329, "Hayda Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3330, "Livia Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3331, "Keiran Thackeray Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3332, "Miku Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3333, "MOX Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3334, "Shiro Tagachi Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3335, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3336, "Prince Rurik Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3337, "Margonite Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3338, "Destroyer Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3339, "Queen Salma Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3340, "Slightly Mad King Thorn Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3341, "Kuunavang Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3342, "Lone Wolf", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 10, 10, 10, 10, 1000, 0], _
+[3343, "Stand Together", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 15, 15, 5, 5, 156, 0], _
+[3344, "Unyielding Spirit", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 1, 1, 0, 0, 0, 0], _
+[3345, "Reckless Advance", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 10, 10, 0, 0, 0, 0], _
+[3346, "Aura of Thorns PvP", 10, 13, 3, 6, 12582912, 0, 9, 512, 0, 0, 10, 43, 1495, 0, 0, 0, 0, 0, 0, 30, 30, 10, 3, 8, 5, 15, 240, 0], _
+[3347, "Dust Cloak PvP", 10, 13, 3, 6, 12582912, 0, 2, 512, 0, 0, 10, 43, 1497, 0, 0, 0, 0, 0, 0, 30, 30, 10, 10, 40, 1, 4, 240, 0], _
+[3348, "Lyssas Haste PvP", 10, 13, 3, 6, 12582976, 0, 0, 512, 0, 0, 10, 42, 1512, 0, 0, 0, 0, 0, 0, 3, 15, 25, 33, 33, 0, 0, 156, 0], _
+[3349, "Knight Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3350, "Lord Archer Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3351, "Bodyguard Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3352, "Guild Thief Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3353, "Ghostly Priest Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3354, "Flame Sentinel Form", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3355, "Unknow", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3356, "Solidarity", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 20, 20, 0, 0, 312, 0], _
+[3357, "There Can Be Only One", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 30, 30, 5, 5, 0, 0], _
+[3358, "Fight Against Despair", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 5, 5, 0, 0, 0, 0], _
+[3359, "Deaths Succor", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 20, 20, 5, 5, 1000, 0], _
+[3360, "Battle of Attrition", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 2, 2, 60, 60, 0, 0], _
+[3361, "Fight or Flight", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 20, 20, 20, 20, 0, 0], _
+[3362, "Renewing Escape", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 5, 5, 1, 1, 1000, 0], _
+[3363, "Battle Frenzy", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 25, 25, 50, 50, 0, 0], _
+[3364, "The Way of One", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 10, 10, 2, 2, 1000, 0], _
+[3365, "Onslaught PvP", 10, 13, 3, 6, 12582916, 0, 0, 0, 0, 0, 10, 42, 1754, 0, 0, 0, 0, 0, 0, 2, 8, 10, 25, 25, 0, 0, 0, 25], _
+[3366, "Heart of Fury PvP", 0, 0, 3, 3, 4194304, 0, 0, 0, 0, 0, 10, 44, 1762, 0, 0, 0, 100, 0, 0, 2, 10, 6, 25, 25, 0, 0, 0, 25], _
+[3367, "Wounding Strike PvP", 5, 6.5, 3, 14, 4194308, 0, 17, 8192, 0, 32, 10, 41, 1536, 0, 5, 0, 0, 0, 0, 0, 0, 3, 5, 20, 0, 0, 0, 0], _
+[3368, "Pious Fury PvP", 5, 6.5, 4, 3, 4194304, 0, 0, 8192, 0, 0, 10, 44, 2146, 0, 0, 0, 0, 0, 0, 1, 5, 15, 25, 25, 0, 0, 0, 0], _
+[3369, "Party Mode", 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 600, 600, 0, 25, 25, 0, 0, 0, 0], _
+[3370, "Smash of the Titans", 10, 13, 1, 10, 2, 0, 128, 0, 0, 0, 0, 51, 3433, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 150, 150, 0, 0, 156, 0], _
+[3371, "Mirror Shatter", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 1, 0.75, 0, 0, 30, 0, 0, 0, 0, 0, 0], _
+[3372, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 196608, 196608, 0, 30, 30, 0, 0, 0, 0], _
+[3373, "Illusion of Haste PvP", 5, 6.5, 0, 6, 4194304, 0, 0, 0, 0, 0, 5, 1, 37, 0, 0, 0, 0, 1, 0.75, 5, 11, 8, 33, 33, 3, 3, 0, 0], _
+[3374, "Illusion of Pain PvP", 10, 13, 2, 4, 4194816, 0, 0, 0, 0, 0, 5, 1, 879, 0, 5, 0, 0, 2, 0.75, 8, 8, 5, 3, 10, 36, 120, 0, 0], _
+[3375, "Aura of Restoration PvP", 5, 6.5, 0, 6, 4194304, 0, 0, 0, 0, 0, 6, 12, 180, 0, 0, 0, 0, 0.25, 0.75, 60, 60, 20, 200, 400, 0, 1, 0, 0], _
+[3376, "Shapeshift", 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 15, 15, 20, 15, 15, 0, 0, 0, 0], _
+[3377, "GOLEM disguise", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3378, "Phase Shield", 15, 19.5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 1, 0.75, 20, 20, 40, 250, 250, 0, 0, 312, 0], _
+[3379, "Reactor Burst", 10, 13, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0.75, 0.75, 0, 0, 10, 150, 150, 3, 3, 156, 0], _
+[3380, "Ill Be Back", 5, 6.5, 0, 15, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 10, 10, 30, 500, 500, 0, 0, 0, 0], _
+[3381, "Annihilator Strike", 5, 6.5, 0, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 2, 0, 1, 0, 0, 0, 5, 75, 75, 0, 0, 0, 0], _
+[3382, "Annihilator Beam", 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 200, 2, 0.75, 0, 0, 0, 300, 300, 0, 0, 312, 5], _
+[3383, "Annihilator Knuckle", 0, 0, 0, 14, 0, 0, 0, 0, 0, 255, 0, 51, 3433, 0, 5, 2, 80, 0, 0, 0, 0, 0, 80, 80, 0, 0, 156, 0], _
+[3384, "Annihilator Toss", 5, 6.5, 0, 10, 2, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 2, 0, 1, 0.75, 0, 0, 15, 150, 150, 0, 0, 0, 0], _
+[3385, "Unknow", 0, 0, 0, 17, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3386, "Web of Disruption PvP", 10, 13, 3, 4, 4194304, 0, 0, 1, 0, 0, 5, 51, 1344, 0, 5, 0, 0, 0.25, 0.75, 10, 10, 15, 0, 0, 0, 0, 0, 0], _
+[3387, "Chain Combo", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 5, 5, 30, 30, 0, 0], _
+[3388, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 1, 1, 2, 2, 0, 0], _
+[3389, "Unknow", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 1, 1, 20, 20, 0, 0], _
+[3390, "All In", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 3, 3, 25, 25, 100, 0], _
+[3391, "Jack of All Trades", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 15, 15, 25, 25, 20, 0], _
+[3392, "Amateur Hour", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 30, 30, 0, 0, 0, 0], _
+[3393, "Odrans Razor", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3394, "Like a Boss", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 33, 33, 20, 20, 3, 1], _
+[3395, "The Boss", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 33, 33, 20, 20, 3, 1], _
+[3396, "Lightning Hammer PvP", 25, 32.5, 2, 5, 4194304, 0, 0, 0, 0, 0, 6, 8, 865, 0, 5, 0, 0, 2, 0.75, 0, 0, 4, 10, 100, 25, 25, 0, 0], _
+[3397, "Elemental Flame PvP", 10, 13, 3, 6, 4194304, 0, 0, 0, 0, 0, 6, 10, 1663, 0, 0, 0, 0, 1, 0.75, 5, 20, 30, 1, 2, 0, 0, 0, 0], _
+[3398, "Slippery Ground PvP", 5, 6.5, 4, 5, 4194368, 0, 0, 0, 0, 0, 6, 11, 2191, 0, 5, 0, 0, 1, 0.75, 0, 0, 20, 0, 0, 0, 0, 0, 0], _
+[3399, "Disguised when using everlasting tonics except Everlasting Legionnaire Tonic", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3400, "Disguised when using non everlasting tonics", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3401, "Disguised verification requested", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3402, "Tonic Tipsiness", 0, 0, 0, 10, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0], _
+[3403, "Parting Gift", 0, 0, 0, 18, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3404, "Gift of Battle", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 30, 30, 0, 100, 100, 8, 8, 312, 33], _
+[3405, "Rolling Start", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 0, 0, 0, 0, 0, 0], _
+[3406, "Disguised when using Everlasting Legionnaire Tonic", 0, 0, 0, 29, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 2, 0, 0, 0, 3000, 3000, 0, 0, 0, 0, 0, 0, 0], _
+[3407, "Unknow", 0, 0, 0, 16, 17825792, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3408, "Unknow", 0, 0, 0, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3409, "Unknow", 0, 0, 0, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3410, "Unknow", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3411, "Unknow", 0, 0, 0, 5, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 100, 100, 0, 0, 0, 0], _
+[3412, "Unknow", 0, 0, 0, 5, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 200, 200, 0, 0, 0, 0], _
+[3413, "Unknow", 0, 0, 0, 5, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 300, 300, 100, 100, 0, 0], _
+[3414, "Unknow", 0, 0, 0, 5, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 196608, 196608, 0, 400, 400, 200, 200, 0, 0], _
+[3415, "Unknow", 0, 0, 0, 5, 1048576, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 3, 0, 0, 0, 0, 0, 0, 25, 25, 10, 10, 0, 0], _
+[3416, "Unknow", 0, 0, 0, 5, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 10, 0, 0, 0, 0, 999, 999, 0, 0, 0, 0], _
+[3417, "Unknow", 0, 0, 0, 10, 16384, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 1, 2, 0, 100, 0, 0, 0, 0, 999, 999, 0, 0, 0, 0], _
+[3418, "Unknow", 5, 6.5, 0, 10, 33554438, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3419, "Unknow", 5, 6.5, 0, 10, 33554436, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 1, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3420, "Unknow", 5, 6.5, 0, 5, 33554436, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 5, 1, 0, 5, 0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+[3421, "Unknow", 5, 6.5, 0, 5, 33554436, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 1, 0, 10, 0.75, 0, 0, 30, 0, 0, 0, 0, 0, 0], _
+[3422, "Time Ward", 10, 13, 0, 11, 524292, 0, 0, 0, 0, 0, 5, 0, 3433, 0, 0, 1, 0, 2, 0.75, 3, 15, 30, 15, 20, 15, 20, 312, 0], _
+[3423, "Soul Taker", 5, 6.5, 0, 6, 524292, 0, 0, 0, 0, 0, 4, 6, 3433, 0, 0, 1, 0, 1, 0.75, 3, 30, 15, 15, 20, 15, 20, 0, 0], _
+[3424, "Over the Limit", 5, 6.5, 0, 6, 524292, 0, 0, 0, 0, 0, 6, 12, 3433, 0, 0, 1, 0, 1, 0.75, 131072, 131072, 20, 15, 20, 15, 50, 0, 0], _
+[3425, "Judgment Strike", 5, 6.5, 0, 14, 524292, 0, 0, 0, 0, 185, 3, 16, 3433, 0, 5, 1, 0, 1, 0, 0, 0, 8, 13, 30, 0, 0, 156, 0], _
+[3426, "Seven Weapons Stance", 5, 6.5, 0, 3, 524292, 0, 0, 0, 0, 0, 1, 17, 3433, 0, 0, 1, 0, 0, 0, 3, 20, 20, 1, 15, 33, 33, 0, 0], _
+[3427, "Together as One", 10, 13, 0, 15, 524292, 0, 0, 0, 0, 0, 2, 23, 3433, 0, 0, 1, 0, 0, 0, 3, 15, 15, 5, 15, 1, 7, 312, 0], _
+[3428, "Shadow Theft", 5, 6.5, 0, 10, 524292, 0, 0, 0, 0, 0, 7, 35, 3433, 1, 5, 1, 0, 0.25, 0.75, 5, 20, 20, 1, 5, 1, 5, 0, 0], _
+[3429, "Weapons of Three Forges", 10, 13, 0, 25, 524292, 0, 0, 0, 0, 0, 8, 36, 3433, 0, 0, 1, 0, 2, 0.75, 3, 20, 15, 0, 0, 0, 0, 1000, 0], _
+[3430, "Vow of Revolution", 10, 13, 0, 6, 524292, 0, 0, 0, 0, 0, 10, 44, 3433, 0, 0, 1, 0, 1, 0, 3, 10, 20, 1, 5, 0, 0, 0, 0], _
+[3431, "Heroic Refrain", 5, 6.5, 0, 28, 524292, 0, 0, 0, 0, 0, 9, 40, 3433, 0, 3, 1, 0, 1, 0.75, 3, 15, 10, 1, 3, 0, 0, 0, 0], _
+[3432, "unknown", 0, 0, 0, 17, 8192, 0, 0, 0, 0, 0, 0, 51, 3433, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+#EndRegion Skill Array

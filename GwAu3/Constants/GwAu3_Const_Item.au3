@@ -387,225 +387,225 @@ Global Const $GC_S_MOD_MARTIAL_ZEAL 							= "0100C820"	; -1energy regen
 
 #Region ArmorMods (Runes)
 ; Mesmer
-Global Const $GC_S_MOD_MESMER_ARTIFICER 						= "E2010824"	; Artificer Insignia
-Global Const $GC_S_MOD_MESMER_PRODIGY 							= "E3010824"	; Prodigy Insignia
-Global Const $GC_S_MOD_MESMER_VIRTUOSO 							= "E4010824"	; Virtuoso	Insignia
+Global Const $GC_S_INSIGNIA_MESMER_ARTIFICER 					= "E2010824"	; Artificer Insignia
+Global Const $GC_S_INSIGNIA_MESMER_PRODIGY 						= "E3010824"	; Prodigy Insignia
+Global Const $GC_S_INSIGNIA_MESMER_VIRTUOSO 					= "E4010824"	; Virtuoso	Insignia
 
-Global Const $GC_S_MOD_MESMER_MINOR_FAST_CASTING 				= "0100E821"	; Minor FastCasting Rune
-Global Const $GC_S_MOD_MESMER_MINOR_ILLUSION_MAGIC 				= "0101E821"	; Minor IllusionMagic Rune
-Global Const $GC_S_MOD_MESMER_MINOR_DOMINATION_MAGIC 			= "0102E821"	; Minor DominationMagic Rune
-Global Const $GC_S_MOD_MESMER_MINOR_INSPIRATION_MAGIC 			= "0103E821"	; Minor InspirationMagic Rune
-Global Const $GC_S_MOD_MESMER_MAJOR_FAST_CASTING 				= "0200E821"	; Major FastCasting Rune
-Global Const $GC_S_MOD_MESMER_MAJOR_ILLUSION_MAGIC 				= "0201E821"	; Major IllusionMagic Rune
-Global Const $GC_S_MOD_MESMER_MAJOR_DOMINATION_MAGIC 			= "0202E821"	; Major DominationMagic Rune
-Global Const $GC_S_MOD_MESMER_MAJOR_INSPIRATION_MAGIC 			= "0203E821"	; Major InspirationMagic Rune
-Global Const $GC_S_MOD_MESMER_SUPERIOR_FAST_CASTING 			= "0300E821"	; Superior FastCasting Rune
-Global Const $GC_S_MOD_MESMER_SUPERIOR_ILLUSION_MAGIC 			= "0301E821"	; Superior IllusionMagic Rune
-Global Const $GC_S_MOD_MESMER_SUPERIOR_DOMINATION_MAGIC 		= "0302E821"	; Superior DominationMagic Rune
-Global Const $GC_S_MOD_MESMER_SUPERIOR_INSPIRATION_MAGIC 		= "0303E821"	; Superior InspirationMagic Rune
+Global Const $GC_S_RUNE_MESMER_MINOR_FAST_CASTING 				= "0100E821"	; Minor FastCasting Rune
+Global Const $GC_S_RUNE_MESMER_MINOR_ILLUSION_MAGIC 			= "0101E821"	; Minor IllusionMagic Rune
+Global Const $GC_S_RUNE_MESMER_MINOR_DOMINATION_MAGIC 			= "0102E821"	; Minor DominationMagic Rune
+Global Const $GC_S_RUNE_MESMER_MINOR_INSPIRATION_MAGIC 			= "0103E821"	; Minor InspirationMagic Rune
+Global Const $GC_S_RUNE_MESMER_MAJOR_FAST_CASTING 				= "0200E821"	; Major FastCasting Rune
+Global Const $GC_S_RUNE_MESMER_MAJOR_ILLUSION_MAGIC 			= "0201E821"	; Major IllusionMagic Rune
+Global Const $GC_S_RUNE_MESMER_MAJOR_DOMINATION_MAGIC 			= "0202E821"	; Major DominationMagic Rune
+Global Const $GC_S_RUNE_MESMER_MAJOR_INSPIRATION_MAGIC 			= "0203E821"	; Major InspirationMagic Rune
+Global Const $GC_S_RUNE_MESMER_SUPERIOR_FAST_CASTING 			= "0300E821"	; Superior FastCasting Rune
+Global Const $GC_S_RUNE_MESMER_SUPERIOR_ILLUSION_MAGIC 			= "0301E821"	; Superior IllusionMagic Rune
+Global Const $GC_S_RUNE_MESMER_SUPERIOR_DOMINATION_MAGIC 		= "0302E821"	; Superior DominationMagic Rune
+Global Const $GC_S_RUNE_MESMER_SUPERIOR_INSPIRATION_MAGIC 		= "0303E821"	; Superior InspirationMagic Rune
 
 ; Necromancer
-Global Const $GC_S_MOD_NECROMANCER_TORMENTOR 					= "EC010824"	; Tormentor Insignia
-Global Const $GC_S_MOD_NECROMANCER_UNDERTAKER 					= "ED010824"	; Undertaker Insignia
-Global Const $GC_S_MOD_NECROMANCER_BONELACE 					= "EE010824"	; Bonelace Insignia
-Global Const $GC_S_MOD_NECROMANCER_MINION_MASTER 				= "EF010824"	; MinionMaster Insignia
-Global Const $GC_S_MOD_NECROMANCER_BLIGHTER 					= "F0010824"	; Blighter Insignia
-Global Const $GC_S_MOD_NECROMANCER_BLOODSTAINED 				= "0A020824"	; Bloodstained Insignia
+Global Const $GC_S_INSIGNIA_NECROMANCER_TORMENTOR 				= "EC010824"	; Tormentor Insignia
+Global Const $GC_S_INSIGNIA_NECROMANCER_UNDERTAKER 				= "ED010824"	; Undertaker Insignia
+Global Const $GC_S_INSIGNIA_NECROMANCER_BONELACE 				= "EE010824"	; Bonelace Insignia
+Global Const $GC_S_INSIGNIA_NECROMANCER_MINION_MASTER 			= "EF010824"	; MinionMaster Insignia
+Global Const $GC_S_INSIGNIA_NECROMANCER_BLIGHTER 				= "F0010824"	; Blighter Insignia
+Global Const $GC_S_INSIGNIA_NECROMANCER_BLOODSTAINED 			= "0A020824"	; Bloodstained Insignia
 
-Global Const $GC_S_MOD_NECROMANCER_MINOR_BLOOD_MAGIC 			= "0104E821"	; Minor BloodMagic Rune
-Global Const $GC_S_MOD_NECROMANCER_MINOR_DEATH_MAGIC 			= "0105E821"	; Minor DeathMagic Rune
-Global Const $GC_S_MOD_NECROMANCER_MINOR_SOUL_REAPING 			= "0106E821"	; Minor SoulReaping Rune
-Global Const $GC_S_MOD_NECROMANCER_MINOR_CURSES		 			= "0107E821"	; Minor Curses Rune
-Global Const $GC_S_MOD_NECROMANCER_MAJOR_BLOOD_MAGIC 			= "0204E821"	; Major BloodMagic Rune
-Global Const $GC_S_MOD_NECROMANCER_MAJOR_DEATH_MAGIC 			= "0205E821"	; Major DeathMagic Rune
-Global Const $GC_S_MOD_NECROMANCER_MAJOR_SOUL_REAPING 			= "0206E821"	; Major SoulReaping Rune
-Global Const $GC_S_MOD_NECROMANCER_MAJOR_CURSES		 			= "0207E821"	; Major Curses Rune
-Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_BLOOD_MAGIC 		= "0304E821"	; Superior BloodMagic Rune
-Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_DEATH_MAGIC  		= "0305E821"	; Superior DeathMagic Rune
-Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_SOUL_REAPING	 	= "0306E821"	; Superior SoulReaping Rune
-Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_CURSES			 	= "0307E821"	; Superior Curses Rune
+Global Const $GC_S_RUNE_NECROMANCER_MINOR_BLOOD_MAGIC 			= "0104E821"	; Minor BloodMagic Rune
+Global Const $GC_S_RUNE_NECROMANCER_MINOR_DEATH_MAGIC 			= "0105E821"	; Minor DeathMagic Rune
+Global Const $GC_S_RUNE_NECROMANCER_MINOR_SOUL_REAPING 			= "0106E821"	; Minor SoulReaping Rune
+Global Const $GC_S_RUNE_NECROMANCER_MINOR_CURSES		 		= "0107E821"	; Minor Curses Rune
+Global Const $GC_S_RUNE_NECROMANCER_MAJOR_BLOOD_MAGIC 			= "0204E821"	; Major BloodMagic Rune
+Global Const $GC_S_RUNE_NECROMANCER_MAJOR_DEATH_MAGIC 			= "0205E821"	; Major DeathMagic Rune
+Global Const $GC_S_RUNE_NECROMANCER_MAJOR_SOUL_REAPING 			= "0206E821"	; Major SoulReaping Rune
+Global Const $GC_S_RUNE_NECROMANCER_MAJOR_CURSES		 		= "0207E821"	; Major Curses Rune
+Global Const $GC_S_RUNE_NECROMANCER_SUPERIOR_BLOOD_MAGIC 		= "0304E821"	; Superior BloodMagic Rune
+Global Const $GC_S_RUNE_NECROMANCER_SUPERIOR_DEATH_MAGIC  		= "0305E821"	; Superior DeathMagic Rune
+Global Const $GC_S_RUNE_NECROMANCER_SUPERIOR_SOUL_REAPING	 	= "0306E821"	; Superior SoulReaping Rune
+Global Const $GC_S_RUNE_NECROMANCER_SUPERIOR_CURSES			 	= "0307E821"	; Superior Curses Rune
 
 ; Elementalist
-Global Const $GC_S_MOD_ELEMENTALIST_PRISMATIC 					= "F1010824"	; Prismatic Insignia
-Global Const $GC_S_MOD_ELEMENTALIST_HYDROMANCER 				= "F2010824"	; Hydromancer Insignia
-Global Const $GC_S_MOD_ELEMENTALIST_GEOMANCER 					= "F3010824"	; Geomancer Insignia
-Global Const $GC_S_MOD_ELEMENTALIST_PYROMANCER 					= "F4010824"	; Pyromancer Insignia
-Global Const $GC_S_MOD_ELEMENTALIST_AEROMANCER 					= "F5010824"	; Aeromancer Insignia
+Global Const $GC_S_INSIGNIA_ELEMENTALIST_PRISMATIC 				= "F1010824"	; Prismatic Insignia
+Global Const $GC_S_INSIGNIA_ELEMENTALIST_HYDROMANCER 			= "F2010824"	; Hydromancer Insignia
+Global Const $GC_S_INSIGNIA_ELEMENTALIST_GEOMANCER 				= "F3010824"	; Geomancer Insignia
+Global Const $GC_S_INSIGNIA_ELEMENTALIST_PYROMANCER 			= "F4010824"	; Pyromancer Insignia
+Global Const $GC_S_INSIGNIA_ELEMENTALIST_AEROMANCER 			= "F5010824"	; Aeromancer Insignia
 
-Global Const $GC_S_MOD_WARRIOR_MINOR_AIR_MAGIC					= "0108E821"	; Minor AirMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_EARTH_MAGIC				= "0109E821"	; Minor EarthMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_FIRE_MAGIC					= "010AE821"	; Minor FireMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_WATER_MAGIC 				= "010BE821"	; Minor WaterMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_ENERGY_STORAGE 			= "010CE821"	; Minor EnergyStorage Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_AIR_MAGIC					= "0208E821"	; Major AirMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_EARTH_MAGIC				= "0209E821"	; Major EarthMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_FIRE_MAGIC 				= "020AE821"	; Major FireMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_WATER_MAGIC				= "020BE821"	; Major WaterMagic Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_ENERGY_STORAGE 			= "020CE821"	; Major EnergyStorage Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_AIR_MAGIC 				= "0308E821"	; Superior AirMagic Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_EARTH_MAGIC				= "0309E821"	; Superior EarthMagic Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_FIRE_MAGIC 				= "030AE821"	; Superior FireMagic Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_WATER_MAGIC 			= "030BE821"	; Superior WaterMagic Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_ENERGY_STORAGE 			= "030CE821"	; Superior EnergyStorage Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_AIR_MAGIC					= "0108E821"	; Minor AirMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_EARTH_MAGIC				= "0109E821"	; Minor EarthMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_FIRE_MAGIC				= "010AE821"	; Minor FireMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_WATER_MAGIC 				= "010BE821"	; Minor WaterMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_ENERGY_STORAGE 			= "010CE821"	; Minor EnergyStorage Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_AIR_MAGIC					= "0208E821"	; Major AirMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_EARTH_MAGIC				= "0209E821"	; Major EarthMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_FIRE_MAGIC 				= "020AE821"	; Major FireMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_WATER_MAGIC				= "020BE821"	; Major WaterMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_ENERGY_STORAGE 			= "020CE821"	; Major EnergyStorage Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_AIR_MAGIC 				= "0308E821"	; Superior AirMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_EARTH_MAGIC			= "0309E821"	; Superior EarthMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_FIRE_MAGIC 			= "030AE821"	; Superior FireMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_WATER_MAGIC 			= "030BE821"	; Superior WaterMagic Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_ENERGY_STORAGE 		= "030CE821"	; Superior EnergyStorage Rune
 
 ; Monk
-Global Const $GC_S_MOD_MONK_WANDERER 							= "F6010824"	; Wanderer Insignia
-Global Const $GC_S_MOD_MONK_DISCIPLE 							= "F7010824"	; Disciple Insignia
-Global Const $GC_S_MOD_MONK_ANCHORITE 							= "F8010824"	; Anchorite Insignia
+Global Const $GC_S_INSIGNIA_MONK_WANDERER 						= "F6010824"	; Wanderer Insignia
+Global Const $GC_S_INSIGNIA_MONK_DISCIPLE 						= "F7010824"	; Disciple Insignia
+Global Const $GC_S_INSIGNIA_MONK_ANCHORITE 						= "F8010824"	; Anchorite Insignia
 
-Global Const $GC_S_MOD_MONK_MINOR_HEALING_PRAYERS 				= "010DE821"	; Minor HealingPrayers Rune
-Global Const $GC_S_MOD_MONK_MINOR_SMITING_PRAYERS 				= "010EE821"	; Minor SmitingPrayers Rune
-Global Const $GC_S_MOD_MONK_MINOR_PROTECTION_PRAYERS 			= "010FE821"	; Minor ProtectionPrayers Rune
-Global Const $GC_S_MOD_MONK_MINOR_DIVINE_FAVOR		 			= "0110E821"	; Minor DivineFavor Rune
-Global Const $GC_S_MOD_MONK_MAJOR_HEALING_PRAYERS				= "020DE821"	; Major HealingPrayers Rune
-Global Const $GC_S_MOD_MONK_MAJOR_MINOR_SMITING_PRAYERS			= "020EE821"	; Major SmitingPrayers Rune
-Global Const $GC_S_MOD_MONK_MAJOR_PROTECTION_PRAYERSC 			= "020FE821"	; Major ProtectionPrayers Rune
-Global Const $GC_S_MOD_MONK_MAJOR_DIVINE_FAVOR 					= "0210E821"	; Major DivineFavor Rune
-Global Const $GC_S_MOD_MONK_SUPERIOR_HEALING_PRAYERS 			= "030DE821"	; Superior HealingPrayers Rune
-Global Const $GC_S_MOD_MONK_SUPERIOR_MINOR_SMITING_PRAYERS 		= "030EE821"	; Superior SmitingPrayers Rune
-Global Const $GC_S_MOD_MONK_SUPERIOR_PROTECTION_PRAYERS 		= "030FE821"	; Superior ProtectionPrayers Rune
-Global Const $GC_S_MOD_MONK_SUPERIOR_DIVINE_FAVOR 				= "0310E821"	; Superior DivineFavor Rune
+Global Const $GC_S_RUNE_MONK_MINOR_HEALING_PRAYERS 				= "010DE821"	; Minor HealingPrayers Rune
+Global Const $GC_S_RUNE_MONK_MINOR_SMITING_PRAYERS 				= "010EE821"	; Minor SmitingPrayers Rune
+Global Const $GC_S_RUNE_MONK_MINOR_PROTECTION_PRAYERS 			= "010FE821"	; Minor ProtectionPrayers Rune
+Global Const $GC_S_RUNE_MONK_MINOR_DIVINE_FAVOR		 			= "0110E821"	; Minor DivineFavor Rune
+Global Const $GC_S_RUNE_MONK_MAJOR_HEALING_PRAYERS				= "020DE821"	; Major HealingPrayers Rune
+Global Const $GC_S_RUNE_MONK_MAJOR_MINOR_SMITING_PRAYERS		= "020EE821"	; Major SmitingPrayers Rune
+Global Const $GC_S_RUNE_MONK_MAJOR_PROTECTION_PRAYERSC 			= "020FE821"	; Major ProtectionPrayers Rune
+Global Const $GC_S_RUNE_MONK_MAJOR_DIVINE_FAVOR 				= "0210E821"	; Major DivineFavor Rune
+Global Const $GC_S_RUNE_MONK_SUPERIOR_HEALING_PRAYERS 			= "030DE821"	; Superior HealingPrayers Rune
+Global Const $GC_S_RUNE_MONK_SUPERIOR_MINOR_SMITING_PRAYERS 	= "030EE821"	; Superior SmitingPrayers Rune
+Global Const $GC_S_RUNE_MONK_SUPERIOR_PROTECTION_PRAYERS 		= "030FE821"	; Superior ProtectionPrayers Rune
+Global Const $GC_S_RUNE_MONK_SUPERIOR_DIVINE_FAVOR 				= "0310E821"	; Superior DivineFavor Rune
 
 ; Warrior
-Global Const $GC_S_MOD_WARRIOR_KNIGHT 							= "F9010824"	; Knight Insignia
-Global Const $GC_S_MOD_WARRIOR_DREADNOUGHT 						= "FA010824"	; Dreadnought Insignia
-Global Const $GC_S_MOD_WARRIOR_SENTINEL 						= "FB010824"	; Sentinel Insignia
-Global Const $GC_S_MOD_WARRIOR_LIEUTENANT 						= "08020824"	; Lieutenant Insignia
-Global Const $GC_S_MOD_WARRIOR_STONEFIST 						= "09020824"	; Stonefist Insignia
+Global Const $GC_S_INSIGNIA_WARRIOR_KNIGHT 						= "F9010824"	; Knight Insignia
+Global Const $GC_S_INSIGNIA_WARRIOR_DREADNOUGHT 				= "FA010824"	; Dreadnought Insignia
+Global Const $GC_S_INSIGNIA_WARRIOR_SENTINEL 					= "FB010824"	; Sentinel Insignia
+Global Const $GC_S_INSIGNIA_WARRIOR_LIEUTENANT 					= "08020824"	; Lieutenant Insignia
+Global Const $GC_S_INSIGNIA_WARRIOR_STONEFIST 					= "09020824"	; Stonefist Insignia
 
-Global Const $GC_S_MOD_WARRIOR_MINOR_ABSORPTION 				= "FC000824"	; Minor Absorption Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_ABSORPTION 				= "FD000824"	; Major Absorption Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_ABSORPTION 				= "FE000824"	; Superior Absorption Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_ABSORPTION 				= "FC000824"	; Minor Absorption Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_ABSORPTION 				= "FD000824"	; Major Absorption Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_ABSORPTION 			= "FE000824"	; Superior Absorption Rune
 
-Global Const $GC_S_MOD_WARRIOR_MINOR_STRENGHT 					= "0111E821"	; Minor Strenght Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_AXE_MASTERY 				= "0112E821"	; Minor AxeMastery Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_HAMMER_MASTERY 			= "0113E821"	; Minor HammerMastery Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_SWORDSMANSHIP 				= "0114E821"	; Minor Swordsmanship Rune
-Global Const $GC_S_MOD_WARRIOR_MINOR_TACTICS 					= "0115E821"	; Minor Tactics Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_STRENGHT 					= "0211E821"	; Major Strenght Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_AXE_MASTERY 				= "0212E821"	; Major AxeMastery Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_HAMMER_MASTERY 			= "0213E821"	; Major HammerMastery Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_SWORDSMANSHIP 				= "0214E821"	; Major Swordsmanship Rune
-Global Const $GC_S_MOD_WARRIOR_MAJOR_TACTICS 					= "0215E821"	; Major Tactics Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_STRENGHT 				= "0311E821"	; Superior Strenght Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_AXE_MASTERY 			= "0312E821"	; Superior AxeMastery Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_HAMMER_MASTERY 			= "0313E821"	; Superior HammerMastery Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_SWORDSMANSHIP 			= "0314E821"	; Superior Swordsmanship Rune
-Global Const $GC_S_MOD_WARRIOR_SUPERIOR_TACTICS 				= "0315E821"	; Superior Tactics Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_STRENGHT 					= "0111E821"	; Minor Strenght Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_AXE_MASTERY 				= "0112E821"	; Minor AxeMastery Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_HAMMER_MASTERY 			= "0113E821"	; Minor HammerMastery Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_SWORDSMANSHIP 			= "0114E821"	; Minor Swordsmanship Rune
+Global Const $GC_S_RUNE_WARRIOR_MINOR_TACTICS 					= "0115E821"	; Minor Tactics Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_STRENGHT 					= "0211E821"	; Major Strenght Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_AXE_MASTERY 				= "0212E821"	; Major AxeMastery Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_HAMMER_MASTERY 			= "0213E821"	; Major HammerMastery Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_SWORDSMANSHIP 			= "0214E821"	; Major Swordsmanship Rune
+Global Const $GC_S_RUNE_WARRIOR_MAJOR_TACTICS 					= "0215E821"	; Major Tactics Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_STRENGHT 				= "0311E821"	; Superior Strenght Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_AXE_MASTERY 			= "0312E821"	; Superior AxeMastery Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_HAMMER_MASTERY 		= "0313E821"	; Superior HammerMastery Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_SWORDSMANSHIP 			= "0314E821"	; Superior Swordsmanship Rune
+Global Const $GC_S_RUNE_WARRIOR_SUPERIOR_TACTICS 				= "0315E821"	; Superior Tactics Rune
 
 ; Ranger
-Global Const $GC_S_MOD_RANGER_FROSTBOUND 						= "FC010824"	; Frostbound Insignia
-Global Const $GC_S_MOD_RANGER_EARTHBOUND 						= "FD010824"	; Earthbound Insignia
-Global Const $GC_S_MOD_RANGER_PYREBOUND 						= "FE010824"	; Pyrebound Insignia
-Global Const $GC_S_MOD_RANGER_STORMBOUND 						= "FF010824"	; Stormbound Insignia
-Global Const $GC_S_MOD_RANGER_BEASTMASTER 						= "00020824"	; Beastmaster Insignia
-Global Const $GC_S_MOD_RANGER_SCOUT 							= "01020824"	; Scout Insignia
+Global Const $GC_S_INSIGNIA_RANGER_FROSTBOUND 					= "FC010824"	; Frostbound Insignia
+Global Const $GC_S_INSIGNIA_RANGER_EARTHBOUND 					= "FD010824"	; Earthbound Insignia
+Global Const $GC_S_INSIGNIA_RANGER_PYREBOUND 					= "FE010824"	; Pyrebound Insignia
+Global Const $GC_S_INSIGNIA_RANGER_STORMBOUND 					= "FF010824"	; Stormbound Insignia
+Global Const $GC_S_INSIGNIA_RANGER_BEASTMASTER 					= "00020824"	; Beastmaster Insignia
+Global Const $GC_S_INSIGNIA_RANGER_SCOUT 						= "01020824"	; Scout Insignia
 
-Global Const $GC_S_MOD_RANGER_MINOR_BEAST_MASTERY 				= "0116E821"	; Minor BeastMastery Rune
-Global Const $GC_S_MOD_RANGER_MINOR_EXPERTISE 					= "0117E821"	; Minor Expertise Rune
-Global Const $GC_S_MOD_RANGER_MINOR_WILDERNESS_SURVIVAL 		= "0118E821"	; Minor WildernessSurvival Rune
-Global Const $GC_S_MOD_RANGER_MINOR_MARKSMANSHIP 				= "0119E821"	; Minor Marksmanship Rune
-Global Const $GC_S_MOD_RANGER_MAJOR_BEAST_MASTERY 				= "0216E821"	; Major BeastMastery Rune
-Global Const $GC_S_MOD_RANGER_MAJOR_EXPERTISE 					= "0217E821"	; Major Expertise Rune
-Global Const $GC_S_MOD_RANGER_MAJOR_WILDERNESS_SURVIVAL 		= "0218E821"	; Major WildernessSurvival Rune
-Global Const $GC_S_MOD_RANGER_MAJOR_MARKSMANSHIP 				= "0219E821"	; Major Marksmanship Rune
-Global Const $GC_S_MOD_RANGER_SUPERIOR_BEAST_MASTERY 			= "0316E821"	; Superior BeastMastery Rune
-Global Const $GC_S_MOD_RANGER_SUPERIOR_EXPERTISE 				= "0317E821"	; Superior Expertise Rune
-Global Const $GC_S_MOD_RANGER_SUPERIOR_WILDERNESS_SURVIVAL 		= "0318E821"	; Superior WildernessSurvival Rune
-Global Const $GC_S_MOD_RANGER_SUPERIOR_MARKSMANSHIP 			= "0319E821"	; Superior Marksmanship Rune
+Global Const $GC_S_RUNE_RANGER_MINOR_BEAST_MASTERY 				= "0116E821"	; Minor BeastMastery Rune
+Global Const $GC_S_RUNE_RANGER_MINOR_EXPERTISE 					= "0117E821"	; Minor Expertise Rune
+Global Const $GC_S_RUNE_RANGER_MINOR_WILDERNESS_SURVIVAL 		= "0118E821"	; Minor WildernessSurvival Rune
+Global Const $GC_S_RUNE_RANGER_MINOR_MARKSMANSHIP 				= "0119E821"	; Minor Marksmanship Rune
+Global Const $GC_S_RUNE_RANGER_MAJOR_BEAST_MASTERY 				= "0216E821"	; Major BeastMastery Rune
+Global Const $GC_S_RUNE_RANGER_MAJOR_EXPERTISE 					= "0217E821"	; Major Expertise Rune
+Global Const $GC_S_RUNE_RANGER_MAJOR_WILDERNESS_SURVIVAL 		= "0218E821"	; Major WildernessSurvival Rune
+Global Const $GC_S_RUNE_RANGER_MAJOR_MARKSMANSHIP 				= "0219E821"	; Major Marksmanship Rune
+Global Const $GC_S_RUNE_RANGER_SUPERIOR_BEAST_MASTERY 			= "0316E821"	; Superior BeastMastery Rune
+Global Const $GC_S_RUNE_RANGER_SUPERIOR_EXPERTISE 				= "0317E821"	; Superior Expertise Rune
+Global Const $GC_S_RUNE_RANGER_SUPERIOR_WILDERNESS_SURVIVAL 	= "0318E821"	; Superior WildernessSurvival Rune
+Global Const $GC_S_RUNE_RANGER_SUPERIOR_MARKSMANSHIP 			= "0319E821"	; Superior Marksmanship Rune
 
 ; Assassin
-Global Const $GC_S_MOD_ASSASSIN_VANGUARD 						= "DE010824"	; Vanguard Insignia
-Global Const $GC_S_MOD_ASSASSIN_INFILTRATOR 					= "DF010824"	; Infiltrator Insignia
-Global Const $GC_S_MOD_ASSASSIN_SABOTEUR 						= "E0010824"	; Saboteur Insignia
-Global Const $GC_S_MOD_ASSASSIN_NIGHTSTALKER 					= "E1010824"	; Nightstalker Insignia
+Global Const $GC_S_INSIGNIA_ASSASSIN_VANGUARD 					= "DE010824"	; Vanguard Insignia
+Global Const $GC_S_INSIGNIA_ASSASSIN_INFILTRATOR 				= "DF010824"	; Infiltrator Insignia
+Global Const $GC_S_INSIGNIA_ASSASSIN_SABOTEUR 					= "E0010824"	; Saboteur Insignia
+Global Const $GC_S_INSIGNIA_ASSASSIN_NIGHTSTALKER 				= "E1010824"	; Nightstalker Insignia
 
-Global Const $GC_S_MOD_ASSASSIN_MINOR_DAGGER_MASTERY 			= "011DE821"	; Minor DaggerMastery Rune
-Global Const $GC_S_MOD_ASSASSIN_MINOR_DEADLY_ARTS				= "011EE821"	; Minor DeadlyArts Rune
-Global Const $GC_S_MOD_ASSASSIN_MINOR_SHADOW_ARTS 				= "011FE821"	; Minor ShadowArts Rune
-Global Const $GC_S_MOD_ASSASSIN_MINOR_CRITICAL_STRIKES 			= "0123E821"	; Minor CriticalStrikes Rune
-Global Const $GC_S_MOD_ASSASSIN_MAJOR_DAGGER_MASTERY 			= "021DE821"	; Major DaggerMastery Rune
-Global Const $GC_S_MOD_ASSASSIN_MAJOR_DEADLY_ART 				= "021EE821"	; Major DeadlyArts Rune
-Global Const $GC_S_MOD_ASSASSIN_MAJOR_SHADOW_ARTS 				= "021FE821"	; Major ShadowArts Rune
-Global Const $GC_S_MOD_ASSASSIN_MAJOR_CRITICAL_STRIKES 			= "0223E821"	; Major CriticalStrikes Rune
-Global Const $GC_S_MOD_ASSASSIN_SUPERIOR_DAGGER_MASTERY 		= "031DE821"	; Superior DaggerMastery Rune
-Global Const $GC_S_MOD_ASSASSIN_SUPERIOR_DEADLY_ART				= "031EE821"	; Superior DeadlyArts Rune
-Global Const $GC_S_MOD_ASSASSIN_SUPERIOR_SHADOW_ARTS 			= "031FE821"	; Superior ShadowArts Rune
-Global Const $GC_S_MOD_ASSASSIN_SUPERIOR_CRITICAL_STRIKES 		= "0323E821"	; Superior CriticalStrikes Rune
+Global Const $GC_S_RUNE_ASSASSIN_MINOR_DAGGER_MASTERY 			= "011DE821"	; Minor DaggerMastery Rune
+Global Const $GC_S_RUNE_ASSASSIN_MINOR_DEADLY_ARTS				= "011EE821"	; Minor DeadlyArts Rune
+Global Const $GC_S_RUNE_ASSASSIN_MINOR_SHADOW_ARTS 				= "011FE821"	; Minor ShadowArts Rune
+Global Const $GC_S_RUNE_ASSASSIN_MINOR_CRITICAL_STRIKES 		= "0123E821"	; Minor CriticalStrikes Rune
+Global Const $GC_S_RUNE_ASSASSIN_MAJOR_DAGGER_MASTERY 			= "021DE821"	; Major DaggerMastery Rune
+Global Const $GC_S_RUNE_ASSASSIN_MAJOR_DEADLY_ART 				= "021EE821"	; Major DeadlyArts Rune
+Global Const $GC_S_RUNE_ASSASSIN_MAJOR_SHADOW_ARTS 				= "021FE821"	; Major ShadowArts Rune
+Global Const $GC_S_RUNE_ASSASSIN_MAJOR_CRITICAL_STRIKES 		= "0223E821"	; Major CriticalStrikes Rune
+Global Const $GC_S_RUNE_ASSASSIN_SUPERIOR_DAGGER_MASTERY 		= "031DE821"	; Superior DaggerMastery Rune
+Global Const $GC_S_RUNE_ASSASSIN_SUPERIOR_DEADLY_ART			= "031EE821"	; Superior DeadlyArts Rune
+Global Const $GC_S_RUNE_ASSASSIN_SUPERIOR_SHADOW_ARTS 			= "031FE821"	; Superior ShadowArts Rune
+Global Const $GC_S_RUNE_ASSASSIN_SUPERIOR_CRITICAL_STRIKES 		= "0323E821"	; Superior CriticalStrikes Rune
 
 ; Ritualist
-Global Const $GC_S_MOD_RITUALIST_SHAMAN 						= "04020824"	; Shaman Insignia
-Global Const $GC_S_MOD_RITUALIST_GHOST_FORGE 					= "05020824"	; GhostForge Insignia
-Global Const $GC_S_MOD_RITUALIST_MYSTIC 						= "06020824"	; Mystic Insignia
+Global Const $GC_S_INSIGNIA_RITUALIST_SHAMAN 					= "04020824"	; Shaman Insignia
+Global Const $GC_S_INSIGNIA_RITUALIST_GHOST_FORGE 				= "05020824"	; GhostForge Insignia
+Global Const $GC_S_INSIGNIA_RITUALIST_MYSTIC 					= "06020824"	; Mystic Insignia
 
-Global Const $GC_S_MOD_RITUALIST_MINOR_COMMUNING 				= "0120E821"	; Minor Communing Rune
-Global Const $GC_S_MOD_RITUALIST_MINOR_RESTORATION_MAGIC 		= "0121E821"	; Minor RestorationMagic Rune
-Global Const $GC_S_MOD_RITUALIST_MINOR_CHANNELING_MAGIC 		= "0122E821"	; Minor ChannelingMagic Rune
-Global Const $GC_S_MOD_RITUALIST_MINOR_SPAWNING_POWER 			= "0124E821"	; Minor SpawningPower Rune
-Global Const $GC_S_MOD_RITUALIST_MAJOR_COMMUNING 				= "0220E821"	; Major Communing Rune
-Global Const $GC_S_MOD_RITUALIST_MAJOR_RESTORATION_MAGIC 		= "0221E821"	; Major RestorationMagic Rune
-Global Const $GC_S_MOD_RITUALIST_MAJOR_CHANNELING_MAGIC 		= "0222E821"	; Major ChannelingMagic Rune
-Global Const $GC_S_MOD_RITUALIST_MAJOR_SPAWNING_POWER 			= "0224E821"	; Major SpawningPower
-Global Const $GC_S_MOD_RITUALIST_SUPERIOR_COMMUNING 			= "0320E821"	; Superior Communing Rune
-Global Const $GC_S_MOD_RITUALIST_SUPERIOR_RESTORATION_MAGIC 	= "0321E821"	; Superior RestorationMagic Rune
-Global Const $GC_S_MOD_RITUALIST_SUPERIOR_CHANNELING_MAGIC 		= "0322E821"	; Superior ChannelingMagic Rune
-Global Const $GC_S_MOD_RITUALIST_SUPERIOR_SPAWNING_POWER 		= "0324E821"	; Superior SpawningPower Rune
+Global Const $GC_S_RUNE_RITUALIST_MINOR_COMMUNING 				= "0120E821"	; Minor Communing Rune
+Global Const $GC_S_RUNE_RITUALIST_MINOR_RESTORATION_MAGIC 		= "0121E821"	; Minor RestorationMagic Rune
+Global Const $GC_S_RUNE_RITUALIST_MINOR_CHANNELING_MAGIC 		= "0122E821"	; Minor ChannelingMagic Rune
+Global Const $GC_S_RUNE_RITUALIST_MINOR_SPAWNING_POWER 			= "0124E821"	; Minor SpawningPower Rune
+Global Const $GC_S_RUNE_RITUALIST_MAJOR_COMMUNING 				= "0220E821"	; Major Communing Rune
+Global Const $GC_S_RUNE_RITUALIST_MAJOR_RESTORATION_MAGIC 		= "0221E821"	; Major RestorationMagic Rune
+Global Const $GC_S_RUNE_RITUALIST_MAJOR_CHANNELING_MAGIC 		= "0222E821"	; Major ChannelingMagic Rune
+Global Const $GC_S_RUNE_RITUALIST_MAJOR_SPAWNING_POWER 			= "0224E821"	; Major SpawningPower
+Global Const $GC_S_RUNE_RITUALIST_SUPERIOR_COMMUNING 			= "0320E821"	; Superior Communing Rune
+Global Const $GC_S_RUNE_RITUALIST_SUPERIOR_RESTORATION_MAGIC 	= "0321E821"	; Superior RestorationMagic Rune
+Global Const $GC_S_RUNE_RITUALIST_SUPERIOR_CHANNELING_MAGIC 	= "0322E821"	; Superior ChannelingMagic Rune
+Global Const $GC_S_RUNE_RITUALIST_SUPERIOR_SPAWNING_POWER 		= "0324E821"	; Superior SpawningPower Rune
 
 ; Paragon
-Global Const $GC_S_MOD_PARAGON_CENTURION						= "07020824"	; Centurion	Insignia
+Global Const $GC_S_INSIGNIA_PARAGON_CENTURION					= "07020824"	; Centurion	Insignia
 
-Global Const $GC_S_MOD_PARAGON_MINOR_SPEAR_MASTERY				= "0125E821"	; Minor SpearMastery Rune
-Global Const $GC_S_MOD_PARAGON_MINOR_COMMAND 					= "0126E821"	; Minor Command Rune
-Global Const $GC_S_MOD_PARAGON_MINOR_MOTIVATION 				= "0127E821"	; Minor Motivation Rune
-Global Const $GC_S_MOD_PARAGON_MINOR_LEADERSHIP					= "0128E821"	; Minor Leadership Rune
-Global Const $GC_S_MOD_PARAGON_MAJOR_SPEAR_MASTERY				= "0225E821"	; Major SpearMastery Rune
-Global Const $GC_S_MOD_PARAGON_MAJOR_COMMAND  					= "0226E821"	; Major Command Rune
-Global Const $GC_S_MOD_PARAGON_MAJOR_MOTIVATION 				= "0227E821"	; Major Motivation Rune
-Global Const $GC_S_MOD_PARAGON_MAJOR_LEADERSHIP 				= "0228E821"	; Major Leadership Rune
-Global Const $GC_S_MOD_PARAGON_SUPERIOR_SPEAR_MASTERY	 		= "0325E821"	; Superior SpearMastery Rune
-Global Const $GC_S_MOD_PARAGON_SUPERIOR_COMMAND  				= "0326E821"	; Superior Command Rune
-Global Const $GC_S_MOD_PARAGON_SUPERIOR_MOTIVATION 				= "0327E821"	; Superior Motivation Rune
-Global Const $GC_S_MOD_PARAGON_SUPERIOR_LEADERSHIP 				= "0328E821"	; Superior Leadership Rune
+Global Const $GC_S_RUNE_PARAGON_MINOR_SPEAR_MASTERY				= "0125E821"	; Minor SpearMastery Rune
+Global Const $GC_S_RUNE_PARAGON_MINOR_COMMAND 					= "0126E821"	; Minor Command Rune
+Global Const $GC_S_RUNE_PARAGON_MINOR_MOTIVATION 				= "0127E821"	; Minor Motivation Rune
+Global Const $GC_S_RUNE_PARAGON_MINOR_LEADERSHIP				= "0128E821"	; Minor Leadership Rune
+Global Const $GC_S_RUNE_PARAGON_MAJOR_SPEAR_MASTERY				= "0225E821"	; Major SpearMastery Rune
+Global Const $GC_S_RUNE_PARAGON_MAJOR_COMMAND  					= "0226E821"	; Major Command Rune
+Global Const $GC_S_RUNE_PARAGON_MAJOR_MOTIVATION 				= "0227E821"	; Major Motivation Rune
+Global Const $GC_S_RUNE_PARAGON_MAJOR_LEADERSHIP 				= "0228E821"	; Major Leadership Rune
+Global Const $GC_S_RUNE_PARAGON_SUPERIOR_SPEAR_MASTERY	 		= "0325E821"	; Superior SpearMastery Rune
+Global Const $GC_S_RUNE_PARAGON_SUPERIOR_COMMAND  				= "0326E821"	; Superior Command Rune
+Global Const $GC_S_RUNE_PARAGON_SUPERIOR_MOTIVATION 			= "0327E821"	; Superior Motivation Rune
+Global Const $GC_S_RUNE_PARAGON_SUPERIOR_LEADERSHIP 			= "0328E821"	; Superior Leadership Rune
 
 ; Dervish
-Global Const $GC_S_MOD_DERVISH_WINDWALKER						= "02020824"	; Windwalker Insignia
-Global Const $GC_S_MOD_DERVISH_FORSAKEN							= "03020824"	; Forsaken Insignia
+Global Const $GC_S_INSIGNIA_DERVISH_WINDWALKER					= "02020824"	; Windwalker Insignia
+Global Const $GC_S_INSIGNIA_DERVISH_FORSAKEN					= "03020824"	; Forsaken Insignia
 
-Global Const $GC_S_MOD_DERVISH_MINOR_SCYTHE_MASTERY				= "0129E821"	; Minor ScytheMastery Rune
-Global Const $GC_S_MOD_DERVISH_MINOR_WIND_PRAYERS 				= "012AE821"	; Minor WindPrayers Rune
-Global Const $GC_S_MOD_DERVISH_MINOR_EARTH_PRAYERS				= "012BE821"	; Minor EarthPrayers Rune
-Global Const $GC_S_MOD_DERVISH_MINOR_MYSTICISM					= "012CE821"	; Minor Mysticism Rune
-Global Const $GC_S_MOD_DERVISH_MAJOR_SCYTHE_MASTERY				= "0229E821"	; Major ScytheMastery Rune
-Global Const $GC_S_MOD_DERVISH_MAJOR_WIND_PRAYERS  				= "022AE821"	; Major WindPrayers Rune
-Global Const $GC_S_MOD_DERVISH_MAJOR_EARTH_PRAYERS 				= "022BE821"	; Major EarthPrayers Rune
-Global Const $GC_S_MOD_DERVISH_MAJOR_MYSTICISM 					= "022CE821"	; Major Mysticism Rune
-Global Const $GC_S_MOD_DERVISH_SUPERIOR_SCYTHE_MASTERY		 	= "0329E821"	; Superior ScytheMastery Rune
-Global Const $GC_S_MOD_DERVISH_SUPERIOR_WIND_PRAYERS  			= "032AE821"	; Superior WindPrayers Rune
-Global Const $GC_S_MOD_DERVISH_SUPERIOR_EARTH_PRAYERS 			= "032BE821"	; Superior EarthPrayers Rune
-Global Const $GC_S_MOD_DERVISH_SUPERIOR_MYSTICISM 				= "032CE821"	; Superior Mysticism Rune
+Global Const $GC_S_RUNE_DERVISH_MINOR_SCYTHE_MASTERY			= "0129E821"	; Minor ScytheMastery Rune
+Global Const $GC_S_RUNE_DERVISH_MINOR_WIND_PRAYERS 				= "012AE821"	; Minor WindPrayers Rune
+Global Const $GC_S_RUNE_DERVISH_MINOR_EARTH_PRAYERS				= "012BE821"	; Minor EarthPrayers Rune
+Global Const $GC_S_RUNE_DERVISH_MINOR_MYSTICISM					= "012CE821"	; Minor Mysticism Rune
+Global Const $GC_S_RUNE_DERVISH_MAJOR_SCYTHE_MASTERY			= "0229E821"	; Major ScytheMastery Rune
+Global Const $GC_S_RUNE_DERVISH_MAJOR_WIND_PRAYERS  			= "022AE821"	; Major WindPrayers Rune
+Global Const $GC_S_RUNE_DERVISH_MAJOR_EARTH_PRAYERS 			= "022BE821"	; Major EarthPrayers Rune
+Global Const $GC_S_RUNE_DERVISH_MAJOR_MYSTICISM 				= "022CE821"	; Major Mysticism Rune
+Global Const $GC_S_RUNE_DERVISH_SUPERIOR_SCYTHE_MASTERY		 	= "0329E821"	; Superior ScytheMastery Rune
+Global Const $GC_S_RUNE_DERVISH_SUPERIOR_WIND_PRAYERS  			= "032AE821"	; Superior WindPrayers Rune
+Global Const $GC_S_RUNE_DERVISH_SUPERIOR_EARTH_PRAYERS 			= "032BE821"	; Superior EarthPrayers Rune
+Global Const $GC_S_RUNE_DERVISH_SUPERIOR_MYSTICISM 				= "032CE821"	; Superior Mysticism Rune
 
 ; General
-Global Const $GC_S_MOD_GENERAL_RADIANT 							= "E5010824"	; Radiant Insignia
-Global Const $GC_S_MOD_GENERAL_SURVIVOR 						= "E6010824"	; Survivor Insignia
-Global Const $GC_S_MOD_GENERAL_STALWART 						= "E7010824"	; Stalwart Insignia
-Global Const $GC_S_MOD_GENERAL_BRAWLER 							= "E8010824"	; Brawler Insignia
-Global Const $GC_S_MOD_GENERAL_BLESSED 							= "E9010824"	; Blessed Insignia
-Global Const $GC_S_MOD_GENERAL_HERALD 							= "EA010824"	; Herald Insignia
-Global Const $GC_S_MOD_GENERAL_SENTRY 							= "EB010824"	; Sentry Insignia
+Global Const $GC_S_INSIGNIA_GENERAL_RADIANT 					= "E5010824"	; Radiant Insignia
+Global Const $GC_S_INSIGNIA_GENERAL_SURVIVOR 					= "E6010824"	; Survivor Insignia
+Global Const $GC_S_INSIGNIA_GENERAL_STALWART 					= "E7010824"	; Stalwart Insignia
+Global Const $GC_S_INSIGNIA_GENERAL_BRAWLER 					= "E8010824"	; Brawler Insignia
+Global Const $GC_S_INSIGNIA_GENERAL_BLESSED 					= "E9010824"	; Blessed Insignia
+Global Const $GC_S_INSIGNIA_GENERAL_HERALD 						= "EA010824"	; Herald Insignia
+Global Const $GC_S_INSIGNIA_GENERAL_SENTRY 						= "EB010824"	; Sentry Insignia
 
-Global Const $GC_S_MOD_GENERAL_ATTUNEMENT 						= "11020824"	; Attunement Rune
-Global Const $GC_S_MOD_GENERAL_VITAE							= "12020824"	; Vitae Rune
-Global Const $GC_S_MOD_GENERAL_RECOVERY							= "13020824"	; Recovery Rune
-Global Const $GC_S_MOD_GENERAL_RESTORATION						= "14020824"	; Restoration Rune
-Global Const $GC_S_MOD_GENERAL_CLARITY 							= "15020824"	; Clarity Rune
-Global Const $GC_S_MOD_GENERAL_PURITY							= "16020824"	; Purity Rune
+Global Const $GC_S_RUNE_GENERAL_ATTUNEMENT 						= "11020824"	; Attunement Rune
+Global Const $GC_S_RUNE_GENERAL_VITAE							= "12020824"	; Vitae Rune
+Global Const $GC_S_RUNE_GENERAL_RECOVERY						= "13020824"	; Recovery Rune
+Global Const $GC_S_RUNE_GENERAL_RESTORATION						= "14020824"	; Restoration Rune
+Global Const $GC_S_RUNE_GENERAL_CLARITY 						= "15020824"	; Clarity Rune
+Global Const $GC_S_RUNE_GENERAL_PURITY							= "16020824"	; Purity Rune
 
-Global Const $GC_S_MOD_GENERAL_MINOR_VIGOR 						= "FF000824"	; Minor Vigor Rune
-Global Const $GC_S_MOD_GENERAL_MAJOR_VIGOR 						= "00010824"	; Major Vigor Rune
-Global Const $GC_S_MOD_GENERAL_SUPERIOR_VIGOR 					= "01010824"	; Superior Vigor Rune
+Global Const $GC_S_RUNE_GENERAL_MINOR_VIGOR 					= "FF000824"	; Minor Vigor Rune
+Global Const $GC_S_RUNE_GENERAL_MAJOR_VIGOR 					= "00010824"	; Major Vigor Rune
+Global Const $GC_S_RUNE_GENERAL_SUPERIOR_VIGOR 					= "01010824"	; Superior Vigor Rune
 #EndRegion ArmorMods (Runes)
 
-#Region Consumable Crafter Items
+#Region Consumable Crafted Items
 Global Const $GC_I_MODELID_ESSENCE_OF_CELERITY = 24859
 Global Const $GC_I_MODELID_ARMOR_OF_SALVATION = 24860
 Global Const $GC_I_MODELID_GRAIL_OF_MIGHT = 24861
@@ -628,7 +628,7 @@ Global Const $GC_AI_CONSET[4] = [ 3, _
     $GC_I_MODELID_ARMOR_OF_SALVATION, _
     $GC_I_MODELID_GRAIL_OF_MIGHT _
 ]
-#EndRegion Consumable Crafter Items
+#EndRegion Consumable Crafted Items
 
 #Region Pcons
 Global Const $GC_I_MODELID_PCONS_DRAKE_KABOB = 17060
@@ -663,40 +663,6 @@ Global Const $GC_AI_ALL_PCONS[15] = [ 14, _
     $GC_I_MODELID_PCONS_RED_ROCK _
 ]
 #Endregion Pcons
-
-#Region GC_MODELID_PCONS_EFFECT
-Global Const $GC_I_MODELID_PCONS_DRAKE_KABOB_EFFECT = 1680
-Global Const $GC_I_MODELID_PCONS_SKALEFIN_SOUP_EFFECT = 1681
-Global Const $GC_I_MODELID_PCONS_PAHNAI_SALAD_EFFECT = 1682
-Global Const $GC_I_MODELID_PCONS_CUPCAKE_EFFECT = 1945
-Global Const $GC_I_MODELID_PCONS_PUMPKIN_PIE_EFFECT = 2649
-Global Const $GC_I_MODELID_PCONS_GOLDEN_EGG_EFFECT = 1934
-Global Const $GC_I_MODELID_PCONS_CANDY_CORN_EFFECT = 2604
-Global Const $GC_I_MODELID_PCONS_CANDY_APPLE_EFFECT = 2605
-Global Const $GC_I_MODELID_PCONS_LUNAR_FORTUNE_EFFECT = 1926
-Global Const $GC_I_MODELID_PCONS_LUNAR_FORTUNE_2_EFFECT = 1926
-Global Const $GC_I_MODELID_PCONS_WAR_SUPPLIES_EFFECT = 3174
-Global Const $GC_I_MODELID_PCONS_BLUE_ROCK_EFFECT = 2971
-Global Const $GC_I_MODELID_PCONS_GREEN_ROCK_EFFECT = 2972
-Global Const $GC_I_MODELID_PCONS_RED_ROCK_EFFECT = 2973
-
-Global Const $GC_AI_ALL_PCONS_EFFECTS[15] = [ 14, _
-    $GC_I_MODELID_PCONS_DRAKE_KABOB_EFFECT, _
-    $GC_I_MODELID_PCONS_SKALEFIN_SOUP_EFFECT, _
-    $GC_I_MODELID_PCONS_PAHNAI_SALAD_EFFECT, _
-    $GC_I_MODELID_PCONS_CUPCAKE_EFFECT, _
-    $GC_I_MODELID_PCONS_PUMPKIN_PIE_EFFECT, _
-    $GC_I_MODELID_PCONS_GOLDEN_EGG_EFFECT, _
-    $GC_I_MODELID_PCONS_CANDY_CORN_EFFECT, _
-    $GC_I_MODELID_PCONS_CANDY_APPLE_EFFECT, _
-    $GC_I_MODELID_PCONS_LUNAR_FORTUNE_EFFECT, _
-    $GC_I_MODELID_PCONS_LUNAR_FORTUNE_2_EFFECT, _
-    $GC_I_MODELID_PCONS_WAR_SUPPLIES_EFFECT, _
-    $GC_I_MODELID_PCONS_BLUE_ROCK_EFFECT, _
-    $GC_I_MODELID_PCONS_GREEN_ROCK_EFFECT, _
-    $GC_I_MODELID_PCONS_RED_ROCK_EFFECT _
-]
-#Endregion GC_MODELID_PCONS_EFFECT
 
 #Region DP Removals
 Global Const $GC_I_MODELID_DP_REMOVAL_PEPPERMINT_CC = 6370
