@@ -158,7 +158,7 @@ Global Const $GC_AI_ALL_MATERIALS[37] = [ 36, _
 
 #Region Scrolls
 
-Global Const $GC_I_MODELID_SCROLL_FOW = 948
+Global Const $GC_I_MODELID_SCROLL_FOW = 22280
 Global Const $GC_I_MODELID_SCROLL_URGOZ = 3256
 Global Const $GC_I_MODELID_SCROLL_UNDERWORLD = 3746
 Global Const $GC_I_MODELID_SCROLL_HERO = 5594
@@ -265,7 +265,7 @@ Global Const $GC_S_MOD_STAFF_CURSES20_CASTING 					= "07141822"	; 20% Curses
 Global Const $GC_S_MOD_STAFF_AIR20_CASTING 						= "08141822"	; 20% air
 Global Const $GC_S_MOD_STAFF_EARTH20_CASTING 					= "09141822"	; 20% Earth
 Global Const $GC_S_MOD_STAFF_FIRE20_CASTING 					= "0A141822"	; 20% fire
-Global Const $GC_S_MOD_STAFF_WATER20_CASTING 					= "0B141822"	; 20% water	
+Global Const $GC_S_MOD_STAFF_WATER20_CASTING 					= "0B141822"	; 20% water
 Global Const $GC_S_MOD_STAFF_ENERGY20_CASTING 					= "0C141822"	; 20% Energy Storage (Doesnt drop)
 ; Monk mods
 Global Const $GC_S_MOD_STAFF_HEALING20_CASTING 					= "0D141822"	; 20% healing
@@ -408,7 +408,7 @@ Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_BLOOD_MAGIC 		= "0304E821"	; Superio
 Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_DEATH_MAGIC  		= "0305E821"	; Superior DeathMagic Rune
 Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_SOUL_REAPING	 	= "0306E821"	; Superior SoulReaping Rune
 Global Const $GC_S_MOD_NECROMANCER_SUPERIOR_CURSES			 	= "0307E821"	; Superior Curses Rune
- 
+
 ; Elementalist
 Global Const $GC_S_MOD_ELEMENTALIST_PRISMATIC 					= "F1010824"	; Prismatic Insignia
 Global Const $GC_S_MOD_ELEMENTALIST_HYDROMANCER 				= "F2010824"	; Hydromancer Insignia
@@ -529,7 +529,7 @@ Global Const $GC_S_MOD_RITUALIST_MINOR_SPAWNING_POWER 			= "0124E821"	; Minor Sp
 Global Const $GC_S_MOD_RITUALIST_MAJOR_COMMUNING 				= "0220E821"	; Major Communing Rune
 Global Const $GC_S_MOD_RITUALIST_MAJOR_RESTORATION_MAGIC 		= "0221E821"	; Major RestorationMagic Rune
 Global Const $GC_S_MOD_RITUALIST_MAJOR_CHANNELING_MAGIC 		= "0222E821"	; Major ChannelingMagic Rune
-Global Const $GC_S_MOD_RITUALIST_MAJOR_SPAWNING_POWER 			= "0224E821"	; Major SpawningPower 
+Global Const $GC_S_MOD_RITUALIST_MAJOR_SPAWNING_POWER 			= "0224E821"	; Major SpawningPower
 Global Const $GC_S_MOD_RITUALIST_SUPERIOR_COMMUNING 			= "0320E821"	; Superior Communing Rune
 Global Const $GC_S_MOD_RITUALIST_SUPERIOR_RESTORATION_MAGIC 	= "0321E821"	; Superior RestorationMagic Rune
 Global Const $GC_S_MOD_RITUALIST_SUPERIOR_CHANNELING_MAGIC 		= "0322E821"	; Superior ChannelingMagic Rune
@@ -576,7 +576,7 @@ Global Const $GC_S_MOD_GENERAL_BRAWLER 							= "E8010824"	; Brawler Insignia
 Global Const $GC_S_MOD_GENERAL_BLESSED 							= "E9010824"	; Blessed Insignia
 Global Const $GC_S_MOD_GENERAL_HERALD 							= "EA010824"	; Herald Insignia
 Global Const $GC_S_MOD_GENERAL_SENTRY 							= "EB010824"	; Sentry Insignia
-	
+
 Global Const $GC_S_MOD_GENERAL_ATTUNEMENT 						= "11020824"	; Attunement Rune
 Global Const $GC_S_MOD_GENERAL_VITAE							= "12020824"	; Vitae Rune
 Global Const $GC_S_MOD_GENERAL_RECOVERY							= "13020824"	; Recovery Rune
