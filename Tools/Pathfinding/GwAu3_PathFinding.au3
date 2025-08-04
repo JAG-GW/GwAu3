@@ -550,11 +550,17 @@ Func PathFinding_GenerateTeleportGraph()
             Local $l_a_TP2 = $g_a_PathingTeleports[$j]
 
             If $l_a_TP1[6] And $l_a_TP2[6] Then ; Both bidirectional
-                Local $l_f_Dist = _Min( _
-                    PathFinding_Distance2D($l_a_TP1[0], $l_a_TP1[1], $l_a_TP2[3], $l_a_TP2[4]), _
-                    PathFinding_Distance2D($l_a_TP1[3], $l_a_TP1[4], $l_a_TP2[0], $l_a_TP2[1]), _
-                    PathFinding_Distance2D($l_a_TP1[3], $l_a_TP1[4], $l_a_TP2[3], $l_a_TP2[4]), _
-                    PathFinding_Distance2D($l_a_TP1[0], $l_a_TP1[1], $l_a_TP2[0], $l_a_TP2[1]))
+                ; Calculate all 4 possible distances
+                Local $l_f_Dist1 = PathFinding_Distance2D($l_a_TP1[0], $l_a_TP1[1], $l_a_TP2[3], $l_a_TP2[4])
+                Local $l_f_Dist2 = PathFinding_Distance2D($l_a_TP1[3], $l_a_TP1[4], $l_a_TP2[0], $l_a_TP2[1])
+                Local $l_f_Dist3 = PathFinding_Distance2D($l_a_TP1[3], $l_a_TP1[4], $l_a_TP2[3], $l_a_TP2[4])
+                Local $l_f_Dist4 = PathFinding_Distance2D($l_a_TP1[0], $l_a_TP1[1], $l_a_TP2[0], $l_a_TP2[1])
+
+                ; Find minimum distance manually
+                Local $l_f_Dist = $l_f_Dist1
+                If $l_f_Dist2 < $l_f_Dist Then $l_f_Dist = $l_f_Dist2
+                If $l_f_Dist3 < $l_f_Dist Then $l_f_Dist = $l_f_Dist3
+                If $l_f_Dist4 < $l_f_Dist Then $l_f_Dist = $l_f_Dist4
 
                 PathFinding_AddTeleportNode($i, $j, $l_f_Dist)
                 If $i <> $j Then PathFinding_AddTeleportNode($j, $i, $l_f_Dist)
