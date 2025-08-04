@@ -13,7 +13,7 @@ Global $g_a_PathingPTPortalGraph[1] ; Portal graph by trapezoid
 Global $g_b_PathingInitialized = False
 Global $g_a_PathingTeleports[1]     ; Teleports array
 Global $g_a_TeleportGraph[1]        ; Teleport connectivity
-Global Const $GC_F_MAX_VISIBILITY_RANGE = 2000.0  ; Reduced from 5000.0 for performance
+Global Const $GC_F_MAX_VISIBILITY_RANGE = 2500.0  ; Reduced from 5000.0 for performance
 Global $g_b_UseVisibilityGraph = True  ; Can be set to False to skip visibility graph generation
 
 ; ===============================================================
@@ -337,36 +337,233 @@ Func PathFinding_GeneratePoints()
     ReDim $g_a_PathingPoints[1]
     $g_a_PathingPoints[0] = 0
 
+    ; Distance minimale entre points de différents portals
+    Local Const $MIN_POINT_DISTANCE = 500.0  ; La moitié de 500 pour avoir une marge
+    Local Const $MIN_POINT_DISTANCE_SQ = $MIN_POINT_DISTANCE * $MIN_POINT_DISTANCE
+
     ; Create points from portals
     For $i = 1 To $g_a_PathingPortals[0]
         Local $l_a_Portal = $g_a_PathingPortals[$i]
+        If Not IsArray($l_a_Portal) Then ContinueLoop
 
         ; Calculate portal length
         Local $l_f_PortalLength = PathFinding_Distance2D($l_a_Portal[0], $l_a_Portal[1], $l_a_Portal[2], $l_a_Portal[3])
 
-        ; Determine number of segments based on length
-        Local $l_i_Segments = Ceiling($l_f_PortalLength / 500.0)
-        If $l_i_Segments < 1 Then $l_i_Segments = 1
+        ; Tableau temporaire pour stocker les points candidats du portal
+        Local $l_a_CandidatePoints[1][3] ; [x, y, t]
+        $l_a_CandidatePoints[0][0] = 0
 
-        ; Add points along the portal
-        For $j = 0 To $l_i_Segments
-            Local $l_f_T = $j / $l_i_Segments
+        ; Générer les points candidats
+        If $l_f_PortalLength <= 1000 Then
+            ; Portal court : juste un point au milieu
+            ReDim $l_a_CandidatePoints[2][3]
+            $l_a_CandidatePoints[1][0] = ($l_a_Portal[0] + $l_a_Portal[2]) / 2
+            $l_a_CandidatePoints[1][1] = ($l_a_Portal[1] + $l_a_Portal[3]) / 2
+            $l_a_CandidatePoints[1][2] = 0.5
+            $l_a_CandidatePoints[0][0] = 1
+        Else
+            ; Portal long : points espacés d'environ 500
+            Local $l_i_NumSegments = Round($l_f_PortalLength / 500)
+            If $l_i_NumSegments < 2 Then $l_i_NumSegments = 2
+            If $l_i_NumSegments > 10 Then $l_i_NumSegments = 10  ; Limiter le nombre de points par portal
 
-            ; Interpolate position
-            Local $l_f_X = $l_a_Portal[0] + ($l_a_Portal[2] - $l_a_Portal[0]) * $l_f_T
-            Local $l_f_Y = $l_a_Portal[1] + ($l_a_Portal[3] - $l_a_Portal[1]) * $l_f_T
+            ReDim $l_a_CandidatePoints[$l_i_NumSegments + 1][3]
+            $l_a_CandidatePoints[0][0] = $l_i_NumSegments
 
-            ; Create point
-            Local $l_i_PointID = $g_a_PathingPoints[0]
-            Local $l_a_Point = PathFinding_CreatePoint($l_i_PointID, $l_f_X, $l_f_Y, $l_a_Portal[4], $l_a_Portal[5], $i)
-            PathFinding_AddPoint($l_a_Point)
+            For $j = 0 To $l_i_NumSegments - 1
+                Local $l_f_T = ($j + 0.5) / $l_i_NumSegments
+                $l_a_CandidatePoints[$j + 1][0] = $l_a_Portal[0] + ($l_a_Portal[2] - $l_a_Portal[0]) * $l_f_T
+                $l_a_CandidatePoints[$j + 1][1] = $l_a_Portal[1] + ($l_a_Portal[3] - $l_a_Portal[1]) * $l_f_T
+                $l_a_CandidatePoints[$j + 1][2] = $l_f_T
+            Next
+        EndIf
+
+        ; Filtrer les points trop proches des points existants
+        Local $l_i_AddedPoints = 0
+        For $j = 1 To $l_a_CandidatePoints[0][0]
+            Local $l_f_CandX = $l_a_CandidatePoints[$j][0]
+            Local $l_f_CandY = $l_a_CandidatePoints[$j][1]
+            Local $l_b_TooClose = False
+
+            ; Vérifier la distance avec tous les points existants
+            For $k = 1 To $g_a_PathingPoints[0]
+                Local $l_a_ExistingPoint = $g_a_PathingPoints[$k]
+                If Not IsArray($l_a_ExistingPoint) Then ContinueLoop
+
+                Local $l_f_DistSq = PathFinding_GetSquareDistance($l_f_CandX, $l_f_CandY, $l_a_ExistingPoint[1], $l_a_ExistingPoint[2])
+
+                If $l_f_DistSq < $MIN_POINT_DISTANCE_SQ Then
+                    $l_b_TooClose = True
+                    ExitLoop
+                EndIf
+            Next
+
+            ; Si le point n'est pas trop proche, l'ajouter
+            If Not $l_b_TooClose Then
+                Local $l_i_PointID = $g_a_PathingPoints[0]
+                Local $l_a_Point = PathFinding_CreatePoint($l_i_PointID, $l_f_CandX, $l_f_CandY, $l_a_Portal[4], $l_a_Portal[5], $i - 1)  ; Portal ID est 0-based
+                PathFinding_AddPoint($l_a_Point)
+                $l_i_AddedPoints += 1
+            EndIf
         Next
+
+        ; Si aucun point n'a été ajouté et que c'est un portal important, forcer au moins un point
+        If $l_i_AddedPoints = 0 And $l_f_PortalLength > 100 Then
+            ; Essayer de trouver le meilleur emplacement
+            Local $l_i_BestIndex = -1
+            Local $l_f_BestMinDist = 0
+
+            For $j = 1 To $l_a_CandidatePoints[0][0]
+                Local $l_f_CandX = $l_a_CandidatePoints[$j][0]
+                Local $l_f_CandY = $l_a_CandidatePoints[$j][1]
+                Local $l_f_MinDist = 999999
+
+                ; Trouver la distance au point le plus proche
+                For $k = 1 To $g_a_PathingPoints[0]
+                    Local $l_a_ExistingPoint = $g_a_PathingPoints[$k]
+                    If Not IsArray($l_a_ExistingPoint) Then ContinueLoop
+
+                    Local $l_f_DistSq = PathFinding_GetSquareDistance($l_f_CandX, $l_f_CandY, $l_a_ExistingPoint[1], $l_a_ExistingPoint[2])
+                    If $l_f_DistSq < $l_f_MinDist Then
+                        $l_f_MinDist = $l_f_DistSq
+                    EndIf
+                Next
+
+                If $l_f_MinDist > $l_f_BestMinDist Then
+                    $l_f_BestMinDist = $l_f_MinDist
+                    $l_i_BestIndex = $j
+                EndIf
+            Next
+
+            ; Ajouter le point le plus éloigné des autres
+            If $l_i_BestIndex > 0 Then
+                Local $l_f_X = $l_a_CandidatePoints[$l_i_BestIndex][0]
+                Local $l_f_Y = $l_a_CandidatePoints[$l_i_BestIndex][1]
+                Local $l_i_PointID = $g_a_PathingPoints[0]
+                Local $l_a_Point = PathFinding_CreatePoint($l_i_PointID, $l_f_X, $l_f_Y, $l_a_Portal[4], $l_a_Portal[5], $i - 1)
+                PathFinding_AddPoint($l_a_Point)
+                $l_i_AddedPoints = 1
+            EndIf
+        EndIf
     Next
 
     ; Sort points by Y coordinate (descending)
     PathFinding_SortPointsByY()
 
-    Log_Info("Generated " & $g_a_PathingPoints[0] & " points", "PathFinding", $g_h_EditText)
+    ; Vérifier et corriger les portails sans points
+    Local $l_i_PortalsWithoutPoints = 0
+    For $i = 1 To $g_a_PathingPortals[0]
+        Local $l_b_HasPoint = False
+
+        For $j = 1 To $g_a_PathingPoints[0]
+            Local $l_a_Point = $g_a_PathingPoints[$j]
+            If IsArray($l_a_Point) And $l_a_Point[5] = $i - 1 Then  ; Portal ID est 0-based
+                $l_b_HasPoint = True
+                ExitLoop
+            EndIf
+        Next
+
+        If Not $l_b_HasPoint Then
+            ; Forcer l'ajout d'un point au centre du portal
+            Local $l_a_Portal = $g_a_PathingPortals[$i]
+            If IsArray($l_a_Portal) Then
+                Local $l_f_X = ($l_a_Portal[0] + $l_a_Portal[2]) / 2
+                Local $l_f_Y = ($l_a_Portal[1] + $l_a_Portal[3]) / 2
+                Local $l_i_PointID = $g_a_PathingPoints[0]
+                Local $l_a_Point = PathFinding_CreatePoint($l_i_PointID, $l_f_X, $l_f_Y, $l_a_Portal[4], $l_a_Portal[5], $i - 1)
+                PathFinding_AddPoint($l_a_Point)
+                $l_i_PortalsWithoutPoints += 1
+            EndIf
+        EndIf
+    Next
+
+    If $l_i_PortalsWithoutPoints > 0 Then
+        Log_Info("Added " & $l_i_PortalsWithoutPoints & " points to portals without points", "PathFinding", $g_h_EditText)
+
+        ; Re-trier après avoir ajouté des points supplémentaires
+        PathFinding_SortPointsByY()
+    EndIf
+
+    ; Vérifier les AABBs sans points d'accès
+    Local $l_i_AABBsWithoutPoints = 0
+    Local $l_a_AABBHasPoint[$g_a_PathingAABBs[0] + 1]
+
+    ; Initialiser le tableau
+    For $i = 0 To $g_a_PathingAABBs[0]
+        $l_a_AABBHasPoint[$i] = False
+    Next
+
+    ; Marquer les AABBs qui ont des points
+    For $i = 1 To $g_a_PathingPoints[0]
+        Local $l_a_Point = $g_a_PathingPoints[$i]
+        If IsArray($l_a_Point) Then
+            If $l_a_Point[3] >= 0 And $l_a_Point[3] <= $g_a_PathingAABBs[0] Then
+                $l_a_AABBHasPoint[$l_a_Point[3]] = True
+            EndIf
+            If $l_a_Point[4] >= 0 And $l_a_Point[4] <= $g_a_PathingAABBs[0] Then
+                $l_a_AABBHasPoint[$l_a_Point[4]] = True
+            EndIf
+        EndIf
+    Next
+
+    ; Ajouter des points aux AABBs isolés qui ont des connexions
+    For $i = 0 To $g_a_PathingAABBs[0] - 1
+        If Not $l_a_AABBHasPoint[$i] Then
+            ; Vérifier si cet AABB a des connexions
+            If $i + 1 <= UBound($g_a_PathingAABBGraph) - 1 And $g_a_PathingAABBGraph[$i + 1] <> "" Then
+                ; Ajouter un point au centre de l'AABB
+                Local $l_a_AABB = $g_a_PathingAABBs[$i + 1]
+                If IsArray($l_a_AABB) Then
+                    Local $l_i_PointID = $g_a_PathingPoints[0]
+                    Local $l_a_Point = PathFinding_CreatePoint($l_i_PointID, $l_a_AABB[1], $l_a_AABB[2], $i, -1, -1)
+                    PathFinding_AddPoint($l_a_Point)
+                    $l_i_AABBsWithoutPoints += 1
+                EndIf
+            EndIf
+        EndIf
+    Next
+
+    If $l_i_AABBsWithoutPoints > 0 Then
+        Log_Info("Added " & $l_i_AABBsWithoutPoints & " points to isolated AABBs", "PathFinding", $g_h_EditText)
+
+        ; Re-trier après avoir ajouté des points supplémentaires
+        PathFinding_SortPointsByY()
+    EndIf
+
+    Log_Info("Generated " & $g_a_PathingPoints[0] & " points total", "PathFinding", $g_h_EditText)
+
+    ; Statistiques finales
+    Local $l_i_PointsPerPortal[1]
+    ReDim $l_i_PointsPerPortal[$g_a_PathingPortals[0] + 1]
+    For $i = 0 To $g_a_PathingPortals[0]
+        $l_i_PointsPerPortal[$i] = 0
+    Next
+
+    For $i = 1 To $g_a_PathingPoints[0]
+        Local $l_a_Point = $g_a_PathingPoints[$i]
+        If IsArray($l_a_Point) And $l_a_Point[5] >= 0 And $l_a_Point[5] < $g_a_PathingPortals[0] Then
+            $l_i_PointsPerPortal[$l_a_Point[5] + 1] += 1
+        EndIf
+    Next
+
+    Local $l_i_MinPoints = 999
+    Local $l_i_MaxPoints = 0
+    Local $l_i_TotalPortalPoints = 0
+    Local $l_i_PortalsWithPoints = 0
+
+    For $i = 1 To $g_a_PathingPortals[0]
+        If $l_i_PointsPerPortal[$i] > 0 Then
+            $l_i_PortalsWithPoints += 1
+            $l_i_TotalPortalPoints += $l_i_PointsPerPortal[$i]
+            If $l_i_PointsPerPortal[$i] < $l_i_MinPoints Then $l_i_MinPoints = $l_i_PointsPerPortal[$i]
+            If $l_i_PointsPerPortal[$i] > $l_i_MaxPoints Then $l_i_MaxPoints = $l_i_PointsPerPortal[$i]
+        EndIf
+    Next
+
+    If $l_i_PortalsWithPoints > 0 Then
+        Log_Debug("Portal coverage: " & $l_i_PortalsWithPoints & "/" & $g_a_PathingPortals[0] & " portals have points", "PathFinding", $g_h_EditText)
+        Log_Debug("Points per portal: Min=" & $l_i_MinPoints & ", Max=" & $l_i_MaxPoints & ", Avg=" & Round($l_i_TotalPortalPoints / $l_i_PortalsWithPoints, 2), "PathFinding", $g_h_EditText)
+    EndIf
 EndFunc
 
 Func PathFinding_AddPoint($a_a_Point)
@@ -656,11 +853,11 @@ Func GetPath($a_f_DestX, $a_f_DestY)
     Local $l_f_StartX = Agent_GetAgentInfo(-2, "X")
     Local $l_f_StartY = Agent_GetAgentInfo(-2, "Y")
 
-	If Not $g_b_PathingInitialized Then
+    If Not $g_b_PathingInitialized Then
         If Not PathFinding_Initialize() Then
             Return $PATHING_ERROR_INVALID_MAP_CONTEXT
         EndIf
-	EndIf
+    EndIf
 
     ; Get path
     Local $l_v_Result = PathFinding_Search($l_f_StartX, $l_f_StartY, $a_f_DestX, $a_f_DestY)
@@ -669,6 +866,13 @@ Func GetPath($a_f_DestX, $a_f_DestY)
     If Not IsArray($l_v_Result) Then
         Log_Error("PathFinding failed with error code: " & $l_v_Result, "PathFinding", $g_h_EditText)
         Return False
+    EndIf
+
+    ; Ensure the exact destination is the last point
+    If $l_v_Result[0][0] > 0 Then
+        Local $l_i_LastIndex = $l_v_Result[0][0]
+        $l_v_Result[$l_i_LastIndex][0] = $a_f_DestX
+        $l_v_Result[$l_i_LastIndex][1] = $a_f_DestY
     EndIf
 
     Return $l_v_Result
@@ -772,7 +976,7 @@ Func PathFinding_AStarSearch($a_a_StartPoint, $a_a_GoalPoint, $a_a_BlockArray)
     $l_a_CameFrom[$a_a_StartPoint[0]] = $a_a_StartPoint[0]
 
     Local $l_i_Iterations = 0
-    Local $l_i_MaxIterations = 100000
+    Local $l_i_MaxIterations = 500000
 
     While UBound($l_a_OpenSet) > 0 And $l_i_Iterations < $l_i_MaxIterations
         $l_i_Iterations += 1
@@ -1079,6 +1283,23 @@ Func PathFinding_HasDirectLineOfSight($a_f_X1, $a_f_Y1, $a_f_X2, $a_f_Y2)
     Next
 
     Return True
+EndFunc
+
+Func PathFinding_QuickAABBConnectionCheck($a_i_AABB1, $a_i_AABB2)
+    If $a_i_AABB1 = $a_i_AABB2 Then Return True
+
+    ; Vérifier la connexion directe
+    If $a_i_AABB1 >= 0 And $a_i_AABB1 < UBound($g_a_PathingAABBGraph) Then
+        Local $l_s_Connections = $g_a_PathingAABBGraph[$a_i_AABB1 + 1]
+        If $l_s_Connections <> "" Then
+            Local $l_a_Connected = StringSplit($l_s_Connections, ",", 2)
+            For $i = 0 To UBound($l_a_Connected) - 1
+                If Int($l_a_Connected[$i]) = $a_i_AABB2 Then Return True
+            Next
+        EndIf
+    EndIf
+
+    Return False
 EndFunc
 
 ; ===============================================================
@@ -1756,22 +1977,155 @@ EndFunc
 
 Func PathFinding_InsertPointIntoVisGraph($a_a_Point)
     Local $l_f_SqRange = $GC_F_MAX_VISIBILITY_RANGE * $GC_F_MAX_VISIBILITY_RANGE
+    Local $l_i_ConnectionCount = 0
+    Local $l_f_MinConnectionRange = 500.0 ; Distance minimale pour garantir des connexions
+    Local $l_f_MinSqRange = $l_f_MinConnectionRange * $l_f_MinConnectionRange
+
+    ; Structure pour stocker les connexions potentielles triées par distance
+    Local $l_a_PotentialConnections[100][3] ; [point_id, distance, blocking_ids_string]
+    Local $l_i_PotentialCount = 0
 
     For $i = 1 To $g_a_PathingPoints[0]
         Local $l_a_P = $g_a_PathingPoints[$i]
+        If Not IsArray($l_a_P) Then ContinueLoop
 
         Local $l_f_SqDist = PathFinding_GetSquareDistance($l_a_P[1], $l_a_P[2], $a_a_Point[1], $a_a_Point[2])
+
+        ; Ignorer les points trop éloignés
         If $l_f_SqDist > $l_f_SqRange Then ContinueLoop
+
+        ; Ignorer le point lui-même
+        If $l_f_SqDist < 1 Then ContinueLoop
 
         Local $l_a_BlockingIDs[1]
         $l_a_BlockingIDs[0] = 0
 
         If PathFinding_HasLineOfSight($l_a_P, $a_a_Point, $l_a_BlockingIDs) Then
             Local $l_f_Distance = Sqrt($l_f_SqDist)
-            PathFinding_AddToVisGraph($a_a_Point[0], $l_a_P[0], $l_f_Distance, $l_a_BlockingIDs)
-            PathFinding_AddToVisGraph($l_a_P[0], $a_a_Point[0], $l_f_Distance, $l_a_BlockingIDs)
+
+            ; Convertir blocking IDs en string pour stockage
+            Local $l_s_BlockingIDs = ""
+            For $j = 1 To $l_a_BlockingIDs[0]
+                If $l_s_BlockingIDs <> "" Then $l_s_BlockingIDs &= ","
+                $l_s_BlockingIDs &= $l_a_BlockingIDs[$j]
+            Next
+
+            ; Ajouter à la liste des connexions potentielles
+            If $l_i_PotentialCount < 100 Then
+                $l_a_PotentialConnections[$l_i_PotentialCount][0] = $l_a_P[0]
+                $l_a_PotentialConnections[$l_i_PotentialCount][1] = $l_f_Distance
+                $l_a_PotentialConnections[$l_i_PotentialCount][2] = $l_s_BlockingIDs
+                $l_i_PotentialCount += 1
+            EndIf
         EndIf
     Next
+
+    ; Trier les connexions par distance (du plus proche au plus éloigné)
+    For $i = 0 To $l_i_PotentialCount - 2
+        For $j = $i + 1 To $l_i_PotentialCount - 1
+            If $l_a_PotentialConnections[$j][1] < $l_a_PotentialConnections[$i][1] Then
+                ; Swap
+                Local $l_a_Temp[3]
+                For $k = 0 To 2
+                    $l_a_Temp[$k] = $l_a_PotentialConnections[$i][$k]
+                    $l_a_PotentialConnections[$i][$k] = $l_a_PotentialConnections[$j][$k]
+                    $l_a_PotentialConnections[$j][$k] = $l_a_Temp[$k]
+                Next
+            EndIf
+        Next
+    Next
+
+    ; Ajouter les connexions, en garantissant au moins quelques connexions proches
+    Local $l_i_MinConnections = 3 ; Nombre minimum de connexions à garantir
+    Local $l_i_MaxConnections = 20 ; Nombre maximum de connexions pour éviter la surcharge
+
+    For $i = 0 To $l_i_PotentialCount - 1
+        If $l_i_ConnectionCount >= $l_i_MaxConnections Then ExitLoop
+
+        ; Forcer l'ajout des premières connexions même si elles sont loin
+        If $l_i_ConnectionCount < $l_i_MinConnections Or $l_a_PotentialConnections[$i][1] < $GC_F_MAX_VISIBILITY_RANGE Then
+            ; Reconstruire le tableau blocking IDs
+            Local $l_a_BlockingIDs[1]
+            $l_a_BlockingIDs[0] = 0
+
+            If $l_a_PotentialConnections[$i][2] <> "" Then
+                Local $l_a_BlockingParts = StringSplit($l_a_PotentialConnections[$i][2], ",", 2)
+                ReDim $l_a_BlockingIDs[UBound($l_a_BlockingParts) + 1]
+                $l_a_BlockingIDs[0] = UBound($l_a_BlockingParts)
+                For $j = 0 To UBound($l_a_BlockingParts) - 1
+                    $l_a_BlockingIDs[$j + 1] = Int($l_a_BlockingParts[$j])
+                Next
+            EndIf
+
+            ; Ajouter les connexions bidirectionnelles
+            PathFinding_AddToVisGraph($a_a_Point[0], $l_a_PotentialConnections[$i][0], $l_a_PotentialConnections[$i][1], $l_a_BlockingIDs)
+            PathFinding_AddToVisGraph($l_a_PotentialConnections[$i][0], $a_a_Point[0], $l_a_PotentialConnections[$i][1], $l_a_BlockingIDs)
+            $l_i_ConnectionCount += 1
+        EndIf
+    Next
+
+    ; Si aucune connexion n'a été trouvée, essayer une approche de secours
+    If $l_i_ConnectionCount = 0 Then
+        Log_Warning("No visibility connections found for point " & $a_a_Point[0] & ", trying fallback approach", "PathFinding", $g_h_EditText)
+
+        ; Connecter aux points les plus proches dans le même AABB ou les AABBs adjacents
+        If $a_a_Point[3] >= 0 Then
+            PathFinding_ConnectToNearestInAABB($a_a_Point)
+        EndIf
+    EndIf
+
+    Log_Debug("Added " & $l_i_ConnectionCount & " connections for temporary point", "PathFinding", $g_h_EditText)
+EndFunc
+
+; Nouvelle fonction pour connecter aux points dans le même AABB
+Func PathFinding_ConnectToNearestInAABB($a_a_Point)
+    Local $l_i_ConnectionCount = 0
+    Local $l_f_MaxDistanceInAABB = 2000.0 ; Distance max pour connexion dans le même AABB
+
+    ; Trouver tous les points dans le même AABB ou les AABBs adjacents
+    For $i = 1 To $g_a_PathingPoints[0]
+        Local $l_a_P = $g_a_PathingPoints[$i]
+        If Not IsArray($l_a_P) Then ContinueLoop
+
+        ; Vérifier si le point est dans le même AABB ou un AABB adjacent
+        Local $l_b_InSameOrAdjacentAABB = False
+
+        If ($a_a_Point[3] >= 0 And $l_a_P[3] >= 0 And $a_a_Point[3] = $l_a_P[3]) Or _
+           ($a_a_Point[3] >= 0 And $l_a_P[4] >= 0 And $a_a_Point[3] = $l_a_P[4]) Or _
+           ($a_a_Point[4] >= 0 And $l_a_P[3] >= 0 And $a_a_Point[4] = $l_a_P[3]) Or _
+           ($a_a_Point[4] >= 0 And $l_a_P[4] >= 0 And $a_a_Point[4] = $l_a_P[4]) Then
+            $l_b_InSameOrAdjacentAABB = True
+        Else
+            ; Vérifier si les AABBs sont connectés
+            If $a_a_Point[3] >= 0 And $l_a_P[3] >= 0 Then
+                If PathFinding_QuickAABBConnectionCheck($a_a_Point[3], $l_a_P[3]) Then
+                    $l_b_InSameOrAdjacentAABB = True
+                EndIf
+            EndIf
+        EndIf
+
+        If $l_b_InSameOrAdjacentAABB Then
+            Local $l_f_Distance = PathFinding_Distance2D($a_a_Point[1], $a_a_Point[2], $l_a_P[1], $l_a_P[2])
+
+            If $l_f_Distance < $l_f_MaxDistanceInAABB And $l_f_Distance > 1 Then
+                Local $l_a_BlockingIDs[1]
+                $l_a_BlockingIDs[0] = 0
+
+                ; Ajouter les AABBs comme blocking IDs
+                PathFinding_AddBlockingID($l_a_BlockingIDs, $a_a_Point[3])
+                PathFinding_AddBlockingID($l_a_BlockingIDs, $l_a_P[3])
+
+                PathFinding_AddToVisGraph($a_a_Point[0], $l_a_P[0], $l_f_Distance, $l_a_BlockingIDs)
+                PathFinding_AddToVisGraph($l_a_P[0], $a_a_Point[0], $l_f_Distance, $l_a_BlockingIDs)
+
+                $l_i_ConnectionCount += 1
+
+                If $l_i_ConnectionCount >= 3 Then ExitLoop ; Au moins 3 connexions
+            EndIf
+        EndIf
+    Next
+
+    Log_Info("Added " & $l_i_ConnectionCount & " fallback connections in same/adjacent AABBs", "PathFinding", $g_h_EditText)
 EndFunc
 
 Func PathFinding_GetSquareDistance($a_f_X1, $a_f_Y1, $a_f_X2, $a_f_Y2)

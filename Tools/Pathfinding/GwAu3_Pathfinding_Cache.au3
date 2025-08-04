@@ -728,6 +728,8 @@ Func PathFinding_ClearData()
     $g_a_PathingPoints[0] = 0
     $g_a_PathingTeleports[0] = 0
     $g_a_TeleportGraph[0] = 0
+
+	$g_b_PathingInitialized = False
 EndFunc
 
 Func PathFinding_CompressVisGraphData($a_s_Data)
@@ -779,10 +781,12 @@ EndFunc
 Func PathFinding_InitializeWithCache()
     Log_Info("=== Starting PathFinding initialization with cache ===", "PathFinding", $g_h_EditText)
 
+    ; ========== NETTOYAGE PRÉVENTIF ==========
     If $g_b_PathingInitialized Then
-        Log_Warning("PathFinding already initialized", "PathFinding", $g_h_EditText)
-        Return True
+        Log_Warning("PathFinding already initialized, cleaning up first", "PathFinding", $g_h_EditText)
+        PathFinding_ClearData()
     EndIf
+    ; ========================================
 
     Local $l_i_MapID = Map_GetMapID()
 
