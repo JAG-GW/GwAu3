@@ -204,14 +204,20 @@ Func PathFinding_GenerateAABBs()
     $g_a_PathingTrapezoids[0] = 0
     $g_a_PathingAABBs[0] = 0
 
-    ; Sanity check
+    Local $l_i_BridgeCount = 0
+    Local $l_i_SkippedCount = 0
+
+    If $l_i_ArraySize > 500 Then
+        Log_Warning("PathingMapArray size is very large: " & $l_i_ArraySize & ", processing all layers", "PathFinding", $g_h_EditText)
+    EndIf
+
+    Local $l_i_MaxLayers = $l_i_ArraySize
     If $l_i_ArraySize > 100 Then
-        Log_Warning("PathingMapArray size seems too large: " & $l_i_ArraySize & ", limiting to 20", "PathFinding", $g_h_EditText)
-        $l_i_ArraySize = 20
+        Log_Info("Processing " & $l_i_ArraySize & " layers (may include bridges)", "PathFinding", $g_h_EditText)
     EndIf
 
     ; Process each pathing map layer
-    For $i = 0 To $l_i_ArraySize - 1
+    For $i = 0 To $l_i_MaxLayers - 1
         Local $l_p_PathingMap = $l_p_ArrayBuffer + ($i * 0x54)
         Local $l_i_Count = Memory_Read($l_p_PathingMap + 0x14, "dword")
         Local $l_p_Trapezoids = Memory_Read($l_p_PathingMap + 0x18, "ptr")
@@ -223,12 +229,38 @@ Func PathFinding_GenerateAABBs()
             Local $l_p_Trapezoid = Map_GetTrapezoid($l_p_Trapezoids, $j)
             Local $l_f_YB = Map_GetTrapezoidInfo($l_p_Trapezoid, "YB")
             Local $l_f_YT = Map_GetTrapezoidInfo($l_p_Trapezoid, "YT")
+            Local $l_f_XTL = Map_GetTrapezoidInfo($l_p_Trapezoid, "XTL")
+            Local $l_f_XTR = Map_GetTrapezoidInfo($l_p_Trapezoid, "XTR")
+            Local $l_f_XBL = Map_GetTrapezoidInfo($l_p_Trapezoid, "XBL")
+            Local $l_f_XBR = Map_GetTrapezoidInfo($l_p_Trapezoid, "XBR")
 
-            ; Skip degenerate trapezoids
-            If $l_f_YB = $l_f_YT Then ContinueLoop
+            Local $l_f_Height = Abs($l_f_YT - $l_f_YB)
+            Local $l_f_WidthTop = Abs($l_f_XTR - $l_f_XTL)
+            Local $l_f_WidthBottom = Abs($l_f_XBR - $l_f_XBL)
+            Local $l_f_MaxWidth = _Max($l_f_WidthTop, $l_f_WidthBottom)
+
+            Local $l_b_IsBridge = False
+            If $l_f_MaxWidth > 500 And $l_f_Height < 200 Then
+                $l_b_IsBridge = True
+                $l_i_BridgeCount += 1
+            EndIf
+
+            Local $l_f_HeightTolerance = 0.5
+            If $l_b_IsBridge Then
+                $l_f_HeightTolerance = 0.1
+            EndIf
+
+            If $l_f_Height < $l_f_HeightTolerance Then
+                $l_i_SkippedCount += 1
+                If $l_b_IsBridge Then
+                    Log_Warning("Skipped potential bridge at layer " & $i & " (height=" & $l_f_Height & ")", "PathFinding", $g_h_EditText)
+                EndIf
+                ContinueLoop
+            EndIf
 
             ; Create SimplePT
             Local $l_a_SimplePT = PathFinding_CreateSimplePT($l_p_Trapezoid, $i)
+
             Local $l_i_TrapIndex = $g_a_PathingTrapezoids[0] + 1
             ReDim $g_a_PathingTrapezoids[$l_i_TrapIndex + 1]
             $g_a_PathingTrapezoids[$l_i_TrapIndex] = $l_a_SimplePT
@@ -243,16 +275,17 @@ Func PathFinding_GenerateAABBs()
         Next
     Next
 
+    ; Log statistics
+    Log_Info("Bridge detection: " & $l_i_BridgeCount & " potential bridges found", "PathFinding", $g_h_EditText)
+    Log_Info("Skipped " & $l_i_SkippedCount & " degenerate trapezoids", "PathFinding", $g_h_EditText)
+
     ; Check if we got any AABBs
     If $g_a_PathingAABBs[0] = 0 Then
-        Log_Error("No valid AABBs generated", "PathFinding", $g_h_EditText)
+        Log_Error("No valid AABBs generated!", "PathFinding", $g_h_EditText)
         Return False
     EndIf
 
-    ; Sort AABBs by Y coordinate (descending)
-    PathFinding_SortAABBsByY()
-
-    Log_Info("Generated " & $g_a_PathingAABBs[0] & " AABBs", "PathFinding", $g_h_EditText)
+    Log_Info("Generated " & $g_a_PathingAABBs[0] & " AABBs from " & $g_a_PathingTrapezoids[0] & " trapezoids", "PathFinding", $g_h_EditText)
     Return True
 EndFunc
 
@@ -1560,41 +1593,83 @@ EndFunc
 
 ; Adjacent side enum: 0=none, 1=aBottom_bTop, 2=aTop_bBottom, 3=aLeft_bRight, 4=aRight_bLeft
 Func PathFinding_CheckTouching($a_i_AABB1ID, $a_i_AABB2ID)
+    If $a_i_AABB1ID < 1 Or $a_i_AABB1ID > $g_a_PathingAABBs[0] Then Return 0
+    If $a_i_AABB2ID < 1 Or $a_i_AABB2ID > $g_a_PathingAABBs[0] Then Return 0
+
     Local $l_a_AABB1 = $g_a_PathingAABBs[$a_i_AABB1ID]
     Local $l_a_AABB2 = $g_a_PathingAABBs[$a_i_AABB2ID]
 
     If Not IsArray($l_a_AABB1) Or Not IsArray($l_a_AABB2) Then Return 0
+    If UBound($l_a_AABB1) < 6 Or UBound($l_a_AABB2) < 6 Then Return 0
 
-    Local $l_a_Trap1 = $g_a_PathingTrapezoids[$l_a_AABB1[5]]
-    Local $l_a_Trap2 = $g_a_PathingTrapezoids[$l_a_AABB2[5]]
+    Local $l_i_TrapIndex1 = $l_a_AABB1[5]
+    Local $l_i_TrapIndex2 = $l_a_AABB2[5]
+
+    If $l_i_TrapIndex1 < 1 Or $l_i_TrapIndex1 > $g_a_PathingTrapezoids[0] Then Return 0
+    If $l_i_TrapIndex2 < 1 Or $l_i_TrapIndex2 > $g_a_PathingTrapezoids[0] Then Return 0
+
+    Local $l_a_Trap1 = $g_a_PathingTrapezoids[$l_i_TrapIndex1]
+    Local $l_a_Trap2 = $g_a_PathingTrapezoids[$l_i_TrapIndex2]
 
     If Not IsArray($l_a_Trap1) Or Not IsArray($l_a_Trap2) Then Return 0
 
-    ; Check layer
+    Local $l_i_LayerDiff = Abs($l_a_Trap1[1] - $l_a_Trap2[1])
+
     If $l_a_Trap1[1] = $l_a_Trap2[1] Then
         Return PathFinding_TrapezoidsTouch($l_a_Trap1, $l_a_Trap2)
-    Else
-        ; For different layers, just use the same logic
-        Return PathFinding_TrapezoidsTouch($l_a_Trap1, $l_a_Trap2)
+    ElseIf $l_i_LayerDiff <= 2 Then
+        Local $l_f_Trap1Width = _Max(Abs($l_a_Trap1[8] - $l_a_Trap1[2]), Abs($l_a_Trap1[6] - $l_a_Trap1[4]))
+        Local $l_f_Trap2Width = _Max(Abs($l_a_Trap2[8] - $l_a_Trap2[2]), Abs($l_a_Trap2[6] - $l_a_Trap2[4]))
+        Local $l_f_Trap1Height = Abs($l_a_Trap1[3] - $l_a_Trap1[5])
+        Local $l_f_Trap2Height = Abs($l_a_Trap2[3] - $l_a_Trap2[5])
+
+        If ($l_f_Trap1Width > 500 And $l_f_Trap1Height < 200) Or ($l_f_Trap2Width > 500 And $l_f_Trap2Height < 200) Then
+            Return PathFinding_TrapezoidsTouch($l_a_Trap1, $l_a_Trap2)
+        EndIf
     EndIf
+
+    Return 0
 EndFunc
 
 Func PathFinding_TrapezoidsTouch($a_a_Trap1, $a_a_Trap2)
+    If Not IsArray($a_a_Trap1) Or Not IsArray($a_a_Trap2) Then Return 0
+    If UBound($a_a_Trap1) < 10 Or UBound($a_a_Trap2) < 10 Then Return 0
+
+    Local $l_f_Trap1Width = _Max(Abs($a_a_Trap1[8] - $a_a_Trap1[2]), Abs($a_a_Trap1[6] - $a_a_Trap1[4]))
+    Local $l_f_Trap2Width = _Max(Abs($a_a_Trap2[8] - $a_a_Trap2[2]), Abs($a_a_Trap2[6] - $a_a_Trap2[4]))
+    Local $l_f_Trap1Height = Abs($a_a_Trap1[3] - $a_a_Trap1[5])
+    Local $l_f_Trap2Height = Abs($a_a_Trap2[3] - $a_a_Trap2[5])
+
+    Local $l_b_HasBridge = False
+    If ($l_f_Trap1Width > 500 And $l_f_Trap1Height < 200) Or ($l_f_Trap2Width > 500 And $l_f_Trap2Height < 200) Then
+        $l_b_HasBridge = True
+    EndIf
+
     ; Check all possible touching configurations
 
     ; Bottom of 1 touches top of 2
-    If $a_a_Trap1[2] <> $a_a_Trap1[8] And $a_a_Trap2[4] <> $a_a_Trap2[6] And $a_a_Trap1[3] = $a_a_Trap1[5] Then
-        If PathFinding_Collinear($a_a_Trap1[2], $a_a_Trap1[3], $a_a_Trap1[8], $a_a_Trap1[9], _
-                                 $a_a_Trap2[4], $a_a_Trap2[5], $a_a_Trap2[6], $a_a_Trap2[7]) Then
-            Return 1 ; aBottom_bTop
+    If $a_a_Trap1[2] <> $a_a_Trap1[8] And $a_a_Trap2[4] <> $a_a_Trap2[6] Then
+        Local $l_f_YTolerance = 1.0
+        If $l_b_HasBridge Then $l_f_YTolerance = 5.0
+
+        If Abs($a_a_Trap1[3] - $a_a_Trap1[5]) < $l_f_YTolerance Then
+            If PathFinding_Collinear($a_a_Trap1[2], $a_a_Trap1[3], $a_a_Trap1[8], $a_a_Trap1[9], _
+                                     $a_a_Trap2[4], $a_a_Trap2[5], $a_a_Trap2[6], $a_a_Trap2[7]) Then
+                Return 1 ; aBottom_bTop
+            EndIf
         EndIf
     EndIf
 
     ; Top of 1 touches bottom of 2
-    If $a_a_Trap1[4] <> $a_a_Trap1[6] And $a_a_Trap2[2] <> $a_a_Trap2[8] And $a_a_Trap1[5] = $a_a_Trap2[3] Then
-        If PathFinding_Collinear($a_a_Trap1[6], $a_a_Trap1[7], $a_a_Trap1[4], $a_a_Trap1[5], _
-                                 $a_a_Trap2[8], $a_a_Trap2[9], $a_a_Trap2[2], $a_a_Trap2[3]) Then
-            Return 2 ; aTop_bBottom
+    If $a_a_Trap1[4] <> $a_a_Trap1[6] And $a_a_Trap2[2] <> $a_a_Trap2[8] Then
+        Local $l_f_YTolerance = 1.0
+        If $l_b_HasBridge Then $l_f_YTolerance = 5.0
+
+        If Abs($a_a_Trap1[5] - $a_a_Trap2[3]) < $l_f_YTolerance Then
+            If PathFinding_Collinear($a_a_Trap1[6], $a_a_Trap1[7], $a_a_Trap1[4], $a_a_Trap1[5], _
+                                     $a_a_Trap2[8], $a_a_Trap2[9], $a_a_Trap2[2], $a_a_Trap2[3]) Then
+                Return 2 ; aTop_bBottom
+            EndIf
         EndIf
     EndIf
 
@@ -1610,7 +1685,39 @@ Func PathFinding_TrapezoidsTouch($a_a_Trap1, $a_a_Trap2)
         Return 3 ; aLeft_bRight
     EndIf
 
+    If $l_b_HasBridge Then
+        If PathFinding_CheckVerticalOverlap($a_a_Trap1, $a_a_Trap2) Then
+            If $a_a_Trap1[3] > $a_a_Trap2[5] Then
+                Return 1
+            Else
+                Return 2
+            EndIf
+        EndIf
+    EndIf
+
     Return 0 ; none
+EndFunc
+
+Func PathFinding_CheckVerticalOverlap($a_a_Trap1, $a_a_Trap2)
+    If Not IsArray($a_a_Trap1) Or Not IsArray($a_a_Trap2) Then Return False
+    If UBound($a_a_Trap1) < 10 Or UBound($a_a_Trap2) < 10 Then Return False
+
+    Local $l_f_Trap1MinX = _Min(_Min($a_a_Trap1[2], $a_a_Trap1[4]), _Min($a_a_Trap1[6], $a_a_Trap1[8]))
+    Local $l_f_Trap1MaxX = _Max(_Max($a_a_Trap1[2], $a_a_Trap1[4]), _Max($a_a_Trap1[6], $a_a_Trap1[8]))
+    Local $l_f_Trap2MinX = _Min(_Min($a_a_Trap2[2], $a_a_Trap2[4]), _Min($a_a_Trap2[6], $a_a_Trap2[8]))
+    Local $l_f_Trap2MaxX = _Max(_Max($a_a_Trap2[2], $a_a_Trap2[4]), _Max($a_a_Trap2[6], $a_a_Trap2[8]))
+
+    If $l_f_Trap1MaxX < $l_f_Trap2MinX Or $l_f_Trap2MaxX < $l_f_Trap1MinX Then
+        Return False
+    EndIf
+
+    Local $l_f_VerticalGap = _Min(Abs($a_a_Trap1[3] - $a_a_Trap2[5]), Abs($a_a_Trap2[3] - $a_a_Trap1[5]))
+
+    If $l_f_VerticalGap < 100 Then
+        Return True
+    EndIf
+
+    Return False
 EndFunc
 
 Func PathFinding_Collinear($a_f_A1X, $a_f_A1Y, $a_f_A2X, $a_f_A2Y, $a_f_B1X, $a_f_B1Y, $a_f_B2X, $a_f_B2Y)
@@ -1658,18 +1765,40 @@ Func PathFinding_Dot2D($a_f_X1, $a_f_Y1, $a_f_X2, $a_f_Y2)
 EndFunc
 
 Func PathFinding_CreatePortalBetween($a_i_AABB1ID, $a_i_AABB2ID, $a_e_TouchingSide)
+    If $a_i_AABB1ID < 1 Or $a_i_AABB1ID > $g_a_PathingAABBs[0] Then Return False
+    If $a_i_AABB2ID < 1 Or $a_i_AABB2ID > $g_a_PathingAABBs[0] Then Return False
+
     Local $l_a_AABB1 = $g_a_PathingAABBs[$a_i_AABB1ID]
     Local $l_a_AABB2 = $g_a_PathingAABBs[$a_i_AABB2ID]
 
     If Not IsArray($l_a_AABB1) Or Not IsArray($l_a_AABB2) Then Return False
 
-    Local $l_a_Trap1 = $g_a_PathingTrapezoids[$l_a_AABB1[5]]
-    Local $l_a_Trap2 = $g_a_PathingTrapezoids[$l_a_AABB2[5]]
+    Local $l_i_TrapIndex1 = $l_a_AABB1[5]
+    Local $l_i_TrapIndex2 = $l_a_AABB2[5]
+
+    If $l_i_TrapIndex1 < 1 Or $l_i_TrapIndex1 > $g_a_PathingTrapezoids[0] Then Return False
+    If $l_i_TrapIndex2 < 1 Or $l_i_TrapIndex2 > $g_a_PathingTrapezoids[0] Then Return False
+
+    Local $l_a_Trap1 = $g_a_PathingTrapezoids[$l_i_TrapIndex1]
+    Local $l_a_Trap2 = $g_a_PathingTrapezoids[$l_i_TrapIndex2]
 
     If Not IsArray($l_a_Trap1) Or Not IsArray($l_a_Trap2) Then Return False
 
-    Local $l_f_Tolerance = 32.0
-    Local $l_f_SquareTolerance = $l_f_Tolerance * $l_f_Tolerance
+    Local $l_f_Trap1Width = _Max(Abs($l_a_Trap1[8] - $l_a_Trap1[2]), Abs($l_a_Trap1[6] - $l_a_Trap1[4]))
+    Local $l_f_Trap2Width = _Max(Abs($l_a_Trap2[8] - $l_a_Trap2[2]), Abs($l_a_Trap2[6] - $l_a_Trap2[4]))
+    Local $l_f_Trap1Height = Abs($l_a_Trap1[3] - $l_a_Trap1[5])
+    Local $l_f_Trap2Height = Abs($l_a_Trap2[3] - $l_a_Trap2[5])
+
+    Local $l_b_IsBridge1 = ($l_f_Trap1Width > 500 And $l_f_Trap1Height < 200)
+    Local $l_b_IsBridge2 = ($l_f_Trap2Width > 500 And $l_f_Trap2Height < 200)
+
+    Local $l_f_Tolerance = 10.0
+    Local $l_f_SquareTolerance = 100.0
+
+    If $l_b_IsBridge1 Or $l_b_IsBridge2 Then
+        $l_f_Tolerance = 50.0
+        $l_f_SquareTolerance = 2500.0
+    EndIf
 
     Switch $a_e_TouchingSide
         Case 1 ; aBottom_bTop
@@ -1724,8 +1853,8 @@ Func PathFinding_CreatePortalBetween($a_i_AABB1ID, $a_i_AABB2ID, $a_e_TouchingSi
 
             Local $l_a_Portal
             If $l_b_O1 And $l_b_O2 Then
-                If PathFinding_GetSquareDistance($l_a_Trap2[6], $l_a_Trap2[7], $l_a_Trap2[8], $l_a_Trap2[9]) < $l_f_SquareTolerance Then Return False
-                $l_a_Portal = PathFinding_CreatePortal($l_a_Trap2[6], $l_a_Trap2[7], $l_a_Trap2[8], $l_a_Trap2[9], $a_i_AABB1ID - 1, $a_i_AABB2ID - 1)
+                If PathFinding_GetSquareDistance($l_a_Trap2[8], $l_a_Trap2[9], $l_a_Trap2[6], $l_a_Trap2[7]) < $l_f_SquareTolerance Then Return False
+                $l_a_Portal = PathFinding_CreatePortal($l_a_Trap2[8], $l_a_Trap2[9], $l_a_Trap2[6], $l_a_Trap2[7], $a_i_AABB1ID - 1, $a_i_AABB2ID - 1)
             ElseIf $l_b_O1 Then
                 If PathFinding_GetSquareDistance($l_a_Trap2[6], $l_a_Trap2[7], $l_a_Trap1[2], $l_a_Trap1[3]) < $l_f_SquareTolerance Then Return False
                 $l_a_Portal = PathFinding_CreatePortal($l_a_Trap2[6], $l_a_Trap2[7], $l_a_Trap1[2], $l_a_Trap1[3], $a_i_AABB1ID - 1, $a_i_AABB2ID - 1)
