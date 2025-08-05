@@ -12,7 +12,7 @@ Opt("GUICloseOnESC", False)
 Global Const $CACHE_FOLDER = @ScriptDir & "\Config\MPFs"
 Global Const $MAPINFO_FILE = @ScriptDir & "\Config\MPFs\mapinfo.csv"
 Global Const $STATUS_FILE = @ScriptDir & "\Config\MPFs\cache_status.ini"
-Global Const $TRAVEL_TIMEOUT = 30000 ; 30 seconds
+Global Const $TRAVEL_TIMEOUT = 10000 ; 30 seconds
 Global Const $CACHE_TIMEOUT = 300000 ; 5 minutes max for caching
 
 ; ===============================================================

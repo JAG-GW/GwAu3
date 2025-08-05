@@ -29,6 +29,7 @@ Global $g_i_QueueSize
 Global $g_p_QueueBase
 Global $g_p_PreGame
 Global $g_p_FrameArray
+Global $g_p_AreaInfo
 
 ;Skill
 Global $g_p_SkillBase

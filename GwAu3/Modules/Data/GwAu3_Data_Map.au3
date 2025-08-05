@@ -229,3 +229,111 @@ EndFunc
 Func Map_GetMapID()
     Return Map_GetCharacterInfo("MapID")
 EndFunc   ;==>GetMapID
+
+#Region Area Related
+Func Map_GetAreaPtr($aMapID = 0)
+    Local $lAreaInfoAddress = $g_p_AreaInfo + (0x7C * $aMapID)
+    Return Ptr($lAreaInfoAddress)
+EndFunc
+
+Func Map_GetAreaInfo($aMapID, $aInfo = "")
+    Local $lPtr = Map_GetAreaPtr($aMapID)
+    If $lPtr = 0 Or $aInfo = "" Then Return 0
+
+    Switch $aInfo
+        Case "Campaign"
+            Return Memory_Read($lPtr, "long")
+        Case "Continent"
+            Return Memory_Read($lPtr + 0x4, "long")
+        Case "Region"
+            Return Memory_Read($lPtr + 0x8, "long")
+        Case "RegionType"
+            Return Memory_Read($lPtr + 0xC, "long")
+        Case "Flags"
+            Return Memory_Read($lPtr + 0x10, "long")
+        Case "ThumbnailID"
+            Return Memory_Read($lPtr + 0x14, "long")
+        Case "MinPartySize"
+            Return Memory_Read($lPtr + 0x18, "long")
+        Case "MaxPartySize"
+            Return Memory_Read($lPtr + 0x1C, "long")
+        Case "MinPlayerSize"
+            Return Memory_Read($lPtr + 0x20, "long")
+        Case "MaxPlayerSize"
+            Return Memory_Read($lPtr + 0x24, "long")
+        Case "ControlledOutpostID"
+            Return Memory_Read($lPtr + 0x28, "long")
+        Case "FractionMission"
+            Return Memory_Read($lPtr + 0x2C, "long")
+        Case "MinLevel"
+            Return Memory_Read($lPtr + 0x30, "long")
+        Case "MaxLevel"
+            Return Memory_Read($lPtr + 0x34, "long")
+        Case "NeededPQ"
+            Return Memory_Read($lPtr + 0x38, "long")
+        Case "MissionMapsTo"
+            Return Memory_Read($lPtr + 0x3C, "long")
+        Case "X"
+            Return Memory_Read($lPtr + 0x40, "long")
+        Case "Y"
+            Return Memory_Read($lPtr + 0x44, "long")
+        Case "IconStartX"
+            Return Memory_Read($lPtr + 0x48, "long")
+        Case "IconStartY"
+            Return Memory_Read($lPtr + 0x4C, "long")
+        Case "IconEndX"
+            Return Memory_Read($lPtr + 0x50, "long")
+        Case "IconEndY"
+            Return Memory_Read($lPtr + 0x54, "long")
+        Case "IconStartXDupe"
+            Return Memory_Read($lPtr + 0x58, "long")
+        Case "IconStartYDupe"
+            Return Memory_Read($lPtr + 0x5C, "long")
+        Case "IconEndXDupe"
+            Return Memory_Read($lPtr + 0x60, "long")
+        Case "IconEndYDupe"
+            Return Memory_Read($lPtr + 0x64, "long")
+        Case "FileID"
+            Return Memory_Read($lPtr + 0x68, "long")
+        Case "MissionChronology"
+            Return Memory_Read($lPtr + 0x6C, "long")
+        Case "HAMapChronology"
+            Return Memory_Read($lPtr + 0x70, "long")
+        Case "NameID"
+            Return Memory_Read($lPtr + 0x74, "long")
+        Case "DescriptionID"
+            Return Memory_Read($lPtr + 0x78, "long")
+
+
+        Case "FileID1"
+            Local $fileID = Memory_Read($lPtr + 0x68, "long")
+            Return Mod(($fileID - 1), 0xFF00) + 0x100
+        Case "FileID2"
+            Local $fileID = Memory_Read($lPtr + 0x68, "long")
+            Return Int(($fileID - 1) / 0xFF00) + 0x100
+        Case "HasEnterButton"
+            Local $flags = Memory_Read($lPtr + 0x10, "long")
+            Return BitAND($flags, 0x100) <> 0 Or BitAND($flags, 0x40000) <> 0
+        Case "IsOnWorldMap"
+            Local $flags = Memory_Read($lPtr + 0x10, "long")
+            Return BitAND($flags, 0x20) = 0
+        Case "IsPvP"
+            Local $flags = Memory_Read($lPtr + 0x10, "long")
+            Return BitAND($flags, 0x40001) <> 0
+        Case "IsGuildHall"
+            Local $flags = Memory_Read($lPtr + 0x10, "long")
+            Return BitAND($flags, 0x800000) <> 0
+        Case "IsVanquishableArea"
+            Local $flags = Memory_Read($lPtr + 0x10, "long")
+            Return BitAND($flags, 0x10000000) <> 0
+        Case "IsUnlockable"
+            Local $flags = Memory_Read($lPtr + 0x10, "long")
+            Return BitAND($flags, 0x10000) <> 0
+        Case "HasMissionMapsTo"
+            Local $flags = Memory_Read($lPtr + 0x10, "long")
+            Return BitAND($flags, 0x8000000) <> 0
+	EndSwitch
+
+    Return 0
+EndFunc
+#EndRegion Area Related
