@@ -269,7 +269,7 @@ Func Updater_CheckForGwAu3Updates()
     EndIf
 
     Log_Info("Starting download, please wait...", "GwAu3", $g_h_EditText)
-    Updater_DownloadFiles_PB($l_as_UpdateFiles, $l_as_UpdateSHAs)
+    Updater_DownloadFilesParallel_PB($l_as_UpdateFiles, $l_as_UpdateSHAs)
 
     ; Restart current script with new file version and same privileges
     ;~ Run(@AutoItExe & ' "' & @ScriptFullPath & '"')
@@ -371,7 +371,7 @@ EndFunc
 ; Optional one-time: Initialize [Hashes] with current file SHAs
 ;=================================================================
 Func Updater_InitializeHashCache()
-    Local $l_as_OldEntries = IniReadSection($g_s_UpdaterConfigIni, $g_s_Section_Hashes)
+    Local $l_as_OldEntries = _IniReadSection($g_s_UpdaterConfigIni, $g_s_Section_Hashes)
     If Not @error Then
         For $i = 0 To UBound($l_as_OldEntries)-1
             IniDelete($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_as_OldEntries[$i][0])
@@ -506,7 +506,6 @@ Func Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         $l_s_RelPath = $a_as_UpdateFiles[$j]
         $l_s_SHA = $a_as_UpdateSHAs[$j]
         $l_s_Url = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $l_s_RelPath
-        $l_i_FileSize = InetGetSize($l_s_Url)
 
         ; Replace "/" with "\" in relative filepath since Windows and GitHub use different delimiters for folders
         $l_s_RelPath = StringReplace($l_s_RelPath, "/", "\")
@@ -528,9 +527,8 @@ Func Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
 
         ; Poll until this file is done
         While True
-            Local $l_i_BytesRead = InetGetInfo($l_h_Download, $INET_DOWNLOADREAD)
+            If InetGetInfo($l_h_Download, $INET_DOWNLOADCOMPLETE) Then ExitLoop
             If @error Then ExitLoop
-            If $l_i_BytesRead >= $l_i_FileSize Then ExitLoop
             Sleep(100)
         WEnd
 
@@ -542,6 +540,67 @@ Func Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
     Next
 
     ; Remove update GUI
+    GUIDelete($l_h_GUI)
+EndFunc
+
+Func Updater_DownloadFilesParallel_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
+    Local Const $LC_I_MAX_STREAMS = 4
+    Local $l_i_FileCount = $a_as_UpdateFiles[0]
+
+    ; Build a single GUI with label + progress bar
+    Local $l_h_GUI = GUICreate("GwAu3-Updater - Downloading Updates", 400, 120)
+    Local $l_h_Lbl = GUICtrlCreateLabel("", 20, 20, 360, 20, BitOR($SS_LEFT, $DT_END_ELLIPSIS))
+    Local $l_h_ProgressBar = GUICtrlCreateProgress(20, 50, 360, 20)
+    GUISetState(@SW_SHOW)
+
+    ; Prepare file list [Index][URL, DownloadDst, RelativePath, SHA, CompleteFlag, Handle]
+    Local $l_a_Files[$l_i_FileCount + 1][6]
+    For $i = 1 To $l_i_FileCount
+        Local $l_s_RelPath = StringReplace($a_as_UpdateFiles[$i], "/", "\")
+        $l_a_Files[$i][0] = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $a_as_UpdateFiles[$i] ; URL
+        $l_a_Files[$i][1] = $g_s_GwAu3Dir & $l_s_RelPath ; DownloadDst
+        $l_a_Files[$i][2] = $l_s_RelPath ; RelativePath
+        $l_a_Files[$i][3] = $a_as_UpdateSHAs[$i] ; SHA
+        $l_a_Files[$i][4] = False ; CompleteFlag
+        $l_a_Files[$i][5] = 0 ; Handle
+        Local $l_s_TargetDir = StringRegExpReplace($l_a_Files[$i][1], "\\[^\\]+$", "")
+        DirCreate($l_s_TargetDir)
+    Next
+
+    Local $l_i_Started = 1, $l_i_Completed = 0
+    ; Start up to $LC_I_MAX_STREAMS initial downloads
+    For $i = 1 To _Min($LC_I_MAX_STREAMS, $l_i_FileCount)
+        $l_a_Files[$i][5] = InetGet($l_a_Files[$i][0], $l_a_Files[$i][1], $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
+        $l_i_Started += 1
+    Next
+
+    While $l_i_Completed < $l_i_FileCount
+        For $i = 1 To $l_i_FileCount
+            If $l_a_Files[$i][4] = True Then ContinueLoop
+            Local $l_h_Download = $l_a_Files[$i][5]
+            If $l_h_Download = 0 Then ContinueLoop ; Not started yet
+
+            ; Poll download
+            If InetGetInfo($l_h_Download, $INET_DOWNLOADCOMPLETE) Then
+                ; Done
+                $l_a_Files[$i][4] = True
+                $l_i_Completed += 1
+                GUICtrlSetData($l_h_Lbl, "Downloaded Files: [" & $l_i_Completed & "/" & $l_i_FileCount & "]: " & $l_a_Files[$i][2])
+                GUICtrlSetData($l_h_ProgressBar, $l_i_Completed / $l_i_FileCount * 100)
+
+                ; Save hash
+                Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_a_Files[$i][2], $l_a_Files[$i][3])
+
+                ; Start next download if any left
+                If $l_i_Started <= $l_i_FileCount Then
+                    $l_a_Files[$l_i_Started][5] = InetGet($l_a_Files[$l_i_Started][0], $l_a_Files[$l_i_Started][1], $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
+                    $l_i_Started += 1
+                EndIf
+            EndIf
+        Next
+        Sleep(100)
+    WEnd
+
     GUIDelete($l_h_GUI)
 EndFunc
 
