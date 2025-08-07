@@ -498,7 +498,7 @@ Func Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
     Local $l_h_GUI = GUICreate("GwAu3-Updater - Downloading Updates", 400, 120)
     Local $l_h_Lbl = GUICtrlCreateLabel("", 20, 20, 360, 20, BitOR($SS_LEFT, $DT_END_ELLIPSIS))
     Local $l_h_ProgressBar = GUICtrlCreateProgress(20, 50, 360, 20)
-    GUICtrlSetLimit($l_h_ProgressBar, $l_i_FileCount)
+    Local $l_i_StepSize = 100 / $l_i_FileCount
     GUISetState(@SW_SHOW)
 
     ; Download sequentially, shifting the bar by an offset each time
@@ -535,7 +535,7 @@ Func Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         WEnd
 
         ; Update progress bar
-        GUICtrlSetData($l_h_ProgressBar, $j)
+        GUICtrlSetData($l_h_ProgressBar, $j * $l_i_StepSize)
 
         ; Save hash
         Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
