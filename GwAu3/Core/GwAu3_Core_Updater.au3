@@ -283,7 +283,7 @@ EndFunc
 ;=================================================================
 Func Updater_LoadHashCache($a_s_IniFile, $a_s_IniSection)
     Local $l_o_HashDict = ObjCreate("Scripting.Dictionary")
-    Local $l_as_ShaHashes = IniReadSection($a_s_IniFile, $a_s_IniSection)
+    Local $l_as_ShaHashes = _IniReadSection($a_s_IniFile, $a_s_IniSection)
     If @error Or UBound($l_as_ShaHashes) = 0 Then Return $l_o_HashDict
     For $i = 1 To UBound($l_as_ShaHashes) - 1
         Local $l_s_DictKey = $l_as_ShaHashes[$i][0]
@@ -292,6 +292,71 @@ Func Updater_LoadHashCache($a_s_IniFile, $a_s_IniSection)
         $l_o_HashDict.Add($l_s_DictKey, $l_s_DictVal)
     Next
     Return $l_o_HashDict
+EndFunc
+
+;=================================================================
+; Reads all key-value pairs from a section of an INI file
+; No length limit
+;=================================================================
+Func _IniReadSection($a_s_IniFile, $a_s_IniSection)
+    If Not FileExists($a_s_IniFile) Then
+        SetError(1)
+        Return 0
+    EndIf
+
+    Local $l_as2_Keys[1][2]
+    Local $l_h_File = FileOpen($a_s_IniFile, 0)
+    If $l_h_File = -1 Then
+        SetError(1)
+        Return 0
+    EndIf
+
+    Local $l_b_InSection = False, $l_s_Line, $l_i_Count = 0
+
+    While 1
+        $l_s_Line = FileReadLine($l_h_File)
+        If @error Then ExitLoop
+
+        $l_s_Line = StringStripWS($l_s_Line, 3)
+        If $l_s_Line = "" Or StringLeft($l_s_Line, 1) = ";" Or StringLeft($l_s_Line, 1) = "#" Then ContinueLoop
+
+        If StringRegExp($l_s_Line, "^\s*\[.*\]\s*$") Then
+            ; Check if this is the target section
+            Local $l_s_CurrentSection = StringRegExpReplace($l_s_Line, "^\s*\[(.*)\]\s*$", "\1")
+            If $l_s_CurrentSection = $a_s_IniSection Then
+                $l_b_InSection = True
+            ElseIf $l_b_InSection Then
+                ; Exited the section
+                ExitLoop
+            Else
+                $l_b_InSection = False
+            EndIf
+            ContinueLoop
+        EndIf
+
+        If $l_b_InSection Then
+            ; Parse key=value
+            Local $l_i_EqPosition = StringInStr($l_s_Line, "=")
+            If $l_i_EqPosition > 1 Then
+                Local $sKey = StringStripWS(StringLeft($l_s_Line, $l_i_EqPosition - 1), 3)
+                Local $sVal = StringMid($l_s_Line, $l_i_EqPosition + 1)
+                ReDim $l_as2_Keys[UBound($l_as2_Keys) + 1][2]
+                $l_as2_Keys[UBound($l_as2_Keys) - 1][0] = $sKey
+                $l_as2_Keys[UBound($l_as2_Keys) - 1][1] = $sVal
+                $l_i_Count += 1
+            EndIf
+        EndIf
+    WEnd
+
+    FileClose($l_h_File)
+
+    If $l_i_Count = 0 Then
+        SetError(1)
+        Return 0
+    EndIf
+
+    $l_as2_Keys[0][0] = $l_i_Count
+    Return $l_as2_Keys
 EndFunc
 
 ;=================================================================

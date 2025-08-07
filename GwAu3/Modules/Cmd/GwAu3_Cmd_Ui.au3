@@ -11,8 +11,12 @@ Func Ui_SetDifficulty($a_b_HardMode = False)
 EndFunc   ;==>Ui_SetDifficulty
 
 ;~ Description: Open targeted chest using dialog options. (0x1 = Use Key, 0x2 = Use Lockpick, 0x80 = Cancel)
-Func Ui_OpenChest($a_i_DialogID)
-    DllStructSetData($g_d_OpenChest, 2, $a_i_DialogID)
+Func Ui_OpenChest($a_b_UseLockpick = True)
+    If $a_b_UseLockpick Then 
+        DllStructSetData($g_d_OpenChest, 2, 0x2)
+    Else
+        DllStructSetData($g_d_OpenChest, 2, 0x1)
+    EndIf
     Core_Enqueue($g_p_OpenChest, 8)
 EndFunc   ;==>Ui_OpenChest
 
