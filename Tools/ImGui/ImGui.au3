@@ -6,7 +6,7 @@
 
 Local $__imgui_dllpath = @TempDir & "\temp-data-" & TimerInit() & ".tmp", $__imgui_created = False
 
-If Not FileInstall("Tools\ImGui\imgui.dll", $__imgui_dllpath) Then
+If Not FileInstall("..\..\Tools\ImGui\imgui.dll", $__imgui_dllpath) Then
 	MsgBox(16, "Error", "Cannot find imgui.dll")
 	Exit
 EndIf

@@ -1398,7 +1398,7 @@ Global Const $GC_I_QUEST_ID_AHUMBLINGGIFT = 1436
 Global Const $GC_I_QUEST_ID_THEPOLARDEPRESSED = 1437
 Global Const $GC_I_QUEST_ID_TAKEMYSISTERPLEASE = 1438
 
-Global $G_S_QUEST_LABEL[1438]
+Global $G_S_QUEST_LABEL[1439]
 $G_S_QUEST_LABEL[0] = "The Ascalon Settlement"
 $G_S_QUEST_LABEL[1] = "The Villainy of Galrath"
 $G_S_QUEST_LABEL[2] = "Bandit Trouble"
