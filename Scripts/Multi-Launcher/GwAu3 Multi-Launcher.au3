@@ -18,7 +18,7 @@
 #include <GuiRichEdit.au3>
 #include <StructureConstants.au3>
 #include <GuiImageList.au3>
-#include 'Tools/_GUICtrlEmoji/_GUICtrlEmoji.au3'
+#include '../../Tools/_GUICtrlEmoji/_GUICtrlEmoji.au3'
 
 ; --- Options ---
 Opt("GUIOnEventMode", 1)
@@ -2246,7 +2246,7 @@ Func OnBotBrowse()
     If $hGUI <> 0 Then WinSetOnTop($hGUI, "", 0)
     If $g_hBotDialog <> 0 Then WinSetOnTop($g_hBotDialog, "", 0)
 
-    Local $botFile = FileOpenDialog("Select Bot File", @ScriptDir, "Bot Files (*.exe;*.au3;*.a3x)|All Files (*.*)", 1)
+    Local $botFile = FileOpenDialog("Select Bot File", @ScriptDir & "\..", "Bot Files (*.exe;*.au3;*.a3x)|All Files (*.*)", 1)
 
     Local $attempts = 0
     While $attempts < 10
