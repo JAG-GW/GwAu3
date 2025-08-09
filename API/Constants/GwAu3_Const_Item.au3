@@ -33,6 +33,46 @@ Global Enum _
 	$GC_I_INVENTORY_EQUIPPED_ITEMS
 #EndRegion Inventory
 
+#Region global Item
+Global Const $GC_I_MODELID_RARITY_WHITE = 2621
+Global Const $GC_I_MODELID_RARITY_BLUE = 2623
+Global Const $GC_I_MODELID_RARITY_PURPLE = 2626
+Global Const $GC_I_MODELID_RARITY_GOLD = 2624
+Global Const $GC_I_MODELID_RARITY_GREEN = 2627
+Global COnst $GC_I_MODELID_GOLD_COIN = 2511
+#EndRegion
+
+#Region Dyes
+Global Const $GC_I_MODELID_DYE = 146
+Global Const $GC_I_EXTRAID_DYE_BLUE = 2
+Global Const $GC_I_EXTRAID_DYE_GREEN = 3
+Global Const $GC_I_EXTRAID_DYE_PURPLE = 4
+Global Const $GC_I_EXTRAID_DYE_RED = 5
+Global Const $GC_I_EXTRAID_DYE_YELLOW = 6
+Global Const $GC_I_EXTRAID_DYE_BROWN = 7
+Global Const $GC_I_EXTRAID_DYE_ORANGE = 8
+Global Const $GC_I_EXTRAID_DYE_SILVER = 9
+Global Const $GC_I_EXTRAID_DYE_BLACK = 10
+Global Const $GC_I_EXTRAID_DYE_GRAY = 11
+Global Const $GC_I_EXTRAID_DYE_WHITE = 12
+Global Const $GC_I_EXTRAID_DYE_PINK = 13
+
+Global $GC_AI_EXTRAID_DYES[13] = [12, _
+    $GC_I_EXTRAID_DYE_BLUE, _
+    $GC_I_EXTRAID_DYE_GREEN, _
+    $GC_I_EXTRAID_DYE_PURPLE, _
+    $GC_I_EXTRAID_DYE_RED, _
+    $GC_I_EXTRAID_DYE_YELLOW, _
+    $GC_I_EXTRAID_DYE_BROWN, _
+    $GC_I_EXTRAID_DYE_ORANGE, _
+    $GC_I_EXTRAID_DYE_SILVER, _
+    $GC_I_EXTRAID_DYE_BLACK, _
+    $GC_I_EXTRAID_DYE_GRAY, _
+    $GC_I_EXTRAID_DYE_WHITE, _
+    $GC_I_EXTRAID_DYE_PINK _
+]
+#EndRegion Dyes
+
 #Region Materials
 ; Material
 Global Const $GC_I_MODELID_BONES = 921
