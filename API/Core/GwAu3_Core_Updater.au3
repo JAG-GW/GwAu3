@@ -215,17 +215,29 @@ Func Updater_CheckForGwAu3Updates()
         EndIf
     Next
 
-    If $l_as_Deletion[0] > 0 Then
+    Local $l_i_Count_Deletion = $l_as_Deletion[0]
+    If $l_i_Count_Deletion > 0 Then
         ; Decide whether to delete, silent mode = always delete
         Local $l_b_DeleteFiles = Not $g_b_Verbose
         If $g_b_Verbose Then
             ; Verbose mode, delete only if user confirms
-            Local $l_s_DeleteMsg = "Tracked file/s removed upstream:" & @CRLF & @CRLF
-            For $i = 1 To $l_as_Deletion[0]
-                $l_s_DeleteMsg &= $i & ") " & $l_as_Deletion[$i] & @CRLF
-            Next
-            $l_s_DeleteMsg &= @CRLF & "Remove file/s locally?"
-            If MsgBox(4 + 48, "GwAu3-Updater - File Removal", $l_s_DeleteMsg) = 6 Then
+            Local Const $LC_I_MAX_ROWS = 20
+            Local $l_s_DeleteMsg = ""
+
+            If $l_i_Count_Deletion > $LC_I_MAX_ROWS Then
+                For $i = 1 To $LC_I_MAX_ROWS
+                    $l_s_DeleteMsg &= $l_as_Deletion[$i] & @CRLF
+                Next
+                Local $l_i_Leftovers = $l_i_Count_Deletion - $LC_I_MAX_ROWS
+                $l_s_DeleteMsg &= @CRLF & "... and " & $l_i_Leftovers & " more items."
+            Else
+                For $i = 1 To $l_i_Count_Deletion
+                    $l_s_DeleteMsg &= $l_as_Deletion[$i] & @CRLF
+                Next
+            EndIf
+
+            If MsgBox(4 + 48, "GwAu3-Updater - File Removal", _
+                "Tracked file/s removed upstream. Remove file/s locally?" & @CRLF & @CRLF & $l_s_DeleteMsg) = 6 Then
                 $l_b_DeleteFiles = True
             EndIf
         EndIf
