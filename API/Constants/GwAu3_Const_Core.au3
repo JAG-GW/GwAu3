@@ -30,6 +30,7 @@ Global $g_p_QueueBase
 Global $g_p_PreGame
 Global $g_p_FrameArray
 Global $g_p_AreaInfo
+Global $g_p_ConnectionStatus
 
 ;Skill
 Global $g_p_SkillBase
@@ -110,6 +111,20 @@ Global $g_f_ClickCoordsX = 0
 Global $g_f_ClickCoordsY = 0
 
 ;UI
+Global $g_d_FlagHero = DllStructCreate('ptr;dword;dword;dword;dword') 
+Global $g_p_FlagHero = DllStructGetPtr($g_d_FlagHero)
+Global $g_d_FlagAll = DllStructCreate('ptr;dword;dword;dword')
+Global $g_p_FlagAll = DllStructGetPtr($g_d_FlagAll)
+Global $g_d_AddNPC = DllStructCreate('ptr;dword')
+Global $g_p_AddNPC = DllStructGetPtr($g_d_AddNPC)
+Global $g_d_AddHero = DllStructCreate('ptr;dword')
+Global $g_p_AddHero = DllStructGetPtr($g_d_AddHero)
+Global $g_d_KickNPC = DllStructCreate('ptr;dword')
+Global $g_p_KickNPC = DllStructGetPtr($g_d_KickNPC)
+Global $g_d_KickHero = DllStructCreate('ptr;dword')
+Global $g_p_KickHero = DllStructGetPtr($g_d_KickHero)
+Global $g_d_LeaveGroup = DllStructCreate('ptr;dword')
+Global $g_p_LeaveGroup = DllStructGetPtr($g_d_LeaveGroup)
 Global $g_d_EnterMission = DllStructCreate('ptr;dword')
 Global $g_p_EnterMission = DllStructGetPtr($g_d_EnterMission)
 Global $g_d_SetDifficulty = DllStructCreate('ptr;dword')

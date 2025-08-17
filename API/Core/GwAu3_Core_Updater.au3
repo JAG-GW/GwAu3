@@ -237,7 +237,7 @@ Func Updater_CheckForGwAu3Updates()
             EndIf
 
             If MsgBox(4 + 48, "GwAu3-Updater - File Removal", _
-                "Tracked file/s removed upstream. Remove file/s locally?" & @CRLF & @CRLF & $l_s_DeleteMsg) = 6 Then
+                "Tracked file(s) removed upstream. Remove file(s) locally?" & @CRLF & @CRLF & $l_s_DeleteMsg) = 6 Then
                 $l_b_DeleteFiles = True
             EndIf
         EndIf
@@ -277,7 +277,7 @@ Func Updater_CheckForGwAu3Updates()
 
     If $g_b_Verbose Then
         ; verbose mode: prompt and abort if they decline
-        If MsgBox(4 + 32, "GwAu3-Updater - Update/s Available", $l_as_UpdateFiles[0] & " update/s available. Update now?") <> 6 Then Return 2
+        If MsgBox(4 + 32, "GwAu3-Updater - Update Available", $l_as_UpdateFiles[0] & " update(s) available. Update now?") <> 6 Then Return 2
     EndIf
 
     Log_Info("Starting download, please wait...", "GwAu3", $g_h_EditText)
@@ -727,7 +727,7 @@ EndFunc
 #EndRegion Updater_Functions
 
 #Region WinHttp
-; #MANAGE DLL HANDLES# ;=====================================================================
+; #MANAGE_DLL_HANDLES# ;=====================================================================
 Func Updater_LoadWinHttp()
     $hWINHTTPDLL__WINHTTP = DllOpen("winhttp.dll")
 EndFunc
