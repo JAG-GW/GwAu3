@@ -442,3 +442,7 @@ Func Core_GetGuildWarsWindow()
     Local $l_h_Wnd = WinGetHandle($l_s_expectedTitle)
     If $l_h_Wnd <> 0 Then Return $l_h_Wnd
 EndFunc
+
+Func Core_GetDisconnected()
+	Return Memory_Read($g_p_ConnectionStatus, 'long') = 7
+EndFunc
