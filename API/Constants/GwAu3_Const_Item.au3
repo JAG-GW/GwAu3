@@ -39,8 +39,55 @@ Global Const $GC_I_MODELID_RARITY_BLUE = 2623
 Global Const $GC_I_MODELID_RARITY_PURPLE = 2626
 Global Const $GC_I_MODELID_RARITY_GOLD = 2624
 Global Const $GC_I_MODELID_RARITY_GREEN = 2627
-Global COnst $GC_I_MODELID_GOLD_COIN = 2511
+Global Const $GC_I_MODELID_GOLD_COIN = 2511
+
+Global Const $GC_I_MODELID_SALVAGE_KIT = 2991
+Global Const $GC_I_MODELID_EXPERT_SALVAGE_KIT = 2992
+Global Const $GC_I_MODELID_SUPERIOR_SALVAGE_KIT = 5900
+Global Const $GC_I_MODELID_IDENTIFICATION_KIT = 2989
+Global Const $GC_I_MODELID_SUPERIOR_IDENTIFICATION_KIT = 5899
 #EndRegion
+
+#Region Items types
+Global Const $GC_I_TYPES_SALVAGE = 0
+Global Const $GC_I_TYPES_LEADHAND	= 1
+Global Const $GC_I_TYPES_AXE = 2
+Global Const $GC_I_TYPES_BAG = 3
+Global Const $GC_I_TYPES_BOOTS = 4
+Global Const $GC_I_TYPES_BOW = 5
+Global Const $GC_I_TYPES_BUNDLE = 6
+Global Const $GC_I_TYPES_CHESTPIECE = 7
+Global Const $GC_I_TYPES_RUNE_AND_MOD = 8
+Global Const $GC_I_TYPES_USABLE = 9
+Global Const $GC_I_TYPES_DYE = 10
+Global Const $GC_I_TYPES_MATERIAL_AND_ZCOINS = 11
+Global Const $GC_I_TYPES_OFFHAND = 12
+Global Const $GC_I_TYPES_GLOVES = 13
+Global Const $GC_I_TYPES_CELESTIAL_SIGIL = 14
+Global Const $GC_I_TYPES_HAMMER = 15
+Global Const $GC_I_TYPES_HEADPIECE = 16
+Global Const $GC_I_TYPES_TROPHY_2 = 17
+Global Const $GC_I_TYPES_KEY = 18
+Global Const $GC_I_TYPES_LEGGINS = 19
+Global Const $GC_I_TYPES_GOLD_COINS = 20
+Global Const $GC_I_TYPES_QUEST_ITEM = 21
+Global Const $GC_I_TYPES_WAND = 22
+Global Const $GC_I_TYPES_SHIELD = 24
+Global Const $GC_I_TYPES_STAFF = 26
+Global Const $GC_I_TYPES_SWORD = 27
+Global Const $GC_I_TYPES_KIT = 29
+Global Const $GC_I_TYPES_TROPHY = 30
+Global Const $GC_I_TYPES_SCROLL = 31
+Global Const $GC_I_TYPES_DAGGERS = 32
+Global Const $GC_I_TYPES_PRESENT = 33
+Global Const $GC_I_TYPES_MINIPET = 34
+Global Const $GC_I_TYPES_SCYTHE = 35
+Global Const $GC_I_TYPES_SPEAR = 36
+Global Const $GC_I_TYPES_BOOKS = 43
+Global Const $GC_I_TYPES_COSTUME_BODY = 44
+Global Const $GC_I_TYPES_COSTUME_HEADPIC = 45
+Global Const $GC_I_TYPES_NOT_EQUIPPED = 46
+#EndRegion Items types
 
 #Region Dyes
 Global Const $GC_I_MODELID_DYE = 146
