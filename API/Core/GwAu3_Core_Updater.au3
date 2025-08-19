@@ -194,10 +194,7 @@ Func Updater_CheckForGwAu3Updates()
 
 	; Parse blobs from JSON
     Local $l_as_Tree = StringRegExp($l_s_Json, '(?s)\{[^}]*"path":"([^"]+)"[^}]*"type":"blob"[^}]*"sha":"([0-9a-f]+)"[^}]*\}', 3)
-    If @error Then
-		MsgBox(16,"Error","Could not parse JSON")
-		Return 0
-	EndIf
+    If @error Or $l_as_Tree = 0 Then Return 0
 
 	; Build remote hash dictionary
     Local $l_o_RemoteHashes = ObjCreate("Scripting.Dictionary")
