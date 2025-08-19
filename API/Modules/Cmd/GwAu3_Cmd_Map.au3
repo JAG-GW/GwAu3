@@ -27,13 +27,15 @@ Func Map_MoveMap($a_i_MapID, $a_i_Region, $a_i_District, $a_i_Language)
 EndFunc   ;==>MoveMap
 
 ;~ Description: Returns to outpost after resigning/failure.
-Func Map_ReturnToOutpost()
-    Return Core_SendPacket(0x4, $GC_I_HEADER_PARTY_RETURN_TO_OUTPOST)
+Func Map_ReturnToOutpost($a_WaitToLoad = True)
+    Core_SendPacket(0x4, $GC_I_HEADER_PARTY_RETURN_TO_OUTPOST)
+	If $a_WaitToLoad Then Return Map_WaitMapLoading(-1, 0)
 EndFunc   ;==>ReturnToOutpost
 
 ;~ Description: Enter a challenge mission/pvp.
-Func Map_EnterChallenge()
-    Return Core_SendPacket(0x8, $GC_I_HEADER_PARTY_ENTER_CHALLENGE, 1)
+Func Map_EnterChallenge($a_WaitToLoad = True)
+    Core_SendPacket(0x8, $GC_I_HEADER_PARTY_ENTER_CHALLENGE, 1)
+	If $a_WaitToLoad Then Return Map_WaitMapLoading(-1, 1)
 EndFunc   ;==>EnterChallenge
 
 ;~ Description: Enter a foreign challenge mission/pvp.
@@ -42,25 +44,25 @@ EndFunc   ;==>EnterChallenge
 ;~ EndFunc   ;==>EnterChallengeForeign
 
 ;~ Description: Travel to your guild hall.
-Func Map_TravelGH()
+Func Map_TravelGH($a_WaitToLoad = True)
     Local $l_ai_Offset[3] = [0, 0x18, 0x3C]
     Local $l_ap_GH = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
     Core_SendPacket(0x18, $GC_I_HEADER_PARTY_ENTER_GUILD_HALL, Memory_Read($l_ap_GH[1] + 0x64), Memory_Read($l_ap_GH[1] + 0x68), Memory_Read($l_ap_GH[1] + 0x6C), Memory_Read($l_ap_GH[1] + 0x70), 1)
-    ;~ Return Map_WaitMapLoading()
+    If $a_WaitToLoad Then Return Map_WaitMapLoading()
 EndFunc   ;==>TravelGH
 
 ;~ Description: Leave your guild hall.
-Func Map_LeaveGH()
+Func Map_LeaveGH($a_WaitToLoad = True)
     Core_SendPacket(0x8, $GC_I_HEADER_PARTY_LEAVE_GUILD_HALL, 1)
-    ;~ Return Map_WaitMapLoading()
+    If $a_WaitToLoad Then Return Map_WaitMapLoading()
 EndFunc   ;==>LeaveGH
 
 ;~ Description: Map travel to an outpost.
-Func Map_TravelTo($a_i_MapID, $a_i_Language = Map_GetCharacterInfo("Language"), $a_i_Region = Map_GetCharacterInfo("Region"), $a_i_District = 0)
+Func Map_TravelTo($a_i_MapID, $a_i_Language = Map_GetCharacterInfo("Language"), $a_i_Region = Map_GetCharacterInfo("Region"), $a_i_District = 0, $a_WaitToLoad = True)
     If Map_GetCharacterInfo("MapID") = $a_i_MapID And Map_GetInstanceInfo("IsOutpost") _
         And $a_i_Language = Map_GetCharacterInfo("Language") And $a_i_Region = Map_GetCharacterInfo("Region") Then Return True
     Map_MoveMap($a_i_MapID, $a_i_Region, $a_i_District, $a_i_Language)
-    Return Map_WaitMapLoading($a_i_MapID)
+    If $a_WaitToLoad Then Return Map_WaitMapLoading($a_i_MapID)
 EndFunc   ;==>TravelTo
 
 Func Map_WaitMapLoading($a_i_MapID = -1, $a_i_InstanceType = -1)
