@@ -141,7 +141,7 @@ Global $g_s_Repo = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Repo", "
 Global $g_s_Branch = IniRead($g_s_UpdaterConfigIni, $g_s_Section_Update, "Branch", "main")
 
 ; Add files as needed, e.g. [n, "file1", "file2", ...], use relative paths and forward "/"
-Global $g_as_IgnoredFiles[2] = [1, "GwAu3/Core/config.ini"]
+Global $g_as_IgnoredFiles[2] = [1, "API/Core/config.ini"]
 #EndRegion Updater_ScriptVars
 
 #Region Updater_Functions
@@ -369,11 +369,17 @@ Func _IniReadSection($a_s_IniFile, $a_s_IniSection)
 EndFunc
 
 ;=================================================================
-; Save one SHA entry into [Hashes], encoding backslash -> tilde
+; Save all SHA entry into [Hashes], encoding backslash -> tilde
 ;=================================================================
-Func Updater_SaveHashCache($a_s_IniFile, $a_s_IniSection, $a_s_RelPath, $a_s_SHA)
-    Local $l_s_Key = StringRegExpReplace($a_s_RelPath, "[/\\]", "~")
-    IniWrite($a_s_IniFile, $a_s_IniSection, $l_s_Key, $a_s_SHA)
+Func Updater_SaveHashCache($a_s_IniFile, $a_s_IniSection, $a_as2_KeyHashes)
+    Local $l_i_KeyCount = UBound($a_as2_KeyHashes)
+    Local $l_s_Key, $l_s_SHA
+
+    For $i = 0 To $l_i_KeyCount - 1
+        $l_s_Key = StringRegExpReplace($a_as2_KeyHashes[$i][0], "[/\\]", "~")
+        $l_s_SHA = $a_as2_KeyHashes[$i][1]
+        IniWrite($a_s_IniFile, $a_s_IniSection, $l_s_Key, $l_s_SHA)
+    Next
 EndFunc
 
 ;=================================================================
@@ -381,19 +387,22 @@ EndFunc
 ;=================================================================
 Func Updater_InitializeHashCache()
     Local $l_as_OldEntries = _IniReadSection($g_s_UpdaterConfigIni, $g_s_Section_Hashes)
-    If Not @error Then
-        For $i = 0 To UBound($l_as_OldEntries)-1
-            IniDelete($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_as_OldEntries[$i][0])
-        Next
-    EndIf
+    If Not @error Then IniDelete($g_s_UpdaterConfigIni, $g_s_Section_Hashes)
 
-    Local $l_as_Files = Updater_GetRelativeFiles($g_s_GwAu3Dir)
+    Local $l_as_Files = Updater_GetRelativeFiles($g_s_GwAu3Dir), $l_i_FileCount = UBound($l_as_Files)
+    Local $l_as2_KeyHashes[$l_i_FileCount][2]
+
     For $i = 1 To $l_as_Files[0]
         Local $l_s_RelPath = $l_as_Files[$i]
         Local $l_s_FullPath = $g_s_GwAu3Dir & $l_s_RelPath
-        Local $l_s_SHA = Updater_ComputeGitBlobSHA($l_s_FullPath)
-        Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
+        Local $l_s_SHA = Updater_ComputeGitBlobSHA($l_s_FullPath)  
+
+        $l_as2_KeyHashes[$i - 1][0] = $l_s_RelPath
+        $l_as2_KeyHashes[$i - 1][1] = $l_s_SHA
     Next
+
+    Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_as2_KeyHashes)
+
     MsgBox(64, "Initialized", "Wrote " & $l_as_Files[0] & " entries into [" & $g_s_Section_Hashes & "]")
 EndFunc
 
@@ -497,61 +506,6 @@ EndFunc
 ; Download files from $a_as_UpdateFiles and write their respective
 ; hashes from $a_as_UpdateSHAs into INI file
 ;=================================================================
-Func Updater_DownloadFiles_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
-    Local $l_i_FileSize, $l_s_RelPath
-    Local $l_s_Url, $l_s_SHA
-
-    Local $l_i_FileCount = $a_as_UpdateFiles[0]
-
-    ; Build a single GUI with label + progress bar
-    Local $l_h_GUI = GUICreate("GwAu3-Updater - Downloading Updates", 400, 120)
-    Local $l_h_Lbl = GUICtrlCreateLabel("", 20, 20, 360, 20, BitOR($SS_LEFT, $DT_END_ELLIPSIS))
-    Local $l_h_ProgressBar = GUICtrlCreateProgress(20, 50, 360, 20)
-    Local $l_i_StepSize = 100 / $l_i_FileCount
-    GUISetState(@SW_SHOW)
-
-    ; Download sequentially, shifting the bar by an offset each time
-    For $j = 1 To $a_as_UpdateFiles[0]
-        $l_s_RelPath = $a_as_UpdateFiles[$j]
-        $l_s_SHA = $a_as_UpdateSHAs[$j]
-        $l_s_Url = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $l_s_RelPath
-
-        ; Replace "/" with "\" in relative filepath since Windows and GitHub use different delimiters for folders
-        $l_s_RelPath = StringReplace($l_s_RelPath, "/", "\")
-        Local $l_s_DownloadDst = $g_s_GwAu3Dir & $l_s_RelPath
-
-        ; Create target directory if not present
-        Local $l_s_TargetDir = StringRegExpReplace($l_s_DownloadDst, "\\[^\\]+$", "")
-        DirCreate($l_s_TargetDir)
-
-        ; Update status
-        GUICtrlSetData($l_h_Lbl, "Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath & "   ")
-
-        ; Start background download
-        Local $l_h_Download = InetGet($l_s_Url, $l_s_DownloadDst, $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
-        If @error Or $l_h_Download = 0 Then
-            MsgBox(16, "Download Error", "Failed to fetch " & $l_s_RelPath)
-            ContinueLoop
-        EndIf
-
-        ; Poll until this file is done
-        While True
-            If InetGetInfo($l_h_Download, $INET_DOWNLOADCOMPLETE) Then ExitLoop
-            If @error Then ExitLoop
-            Sleep(100)
-        WEnd
-
-        ; Update progress bar
-        GUICtrlSetData($l_h_ProgressBar, $j * $l_i_StepSize)
-
-        ; Save hash
-        Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
-    Next
-
-    ; Remove update GUI
-    GUIDelete($l_h_GUI)
-EndFunc
-
 Func Updater_DownloadFilesParallel_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
     Local Const $LC_I_MAX_STREAMS = 4
     Local $l_i_FileCount = $a_as_UpdateFiles[0]
@@ -576,7 +530,8 @@ Func Updater_DownloadFilesParallel_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         DirCreate($l_s_TargetDir)
     Next
 
-    Local $l_i_Started = 1, $l_i_Completed = 0
+    Local $l_as2_KeyHashes[$l_i_FileCount][2]
+    Local $l_i_Started = 1, $l_i_Completed = 0, $l_i_Success = 0
     ; Start up to $LC_I_MAX_STREAMS initial downloads
     For $i = 1 To _Min($LC_I_MAX_STREAMS, $l_i_FileCount)
         $l_a_Files[$i][5] = InetGet($l_a_Files[$i][0], $l_a_Files[$i][1], $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
@@ -594,11 +549,18 @@ Func Updater_DownloadFilesParallel_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
                 ; Done
                 $l_a_Files[$i][4] = True
                 $l_i_Completed += 1
+
                 GUICtrlSetData($l_h_Lbl, "Downloaded Files: [" & $l_i_Completed & "/" & $l_i_FileCount & "]: " & $l_a_Files[$i][2])
                 GUICtrlSetData($l_h_ProgressBar, $l_i_Completed / $l_i_FileCount * 100)
 
-                ; Save hash
-                Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_a_Files[$i][2], $l_a_Files[$i][3])
+                If InetGetInfo($l_h_Download, $INET_DOWNLOADSUCCESS) Then
+                    ; Save hash
+                    $l_as2_KeyHashes[$l_i_Success][0] = $l_a_Files[$i][2]
+                    $l_as2_KeyHashes[$l_i_Success][1] = $l_a_Files[$i][3]
+                    $l_i_Success += 1
+                EndIf
+                
+                InetClose($l_h_Download)
 
                 ; Start next download if any left
                 If $l_i_Started <= $l_i_FileCount Then
@@ -609,6 +571,9 @@ Func Updater_DownloadFilesParallel_PB($a_as_UpdateFiles, $a_as_UpdateSHAs)
         Next
         Sleep(100)
     WEnd
+    
+    ReDim $l_as2_KeyHashes[$l_i_Success][2]
+    Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_as2_KeyHashes)
 
     GUIDelete($l_h_GUI)
 EndFunc
@@ -617,109 +582,65 @@ EndFunc
 ; Download files from $a_as_UpdateFiles and write their respective
 ; hashes from $a_as_UpdateSHAs into INI file
 ;=================================================================
-Func Updater_DownloadFiles_NoPB($a_as_UpdateFiles, $a_as_UpdateSHAs)
-    Local $l_i_FileSize, $l_s_RelPath
-    Local $l_s_Url, $l_s_SHA
-
+Func Updater_DownloadFilesParallel_NoPB($a_as_UpdateFiles, $a_as_UpdateSHAs)
+    Local Const $LC_I_MAX_STREAMS = 4
     Local $l_i_FileCount = $a_as_UpdateFiles[0]
-    For $j = 1 To $l_i_FileCount
-        $l_s_RelPath = $a_as_UpdateFiles[$j]
-        $l_s_SHA = $a_as_UpdateSHAs[$j]
-        $l_s_Url = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $l_s_RelPath
-        $l_i_FileSize = InetGetSize($l_s_Url)
 
-        ; Replace "/" with "\" in relative filepath since Windows and GitHub use different delimiters for folders
-        $l_s_RelPath = StringReplace($l_s_RelPath, "/", "\")
-        Local $l_s_DownloadDst = $g_s_GwAu3Dir & $l_s_RelPath
-
-        ; Create target directory if not present
-        Local $l_s_TargetDir = StringRegExpReplace($l_s_DownloadDst, "\\[^\\]+$", "")
+    ; Prepare file list [Index][URL, DownloadDst, RelativePath, SHA, CompleteFlag, Handle]
+    Local $l_a_Files[$l_i_FileCount + 1][6]
+    For $i = 1 To $l_i_FileCount
+        Local $l_s_RelPath = StringReplace($a_as_UpdateFiles[$i], "/", "\")
+        $l_a_Files[$i][0] = "https://raw.githubusercontent.com/" & $g_s_Owner & "/" & $g_s_Repo & "/" & $g_s_Branch & "/" & $a_as_UpdateFiles[$i] ; URL
+        $l_a_Files[$i][1] = $g_s_GwAu3Dir & $l_s_RelPath ; DownloadDst
+        $l_a_Files[$i][2] = $l_s_RelPath ; RelativePath
+        $l_a_Files[$i][3] = $a_as_UpdateSHAs[$i] ; SHA
+        $l_a_Files[$i][4] = False ; CompleteFlag
+        $l_a_Files[$i][5] = 0 ; Handle
+        Local $l_s_TargetDir = StringRegExpReplace($l_a_Files[$i][1], "\\[^\\]+$", "")
         DirCreate($l_s_TargetDir)
-
-        ; Update status
-        Log_Info("Downloading [" & $j & "/" & $l_i_FileCount & "]: " & $l_s_RelPath, "GwAu3", $g_h_EditText)
-
-        ; Start background download
-        Local $l_h_Download = InetGet($l_s_Url, $l_s_DownloadDst, $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
-        If @error Or $l_h_Download = 0 Then
-            MsgBox(16, "Download Error", "Failed to fetch " & $l_s_RelPath)
-            ContinueLoop
-        EndIf
-
-        ; Poll until this file is done
-        While True
-            Local $l_i_BytesRead = InetGetInfo($l_h_Download, $INET_DOWNLOADREAD)
-            If @error Then ExitLoop
-            If $l_i_BytesRead >= $l_i_FileSize Then ExitLoop
-            Sleep(100)
-        WEnd
-
-        ; Save hash
-        Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_s_RelPath, $l_s_SHA)
     Next
-EndFunc
 
-;=================================================================
-; DownloadFile($a_s_URL, $a_s_Dest) -> True on success, False on failure
-; Uses InetGet() synchronously (waits until the transfer completes)
-;=================================================================
-Func Updater_DownloadFile($a_s_URL, $a_s_Dest)
-    ; flag 1 = synchronous, flag 1 = binary
-    Local $l_h_Download = InetGet($a_s_URL, $a_s_Dest, 1, 1)
-    If @error Then Return False
+    Local $l_as2_KeyHashes[$l_i_FileCount][2]
+    Local $l_i_Started = 1, $l_i_Completed = 0, $l_i_Success = 0
+    ; Start up to $LC_I_MAX_STREAMS initial downloads
+    For $i = 1 To _Min($LC_I_MAX_STREAMS, $l_i_FileCount)
+        $l_a_Files[$i][5] = InetGet($l_a_Files[$i][0], $l_a_Files[$i][1], $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
+        $l_i_Started += 1
+    Next
 
-    ; Wait for the download to finish
-    While InetGetInfo($l_h_Download, 1) = 1
-        Sleep(50)
-    WEnd
+    While $l_i_Completed < $l_i_FileCount
+        For $i = 1 To $l_i_FileCount
+            If $l_a_Files[$i][4] = True Then ContinueLoop
+            Local $l_h_Download = $l_a_Files[$i][5]
+            If $l_h_Download = 0 Then ContinueLoop ; Not started yet
 
-    ; Check final status (0 = success)
-    Return (InetGetInfo($l_h_Download, 2) = 0)
-EndFunc
+            ; Poll download
+            If InetGetInfo($l_h_Download, $INET_DOWNLOADCOMPLETE) Then
+                ; Done
+                $l_a_Files[$i][4] = True
+                $l_i_Completed += 1
 
-;=================================================================
-; DownloadFile($a_s_URL, $a_s_Dest) -> True on success, False on failure
-; Uses InetGet() synchronously (waits until the transfer completes)
-; Includes GUI for download progress
-;=================================================================
-Func Updater_DownloadFileGUI($a_s_URL, $a_s_Dest)
-    ; Ask the server how big the file is
-    Local $l_i_TotalSize = InetGetSize($a_s_URL)
-    If @error Or $l_i_TotalSize <= 0 Then Return False
+                If InetGetInfo($l_h_Download, $INET_DOWNLOADSUCCESS) Then
+                    ; Save hash
+                    $l_as2_KeyHashes[$l_i_Success][0] = $l_a_Files[$i][2]
+                    $l_as2_KeyHashes[$l_i_Success][1] = $l_a_Files[$i][3]
+                    $l_i_Success += 1
+                EndIf
+                
+                InetClose($l_h_Download)
 
-    ; Start the download in the background, binary mode
-    Local $l_h_Download = InetGet($a_s_URL, $a_s_Dest, $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
-    If @error Or $l_h_Download = 0 Then Return False
-
-    ; Build a tiny GUI with a progress bar
-    Local $l_h_UpdaterGUI = GUICreate("Downloading...", 400, 120)
-    Local $l_i_Pos = StringInStr($a_s_Dest, "\", 0, -1)
-    Local $l_s_FileName
-    If $l_i_Pos Then
-        $l_s_FileName = StringMid($a_s_Dest, $l_i_Pos + 1)
-    Else
-        $l_s_FileName = $a_s_Dest
-    EndIf
-    Local $l_h_FileLabel = GUICtrlCreateLabel($l_s_FileName, 20, 20, 360, 20)
-    Local $l_h_ProgressBar = GUICtrlCreateProgress(20, 50, 360, 20)
-    GUICtrlSetLimit($l_h_ProgressBar, $l_i_TotalSize)                   ; Set maximum = total bytes
-    GUISetState(@SW_SHOW)
-
-    ; Poll the download handle until we’ve read all bytes
-    Local $l_i_ReadBytes = 0
-    While True
-        $l_i_ReadBytes = InetGetInfo($l_h_Download, $INET_DOWNLOADREAD) ; Bytes read so far
-        If @error Then ExitLoop
-        GUICtrlSetData($l_h_ProgressBar, $l_i_ReadBytes)                ; Update the progress bar
-        GUISetState()                                                   ; Refresh GUI
-        If $l_i_ReadBytes >= $l_i_TotalSize Then ExitLoop
+                ; Start next download if any left
+                If $l_i_Started <= $l_i_FileCount Then
+                    $l_a_Files[$l_i_Started][5] = InetGet($l_a_Files[$l_i_Started][0], $l_a_Files[$l_i_Started][1], $INET_BINARYTRANSFER, $INET_DOWNLOADBACKGROUND)
+                    $l_i_Started += 1
+                EndIf
+            EndIf
+        Next
         Sleep(100)
     WEnd
-
-    GUIDelete($l_h_UpdaterGUI)
-
-    ; Return success if we read exactly the total bytes
-    Return ($l_i_ReadBytes >= $l_i_TotalSize)
+    
+    ReDim $l_as2_KeyHashes[$l_i_Success][2]
+    Updater_SaveHashCache($g_s_UpdaterConfigIni, $g_s_Section_Hashes, $l_as2_KeyHashes)
 EndFunc
 #EndRegion Updater_Functions
 
