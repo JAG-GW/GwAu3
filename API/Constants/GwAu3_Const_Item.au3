@@ -49,7 +49,7 @@ Global Const $GC_I_MODELID_SUPERIOR_IDENTIFICATION_KIT = 5899
 
 #Region Items types
 Global Const $GC_I_TYPES_SALVAGE = 0
-Global Const $GC_I_TYPES_LEADHAND	= 1
+Global Const $GC_I_TYPES_LEADHAND = 1
 Global Const $GC_I_TYPES_AXE = 2
 Global Const $GC_I_TYPES_BAG = 3
 Global Const $GC_I_TYPES_BOOTS = 4
