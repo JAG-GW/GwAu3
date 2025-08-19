@@ -22,7 +22,7 @@ Func Ui_CommandAll($a_f_X, $a_f_Y)
     DllStructSetData($g_d_FlagAll, 2, Utils_FloatToInt($a_f_X))
     DllStructSetData($g_d_FlagAll, 3, Utils_FloatToInt($a_f_Y))
     DllStructSetData($g_d_FlagAll, 4, 0) ; zPos
-    Core_Enqueue($g_p_FlagAll, 16) 
+    Core_Enqueue($g_p_FlagAll, 16)
 EndFunc   ;==>Ui_CommandAll
 
 ;~ Description: Clear the position flag of all heroes.
@@ -30,7 +30,7 @@ Func Ui_CancelAll()
     DllStructSetData($g_d_FlagAll, 2, 0x7F800000)
     DllStructSetData($g_d_FlagAll, 3, 0x7F800000)
     DllStructSetData($g_d_FlagAll, 4, 0) ; zPos
-    Core_Enqueue($g_p_FlagAll, 16) 
+    Core_Enqueue($g_p_FlagAll, 16)
 EndFunc   ;==>CancelAll
 
 ;~ Description: Add NPC via the Party Search window.
@@ -71,9 +71,10 @@ Func Ui_LeaveGroup($a_b_KickAllHeroes = True)
 EndFunc   ;==>Ui_LeaveGroup
 
 ;~ Description: Enters Mission/Challenge via Party Formation window. (False = Foreign Character, True = Native Character)
-Func Ui_EnterChallenge($a_b_Foreign = False)
+Func Ui_EnterChallenge($a_b_Foreign = False, $a_WaitToLoad = True)
     DllStructSetData($g_d_EnterMission, 2, Not $a_b_Foreign)
     Core_Enqueue($g_p_EnterMission, 8)
+	If $a_WaitToLoad Then Return Map_WaitMapLoading(-1, 1)
 EndFunc   ;==>Ui_EnterChallenge
 
 ;~ Description: Sets difficulty via Party Formation window. (False = NM, True = HM)
@@ -84,7 +85,7 @@ EndFunc   ;==>Ui_SetDifficulty
 
 ;~ Description: Open targeted chest using dialog options. (0x1 = Use Key, 0x2 = Use Lockpick, 0x80 = Cancel)
 Func Ui_OpenChest($a_b_UseLockpick = True)
-    If $a_b_UseLockpick Then 
+    If $a_b_UseLockpick Then
         DllStructSetData($g_d_OpenChest, 2, 0x2)
     Else
         DllStructSetData($g_d_OpenChest, 2, 0x1)
