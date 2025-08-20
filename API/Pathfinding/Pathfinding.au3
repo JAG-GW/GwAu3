@@ -6,55 +6,55 @@
 ; ============================================================================
 ; Global variables for pathfinding data
 ; ============================================================================
-Global $g_MapData = 0
-Global $g_Metadata = 0
-Global $g_Trapezoids = 0
-Global $g_AABBs = 0
-Global $g_Portals = 0
-Global $g_Points = 0
-Global $g_VisibilityGraph = 0
-Global $g_AABBGraph = 0
-Global $g_PortalGraph = 0
-Global $g_Teleports = 0
-Global $g_TeleportGraph = 0
-Global $g_TravelPortals = 0
+Global $g_av_MapData = 0
+Global $g_av_Metadata = 0
+Global $g_av_Trapezoids = 0
+Global $g_av_AABBs = 0
+Global $g_av_Portals = 0
+Global $g_av_Points = 0
+Global $g_av_VisibilityGraph = 0
+Global $g_av_AABBGraph = 0
+Global $g_av_PortalGraph = 0
+Global $g_av_Teleports = 0
+Global $g_av_TeleportGraph = 0
+Global $g_av_TravelPortals = 0
 
 ; Priority Queue for A*
-Global $g_PriorityQueue[1][2]
-Global $g_PQSize = 0
+Global $g_af2_PriorityQueue[1][2]
+Global $g_i_PQSize = 0
 
 ; Constants
-Global Const $MAX_VISIBILITY_RANGE = 5000.0
-Global Const $INFINITY = 999999999
-Global Const $UINT32_MAX = 4294967295
+Global Const $GC_F_MAX_VISIBILITY_RANGE = 5000.0
+Global Const $GC_I_INFINITY = 999999999
+Global Const $GC_I_UINT32_MAX = 4294967295
 
 ; ============================================================================
 ; Priority Queue Implementation
 ; ============================================================================
 
 Func PQ_Init()
-    Global $g_PriorityQueue[1][2]
-    Global $g_PQSize = 0
+    Global $g_af2_PriorityQueue[1][2]
+    Global $g_i_PQSize = 0
 EndFunc
 
-Func PQ_Push($priority, $value)
-    $g_PQSize += 1
-    ReDim $g_PriorityQueue[$g_PQSize + 1][2]
-    $g_PriorityQueue[$g_PQSize][0] = $priority
-    $g_PriorityQueue[$g_PQSize][1] = $value
+Func PQ_Push($a_f_Priority, $a_v_Value)
+    $g_i_PQSize += 1
+    ReDim $g_af2_PriorityQueue[$g_i_PQSize + 1][2]
+    $g_af2_PriorityQueue[$g_i_PQSize][0] = $a_f_Priority
+    $g_af2_PriorityQueue[$g_i_PQSize][1] = $a_v_Value
 
     ; Bubble up
-    Local $i = $g_PQSize
-    While $i > 1
-        Local $parent = Int($i / 2)
-        If $g_PriorityQueue[$i][0] < $g_PriorityQueue[$parent][0] Then
+    Local $l_i_Index = $g_i_PQSize
+    While $l_i_Index > 1
+        Local $l_i_Parent = Int($l_i_Index / 2)
+        If $g_af2_PriorityQueue[$l_i_Index][0] < $g_af2_PriorityQueue[$l_i_Parent][0] Then
             ; Swap
-            Local $temp[2] = [$g_PriorityQueue[$i][0], $g_PriorityQueue[$i][1]]
-            $g_PriorityQueue[$i][0] = $g_PriorityQueue[$parent][0]
-            $g_PriorityQueue[$i][1] = $g_PriorityQueue[$parent][1]
-            $g_PriorityQueue[$parent][0] = $temp[0]
-            $g_PriorityQueue[$parent][1] = $temp[1]
-            $i = $parent
+            Local $l_af_Temp[2] = [$g_af2_PriorityQueue[$l_i_Index][0], $g_af2_PriorityQueue[$l_i_Index][1]]
+            $g_af2_PriorityQueue[$l_i_Index][0] = $g_af2_PriorityQueue[$l_i_Parent][0]
+            $g_af2_PriorityQueue[$l_i_Index][1] = $g_af2_PriorityQueue[$l_i_Parent][1]
+            $g_af2_PriorityQueue[$l_i_Parent][0] = $l_af_Temp[0]
+            $g_af2_PriorityQueue[$l_i_Parent][1] = $l_af_Temp[1]
+            $l_i_Index = $l_i_Parent
         Else
             ExitLoop
         EndIf
@@ -62,392 +62,392 @@ Func PQ_Push($priority, $value)
 EndFunc
 
 Func PQ_Pop()
-    If $g_PQSize = 0 Then Return -1
+    If $g_i_PQSize = 0 Then Return -1
 
-    Local $result = $g_PriorityQueue[1][1]
+    Local $l_v_Result = $g_af2_PriorityQueue[1][1]
 
     ; Move last element to root
-    $g_PriorityQueue[1][0] = $g_PriorityQueue[$g_PQSize][0]
-    $g_PriorityQueue[1][1] = $g_PriorityQueue[$g_PQSize][1]
-    $g_PQSize -= 1
+    $g_af2_PriorityQueue[1][0] = $g_af2_PriorityQueue[$g_i_PQSize][0]
+    $g_af2_PriorityQueue[1][1] = $g_af2_PriorityQueue[$g_i_PQSize][1]
+    $g_i_PQSize -= 1
 
-    If $g_PQSize = 0 Then Return $result
+    If $g_i_PQSize = 0 Then Return $l_v_Result
 
     ; Bubble down
-    Local $i = 1
-    While $i * 2 <= $g_PQSize
-        Local $leftChild = $i * 2
-        Local $rightChild = $i * 2 + 1
-        Local $smallest = $i
+    Local $l_i_Index = 1
+    While $l_i_Index * 2 <= $g_i_PQSize
+        Local $l_i_LeftChild = $l_i_Index * 2
+        Local $l_i_RightChild = $l_i_Index * 2 + 1
+        Local $l_i_Smallest = $l_i_Index
 
-        If $leftChild <= $g_PQSize And $g_PriorityQueue[$leftChild][0] < $g_PriorityQueue[$smallest][0] Then
-            $smallest = $leftChild
+        If $l_i_LeftChild <= $g_i_PQSize And $g_af2_PriorityQueue[$l_i_LeftChild][0] < $g_af2_PriorityQueue[$l_i_Smallest][0] Then
+            $l_i_Smallest = $l_i_LeftChild
         EndIf
 
-        If $rightChild <= $g_PQSize And $g_PriorityQueue[$rightChild][0] < $g_PriorityQueue[$smallest][0] Then
-            $smallest = $rightChild
+        If $l_i_RightChild <= $g_i_PQSize And $g_af2_PriorityQueue[$l_i_RightChild][0] < $g_af2_PriorityQueue[$l_i_Smallest][0] Then
+            $l_i_Smallest = $l_i_RightChild
         EndIf
 
-        If $smallest <> $i Then
+        If $l_i_Smallest <> $l_i_Index Then
             ; Swap
-            Local $temp[2] = [$g_PriorityQueue[$i][0], $g_PriorityQueue[$i][1]]
-            $g_PriorityQueue[$i][0] = $g_PriorityQueue[$smallest][0]
-            $g_PriorityQueue[$i][1] = $g_PriorityQueue[$smallest][1]
-            $g_PriorityQueue[$smallest][0] = $temp[0]
-            $g_PriorityQueue[$smallest][1] = $temp[1]
-            $i = $smallest
+            Local $l_af_Temp[2] = [$g_af2_PriorityQueue[$l_i_Index][0], $g_af2_PriorityQueue[$l_i_Index][1]]
+            $g_af2_PriorityQueue[$l_i_Index][0] = $g_af2_PriorityQueue[$l_i_Smallest][0]
+            $g_af2_PriorityQueue[$l_i_Index][1] = $g_af2_PriorityQueue[$l_i_Smallest][1]
+            $g_af2_PriorityQueue[$l_i_Smallest][0] = $l_af_Temp[0]
+            $g_af2_PriorityQueue[$l_i_Smallest][1] = $l_af_Temp[1]
+            $l_i_Index = $l_i_Smallest
         Else
             ExitLoop
         EndIf
     WEnd
 
-    Return $result
+    Return $l_v_Result
 EndFunc
 
 Func PQ_IsEmpty()
-    Return $g_PQSize = 0
+    Return $g_i_PQSize = 0
 EndFunc
 
 ; ============================================================================
 ; Data Loading Functions
 ; ============================================================================
 
-Func LoadPathfindingData($filePath)
-    Local $fileContent = FileRead($filePath)
+Func Pathfinding_LoadData($a_s_FilePath)
+    Local $l_s_FileContent = FileRead($a_s_FilePath)
     If @error Then
-        ConsoleWrite("Error reading file: " & $filePath & @CRLF)
+        ConsoleWrite("Error reading file: " & $a_s_FilePath & @CRLF)
         Return False
     EndIf
 
     ; Parse file content by sections
-    Local $lines = StringSplit($fileContent, @CRLF, 1)
-    Local $currentSection = ""
-    Local $i = 1
+    Local $l_as_Lines = StringSplit($l_s_FileContent, @CRLF, 1)
+    Local $l_s_CurrentSection = ""
+    Local $l_i_Index = 1
 
-    While $i <= $lines[0]
-        Local $line = StringStripWS($lines[$i], 3)
+    While $l_i_Index <= $l_as_Lines[0]
+        Local $l_s_Line = StringStripWS($l_as_Lines[$l_i_Index], 3)
 
-        If StringLeft($line, 1) = "[" And StringRight($line, 1) = "]" Then
-            $currentSection = StringMid($line, 2, StringLen($line) - 2)
-            ConsoleWrite("Loading section: " & $currentSection & @CRLF)
-        ElseIf $line <> "" Then
-            Switch $currentSection
+        If StringLeft($l_s_Line, 1) = "[" And StringRight($l_s_Line, 1) = "]" Then
+            $l_s_CurrentSection = StringMid($l_s_Line, 2, StringLen($l_s_Line) - 2)
+            ConsoleWrite("Loading section: " & $l_s_CurrentSection & @CRLF)
+        ElseIf $l_s_Line <> "" Then
+            Switch $l_s_CurrentSection
                 Case "METADATA"
-                    ParseMetadata($line)
+                    Pathfinding_ParseMetadata($l_s_Line)
                 Case "TRAPEZOIDS"
-                    ParseTrapezoids($lines, $i)
+                    Pathfinding_ParseTrapezoids($l_as_Lines, $l_i_Index)
                 Case "AABBS"
-                    ParseAABBs($lines, $i)
+                    Pathfinding_ParseAABBs($l_as_Lines, $l_i_Index)
                 Case "PORTALS"
-                    ParsePortals($lines, $i)
+                    Pathfinding_ParsePortals($l_as_Lines, $l_i_Index)
                 Case "POINTS"
-                    ParsePoints($lines, $i)
+                    Pathfinding_ParsePoints($l_as_Lines, $l_i_Index)
                 Case "VISIBILITY_GRAPH"
-                    ParseVisibilityGraph($lines, $i)
+                    Pathfinding_ParseVisibilityGraph($l_as_Lines, $l_i_Index)
                 Case "AABB_GRAPH"
-                    ParseAABBGraph($lines, $i)
+                    Pathfinding_ParseAABBGraph($l_as_Lines, $l_i_Index)
                 Case "PORTAL_GRAPH"
-                    ParsePortalGraph($lines, $i)
+                    Pathfinding_ParsePortalGraph($l_as_Lines, $l_i_Index)
                 Case "TELEPORTS"
-                    ParseTeleports($lines, $i)
+                    Pathfinding_ParseTeleports($l_as_Lines, $l_i_Index)
                 Case "TELEPORT_GRAPH"
-                    ParseTeleportGraph($lines, $i)
+                    Pathfinding_ParseTeleportGraph($l_as_Lines, $l_i_Index)
                 Case "TRAVEL_PORTALS"
-                    ParseTravelPortals($lines, $i)
+                    Pathfinding_ParseTravelPortals($l_as_Lines, $l_i_Index)
             EndSwitch
         EndIf
 
-        $i += 1
+        $l_i_Index += 1
     WEnd
 
     ConsoleWrite("Data loaded successfully!" & @CRLF)
-    ConsoleWrite("Points: " & UBound($g_Points) & @CRLF)
-    ConsoleWrite("Portals: " & UBound($g_Portals) & @CRLF)
-    ConsoleWrite("AABBs: " & UBound($g_AABBs) & @CRLF)
-    ConsoleWrite("Teleports: " & UBound($g_Teleports) & @CRLF)
+    ConsoleWrite("Points: " & UBound($g_av_Points) & @CRLF)
+    ConsoleWrite("Portals: " & UBound($g_av_Portals) & @CRLF)
+    ConsoleWrite("AABBs: " & UBound($g_av_AABBs) & @CRLF)
+    ConsoleWrite("Teleports: " & UBound($g_av_Teleports) & @CRLF)
 
     Return True
 EndFunc
 
-Func ParseMetadata($line)
-    If Not IsArray($g_Metadata) Then
-        Dim $g_Metadata[20][2]
+Func Pathfinding_ParseMetadata($a_s_Line)
+    If Not IsArray($g_av_Metadata) Then
+        Dim $g_av_Metadata[20][2]
     EndIf
 
-    Local $parts = StringSplit($line, "=", 2)
-    If UBound($parts) >= 2 Then
+    Local $l_as_Parts = StringSplit($a_s_Line, "=", 2)
+    If UBound($l_as_Parts) >= 2 Then
         ; Store metadata (you can expand this as needed)
     EndIf
 EndFunc
 
-Func ParseTrapezoids(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_Trapezoids[$count][6] ; id, layer, ax, ay, bx, by, cx, cy, dx, dy
+Func Pathfinding_ParseTrapezoids(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_Trapezoids[$l_i_Count][6] ; id, layer, ax, ay, bx, by, cx, cy, dx, dy
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $parts = StringSplit($lines[$index], "|", 2)
-            If UBound($parts) >= 6 Then
-                $g_Trapezoids[$i][0] = Number($parts[0]) ; id
-                $g_Trapezoids[$i][1] = Number($parts[1]) ; layer
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
+            If UBound($l_as_Parts) >= 6 Then
+                $g_av_Trapezoids[$l_i_Idx][0] = Number($l_as_Parts[0]) ; id
+                $g_av_Trapezoids[$l_i_Idx][1] = Number($l_as_Parts[1]) ; layer
 
                 ; Parse vertices
-                Local $a = StringSplit($parts[2], ",", 2)
-                Local $b = StringSplit($parts[3], ",", 2)
-                Local $c = StringSplit($parts[4], ",", 2)
-                Local $d = StringSplit($parts[5], ",", 2)
+                Local $l_as_VertexA = StringSplit($l_as_Parts[2], ",", 2)
+                Local $l_as_VertexB = StringSplit($l_as_Parts[3], ",", 2)
+                Local $l_as_VertexC = StringSplit($l_as_Parts[4], ",", 2)
+                Local $l_as_VertexD = StringSplit($l_as_Parts[5], ",", 2)
 
-                $g_Trapezoids[$i][2] = Number($a[0]) ; ax
-                $g_Trapezoids[$i][3] = Number($a[1]) ; ay
-                $g_Trapezoids[$i][4] = Number($b[0]) ; bx
-                $g_Trapezoids[$i][5] = Number($b[1]) ; by
+                $g_av_Trapezoids[$l_i_Idx][2] = Number($l_as_VertexA[0]) ; ax
+                $g_av_Trapezoids[$l_i_Idx][3] = Number($l_as_VertexA[1]) ; ay
+                $g_av_Trapezoids[$l_i_Idx][4] = Number($l_as_VertexB[0]) ; bx
+                $g_av_Trapezoids[$l_i_Idx][5] = Number($l_as_VertexB[1]) ; by
                 ; Store c and d similarly if needed
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParseAABBs(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_AABBs[$count][7] ; id, pos_x, pos_y, half_x, half_y, trap_id, layer
+Func Pathfinding_ParseAABBs(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_AABBs[$l_i_Count][7] ; id, pos_x, pos_y, half_x, half_y, trap_id, layer
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $parts = StringSplit($lines[$index], "|", 2)
-            If UBound($parts) >= 5 Then
-                $g_AABBs[$i][0] = Number($parts[0]) ; id
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
+            If UBound($l_as_Parts) >= 5 Then
+                $g_av_AABBs[$l_i_Idx][0] = Number($l_as_Parts[0]) ; id
 
-                Local $pos = StringSplit($parts[1], ",", 2)
-                $g_AABBs[$i][1] = Number($pos[0]) ; pos_x
-                $g_AABBs[$i][2] = Number($pos[1]) ; pos_y
+                Local $l_as_Pos = StringSplit($l_as_Parts[1], ",", 2)
+                $g_av_AABBs[$l_i_Idx][1] = Number($l_as_Pos[0]) ; pos_x
+                $g_av_AABBs[$l_i_Idx][2] = Number($l_as_Pos[1]) ; pos_y
 
-                Local $half = StringSplit($parts[2], ",", 2)
-                $g_AABBs[$i][3] = Number($half[0]) ; half_x
-                $g_AABBs[$i][4] = Number($half[1]) ; half_y
+                Local $l_as_Half = StringSplit($l_as_Parts[2], ",", 2)
+                $g_av_AABBs[$l_i_Idx][3] = Number($l_as_Half[0]) ; half_x
+                $g_av_AABBs[$l_i_Idx][4] = Number($l_as_Half[1]) ; half_y
 
-                $g_AABBs[$i][5] = Number($parts[3]) ; trap_id
-                $g_AABBs[$i][6] = Number($parts[4]) ; layer
+                $g_av_AABBs[$l_i_Idx][5] = Number($l_as_Parts[3]) ; trap_id
+                $g_av_AABBs[$l_i_Idx][6] = Number($l_as_Parts[4]) ; layer
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParsePortals(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_Portals[$count][7] ; id, start_x, start_y, goal_x, goal_y, box1_id, box2_id
+Func Pathfinding_ParsePortals(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_Portals[$l_i_Count][7] ; id, start_x, start_y, goal_x, goal_y, box1_id, box2_id
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $parts = StringSplit($lines[$index], "|", 2)
-            If UBound($parts) >= 5 Then
-                $g_Portals[$i][0] = Number($parts[0]) ; id
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
+            If UBound($l_as_Parts) >= 5 Then
+                $g_av_Portals[$l_i_Idx][0] = Number($l_as_Parts[0]) ; id
 
-                Local $start = StringSplit($parts[1], ",", 2)
-                $g_Portals[$i][1] = Number($start[0]) ; start_x
-                $g_Portals[$i][2] = Number($start[1]) ; start_y
+                Local $l_as_Start = StringSplit($l_as_Parts[1], ",", 2)
+                $g_av_Portals[$l_i_Idx][1] = Number($l_as_Start[0]) ; start_x
+                $g_av_Portals[$l_i_Idx][2] = Number($l_as_Start[1]) ; start_y
 
-                Local $goal = StringSplit($parts[2], ",", 2)
-                $g_Portals[$i][3] = Number($goal[0]) ; goal_x
-                $g_Portals[$i][4] = Number($goal[1]) ; goal_y
+                Local $l_as_Goal = StringSplit($l_as_Parts[2], ",", 2)
+                $g_av_Portals[$l_i_Idx][3] = Number($l_as_Goal[0]) ; goal_x
+                $g_av_Portals[$l_i_Idx][4] = Number($l_as_Goal[1]) ; goal_y
 
-                $g_Portals[$i][5] = Number($parts[3]) ; box1_id
-                $g_Portals[$i][6] = Number($parts[4]) ; box2_id
+                $g_av_Portals[$l_i_Idx][5] = Number($l_as_Parts[3]) ; box1_id
+                $g_av_Portals[$l_i_Idx][6] = Number($l_as_Parts[4]) ; box2_id
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParsePoints(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_Points[$count][7] ; id, pos_x, pos_y, box_id, layer, box2_id, portal_id
+Func Pathfinding_ParsePoints(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_Points[$l_i_Count][7] ; id, pos_x, pos_y, box_id, layer, box2_id, portal_id
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $parts = StringSplit($lines[$index], "|", 2)
-            If UBound($parts) >= 6 Then
-                $g_Points[$i][0] = Number($parts[0]) ; id
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
+            If UBound($l_as_Parts) >= 6 Then
+                $g_av_Points[$l_i_Idx][0] = Number($l_as_Parts[0]) ; id
 
-                Local $pos = StringSplit($parts[1], ",", 2)
-                $g_Points[$i][1] = Number($pos[0]) ; pos_x
-                $g_Points[$i][2] = Number($pos[1]) ; pos_y
+                Local $l_as_Pos = StringSplit($l_as_Parts[1], ",", 2)
+                $g_av_Points[$l_i_Idx][1] = Number($l_as_Pos[0]) ; pos_x
+                $g_av_Points[$l_i_Idx][2] = Number($l_as_Pos[1]) ; pos_y
 
-                $g_Points[$i][3] = Number($parts[2]) ; box_id
-                $g_Points[$i][4] = Number($parts[3]) ; layer
-                $g_Points[$i][5] = Number($parts[4]) ; box2_id
-                $g_Points[$i][6] = Number($parts[5]) ; portal_id
+                $g_av_Points[$l_i_Idx][3] = Number($l_as_Parts[2]) ; box_id
+                $g_av_Points[$l_i_Idx][4] = Number($l_as_Parts[3]) ; layer
+                $g_av_Points[$l_i_Idx][5] = Number($l_as_Parts[4]) ; box2_id
+                $g_av_Points[$l_i_Idx][6] = Number($l_as_Parts[5]) ; portal_id
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParseVisibilityGraph(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_VisibilityGraph[$count]
+Func Pathfinding_ParseVisibilityGraph(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_VisibilityGraph[$l_i_Count]
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $line = $lines[$index]
-            Local $eqPos = StringInStr($line, "=")
-            Local $pipePos = StringInStr($line, "|")
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_s_Line = $a_as_Lines[$a_i_Index]
+            Local $l_i_EqPos = StringInStr($l_s_Line, "=")
+            Local $l_i_PipePos = StringInStr($l_s_Line, "|")
 
-            If $pipePos > 0 Then
-                Local $edgesStr = StringMid($line, $pipePos + 1)
-                Local $edges = StringSplit($edgesStr, ";", 2)
+            If $l_i_PipePos > 0 Then
+                Local $l_s_EdgesStr = StringMid($l_s_Line, $l_i_PipePos + 1)
+                Local $l_as_Edges = StringSplit($l_s_EdgesStr, ";", 2)
 
-                Local $edgeCount = UBound($edges)
-                If $edgeCount > 0 Then
-                    Dim $edgeArray[$edgeCount][3] ; point_id, distance, blocking_ids
+                Local $l_i_EdgeCount = UBound($l_as_Edges)
+                If $l_i_EdgeCount > 0 Then
+                    Dim $l_amx2_EdgeArray[$l_i_EdgeCount][3] ; point_id, distance, blocking_ids
 
-                    For $j = 0 To $edgeCount - 1
+                    For $l_i_EdgeIdx = 0 To $l_i_EdgeCount - 1
                         ; Parse "point_id,distance,[blocking_ids]"
-                        Local $edgeParts = StringSplit($edges[$j], ",", 2)
-                        If UBound($edgeParts) >= 2 Then
-                            $edgeArray[$j][0] = Number($edgeParts[0]) ; point_id
-                            $edgeArray[$j][1] = Number($edgeParts[1]) ; distance
+                        Local $l_as_EdgeParts = StringSplit($l_as_Edges[$l_i_EdgeIdx], ",", 2)
+                        If UBound($l_as_EdgeParts) >= 2 Then
+                            $l_amx2_EdgeArray[$l_i_EdgeIdx][0] = Number($l_as_EdgeParts[0]) ; point_id
+                            $l_amx2_EdgeArray[$l_i_EdgeIdx][1] = Number($l_as_EdgeParts[1]) ; distance
 
                             ; Parse blocking IDs if present
-                            Local $blockingStr = ""
-                            For $k = 2 To UBound($edgeParts) - 1
-                                $blockingStr &= $edgeParts[$k]
-                                If $k < UBound($edgeParts) - 1 Then $blockingStr &= ","
+                            Local $l_s_BlockingStr = ""
+                            For $l_i_PartIdx = 2 To UBound($l_as_EdgeParts) - 1
+                                $l_s_BlockingStr &= $l_as_EdgeParts[$l_i_PartIdx]
+                                If $l_i_PartIdx < UBound($l_as_EdgeParts) - 1 Then $l_s_BlockingStr &= ","
                             Next
 
-                            $blockingStr = StringReplace($blockingStr, "[", "")
-                            $blockingStr = StringReplace($blockingStr, "]", "")
+                            $l_s_BlockingStr = StringReplace($l_s_BlockingStr, "[", "")
+                            $l_s_BlockingStr = StringReplace($l_s_BlockingStr, "]", "")
 
-                            If $blockingStr <> "" Then
-                                $edgeArray[$j][2] = $blockingStr
+                            If $l_s_BlockingStr <> "" Then
+                                $l_amx2_EdgeArray[$l_i_EdgeIdx][2] = $l_s_BlockingStr
                             Else
-                                $edgeArray[$j][2] = ""
+                                $l_amx2_EdgeArray[$l_i_EdgeIdx][2] = ""
                             EndIf
                         EndIf
                     Next
 
-                    $g_VisibilityGraph[$i] = $edgeArray
+                    $g_av_VisibilityGraph[$l_i_Idx] = $l_amx2_EdgeArray
                 EndIf
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParseAABBGraph(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_AABBGraph[$count]
+Func Pathfinding_ParseAABBGraph(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_AABBGraph[$l_i_Count]
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $line = $lines[$index]
-            Local $eqPos = StringInStr($line, "=")
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_s_Line = $a_as_Lines[$a_i_Index]
+            Local $l_i_EqPos = StringInStr($l_s_Line, "=")
 
-            If $eqPos > 0 Then
-                Local $neighborsStr = StringMid($line, $eqPos + 1)
-                If $neighborsStr <> "" Then
-                    Local $neighbors = StringSplit($neighborsStr, ",", 2)
-                    $g_AABBGraph[$i] = $neighbors
+            If $l_i_EqPos > 0 Then
+                Local $l_s_NeighborsStr = StringMid($l_s_Line, $l_i_EqPos + 1)
+                If $l_s_NeighborsStr <> "" Then
+                    Local $l_as_Neighbors = StringSplit($l_s_NeighborsStr, ",", 2)
+                    $g_av_AABBGraph[$l_i_Idx] = $l_as_Neighbors
                 Else
-                    Dim $empty[0]
-                    $g_AABBGraph[$i] = $empty
+                    Dim $l_av_Empty[0]
+                    $g_av_AABBGraph[$l_i_Idx] = $l_av_Empty
                 EndIf
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParsePortalGraph(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_PortalGraph[$count]
+Func Pathfinding_ParsePortalGraph(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_PortalGraph[$l_i_Count]
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $line = $lines[$index]
-            Local $eqPos = StringInStr($line, "=")
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_s_Line = $a_as_Lines[$a_i_Index]
+            Local $l_i_EqPos = StringInStr($l_s_Line, "=")
 
-            If $eqPos > 0 Then
-                Local $portalsStr = StringMid($line, $eqPos + 1)
-                If $portalsStr <> "" Then
-                    Local $portals = StringSplit($portalsStr, ",", 2)
-                    $g_PortalGraph[$i] = $portals
+            If $l_i_EqPos > 0 Then
+                Local $l_s_PortalsStr = StringMid($l_s_Line, $l_i_EqPos + 1)
+                If $l_s_PortalsStr <> "" Then
+                    Local $l_as_Portals = StringSplit($l_s_PortalsStr, ",", 2)
+                    $g_av_PortalGraph[$l_i_Idx] = $l_as_Portals
                 Else
-                    Dim $empty[0]
-                    $g_PortalGraph[$i] = $empty
+                    Dim $l_av_Empty[0]
+                    $g_av_PortalGraph[$l_i_Idx] = $l_av_Empty
                 EndIf
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParseTeleports(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_Teleports[$count][7] ; enter_x, enter_y, enter_z, exit_x, exit_y, exit_z, bidirectional
+Func Pathfinding_ParseTeleports(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_Teleports[$l_i_Count][7] ; enter_x, enter_y, enter_z, exit_x, exit_y, exit_z, bidirectional
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $parts = StringSplit($lines[$index], "|", 2)
-            If UBound($parts) >= 3 Then
-                Local $enter = StringSplit($parts[0], ",", 2)
-                $g_Teleports[$i][0] = Number($enter[0]) ; enter_x
-                $g_Teleports[$i][1] = Number($enter[1]) ; enter_y
-                $g_Teleports[$i][2] = Number($enter[2]) ; enter_z
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
+            If UBound($l_as_Parts) >= 3 Then
+                Local $l_as_Enter = StringSplit($l_as_Parts[0], ",", 2)
+                $g_av_Teleports[$l_i_Idx][0] = Number($l_as_Enter[0]) ; enter_x
+                $g_av_Teleports[$l_i_Idx][1] = Number($l_as_Enter[1]) ; enter_y
+                $g_av_Teleports[$l_i_Idx][2] = Number($l_as_Enter[2]) ; enter_z
 
-                Local $exit = StringSplit($parts[1], ",", 2)
-                $g_Teleports[$i][3] = Number($exit[0]) ; exit_x
-                $g_Teleports[$i][4] = Number($exit[1]) ; exit_y
-                $g_Teleports[$i][5] = Number($exit[2]) ; exit_z
+                Local $l_as_Exit = StringSplit($l_as_Parts[1], ",", 2)
+                $g_av_Teleports[$l_i_Idx][3] = Number($l_as_Exit[0]) ; exit_x
+                $g_av_Teleports[$l_i_Idx][4] = Number($l_as_Exit[1]) ; exit_y
+                $g_av_Teleports[$l_i_Idx][5] = Number($l_as_Exit[2]) ; exit_z
 
-                $g_Teleports[$i][6] = Number($parts[2]) ; bidirectional
+                $g_av_Teleports[$l_i_Idx][6] = Number($l_as_Parts[2]) ; bidirectional
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParseTeleportGraph(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_TeleportGraph[$count][3] ; tp1_index, tp2_index, distance
+Func Pathfinding_ParseTeleportGraph(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_TeleportGraph[$l_i_Count][3] ; tp1_index, tp2_index, distance
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $parts = StringSplit($lines[$index], "|", 2)
-            If UBound($parts) >= 3 Then
-                $g_TeleportGraph[$i][0] = Number($parts[0]) ; tp1_index
-                $g_TeleportGraph[$i][1] = Number($parts[1]) ; tp2_index
-                $g_TeleportGraph[$i][2] = Number($parts[2]) ; distance
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
+            If UBound($l_as_Parts) >= 3 Then
+                $g_av_TeleportGraph[$l_i_Idx][0] = Number($l_as_Parts[0]) ; tp1_index
+                $g_av_TeleportGraph[$l_i_Idx][1] = Number($l_as_Parts[1]) ; tp2_index
+                $g_av_TeleportGraph[$l_i_Idx][2] = Number($l_as_Parts[2]) ; distance
             EndIf
         Next
     EndIf
 EndFunc
 
-Func ParseTravelPortals(ByRef $lines, ByRef $index)
-    Local $line = $lines[$index]
-    If StringInStr($line, "count=") Then
-        Local $count = Number(StringMid($line, 7))
-        Dim $g_TravelPortals[$count][3] ; pos_x, pos_y, model_id
+Func Pathfinding_ParseTravelPortals(ByRef $a_as_Lines, ByRef $a_i_Index)
+    Local $l_s_Line = $a_as_Lines[$a_i_Index]
+    If StringInStr($l_s_Line, "count=") Then
+        Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+        Dim $g_av_TravelPortals[$l_i_Count][3] ; pos_x, pos_y, model_id
 
-        For $i = 0 To $count - 1
-            $index += 1
-            Local $parts = StringSplit($lines[$index], "|", 2)
-            If UBound($parts) >= 2 Then
-                Local $pos = StringSplit($parts[0], ",", 2)
-                $g_TravelPortals[$i][0] = Number($pos[0]) ; pos_x
-                $g_TravelPortals[$i][1] = Number($pos[1]) ; pos_y
-                $g_TravelPortals[$i][2] = Number($parts[1]) ; model_id
+        For $l_i_Idx = 0 To $l_i_Count - 1
+            $a_i_Index += 1
+            Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
+            If UBound($l_as_Parts) >= 2 Then
+                Local $l_as_Pos = StringSplit($l_as_Parts[0], ",", 2)
+                $g_av_TravelPortals[$l_i_Idx][0] = Number($l_as_Pos[0]) ; pos_x
+                $g_av_TravelPortals[$l_i_Idx][1] = Number($l_as_Pos[1]) ; pos_y
+                $g_av_TravelPortals[$l_i_Idx][2] = Number($l_as_Parts[1]) ; model_id
             EndIf
         Next
     EndIf
@@ -457,33 +457,33 @@ EndFunc
 ; Pathfinding Functions
 ; ============================================================================
 
-Func GetDistance($x1, $y1, $x2, $y2)
-    Return Sqrt(($x2 - $x1) * ($x2 - $x1) + ($y2 - $y1) * ($y2 - $y1))
+Func Pathfinding_GetDistance($a_f_X1, $a_f_Y1, $a_f_X2, $a_f_Y2)
+    Return Sqrt(($a_f_X2 - $a_f_X1) * ($a_f_X2 - $a_f_X1) + ($a_f_Y2 - $a_f_Y1) * ($a_f_Y2 - $a_f_Y1))
 EndFunc
 
-Func GetSquareDistance($x1, $y1, $x2, $y2)
-    Return ($x2 - $x1) * ($x2 - $x1) + ($y2 - $y1) * ($y2 - $y1)
+Func Pathfinding_GetSquareDistance($a_f_X1, $a_f_Y1, $a_f_X2, $a_f_Y2)
+    Return ($a_f_X2 - $a_f_X1) * ($a_f_X2 - $a_f_X1) + ($a_f_Y2 - $a_f_Y1) * ($a_f_Y2 - $a_f_Y1)
 EndFunc
 
-Func IsPointInAABB($px, $py, $aabbIndex)
-    If $aabbIndex >= UBound($g_AABBs) Or $aabbIndex < 0 Then Return False
+Func Pathfinding_IsPointInAABB($a_f_PosX, $a_f_PosY, $a_i_AABBIndex)
+    If $a_i_AABBIndex >= UBound($g_av_AABBs) Or $a_i_AABBIndex < 0 Then Return False
 
-    Local $pos_x = $g_AABBs[$aabbIndex][1]
-    Local $pos_y = $g_AABBs[$aabbIndex][2]
-    Local $half_x = $g_AABBs[$aabbIndex][3]
-    Local $half_y = $g_AABBs[$aabbIndex][4]
+    Local $l_f_CenterX = $g_av_AABBs[$a_i_AABBIndex][1]
+    Local $l_f_CenterY = $g_av_AABBs[$a_i_AABBIndex][2]
+    Local $l_f_HalfX = $g_av_AABBs[$a_i_AABBIndex][3]
+    Local $l_f_HalfY = $g_av_AABBs[$a_i_AABBIndex][4]
 
-    If Abs($px - $pos_x) > $half_x Then Return False
-    If Abs($py - $pos_y) > $half_y Then Return False
+    If Abs($a_f_PosX - $l_f_CenterX) > $l_f_HalfX Then Return False
+    If Abs($a_f_PosY - $l_f_CenterY) > $l_f_HalfY Then Return False
 
     Return True
 EndFunc
 
-Func FindAABB($x, $y, $layer = 0)
-    For $i = 0 To UBound($g_AABBs) - 1
-        If $g_AABBs[$i][6] = $layer Then ; Check layer
-            If IsPointInAABB($x, $y, $i) Then
-                Return $i
+Func Pathfinding_FindAABB($a_f_X, $a_f_Y, $a_i_Layer = 0)
+    For $l_i_Idx = 0 To UBound($g_av_AABBs) - 1
+        If $g_av_AABBs[$l_i_Idx][6] = $a_i_Layer Then ; Check layer
+            If Pathfinding_IsPointInAABB($a_f_X, $a_f_Y, $l_i_Idx) Then
+                Return $l_i_Idx
             EndIf
         EndIf
     Next
@@ -491,55 +491,55 @@ Func FindAABB($x, $y, $layer = 0)
     Return -1
 EndFunc
 
-Func FindClosestPoint($x, $y, $layer = 0)
-    Local $closestIndex = -1
-    Local $minDist = $INFINITY
+Func Pathfinding_FindClosestPoint($a_f_X, $a_f_Y, $a_i_Layer = 0)
+    Local $l_i_ClosestIndex = -1
+    Local $l_f_MinDist = $GC_I_INFINITY
 
-    For $i = 0 To UBound($g_Points) - 1
-        Local $px = $g_Points[$i][1]
-        Local $py = $g_Points[$i][2]
-        Local $player = $g_Points[$i][4]
+    For $l_i_Idx = 0 To UBound($g_av_Points) - 1
+        Local $l_f_PointX = $g_av_Points[$l_i_Idx][1]
+        Local $l_f_PointY = $g_av_Points[$l_i_Idx][2]
+        Local $l_i_PointLayer = $g_av_Points[$l_i_Idx][4]
 
         ; Consider layer difference as additional distance
-        Local $layerPenalty = Abs($player - $layer) * 1000
-        Local $dist = GetSquareDistance($x, $y, $px, $py) + $layerPenalty
+        Local $l_f_LayerPenalty = Abs($l_i_PointLayer - $a_i_Layer) * 1000
+        Local $l_f_Dist = Pathfinding_GetSquareDistance($a_f_X, $a_f_Y, $l_f_PointX, $l_f_PointY) + $l_f_LayerPenalty
 
-        If $dist < $minDist Then
-            $minDist = $dist
-            $closestIndex = $i
+        If $l_f_Dist < $l_f_MinDist Then
+            $l_f_MinDist = $l_f_Dist
+            $l_i_ClosestIndex = $l_i_Idx
         EndIf
     Next
 
-    Return $closestIndex
+    Return $l_i_ClosestIndex
 EndFunc
 
-Func GetClosestPointOnMap($x, $y, $layer = 0)
+Func Pathfinding_GetClosestPointOnMap($a_f_X, $a_f_Y, $a_i_Layer = 0)
     ; Check if already on pathing map
-    Local $aabbIdx = FindAABB($x, $y, $layer)
-    If $aabbIdx >= 0 Then
-        Local $result[3] = [$x, $y, $layer]
-        Return $result
+    Local $l_i_AABBIdx = Pathfinding_FindAABB($a_f_X, $a_f_Y, $a_i_Layer)
+    If $l_i_AABBIdx >= 0 Then
+        Local $l_af_Result[3] = [$a_f_X, $a_f_Y, $a_i_Layer]
+        Return $l_af_Result
     EndIf
 
     ; Find closest point
-    Local $closestIdx = FindClosestPoint($x, $y, $layer)
-    If $closestIdx >= 0 Then
-        Local $result[3] = [$g_Points[$closestIdx][1], $g_Points[$closestIdx][2], $g_Points[$closestIdx][4]]
-        Return $result
+    Local $l_i_ClosestIdx = Pathfinding_FindClosestPoint($a_f_X, $a_f_Y, $a_i_Layer)
+    If $l_i_ClosestIdx >= 0 Then
+        Local $l_af_Result[3] = [$g_av_Points[$l_i_ClosestIdx][1], $g_av_Points[$l_i_ClosestIdx][2], $g_av_Points[$l_i_ClosestIdx][4]]
+        Return $l_af_Result
     EndIf
 
-    Local $result[3] = [0, 0, 0]
-    Return $result
+    Local $l_af_Result[3] = [0, 0, 0]
+    Return $l_af_Result
 EndFunc
 
-Func IsPathBlocked($blockingIdsStr, ByRef $blockedLayers)
-    If $blockingIdsStr = "" Then Return False
+Func Pathfinding_IsPathBlocked($a_s_BlockingIdsStr, ByRef $a_ab_BlockedLayers)
+    If $a_s_BlockingIdsStr = "" Then Return False
 
-    Local $blockingIds = StringSplit($blockingIdsStr, ",", 2)
-    For $i = 0 To UBound($blockingIds) - 1
-        Local $layerId = Number($blockingIds[$i])
-        If $layerId < UBound($blockedLayers) Then
-            If $blockedLayers[$layerId] Then
+    Local $l_as_BlockingIds = StringSplit($a_s_BlockingIdsStr, ",", 2)
+    For $l_i_Idx = 0 To UBound($l_as_BlockingIds) - 1
+        Local $l_i_LayerId = Number($l_as_BlockingIds[$l_i_Idx])
+        If $l_i_LayerId < UBound($a_ab_BlockedLayers) Then
+            If $a_ab_BlockedLayers[$l_i_LayerId] Then
                 Return True
             EndIf
         EndIf
@@ -548,177 +548,177 @@ Func IsPathBlocked($blockingIdsStr, ByRef $blockedLayers)
     Return False
 EndFunc
 
-Func GetTeleporterHeuristic($startPointId, $goalPointId)
-    If Not IsArray($g_Teleports) Or UBound($g_Teleports) = 0 Then
-        Return $INFINITY
+Func Pathfinding_GetTeleporterHeuristic($a_i_StartPointId, $a_i_GoalPointId)
+    If Not IsArray($g_av_Teleports) Or UBound($g_av_Teleports) = 0 Then
+        Return $GC_I_INFINITY
     EndIf
 
-    Local $startX = $g_Points[$startPointId][1]
-    Local $startY = $g_Points[$startPointId][2]
-    Local $goalX = $g_Points[$goalPointId][1]
-    Local $goalY = $g_Points[$goalPointId][2]
+    Local $l_f_StartX = $g_av_Points[$a_i_StartPointId][1]
+    Local $l_f_StartY = $g_av_Points[$a_i_StartPointId][2]
+    Local $l_f_GoalX = $g_av_Points[$a_i_GoalPointId][1]
+    Local $l_f_GoalY = $g_av_Points[$a_i_GoalPointId][2]
 
-    Local $minCost = $INFINITY
+    Local $l_f_MinCost = $GC_I_INFINITY
 
-    For $i = 0 To UBound($g_Teleports) - 1
-        Local $enterX = $g_Teleports[$i][0]
-        Local $enterY = $g_Teleports[$i][1]
-        Local $exitX = $g_Teleports[$i][3]
-        Local $exitY = $g_Teleports[$i][4]
-        Local $bidir = $g_Teleports[$i][6]
+    For $l_i_Idx = 0 To UBound($g_av_Teleports) - 1
+        Local $l_f_EnterX = $g_av_Teleports[$l_i_Idx][0]
+        Local $l_f_EnterY = $g_av_Teleports[$l_i_Idx][1]
+        Local $l_f_ExitX = $g_av_Teleports[$l_i_Idx][3]
+        Local $l_f_ExitY = $g_av_Teleports[$l_i_Idx][4]
+        Local $l_b_Bidirectional = $g_av_Teleports[$l_i_Idx][6]
 
         ; Distance from start to teleport entrance
-        Local $distToEnter = GetDistance($startX, $startY, $enterX, $enterY)
+        Local $l_f_DistToEnter = Pathfinding_GetDistance($l_f_StartX, $l_f_StartY, $l_f_EnterX, $l_f_EnterY)
         ; Distance from teleport exit to goal
-        Local $distFromExit = GetDistance($exitX, $exitY, $goalX, $goalY)
+        Local $l_f_DistFromExit = Pathfinding_GetDistance($l_f_ExitX, $l_f_ExitY, $l_f_GoalX, $l_f_GoalY)
 
-        Local $cost = $distToEnter + $distFromExit + 10 ; Small penalty
+        Local $l_f_Cost = $l_f_DistToEnter + $l_f_DistFromExit + 10 ; Small penalty
 
-        If $cost < $minCost Then
-            $minCost = $cost
+        If $l_f_Cost < $l_f_MinCost Then
+            $l_f_MinCost = $l_f_Cost
         EndIf
 
         ; Check reverse direction if bidirectional
-        If $bidir Then
-            $distToEnter = GetDistance($startX, $startY, $exitX, $exitY)
-            $distFromExit = GetDistance($enterX, $enterY, $goalX, $goalY)
-            $cost = $distToEnter + $distFromExit + 10
+        If $l_b_Bidirectional Then
+            $l_f_DistToEnter = Pathfinding_GetDistance($l_f_StartX, $l_f_StartY, $l_f_ExitX, $l_f_ExitY)
+            $l_f_DistFromExit = Pathfinding_GetDistance($l_f_EnterX, $l_f_EnterY, $l_f_GoalX, $l_f_GoalY)
+            $l_f_Cost = $l_f_DistToEnter + $l_f_DistFromExit + 10
 
-            If $cost < $minCost Then
-                $minCost = $cost
+            If $l_f_Cost < $l_f_MinCost Then
+                $l_f_MinCost = $l_f_Cost
             EndIf
         EndIf
     Next
 
-    Return $minCost
+    Return $l_f_MinCost
 EndFunc
 
 ; Main A* pathfinding function
-Func CalculatePath($fromX, $fromY, $fromZ, $toX, $toY, $toZ, ByRef $blockedLayers)
-    Local $path[0][3] ; Array to store path points [x, y, z]
+Func Pathfinding_CalculatePath($a_f_FromX, $a_f_FromY, $a_f_FromZ, $a_f_ToX, $a_f_ToY, $a_f_ToZ, ByRef $a_ab_BlockedLayers)
+    Local $l_af2_Path[0][3] ; Array to store path points [x, y, z]
 
     ; Get closest points on the pathing map
-    Local $startPos = GetClosestPointOnMap($fromX, $fromY, $fromZ)
-    Local $goalPos = GetClosestPointOnMap($toX, $toY, $toZ)
+    Local $l_af_StartPos = Pathfinding_GetClosestPointOnMap($a_f_FromX, $a_f_FromY, $a_f_FromZ)
+    Local $l_af_GoalPos = Pathfinding_GetClosestPointOnMap($a_f_ToX, $a_f_ToY, $a_f_ToZ)
 
-    If $startPos[0] = 0 And $startPos[1] = 0 Then
+    If $l_af_StartPos[0] = 0 And $l_af_StartPos[1] = 0 Then
         ConsoleWrite("Failed to find valid start position" & @CRLF)
-        Return $path
+        Return $l_af2_Path
     EndIf
 
-    If $goalPos[0] = 0 And $goalPos[1] = 0 Then
+    If $l_af_GoalPos[0] = 0 And $l_af_GoalPos[1] = 0 Then
         ConsoleWrite("Failed to find valid goal position" & @CRLF)
-        Return $path
+        Return $l_af2_Path
     EndIf
 
     ; Find start and goal points in the graph
-    Local $startPointId = FindClosestPoint($startPos[0], $startPos[1], $startPos[2])
-    Local $goalPointId = FindClosestPoint($goalPos[0], $goalPos[1], $goalPos[2])
+    Local $l_i_StartPointId = Pathfinding_FindClosestPoint($l_af_StartPos[0], $l_af_StartPos[1], $l_af_StartPos[2])
+    Local $l_i_GoalPointId = Pathfinding_FindClosestPoint($l_af_GoalPos[0], $l_af_GoalPos[1], $l_af_GoalPos[2])
 
-    If $startPointId < 0 Or $goalPointId < 0 Then
+    If $l_i_StartPointId < 0 Or $l_i_GoalPointId < 0 Then
         ConsoleWrite("Failed to find start or goal points in graph" & @CRLF)
-        Return $path
+        Return $l_af2_Path
     EndIf
 
-    ConsoleWrite("Start point: " & $startPointId & ", Goal point: " & $goalPointId & @CRLF)
+    ConsoleWrite("Start point: " & $l_i_StartPointId & ", Goal point: " & $l_i_GoalPointId & @CRLF)
 
     ; Initialize A* algorithm
-    Local $numPoints = UBound($g_Points)
-    Local $gScore[$numPoints]
-    Local $cameFrom[$numPoints]
-    Local $inClosedSet[$numPoints]
+    Local $l_i_NumPoints = UBound($g_av_Points)
+    Local $l_af_GScore[$l_i_NumPoints]
+    Local $l_ai_CameFrom[$l_i_NumPoints]
+    Local $l_ab_InClosedSet[$l_i_NumPoints]
 
-    For $i = 0 To $numPoints - 1
-        $gScore[$i] = $INFINITY
-        $cameFrom[$i] = -1
-        $inClosedSet[$i] = False
+    For $l_i_Idx = 0 To $l_i_NumPoints - 1
+        $l_af_GScore[$l_i_Idx] = $GC_I_INFINITY
+        $l_ai_CameFrom[$l_i_Idx] = -1
+        $l_ab_InClosedSet[$l_i_Idx] = False
     Next
 
     ; Initialize start node
-    $gScore[$startPointId] = 0
+    $l_af_GScore[$l_i_StartPointId] = 0
 
     ; Initialize priority queue
     PQ_Init()
-    Local $heuristic = GetDistance($g_Points[$startPointId][1], $g_Points[$startPointId][2], _
-                                  $g_Points[$goalPointId][1], $g_Points[$goalPointId][2])
-    PQ_Push($heuristic, $startPointId)
+    Local $l_f_Heuristic = Pathfinding_GetDistance($g_av_Points[$l_i_StartPointId][1], $g_av_Points[$l_i_StartPointId][2], _
+                                      $g_av_Points[$l_i_GoalPointId][1], $g_av_Points[$l_i_GoalPointId][2])
+    PQ_Push($l_f_Heuristic, $l_i_StartPointId)
 
-    Local $useTeleports = (IsArray($g_Teleports) And UBound($g_Teleports) > 0)
+    Local $l_b_UseTeleports = (IsArray($g_av_Teleports) And UBound($g_av_Teleports) > 0)
 
     ; A* main loop
     While Not PQ_IsEmpty()
-        Local $current = PQ_Pop()
+        Local $l_i_Current = PQ_Pop()
 
-        If $current = $goalPointId Then
+        If $l_i_Current = $l_i_GoalPointId Then
             ; Reconstruct path
             ConsoleWrite("Path found!" & @CRLF)
-            Local $node = $goalPointId
-            Local $tempPath[0]
+            Local $l_i_Node = $l_i_GoalPointId
+            Local $l_ai_TempPath[0]
 
-            While $node <> -1 And $node <> $startPointId
-                _ArrayAdd($tempPath, $node)
-                $node = $cameFrom[$node]
+            While $l_i_Node <> -1 And $l_i_Node <> $l_i_StartPointId
+                _ArrayAdd($l_ai_TempPath, $l_i_Node)
+                $l_i_Node = $l_ai_CameFrom[$l_i_Node]
             WEnd
-            _ArrayAdd($tempPath, $startPointId)
+            _ArrayAdd($l_ai_TempPath, $l_i_StartPointId)
 
             ; Reverse path and convert to coordinates
-            For $i = UBound($tempPath) - 1 To 0 Step -1
-                Local $pointIdx = $tempPath[$i]
-                Local $coord[3] = [$g_Points[$pointIdx][1], $g_Points[$pointIdx][2], $g_Points[$pointIdx][4]]
-                Local $newRow = UBound($path)
-                ReDim $path[$newRow + 1][3]
-                $path[$newRow][0] = $coord[0]
-                $path[$newRow][1] = $coord[1]
-                $path[$newRow][2] = $coord[2]
+            For $l_i_Idx = UBound($l_ai_TempPath) - 1 To 0 Step -1
+                Local $l_i_PointIdx = $l_ai_TempPath[$l_i_Idx]
+                Local $l_af_Coord[3] = [$g_av_Points[$l_i_PointIdx][1], $g_av_Points[$l_i_PointIdx][2], $g_av_Points[$l_i_PointIdx][4]]
+                Local $l_i_NewRow = UBound($l_af2_Path)
+                ReDim $l_af2_Path[$l_i_NewRow + 1][3]
+                $l_af2_Path[$l_i_NewRow][0] = $l_af_Coord[0]
+                $l_af2_Path[$l_i_NewRow][1] = $l_af_Coord[1]
+                $l_af2_Path[$l_i_NewRow][2] = $l_af_Coord[2]
             Next
 
-            ConsoleWrite("Path length: " & $gScore[$goalPointId] & @CRLF)
-            Return $path
+            ConsoleWrite("Path length: " & $l_af_GScore[$l_i_GoalPointId] & @CRLF)
+            Return $l_af2_Path
         EndIf
 
-        If $current < 0 Or $current >= $numPoints Then ContinueLoop
+        If $l_i_Current < 0 Or $l_i_Current >= $l_i_NumPoints Then ContinueLoop
 
-        $inClosedSet[$current] = True
+        $l_ab_InClosedSet[$l_i_Current] = True
 
         ; Check all neighbors
-        If $current < UBound($g_VisibilityGraph) Then
-            Local $edges = $g_VisibilityGraph[$current]
-            If IsArray($edges) Then
-                For $i = 0 To UBound($edges) - 1
-                    Local $neighbor = $edges[$i][0]
-                    Local $distance = $edges[$i][1]
-                    Local $blockingIds = $edges[$i][2]
+        If $l_i_Current < UBound($g_av_VisibilityGraph) Then
+            Local $l_amx2_Edges = $g_av_VisibilityGraph[$l_i_Current]
+            If IsArray($l_amx2_Edges) Then
+                For $l_i_EdgeIdx = 0 To UBound($l_amx2_Edges) - 1
+                    Local $l_i_Neighbor = $l_amx2_Edges[$l_i_EdgeIdx][0]
+                    Local $l_f_Distance = $l_amx2_Edges[$l_i_EdgeIdx][1]
+                    Local $l_s_BlockingIds = $l_amx2_Edges[$l_i_EdgeIdx][2]
 
                     ; Skip if in closed set
-                    If $neighbor >= 0 And $neighbor < $numPoints Then
-                        If $inClosedSet[$neighbor] Then ContinueLoop
+                    If $l_i_Neighbor >= 0 And $l_i_Neighbor < $l_i_NumPoints Then
+                        If $l_ab_InClosedSet[$l_i_Neighbor] Then ContinueLoop
                     Else
                         ContinueLoop
                     EndIf
 
                     ; Skip if path is blocked
-                    If IsPathBlocked($blockingIds, $blockedLayers) Then ContinueLoop
+                    If Pathfinding_IsPathBlocked($l_s_BlockingIds, $a_ab_BlockedLayers) Then ContinueLoop
 
                     ; Calculate tentative g score
-                    Local $tentativeGScore = $gScore[$current] + $distance
+                    Local $l_f_TentativeGScore = $l_af_GScore[$l_i_Current] + $l_f_Distance
 
-                    If $tentativeGScore < $gScore[$neighbor] Then
+                    If $l_f_TentativeGScore < $l_af_GScore[$l_i_Neighbor] Then
                         ; This path is better
-                        $cameFrom[$neighbor] = $current
-                        $gScore[$neighbor] = $tentativeGScore
+                        $l_ai_CameFrom[$l_i_Neighbor] = $l_i_Current
+                        $l_af_GScore[$l_i_Neighbor] = $l_f_TentativeGScore
 
                         ; Calculate heuristic
-                        Local $h = GetDistance($g_Points[$neighbor][1], $g_Points[$neighbor][2], _
-                                             $g_Points[$goalPointId][1], $g_Points[$goalPointId][2])
+                        Local $l_f_H = Pathfinding_GetDistance($g_av_Points[$l_i_Neighbor][1], $g_av_Points[$l_i_Neighbor][2], _
+                                                  $g_av_Points[$l_i_GoalPointId][1], $g_av_Points[$l_i_GoalPointId][2])
 
                         ; Check for teleporter heuristic
-                        If $useTeleports Then
-                            Local $teleportH = GetTeleporterHeuristic($neighbor, $goalPointId)
-                            If $teleportH < $h Then $h = $teleportH
+                        If $l_b_UseTeleports Then
+                            Local $l_f_TeleportH = Pathfinding_GetTeleporterHeuristic($l_i_Neighbor, $l_i_GoalPointId)
+                            If $l_f_TeleportH < $l_f_H Then $l_f_H = $l_f_TeleportH
                         EndIf
 
-                        Local $fScore = $tentativeGScore + $h
-                        PQ_Push($fScore, $neighbor)
+                        Local $l_f_FScore = $l_f_TentativeGScore + $l_f_H
+                        PQ_Push($l_f_FScore, $l_i_Neighbor)
                     EndIf
                 Next
             EndIf
@@ -726,99 +726,45 @@ Func CalculatePath($fromX, $fromY, $fromZ, $toX, $toY, $toZ, ByRef $blockedLayer
     WEnd
 
     ConsoleWrite("No path found" & @CRLF)
-    Return $path
+    Return $l_af2_Path
 EndFunc
 
 ; Simplify path by removing unnecessary waypoints
-Func SimplifyPath(ByRef $path, $aMaxDist = 2500)
-    If UBound($path) <= 2 Then Return $path
+Func Pathfinding_SimplifyPath(ByRef $a_af2_Path, $a_f_MaxDist = 2500)
+    If UBound($a_af2_Path) <= 2 Then Return $a_af2_Path
 
-    Local $simplified[1][3]
-    $simplified[0][0] = $path[0][0]
-    $simplified[0][1] = $path[0][1]
-    $simplified[0][2] = $path[0][2]
+    Local $l_af2_Simplified[1][3]
+    $l_af2_Simplified[0][0] = $a_af2_Path[0][0]
+    $l_af2_Simplified[0][1] = $a_af2_Path[0][1]
+    $l_af2_Simplified[0][2] = $a_af2_Path[0][2]
 
-    Local $i = 0
-    While $i < UBound($path) - 1
-        Local $j = $i + 2
-        Local $lastValid = $i + 1
+    Local $l_i_CurrentIdx = 0
+    While $l_i_CurrentIdx < UBound($a_af2_Path) - 1
+        Local $l_i_TestIdx = $l_i_CurrentIdx + 2
+        Local $l_i_LastValid = $l_i_CurrentIdx + 1
 
         ; Try to skip points (simplified line of sight check)
-        While $j < UBound($path)
+        While $l_i_TestIdx < UBound($a_af2_Path)
             ; Here you would check line of sight
             ; For now, just use distance as a simple heuristic
-            Local $dist = GetDistance($path[$i][0], $path[$i][1], $path[$j][0], $path[$j][1])
-            If $dist < $aMaxDist Then
-                $lastValid = $j
-                $j += 1
+            Local $l_f_Dist = Pathfinding_GetDistance($a_af2_Path[$l_i_CurrentIdx][0], $a_af2_Path[$l_i_CurrentIdx][1], _
+                                         $a_af2_Path[$l_i_TestIdx][0], $a_af2_Path[$l_i_TestIdx][1])
+            If $l_f_Dist < $a_f_MaxDist Then
+                $l_i_LastValid = $l_i_TestIdx
+                $l_i_TestIdx += 1
             Else
                 ExitLoop
             EndIf
         WEnd
 
-        Local $newRow = UBound($simplified)
-        ReDim $simplified[$newRow + 1][3]
-        $simplified[$newRow][0] = $path[$lastValid][0]
-        $simplified[$newRow][1] = $path[$lastValid][1]
-        $simplified[$newRow][2] = $path[$lastValid][2]
+        Local $l_i_NewRow = UBound($l_af2_Simplified)
+        ReDim $l_af2_Simplified[$l_i_NewRow + 1][3]
+        $l_af2_Simplified[$l_i_NewRow][0] = $a_af2_Path[$l_i_LastValid][0]
+        $l_af2_Simplified[$l_i_NewRow][1] = $a_af2_Path[$l_i_LastValid][1]
+        $l_af2_Simplified[$l_i_NewRow][2] = $a_af2_Path[$l_i_LastValid][2]
 
-        $i = $lastValid
+        $l_i_CurrentIdx = $l_i_LastValid
     WEnd
 
-    Return $simplified
+    Return $l_af2_Simplified
 EndFunc
-
-; ============================================================================
-; Example Usage
-; ============================================================================
-
-;~ Func ExampleUsage()
-;~     ; Load pathfinding data
-;~     Local $dataFile = "675_Boreal_Station.gwau3" ; Your exported file
-
-;~     If Not LoadPathfindingData($dataFile) Then
-;~         ConsoleWrite("Failed to load pathfinding data from: " & $dataFile & @CRLF)
-;~         Return
-;~     EndIf
-
-;~     ; Define blocked layers (0 = not blocked, 1 = blocked)
-;~     Local $blockedLayers[256]
-;~     For $i = 0 To 255
-;~         $blockedLayers[$i] = False
-;~     Next
-
-;~     ; Example: Calculate path from point A to point B
-;~     Local $fromX = 7444
-;~     Local $fromY = -25168
-;~     Local $fromZ = 0
-;~     Local $toX = -4553
-;~     Local $toY = 24731
-;~     Local $toZ = 0
-
-;~     ConsoleWrite("Calculating path from (" & $fromX & ", " & $fromY & ", " & $fromZ & ") to (" & _
-;~                  $toX & ", " & $toY & ", " & $toZ & ")" & @CRLF)
-
-;~     Local $path = CalculatePath($fromX, $fromY, $fromZ, $toX, $toY, $toZ, $blockedLayers)
-
-;~     If UBound($path) > 0 Then
-;~         ConsoleWrite("Path found with " & UBound($path) & " waypoints:" & @CRLF)
-;~         For $i = 0 To UBound($path) - 1
-;~             ConsoleWrite("(" & $path[$i][0] & ", " & _
-;~                         $path[$i][1] & ", " & $path[$i][2] & ")" & @CRLF)
-;~         Next
-
-;~         ; Simplify path
-;~         Local $simplified = SimplifyPath($path)
-;~         ConsoleWrite(@CRLF & "Simplified path has " & UBound($simplified) & " waypoints:" & @CRLF)
-;~         For $i = 0 To UBound($simplified) - 1
-;~             ConsoleWrite("(" & $simplified[$i][0] & ", " & _
-;~                         $simplified[$i][1] & ", " & $simplified[$i][2] & ")" & @CRLF)
-;~         Next
-;~     Else
-;~         ConsoleWrite("No path found!" & @CRLF)
-;~     EndIf
-;~ EndFunc
-
-;~ ; Run the example
-;~ ExampleUsage()
-

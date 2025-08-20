@@ -135,7 +135,7 @@ While $BotRunning
     Out("Ready")
 
 	; MapID, Xpos, Ypos, ToX, ToY
-	Local $path = GetPathCoords(31, 5302, -11627, 4409, 15043)
+	Local $path = Pathfinding_GetPathCoords(31, 5302, -11627, 4409, 15043)
 
 	For $i = 0 To UBound($path) - 1
 		Out('X: ' & $path[$i][0] & ', Y: ' & $path[$i][1] & ', Z: ' & $path[$i][2])
