@@ -45,9 +45,9 @@ Func Pathfinding_OptimizePath(ByRef $a_af2_OriginalPath, $a_f_Aggressiveness = 0
     ConsoleWrite("  Line of sight completed in " & Round(TimerDiff($l_i_Timer), 1) & " ms" & @CRLF)
 
     ; Step 2: Fast wall adjustment
-    $l_i_Timer = TimerInit()
-    Local $l_af2_AdjustedPath = Pathfinding_WallAdjustment($l_af2_OptimizedPath, $a_f_Aggressiveness)
-    ConsoleWrite("  Fast wall adjustment completed in " & Round(TimerDiff($l_i_Timer), 1) & " ms" & @CRLF)
+   ; $l_i_Timer = TimerInit()
+   ; Local $l_af2_AdjustedPath = Pathfinding_WallAdjustment($l_af2_OptimizedPath, $a_f_Aggressiveness)
+   ; ConsoleWrite("  Fast wall adjustment completed in " & Round(TimerDiff($l_i_Timer), 1) & " ms" & @CRLF)
 
     ; Step 3: Final path smoothing
     $l_i_Timer = TimerInit()
