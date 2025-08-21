@@ -1,5 +1,4 @@
-#include <Array.au3>
-#include <Math.au3>
+#include-once
 #include "Pathfinding.au3"
 
 ; ============================================================================

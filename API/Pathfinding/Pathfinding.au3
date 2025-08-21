@@ -1,7 +1,4 @@
-#include <Array.au3>
-#include <File.au3>
-#include <String.au3>
-#include <Math.au3>
+#include-once
 
 ; ============================================================================
 ; Global variables for pathfinding data
