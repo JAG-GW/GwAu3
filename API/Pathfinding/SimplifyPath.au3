@@ -51,7 +51,7 @@ Func Pathfinding_OptimizePath(ByRef $a_af2_OriginalPath, $a_f_Aggressiveness = 0
 
     ; Step 3: Final path smoothing
     $l_i_Timer = TimerInit()
-    Local $l_af2_SmoothedPath = Pathfinding_SmoothPath($l_af2_AdjustedPath)
+    Local $l_af2_SmoothedPath = Pathfinding_SmoothPath($l_af2_OptimizedPath)
     ConsoleWrite("  Path smoothing completed in " & Round(TimerDiff($l_i_Timer), 1) & " ms" & @CRLF)
 
     ; IMPORTANT: Ensure the last point is the final destination
