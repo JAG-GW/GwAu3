@@ -485,6 +485,8 @@ Func Pathfinding_GetPathCoords($a_i_MapID, $a_f_FromX, $a_f_FromY, $a_f_ToX, $a_
 
     Local $l_af2_OriginalPath = Pathfinding_CalculatePath($a_f_FromX, $a_f_FromY, 0, $a_f_ToX, $a_f_ToY, 0, $l_ab_BlockedLayers)
     Local $l_af2_OptimizedPath = Pathfinding_OptimizePath($l_af2_OriginalPath, $a_f_Aggressivity)
+    Local $l_af_Dest = [[$a_f_ToX, $a_f_ToY, 0]]
+    _ArrayAdd($l_af2_OptimizedPath, $l_af_Dest)
 
     Return $l_af2_OptimizedPath
 EndFunc
