@@ -21,6 +21,10 @@ Global $g_f_Zoom = 1.0, $g_f_OffsetX = 0, $g_f_OffsetY = 0
 Global $g_b_Dragging = False, $g_i_DragStartX, $g_i_DragStartY
 Global $g_f_DragOffsetX, $g_f_DragOffsetY
 
+; Mouse coordinates
+Global $g_i_MouseScreenX = 0, $g_i_MouseScreenY = 0
+Global $g_f_MouseWorldX = 0, $g_f_MouseWorldY = 0
+
 ; Map data structures - Only keep what we display
 Global $g_amx2_Trapezoids[0] ; Will store: [id, layer, ax, ay, bx, by, cx, cy, dx, dy]
 Global $g_amx2_Points[0]      ; Will store: [id, pos_x, pos_y, box_id, layer, box2_id, portal_id]
@@ -284,6 +288,20 @@ While 1
             $g_b_Dragging = False
 
         Case $GUI_EVENT_MOUSEMOVE
+            ; Update mouse coordinates
+            Local $l_ai_CursorInfo = GUIGetCursorInfo($g_h_GUI)
+            If IsArray($l_ai_CursorInfo) Then
+                $g_i_MouseScreenX = $l_ai_CursorInfo[0]
+                $g_i_MouseScreenY = $l_ai_CursorInfo[1]
+                $g_f_MouseWorldX = ScreenToWorldX($g_i_MouseScreenX)
+                $g_f_MouseWorldY = ScreenToWorldY($g_i_MouseScreenY)
+
+                ; Redraw only if not dragging (to avoid flicker)
+                If Not $g_b_Dragging Then
+                    DrawMap()
+                EndIf
+            EndIf
+
             If $g_b_Dragging And Not $g_b_PathfindingMode Then
                 Local $l_ai_MousePos = MouseGetPos()
                 $g_f_OffsetX = $g_f_DragOffsetX + ($l_ai_MousePos[0] - $g_i_DragStartX)
@@ -747,7 +765,8 @@ Func DrawInfo()
     Local $l_h_Family = _GDIPlus_FontFamilyCreate("Consolas")
     Local $l_h_Font = _GDIPlus_FontCreate($l_h_Family, 10)
 
-    Local $l_s_Info = StringFormat("Zoom: %.2f%%", $g_f_Zoom * 100)
+    ; Build info string
+    Local $l_s_Info = StringFormat("Zoom: %.2f%% | Mouse: X=%.0f, Y=%.0f", $g_f_Zoom * 100, $g_f_MouseWorldX, $g_f_MouseWorldY)
     If $g_i_SelectedLayer >= 0 Then $l_s_Info &= " | Layer: " & $g_i_SelectedLayer
     $l_s_Info &= " | Pathfinding: " & ($g_b_PathfindingMode ? "ON" : "OFF")
     If $g_b_PathfindingMode Then
@@ -764,13 +783,18 @@ Func DrawInfo()
     $l_s_Info &= @CRLF & "Controls: Mouse drag to pan, wheel to zoom, +/- zoom, R reset, F fit"
     $l_s_Info &= @CRLF & "Toggle: T trapezoids, O points, E teleports, G grid, P pathfinding, C clear path"
 
-    Local $l_t_Layout = _GDIPlus_RectFCreate(5, 5, 800, 60)
+    ; Draw background for better readability
+    Local $l_h_BrushBg = _GDIPlus_BrushCreateSolid(0xCC000000) ; Semi-transparent black
+    _GDIPlus_GraphicsFillRect($g_h_GfxCtxt, 0, 0, 900, 65, $l_h_BrushBg)
+
+    Local $l_t_Layout = _GDIPlus_RectFCreate(5, 5, 900, 60)
     _GDIPlus_GraphicsDrawStringEx($g_h_GfxCtxt, $l_s_Info, $l_h_Font, $l_t_Layout, $l_h_Format, $l_h_Brush)
 
     _GDIPlus_FontDispose($l_h_Font)
     _GDIPlus_FontFamilyDispose($l_h_Family)
     _GDIPlus_StringFormatDispose($l_h_Format)
     _GDIPlus_BrushDispose($l_h_Brush)
+    _GDIPlus_BrushDispose($l_h_BrushBg)
 EndFunc
 
 ; Coordinate conversion functions
@@ -850,7 +874,7 @@ Func CalculateAndShowPath()
 
     If UBound($l_af2_RawPath) > 0 Then
         ; Optimize the path
-        $g_af2_CalculatedPath = Pathfinding_OptimizePath($l_af2_RawPath, $g_f_PathAggressiveness)
+        $g_af2_CalculatedPath = Pathfinding_GetPathCoords($g_i_CurrentMapID, $g_f_StartClickX, $g_f_StartClickY, $g_f_EndClickX, $g_f_EndClickY)
         $g_b_ShowPath = True
 
         ConsoleWrite("Path found!" & @CRLF)

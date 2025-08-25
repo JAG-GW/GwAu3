@@ -337,3 +337,25 @@ Func Map_GetAreaInfo($aMapID, $aInfo = "")
     Return 0
 EndFunc
 #EndRegion Area Related
+
+Func Map_IsMapUnlocked($a_i_MapID)
+    Local $l_p_WorldContext = World_GetWorldContextPtr()
+
+    If $l_p_WorldContext = 0 Then Return False
+
+    Local $l_p_ArrayStruct = $l_p_WorldContext + 0x60C
+    Local $l_p_ArrayBuffer = Memory_Read($l_p_ArrayStruct, "ptr")
+    Local $l_i_ArraySize = Memory_Read($l_p_ArrayStruct + 0x8, "dword")
+
+    If $l_p_ArrayBuffer = 0 Or $l_i_ArraySize = 0 Then Return False
+
+    Local $l_i_RealIndex = Floor($a_i_MapID / 32)
+
+    If $l_i_RealIndex >= $l_i_ArraySize Then Return False
+
+    Local $l_i_Value = Memory_Read($l_p_ArrayBuffer + ($l_i_RealIndex * 4), "dword")
+    Local $l_i_Shift = Mod($a_i_MapID, 32)
+    Local $l_i_Flag = BitShift(1, -$l_i_Shift) ; 1 << shift
+
+    Return BitAND($l_i_Value, $l_i_Flag) <> 0
+EndFunc
