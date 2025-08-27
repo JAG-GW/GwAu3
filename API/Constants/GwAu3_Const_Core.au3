@@ -31,6 +31,7 @@ Global $g_p_PreGame
 Global $g_p_FrameArray
 Global $g_p_AreaInfo
 Global $g_p_ConnectionStatus
+Global $g_p_MapIsLoaded
 
 ;Skill
 Global $g_p_SkillBase

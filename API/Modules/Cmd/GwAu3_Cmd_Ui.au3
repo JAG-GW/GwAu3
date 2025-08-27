@@ -135,7 +135,6 @@ EndFunc ;==>PurgeHook
 Func Ui_ToggleRendering_()
     If Ui_GetRenderDisabled() Then
         Ui_EnableRendering()
-        Memory_Clear()
     Else
         Ui_DisableRendering()
         Memory_Clear()

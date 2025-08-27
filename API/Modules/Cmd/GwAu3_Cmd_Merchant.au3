@@ -141,9 +141,12 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
 
         If Not $l_b_FoundItem Then Return False
 
+        Local $l_i_TotalCost = $a_i_Quantity * ($l_i_ItemValue * 2)
+        If $l_i_TotalCost > Item_GetInventoryInfo("GoldCharacter") Then Return False
+
         DllStructSetData($g_d_BuyItem, 2, $a_i_Quantity)
         DllStructSetData($g_d_BuyItem, 3, $l_i_ItemID)
-        DllStructSetData($g_d_BuyItem, 4, $a_i_Quantity * ($l_i_ItemValue*2))
+        DllStructSetData($g_d_BuyItem, 4, $l_i_TotalCost)
         DllStructSetData($g_d_BuyItem, 5, Memory_GetValue('BuyItemBase'))
 
         Core_Enqueue($g_p_BuyItem, 20)
@@ -156,10 +159,9 @@ EndFunc ;==>Merchant_BuyItem
 Func Merchant_SellItem($a_p_Item, $a_i_Quantity = 0, $a_b_Trader = False)
     Local $l_p_Item = Item_GetItemPtr($a_p_Item)
     Local $l_i_ItemID = Item_ItemID($a_p_Item)
-	Local $l_i_Item_ModelID = Memory_Read($l_p_Item + 0x2C, "dword")
     Local $l_i_ItemQuantity = Memory_Read($l_p_Item + 0x4C, 'short')
 
-    If $l_i_ItemQuantity <= 0 Then Return False
+    If $l_i_ItemQuantity < 0 Then Return False
 
     ; "SellAll": Set quantity to stack count, but keep track if original was 0
     Local $l_b_SellAll = ($a_i_Quantity = 0)
@@ -171,7 +173,9 @@ Func Merchant_SellItem($a_p_Item, $a_i_Quantity = 0, $a_b_Trader = False)
         ; Trader sell process - one by one
         Local $l_i_SoldCount = 0, $l_i_SellingThreshold = 0
         Local $l_b_IsRareMaterial = Item_GetItemIsRareMaterial($l_p_Item)
-		Local $l_b_IsRuneOrInsignia = Item_IsRuneOrInsignia($l_i_Item_ModelID)
+        Local $l_i_ItemModelID = Memory_Read($l_p_Item + 0x2C, "dword")
+		Local $l_b_IsRuneOrInsignia = Item_IsRuneOrInsignia($l_i_ItemModelID)
+
         If Not $l_b_IsRareMaterial And $l_b_IsRuneOrInsignia = 0 Then
             $l_i_SellingThreshold = 10
             $a_i_Quantity = Int($a_i_Quantity / 10)

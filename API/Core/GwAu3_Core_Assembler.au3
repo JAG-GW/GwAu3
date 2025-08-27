@@ -1607,7 +1607,7 @@ Func _($a_s_ASM)
 				; Crafting
 				Case 'lea edi,[eax+C]'
 					$l_s_OpCode = '8D780C'
-				;Collector Exchange
+				; Collector Exchange
 				Case 'lea ecx,[edx+4]'
 					$l_s_OpCode = '8D4A04'
 				Case 'lea eax,[edx+C]'
@@ -1616,6 +1616,9 @@ Func _($a_s_ASM)
 					$l_s_OpCode = '8B5A08'
 				Case 'lea ecx,[edx+ebx*4+C]'
 					$l_s_OpCode = '8D4C9A0C'
+				; LoadFinished
+				Case 'push dword[edi+1C]'
+					$l_s_OpCode = 'FF771C'
 
 				Case Else
 					Log_Error('Could not assemble: ' & $a_s_ASM, 'ASM', $g_h_EditText)
@@ -1778,6 +1781,7 @@ Func Assembler_ModifyMemory()
 	Assembler_CreateData()
 	Assembler_CreateMain()
 	Assembler_CreateRenderingMod()
+	Assembler_CreateLoadFinished()
 	Assembler_CreateCommands()
 	Assembler_CreateSkillCommands()
 	Assembler_CreateFriendCommands()
@@ -1814,6 +1818,7 @@ Func Assembler_ModifyMemory()
 	Memory_WriteDetour('MainStart', 'MainProc')
 	Memory_WriteDetour('TraderStart', 'TraderProc')
 	Memory_WriteDetour('RenderingMod', 'RenderingModProc')
+	Memory_WriteDetour('LoadFinishedStart', 'LoadFinishedProc')
 	If IsDeclared("g_b_AssemblerWriteDetour") Then Extend_AssemblerWriteDetour()
 EndFunc
 
@@ -1823,6 +1828,7 @@ Func Assembler_CreateData()
     _('TraderCostID/4')
     _('TraderCostValue/4')
     _('DisableRendering/4')
+	_('MapIsLoaded/4')
 	_('AgentCopyCount/4')
 
 	If IsDeclared("g_b_AssemblerData") Then Extend_AssemblerData()
@@ -1943,6 +1949,21 @@ Func Assembler_CreateRenderingMod()
 	_('add esp,4')
 	_('cmp dword[DisableRendering],1')
 	_('ljmp RenderingModReturn')
+EndFunc
+
+Func Assembler_CreateLoadFinished()
+    _('LoadFinishedProc:')
+    _('pushad')
+	_('pushfd')
+
+    _('mov dword[MapIsLoaded],1')
+
+	_('popfd')
+    _('popad')
+
+	_('push dword[edi+1C]')
+	_('mov ecx,esi')
+	_('ljmp LoadFinishedReturn')
 EndFunc
 
 Func Assembler_CreateCommands()

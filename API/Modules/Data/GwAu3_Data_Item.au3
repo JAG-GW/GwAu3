@@ -289,7 +289,7 @@ Func Item_GetInventoryArray($a_b_IncludeEquipmentPack = False)
 
             $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_PTR] = $l_p_CacheItemPtr
             $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_ITEMID] = DllStructGetData($s_d_Struct_Item, "ItemID")
-            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_BAG] = Memory_Read(DllStructGetData($s_d_Struct_Item, "Bag"), "byte")
+            $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_BAG] = Memory_Read(DllStructGetData($s_d_Struct_Item, "Bag") + 0x4, "dword")
             $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_ITEMTYPE] = DllStructGetData($s_d_Struct_Item, "ItemType")
             $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_EXTRAID] = DllStructGetData($s_d_Struct_Item, "ExtraID")
             $l_amx2_Inventory[$l_i_Inventory_Idx][$GC_I_INVENTORY_VALUE] = DllStructGetData($s_d_Struct_Item, "Value")

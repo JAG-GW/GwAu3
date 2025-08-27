@@ -44,17 +44,20 @@ EndFunc   ;==>EnterChallenge
 ;~ EndFunc   ;==>EnterChallengeForeign
 
 ;~ Description: Travel to your guild hall.
-Func Map_TravelGH($a_WaitToLoad = True)
+Func Map_TravelGH()
     Local $l_ai_Offset[3] = [0, 0x18, 0x3C]
     Local $l_ap_GH = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+
+    Map_InitMapIsLoaded()
     Core_SendPacket(0x18, $GC_I_HEADER_PARTY_ENTER_GUILD_HALL, Memory_Read($l_ap_GH[1] + 0x64), Memory_Read($l_ap_GH[1] + 0x68), Memory_Read($l_ap_GH[1] + 0x6C), Memory_Read($l_ap_GH[1] + 0x70), 1)
-    If $a_WaitToLoad Then Return Map_WaitMapLoading()
+    Map_WaitMapIsLoaded()
 EndFunc   ;==>TravelGH
 
 ;~ Description: Leave your guild hall.
-Func Map_LeaveGH($a_WaitToLoad = True)
+Func Map_LeaveGH()
+    Map_InitMapIsLoaded()
     Core_SendPacket(0x8, $GC_I_HEADER_PARTY_LEAVE_GUILD_HALL, 1)
-    If $a_WaitToLoad Then Return Map_WaitMapLoading()
+    Map_WaitMapIsLoaded()
 EndFunc   ;==>LeaveGH
 
 ;~ Description: Map travel to an outpost.
@@ -74,4 +77,37 @@ Func Map_WaitMapLoading($a_i_MapID = -1, $a_i_InstanceType = -1)
         EndIf
     Until Agent_GetAgentPtr(-2) <> 0 And Agent_GetMaxAgents() <> 0 And World_GetWorldInfo("SkillbarArray") <> 0 And Party_GetPartyContextPtr() <> 0 _
     And ($a_i_InstanceType = -1 Or Map_GetInstanceInfo("Type") = $a_i_InstanceType) And ($a_i_MapID = -1 Or Map_GetCharacterInfo("MapID") = $a_i_MapID) And Not Game_GetGameInfo("IsCinematic")
+EndFunc
+
+Func Map_InitMapIsLoaded()
+    Memory_Write($g_p_MapIsLoaded, 0)
+EndFunc
+
+Func Map_MapIsLoaded()
+    If Memory_Read($g_p_MapIsLoaded) = 1 Then 
+        Memory_Write($g_p_MapIsLoaded, 0)
+        Return True
+    EndIf
+    Return False
+EndFunc
+
+Func Map_WaitMapIsLoaded($a_i_Timeout = 30000)
+    If Map_MapIsLoaded() Then Return True
+    
+    Local $l_h_Timeout = TimerInit()
+    Do
+        Sleep(150)
+    Until Map_MapIsLoaded() Or TimerDiff($l_h_Timeout) >= $a_i_Timeout
+    If TimerDiff($l_h_Timeout) >= $a_i_Timeout Then Return False
+
+    $l_h_Timeout = TimerInit()
+    If Game_GetGameInfo("IsCinematic") Then
+        Cinematic_SkipCinematic()
+        Do
+            Sleep(150)
+        Until Map_MapIsLoaded() Or TimerDiff($l_h_Timeout) >= $a_i_Timeout
+        If TimerDiff($l_h_Timeout) >= $a_i_Timeout Then Return False
+    EndIf
+
+    Return True
 EndFunc

@@ -1,6 +1,12 @@
 #include-once
 
-#region Map_IDs
+#Region MapTypes
+Global Const $GC_I_MAP_TYPE_OUTPOST = 0
+Global Const $GC_I_MAP_TYPE_EXPLORABLE = 1
+Global Const $GC_I_MAP_TYPE_LOADING = 2
+#EndRegion MapTypes
+
+#Region MapIDs
 Global Const $GC_I_MAP_ID_GUILD_HALL_WARRIORS_ISLE = 4
 Global Const $GC_I_MAP_ID_GUILD_HALL_HUNTERS_ISLE = 5
 Global Const $GC_I_MAP_ID_GUILD_HALL_WIZARDS_ISLE = 6
@@ -235,7 +241,6 @@ Global Const $GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE = 247
 Global Const $GC_I_MAP_ID_GREAT_TEMPLE_OF_BALTHAZAR = 248
 Global Const $GC_I_MAP_ID_TSUMEI_VILLAGE = 249
 Global Const $GC_I_MAP_ID_SEITUNG_HARBOR = 250
-
 Global Const $GC_I_MAP_ID_RAN_MUSU_GARDENS = 251
 Global Const $GC_I_MAP_ID_LINNOK_COURTYARD = 252
 Global Const $GC_I_MAP_ID_DWAYNA_VS_GRENTH_OUTPOST = 253
@@ -665,10 +670,9 @@ Global Const $GC_I_MAP_ID_MINISTRY_OF_OPPRESSION_WAJJUN_BAZAAR = 873
 Global Const $GC_I_MAP_ID_THE_FINAL_CONFRONTATION = 874
 Global Const $GC_I_MAP_ID_LAKESIDE_COUNTY_1070_AE = 875
 Global Const $GC_I_MAP_ID_ASHFORD_CATACOMBS_1070_AE = 876
+#EndRegion MapIDs
 
-#endregion Map_IDs
-
-#region Map_Labels
+#Region MapLabels
 Global $G_S_MAP_LABEL[880]
 $G_S_MAP_LABEL[0] = "662"
 $G_S_MAP_LABEL[4] = "Guild Hall - Warrior's Isle"
@@ -1334,5 +1338,4 @@ $G_S_MAP_LABEL[873] = "Ministry of Oppression: Wajjun Bazaar"
 $G_S_MAP_LABEL[874] = "The Final Confrontation"
 $G_S_MAP_LABEL[875] = "Lakeside County: 1070 AE"
 $G_S_MAP_LABEL[876] = "Ashford Catacombs: 1070 AE"
-
-#endregion Map_Labels
+#EndRegion MapLabels
