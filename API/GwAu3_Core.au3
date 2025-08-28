@@ -101,9 +101,9 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Scanner_AddPattern('SetDifficulty', '8B75086828010010', 0x71, 'Func')
 	Scanner_AddPattern('OpenChest', '83C901894B24', 0x29, 'Func')
 	Scanner_AddPattern('Dialog', '894B248B4B2883E900', 0x16, 'Func')
-	Scanner_AddPattern('AiMode', '683A000010FF36', 0x1, 'Ptr') ;+0x83
+	Scanner_AddPattern('AiMode', '683A000010FF36', 0x1, 'Ptr')
 	Scanner_AddPattern('HeroCommand', '33D268E0010000', 0x1, 'Ptr')
-	Scanner_AddPattern('HeroSkills', '8B4E04505185FF', 0x1, 'Ptr') ;-0xB6, +0x42
+	Scanner_AddPattern('HeroSkills', '8B4E04505185FF', 0x1, 'Ptr')
 	; hook
 	Scanner_AddPattern('Engine', '568B3085F67478EB038D4900D9460C', -0x22, 'Hook')
     Scanner_AddPattern('Render', 'F6C401741C68B1010000BA', -0x67, 'Hook')
