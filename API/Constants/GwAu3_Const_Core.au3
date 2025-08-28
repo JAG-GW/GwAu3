@@ -40,6 +40,8 @@ Global $g_d_UseSkill = DllStructCreate('ptr;dword;dword;dword;bool')
 Global $g_p_UseSkill = DllStructGetPtr($g_d_UseSkill)
 Global $g_d_UseHeroSkill = DllStructCreate('ptr;dword;dword;dword')
 Global $g_p_UseHeroSkill = DllStructGetPtr($g_d_UseHeroSkill)
+Global $g_d_CancelHeroSkill = DllStructCreate('ptr;dword;dword')
+Global $g_p_CancelHeroSkill = DllStructGetPtr($g_d_CancelHeroSkill)
 Global $g_i_LastSkillUsed = 0
 Global $g_i_LastSkillTarget = 0
 
@@ -112,10 +114,10 @@ Global $g_f_ClickCoordsX = 0
 Global $g_f_ClickCoordsY = 0
 
 ;UI
-Global $g_d_FlagHero = DllStructCreate('ptr;dword;dword;dword;dword') 
-Global $g_p_FlagHero = DllStructGetPtr($g_d_FlagHero)
-Global $g_d_FlagAll = DllStructCreate('ptr;dword;dword;dword')
-Global $g_p_FlagAll = DllStructGetPtr($g_d_FlagAll)
+Global $g_d_Dialog = DllStructCreate('ptr;dword')
+Global $g_p_Dialog = DllStructGetPtr($g_d_Dialog)
+Global $g_d_OpenChest = DllStructCreate('ptr;dword')
+Global $g_p_OpenChest = DllStructGetPtr($g_d_OpenChest)
 Global $g_d_AddNPC = DllStructCreate('ptr;dword')
 Global $g_p_AddNPC = DllStructGetPtr($g_d_AddNPC)
 Global $g_d_AddHero = DllStructCreate('ptr;dword')
@@ -126,12 +128,26 @@ Global $g_d_KickHero = DllStructCreate('ptr;dword')
 Global $g_p_KickHero = DllStructGetPtr($g_d_KickHero)
 Global $g_d_LeaveGroup = DllStructCreate('ptr;dword')
 Global $g_p_LeaveGroup = DllStructGetPtr($g_d_LeaveGroup)
-Global $g_d_EnterMission = DllStructCreate('ptr;dword')
-Global $g_p_EnterMission = DllStructGetPtr($g_d_EnterMission)
 Global $g_d_SetDifficulty = DllStructCreate('ptr;dword')
 Global $g_p_SetDifficulty = DllStructGetPtr($g_d_SetDifficulty)
-Global $g_d_OpenChest = DllStructCreate('ptr;dword')
-Global $g_p_OpenChest = DllStructGetPtr($g_d_OpenChest)
+Global $g_d_EnterMission = DllStructCreate('ptr;dword')
+Global $g_p_EnterMission = DllStructGetPtr($g_d_EnterMission)
+Global $g_d_FlagHero = DllStructCreate('ptr;dword;dword;dword;dword') 
+Global $g_p_FlagHero = DllStructGetPtr($g_d_FlagHero)
+Global $g_d_FlagAll = DllStructCreate('ptr;dword;dword;dword')
+Global $g_p_FlagAll = DllStructGetPtr($g_d_FlagAll)
+Global $g_d_SetHeroBehavior = DllStructCreate('ptr;dword;dword')
+Global $g_p_SetHeroBehavior = DllStructGetPtr($g_d_SetHeroBehavior)
+Global $g_d_DropHeroBundle = DllStructCreate('ptr;dword')
+Global $g_p_DropHeroBundle = DllStructGetPtr($g_d_DropHeroBundle)
+Global $g_d_LockHeroTarget = DllStructCreate('ptr;dword;dword')
+Global $g_p_LockHeroTarget = DllStructGetPtr($g_d_LockHeroTarget)
+Global $g_d_ToggleHeroSkillState = DllStructCreate('ptr;dword;dword')
+Global $g_p_ToggleHeroSkillState = DllStructGetPtr($g_d_ToggleHeroSkillState)
+
+;UI-Msg
+Global $g_d_MoveMap = DllStructCreate('ptr;dword;dword;dword;dword;dword')
+Global $g_p_MoveMap = DllStructGetPtr($g_d_MoveMap)
 
 ;Bot related
 Global $g_bAutoStart = False  ; Flag for auto-start

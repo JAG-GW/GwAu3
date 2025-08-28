@@ -1,4 +1,21 @@
 #include-once
+
+;~ Description: Sends dialog ID.
+Func Ui_Dialog($a_i_DialogID)
+    DllStructSetData($g_d_Dialog, 2, $a_i_DialogID)
+    Core_Enqueue($g_p_Dialog, 8)
+EndFunc   ;==>Ui_Dialog
+
+;~ Description: Open targeted chest using dialog options. (0x1 = Use Key, 0x2 = Use Lockpick, 0x80 = Cancel)
+Func Ui_OpenChest($a_b_UseLockpick = True)
+    If $a_b_UseLockpick Then
+        DllStructSetData($g_d_OpenChest, 2, 0x2)
+    Else
+        DllStructSetData($g_d_OpenChest, 2, 0x1)
+    EndIf
+    Core_Enqueue($g_p_OpenChest, 8)
+EndFunc   ;==>Ui_OpenChest
+
 ;~ Description: Command a hero via flag.
 Func Ui_CommandHero($a_i_HeroNumber, $a_f_X, $a_f_Y)
     DllStructSetData($g_d_FlagHero, 2, Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))
@@ -31,7 +48,45 @@ Func Ui_CancelAll()
     DllStructSetData($g_d_FlagAll, 3, 0x7F800000)
     DllStructSetData($g_d_FlagAll, 4, 0) ; zPos
     Core_Enqueue($g_p_FlagAll, 16)
-EndFunc   ;==>CancelAll
+EndFunc   ;==>Ui_CancelAll
+
+;~ Description: Sets hero behavior (0 = Fight, 1 = Guard, 2 = Avoid Combat).
+Func Ui_SetHeroBehaviour($a_i_HeroNumber, $a_i_Behavior = 1)
+    DllStructSetData($g_d_SetHeroBehavior, 2, Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))
+    DllStructSetData($g_d_SetHeroBehavior, 3, $a_i_Behavior)
+    Core_Enqueue($g_p_SetHeroBehavior, 12)
+EndFunc   ;==>Ui_SetHeroBehaviour
+
+;~ Description: Commands hero to drop held bundle.
+Func Ui_DropHeroBundle($a_i_HeroNumber)
+    DllStructSetData($g_d_DropHeroBundle, 2, Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))
+    Core_Enqueue($g_p_DropHeroBundle, 8)
+EndFunc   ;==>Ui_DropHeroBundle
+
+;~ Description: Locks hero onto a target (0 = remove lock).
+Func Ui_LockHeroTarget($a_i_HeroNumber, $a_i_TargetAgentID = 0)
+    DllStructSetData($g_d_LockHeroTarget, 2, Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))
+    DllStructSetData($g_d_LockHeroTarget, 3, Agent_ConvertID($a_i_TargetAgentID))
+    Core_Enqueue($g_p_LockHeroTarget, 12)
+EndFunc   ;==>Ui_LockHeroTarget
+
+;~ Description: Toggles state of a hero skill (enabled/disabled).
+Func Ui_ToggleHeroSkillState($a_i_HeroNumber, $a_i_Skillslot)
+    DllStructSetData($g_d_ToggleHeroSkillState, 2, Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))
+    DllStructSetData($g_d_ToggleHeroSkillState, 3, $a_i_Skillslot - 1)
+    Core_Enqueue($g_p_ToggleHeroSkillState, 12)
+EndFunc   ;==>Ui_ToggleHeroSkillState
+
+;~ Description: Enable a skill on a hero's skill bar.
+Func Ui_EnableHeroSkill($a_i_HeroNumber, $a_i_SkillSlot)
+	If Party_GetIsHeroSkillDisabled($a_i_HeroNumber, $a_i_SkillSlot) Then Ui_ToggleHeroSkillState($a_i_HeroNumber, $a_i_SkillSlot)
+EndFunc   ;==>Ui_EnableHeroSkill
+
+;~ Description: Disable a skill on a hero's skill bar.
+Func Ui_DisableHeroSkill($a_i_HeroNumber, $a_i_SkillSlot)
+	If Not Party_GetIsHeroSkillDisabled($a_i_HeroNumber, $a_i_SkillSlot) Then Ui_ToggleHeroSkillState($a_i_HeroNumber, $a_i_SkillSlot)
+	Return True
+EndFunc   ;==>Ui_DisableHeroSkill
 
 ;~ Description: Add NPC via the Party Search window.
 Func Ui_AddNPC($a_i_AgentID)
@@ -57,7 +112,7 @@ Func Ui_KickHero($a_i_HeroID)
     Core_Enqueue($g_p_KickHero, 8)
 EndFunc   ;==>Ui_KickHero
 
-;~ Description: Kicks all heroes from the group
+;~ Description: Kicks all heroes from the group.
 Func Ui_KickAllHeroes()
     DllStructSetData($g_d_KickHero, 2, 0x26)
     Core_Enqueue($g_p_KickHero, 8)
@@ -70,6 +125,12 @@ Func Ui_LeaveGroup($a_b_KickAllHeroes = True)
     If $a_b_KickAllHeroes Then Ui_KickAllHeroes()
 EndFunc   ;==>Ui_LeaveGroup
 
+;~ Description: Sets difficulty via Party Formation window. (False = NM, True = HM)
+Func Ui_SetDifficulty($a_b_HardMode = False)
+    DllStructSetData($g_d_SetDifficulty, 2, $a_b_HardMode)
+    Core_Enqueue($g_p_SetDifficulty, 8)
+EndFunc   ;==>Ui_SetDifficulty
+
 ;~ Description: Enters Mission/Challenge via Party Formation window. (False = Foreign Character, True = Native Character)
 Func Ui_EnterChallenge($a_b_Foreign = False, $a_WaitToLoad = True)
     DllStructSetData($g_d_EnterMission, 2, Not $a_b_Foreign)
@@ -77,26 +138,15 @@ Func Ui_EnterChallenge($a_b_Foreign = False, $a_WaitToLoad = True)
 	If $a_WaitToLoad Then Return Map_WaitMapLoading(-1, 1)
 EndFunc   ;==>Ui_EnterChallenge
 
-;~ Description: Sets difficulty via Party Formation window. (False = NM, True = HM)
-Func Ui_SetDifficulty($a_b_HardMode = False)
-    DllStructSetData($g_d_SetDifficulty, 2, $a_b_HardMode)
-    Core_Enqueue($g_p_SetDifficulty, 8)
-EndFunc   ;==>Ui_SetDifficulty
-
-;~ Description: Open targeted chest using dialog options. (0x1 = Use Key, 0x2 = Use Lockpick, 0x80 = Cancel)
-Func Ui_OpenChest($a_b_UseLockpick = True)
-    If $a_b_UseLockpick Then
-        DllStructSetData($g_d_OpenChest, 2, 0x2)
-    Else
-        DllStructSetData($g_d_OpenChest, 2, 0x1)
-    EndIf
-    Core_Enqueue($g_p_OpenChest, 8)
-EndFunc   ;==>Ui_OpenChest
-
-;~ Description: Open a dialog.
-Func Ui_Dialog($a_v_DialogID)
-    Return Core_SendPacket(0x8, $GC_I_HEADER_DIALOG_SEND, $a_v_DialogID)
-EndFunc   ;==>Dialog
+;~ Description: Initiates map travel.
+Func Ui_MoveMap($a_i_MapID, $a_i_Region, $a_i_Language, $a_i_District)
+    DllStructSetData($g_d_MoveMap, 2, 0x1000017A)
+    DllStructSetData($g_d_MoveMap, 3, $a_i_MapID)
+    DllStructSetData($g_d_MoveMap, 4, $a_i_Region)
+    DllStructSetData($g_d_MoveMap, 5, $a_i_Language)
+    DllStructSetData($g_d_MoveMap, 6, $a_i_District)
+    Core_Enqueue($g_p_MoveMap, 24)
+EndFunc   ;==>Ui_MoveMap
 
 ;~ Description: Enable graphics rendering.
 Func Ui_EnableRendering()

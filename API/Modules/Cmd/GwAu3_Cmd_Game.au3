@@ -1,5 +1,10 @@
 #include-once
 
+;~ Description: Open a dialog.
+Func Game_Dialog($a_v_DialogID)
+    Return Core_SendPacket(0x8, $GC_I_HEADER_DIALOG_SEND, $a_v_DialogID)
+EndFunc   ;==>Dialog
+
 ;~ Description: Switches to/from Hard Mode.
 Func Game_SwitchMode($a_i_Mode)
     Return Core_SendPacket(0x8, $GC_I_HEADER_PARTY_SET_DIFFICULTY, $a_i_Mode)

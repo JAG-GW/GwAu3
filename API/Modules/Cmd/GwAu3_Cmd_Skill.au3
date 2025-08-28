@@ -63,6 +63,34 @@ Func Skill_UseHeroSkill($a_i_HeroIndex, $a_i_SkillSlot, $a_v_TargetID = 0)
     Return True
 EndFunc
 
+Func Skill_CancelHeroSkill($a_i_HeroIndex, $a_i_SkillSlot)
+    If $a_i_HeroIndex < 1 Or $a_i_HeroIndex > 8 Then
+        Log_Error("Invalid hero index: " & $a_i_HeroIndex, "SkillMod", $g_h_EditText)
+        Return False
+    EndIf
+
+    If $a_i_SkillSlot < 1 Or $a_i_SkillSlot > 8 Then
+        Log_Error("Invalid skill slot: " & $a_i_SkillSlot, "SkillMod", $g_h_EditText)
+        Return False
+    EndIf
+
+    $a_i_HeroIndex = Party_GetMyPartyHeroInfo($a_i_HeroIndex, "AgentID")
+    If $a_i_HeroIndex = 0 Then
+        Log_Error("Hero not found or not in party: " & $a_i_HeroIndex, "SkillMod", $g_h_EditText)
+        Return False
+    EndIf
+
+    $a_i_SkillSlot = $a_i_SkillSlot - 1
+
+    DllStructSetData($g_d_CancelHeroSkill, 2, $a_i_HeroIndex)
+    DllStructSetData($g_d_CancelHeroSkill, 3, $a_i_SkillSlot)
+
+    Core_Enqueue($g_p_CancelHeroSkill, 12)
+
+    Log_Debug("Hero " & $a_i_HeroIndex & " canceled skill " & ($a_i_SkillSlot + 1), "SkillMod", $g_h_EditText)
+    Return True
+EndFunc
+
 ;~ Description: Change a skill on the skillbar.
 Func Skill_SetSkillbarSkill($a_i_Slot, $a_i_SkillID, $a_i_HeroNumber = 0)
     Local $l_i_HeroID
