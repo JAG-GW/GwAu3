@@ -38,6 +38,7 @@ Global $g_b_MouseDown = False
 Global $g_amx2_MapTrapezoids[0]  ; Store: [id, layer, ax, ay, bx, by, cx, cy, dx, dy]
 Global $g_amx2_MapPoints[0]
 Global $g_amx2_MapTeleports[0]
+Global $g_amx2_MapTravelPortals[0]  ; Store travel portal data
 Global $g_f_MapMinX = 0, $g_f_MapMaxX = 50000
 Global $g_f_MapMinY = 0, $g_f_MapMaxY = 50000
 
@@ -52,6 +53,7 @@ Global $g_b_ShowPlayer = True
 Global $g_b_ShowPath = False
 Global $g_b_ShowTeleports = False
 Global $g_b_ShowAgents = True  ; Option to show all agents
+Global $g_b_ShowTravelPortals = True
 Global $g_i_SelectedLayer = -1 ; -1 = all layers
 Global $g_af2_CurrentPath[0][3]
 Global $g_i_MapUpdateTimer = 0
@@ -576,6 +578,16 @@ Func MapDisplay_ParseFile($a_s_FilePath)
                             MapDisplay_ParsePoint($l_as_Lines[$l_i_Index], $j)
                         Next
                     EndIf
+				Case "TRAVEL_PORTALS"
+					If StringInStr($l_s_Line, "count=") Then
+						Local $l_i_Count = Number(StringMid($l_s_Line, 7))
+						ReDim $g_amx2_MapTravelPortals[$l_i_Count][7]
+						For $j = 0 To $l_i_Count - 1
+							$l_i_Index += 1
+							If $l_i_Index >= UBound($l_as_Lines) Then ExitLoop
+							MapDisplay_ParseTravelPortal($l_as_Lines[$l_i_Index], $j)
+						Next
+					EndIf
             EndSwitch
         EndIf
 
@@ -677,6 +689,40 @@ Func MapDisplay_CalculateBounds()
     EndIf
 EndFunc
 
+Func MapDisplay_ParseTravelPortal($a_s_Line, $a_i_Index)
+    Local $l_as_Parts = StringSplit($a_s_Line, "|", 2)
+    If UBound($l_as_Parts) < 2 Then Return
+
+    ; Parse position
+    Local $l_as_Pos = StringSplit($l_as_Parts[0], ",", 2)
+    If UBound($l_as_Pos) >= 2 Then
+        $g_amx2_MapTravelPortals[$a_i_Index][0] = Number($l_as_Pos[0]) ; pos_x
+        $g_amx2_MapTravelPortals[$a_i_Index][1] = Number($l_as_Pos[1]) ; pos_y
+    EndIf
+
+    ; Model ID
+    $g_amx2_MapTravelPortals[$a_i_Index][2] = Number($l_as_Parts[1]) ; model_id
+
+    If UBound($l_as_Parts) >= 3 Then
+        $g_amx2_MapTravelPortals[$a_i_Index][3] = Number($l_as_Parts[2]) ; to_map_id
+    Else
+        $g_amx2_MapTravelPortals[$a_i_Index][3] = 0 ; None
+    EndIf
+
+    If UBound($l_as_Parts) >= 4 Then
+        Local $l_as_Exit = StringSplit($l_as_Parts[3], ",", 2)
+        If UBound($l_as_Exit) >= 3 Then
+            $g_amx2_MapTravelPortals[$a_i_Index][4] = Number($l_as_Exit[0]) ; to_exit_x
+            $g_amx2_MapTravelPortals[$a_i_Index][5] = Number($l_as_Exit[1]) ; to_exit_y
+            $g_amx2_MapTravelPortals[$a_i_Index][6] = Number($l_as_Exit[2]) ; to_exit_z
+        EndIf
+    Else
+        $g_amx2_MapTravelPortals[$a_i_Index][4] = 0
+        $g_amx2_MapTravelPortals[$a_i_Index][5] = 0
+        $g_amx2_MapTravelPortals[$a_i_Index][6] = 0
+    EndIf
+EndFunc
+
 Func MapDisplay_Render()
     If Not $g_h_MapGfxCtxt Then Return
 
@@ -706,6 +752,10 @@ Func MapDisplay_Render()
         MapDisplay_DrawPlayer()
     EndIf
 
+	If $g_b_ShowTravelPortals Then
+		MapDisplay_DrawTravelPortals()
+	EndIf
+
     ; Draw mini info
     MapDisplay_DrawInfo()
 
@@ -716,6 +766,60 @@ Func MapDisplay_Render()
     Local $l_h_HBitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($g_h_MapBitmap)
     _WinAPI_DeleteObject(GUICtrlSendMsg($g_h_MapPic, 0x0172, 0, $l_h_HBitmap)) ; STM_SETIMAGE
     _WinAPI_DeleteObject($l_h_HBitmap)
+EndFunc
+
+Func MapDisplay_DrawTravelPortals()
+    If Not $g_b_ShowTravelPortals Then Return
+
+    Local $l_h_PenPortal = _GDIPlus_PenCreate(0xFF00FFFF, 2) ; Cyan for travel portals
+    Local $l_h_BrushPortal = _GDIPlus_BrushCreateSolid(0x8000FFFF) ; Semi-transparent cyan
+    Local $l_h_BrushConfigured = _GDIPlus_BrushCreateSolid(0x8000FF00) ; Semi-transparent green for configured
+    Local $l_h_BrushUnconfigured = _GDIPlus_BrushCreateSolid(0x80FF0000) ; Semi-transparent red for unconfigured
+
+    For $i = 0 To UBound($g_amx2_MapTravelPortals) - 1
+        Local $l_i_X = MapDisplay_WorldToScreenX($g_amx2_MapTravelPortals[$i][0])
+        Local $l_i_Y = MapDisplay_WorldToScreenY($g_amx2_MapTravelPortals[$i][1])
+
+        ; Check if portal is configured (has destination)
+        Local $l_b_Configured = ($g_amx2_MapTravelPortals[$i][3] > 0)
+
+        ; Choose brush based on configuration
+        Local $l_h_CurrentBrush = $l_b_Configured ? $l_h_BrushConfigured : $l_h_BrushUnconfigured
+
+        ; Draw diamond shape for travel portal
+        Local $l_af2_Points[5][2]
+        $l_af2_Points[0][0] = 4  ; Number of points
+        $l_af2_Points[1][0] = $l_i_X
+        $l_af2_Points[1][1] = $l_i_Y - 10
+        $l_af2_Points[2][0] = $l_i_X + 10
+        $l_af2_Points[2][1] = $l_i_Y
+        $l_af2_Points[3][0] = $l_i_X
+        $l_af2_Points[3][1] = $l_i_Y + 10
+        $l_af2_Points[4][0] = $l_i_X - 10
+        $l_af2_Points[4][1] = $l_i_Y
+
+        _GDIPlus_GraphicsFillPolygon($g_h_MapGfxCtxt, $l_af2_Points, $l_h_CurrentBrush)
+        _GDIPlus_GraphicsDrawPolygon($g_h_MapGfxCtxt, $l_af2_Points, $l_h_PenPortal)
+
+        ; If configured, draw a line to the exit position (if on same map)
+        If $l_b_Configured And $g_amx2_MapTravelPortals[$i][4] <> 0 And $g_amx2_MapTravelPortals[$i][5] <> 0 Then
+            Local $l_i_ExitX = MapDisplay_WorldToScreenX($g_amx2_MapTravelPortals[$i][4])
+            Local $l_i_ExitY = MapDisplay_WorldToScreenY($g_amx2_MapTravelPortals[$i][5])
+
+            ; Draw dashed line to exit
+            _GDIPlus_PenSetDashStyle($l_h_PenPortal, 1)
+            _GDIPlus_GraphicsDrawLine($g_h_MapGfxCtxt, $l_i_X, $l_i_Y, $l_i_ExitX, $l_i_ExitY, $l_h_PenPortal)
+            _GDIPlus_PenSetDashStyle($l_h_PenPortal, 0)
+
+            ; Draw exit marker
+            _GDIPlus_GraphicsDrawEllipse($g_h_MapGfxCtxt, $l_i_ExitX - 3, $l_i_ExitY - 3, 6, 6, $l_h_PenPortal)
+        EndIf
+    Next
+
+    _GDIPlus_PenDispose($l_h_PenPortal)
+    _GDIPlus_BrushDispose($l_h_BrushPortal)
+    _GDIPlus_BrushDispose($l_h_BrushConfigured)
+    _GDIPlus_BrushDispose($l_h_BrushUnconfigured)
 EndFunc
 
 Func MapDisplay_DrawTrapezoids()

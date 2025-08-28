@@ -485,12 +485,58 @@ Func Pathfinding_GetPathCoords($a_i_MapID, $a_f_FromX, $a_f_FromY, $a_f_ToX, $a_
 
     Local $l_af2_OriginalPath = Pathfinding_CalculatePath($a_f_FromX, $a_f_FromY, 0, $a_f_ToX, $a_f_ToY, 0, $l_ab_BlockedLayers)
     Local $l_af2_OptimizedPath = Pathfinding_OptimizePath($l_af2_OriginalPath, $a_f_Aggressivity)
-    Local $l_af_Dest = [[$a_f_ToX, $a_f_ToY, 0]]
-    _ArrayAdd($l_af2_OptimizedPath, $l_af_Dest)
 
-	$l_af2_OptimizedPath[0][0] = $a_f_FromX
-	$l_af2_OptimizedPath[0][1] = $a_f_FromY
-	$l_af2_OptimizedPath[0][2] = 0
+    Local $l_i_LastIndex = UBound($l_af2_OptimizedPath) - 1
+    If $l_i_LastIndex >= 0 Then
+        $l_af2_OptimizedPath[$l_i_LastIndex][0] = $a_f_ToX
+        $l_af2_OptimizedPath[$l_i_LastIndex][1] = $a_f_ToY
+        $l_af2_OptimizedPath[$l_i_LastIndex][2] = 0
+    EndIf
+
+    $l_af2_OptimizedPath[0][0] = $a_f_FromX
+    $l_af2_OptimizedPath[0][1] = $a_f_FromY
+    $l_af2_OptimizedPath[0][2] = 0
 
     Return $l_af2_OptimizedPath
 EndFunc
+
+Func Pathfinding_GetSimplePathCoords($a_i_MapID, $a_f_FromX, $a_f_FromY, $a_f_ToX, $a_f_ToY, $a_f_MaxDist = 2500)
+    Local $l_s_DataFile = $a_i_MapID & "_*.gwau3"
+    Local $l_as_Files = _FileListToArray(@ScriptDir, $l_s_DataFile, 1) ; 1 = files only
+
+    If @error Or Not IsArray($l_as_Files) Or $l_as_Files[0] = 0 Then
+        $l_as_Files = _FileListToArray(@ScriptDir & "\..\..\API\Pathfinding\", $l_s_DataFile, 1)
+        If @error Or Not IsArray($l_as_Files) Or $l_as_Files[0] = 0 Then
+            Return False
+        EndIf
+        $l_s_DataFile = @ScriptDir & "\..\..\API\Pathfinding\" & $l_as_Files[1]
+    Else
+        $l_s_DataFile = @ScriptDir & "\" & $l_as_Files[1]
+    EndIf
+
+    If Not Pathfinding_LoadData($l_s_DataFile) Then
+        Return False
+    EndIf
+
+    Local $l_ab_BlockedLayers[256]
+    For $l_i_Idx = 0 To 255
+        $l_ab_BlockedLayers[$l_i_Idx] = False
+    Next
+
+    Local $l_af2_OriginalPath = Pathfinding_CalculatePath($a_f_FromX, $a_f_FromY, 0, $a_f_ToX, $a_f_ToY, 0, $l_ab_BlockedLayers)
+    Local $l_af2_OptimizedPath = Pathfinding_SimplifyPath($l_af2_OriginalPath, $a_f_MaxDist)
+
+    Local $l_i_LastIndex = UBound($l_af2_OptimizedPath) - 1
+    If $l_i_LastIndex >= 0 Then
+        $l_af2_OptimizedPath[$l_i_LastIndex][0] = $a_f_ToX
+        $l_af2_OptimizedPath[$l_i_LastIndex][1] = $a_f_ToY
+        $l_af2_OptimizedPath[$l_i_LastIndex][2] = 0
+    EndIf
+
+    $l_af2_OptimizedPath[0][0] = $a_f_FromX
+    $l_af2_OptimizedPath[0][1] = $a_f_FromY
+    $l_af2_OptimizedPath[0][2] = 0
+
+    Return $l_af2_OptimizedPath
+EndFunc
+

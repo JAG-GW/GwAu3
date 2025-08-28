@@ -435,16 +435,41 @@ Func Pathfinding_ParseTravelPortals(ByRef $a_as_Lines, ByRef $a_i_Index)
     Local $l_s_Line = $a_as_Lines[$a_i_Index]
     If StringInStr($l_s_Line, "count=") Then
         Local $l_i_Count = Number(StringMid($l_s_Line, 7))
-        Dim $g_av_TravelPortals[$l_i_Count][3] ; pos_x, pos_y, model_id
+        Dim $g_av_TravelPortals[$l_i_Count][8] ; pos_x, pos_y, model_id, to_map_id, to_exit_x, to_exit_y, to_exit_z
 
         For $l_i_Idx = 0 To $l_i_Count - 1
             $a_i_Index += 1
             Local $l_as_Parts = StringSplit($a_as_Lines[$a_i_Index], "|", 2)
-            If UBound($l_as_Parts) >= 2 Then
-                Local $l_as_Pos = StringSplit($l_as_Parts[0], ",", 2)
-                $g_av_TravelPortals[$l_i_Idx][0] = Number($l_as_Pos[0]) ; pos_x
-                $g_av_TravelPortals[$l_i_Idx][1] = Number($l_as_Pos[1]) ; pos_y
-                $g_av_TravelPortals[$l_i_Idx][2] = Number($l_as_Parts[1]) ; model_id
+
+            ; Parse position
+            Local $l_as_Pos = StringSplit($l_as_Parts[0], ",", 2)
+            $g_av_TravelPortals[$l_i_Idx][0] = Number($l_as_Pos[0]) ; pos_x
+            $g_av_TravelPortals[$l_i_Idx][1] = Number($l_as_Pos[1]) ; pos_y
+
+            ; Model ID
+            $g_av_TravelPortals[$l_i_Idx][2] = Number($l_as_Parts[1]) ; model_id
+
+            If UBound($l_as_Parts) >= 3 Then
+                $g_av_TravelPortals[$l_i_Idx][3] = Number($l_as_Parts[2]) ; to_map_id
+            Else
+                $g_av_TravelPortals[$l_i_Idx][3] = 0 ; None
+            EndIf
+
+            If UBound($l_as_Parts) >= 4 Then
+                Local $l_as_Exit = StringSplit($l_as_Parts[3], ",", 2)
+                If UBound($l_as_Exit) >= 3 Then
+                    $g_av_TravelPortals[$l_i_Idx][4] = Number($l_as_Exit[0]) ; to_exit_x
+                    $g_av_TravelPortals[$l_i_Idx][5] = Number($l_as_Exit[1]) ; to_exit_y
+                    $g_av_TravelPortals[$l_i_Idx][6] = Number($l_as_Exit[2]) ; to_exit_z
+                Else
+                    $g_av_TravelPortals[$l_i_Idx][4] = 0
+                    $g_av_TravelPortals[$l_i_Idx][5] = 0
+                    $g_av_TravelPortals[$l_i_Idx][6] = 0
+                EndIf
+            Else
+                $g_av_TravelPortals[$l_i_Idx][4] = 0
+                $g_av_TravelPortals[$l_i_Idx][5] = 0
+                $g_av_TravelPortals[$l_i_Idx][6] = 0
             EndIf
         Next
     EndIf
