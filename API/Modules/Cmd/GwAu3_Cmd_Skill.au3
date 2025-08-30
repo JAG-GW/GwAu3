@@ -1,6 +1,6 @@
 #include-once
 
-Func Skill_UseSkill($a_i_SkillSlot, $a_v_TargetID = 0, $a_b_CallTarget = False)
+Func Skill_UseSkill($a_i_SkillSlot, $a_v_TargetID = -2, $a_b_CallTarget = False)
     If $a_i_SkillSlot < 1 Or $a_i_SkillSlot > 8 Then
         Log_Error("Invalid skill ID: " & $a_i_SkillSlot, "SkillMod", $g_h_EditText)
         Return False

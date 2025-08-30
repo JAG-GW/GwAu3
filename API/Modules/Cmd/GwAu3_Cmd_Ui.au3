@@ -51,11 +51,11 @@ Func Ui_CancelAll()
 EndFunc   ;==>Ui_CancelAll
 
 ;~ Description: Sets hero behavior (0 = Fight, 1 = Guard, 2 = Avoid Combat).
-Func Ui_SetHeroBehaviour($a_i_HeroNumber, $a_i_Behavior = 1)
+Func Ui_SetHeroBehavior($a_i_HeroNumber, $a_i_Behavior = 1)
     DllStructSetData($g_d_SetHeroBehavior, 2, Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID"))
     DllStructSetData($g_d_SetHeroBehavior, 3, $a_i_Behavior)
     Core_Enqueue($g_p_SetHeroBehavior, 12)
-EndFunc   ;==>Ui_SetHeroBehaviour
+EndFunc   ;==>Ui_SetHeroBehavior
 
 ;~ Description: Commands hero to drop held bundle.
 Func Ui_DropHeroBundle($a_i_HeroNumber)
