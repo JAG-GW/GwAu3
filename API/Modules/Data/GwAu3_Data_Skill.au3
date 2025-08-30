@@ -9,9 +9,9 @@ Func Skill_GetLastTarget()
 EndFunc
 
 Func Skill_GetSkillTimer()
-    Static $l_i_ExeStart = Memory_Read($g_p_SkillTimer, 'dword')
+    Static $s_i_ExeStart = Memory_Read($g_p_SkillTimer, 'dword')
     Local $l_i_TickCount = DllCall($g_h_Kernel32, 'dword', 'GetTickCount')[0]
-    Return BitAND($l_i_TickCount + $l_i_ExeStart, 0xFFFFFFFF)
+    Return BitAND($l_i_TickCount + $s_i_ExeStart, 0xFFFFFFFF)
 EndFunc
 
 Func Skill_GetSkillPtr($a_v_SkillID)

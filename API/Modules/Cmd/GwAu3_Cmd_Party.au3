@@ -62,8 +62,8 @@ Func Party_ChangeHeroSkillSlotState($a_i_HeroNumber, $a_i_SkillSlot)
 EndFunc   ;==>Party_ChangeHeroSkillSlotState
 
 ;~ Description: Tests if a hero's skill slot is disabled.
-Func Party_GetIsHeroSkillDisabled($a_i_HeroNumber, $a_i_SkillSlot)
-	Return Skill_GetSkillbarInfo($a_i_SkillSlot, "Disabled", $a_i_HeroNumber) > 0
+Func Party_GetIsHeroSkillSlotDisabled($a_i_HeroNumber, $a_i_SkillSlot)
+	Return BitAND(2 ^ ($a_i_SkillSlot - 1), Skill_GetSkillbarInfo($a_i_SkillSlot, "Disabled", $a_i_HeroNumber)) > 0
 EndFunc   ;==>Party_GetIsHeroSkillDisabled
 
 ;~ Description: Enable a skill on a hero's skill bar.

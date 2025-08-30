@@ -46,11 +46,6 @@ Func Skill_UseHeroSkill($a_i_HeroIndex, $a_i_SkillSlot, $a_v_TargetID = 0)
     EndIf
 
     $a_v_TargetID = Agent_ConvertID($a_v_TargetID)
-    If $a_v_TargetID = 0 Then
-        Log_Error("Target not found: " & $a_v_TargetID, "SkillMod", $g_h_EditText)
-        Return False
-    EndIf
-
     $a_i_SkillSlot = $a_i_SkillSlot - 1
 
     DllStructSetData($g_d_UseHeroSkill, 2, $a_i_HeroIndex)
