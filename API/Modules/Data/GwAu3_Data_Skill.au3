@@ -173,6 +173,8 @@ Func Skill_GetSkillbarInfo($a_i_SkillSlot = 1, $a_s_Info = "", $a_i_HeroNumber =
             Return Memory_Read($l_p_SkillbarPtr + 0xA8, "dword")
         Case "h00B4[2]"
             Return Memory_Read($l_p_SkillbarPtr + 0xB4, "dword")
+        Case "Queued"
+            Return Memory_Read($l_p_SkillbarPtr + 0xB8, "dword")
 
         Case "SkillID"
             Return Memory_Read($l_p_SkillbarPtr + 0x10 + (($a_i_SkillSlot - 1) * 0x14), "dword")

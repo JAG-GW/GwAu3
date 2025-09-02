@@ -91,7 +91,7 @@ Func Map_MapIsLoaded()
     Return False
 EndFunc
 
-Func Map_WaitMapIsLoaded($a_i_Timeout = 30000)
+Func Map_WaitMapIsLoaded($a_i_Timeout = 15000)
     If Map_MapIsLoaded() Then Return True
     
     Local $l_h_Timeout = TimerInit()
@@ -108,6 +108,8 @@ Func Map_WaitMapIsLoaded($a_i_Timeout = 30000)
         Until Map_MapIsLoaded() Or TimerDiff($l_h_Timeout) >= $a_i_Timeout
         If TimerDiff($l_h_Timeout) >= $a_i_Timeout Then Return False
     EndIf
+
+    Other_PingSleep(150)
 
     Return True
 EndFunc

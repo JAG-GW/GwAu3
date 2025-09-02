@@ -307,7 +307,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	If IsDeclared("g_b_Scanner") Then Extend_Scanner()
 
 
-	Memory_SetValue('QueueSize', '0x00000010')
+	Memory_SetValue('QueueSize', '0x00000040')
 
 
     ; Modify memory
