@@ -3,6 +3,11 @@
 #include "Utilities/Debug.h"
 #include <MinHook.h>
 #include <algorithm>
+#include <queue>
+#include <memory>
+#include <future>
+#include <chrono>
+#include <vector>
 
 namespace GW {
 
@@ -377,36 +382,121 @@ namespace GW {
 
         if (!name) return false;
 
-        FunctionSignature sig;
+        LOG_INFO("CallFunction: %s (queued for game thread)", name);
+
+        // Créer un appel différé
+        auto pending = std::make_shared<PendingCall>();
+        pending->result_ptr = result;
+        auto future = pending->promise.get_future();
+
+        // Copier les paramètres pour éviter les problèmes de durée de vie
+        std::vector<FunctionParam> params_copy;
+        if (params && param_count > 0) {
+            params_copy.assign(params, params + param_count);
+        }
+
+        // Capturer le nom de la fonction
+        std::string func_name(name);
+
+        // Créer la fonction à exécuter dans le game thread
+        pending->func = [this, func_name, params_copy, pending]() -> bool {
+            LOG_DEBUG("Executing %s in game thread", func_name.c_str());
+
+            // Récupérer la signature de la fonction
+            FunctionSignature sig;
+            {
+                std::lock_guard<std::mutex> lock(functions_mutex);
+                auto it = functions.find(func_name);
+                if (it == functions.end()) {
+                    LOG_ERROR("Function %s not found", func_name.c_str());
+                    return false;
+                }
+                sig = it->second;
+            }
+
+            // Valider le nombre de paramètres
+            if (params_copy.size() != sig.param_count) {
+                LOG_ERROR("Parameter count mismatch for %s", func_name.c_str());
+                return false;
+            }
+
+            // Appeler la fonction selon sa convention
+            bool success = false;
+            const FunctionParam* params_ptr = params_copy.empty() ? nullptr : params_copy.data();
+
+            try {
+                switch (sig.convention) {
+                case CONV_CDECL:
+                    success = CallCdecl(sig, params_ptr, pending->result_ptr);
+                    break;
+                case CONV_STDCALL:
+                    success = CallStdcall(sig, params_ptr, pending->result_ptr);
+                    break;
+                case CONV_FASTCALL:
+                    success = CallFastcall(sig, params_ptr, pending->result_ptr);
+                    break;
+                case CONV_THISCALL:
+                    success = CallThiscall(sig, params_ptr, pending->result_ptr);
+                    break;
+                default:
+                    LOG_ERROR("Unknown calling convention: %d", sig.convention);
+                    success = false;
+                }
+            }
+            catch (...) {
+                LOG_ERROR("Exception caught while calling %s", func_name.c_str());
+                success = false;
+            }
+
+            return success;
+            };
+
+        // Ajouter à la queue
         {
-            std::lock_guard<std::mutex> lock(functions_mutex);
-            auto it = functions.find(name);
-            if (it == functions.end()) return false;
-            sig = it->second;
+            std::lock_guard<std::mutex> lock(pending_calls_mutex);
+            pending_calls.push(pending);
         }
 
-        // Validate parameter count
-        if (param_count != sig.param_count) {
-            LOG_ERROR("Parameter count mismatch for %s: expected %d, got %d",
-                name, sig.param_count, param_count);
+        // Attendre le résultat avec timeout
+        auto status = future.wait_for(std::chrono::seconds(5));
+
+        if (status == std::future_status::ready) {
+            bool success = future.get();
+            LOG_INFO("Function %s returned: %s", name, success ? "success" : "failure");
+            return success;
+        }
+        else {
+            LOG_ERROR("Timeout waiting for function %s", name);
             return false;
         }
+    }
 
-        LOG_INFO("Calling function: %s at 0x%X", name, sig.address);
+    void RPCBridge::ProcessPendingCalls() {
+        std::queue<std::shared_ptr<PendingCall>> calls_to_process;
 
-        // Call based on convention
-        switch (sig.convention) {
-        case CONV_CDECL:
-            return CallCdecl(sig, params, result);
-        case CONV_STDCALL:
-            return CallStdcall(sig, params, result);
-        case CONV_FASTCALL:
-            return CallFastcall(sig, params, result);
-        case CONV_THISCALL:
-            return CallThiscall(sig, params, result);
-        default:
-            LOG_ERROR("Unknown calling convention: %d", sig.convention);
-            return false;
+        // Récupérer les appels en attente (minimiser le temps de verrouillage)
+        {
+            std::lock_guard<std::mutex> lock(pending_calls_mutex);
+            std::swap(calls_to_process, pending_calls);
+        }
+
+        // Traiter chaque appel
+        while (!calls_to_process.empty()) {
+            auto call = calls_to_process.front();
+            calls_to_process.pop();
+
+            try {
+                bool result = call->func();
+                call->promise.set_value(result);
+            }
+            catch (const std::exception& e) {
+                LOG_ERROR("Exception in pending call: %s", e.what());
+                call->promise.set_value(false);
+            }
+            catch (...) {
+                LOG_ERROR("Unknown exception in pending call");
+                call->promise.set_value(false);
+            }
         }
     }
 

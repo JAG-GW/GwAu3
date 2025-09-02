@@ -3,6 +3,7 @@
 #include "Utilities/Scanner.h"
 #include "NamedPipe/NamedPipeServer.h"
 #include "NamedPipe/NamedPipeUI.h"
+#include "NamedPipe/RPCBridge.h"
 #include <MinHook.h>
 #include <d3d9.h>
 #include <imgui.h>
@@ -403,6 +404,12 @@ HRESULT WINAPI OnEndScene(IDirect3DDevice9* device) {
             return g_EndScene_Original(device);
         }
         return S_OK;
+    }
+
+    // Traiter les appels RPC en attente AVANT le rendu ImGui
+    // Ceci garantit que les appels se font dans le contexte du game thread
+    if (g_pipeServer || g_pipeUI) {
+        GW::RPCBridge::GetInstance().ProcessPendingCalls();
     }
 
     // Initialize ImGui on first call

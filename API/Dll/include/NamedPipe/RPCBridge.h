@@ -81,6 +81,16 @@ namespace GW {
         bool CallFastcall(const FunctionSignature& func, const FunctionParam* params, void* result);
         bool CallThiscall(const FunctionSignature& func, const FunctionParam* params, void* result);
 
+        struct PendingCall {
+            std::function<bool()> func;
+            std::promise<bool> promise;
+            void* result_ptr;
+        };
+
+        // Queue pour les appels différés
+        std::queue<std::shared_ptr<PendingCall>> pending_calls;
+        std::mutex pending_calls_mutex;
+
     public:
         RPCBridge();
         ~RPCBridge();
@@ -117,5 +127,7 @@ namespace GW {
         bool UnregisterEventBuffer(const char* name);
         void PushEvent(const char* buffer_name, uint32_t event_id, const void* data, size_t data_size);
         size_t GetPendingEvents(const char* buffer_name, EventData* out_events, size_t max_count);
+
+        void ProcessPendingCalls();
     };
 }
