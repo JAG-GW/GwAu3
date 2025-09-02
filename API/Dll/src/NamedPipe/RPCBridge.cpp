@@ -1,0 +1,892 @@
+#include "NamedPipe/RPCBridge.h"
+#include "Utilities/Scanner.h"
+#include "Utilities/Debug.h"
+#include <MinHook.h>
+#include <algorithm>
+
+namespace GW {
+
+    RPCBridge* RPCBridge::instance = nullptr;
+
+    RPCBridge::RPCBridge() {
+        LOG_INFO("RPCBridge initialized");
+    }
+
+    RPCBridge::~RPCBridge() {
+        // Clean up all allocations
+        for (auto& alloc : allocations) {
+            VirtualFree((LPVOID)alloc.second.address, 0, MEM_RELEASE);
+        }
+        allocations.clear();
+
+        // Clean up hooks
+        for (auto& hook : hooks) {
+            MH_RemoveHook((LPVOID)hook.second);
+        }
+        hooks.clear();
+
+        LOG_INFO("RPCBridge destroyed");
+    }
+
+    RPCBridge& RPCBridge::GetInstance() {
+        if (!instance) {
+            instance = new RPCBridge();
+        }
+        return *instance;
+    }
+
+    void RPCBridge::Destroy() {
+        if (instance) {
+            delete instance;
+            instance = nullptr;
+        }
+    }
+
+    bool RPCBridge::HandleRequest(const PipeRequest& request, PipeResponse& response) {
+        memset(&response, 0, sizeof(response));
+
+        try {
+            switch (request.type) {
+                // Scanner operations
+            case SCAN_FIND:
+            case SCAN_FIND_ASSERTION:
+            case SCAN_FIND_IN_RANGE:
+            case SCAN_TO_FUNCTION_START:
+            case SCAN_FUNCTION_FROM_NEAR_CALL:
+            case READ_MEMORY:
+            case GET_SECTION_INFO:
+                return HandleScannerRequest(request, response);
+
+                // Function operations
+            case REGISTER_FUNCTION:
+            case UNREGISTER_FUNCTION:
+            case CALL_FUNCTION:
+            case LIST_FUNCTIONS:
+                return HandleFunctionRequest(request, response);
+
+                // Memory operations
+            case ALLOCATE_MEMORY:
+            case FREE_MEMORY:
+            case WRITE_MEMORY:
+            case PROTECT_MEMORY:
+                return HandleMemoryRequest(request, response);
+
+                // Hook operations
+            case INSTALL_HOOK:
+            case REMOVE_HOOK:
+            case ENABLE_HOOK:
+            case DISABLE_HOOK:
+                return HandleHookRequest(request, response);
+
+                // Event operations
+            case GET_PENDING_EVENTS:
+            case REGISTER_EVENT_BUFFER:
+            case UNREGISTER_EVENT_BUFFER:
+                return HandleEventRequest(request, response);
+
+            default:
+                strcpy_s(response.error_message, "Unknown request type");
+                return false;
+            }
+        }
+        catch (const std::exception& e) {
+            strcpy_s(response.error_message, e.what());
+            return false;
+        }
+        catch (...) {
+            strcpy_s(response.error_message, "Unknown exception");
+            return false;
+        }
+    }
+
+    bool RPCBridge::HandleScannerRequest(const PipeRequest& request, PipeResponse& response) {
+        // Scanner requests are handled by NamedPipeServer for backward compatibility
+        // This is just a fallback
+        response.success = 0;
+        strcpy_s(response.error_message, "Scanner requests should be handled by NamedPipeServer");
+        return false;
+    }
+
+    bool RPCBridge::HandleFunctionRequest(const PipeRequest& request, PipeResponse& response) {
+        switch (request.type) {
+        case REGISTER_FUNCTION: {
+            bool result = RegisterFunction(
+                request.register_func.name,
+                request.register_func.address,
+                request.register_func.param_count,
+                request.register_func.convention,
+                request.register_func.has_return != 0
+            );
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to register function");
+            }
+            break;
+        }
+
+        case UNREGISTER_FUNCTION: {
+            bool result = UnregisterFunction(request.call_func.name);
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Function not found");
+            }
+            break;
+        }
+
+        case CALL_FUNCTION: {
+            void* result_buffer = nullptr;
+            int32_t int_result = 0;
+            float float_result = 0.0f;
+            uintptr_t ptr_result = 0;
+
+            // Determine result buffer based on function signature
+            {
+                std::lock_guard<std::mutex> lock(functions_mutex);
+                auto it = functions.find(request.call_func.name);
+                if (it != functions.end() && it->second.has_return) {
+                    result_buffer = &int_result;
+                }
+            }
+
+            bool result = CallFunction(
+                request.call_func.name,
+                request.call_func.params,
+                request.call_func.param_count,
+                result_buffer
+            );
+
+            response.success = result ? 1 : 0;
+            if (result && result_buffer) {
+                response.call_result.has_return = 1;
+                response.call_result.return_value.int_val = int_result;
+            }
+            else if (!result) {
+                strcpy_s(response.error_message, "Function call failed");
+            }
+            break;
+        }
+
+        case LIST_FUNCTIONS: {
+            std::lock_guard<std::mutex> lock(functions_mutex);
+            response.function_list.count = 0;
+
+            size_t i = 0;
+            for (const auto& func : functions) {
+                if (i >= 20) break;  // Max 20 functions in response
+                strcpy_s(response.function_list.names[i], func.first.c_str());
+                i++;
+            }
+            response.function_list.count = i;
+            response.success = 1;
+            break;
+        }
+
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool RPCBridge::HandleMemoryRequest(const PipeRequest& request, PipeResponse& response) {
+        switch (request.type) {
+        case ALLOCATE_MEMORY: {
+            uintptr_t addr = AllocateMemory(request.memory.size, request.memory.protection);
+            response.memory_result.address = addr;
+            response.memory_result.size = request.memory.size;
+            response.success = (addr != 0) ? 1 : 0;
+            if (!addr) {
+                strcpy_s(response.error_message, "Memory allocation failed");
+            }
+            break;
+        }
+
+        case FREE_MEMORY: {
+            bool result = FreeMemory(request.memory.address);
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to free memory");
+            }
+            break;
+        }
+
+        case WRITE_MEMORY: {
+            bool result = WriteMemory(
+                request.memory.address,
+                request.memory.data,
+                request.memory.size
+            );
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to write memory");
+            }
+            break;
+        }
+
+        case PROTECT_MEMORY: {
+            bool result = ProtectMemory(
+                request.memory.address,
+                request.memory.size,
+                request.memory.protection
+            );
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to protect memory");
+            }
+            break;
+        }
+
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool RPCBridge::HandleHookRequest(const PipeRequest& request, PipeResponse& response) {
+        switch (request.type) {
+        case INSTALL_HOOK: {
+            bool result = InstallHook(
+                request.hook.name,
+                request.hook.target,
+                request.hook.detour
+            );
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to install hook");
+            }
+            break;
+        }
+
+        case REMOVE_HOOK: {
+            bool result = RemoveHook(request.hook.name);
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to remove hook");
+            }
+            break;
+        }
+
+        case ENABLE_HOOK: {
+            bool result = EnableHook(request.hook.name);
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to enable hook");
+            }
+            break;
+        }
+
+        case DISABLE_HOOK: {
+            bool result = DisableHook(request.hook.name);
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to disable hook");
+            }
+            break;
+        }
+
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool RPCBridge::HandleEventRequest(const PipeRequest& request, PipeResponse& response) {
+        switch (request.type) {
+        case REGISTER_EVENT_BUFFER: {
+            bool result = RegisterEventBuffer(
+                request.event.name,
+                request.event.buffer_address,
+                request.event.buffer_size,
+                request.event.max_events
+            );
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to register event buffer");
+            }
+            break;
+        }
+
+        case UNREGISTER_EVENT_BUFFER: {
+            bool result = UnregisterEventBuffer(request.event.name);
+            response.success = result ? 1 : 0;
+            if (!result) {
+                strcpy_s(response.error_message, "Failed to unregister event buffer");
+            }
+            break;
+        }
+
+        case GET_PENDING_EVENTS: {
+            EventData events[10];  // Max 10 events per request
+            size_t count = GetPendingEvents(request.event.name, events, 10);
+
+            response.event_data.event_count = count;
+            if (count > 0) {
+                memcpy(response.event_data.events, events, sizeof(EventData) * count);
+            }
+            response.success = 1;
+            break;
+        }
+
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool RPCBridge::RegisterFunction(const char* name, uintptr_t address,
+        uint8_t param_count, CallConvention conv, bool has_return) {
+
+        if (!name || !address) return false;
+
+        std::lock_guard<std::mutex> lock(functions_mutex);
+
+        FunctionSignature sig;
+        sig.name = name;
+        sig.address = address;
+        sig.param_count = param_count;
+        sig.convention = conv;
+        sig.has_return = has_return;
+
+        functions[name] = sig;
+
+        LOG_INFO("Registered function: %s at 0x%X (params: %d, conv: %d)",
+            name, address, param_count, conv);
+
+        return true;
+    }
+
+    bool RPCBridge::UnregisterFunction(const char* name) {
+        if (!name) return false;
+
+        std::lock_guard<std::mutex> lock(functions_mutex);
+
+        auto it = functions.find(name);
+        if (it == functions.end()) return false;
+
+        functions.erase(it);
+        LOG_INFO("Unregistered function: %s", name);
+
+        return true;
+    }
+
+    bool RPCBridge::CallFunction(const char* name, const FunctionParam* params,
+        uint8_t param_count, void* result) {
+
+        if (!name) return false;
+
+        FunctionSignature sig;
+        {
+            std::lock_guard<std::mutex> lock(functions_mutex);
+            auto it = functions.find(name);
+            if (it == functions.end()) return false;
+            sig = it->second;
+        }
+
+        // Validate parameter count
+        if (param_count != sig.param_count) {
+            LOG_ERROR("Parameter count mismatch for %s: expected %d, got %d",
+                name, sig.param_count, param_count);
+            return false;
+        }
+
+        LOG_INFO("Calling function: %s at 0x%X", name, sig.address);
+
+        // Call based on convention
+        switch (sig.convention) {
+        case CONV_CDECL:
+            return CallCdecl(sig, params, result);
+        case CONV_STDCALL:
+            return CallStdcall(sig, params, result);
+        case CONV_FASTCALL:
+            return CallFastcall(sig, params, result);
+        case CONV_THISCALL:
+            return CallThiscall(sig, params, result);
+        default:
+            LOG_ERROR("Unknown calling convention: %d", sig.convention);
+            return false;
+        }
+    }
+
+    // Function calling using function pointers (no inline assembly)
+    bool RPCBridge::CallStdcall(const FunctionSignature& func,
+        const FunctionParam* params, void* result) {
+
+        __try {
+            // Convert parameters to simple array
+            uintptr_t args[10] = { 0 };  // Max 10 params
+
+            for (int i = 0; i < func.param_count && i < 10; i++) {
+                switch (params[i].type) {
+                case PARAM_INT8:
+                case PARAM_INT16:
+                case PARAM_INT32:
+                    args[i] = params[i].int32_val;
+                    break;
+                case PARAM_POINTER:
+                    args[i] = params[i].ptr_val;
+                    break;
+                case PARAM_FLOAT:
+                    args[i] = *(uintptr_t*)&params[i].float_val;
+                    break;
+                case PARAM_STRING:
+                    args[i] = (uintptr_t)params[i].string_val;
+                    break;
+                case PARAM_WSTRING:
+                    args[i] = (uintptr_t)params[i].wstring_val;
+                    break;
+                default:
+                    LOG_ERROR("Unsupported parameter type: %d", params[i].type);
+                    return false;
+                }
+            }
+
+            // Call function based on parameter count
+            uintptr_t retval = 0;
+
+            switch (func.param_count) {
+            case 0: {
+                typedef uintptr_t(__stdcall* Func0)();
+                Func0 f = (Func0)func.address;
+                retval = f();
+                break;
+            }
+            case 1: {
+                typedef uintptr_t(__stdcall* Func1)(uintptr_t);
+                Func1 f = (Func1)func.address;
+                retval = f(args[0]);
+                break;
+            }
+            case 2: {
+                typedef uintptr_t(__stdcall* Func2)(uintptr_t, uintptr_t);
+                Func2 f = (Func2)func.address;
+                retval = f(args[0], args[1]);
+                break;
+            }
+            case 3: {
+                typedef uintptr_t(__stdcall* Func3)(uintptr_t, uintptr_t, uintptr_t);
+                Func3 f = (Func3)func.address;
+                retval = f(args[0], args[1], args[2]);
+                break;
+            }
+            case 4: {
+                typedef uintptr_t(__stdcall* Func4)(uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+                Func4 f = (Func4)func.address;
+                retval = f(args[0], args[1], args[2], args[3]);
+                break;
+            }
+            case 5: {
+                typedef uintptr_t(__stdcall* Func5)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+                Func5 f = (Func5)func.address;
+                retval = f(args[0], args[1], args[2], args[3], args[4]);
+                break;
+            }
+            case 6: {
+                typedef uintptr_t(__stdcall* Func6)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+                Func6 f = (Func6)func.address;
+                retval = f(args[0], args[1], args[2], args[3], args[4], args[5]);
+                break;
+            }
+            default:
+                LOG_ERROR("Too many parameters: %d (max 6)", func.param_count);
+                return false;
+            }
+
+            if (result && func.has_return) {
+                *(uintptr_t*)result = retval;
+            }
+
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            LOG_ERROR("Exception calling stdcall function at 0x%X", func.address);
+            return false;
+        }
+    }
+
+    bool RPCBridge::CallCdecl(const FunctionSignature& func,
+        const FunctionParam* params, void* result) {
+
+        __try {
+            // Convert parameters
+            uintptr_t args[10] = { 0 };
+
+            for (int i = 0; i < func.param_count && i < 10; i++) {
+                switch (params[i].type) {
+                case PARAM_INT8:
+                case PARAM_INT16:
+                case PARAM_INT32:
+                    args[i] = params[i].int32_val;
+                    break;
+                case PARAM_POINTER:
+                    args[i] = params[i].ptr_val;
+                    break;
+                case PARAM_FLOAT:
+                    args[i] = *(uintptr_t*)&params[i].float_val;
+                    break;
+                case PARAM_STRING:
+                    args[i] = (uintptr_t)params[i].string_val;
+                    break;
+                case PARAM_WSTRING:
+                    args[i] = (uintptr_t)params[i].wstring_val;
+                    break;
+                default:
+                    return false;
+                }
+            }
+
+            // Call function with cdecl convention
+            uintptr_t retval = 0;
+
+            switch (func.param_count) {
+            case 0: {
+                typedef uintptr_t(__cdecl* Func0)();
+                Func0 f = (Func0)func.address;
+                retval = f();
+                break;
+            }
+            case 1: {
+                typedef uintptr_t(__cdecl* Func1)(uintptr_t);
+                Func1 f = (Func1)func.address;
+                retval = f(args[0]);
+                break;
+            }
+            case 2: {
+                typedef uintptr_t(__cdecl* Func2)(uintptr_t, uintptr_t);
+                Func2 f = (Func2)func.address;
+                retval = f(args[0], args[1]);
+                break;
+            }
+            case 3: {
+                typedef uintptr_t(__cdecl* Func3)(uintptr_t, uintptr_t, uintptr_t);
+                Func3 f = (Func3)func.address;
+                retval = f(args[0], args[1], args[2]);
+                break;
+            }
+            case 4: {
+                typedef uintptr_t(__cdecl* Func4)(uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+                Func4 f = (Func4)func.address;
+                retval = f(args[0], args[1], args[2], args[3]);
+                break;
+            }
+            case 5: {
+                typedef uintptr_t(__cdecl* Func5)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+                Func5 f = (Func5)func.address;
+                retval = f(args[0], args[1], args[2], args[3], args[4]);
+                break;
+            }
+            default:
+                LOG_ERROR("Too many parameters: %d (max 5)", func.param_count);
+                return false;
+            }
+
+            if (result && func.has_return) {
+                *(uintptr_t*)result = retval;
+            }
+
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            LOG_ERROR("Exception calling cdecl function at 0x%X", func.address);
+            return false;
+        }
+    }
+
+    bool RPCBridge::CallFastcall(const FunctionSignature& func,
+        const FunctionParam* params, void* result) {
+        // Fastcall: first 2 params in ECX and EDX, rest on stack
+        // Not commonly used in Guild Wars
+        LOG_ERROR("Fastcall not implemented (rarely used in GW)");
+        return false;
+    }
+
+    bool RPCBridge::CallThiscall(const FunctionSignature& func,
+        const FunctionParam* params, void* result) {
+        // Thiscall: 'this' pointer in ECX, rest on stack
+        __try {
+            uintptr_t args[10] = { 0 };
+
+            for (int i = 0; i < func.param_count && i < 10; i++) {
+                switch (params[i].type) {
+                case PARAM_INT32:
+                    args[i] = params[i].int32_val;
+                    break;
+                case PARAM_POINTER:
+                    args[i] = params[i].ptr_val;
+                    break;
+                default:
+                    args[i] = params[i].int32_val;
+                    break;
+                }
+            }
+
+            uintptr_t retval = 0;
+
+            // First param is 'this' pointer for thiscall
+            if (func.param_count < 1) {
+                LOG_ERROR("Thiscall requires at least 1 parameter (this pointer)");
+                return false;
+            }
+
+            switch (func.param_count) {
+            case 1: {
+                typedef uintptr_t(__thiscall* Func1)(uintptr_t);
+                Func1 f = (Func1)func.address;
+                retval = f(args[0]);
+                break;
+            }
+            case 2: {
+                typedef uintptr_t(__thiscall* Func2)(uintptr_t, uintptr_t);
+                Func2 f = (Func2)func.address;
+                retval = f(args[0], args[1]);
+                break;
+            }
+            case 3: {
+                typedef uintptr_t(__thiscall* Func3)(uintptr_t, uintptr_t, uintptr_t);
+                Func3 f = (Func3)func.address;
+                retval = f(args[0], args[1], args[2]);
+                break;
+            }
+            default:
+                LOG_ERROR("Too many parameters for thiscall: %d", func.param_count);
+                return false;
+            }
+
+            if (result && func.has_return) {
+                *(uintptr_t*)result = retval;
+            }
+
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            LOG_ERROR("Exception calling thiscall function at 0x%X", func.address);
+            return false;
+        }
+    }
+
+    uintptr_t RPCBridge::AllocateMemory(size_t size, DWORD protection) {
+        void* addr = VirtualAlloc(NULL, size, MEM_COMMIT | MEM_RESERVE, protection);
+        if (!addr) return 0;
+
+        std::lock_guard<std::mutex> lock(allocations_mutex);
+
+        MemoryBlock block;
+        block.address = (uintptr_t)addr;
+        block.size = size;
+        block.original_protection = protection;
+
+        allocations[block.address] = block;
+
+        LOG_INFO("Allocated %zu bytes at 0x%X", size, block.address);
+        return block.address;
+    }
+
+    bool RPCBridge::FreeMemory(uintptr_t address) {
+        std::lock_guard<std::mutex> lock(allocations_mutex);
+
+        auto it = allocations.find(address);
+        if (it == allocations.end()) return false;
+
+        bool result = VirtualFree((LPVOID)address, 0, MEM_RELEASE) != 0;
+        if (result) {
+            allocations.erase(it);
+            LOG_INFO("Freed memory at 0x%X", address);
+        }
+
+        return result;
+    }
+
+    bool RPCBridge::WriteMemory(uintptr_t address, const void* data, size_t size) {
+        if (!address || !data || size == 0) return false;
+
+        DWORD oldProtect;
+        if (!VirtualProtect((LPVOID)address, size, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+            return false;
+        }
+
+        memcpy((void*)address, data, size);
+
+        VirtualProtect((LPVOID)address, size, oldProtect, &oldProtect);
+
+        LOG_INFO("Wrote %zu bytes to 0x%X", size, address);
+        return true;
+    }
+
+    bool RPCBridge::ProtectMemory(uintptr_t address, size_t size, DWORD protection) {
+        DWORD oldProtect;
+        bool result = VirtualProtect((LPVOID)address, size, protection, &oldProtect) != 0;
+
+        if (result) {
+            LOG_INFO("Protected memory at 0x%X with 0x%X", address, protection);
+        }
+
+        return result;
+    }
+
+    bool RPCBridge::InstallHook(const char* name, uintptr_t target, uintptr_t detour) {
+        if (!name || !target || !detour) return false;
+
+        std::lock_guard<std::mutex> lock(hooks_mutex);
+
+        // Check if hook already exists
+        if (hooks.find(name) != hooks.end()) {
+            LOG_ERROR("Hook %s already exists", name);
+            return false;
+        }
+
+        // Create hook using MinHook
+        if (MH_CreateHook((LPVOID)target, (LPVOID)detour, nullptr) != MH_OK) {
+            LOG_ERROR("Failed to create hook %s", name);
+            return false;
+        }
+
+        // Enable hook
+        if (MH_EnableHook((LPVOID)target) != MH_OK) {
+            MH_RemoveHook((LPVOID)target);
+            LOG_ERROR("Failed to enable hook %s", name);
+            return false;
+        }
+
+        hooks[name] = target;
+        LOG_INFO("Installed hook %s: 0x%X -> 0x%X", name, target, detour);
+
+        return true;
+    }
+
+    bool RPCBridge::RemoveHook(const char* name) {
+        if (!name) return false;
+
+        std::lock_guard<std::mutex> lock(hooks_mutex);
+
+        auto it = hooks.find(name);
+        if (it == hooks.end()) return false;
+
+        MH_DisableHook((LPVOID)it->second);
+        MH_RemoveHook((LPVOID)it->second);
+
+        hooks.erase(it);
+        LOG_INFO("Removed hook %s", name);
+
+        return true;
+    }
+
+    bool RPCBridge::EnableHook(const char* name) {
+        if (!name) return false;
+
+        std::lock_guard<std::mutex> lock(hooks_mutex);
+
+        auto it = hooks.find(name);
+        if (it == hooks.end()) return false;
+
+        bool result = MH_EnableHook((LPVOID)it->second) == MH_OK;
+        if (result) {
+            LOG_INFO("Enabled hook %s", name);
+        }
+
+        return result;
+    }
+
+    bool RPCBridge::DisableHook(const char* name) {
+        if (!name) return false;
+
+        std::lock_guard<std::mutex> lock(hooks_mutex);
+
+        auto it = hooks.find(name);
+        if (it == hooks.end()) return false;
+
+        bool result = MH_DisableHook((LPVOID)it->second) == MH_OK;
+        if (result) {
+            LOG_INFO("Disabled hook %s", name);
+        }
+
+        return result;
+    }
+
+    std::vector<std::string> RPCBridge::ListFunctions() {
+        std::lock_guard<std::mutex> lock(functions_mutex);
+        std::vector<std::string> names;
+
+        for (const auto& func : functions) {
+            names.push_back(func.first);
+        }
+
+        return names;
+    }
+
+    bool RPCBridge::RegisterEventBuffer(const char* name, uintptr_t buffer, size_t size, size_t max_events) {
+        if (!name || !buffer || size == 0) return false;
+
+        std::lock_guard<std::mutex> lock(events_mutex);
+
+        EventBuffer eb;
+        eb.name = name;
+        eb.address = buffer;
+        eb.size = size;
+        eb.max_events = max_events;
+
+        event_buffers[name] = eb;
+
+        LOG_INFO("Registered event buffer: %s at 0x%X", name, buffer);
+        return true;
+    }
+
+    bool RPCBridge::UnregisterEventBuffer(const char* name) {
+        if (!name) return false;
+
+        std::lock_guard<std::mutex> lock(events_mutex);
+
+        auto it = event_buffers.find(name);
+        if (it == event_buffers.end()) return false;
+
+        event_buffers.erase(it);
+        LOG_INFO("Unregistered event buffer: %s", name);
+
+        return true;
+    }
+
+    void RPCBridge::PushEvent(const char* buffer_name, uint32_t event_id, const void* data, size_t data_size) {
+        if (!buffer_name) return;
+
+        std::lock_guard<std::mutex> lock(events_mutex);
+
+        auto it = event_buffers.find(buffer_name);
+        if (it == event_buffers.end()) return;
+
+        EventData event;
+        event.event_id = event_id;
+        event.timestamp = GetTickCount();
+        event.data_size = (data_size < sizeof(event.data)) ? data_size : sizeof(event.data);
+
+        if (data && data_size > 0) {
+            memcpy(event.data, data, event.data_size);
+        }
+
+        // Add to queue
+        it->second.pending_events.push(event);
+
+        // Limit queue size
+        while (it->second.pending_events.size() > it->second.max_events) {
+            it->second.pending_events.pop();
+        }
+    }
+
+    size_t RPCBridge::GetPendingEvents(const char* buffer_name, EventData* out_events, size_t max_count) {
+        if (!buffer_name || !out_events || max_count == 0) return 0;
+
+        std::lock_guard<std::mutex> lock(events_mutex);
+
+        auto it = event_buffers.find(buffer_name);
+        if (it == event_buffers.end()) return 0;
+
+        size_t count = 0;
+        while (!it->second.pending_events.empty() && count < max_count) {
+            out_events[count] = it->second.pending_events.front();
+            it->second.pending_events.pop();
+            count++;
+        }
+
+        return count;
+    }
+}

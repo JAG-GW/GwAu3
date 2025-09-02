@@ -778,16 +778,16 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reason, LPVOID reserved) {
             CloseHandle(g_mainThread);
             g_mainThread = nullptr;
         }
-            // If reserved is NULL, this is an explicit detachment(FreeLibrary)
-            // If reserved is non - NULL, this is a process detachment
-            if (reserved == NULL) {
-                // Explicit detachment - we can do a little more cleanup
-                // But most of it should already be done by MainThread
-            }
-            else {
-                // Process terminates - minimal cleanup only
-                // Windows will clean everything up anyway
-            }
+        // If reserved is NULL, this is an explicit detachment(FreeLibrary)
+        // If reserved is non - NULL, this is a process detachment
+        if (reserved == NULL) {
+            // Explicit detachment - we can do a little more cleanup
+            // But most of it should already be done by MainThread
+        }
+        else {
+            // Process terminates - minimal cleanup only
+            // Windows will clean everything up anyway
+        }
 
         break;
     }
