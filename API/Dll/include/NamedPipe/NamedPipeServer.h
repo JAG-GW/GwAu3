@@ -6,6 +6,8 @@
 #include <atomic>
 #include <functional>
 
+std::string GetPipeName();
+
 namespace GW {
 
 #pragma pack(push, 1)  // Force 1-byte alignment
@@ -250,7 +252,7 @@ namespace GW {
         static void Destroy();
 
         // Server control
-        bool Start(const std::string& pipeName = "\\\\.\\pipe\\GwAu3Server");
+        bool Start(const std::string& pipeName = "");
         void Stop();
         bool IsRunning() const { return running.load(); }
 

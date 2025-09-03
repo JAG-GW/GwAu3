@@ -8,6 +8,9 @@
 #include <queue>
 #include <chrono>
 #include <future>
+#include <thread>
+#include <atomic>
+#include <condition_variable>
 
 namespace GW {
 
@@ -71,6 +74,17 @@ namespace GW {
         std::unordered_map<std::string, EventBuffer> event_buffers;
         std::mutex events_mutex;
 
+        // Polling thread for when game is minimized
+        std::thread polling_thread;
+        std::atomic<bool> polling_enabled;
+        std::condition_variable polling_cv;
+        std::mutex polling_mutex;
+
+        // Hook for game main loop
+        static HWND game_window;
+        static WNDPROC original_wndproc;
+        static bool hook_installed;
+
         // Internal methods
         bool HandleScannerRequest(const PipeRequest& request, PipeResponse& response);
         bool HandleFunctionRequest(const PipeRequest& request, PipeResponse& response);
@@ -94,6 +108,17 @@ namespace GW {
         // Queue for pending calls with thread-safety
         std::queue<std::shared_ptr<PendingCall>> pending_calls;
         std::mutex pending_calls_mutex;
+        std::atomic<bool> has_pending_calls;
+
+        // Polling thread function
+        void PollingThreadFunc();
+
+        // Install hook for processing
+        bool InstallProcessingHook();
+        void UninstallProcessingHook();
+
+        // WndProc hook handler
+        static LRESULT CALLBACK HookedWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     public:
         RPCBridge();
@@ -102,6 +127,10 @@ namespace GW {
         // Singleton (thread-safe)
         static RPCBridge& GetInstance();
         static void Destroy();
+
+        // Initialize/Shutdown
+        bool Initialize();
+        void Shutdown();
 
         // Main request handler
         bool HandleRequest(const PipeRequest& request, PipeResponse& response);
@@ -132,7 +161,10 @@ namespace GW {
         void PushEvent(const char* buffer_name, uint32_t event_id, const void* data, size_t data_size);
         size_t GetPendingEvents(const char* buffer_name, EventData* out_events, size_t max_count);
 
-        // Process pending function calls (must be called from game thread)
+        // Process pending function calls (MUST be called from game thread)
         void ProcessPendingCalls();
+
+        // Check if there are pending calls
+        bool HasPendingCalls() const { return has_pending_calls.load(); }
     };
 }

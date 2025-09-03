@@ -365,7 +365,7 @@ void RenderMainWindow() {
                 ImGui::Text("Status: %s", isRunning ? "Running" : "Stopped");
 
                 if (isRunning) {
-                    ImGui::Text("Pipe: \\\\.\\pipe\\GwAu3Server");
+                    ImGui::Text("Pipe: %s", GetPipeName().c_str());
 
                     if (ImGui::Button("Stop Server")) {
                         g_pipeUI->StopServer();
@@ -472,9 +472,8 @@ HRESULT WINAPI OnEndScene(IDirect3DDevice9* device) {
     }
 
     // Process pending RPC calls in game thread context
-    if (g_pipeServer || g_pipeUI) {
-        GW::RPCBridge::GetInstance().ProcessPendingCalls();
-    }
+    // IMPORTANT: This executes in the render thread which IS the main game thread
+    GW::RPCBridge::GetInstance().ProcessPendingCalls();
 
 #ifdef _DEBUG
     // Initialize ImGui on first call (only in debug mode)
@@ -685,6 +684,14 @@ DWORD WINAPI MainThread(LPVOID param) {
             LOG_ERROR("Failed to start Named Pipe server");
         }
 #endif
+
+        // Initialize RPCBridge with support for minimized window
+        if (GW::RPCBridge::GetInstance().Initialize()) {
+            LOG_SUCCESS("RPC Bridge initialized with fallback processing");
+        }
+        else {
+            LOG_WARN("RPC Bridge initialized without WndProc hook (EndScene only)");
+        }
     }
     catch (const std::exception& e) {
         LOG_ERROR("Failed to initialize Named Pipe: %s", e.what());
@@ -700,7 +707,7 @@ DWORD WINAPI MainThread(LPVOID param) {
 #else
     LOG_INFO("Running in headless mode - no UI");
 #endif
-    LOG_INFO("Named Pipe: \\\\.\\pipe\\GwAu3Server");
+    LOG_INFO("Named Pipe: %s", GetPipeName().c_str());
     LOG_INFO("===========================================");
 
     // Main loop - Wait for shutdown signal
@@ -712,6 +719,10 @@ DWORD WINAPI MainThread(LPVOID param) {
     LOG_INFO("===========================================");
     LOG_INFO("Shutting down GwAu3...");
     LOG_INFO("===========================================");
+
+    // Shutdown RPCBridge properly
+    LOG_INFO("Shutting down RPC Bridge...");
+    GW::RPCBridge::GetInstance().Shutdown();
 
     // Cleanup ImGui BEFORE hooks
 #ifdef _DEBUG

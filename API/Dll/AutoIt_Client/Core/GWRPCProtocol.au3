@@ -85,6 +85,6 @@ Global Const $RPC_RESPONSE_SIZE = 1544
 ; ==================================
 ; Default Values
 ; ==================================
-Global Const $RPC_DEFAULT_PIPE = "\\.\pipe\GwAu3Server"
+Global Const $RPC_DEFAULT_PIPE = "\\.\pipe\GwAu3Server_"
 Global Const $RPC_DEFAULT_TIMEOUT = 5000
 Global Const $RPC_MAX_RETRIES = 10
