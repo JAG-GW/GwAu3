@@ -327,35 +327,35 @@ Global Const $GC_S_MOD_SHIELD_PLUS_DIVINE 						= "14101824"	; +1 Divine 20%
 Global Const $GC_S_MOD_SHIELD_PLUS_STRENGTH 					= "14111824"	; +1 Strength 20%
 Global Const $GC_S_MOD_SHIELD_PLUS_TACTICS 						= "14151824"	; +1 Tactics 20%
 ; +10vs Monsters Mods
-Global Const $GC_S_MOD_SHIELD_PLUS_DEMONS 						= "A0848210"	; +10vs Demons
-Global Const $GC_S_MOD_SHIELD_PLUS_DRAGONS 						= "A0948210"	; +10vs Dragons
-Global Const $GC_S_MOD_SHIELD_PLUS_PLANTS 						= "A0348210"	; +10vs Plants
-Global Const $GC_S_MOD_SHIELD_PLUS_UNDEAD 						= "A0048210"	; +10vs Undead
-Global Const $GC_S_MOD_SHIELD_PLUS_TENGU 						= "A0748210"	; +10vs Tengu
-Global Const $GC_S_MOD_SHIELD_PLUS_CHARR 						= "0A014821"	; +10vs Charr
-Global Const $GC_S_MOD_SHIELD_PLUS_TROLLS 						= "0A024821"	; +10vs Trolls
-Global Const $GC_S_MOD_SHIELD_PLUS_SKELETONS 					= "0A044821"	; +10vs Skeletons
-Global Const $GC_S_MOD_SHIELD_PLUS_GIANTS 						= "0A054821"	; +10vs Giants
-Global Const $GC_S_MOD_SHIELD_PLUS_DWARVES 						= "0A064821"	; +10vs Dwarves
-Global Const $GC_S_MOD_SHIELD_PLUS_OGRES 						= "0A0A4821"	; +10vs Ogres
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_DEMONS 					= "A0848210"	; +10vs Demons
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_DRAGONS 					= "A0948210"	; +10vs Dragons
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_PLANTS 					= "A0348210"	; +10vs Plants
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_UNDEAD 					= "A0048210"	; +10vs Undead
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_TENGU 					= "A0748210"	; +10vs Tengu
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_CHARR 					= "0A014821"	; +10vs Charr
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_TROLLS 					= "0A024821"	; +10vs Trolls
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_SKELETONS 				= "0A044821"	; +10vs Skeletons
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_GIANTS 					= "0A054821"	; +10vs Giants
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_DWARVES 					= "0A064821"	; +10vs Dwarves
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_OGRES 					= "0A0A4821"	; +10vs Ogres
 ; +10vs Dmg - Elemental
-Global Const $GC_S_MOD_SHIELD_PLUS_LIGHTNING 					= "A0418210"	; +10vs Lightning
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_LIGHTNING 				= "A0418210"	; +10vs Lightning
 Global Const $GC_S_MOD_SHIELD_PLUS_VS_EARTH 					= "A0B18210"	; +10vs Earth
-Global Const $GC_S_MOD_SHIELD_PLUS_COLD 						= "A0318210"	; +10vs Cold
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_COLD 						= "A0318210"	; +10vs Cold
 Global Const $GC_S_MOD_SHIELD_PLUS_VS_FIRE 						= "A0518210"	; +10vs Fire
 ; +10vs Dmg -Physical
-Global Const $GC_S_MOD_SHIELD_PLUS_PIERCING 					= "A0118210"	; +10vs Piercing
-Global Const $GC_S_MOD_SHIELD_PLUS_BLUNT 						= "A0018210"	; +10vs Blunt
-Global Const $GC_S_MOD_SHIELD_PLUS_SLASHING 					= "A0218210"	; +10vs Slashing
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_PIERCING 					= "A0118210"	; +10vs Piercing
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_BLUNT 					= "A0018210"	; +10vs Blunt
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_SLASHING 					= "A0218210"	; +10vs Slashing
 ; +20 vs Conditions
-Global Const $GC_S_MOD_SHIELD_VS_BLEEDING						= "DE017824"	; +20%vs Bleeding
-Global Const $GC_S_MOD_SHIELD_VS_BLIND 							= "DF017824"	; +20%vs Blind
-Global Const $GC_S_MOD_SHIELD_VS_CRIPPLE						= "E1017824"	; +20%vs Cripple
-Global Const $GC_S_MOD_SHIELD_VS_DEEP_WOUND						= "E2017824"	; +20%vs Deep Wound
-Global Const $GC_S_MOD_SHIELD_VS_DISEASE 						= "E3017824"	; +20%vs Disease
-Global Const $GC_S_MOD_SHIELD_VS_POISON 						= "E4017824"	; +20%vs Poison
-Global Const $GC_S_MOD_SHIELD_VS_DAZE 							= "E5017824"	; +20%vs Daze
-Global Const $GC_S_MOD_SHIELD_VS_WEAKNESS 						= "E6017824"	; +20%vs Weakness
+Global Const $GC_S_MOD_SHIELD_VS_BLEEDING                       = "DE017824"	; +20%vs Bleeding
+Global Const $GC_S_MOD_SHIELD_VS_BLIND                          = "DF017824"	; +20%vs Blind
+Global Const $GC_S_MOD_SHIELD_VS_CRIPPLE                        = "E1017824"	; +20%vs Cripple
+Global Const $GC_S_MOD_SHIELD_VS_DEEP_WOUND                     = "E2017824"	; +20%vs Deep Wound
+Global Const $GC_S_MOD_SHIELD_VS_DISEASE                        = "E3017824"	; +20%vs Disease
+Global Const $GC_S_MOD_SHIELD_VS_POISON                         = "E4017824"	; +20%vs Poison
+Global Const $GC_S_MOD_SHIELD_VS_DAZE                           = "E5017824"	; +20%vs Daze
+Global Const $GC_S_MOD_SHIELD_VS_WEAKNESS                       = "E6017824"	; +20%vs Weakness
 ; Staff
 ;Generic 10% HCT
 Global Const $GC_S_MOD_STAFF_ALL10_CAST 						= "A0822"		; 10% HCT
@@ -396,23 +396,23 @@ Global Const $GC_S_MOD_CASTER_ENERGY_ALWAYS15 					= "0F00D822"	; Energy +15
 Global Const $GC_S_MOD_CASTER_ENERGY_REGEN 						= "0100C820"	; Energy regeneration -1
 Global Const $GC_S_MOD_CASTER_PLUS30 							= "001E4823"	; +30HP
 ; Mes mods
-Global Const $GC_S_MOD_CASTER_FAST_CASTING20_RECHARGE 			= "00149823"	; 20% fast casting
-Global Const $GC_S_MOD_CASTER_FAST_CASTING20_CASTING 			= "00141822"	; 20% fast casting recharge
-Global Const $GC_S_MOD_CASTER_ILLUSION20_RECHARGE 				= "01149823"	; 20% illusion
-Global Const $GC_S_MOD_CASTER_ILLUSION20_CASTING 				= "01141822"	; 20% illusion recharge
+Global Const $GC_S_MOD_CASTER_FAST_CASTING20_CASTING 			= "00141822"	; 20% fast casting
+Global Const $GC_S_MOD_CASTER_FAST_CASTING20_RECHARGE 			= "00149823"	; 20% fast casting recharge
+Global Const $GC_S_MOD_CASTER_ILLUSION20_CASTING 				= "01141822"	; 20% illusion
+Global Const $GC_S_MOD_CASTER_ILLUSION20_RECHARGE 				= "01149823"	; 20% illusion recharge
 Global Const $GC_S_MOD_CASTER_DOMINATION20_CASTING 				= "02141822"	; 20% domination
 Global Const $GC_S_MOD_CASTER_DOMINATION20_RECHARGE 			= "02149823"	; 20% domination recharge
-Global Const $GC_S_MOD_CASTER_INSPIRATION20_RECHARGE 			= "03149823"	; 20% inspiration
-Global Const $GC_S_MOD_CASTER_INSPIRATION20_CASTING 			= "03141822"	; 20% inspiration recharge
+Global Const $GC_S_MOD_CASTER_INSPIRATION20_CASTING 			= "03141822"	; 20% inspiration
+Global Const $GC_S_MOD_CASTER_INSPIRATION20_RECHARGE 			= "03149823"	; 20% inspiration recharge
 ; Necro mods
+Global Const $GC_S_MOD_CASTER_BLOOD20_CASTING 					= "04141822"	; 20% blood
+Global Const $GC_S_MOD_CASTER_BLOOD20_RECHARGE 					= "04149823"	; 20% blood recharge
 Global Const $GC_S_MOD_CASTER_DEATH20_CASTING 					= "05141822"	; 20% death
 Global Const $GC_S_MOD_CASTER_DEATH20_RECHARGE 					= "05149823"	; 20% death recharge
-Global Const $GC_S_MOD_CASTER_BLOOD20_RECHARGE 					= "04149823"	; 20% blood
-Global Const $GC_S_MOD_CASTER_BLOOD20_CASTING 					= "04141822"	; 20% blood recharge
-Global Const $GC_S_MOD_CASTER_SOUL_REAP20_RECHARGE 				= "06149823"	; 20% soul reaping
-Global Const $GC_S_MOD_CASTER_SOUL_REAP20_CASTING 				= "06141822"	; 20% soul reaping recharge
-Global Const $GC_S_MOD_CASTER_CURSES20_RECHARGE 				= "07149823"	; 20% curses
-Global Const $GC_S_MOD_CASTER_CURSES20_CASTING 					= "07141822"	; 20% curses recharge
+Global Const $GC_S_MOD_CASTER_SOUL_REAP20_CASTING 				= "06141822"	; 20% soul reaping
+Global Const $GC_S_MOD_CASTER_SOUL_REAP20_RECHARGE 				= "06149823"	; 20% soul reaping recharge
+Global Const $GC_S_MOD_CASTER_CURSES20_CASTING 					= "07141822"	; 20% curses
+Global Const $GC_S_MOD_CASTER_CURSES20_RECHARGE 				= "07149823"	; 20% curses recharge
 ; Ele mods
 Global Const $GC_S_MOD_CASTER_AIR20_CASTING 					= "08141822"	; 20% air
 Global Const $GC_S_MOD_CASTER_AIR20_RECHARGE 					= "08149823"	; 20% air recharge

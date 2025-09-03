@@ -540,9 +540,42 @@ EndFunc   ;==>GetItemArray
 ;~ Description: Returns modstruct of an item.
 Func Item_GetModStruct($a_v_Item)
     If Not IsPtr($a_v_Item) Then $a_v_Item= Item_GetItemPtr($a_v_Item)
-    If Item_GetItemInfoByPtr($a_v_Item, "ModStruct") = 0 Then Return
-    Return Memory_Read(Item_GetItemInfoByPtr($a_v_Item, "ModStruct"), 'Byte[' & Item_GetItemInfoByPtr($a_v_Item, "ModStructSize") * 4 & ']')
+    Local $l_p_ModStruct = Item_GetItemInfoByPtr($a_v_Item, "ModStruct")
+    If $l_p_ModStruct = 0 Then Return ""
+    Return Memory_Read($l_p_ModStruct, 'Byte[' & Item_GetItemInfoByPtr($a_v_Item, "ModStructSize") * 4 & ']')
 EndFunc   ;==>Item_GetModStruct
+
+;~ Description: Returns an array of the requested mod.
+Func Item_GetModByIdentifier($a_v_Item, $a_s_Identifier)
+    Local $l_ai_Return[2] = [0, 0]
+    Local $l_s_ModStruct = Item_GetModStruct($a_v_Item)
+    If $l_s_ModStruct = "" Then Return SetError(1, 0, $l_ai_Return)
+
+    $l_s_ModStruct = StringTrimLeft($l_s_ModStruct, 2)
+    Local $l_s_Ident = StringUpper($a_s_Identifier)
+
+    For $i = 0 To StringLen($l_s_ModStruct) / 8 - 1
+        Local $l_i_Base = 8 * $i
+        If StringUpper(StringMid($l_s_ModStruct, $l_i_Base + 5, 4)) = $l_s_Ident Then
+            $l_ai_Return[0] = Dec(StringMid($l_s_ModStruct, $l_i_Base + 1, 2))
+            $l_ai_Return[1] = Dec(StringMid($l_s_ModStruct, $l_i_Base + 3, 2))
+            Return $l_ai_Return
+        EndIf
+    Next
+    Return $l_ai_Return
+EndFunc   ;==>Item_GetModByIdentifier
+
+;~ Description: Returns a weapon or shield's minimum required attribute.
+Func Item_GetItemReq($a_v_Item)
+	Local $l_ai_Mod = Item_GetModByIdentifier($a_v_Item, "9827")
+	Return $l_ai_Mod[0]
+EndFunc   ;==>GetItemReq
+
+;~ Description: Returns a weapon or shield's required attribute.
+Func Item_GetItemAttribute($a_v_Item)
+	Local $l_ai_Mod = Item_GetModByIdentifier($a_v_Item, "9827")
+	Return $l_ai_Mod[1]
+EndFunc   ;==>GetItemAttribute
 
 ;~ Description: Returns 1 for Rune, 2 for Insignia, 0 if not found.
 Func Item_IsRuneOrInsignia($a_i_ModelID)
