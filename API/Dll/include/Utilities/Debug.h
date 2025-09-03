@@ -92,14 +92,10 @@ public:
     void ToggleWindow();
     bool IsWindowVisible() const { return showDebugWindow; }
 
-    // Windows message processing
-    bool WndProc(UINT msg, WPARAM wParam, LPARAM lParam);
-
     // Clear logs
     void Clear();
 
-    // Performance monitoring
-    void UpdatePerformanceStats();
+    // Copy logs to clipboard
     void CopyLogsToClipboard();
     void CopyFilteredLogsToClipboard();
 
@@ -143,11 +139,6 @@ private:
     // Statistics
     size_t logCounts[7];
 
-    // Performance monitoring
-    float frameTime;
-    float fps;
-    std::chrono::steady_clock::time_point lastFrameTime;
-
     // Constructor/Destructor
     Debug();
     ~Debug();
@@ -159,8 +150,8 @@ private:
     // ImGui helpers
     void DrawControlPanel();
     void DrawLogPanel();
-    void DrawPerformancePanel();
 
+    // Utility functions
     const char* GetLogLevelString(LogLevel level) const;
     ImVec4 GetLogLevelColor(LogLevel level) const;
     std::string FormatTimestamp(const std::chrono::system_clock::time_point& time) const;

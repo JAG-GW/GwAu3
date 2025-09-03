@@ -183,7 +183,7 @@ Func Test()
     Out("===== RPC Client Test Suite =====")
 
     ; Initialize with debug mode
-    If Not RPCClient_Init("\\.\pipe\GWToolsPipe", True) Then
+    If Not RPCClient_Init("\\.\pipe\GwAu3Server", True) Then
         Out("[ERROR] Failed to initialize RPC client")
         Return
     EndIf

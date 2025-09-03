@@ -3,7 +3,6 @@
 #include <Windows.h>
 #include <imgui.h>
 #include <string>
-#include <vector>
 #include <chrono>
 #include <mutex>
 #include <deque>
@@ -58,17 +57,15 @@ namespace GW {
 
     private:
         static NamedPipeUI* instance;
+        static constexpr const char* PIPE_NAME = "\\\\.\\pipe\\GwAu3Server";
+        static constexpr size_t MAX_LOGS = 500;
 
-        // État du serveur
+        // État
         bool showWindow;
-        bool serverAutoStart;
-        std::string pipeName;
-        std::string customPipeName;
 
         // Logs et statistiques
         std::deque<LogEntry> logs;
         std::mutex logMutex;
-        size_t maxLogs;
         Statistics stats;
 
         // Paramètres UI
@@ -84,7 +81,6 @@ namespace GW {
         void DrawServerControl();
         void DrawStatistics();
         void DrawLogPanel();
-        void DrawConfiguration();
 
         ImVec4 GetLogColor(LogEntry::Type type) const;
         std::string FormatTimestamp(const std::chrono::system_clock::time_point& time) const;
@@ -94,9 +90,6 @@ namespace GW {
         // Callbacks pour le serveur
         void OnServerLog(const std::string& message);
         void OnServerError(const std::string& message);
-        void OnClientConnected();
-        void OnClientDisconnected();
-        void OnRequestReceived(int requestType, bool success);
 
     public:
         NamedPipeUI();
@@ -119,16 +112,11 @@ namespace GW {
         bool StartServer();
         bool StopServer();
         bool IsServerRunning() const;
-        void ToggleServer();
 
         // Logs
         void AddLog(LogEntry::Type type, const std::string& message);
         void ClearLogs();
         void CopyLogsToClipboard();
-
-        // Configuration
-        void LoadConfig();
-        void SaveConfig();
 
         // Statistiques
         void UpdateStatistics(int requestType, bool success, size_t bytesIn, size_t bytesOut);

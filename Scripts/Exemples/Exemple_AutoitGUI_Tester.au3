@@ -132,7 +132,7 @@ WEnd
 While $BotRunning
     Sleep(500)
     Out("Ready")
-
+	Out(Agent_GetMyID())
     Out("Done")
     Sleep(5000)
 WEnd

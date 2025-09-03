@@ -1,6 +1,7 @@
 #include "Headers.h"
 #include "Utilities/Debug.h"
 #include "Utilities/Scanner.h"
+#include "DllState.h"
 #include "NamedPipe/NamedPipeServer.h"
 #include "NamedPipe/NamedPipeUI.h"
 #include "NamedPipe/RPCBridge.h"
@@ -18,13 +19,46 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // ================================
-// Global Variables
+// DLL State Management (Thread-Safe)
 // ================================
 
-// Thread management
-HANDLE g_mainThread = nullptr;
-std::atomic<bool> g_dllRunning(true);
-std::atomic<bool> g_shutdownRequested(false);
+// Global state definition
+std::atomic<GW::DllState> GW::g_dllState{ GW::DllState::Initializing };
+
+// Synchronization primitives
+std::condition_variable g_shutdownCV;
+std::mutex g_shutdownMutex;
+
+// Thread management with RAII
+class ThreadRAII {
+    HANDLE handle;
+public:
+    ThreadRAII(HANDLE h = nullptr) : handle(h) {}
+    ~ThreadRAII() {
+        if (handle && handle != INVALID_HANDLE_VALUE) {
+            CloseHandle(handle);
+        }
+    }
+    void reset(HANDLE h) {
+        if (handle && handle != INVALID_HANDLE_VALUE) {
+            CloseHandle(handle);
+        }
+        handle = h;
+    }
+    HANDLE get() const { return handle; }
+    HANDLE release() {
+        HANDLE h = handle;
+        handle = nullptr;
+        return h;
+    }
+};
+
+// Global thread handle with RAII
+ThreadRAII g_mainThread;
+
+// ================================
+// Global Variables
+// ================================
 
 // DirectX hooks
 typedef HRESULT(WINAPI* EndScene_t)(IDirect3DDevice9*);
@@ -34,12 +68,9 @@ Reset_t g_Reset_Original = nullptr;
 
 // ImGui state
 bool g_imguiInitialized = false;
-bool g_showMainWindow = true;
+bool g_showMainWindow = false;  // Changed to false by default, will be enabled only in debug mode
 HWND g_gameWindow = nullptr;
 WNDPROC g_originalWndProc = nullptr;
-
-// Feature toggles
-bool g_showDebugConsole = false;
 
 // Mouse tracking
 static bool g_rightMouseDown = false;
@@ -57,12 +88,15 @@ GW::NamedPipeUI* g_pipeUI = nullptr;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     // Handle shutdown
     if (msg == WM_CLOSE || (msg == WM_SYSCOMMAND && wParam == SC_CLOSE)) {
-        g_shutdownRequested = true;
+        GW::RequestShutdown();
+        g_shutdownCV.notify_all();
         return 0;
     }
 
+#ifdef _DEBUG
+    // Only handle ImGui input in debug mode
     // Check if ImGui is initialized
-    if (!g_dllRunning || !g_imguiInitialized) {
+    if (!GW::IsDllRunning() || !g_imguiInitialized) {
         return CallWindowProc(g_originalWndProc, hWnd, msg, wParam, lParam);
     }
 
@@ -124,6 +158,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         (msg == WM_KEYDOWN || msg == WM_KEYUP || msg == WM_CHAR)) {
         return TRUE;
     }
+#endif // _DEBUG
 
     // Pass to game
     return CallWindowProc(g_originalWndProc, hWnd, msg, wParam, lParam);
@@ -144,9 +179,10 @@ LRESULT CALLBACK SafeWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 // ================================
 
 bool InitImGui(IDirect3DDevice9* device) {
+#ifdef _DEBUG
     if (g_imguiInitialized) return true;
 
-    LOG_INFO("Initializing ImGui...");
+    LOG_INFO("Initializing ImGui (Debug Mode)...");
 
     // Get window handle
     D3DDEVICE_CREATION_PARAMETERS params;
@@ -187,8 +223,13 @@ bool InitImGui(IDirect3DDevice9* device) {
     ImGui_ImplDX9_Init(device);
 
     g_imguiInitialized = true;
-    LOG_SUCCESS("ImGui initialized successfully");
+    g_showMainWindow = true; // Show main window in debug mode
+    LOG_SUCCESS("ImGui initialized successfully (Debug Mode)");
     return true;
+#else
+    // In release mode, don't initialize ImGui
+    return false;
+#endif
 }
 
 // ================================
@@ -196,26 +237,44 @@ bool InitImGui(IDirect3DDevice9* device) {
 // ================================
 
 void CleanupImGui() {
+#ifdef _DEBUG
     if (!g_imguiInitialized) return;
 
     LOG_INFO("Cleaning up ImGui...");
 
-    ImGui_ImplDX9_InvalidateDeviceObjects();
-    ImGui_ImplDX9_Shutdown();
-    ImGui_ImplWin32_Shutdown();
+    // Mark as not initialized first to prevent any new rendering
+    g_imguiInitialized = false;
 
-    if (ImGui::GetCurrentContext()) {
-        ImGui::DestroyContext();
+    // Wait a bit for any pending render to complete
+    Sleep(50);
+
+    try {
+        // Cleanup ImGui DirectX resources
+        if (ImGui::GetCurrentContext()) {
+            ImGui_ImplDX9_InvalidateDeviceObjects();
+            ImGui_ImplDX9_Shutdown();
+            ImGui_ImplWin32_Shutdown();
+            ImGui::DestroyContext();
+        }
+    }
+    catch (...) {
+        LOG_ERROR("Exception during ImGui cleanup");
     }
 
     // Restore original WndProc
     if (g_originalWndProc && g_gameWindow && IsWindow(g_gameWindow)) {
-        SetWindowLongPtr(g_gameWindow, GWLP_WNDPROC, (LONG_PTR)g_originalWndProc);
+        try {
+            SetWindowLongPtr(g_gameWindow, GWLP_WNDPROC, (LONG_PTR)g_originalWndProc);
+        }
+        catch (...) {
+            LOG_ERROR("Failed to restore WndProc");
+        }
         g_originalWndProc = nullptr;
     }
 
-    g_imguiInitialized = false;
+    g_gameWindow = nullptr;
     LOG_INFO("ImGui cleanup complete");
+#endif
 }
 
 // ================================
@@ -223,21 +282,22 @@ void CleanupImGui() {
 // ================================
 
 void RenderMainWindow() {
+#ifdef _DEBUG
     if (!g_showMainWindow) return;
 
     ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_FirstUseEver);
 
-    if (ImGui::Begin("GWTools Enhanced", &g_showMainWindow, ImGuiWindowFlags_MenuBar)) {
+    if (ImGui::Begin("GwAu3 (Debug Mode)", &g_showMainWindow, ImGuiWindowFlags_MenuBar)) {
         // Menu bar
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("Windows")) {
-                if (ImGui::MenuItem("Debug Console", "HOME", Debug::GetInstance().IsWindowVisible())) {
+                if (ImGui::MenuItem("Debug Console", nullptr, Debug::GetInstance().IsWindowVisible())) {
                     Debug::GetInstance().ToggleWindow();
                 }
 
                 // Menu for Named Pipe Server
-                if (ImGui::MenuItem("Named Pipe Server", "F9", g_pipeUI && g_pipeUI->IsWindowVisible())) {
+                if (ImGui::MenuItem("Named Pipe Server", nullptr, g_pipeUI && g_pipeUI->IsWindowVisible())) {
                     if (g_pipeUI) {
                         g_pipeUI->ToggleWindow();
                     }
@@ -264,14 +324,13 @@ void RenderMainWindow() {
         }
 
         // Main content
-        ImGui::Text("GWTools Enhanced DLL");
+        ImGui::Text("GwAu3 DLL - Debug Mode");
         ImGui::Text("Version: 1.0.0");
         ImGui::Separator();
 
         // System info
         ImGui::Text("Process ID: %d", GetCurrentProcessId());
         ImGui::Text("Thread ID: %d", GetCurrentThreadId());
-        ImGui::Text("Main Thread: 0x%p", g_mainThread);
 
         ImGui::Separator();
 
@@ -306,7 +365,7 @@ void RenderMainWindow() {
                 ImGui::Text("Status: %s", isRunning ? "Running" : "Stopped");
 
                 if (isRunning) {
-                    ImGui::Text("Pipe: \\\\.\\pipe\\GWToolsPipe");
+                    ImGui::Text("Pipe: \\\\.\\pipe\\GwAu3Server");
 
                     if (ImGui::Button("Stop Server")) {
                         g_pipeUI->StopServer();
@@ -334,7 +393,8 @@ void RenderMainWindow() {
         if (ImGui::Button("Unload DLL", ImVec2(100, 30))) {
             if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
                 // Immediate shutdown with shift held
-                g_shutdownRequested = true;
+                GW::RequestShutdown();
+                g_shutdownCV.notify_all();
             }
             else {
                 // Confirmation popup
@@ -348,7 +408,8 @@ void RenderMainWindow() {
             ImGui::Separator();
 
             if (ImGui::Button("Yes", ImVec2(120, 0))) {
-                g_shutdownRequested = true;
+                GW::RequestShutdown();
+                g_shutdownCV.notify_all();
                 ImGui::CloseCurrentPopup();
             }
             ImGui::SetItemDefaultFocus();
@@ -360,6 +421,7 @@ void RenderMainWindow() {
         }
     }
     ImGui::End();
+#endif
 }
 
 // ================================
@@ -367,6 +429,7 @@ void RenderMainWindow() {
 // ================================
 
 void RenderImGui() {
+#ifdef _DEBUG
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
@@ -384,14 +447,16 @@ void RenderImGui() {
         g_pipeUI->Draw();
     }
 
-    // Check for shutdown
-    if (!g_showMainWindow || g_shutdownRequested) {
-        g_dllRunning = false;
+    // Check for shutdown request from UI
+    if (!g_showMainWindow) {
+        GW::RequestShutdown();
+        g_shutdownCV.notify_all();
     }
 
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+#endif
 }
 
 // ================================
@@ -399,48 +464,53 @@ void RenderImGui() {
 // ================================
 
 HRESULT WINAPI OnEndScene(IDirect3DDevice9* device) {
-    if (!g_dllRunning) {
+    if (!GW::IsDllRunning()) {
         if (g_EndScene_Original) {
             return g_EndScene_Original(device);
         }
         return S_OK;
     }
 
-    // Traiter les appels RPC en attente AVANT le rendu ImGui
-    // Ceci garantit que les appels se font dans le contexte du game thread
+    // Process pending RPC calls in game thread context
     if (g_pipeServer || g_pipeUI) {
         GW::RPCBridge::GetInstance().ProcessPendingCalls();
     }
 
-    // Initialize ImGui on first call
+#ifdef _DEBUG
+    // Initialize ImGui on first call (only in debug mode)
     if (!g_imguiInitialized) {
         if (!InitImGui(device)) {
             return g_EndScene_Original(device);
         }
     }
 
-    // Render ImGui
-    if (g_imguiInitialized && g_dllRunning) {
+    // Render ImGui (only in debug mode)
+    if (g_imguiInitialized && GW::IsDllRunning()) {
         RenderImGui();
     }
+#endif
 
     return g_EndScene_Original(device);
 }
 
 HRESULT WINAPI OnReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* params) {
-    if (!g_dllRunning && g_Reset_Original) {
+    if (!GW::IsDllRunning() && g_Reset_Original) {
         return g_Reset_Original(device, params);
     }
 
+#ifdef _DEBUG
     if (g_imguiInitialized) {
         ImGui_ImplDX9_InvalidateDeviceObjects();
     }
+#endif
 
     HRESULT result = g_Reset_Original ? g_Reset_Original(device, params) : S_OK;
 
-    if (g_imguiInitialized && g_dllRunning) {
+#ifdef _DEBUG
+    if (g_imguiInitialized && GW::IsDllRunning()) {
         ImGui_ImplDX9_CreateDeviceObjects();
     }
+#endif
 
     return result;
 }
@@ -488,10 +558,20 @@ bool GetD3D9VTable(void** vtable, size_t size) {
 // Main DLL Thread
 // ================================
 
-void MainThread(HMODULE hModule) {
+DWORD WINAPI MainThread(LPVOID param) {
+    HMODULE hModule = (HMODULE)param;
+
     LOG_INFO("===========================================");
-    LOG_INFO("GWTools Enhanced DLL Starting");
+    LOG_INFO("GwAu3 DLL Starting");
+#ifdef _DEBUG
+    LOG_INFO("Running in DEBUG mode - UI enabled");
+#else
+    LOG_INFO("Running in RELEASE mode - UI disabled");
+#endif
     LOG_INFO("===========================================");
+
+    // Set state to running
+    GW::g_dllState = GW::DllState::Running;
 
     // Initialize Debug system
     Debug::RegisterLogHandler(nullptr, nullptr);
@@ -499,23 +579,25 @@ void MainThread(HMODULE hModule) {
     // Initialize MinHook
     if (MH_Initialize() != MH_OK) {
         LOG_ERROR("Failed to initialize MinHook");
-        g_dllRunning = false;
+        GW::g_dllState = GW::DllState::Stopped;
         FreeLibraryAndExitThread(hModule, EXIT_FAILURE);
-        return;
+        return EXIT_FAILURE;
     }
 
     // Wait for D3D9
     LOG_INFO("Waiting for d3d9.dll...");
-    while (!GetModuleHandleA("d3d9.dll") && g_dllRunning) {
-        Sleep(100);
+    while (!GetModuleHandleA("d3d9.dll") && GW::IsDllRunning()) {
+        std::unique_lock<std::mutex> lock(g_shutdownMutex);
+        g_shutdownCV.wait_for(lock, std::chrono::milliseconds(100));
     }
 
-    if (!g_dllRunning) {
+    if (GW::IsDllShuttingDown()) {
         LOG_INFO("Shutdown requested before d3d9 loaded");
         MH_Uninitialize();
         Debug::Destroy();
+        GW::g_dllState = GW::DllState::Stopped;
         FreeLibraryAndExitThread(hModule, EXIT_SUCCESS);
-        return;
+        return EXIT_SUCCESS;
     }
 
     // Get D3D9 VTable
@@ -524,8 +606,9 @@ void MainThread(HMODULE hModule) {
         LOG_ERROR("Failed to get D3D9 VTable");
         MH_Uninitialize();
         Debug::Destroy();
+        GW::g_dllState = GW::DllState::Stopped;
         FreeLibraryAndExitThread(hModule, EXIT_FAILURE);
-        return;
+        return EXIT_FAILURE;
     }
 
     // Create hooks
@@ -536,8 +619,9 @@ void MainThread(HMODULE hModule) {
         LOG_ERROR("Failed to create EndScene hook");
         MH_Uninitialize();
         Debug::Destroy();
+        GW::g_dllState = GW::DllState::Stopped;
         FreeLibraryAndExitThread(hModule, EXIT_FAILURE);
-        return;
+        return EXIT_FAILURE;
     }
 
     if (MH_CreateHook(reset_addr, OnReset, (void**)&g_Reset_Original) != MH_OK) {
@@ -545,8 +629,9 @@ void MainThread(HMODULE hModule) {
         MH_RemoveHook(endscene_addr);
         MH_Uninitialize();
         Debug::Destroy();
+        GW::g_dllState = GW::DllState::Stopped;
         FreeLibraryAndExitThread(hModule, EXIT_FAILURE);
-        return;
+        return EXIT_FAILURE;
     }
 
     // Enable hooks
@@ -556,8 +641,9 @@ void MainThread(HMODULE hModule) {
         MH_RemoveHook(reset_addr);
         MH_Uninitialize();
         Debug::Destroy();
+        GW::g_dllState = GW::DllState::Stopped;
         FreeLibraryAndExitThread(hModule, EXIT_FAILURE);
-        return;
+        return EXIT_FAILURE;
     }
 
     LOG_SUCCESS("Hooks initialized successfully");
@@ -576,8 +662,10 @@ void MainThread(HMODULE hModule) {
     }
 
     // Initialize Named Pipe server with UI
-    LOG_INFO("Initializing Named Pipe server with UI...");
+    LOG_INFO("Initializing Named Pipe server...");
     try {
+#ifdef _DEBUG
+        // In debug mode, initialize the UI
         g_pipeUI = &GW::NamedPipeUI::GetInstance();
         g_pipeUI->Initialize();
 
@@ -587,54 +675,59 @@ void MainThread(HMODULE hModule) {
         else {
             LOG_INFO("Named Pipe server not auto-started (check configuration)");
         }
+#else
+        // In release mode, start the server directly without UI
+        g_pipeServer = &GW::NamedPipeServer::GetInstance();
+        if (g_pipeServer->Start()) {
+            LOG_SUCCESS("Named Pipe server started successfully (no UI in release mode)");
+        }
+        else {
+            LOG_ERROR("Failed to start Named Pipe server");
+        }
+#endif
     }
     catch (const std::exception& e) {
-        LOG_ERROR("Failed to initialize Named Pipe UI: %s", e.what());
-        g_pipeUI = nullptr;
+        LOG_ERROR("Failed to initialize Named Pipe: %s", e.what());
     }
     catch (...) {
-        LOG_ERROR("Failed to initialize Named Pipe UI: Unknown error");
-        g_pipeUI = nullptr;
+        LOG_ERROR("Failed to initialize Named Pipe: Unknown error");
     }
 
     LOG_INFO("===========================================");
-    LOG_INFO("GWTools Ready!");
-    LOG_INFO("Hotkeys:");
-    LOG_INFO("  END - Toggle main window");
-    LOG_INFO("  HOME - Toggle debug console");
-    LOG_INFO("  F9 - Toggle Named Pipe server control");
-    LOG_INFO("  CTRL+F9 - Emergency shutdown");
+    LOG_INFO("GwAu3 Ready!");
+#ifdef _DEBUG
+    LOG_INFO("Debug UI available - no hotkeys configured");
+#else
+    LOG_INFO("Running in headless mode - no UI");
+#endif
+    LOG_INFO("Named Pipe: \\\\.\\pipe\\GwAu3Server");
     LOG_INFO("===========================================");
 
-    // Main loop
-    while (g_dllRunning && !g_shutdownRequested) {
-        Sleep(16); // ~60 FPS
+    // Main loop - Wait for shutdown signal
+    {
+        std::unique_lock<std::mutex> lock(g_shutdownMutex);
+        g_shutdownCV.wait(lock, [] { return GW::IsDllShuttingDown(); });
     }
 
     LOG_INFO("===========================================");
-    LOG_INFO("Shutting down GWTools...");
+    LOG_INFO("Shutting down GwAu3...");
     LOG_INFO("===========================================");
 
-    // 1. Mark that we are shutting down
-    g_dllRunning = false;
-    g_shutdownRequested = true;
-
-    // 2. Wait a bit for the running threads to finish
-    Sleep(200);
-
-    // 3. Cleanup ImGui BEFORE hooks
+    // Cleanup ImGui BEFORE hooks
+#ifdef _DEBUG
     LOG_INFO("Cleaning up ImGui...");
     CleanupImGui();
+#endif
 
-    // 4. Wait a little longer
+    // Wait a bit for pending operations
     Sleep(100);
 
-    // 5. Disable hooks
+    // Disable hooks
     LOG_INFO("Disabling hooks...");
     MH_DisableHook(MH_ALL_HOOKS);
     Sleep(50);
 
-    // 6. Remove the hooks
+    // Remove the hooks
     if (endscene_addr) {
         MH_RemoveHook(endscene_addr);
     }
@@ -642,31 +735,25 @@ void MainThread(HMODULE hModule) {
         MH_RemoveHook(reset_addr);
     }
 
-    // 7. Uninitialize MinHook
+    // Uninitialize MinHook
     LOG_INFO("Uninitializing MinHook...");
     MH_Uninitialize();
 
-    // 8. Stop Named Pipe Server with UI
+    // Stop Named Pipe Server
+#ifdef _DEBUG
     if (g_pipeUI) {
         LOG_INFO("Shutting down Named Pipe UI and server...");
 
         try {
-            // Stop the server first if it is running
             if (g_pipeUI->IsServerRunning()) {
                 LOG_INFO("Stopping Named Pipe server...");
                 g_pipeUI->StopServer();
-
-                // Wait a bit for the server to shut down properly
                 Sleep(100);
             }
 
-            // Then shutdown the UI
             g_pipeUI->Shutdown();
-
-            // Wait a bit
             Sleep(50);
 
-            // Finally destroy the instance
             GW::NamedPipeUI::Destroy();
             g_pipeUI = nullptr;
 
@@ -679,33 +766,34 @@ void MainThread(HMODULE hModule) {
             LOG_ERROR("Unknown error during Named Pipe shutdown");
         }
     }
-
-    // 9. If the NamedPipe server was created directly (old method), clean it up too
+#else
     if (g_pipeServer) {
-        LOG_INFO("Cleaning up legacy Named Pipe server...");
+        LOG_INFO("Shutting down Named Pipe server...");
         try {
             g_pipeServer->Stop();
             GW::NamedPipeServer::Destroy();
             g_pipeServer = nullptr;
+            LOG_SUCCESS("Named Pipe server shutdown complete");
         }
         catch (...) {
-            LOG_ERROR("Error cleaning up legacy Named Pipe server");
+            LOG_ERROR("Error during Named Pipe shutdown");
         }
     }
+#endif
 
-    // 10. Cleanup debug
+    // Cleanup debug
     LOG_INFO("Destroying Debug system...");
     Debug::Destroy();
 
-    LOG_INFO("GWTools shutdown complete");
+    LOG_INFO("GwAu3 shutdown complete");
     LOG_INFO("===========================================");
 
-    // 11. Last wait before unloading the DLL
-    Sleep(100);
+    // Set final state
+    GW::g_dllState = GW::DllState::Stopped;
 
     // Exit thread and unload DLL
-    g_mainThread = nullptr;
     FreeLibraryAndExitThread(hModule, EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 // ================================
@@ -715,37 +803,39 @@ void MainThread(HMODULE hModule) {
 BOOL WINAPI DllMain(HMODULE hModule, DWORD reason, LPVOID reserved) {
     switch (reason) {
     case DLL_PROCESS_ATTACH: {
-        // Disable thread library calls pour optimiser les performances
+        // Disable thread library calls for optimization
         DisableThreadLibraryCalls(hModule);
 
-        // Initialiser les flags
-        g_dllRunning = true;
-        g_shutdownRequested = false;
+        // Initialize state
+        GW::g_dllState = GW::DllState::Initializing;
 
         // Create main thread
-        g_mainThread = CreateThread(
+        HANDLE hThread = CreateThread(
             nullptr,
             0,
-            (LPTHREAD_START_ROUTINE)MainThread,
+            MainThread,
             hModule,
             0,
             nullptr
         );
 
-        if (!g_mainThread) {
-            // Thread creation failed
+        if (!hThread) {
+            GW::g_dllState = GW::DllState::Stopped;
             return FALSE;
         }
+
+        // Store thread handle with RAII
+        g_mainThread.reset(hThread);
         break;
     }
 
     case DLL_PROCESS_DETACH: {
         // Signal shutdown to all components
-        g_shutdownRequested = true;
-        g_dllRunning = false;
+        GW::RequestShutdown();
+        g_shutdownCV.notify_all();
 
-        // If we have a Named Pipe server, try to shut it down immediately.
-        // This prevents the server from continuing to accept connections during shutdown.
+        // Stop Named Pipe server immediately if running
+#ifdef _DEBUG
         if (g_pipeUI) {
             try {
                 if (g_pipeUI->IsServerRunning()) {
@@ -753,47 +843,31 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reason, LPVOID reserved) {
                 }
             }
             catch (...) {
-                // Ignore errors here, the main thread will do the full cleanup
+                // Ignore errors during emergency shutdown
             }
         }
+#else
+        if (g_pipeServer) {
+            try {
+                g_pipeServer->Stop();
+            }
+            catch (...) {
+                // Ignore errors during emergency shutdown
+            }
+        }
+#endif
 
-        // Wait for the main thread with a reasonable timeout
-        if (g_mainThread) {
-            // Give the thread 3 seconds to terminate properly
-            DWORD result = WaitForSingleObject(g_mainThread, 3000);
+        // Wait for the main thread with timeout
+        HANDLE hThread = g_mainThread.get();
+        if (hThread) {
+            DWORD result = WaitForSingleObject(hThread, 3000);
 
-            switch (result) {
-            case WAIT_OBJECT_0:
-                // Thread terminated cleanly
-                break;
-
-            case WAIT_TIMEOUT:
-                // Thread did not terminate in time
-                // DO NOT TerminateThread as this can corrupt the state
-                // Let Windows clean up
+            if (result == WAIT_TIMEOUT) {
                 LOG_ERROR("Main thread did not terminate in time (3 seconds)");
-                // We can try to force some critical cleanups here
-                // but it's risky
-                break;
-
-            case WAIT_FAILED:
-                LOG_ERROR("WaitForSingleObject failed: %lu", GetLastError());
-                break;
+                // Do NOT TerminateThread - let Windows clean up
             }
 
-            // Close the thread handle
-            CloseHandle(g_mainThread);
-            g_mainThread = nullptr;
-        }
-        // If reserved is NULL, this is an explicit detachment(FreeLibrary)
-        // If reserved is non - NULL, this is a process detachment
-        if (reserved == NULL) {
-            // Explicit detachment - we can do a little more cleanup
-            // But most of it should already be done by MainThread
-        }
-        else {
-            // Process terminates - minimal cleanup only
-            // Windows will clean everything up anyway
+            // Thread handle will be closed by RAII destructor
         }
 
         break;
@@ -802,10 +876,8 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD reason, LPVOID reserved) {
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
         // Do nothing for individual threads
-        // (DisableThreadLibraryCalls has been called)
         break;
     }
 
     return TRUE;
 }
-

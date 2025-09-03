@@ -3,7 +3,6 @@
 #include "Utilities/Debug.h"
 #include <sstream>
 #include <iomanip>
-#include <algorithm>
 
 namespace GW {
 
@@ -11,10 +10,6 @@ namespace GW {
 
     NamedPipeUI::NamedPipeUI()
         : showWindow(false)
-        , serverAutoStart(true)
-        , pipeName("\\\\.\\pipe\\GWToolsPipe")
-        , customPipeName("")
-        , maxLogs(500)
         , autoScrollLogs(true)
         , showTimestamps(true)
         , server(nullptr) {
@@ -25,9 +20,6 @@ namespace GW {
         }
 
         memset(searchFilter, 0, sizeof(searchFilter));
-
-        // Charger la configuration
-        LoadConfig();
     }
 
     NamedPipeUI::~NamedPipeUI() {
@@ -61,22 +53,28 @@ namespace GW {
             OnServerError(msg);
             };
 
-        // Démarrer le serveur si configuré
-        if (serverAutoStart) {
-            StartServer();
-        }
+        server->OnClientConnected = [this](const std::string& msg) {
+            stats.totalConnections++;
+            AddLog(LogEntry::Success, "Client connected");
+            };
+
+        server->OnClientDisconnected = [this](const std::string& msg) {
+            AddLog(LogEntry::Info, "Client disconnected");
+            };
+
+        // Démarrer le serveur automatiquement
+        StartServer();
 
         // Initialiser les statistiques
         stats.Reset();
 
-        LOG_SUCCESS("NamedPipe UI initialized");
+        LOG_SUCCESS("NamedPipe UI initialized and server started");
     }
 
     void NamedPipeUI::Shutdown() {
         if (server && server->IsRunning()) {
             StopServer();
         }
-        SaveConfig();
     }
 
     bool NamedPipeUI::StartServer() {
@@ -90,10 +88,8 @@ namespace GW {
             return true;
         }
 
-        std::string pipeToUse = customPipeName.empty() ? pipeName : customPipeName;
-
-        if (server->Start(pipeToUse)) {
-            AddLog(LogEntry::Success, "Server started on: " + pipeToUse);
+        if (server->Start(PIPE_NAME)) {
+            AddLog(LogEntry::Success, std::string("Server started on: ") + PIPE_NAME);
             stats.startTime = std::chrono::system_clock::now();
             return true;
         }
@@ -123,22 +119,13 @@ namespace GW {
         return server && server->IsRunning();
     }
 
-    void NamedPipeUI::ToggleServer() {
-        if (IsServerRunning()) {
-            StopServer();
-        }
-        else {
-            StartServer();
-        }
-    }
-
     void NamedPipeUI::Draw() {
         if (!showWindow) return;
 
         ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver);
 
-        if (ImGui::Begin("Named Pipe Server Control", &showWindow, ImGuiWindowFlags_MenuBar)) {
+        if (ImGui::Begin("Named Pipe Server", &showWindow, ImGuiWindowFlags_MenuBar)) {
             // Menu bar
             if (ImGui::BeginMenuBar()) {
                 if (ImGui::BeginMenu("File")) {
@@ -147,10 +134,6 @@ namespace GW {
                     }
                     if (ImGui::MenuItem("Copy Logs", "Ctrl+C")) {
                         CopyLogsToClipboard();
-                    }
-                    ImGui::Separator();
-                    if (ImGui::MenuItem("Save Configuration")) {
-                        SaveConfig();
                     }
                     ImGui::Separator();
                     if (ImGui::MenuItem("Close", "Esc")) {
@@ -162,8 +145,6 @@ namespace GW {
                 if (ImGui::BeginMenu("View")) {
                     ImGui::MenuItem("Auto-scroll", nullptr, &autoScrollLogs);
                     ImGui::MenuItem("Show Timestamps", nullptr, &showTimestamps);
-                    ImGui::Separator();
-                    ImGui::SliderInt("Max Logs", (int*)&maxLogs, 100, 2000);
                     ImGui::EndMenu();
                 }
 
@@ -173,6 +154,10 @@ namespace GW {
                     }
                     if (ImGui::MenuItem("Stop", nullptr, false, IsServerRunning())) {
                         StopServer();
+                    }
+                    if (ImGui::MenuItem("Restart", nullptr, false, IsServerRunning())) {
+                        StopServer();
+                        StartServer();
                     }
                     ImGui::Separator();
                     if (ImGui::MenuItem("Reset Statistics")) {
@@ -191,18 +176,13 @@ namespace GW {
 
             // Tabs pour différentes sections
             if (ImGui::BeginTabBar("ServerTabs")) {
-                if (ImGui::BeginTabItem("Statistics")) {
-                    DrawStatistics();
-                    ImGui::EndTabItem();
-                }
-
                 if (ImGui::BeginTabItem("Logs")) {
                     DrawLogPanel();
                     ImGui::EndTabItem();
                 }
 
-                if (ImGui::BeginTabItem("Configuration")) {
-                    DrawConfiguration();
+                if (ImGui::BeginTabItem("Statistics")) {
+                    DrawStatistics();
                     ImGui::EndTabItem();
                 }
 
@@ -213,7 +193,7 @@ namespace GW {
     }
 
     void NamedPipeUI::DrawServerControl() {
-        ImGui::BeginChild("ServerControl", ImVec2(0, 100), true);
+        ImGui::BeginChild("ServerControl", ImVec2(0, 80), true);
 
         // État du serveur
         bool isRunning = IsServerRunning();
@@ -226,39 +206,13 @@ namespace GW {
             auto now = std::chrono::system_clock::now();
             auto uptime = now - stats.startTime;
             ImGui::Text("Uptime: %s", FormatDuration(uptime).c_str());
-
-            // Pipe name actuel
-            std::string currentPipe = customPipeName.empty() ? pipeName : customPipeName;
-            ImGui::Text("Pipe: %s", currentPipe.c_str());
-        }
-
-        ImGui::SameLine(ImGui::GetWindowWidth() - 250);
-
-        // Boutons de contrôle
-        if (!isRunning) {
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
-            if (ImGui::Button("Start Server", ImVec2(100, 30))) {
-                StartServer();
-            }
-            ImGui::PopStyleColor();
+            ImGui::Text("Pipe: %s", PIPE_NAME);
         }
         else {
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.0f, 0.0f, 1.0f));
-            if (ImGui::Button("Stop Server", ImVec2(100, 30))) {
-                StopServer();
-            }
-            ImGui::PopStyleColor();
-        }
+            ImGui::Text("Server is not running");
 
-        ImGui::SameLine();
-
-        // Bouton Toggle
-        if (ImGui::Button(isRunning ? "Restart" : "Quick Start", ImVec2(100, 30))) {
-            if (isRunning) {
-                StopServer();
-                StartServer();
-            }
-            else {
+            // Bouton pour redémarrer si arrêté
+            if (ImGui::Button("Start Server")) {
                 StartServer();
             }
         }
@@ -312,10 +266,16 @@ namespace GW {
 
         ImGui::Separator();
 
-        // Graphiques (placeholder pour futur développement)
-        if (ImGui::CollapsingHeader("Performance Graphs")) {
-            ImGui::Text("Request rate graph would go here");
-            // TODO: Implémenter des graphiques de performance
+        // Temps depuis le démarrage
+        if (IsServerRunning()) {
+            auto now = std::chrono::system_clock::now();
+            auto uptime = now - stats.startTime;
+            ImGui::Text("Server Uptime: %s", FormatDuration(uptime).c_str());
+
+            if (stats.lastRequestTime.time_since_epoch().count() > 0) {
+                auto timeSinceLastRequest = now - stats.lastRequestTime;
+                ImGui::Text("Last Request: %s ago", FormatDuration(timeSinceLastRequest).c_str());
+            }
         }
 
         // Bouton pour réinitialiser les statistiques
@@ -332,34 +292,22 @@ namespace GW {
         ImGui::Text("Filters:");
         ImGui::SameLine();
 
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-        ImGui::Checkbox("Info", &filterByType[0]);
-        ImGui::PopStyleColor();
-        ImGui::SameLine();
+        const char* filterNames[] = { "Info", "Error", "Success", "Warning", "Request", "Response" };
+        ImVec4 filterColors[] = {
+            ImVec4(0.8f, 0.8f, 0.8f, 1.0f),  // Info
+            ImVec4(1.0f, 0.0f, 0.0f, 1.0f),  // Error
+            ImVec4(0.0f, 1.0f, 0.0f, 1.0f),  // Success
+            ImVec4(1.0f, 1.0f, 0.0f, 1.0f),  // Warning
+            ImVec4(0.5f, 0.5f, 1.0f, 1.0f),  // Request
+            ImVec4(0.5f, 1.0f, 0.5f, 1.0f)   // Response
+        };
 
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-        ImGui::Checkbox("Error", &filterByType[1]);
-        ImGui::PopStyleColor();
-        ImGui::SameLine();
-
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
-        ImGui::Checkbox("Success", &filterByType[2]);
-        ImGui::PopStyleColor();
-        ImGui::SameLine();
-
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
-        ImGui::Checkbox("Warning", &filterByType[3]);
-        ImGui::PopStyleColor();
-        ImGui::SameLine();
-
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 1.0f, 1.0f));
-        ImGui::Checkbox("Request", &filterByType[4]);
-        ImGui::PopStyleColor();
-        ImGui::SameLine();
-
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 1.0f, 0.5f, 1.0f));
-        ImGui::Checkbox("Response", &filterByType[5]);
-        ImGui::PopStyleColor();
+        for (int i = 0; i < 6; i++) {
+            ImGui::PushStyleColor(ImGuiCol_Text, filterColors[i]);
+            ImGui::Checkbox(filterNames[i], &filterByType[i]);
+            ImGui::PopStyleColor();
+            if (i < 5) ImGui::SameLine();
+        }
 
         // Barre de recherche
         ImGui::SameLine();
@@ -380,12 +328,20 @@ namespace GW {
         ImGui::Separator();
 
         // Zone de logs avec scroll
-        ImGui::BeginChild("LogScrollArea", ImVec2(0, 0), true,
+        const float footer_height = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+        ImGui::BeginChild("LogScrollArea", ImVec2(0, -footer_height), true,
             ImGuiWindowFlags_HorizontalScrollbar);
 
         std::lock_guard<std::mutex> lock(logMutex);
 
-        for (const auto& log : logs) {
+        // Utiliser un clipper pour la performance
+        ImGuiListClipper clipper;
+        std::vector<size_t> filtered_indices;
+
+        // Construire la liste filtrée
+        for (size_t i = 0; i < logs.size(); i++) {
+            const auto& log = logs[i];
+
             // Appliquer les filtres
             if (!filterByType[static_cast<int>(log.type)]) continue;
 
@@ -396,16 +352,28 @@ namespace GW {
                 }
             }
 
-            // Afficher timestamp si activé
-            if (showTimestamps) {
-                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
-                    "[%s]", FormatTimestamp(log.timestamp).c_str());
-                ImGui::SameLine();
-            }
-
-            // Afficher le message avec la couleur appropriée
-            ImGui::TextColored(GetLogColor(log.type), "%s", log.message.c_str());
+            filtered_indices.push_back(i);
         }
+
+        clipper.Begin(static_cast<int>(filtered_indices.size()));
+
+        while (clipper.Step()) {
+            for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++) {
+                const auto& log = logs[filtered_indices[row]];
+
+                // Afficher timestamp si activé
+                if (showTimestamps) {
+                    ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+                        "[%s]", FormatTimestamp(log.timestamp).c_str());
+                    ImGui::SameLine();
+                }
+
+                // Afficher le message avec la couleur appropriée
+                ImGui::TextColored(GetLogColor(log.type), "%s", log.message.c_str());
+            }
+        }
+
+        clipper.End();
 
         // Auto-scroll
         if (autoScrollLogs && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
@@ -413,80 +381,9 @@ namespace GW {
         }
 
         ImGui::EndChild();
-    }
 
-    void NamedPipeUI::DrawConfiguration() {
-        ImGui::BeginChild("Configuration", ImVec2(0, 0), true);
-
-        ImGui::Text("Server Configuration");
-        ImGui::Separator();
-
-        // Auto-start
-        if (ImGui::Checkbox("Auto-start server on launch", &serverAutoStart)) {
-            SaveConfig();
-        }
-
-        // Pipe name configuration
-        ImGui::Text("Pipe Name:");
-
-        if (ImGui::RadioButton("Default", customPipeName.empty())) {
-            customPipeName.clear();
-        }
-        ImGui::SameLine();
-        ImGui::Text("(%s)", pipeName.c_str());
-
-        if (ImGui::RadioButton("Custom", !customPipeName.empty())) {
-            if (customPipeName.empty()) {
-                customPipeName = pipeName;
-            }
-        }
-
-        if (!customPipeName.empty()) {
-            char buffer[256];
-            strcpy_s(buffer, customPipeName.c_str());
-            if (ImGui::InputText("Custom Pipe", buffer, sizeof(buffer))) {
-                customPipeName = buffer;
-            }
-
-            if (ImGui::Button("Apply Custom Pipe")) {
-                if (IsServerRunning()) {
-                    StopServer();
-                    StartServer();
-                }
-                SaveConfig();
-            }
-        }
-
-        ImGui::Separator();
-
-        // Logging configuration
-        ImGui::Text("Logging Configuration");
-
-        ImGui::SliderInt("Max Log Entries", (int*)&maxLogs, 100, 2000);
-        ImGui::Checkbox("Auto-scroll logs", &autoScrollLogs);
-        ImGui::Checkbox("Show timestamps", &showTimestamps);
-
-        ImGui::Separator();
-
-        // Boutons de configuration
-        if (ImGui::Button("Save Configuration")) {
-            SaveConfig();
-            AddLog(LogEntry::Success, "Configuration saved");
-        }
-
-        ImGui::SameLine();
-
-        if (ImGui::Button("Reset to Defaults")) {
-            serverAutoStart = true;
-            customPipeName.clear();
-            maxLogs = 500;
-            autoScrollLogs = true;
-            showTimestamps = true;
-            SaveConfig();
-            AddLog(LogEntry::Info, "Configuration reset to defaults");
-        }
-
-        ImGui::EndChild();
+        // Status bar
+        ImGui::Text("Showing %zu/%zu logs", filtered_indices.size(), logs.size());
     }
 
     void NamedPipeUI::AddLog(LogEntry::Type type, const std::string& message) {
@@ -495,7 +392,7 @@ namespace GW {
         logs.emplace_back(type, message);
 
         // Limiter le nombre de logs
-        while (logs.size() > maxLogs) {
+        while (logs.size() > MAX_LOGS) {
             logs.pop_front();
         }
     }
@@ -531,26 +428,6 @@ namespace GW {
 
     void NamedPipeUI::OnServerError(const std::string& message) {
         AddLog(LogEntry::Error, message);
-    }
-
-    void NamedPipeUI::OnClientConnected() {
-        stats.totalConnections++;
-        AddLog(LogEntry::Success, "Client connected");
-    }
-
-    void NamedPipeUI::OnClientDisconnected() {
-        AddLog(LogEntry::Info, "Client disconnected");
-    }
-
-    void NamedPipeUI::OnRequestReceived(int requestType, bool success) {
-        stats.totalRequests++;
-        if (success) {
-            stats.successfulRequests++;
-        }
-        else {
-            stats.failedRequests++;
-        }
-        stats.lastRequestTime = std::chrono::system_clock::now();
     }
 
     void NamedPipeUI::UpdateStatistics(int requestType, bool success, size_t bytesIn, size_t bytesOut) {
@@ -630,33 +507,5 @@ namespace GW {
         char buffer[32];
         snprintf(buffer, sizeof(buffer), "%.2f %s", size, units[unitIndex]);
         return std::string(buffer);
-    }
-
-    void NamedPipeUI::LoadConfig() {
-        std::string configPath = "GWTools.ini";
-
-        serverAutoStart = GetPrivateProfileIntA("NamedPipe", "AutoStart", 1, configPath.c_str()) != 0;
-        maxLogs = GetPrivateProfileIntA("NamedPipe", "MaxLogs", 500, configPath.c_str());
-        autoScrollLogs = GetPrivateProfileIntA("NamedPipe", "AutoScroll", 1, configPath.c_str()) != 0;
-        showTimestamps = GetPrivateProfileIntA("NamedPipe", "ShowTimestamps", 1, configPath.c_str()) != 0;
-
-        char buffer[256];
-        GetPrivateProfileStringA("NamedPipe", "CustomPipeName", "", buffer, sizeof(buffer), configPath.c_str());
-        customPipeName = buffer;
-    }
-
-    void NamedPipeUI::SaveConfig() {
-        std::string configPath = "GWTools.ini";
-
-        WritePrivateProfileStringA("NamedPipe", "AutoStart",
-            serverAutoStart ? "1" : "0", configPath.c_str());
-        WritePrivateProfileStringA("NamedPipe", "MaxLogs",
-            std::to_string(maxLogs).c_str(), configPath.c_str());
-        WritePrivateProfileStringA("NamedPipe", "AutoScroll",
-            autoScrollLogs ? "1" : "0", configPath.c_str());
-        WritePrivateProfileStringA("NamedPipe", "ShowTimestamps",
-            showTimestamps ? "1" : "0", configPath.c_str());
-        WritePrivateProfileStringA("NamedPipe", "CustomPipeName",
-            customPipeName.c_str(), configPath.c_str());
     }
 }

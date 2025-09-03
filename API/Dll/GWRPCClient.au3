@@ -67,7 +67,7 @@ Global $g_bDebugMode = False  ; Set to True for debug output
 ; Core Functions
 ; ==================================
 
-Func RPCClient_Init($sPipeName = "\\.\pipe\GWToolsPipe", $bDebug = False)
+Func RPCClient_Init($sPipeName = "\\.\pipe\GwAu3Server", $bDebug = False)
     $g_bDebugMode = $bDebug
     Out("[INFO] Connecting to named pipe: " & $sPipeName)
 

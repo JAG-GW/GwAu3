@@ -1,9 +1,6 @@
 #include "Utilities/Debug.h"
 #include <cstdarg>
 #include <algorithm>
-#include <filesystem>
-#include <Psapi.h>
-#include <Windowsx.h>
 
 // Static member initialization
 Debug* Debug::instance = nullptr;
@@ -17,10 +14,7 @@ Debug::Debug()
     , autoScroll(true)
     , showTimestamps(true)
     , showFileInfo(false)
-    , maxLogs(1000)
-    , frameTime(0.0f)
-    , fps(0.0f)
-    , lastFrameTime(std::chrono::steady_clock::now()) {
+    , maxLogs(1000) {
 
     // Initialize filters (all enabled by default)
     for (int i = 0; i < 7; i++) {
@@ -47,9 +41,10 @@ Debug::~Debug() {
 }
 
 Debug& Debug::GetInstance() {
-    if (!instance) {
+    static std::once_flag onceFlag;
+    std::call_once(onceFlag, []() {
         instance = new Debug();
-    }
+        });
     return *instance;
 }
 
@@ -178,42 +173,11 @@ void Debug::ToggleWindow() {
     showDebugWindow = !showDebugWindow;
 }
 
-bool Debug::WndProc(UINT msg, WPARAM wParam, LPARAM lParam) {
-    // Handle custom messages
-    switch (msg) {
-    //case WM_GW_RBUTTONCLICK: {
-        // Custom right click event - can be used for context menus, etc.
-        // For now, just return false to let other systems handle it
-    //    return false;
-    //}
-    case WM_KEYDOWN: {
-        // Handle debug-specific hotkeys if window is open
-        if (showDebugWindow) {
-            switch (wParam) {
-            case VK_ESCAPE:
-                showDebugWindow = false;
-                return true;
-            case 'C':
-                if (GetKeyState(VK_CONTROL) & 0x8000) {
-                    Clear();
-                    return true;
-                }
-                break;
-            }
-        }
-        break;
-    }
-    }
-    return false;
-}
-
 void Debug::Draw() {
     if (!showDebugWindow) return;
 
-    UpdatePerformanceStats();
-
     // Window configuration
-    ImGui::SetNextWindowSize(ImVec2(900, 700), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(900, 600), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_FirstUseEver);
 
     // Main window
@@ -233,9 +197,6 @@ void Debug::Draw() {
                     CopyFilteredLogsToClipboard();
                 }
 
-                if (ImGui::MenuItem("Export Logs...", "Ctrl+S")) {
-                    // TODO: Implement log export
-                }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Close", "Esc")) {
                     showDebugWindow = false;
@@ -248,13 +209,21 @@ void Debug::Draw() {
                 ImGui::MenuItem("Show Timestamps", nullptr, &showTimestamps);
                 ImGui::MenuItem("Show File Info", nullptr, &showFileInfo);
                 ImGui::Separator();
-                ImGui::SliderInt("Max Logs", (int*)&maxLogs, 100, 10000);
+
+                if (ImGui::BeginMenu("Max Logs")) {
+                    if (ImGui::MenuItem("100", nullptr, maxLogs == 100)) maxLogs = 100;
+                    if (ImGui::MenuItem("500", nullptr, maxLogs == 500)) maxLogs = 500;
+                    if (ImGui::MenuItem("1000", nullptr, maxLogs == 1000)) maxLogs = 1000;
+                    if (ImGui::MenuItem("2000", nullptr, maxLogs == 2000)) maxLogs = 2000;
+                    if (ImGui::MenuItem("5000", nullptr, maxLogs == 5000)) maxLogs = 5000;
+                    ImGui::EndMenu();
+                }
                 ImGui::EndMenu();
             }
 
-            // Performance info in menu bar
+            // Log count in menu bar
             ImGui::Separator();
-            ImGui::Text("| FPS: %.1f | Frame: %.3f ms | Logs: %zu |", fps, frameTime, logs.size());
+            ImGui::Text("| Logs: %zu/%zu |", logs.size(), maxLogs);
 
             ImGui::EndMenuBar();
         }
@@ -264,15 +233,8 @@ void Debug::Draw() {
 
         ImGui::Separator();
 
-        // Performance panel
-        if (ImGui::CollapsingHeader("Performance Monitor", ImGuiTreeNodeFlags_DefaultOpen)) {
-            DrawPerformancePanel();
-        }
-
         // Log panel
-        if (ImGui::CollapsingHeader("Logs", ImGuiTreeNodeFlags_DefaultOpen)) {
-            DrawLogPanel();
-        }
+        DrawLogPanel();
     }
     ImGui::End();
 }
@@ -282,88 +244,80 @@ void Debug::DrawControlPanel() {
     ImGui::Text("Filters:");
     ImGui::SameLine();
 
-    // Trace
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
-    if (ImGui::Checkbox("Trace", &filterByLevel[0])) {}
-    ImGui::PopStyleColor();
-    ImGui::SameLine();
+    // Create filter checkboxes with colors
+    struct FilterInfo {
+        const char* name;
+        ImVec4 color;
+    } filters[] = {
+        {"Trace", ImVec4(0.5f, 0.5f, 0.5f, 1.0f)},
+        {"Debug", ImVec4(0.7f, 0.7f, 0.7f, 1.0f)},
+        {"Info", ImVec4(0.8f, 0.8f, 0.8f, 1.0f)},
+        {"Warning", ImVec4(1.0f, 1.0f, 0.0f, 1.0f)},
+        {"Error", ImVec4(1.0f, 0.0f, 0.0f, 1.0f)},
+        {"Critical", ImVec4(1.0f, 0.0f, 1.0f, 1.0f)},
+        {"Success", ImVec4(0.0f, 1.0f, 0.0f, 1.0f)}
+    };
 
-    // Debug
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0.7f, 0.7f, 1.0f));
-    if (ImGui::Checkbox("Debug", &filterByLevel[1])) {}
-    ImGui::PopStyleColor();
-    ImGui::SameLine();
+    for (int i = 0; i < 7; i++) {
+        ImGui::PushStyleColor(ImGuiCol_Text, filters[i].color);
+        ImGui::Checkbox(filters[i].name, &filterByLevel[i]);
+        ImGui::PopStyleColor();
 
-    // Info
-    if (ImGui::Checkbox("Info", &filterByLevel[2])) {}
-    ImGui::SameLine();
-
-    // Warning
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
-    if (ImGui::Checkbox("Warning", &filterByLevel[3])) {}
-    ImGui::PopStyleColor();
-    ImGui::SameLine();
-
-    // Error
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-    if (ImGui::Checkbox("Error", &filterByLevel[4])) {}
-    ImGui::PopStyleColor();
-    ImGui::SameLine();
-
-    // Critical
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 1.0f, 1.0f));
-    if (ImGui::Checkbox("Critical", &filterByLevel[5])) {}
-    ImGui::PopStyleColor();
-    ImGui::SameLine();
-
-    // Success
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
-    if (ImGui::Checkbox("Success", &filterByLevel[6])) {}
-    ImGui::PopStyleColor();
+        if (i < 6) ImGui::SameLine();
+    }
 
     // Search bar
     ImGui::SameLine();
     ImGui::SetNextItemWidth(200);
     ImGui::InputText("Search", searchFilter, sizeof(searchFilter));
 
-    // Clear button
+    // Action buttons
     ImGui::SameLine();
     if (ImGui::Button("Clear All")) {
         Clear();
     }
 
-    if (ImGui::Button("Copy Console")) {
-        CopyLogsToClipboard();
-    }
     ImGui::SameLine();
-    if (ImGui::Button("Copy Filtred Console")) {
+    if (ImGui::Button("Copy Logs")) {
         CopyFilteredLogsToClipboard();
     }
 
-    // Tooltip pour le bouton Copy Console
-    if (ImGui::IsItemHovered()) {
-        ImGui::SetTooltip("Copy all logs to clipboard");
+    // Statistics
+    ImGui::Text("Count: ");
+    ImGui::SameLine();
+
+    for (int i = 0; i < 7; i++) {
+        if (logCounts[i] > 0) {
+            ImGui::PushStyleColor(ImGuiCol_Text, filters[i].color);
+            ImGui::Text("%s:%zu", filters[i].name, logCounts[i]);
+            ImGui::PopStyleColor();
+            ImGui::SameLine();
+        }
     }
 
-    // Statistics
-    ImGui::Text("Stats: Total:%zu T:%zu D:%zu I:%zu W:%zu E:%zu C:%zu S:%zu",
-        logs.size(), logCounts[0], logCounts[1], logCounts[2],
-        logCounts[3], logCounts[4], logCounts[5], logCounts[6]);
+    ImGui::Text("| Total: %zu", logs.size());
 }
 
 void Debug::DrawLogPanel() {
     // Log area with scroll
-    ImGui::BeginChild("LogScrollArea", ImVec2(0, 400), true,
+    const float footer_height = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+    ImGui::BeginChild("LogScrollArea", ImVec2(0, -footer_height), true,
         ImGuiWindowFlags_HorizontalScrollbar);
 
     // Display filtered logs
     std::lock_guard<std::mutex> lock(logMutex);
 
-    for (const auto& log : logs) {
-        // Apply filters
+    ImGuiListClipper clipper;
+    std::vector<size_t> filtered_indices;
+
+    // Build filtered list
+    for (size_t i = 0; i < logs.size(); i++) {
+        const auto& log = logs[i];
+
+        // Apply level filter
         if (!filterByLevel[static_cast<int>(log.level)]) continue;
 
-        // Search filter
+        // Apply search filter
         if (strlen(searchFilter) > 0) {
             std::string fullText = log.message + " " + log.file + " " + log.function;
             if (fullText.find(searchFilter) == std::string::npos) {
@@ -371,31 +325,43 @@ void Debug::DrawLogPanel() {
             }
         }
 
-        // Display timestamp if enabled
-        if (showTimestamps) {
-            ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
-                "[%s]", FormatTimestamp(log.timestamp).c_str());
-            ImGui::SameLine();
-        }
-
-        // Display level
-        ImVec4 color = GetLogLevelColor(log.level);
-        ImGui::TextColored(color, "[%s]", GetLogLevelString(log.level));
-        ImGui::SameLine();
-
-        // Display file info if enabled
-        if (showFileInfo) {
-            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f),
-                "[%s:%u in %s]",
-                GetShortFileName(log.file).c_str(),
-                log.line,
-                log.function.c_str());
-            ImGui::SameLine();
-        }
-
-        // Display message
-        ImGui::TextWrapped("%s", log.message.c_str());
+        filtered_indices.push_back(i);
     }
+
+    // Use clipper for performance with large logs
+    clipper.Begin(static_cast<int>(filtered_indices.size()));
+
+    while (clipper.Step()) {
+        for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++) {
+            const auto& log = logs[filtered_indices[row]];
+
+            // Display timestamp if enabled
+            if (showTimestamps) {
+                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+                    "[%s]", FormatTimestamp(log.timestamp).c_str());
+                ImGui::SameLine();
+            }
+
+            // Display level
+            ImVec4 color = GetLogLevelColor(log.level);
+            ImGui::TextColored(color, "[%s]", GetLogLevelString(log.level));
+            ImGui::SameLine();
+
+            // Display file info if enabled
+            if (showFileInfo) {
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f),
+                    "[%s:%u]",
+                    GetShortFileName(log.file).c_str(),
+                    log.line);
+                ImGui::SameLine();
+            }
+
+            // Display message
+            ImGui::TextWrapped("%s", log.message.c_str());
+        }
+    }
+
+    clipper.End();
 
     // Auto-scroll
     if (autoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
@@ -403,54 +369,6 @@ void Debug::DrawLogPanel() {
     }
 
     ImGui::EndChild();
-}
-
-void Debug::DrawPerformancePanel() {
-    ImGui::Columns(3, "PerfColumns");
-
-    // FPS and Frame Time
-    ImGui::Text("FPS: %.1f", fps);
-    ImGui::Text("Frame Time: %.3f ms", frameTime);
-    ImGui::Text("Log Count: %zu", logs.size());
-
-    ImGui::NextColumn();
-
-    // Memory info
-    PROCESS_MEMORY_COUNTERS_EX pmc;
-    if (GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))) {
-        float workingSetMB = pmc.WorkingSetSize / (1024.0f * 1024.0f);
-        float privateUsageMB = pmc.PrivateUsage / (1024.0f * 1024.0f);
-
-        ImGui::Text("Working Set: %.2f MB", workingSetMB);
-        ImGui::Text("Private Usage: %.2f MB", privateUsageMB);
-    }
-
-    ImGui::NextColumn();
-
-    // Thread info
-    ImGui::Text("Thread ID: %lu", GetCurrentThreadId());
-    ImGui::Text("Process ID: %lu", GetCurrentProcessId());
-
-    // CPU usage (simplified)
-    FILETIME ftCreate, ftExit, ftKernel, ftUser;
-    if (GetProcessTimes(GetCurrentProcess(), &ftCreate, &ftExit, &ftKernel, &ftUser)) {
-        ULARGE_INTEGER ul;
-        ul.LowPart = ftUser.dwLowDateTime;
-        ul.HighPart = ftUser.dwHighDateTime;
-        ImGui::Text("User Time: %.2f s", ul.QuadPart / 10000000.0);
-    }
-
-    ImGui::Columns(1);
-}
-
-void Debug::UpdatePerformanceStats() {
-    auto now = std::chrono::steady_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(now - lastFrameTime);
-
-    frameTime = duration.count() / 1000.0f; // Convert to milliseconds
-    fps = frameTime > 0 ? 1000.0f / frameTime : 0.0f;
-
-    lastFrameTime = now;
 }
 
 const char* Debug::GetLogLevelString(LogLevel level) const {
@@ -468,14 +386,14 @@ const char* Debug::GetLogLevelString(LogLevel level) const {
 
 ImVec4 Debug::GetLogLevelColor(LogLevel level) const {
     switch (level) {
-    case LogLevel::Trace:    return ImVec4(0.5f, 0.5f, 0.5f, 1.0f);  // Gray
-    case LogLevel::Debug:    return ImVec4(0.7f, 0.7f, 0.7f, 1.0f);  // Light gray
-    case LogLevel::Info:     return ImVec4(0.8f, 0.8f, 0.8f, 1.0f);  // White-ish
-    case LogLevel::Warning:  return ImVec4(1.0f, 1.0f, 0.0f, 1.0f);  // Yellow
-    case LogLevel::Error:    return ImVec4(1.0f, 0.0f, 0.0f, 1.0f);  // Red
-    case LogLevel::Critical: return ImVec4(1.0f, 0.0f, 1.0f, 1.0f);  // Magenta
-    case LogLevel::Success:  return ImVec4(0.0f, 1.0f, 0.0f, 1.0f);  // Green
-    default:                 return ImVec4(1.0f, 1.0f, 1.0f, 1.0f);  // White
+    case LogLevel::Trace:    return ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+    case LogLevel::Debug:    return ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
+    case LogLevel::Info:     return ImVec4(0.8f, 0.8f, 0.8f, 1.0f);
+    case LogLevel::Warning:  return ImVec4(1.0f, 1.0f, 0.0f, 1.0f);
+    case LogLevel::Error:    return ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+    case LogLevel::Critical: return ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
+    case LogLevel::Success:  return ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
+    default:                 return ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }
 
@@ -509,12 +427,9 @@ void Debug::CopyLogsToClipboard() {
 
     {
         std::lock_guard<std::mutex> lock(logMutex);
-
-        // Réserver de l'espace pour éviter les réallocations
         text.reserve(logs.size() * 100);
 
         for (const auto& log : logs) {
-            // Format simple et sûr
             text += "[";
             text += GetLogLevelString(log.level);
             text += "] ";
@@ -523,14 +438,10 @@ void Debug::CopyLogsToClipboard() {
         }
     }
 
-    if (text.empty()) {
-        return;
+    if (!text.empty()) {
+        ImGui::SetClipboardText(text.c_str());
+        LOG_SUCCESS("Logs copied to clipboard (%zu bytes)", text.size());
     }
-
-    // Utiliser ImGui pour copier dans le presse-papiers (plus sûr)
-    ImGui::SetClipboardText(text.c_str());
-
-    LOG_SUCCESS("Logs copied to clipboard (%zu bytes)", text.size());
 }
 
 void Debug::CopyFilteredLogsToClipboard() {
@@ -540,10 +451,10 @@ void Debug::CopyFilteredLogsToClipboard() {
         std::lock_guard<std::mutex> lock(logMutex);
 
         for (const auto& log : logs) {
-            // Appliquer les filtres
+            // Apply filters
             if (!filterByLevel[static_cast<int>(log.level)]) continue;
 
-            // Filtre de recherche
+            // Search filter
             if (strlen(searchFilter) > 0) {
                 std::string fullText = log.message + " " + log.file + " " + log.function;
                 if (fullText.find(searchFilter) == std::string::npos) {
@@ -551,36 +462,30 @@ void Debug::CopyFilteredLogsToClipboard() {
                 }
             }
 
-            // Construire la ligne de log
-            std::string line;
-
+            // Build log line
             if (showTimestamps) {
-                line += "[" + FormatTimestamp(log.timestamp) + "] ";
+                text += "[" + FormatTimestamp(log.timestamp) + "] ";
             }
 
-            line += "[";
-            line += GetLogLevelString(log.level);
-            line += "] ";
+            text += "[";
+            text += GetLogLevelString(log.level);
+            text += "] ";
 
             if (showFileInfo) {
-                line += "[" + GetShortFileName(log.file) + ":" +
-                    std::to_string(log.line) + " in " + log.function + "] ";
+                text += "[" + GetShortFileName(log.file) + ":" +
+                    std::to_string(log.line) + "] ";
             }
 
-            line += log.message;
-            line += "\n";
-
-            text += line;
+            text += log.message;
+            text += "\n";
         }
     }
 
-    if (text.empty()) {
-        LOG_INFO("No filtered logs to copy");
-        return;
+    if (!text.empty()) {
+        ImGui::SetClipboardText(text.c_str());
+        LOG_SUCCESS("Filtered logs copied to clipboard (%zu bytes)", text.size());
     }
-
-    // Utiliser ImGui pour copier (plus sûr)
-    ImGui::SetClipboardText(text.c_str());
-
-    LOG_SUCCESS("Filtered logs copied to clipboard (%zu bytes)", text.size());
+    else {
+        LOG_INFO("No filtered logs to copy");
+    }
 }

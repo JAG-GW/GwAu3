@@ -2,6 +2,7 @@
 #include "NamedPipe/RPCBridge.h"
 #include "Utilities/Scanner.h"
 #include "Utilities/Debug.h"
+#include "DllState.h"
 #include <sstream>
 #include <iomanip>
 
@@ -58,24 +59,21 @@ namespace GW {
         std::stringstream ss;
         size_t len = 0;
 
-        // Trouver la longueur réelle (jusqu'au premier groupe de 0 ou maxLen)
+        // Find actual length
         for (size_t i = 0; i < maxLen; i++) {
             if (pattern[i] != 0) {
                 len = i + 1;
             }
         }
 
-        // Limiter l'affichage
         size_t displayLen = (len > 32) ? 32 : len;
 
         for (size_t i = 0; i < displayLen; i++) {
             unsigned char c = pattern[i];
             if (c >= 32 && c <= 126) {
-                // Printable ASCII
                 ss << (char)c;
             }
             else {
-                // Non-printable, show as hex
                 ss << "\\x" << std::hex << std::setw(2) << std::setfill('0') << (unsigned int)c;
             }
         }
@@ -91,13 +89,25 @@ namespace GW {
 
     NamedPipeServer::NamedPipeServer()
         : hPipe(INVALID_HANDLE_VALUE)
+        , hStopEvent(NULL)
         , running(false) {
         LOG_DEBUG("NamedPipeServer constructor called");
+
+        // Create the stop event
+        hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+        if (!hStopEvent) {
+            LOG_ERROR("Failed to create stop event");
+        }
     }
 
     NamedPipeServer::~NamedPipeServer() {
         LOG_DEBUG("NamedPipeServer destructor called");
         Stop();
+
+        if (hStopEvent) {
+            CloseHandle(hStopEvent);
+            hStopEvent = NULL;
+        }
     }
 
     NamedPipeServer& NamedPipeServer::GetInstance() {
@@ -126,11 +136,15 @@ namespace GW {
         }
 
         this->pipeName = pipeName;
+
+        // Reset stop event
+        ResetEvent(hStopEvent);
+
         running = true;
 
         LOG_INFO("Starting Named Pipe server on: %s", pipeName.c_str());
 
-        // Start server thread - IMPORTANT: detach() to not block
+        // Start server thread - detach to not block
         serverThread = std::thread(&NamedPipeServer::ServerLoop, this);
         serverThread.detach();
 
@@ -153,50 +167,58 @@ namespace GW {
         // Signal shutdown
         running = false;
 
-        // If we have an active pipe, close it to unblock ConnectNamedPipe
+        // Set the stop event to wake up any waiting operations
+        if (hStopEvent) {
+            SetEvent(hStopEvent);
+        }
+
+        // Close any active pipe to unblock operations
         if (hPipe != INVALID_HANDLE_VALUE) {
-            LOG_DEBUG("Creating temporary client to unblock ConnectNamedPipe");
+            // Cancel pending I/O
+            CancelIo(hPipe);
 
-            // Create temporary client to unblock ConnectNamedPipe if needed
-            HANDLE hTempClient = CreateFileA(
-                pipeName.c_str(),
-                GENERIC_READ | GENERIC_WRITE,
-                0,
-                NULL,
-                OPEN_EXISTING,
-                0,
-                NULL
-            );
-
-            if (hTempClient != INVALID_HANDLE_VALUE) {
-                LOG_DEBUG("Temporary client created successfully");
-                CloseHandle(hTempClient);
-            }
-            else {
-                LOG_DEBUG("Failed to create temporary client: %lu", GetLastError());
-            }
-
-            // Close server pipe
-            LOG_DEBUG("Disconnecting and closing server pipe");
+            // Disconnect clients
             DisconnectNamedPipe(hPipe);
+
+            // Close handle
             CloseHandle(hPipe);
             hPipe = INVALID_HANDLE_VALUE;
         }
 
-        // Wait a bit for thread to finish
+        // Create a dummy connection to unblock ConnectNamedPipe if needed
+        HANDLE hDummy = CreateFileA(
+            pipeName.c_str(),
+            GENERIC_READ | GENERIC_WRITE,
+            0,
+            NULL,
+            OPEN_EXISTING,
+            FILE_FLAG_WRITE_THROUGH,
+            NULL
+        );
+
+        if (hDummy != INVALID_HANDLE_VALUE) {
+            CloseHandle(hDummy);
+        }
+
+        // Wait a short time for thread to exit
         Sleep(100);
 
-        if (OnLog) OnLog("Named pipe server stopped");
+        // Clear callbacks
+        OnLog = nullptr;
+        OnError = nullptr;
+        OnClientConnected = nullptr;
+        OnClientDisconnected = nullptr;
+
         LOG_INFO("Named pipe server stopped");
     }
 
     void NamedPipeServer::ServerLoop() {
         LOG_DEBUG("ServerLoop thread started, ThreadID: %lu", GetCurrentThreadId());
 
-        // Thread for server
+        // Set thread priority
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 
-        // Create Security Descriptor allowing access to all
+        // Security descriptor
         SECURITY_DESCRIPTOR sd;
         InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
         SetSecurityDescriptorDacl(&sd, TRUE, NULL, FALSE);
@@ -209,12 +231,19 @@ namespace GW {
         int connectionCount = 0;
 
         while (running) {
+            // Check DLL state
+            if (GW::IsDllShuttingDown()) {
+                LOG_INFO("DLL shutting down, stopping Named Pipe server");
+                running = false;
+                break;
+            }
+
             LOG_DEBUG("Creating named pipe instance #%d", ++connectionCount);
 
-            // Create named pipe with open permissions
-            hPipe = CreateNamedPipeA(
+            // Create named pipe with overlapped I/O
+            HANDLE newPipe = CreateNamedPipeA(
                 pipeName.c_str(),
-                PIPE_ACCESS_DUPLEX,
+                PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                 PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
                 PIPE_UNLIMITED_INSTANCES,
                 sizeof(PipeResponse),
@@ -223,37 +252,60 @@ namespace GW {
                 &sa
             );
 
-            if (hPipe == INVALID_HANDLE_VALUE) {
+            if (newPipe == INVALID_HANDLE_VALUE) {
                 DWORD error = GetLastError();
                 LOG_ERROR("Failed to create named pipe: %lu", error);
 
-                if (running) {
+                if (running && !GW::IsDllShuttingDown()) {
                     if (OnError) OnError("Failed to create named pipe: " + std::to_string(error));
                 }
                 running = false;
                 return;
             }
 
-            LOG_DEBUG("Named pipe created successfully, waiting for client...");
+            hPipe = newPipe;
 
-            // Wait for client connection with periodic check
-            BOOL connected = FALSE;
-            while (running && !connected) {
-                connected = ConnectNamedPipe(hPipe, NULL) ?
-                    TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
+            LOG_DEBUG("Named pipe created, waiting for client...");
 
-                if (!connected && running) {
-                    if (!running) break;
-                    Sleep(50);
+            // Use overlapped structure for async operations
+            OVERLAPPED overlapped = {};
+            overlapped.hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
+
+            // Start async connect
+            BOOL connected = ConnectNamedPipe(hPipe, &overlapped);
+            DWORD error = GetLastError();
+
+            if (!connected && error == ERROR_IO_PENDING) {
+                // Wait for either connection or stop signal
+                HANDLE events[2] = { overlapped.hEvent, hStopEvent };
+                DWORD waitResult = WaitForMultipleObjects(2, events, FALSE, INFINITE);
+
+                if (waitResult == WAIT_OBJECT_0) {
+                    // Connection event
+                    DWORD bytesTransferred;
+                    connected = GetOverlappedResult(hPipe, &overlapped, &bytesTransferred, FALSE);
+                }
+                else if (waitResult == WAIT_OBJECT_0 + 1) {
+                    // Stop event
+                    LOG_INFO("Stop event signaled, exiting server loop");
+                    CloseHandle(overlapped.hEvent);
+                    CloseHandle(hPipe);
+                    hPipe = INVALID_HANDLE_VALUE;
+                    break;
                 }
             }
+            else if (error == ERROR_PIPE_CONNECTED) {
+                connected = TRUE;
+            }
 
-            if (connected && running) {
+            CloseHandle(overlapped.hEvent);
+
+            if (connected && running && !GW::IsDllShuttingDown()) {
                 LOG_SUCCESS("Client #%d connected", connectionCount);
 
                 if (OnClientConnected) OnClientConnected("Client connected");
 
-                // Process client requests
+                // Process client in synchronous mode
                 try {
                     ProcessClient(hPipe);
                 }
@@ -275,6 +327,12 @@ namespace GW {
                 CloseHandle(hPipe);
                 hPipe = INVALID_HANDLE_VALUE;
             }
+
+            // Check if we should stop
+            if (WaitForSingleObject(hStopEvent, 0) == WAIT_OBJECT_0) {
+                LOG_INFO("Stop event signaled, exiting server loop");
+                break;
+            }
         }
 
         LOG_INFO("Named Pipe server thread exiting");
@@ -288,7 +346,7 @@ namespace GW {
         DWORD bytesRead, bytesWritten;
         int requestCount = 0;
 
-        while (running) {
+        while (running && !GW::IsDllShuttingDown()) {
             // Check if pipe is still valid
             DWORD flags = 0;
             if (!GetNamedPipeInfo(clientPipe, &flags, NULL, NULL, NULL)) {
@@ -313,24 +371,24 @@ namespace GW {
                 if (error == ERROR_BROKEN_PIPE || error == ERROR_PIPE_NOT_CONNECTED) {
                     LOG_DEBUG("Pipe disconnected (error: %lu)", error);
                 }
-                else {
+                else if (error != ERROR_SUCCESS) {
                     LOG_ERROR("Named pipe read error: %lu", error);
                     if (running && OnError) OnError("Read error: " + std::to_string(error));
                 }
                 break;
             }
 
-            // ========== REQUEST LOGGING ==========
+            // Log request
             LOG_INFO("==================================================================");
             LOG_INFO("| REQUEST #%d RECEIVED", requestCount);
-            LOG_INFO("|================================================================|");
             LOG_INFO("| Type: %s (%d)", GetRequestTypeName(request.type), request.type);
             LOG_INFO("| Bytes read: %lu", bytesRead);
 
             // Log request details based on type
             switch (request.type) {
             case SCAN_FIND:
-                LOG_INFO("║ Pattern: %s", FormatPattern(request.scan.pattern, request.scan.pattern_length > 0 ? request.scan.pattern_length : 256).c_str());
+                LOG_INFO("| Pattern: %s", FormatPattern(request.scan.pattern,
+                    request.scan.pattern_length > 0 ? request.scan.pattern_length : 256).c_str());
                 LOG_INFO("| Mask: %s", request.scan.mask);
                 LOG_INFO("| Offset: %d", request.scan.offset);
                 LOG_INFO("| Section: %d", request.scan.section);
@@ -343,30 +401,9 @@ namespace GW {
                 LOG_INFO("| Offset: %d", request.assertion.offset);
                 break;
 
-            case SCAN_FIND_IN_RANGE:
-                LOG_INFO("| Start Address: 0x%08X", request.range.start_address);
-                LOG_INFO("| End Address: 0x%08X", request.range.end_address);
-                LOG_INFO("║ Pattern: %s", FormatPattern(request.range.pattern, request.range.pattern_length > 0 ? request.range.pattern_length : 256).c_str());
-                LOG_INFO("| Mask: %s", request.range.mask);
-                LOG_INFO("| Offset: %d", request.range.offset);
-                break;
-
-            case SCAN_TO_FUNCTION_START:
-                LOG_INFO("| Address: 0x%08X", request.memory.address);
-                LOG_INFO("| Scan Range: %u", request.memory.size);
-                break;
-
-            case SCAN_FUNCTION_FROM_NEAR_CALL:
-                LOG_INFO("| Call Address: 0x%08X", request.memory.address);
-                break;
-
             case READ_MEMORY:
                 LOG_INFO("| Address: 0x%08X", request.memory.address);
                 LOG_INFO("| Size: %u", request.memory.size);
-                break;
-
-            case GET_SECTION_INFO:
-                LOG_INFO("| Section: %d", request.scan.section);
                 break;
 
             case CALL_FUNCTION:
@@ -380,26 +417,10 @@ namespace GW {
                 LOG_INFO("| Params: %d", request.register_func.param_count);
                 LOG_INFO("| Convention: %d", request.register_func.convention);
                 break;
-
-            case WRITE_MEMORY:
-                LOG_INFO("| Address: 0x%08X", request.memory.address);
-                LOG_INFO("| Size: %u", request.memory.size);
-                LOG_INFO("| Data: %s", BytesToHex((char*)request.memory.data, request.memory.size).c_str());
-                break;
-
-            case ALLOCATE_MEMORY:
-                LOG_INFO("| Size: %u", request.memory.size);
-                LOG_INFO("| Protection: 0x%08X", request.memory.protection);
-                break;
-
-            case FREE_MEMORY:
-                LOG_INFO("| Address: 0x%08X", request.memory.address);
-                break;
             }
-            LOG_INFO("|================================================================|");
 
             // Check for shutdown
-            if (!running) {
+            if (!running || GW::IsDllShuttingDown()) {
                 LOG_DEBUG("Shutdown requested, stopping client processing");
                 break;
             }
@@ -426,18 +447,15 @@ namespace GW {
             auto endTime = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
 
-            // ========== RESPONSE LOGGING ==========
-            LOG_INFO("==================================================================");
+            // Log response
             LOG_INFO("| RESPONSE #%d", requestCount);
-            LOG_INFO("|================================================================|");
-            LOG_INFO("| Success: %s", response.success ? "YES ✓" : "NO ✗");
+            LOG_INFO("| Success: %s", response.success ? "YES" : "NO");
             LOG_INFO("| Processing time: %lld µs", duration.count());
 
             if (!response.success) {
                 LOG_INFO("| Error: %s", response.error_message);
             }
             else {
-                // Log response details based on request type
                 switch (request.type) {
                 case SCAN_FIND:
                 case SCAN_FIND_ASSERTION:
@@ -445,68 +463,22 @@ namespace GW {
                 case SCAN_TO_FUNCTION_START:
                 case SCAN_FUNCTION_FROM_NEAR_CALL:
                     LOG_INFO("| Result Address: 0x%08X", response.scan_result.address);
-                    if (response.scan_result.address != 0) {
-                        LOG_SUCCESS("| ✓ Pattern/Function found successfully");
-                    }
-                    else {
-                        LOG_WARN("| ⚠ Pattern/Function not found");
-                    }
                     break;
 
                 case READ_MEMORY:
                     LOG_INFO("| Read Address: 0x%08X", response.memory_result.address);
                     LOG_INFO("| Read Size: %u bytes", response.memory_result.size);
-                    if (response.memory_result.size > 0) {
-                        LOG_INFO("| Data (first 32 bytes): %s",
-                            BytesToHex((char*)response.memory_result.data, response.memory_result.size).c_str());
-                    }
                     break;
 
                 case GET_SECTION_INFO:
                     LOG_INFO("| Section Start: 0x%08X", response.section_info.start);
                     LOG_INFO("| Section End: 0x%08X", response.section_info.end);
-                    LOG_INFO("| Section Size: 0x%X (%u bytes)",
-                        response.section_info.end - response.section_info.start,
-                        response.section_info.end - response.section_info.start);
-                    break;
-
-                case LIST_FUNCTIONS:
-                    LOG_INFO("| Function Count: %u", response.function_list.count);
-                    for (size_t i = 0; i < response.function_list.count; i++) {
-                        LOG_INFO("|   [%zu] %s", i, response.function_list.names[i]);
-                    }
-                    break;
-
-                case CALL_FUNCTION:
-                    if (response.call_result.has_return) {
-                        LOG_INFO("| Return Value: 0x%08X (%d)",
-                            response.call_result.return_value.int_val,
-                            response.call_result.return_value.int_val);
-                    }
-                    else {
-                        LOG_INFO("| No return value");
-                    }
-                    break;
-
-                case WRITE_MEMORY:
-                    LOG_INFO("| Memory written successfully");
-                    break;
-
-                case ALLOCATE_MEMORY:
-                    LOG_INFO("| Allocated Address: 0x%08X", response.memory_result.address);
-                    LOG_INFO("| Allocated Size: %u bytes", response.memory_result.size);
-                    break;
-
-                case FREE_MEMORY:
-                    LOG_INFO("| Memory freed successfully");
                     break;
                 }
             }
-            LOG_INFO("|================================================================|");
+            LOG_INFO("==================================================================");
 
             // Send response
-            LOG_TRACE("Sending response to client...");
-
             success = WriteFile(
                 clientPipe,
                 &response,
@@ -526,10 +498,6 @@ namespace GW {
 
             // Flush to ensure data is sent
             FlushFileBuffers(clientPipe);
-
-            // Add separator for readability
-            LOG_INFO("================================================================");
-            LOG_INFO("");
         }
 
         LOG_DEBUG("ProcessClient ended after %d requests", requestCount);
@@ -539,7 +507,7 @@ namespace GW {
         LOG_TRACE("HandleRequest called for type: %s", GetRequestTypeName(request.type));
 
         // Check if still running
-        if (!running) {
+        if (!running || GW::IsDllShuttingDown()) {
             LOG_WARN("Server is shutting down, rejecting request");
             response.success = 0;
             strcpy_s(response.error_message, "Server is shutting down");
@@ -566,60 +534,24 @@ namespace GW {
             }
         }
 
-        // Handle legacy scanner requests (for backward compatibility)
+        // Handle legacy scanner requests
         LOG_DEBUG("Handling legacy scanner request");
 
         try {
             switch (request.type) {
             case SCAN_FIND: {
-                // Utiliser pattern_length pour déterminer la longueur réelle
+                // Use pattern_length to determine actual length
                 size_t patternLength = request.scan.pattern_length;
                 if (patternLength == 0 || patternLength > 256) {
-                    // Fallback: utiliser la longueur du masque
                     patternLength = strlen(request.scan.mask);
                     LOG_WARN("Invalid pattern_length (%u), using mask length: %zu",
                         request.scan.pattern_length, patternLength);
                 }
 
-                LOG_INFO("║ Pattern length: %zu bytes", patternLength);
+                LOG_INFO("| Pattern length: %zu bytes", patternLength);
 
-                if (OnLog) {
-                    std::stringstream ss;
-                    ss << "SCAN_FIND request - Pattern (";
-                    ss << patternLength << " bytes): ";
-
-                    // Afficher les bytes du pattern
-                    for (size_t i = 0; i < patternLength && i < 20; i++) {
-                        ss << "\\x" << std::hex << std::setw(2) << std::setfill('0')
-                            << (unsigned int)request.scan.pattern[i];
-                    }
-                    if (patternLength > 20) ss << "...";
-                    ss << std::dec;
-                    ss << ", Mask: " << request.scan.mask;
-                    ss << ", Offset: " << request.scan.offset;
-                    ss << ", Section: " << (int)request.scan.section;
-                    OnLog(ss.str());
-                }
-
-                // Créer le pattern binaire avec la longueur exacte
+                // Create binary pattern with exact length
                 std::string pattern(reinterpret_cast<const char*>(request.scan.pattern), patternLength);
-
-                // Debug: afficher tous les bytes
-                if (patternLength <= 20) {
-                    std::stringstream hexDump;
-                    for (size_t i = 0; i < patternLength; i++) {
-                        hexDump << "\\x" << std::hex << std::setw(2) << std::setfill('0')
-                            << (unsigned int)(unsigned char)pattern[i];
-                    }
-                    LOG_DEBUG("Full pattern: %s", hexDump.str().c_str());
-                }
-
-                // Vérifier que le masque a la bonne longueur
-                size_t maskLength = strlen(request.scan.mask);
-                if (maskLength != patternLength) {
-                    LOG_WARN("Mask length (%zu) doesn't match pattern length (%zu)",
-                        maskLength, patternLength);
-                }
 
                 LOG_DEBUG("Calling Scanner::Find...");
                 response.scan_result.address = Scanner::Find(
@@ -670,7 +602,7 @@ namespace GW {
             }
 
             case SCAN_FIND_IN_RANGE: {
-                // Utiliser pattern_length pour le pattern dans range aussi
+                // Use pattern_length for range pattern too
                 size_t patternLength = request.range.pattern_length;
                 if (patternLength == 0 || patternLength > 256) {
                     patternLength = strlen(request.range.mask);
@@ -678,9 +610,9 @@ namespace GW {
                         request.range.pattern_length, patternLength);
                 }
 
-                LOG_INFO("║ Pattern length: %zu bytes", patternLength);
+                LOG_INFO("| Pattern length: %zu bytes", patternLength);
 
-                // Créer le pattern binaire
+                // Create binary pattern
                 std::string pattern(reinterpret_cast<const char*>(request.range.pattern), patternLength);
 
                 LOG_DEBUG("Calling Scanner::FindInRange (0x%08X - 0x%08X)...",

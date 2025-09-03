@@ -94,12 +94,12 @@ namespace GW {
         union {
             // Scanner operations
             struct {
-                uint8_t pattern[256];  // Utiliser uint8_t au lieu de char
-                char mask[256];        // Le masque reste char car il n'a que 'x' et '?'
+                uint8_t pattern[256];
+                char mask[256];
                 int32_t offset;
                 uint8_t section;
-                uint8_t pattern_length;  // AJOUT: longueur réelle du pattern
-                uint8_t padding1[2];     // Ajuster le padding
+                uint8_t pattern_length;
+                uint8_t padding1[2];
             } scan;
 
             struct {
@@ -112,11 +112,11 @@ namespace GW {
             struct {
                 uint32_t start_address;
                 uint32_t end_address;
-                uint8_t pattern[256];      // MISE À JOUR: uint8_t au lieu de char
+                uint8_t pattern[256];
                 char mask[256];
                 int32_t offset;
-                uint8_t pattern_length;    // AJOUT: longueur du pattern
-                uint8_t padding[3];        // Padding
+                uint8_t pattern_length;
+                uint8_t padding[3];
             } range;
 
             // Function registry
@@ -228,6 +228,7 @@ namespace GW {
         static NamedPipeServer* instance;
 
         HANDLE hPipe;
+        HANDLE hStopEvent;  // Event for signaling stop
         std::thread serverThread;
         std::atomic<bool> running;
         std::string pipeName;
@@ -249,7 +250,7 @@ namespace GW {
         static void Destroy();
 
         // Server control
-        bool Start(const std::string& pipeName = "\\\\.\\pipe\\GWToolsPipe");
+        bool Start(const std::string& pipeName = "\\\\.\\pipe\\GwAu3Server");
         void Stop();
         bool IsRunning() const { return running.load(); }
 

@@ -6,6 +6,8 @@
 #include <functional>
 #include <mutex>
 #include <queue>
+#include <chrono>
+#include <future>
 
 namespace GW {
 
@@ -51,6 +53,7 @@ namespace GW {
     class RPCBridge {
     private:
         static RPCBridge* instance;
+        static std::once_flag init_flag;
 
         // Function registry
         std::unordered_map<std::string, FunctionSignature> functions;
@@ -85,9 +88,10 @@ namespace GW {
             std::function<bool()> func;
             std::promise<bool> promise;
             void* result_ptr;
+            std::chrono::steady_clock::time_point timeout;
         };
 
-        // Queue pour les appels différés
+        // Queue for pending calls with thread-safety
         std::queue<std::shared_ptr<PendingCall>> pending_calls;
         std::mutex pending_calls_mutex;
 
@@ -95,7 +99,7 @@ namespace GW {
         RPCBridge();
         ~RPCBridge();
 
-        // Singleton
+        // Singleton (thread-safe)
         static RPCBridge& GetInstance();
         static void Destroy();
 
@@ -110,13 +114,13 @@ namespace GW {
             uint8_t param_count, void* result);
         std::vector<std::string> ListFunctions();
 
-        // Memory management
+        // Memory management (with validation)
         uintptr_t AllocateMemory(size_t size, DWORD protection);
         bool FreeMemory(uintptr_t address);
         bool WriteMemory(uintptr_t address, const void* data, size_t size);
         bool ProtectMemory(uintptr_t address, size_t size, DWORD protection);
 
-        // Hook management
+        // Hook management (with validation)
         bool InstallHook(const char* name, uintptr_t target, uintptr_t detour);
         bool RemoveHook(const char* name);
         bool EnableHook(const char* name);
@@ -128,6 +132,7 @@ namespace GW {
         void PushEvent(const char* buffer_name, uint32_t event_id, const void* data, size_t data_size);
         size_t GetPendingEvents(const char* buffer_name, EventData* out_events, size_t max_count);
 
+        // Process pending function calls (must be called from game thread)
         void ProcessPendingCalls();
     };
 }

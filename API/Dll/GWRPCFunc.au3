@@ -3,7 +3,7 @@
 #include <Memory.au3>
 
 ; ==================================
-; RPC Function Management for GWTools
+; RPC Function Management for GwAu3
 ; ==================================
 ; Version: 1.0
 ; Purpose: Register and call functions via RPC

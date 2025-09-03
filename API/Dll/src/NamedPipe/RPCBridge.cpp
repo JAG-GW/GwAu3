@@ -11,7 +11,12 @@
 
 namespace GW {
 
+    // Constants for validation
+    static constexpr size_t MAX_WRITE_SIZE = 0x10000;  // 64KB max write
+    static constexpr size_t MAX_ALLOC_SIZE = 0x100000; // 1MB max allocation
+
     RPCBridge* RPCBridge::instance = nullptr;
+    std::once_flag RPCBridge::init_flag;
 
     RPCBridge::RPCBridge() {
         LOG_INFO("RPCBridge initialized");
@@ -34,9 +39,9 @@ namespace GW {
     }
 
     RPCBridge& RPCBridge::GetInstance() {
-        if (!instance) {
+        std::call_once(init_flag, []() {
             instance = new RPCBridge();
-        }
+            });
         return *instance;
     }
 
@@ -106,7 +111,6 @@ namespace GW {
 
     bool RPCBridge::HandleScannerRequest(const PipeRequest& request, PipeResponse& response) {
         // Scanner requests are handled by NamedPipeServer for backward compatibility
-        // This is just a fallback
         response.success = 0;
         strcpy_s(response.error_message, "Scanner requests should be handled by NamedPipeServer");
         return false;
@@ -115,6 +119,13 @@ namespace GW {
     bool RPCBridge::HandleFunctionRequest(const PipeRequest& request, PipeResponse& response) {
         switch (request.type) {
         case REGISTER_FUNCTION: {
+            // Validate input
+            if (!request.register_func.address) {
+                strcpy_s(response.error_message, "Invalid function address");
+                response.success = 0;
+                return true;
+            }
+
             bool result = RegisterFunction(
                 request.register_func.name,
                 request.register_func.address,
@@ -141,8 +152,6 @@ namespace GW {
         case CALL_FUNCTION: {
             void* result_buffer = nullptr;
             int32_t int_result = 0;
-            float float_result = 0.0f;
-            uintptr_t ptr_result = 0;
 
             // Determine result buffer based on function signature
             {
@@ -196,6 +205,13 @@ namespace GW {
     bool RPCBridge::HandleMemoryRequest(const PipeRequest& request, PipeResponse& response) {
         switch (request.type) {
         case ALLOCATE_MEMORY: {
+            // Validate size
+            if (request.memory.size == 0 || request.memory.size > MAX_ALLOC_SIZE) {
+                strcpy_s(response.error_message, "Invalid allocation size");
+                response.success = 0;
+                return true;
+            }
+
             uintptr_t addr = AllocateMemory(request.memory.size, request.memory.protection);
             response.memory_result.address = addr;
             response.memory_result.size = request.memory.size;
@@ -207,6 +223,13 @@ namespace GW {
         }
 
         case FREE_MEMORY: {
+            // Validate address
+            if (!request.memory.address) {
+                strcpy_s(response.error_message, "Invalid memory address");
+                response.success = 0;
+                return true;
+            }
+
             bool result = FreeMemory(request.memory.address);
             response.success = result ? 1 : 0;
             if (!result) {
@@ -216,6 +239,14 @@ namespace GW {
         }
 
         case WRITE_MEMORY: {
+            // Validate parameters
+            if (!request.memory.address || request.memory.size == 0 ||
+                request.memory.size > MAX_WRITE_SIZE) {
+                strcpy_s(response.error_message, "Invalid write parameters");
+                response.success = 0;
+                return true;
+            }
+
             bool result = WriteMemory(
                 request.memory.address,
                 request.memory.data,
@@ -229,6 +260,13 @@ namespace GW {
         }
 
         case PROTECT_MEMORY: {
+            // Validate parameters
+            if (!request.memory.address || request.memory.size == 0) {
+                strcpy_s(response.error_message, "Invalid protect parameters");
+                response.success = 0;
+                return true;
+            }
+
             bool result = ProtectMemory(
                 request.memory.address,
                 request.memory.size,
@@ -251,6 +289,13 @@ namespace GW {
     bool RPCBridge::HandleHookRequest(const PipeRequest& request, PipeResponse& response) {
         switch (request.type) {
         case INSTALL_HOOK: {
+            // Validate addresses
+            if (!request.hook.target || !request.hook.detour) {
+                strcpy_s(response.error_message, "Invalid hook addresses");
+                response.success = 0;
+                return true;
+            }
+
             bool result = InstallHook(
                 request.hook.name,
                 request.hook.target,
@@ -300,6 +345,13 @@ namespace GW {
     bool RPCBridge::HandleEventRequest(const PipeRequest& request, PipeResponse& response) {
         switch (request.type) {
         case REGISTER_EVENT_BUFFER: {
+            // Validate parameters
+            if (!request.event.buffer_address || request.event.buffer_size == 0) {
+                strcpy_s(response.error_message, "Invalid event buffer parameters");
+                response.success = 0;
+                return true;
+            }
+
             bool result = RegisterEventBuffer(
                 request.event.name,
                 request.event.buffer_address,
@@ -346,6 +398,19 @@ namespace GW {
 
         if (!name || !address) return false;
 
+        // Validate address is executable
+        MEMORY_BASIC_INFORMATION mbi;
+        if (VirtualQuery((LPCVOID)address, &mbi, sizeof(mbi)) == 0) {
+            LOG_ERROR("Invalid function address: 0x%X", address);
+            return false;
+        }
+
+        if (!(mbi.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ |
+            PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))) {
+            LOG_ERROR("Address 0x%X is not executable", address);
+            return false;
+        }
+
         std::lock_guard<std::mutex> lock(functions_mutex);
 
         FunctionSignature sig;
@@ -384,25 +449,26 @@ namespace GW {
 
         LOG_INFO("CallFunction: %s (queued for game thread)", name);
 
-        // Créer un appel différé
+        // Create pending call with timeout
         auto pending = std::make_shared<PendingCall>();
         pending->result_ptr = result;
+        pending->timeout = std::chrono::steady_clock::now() + std::chrono::seconds(5);
         auto future = pending->promise.get_future();
 
-        // Copier les paramètres pour éviter les problèmes de durée de vie
+        // Copy parameters
         std::vector<FunctionParam> params_copy;
         if (params && param_count > 0) {
             params_copy.assign(params, params + param_count);
         }
 
-        // Capturer le nom de la fonction
+        // Capture function name
         std::string func_name(name);
 
-        // Créer la fonction à exécuter dans le game thread
+        // Create execution function
         pending->func = [this, func_name, params_copy, pending]() -> bool {
             LOG_DEBUG("Executing %s in game thread", func_name.c_str());
 
-            // Récupérer la signature de la fonction
+            // Get function signature
             FunctionSignature sig;
             {
                 std::lock_guard<std::mutex> lock(functions_mutex);
@@ -414,13 +480,13 @@ namespace GW {
                 sig = it->second;
             }
 
-            // Valider le nombre de paramètres
+            // Validate parameters
             if (params_copy.size() != sig.param_count) {
                 LOG_ERROR("Parameter count mismatch for %s", func_name.c_str());
                 return false;
             }
 
-            // Appeler la fonction selon sa convention
+            // Call function
             bool success = false;
             const FunctionParam* params_ptr = params_copy.empty() ? nullptr : params_copy.data();
 
@@ -432,11 +498,12 @@ namespace GW {
                 case CONV_STDCALL:
                     success = CallStdcall(sig, params_ptr, pending->result_ptr);
                     break;
-                case CONV_FASTCALL:
-                    success = CallFastcall(sig, params_ptr, pending->result_ptr);
-                    break;
                 case CONV_THISCALL:
                     success = CallThiscall(sig, params_ptr, pending->result_ptr);
+                    break;
+                case CONV_FASTCALL:
+                    LOG_ERROR("Fastcall not implemented");
+                    success = false;
                     break;
                 default:
                     LOG_ERROR("Unknown calling convention: %d", sig.convention);
@@ -451,13 +518,27 @@ namespace GW {
             return success;
             };
 
-        // Ajouter à la queue
+        // Add to queue
         {
             std::lock_guard<std::mutex> lock(pending_calls_mutex);
+
+            // Check for expired calls and remove them
+            auto now = std::chrono::steady_clock::now();
+            while (!pending_calls.empty()) {
+                auto& front = pending_calls.front();
+                if (front->timeout < now) {
+                    front->promise.set_value(false);
+                    pending_calls.pop();
+                }
+                else {
+                    break;
+                }
+            }
+
             pending_calls.push(pending);
         }
 
-        // Attendre le résultat avec timeout
+        // Wait for result with timeout
         auto status = future.wait_for(std::chrono::seconds(5));
 
         if (status == std::future_status::ready) {
@@ -474,13 +555,30 @@ namespace GW {
     void RPCBridge::ProcessPendingCalls() {
         std::queue<std::shared_ptr<PendingCall>> calls_to_process;
 
-        // Récupérer les appels en attente (minimiser le temps de verrouillage)
+        // Get pending calls with timeout check
         {
             std::lock_guard<std::mutex> lock(pending_calls_mutex);
-            std::swap(calls_to_process, pending_calls);
+
+            auto now = std::chrono::steady_clock::now();
+
+            while (!pending_calls.empty()) {
+                auto& front = pending_calls.front();
+
+                // Check timeout
+                if (front->timeout < now) {
+                    // Timeout - fail the call
+                    front->promise.set_value(false);
+                    pending_calls.pop();
+                }
+                else {
+                    // Move to processing queue
+                    calls_to_process.push(front);
+                    pending_calls.pop();
+                }
+            }
         }
 
-        // Traiter chaque appel
+        // Process calls
         while (!calls_to_process.empty()) {
             auto call = calls_to_process.front();
             calls_to_process.pop();
@@ -500,83 +598,73 @@ namespace GW {
         }
     }
 
-    // Function calling using function pointers (no inline assembly)
     bool RPCBridge::CallStdcall(const FunctionSignature& func,
         const FunctionParam* params, void* result) {
 
-        __try {
-            // Convert parameters to simple array
-            uintptr_t args[10] = { 0 };  // Max 10 params
-
-            for (int i = 0; i < func.param_count && i < 10; i++) {
-                switch (params[i].type) {
-                case PARAM_INT8:
-                case PARAM_INT16:
-                case PARAM_INT32:
-                    args[i] = params[i].int32_val;
-                    break;
-                case PARAM_POINTER:
-                    args[i] = params[i].ptr_val;
-                    break;
-                case PARAM_FLOAT:
-                    args[i] = *(uintptr_t*)&params[i].float_val;
-                    break;
-                case PARAM_STRING:
-                    args[i] = (uintptr_t)params[i].string_val;
-                    break;
-                case PARAM_WSTRING:
-                    args[i] = (uintptr_t)params[i].wstring_val;
-                    break;
-                default:
-                    LOG_ERROR("Unsupported parameter type: %d", params[i].type);
-                    return false;
-                }
+        // Validate and convert parameters
+        uintptr_t args[10] = { 0 };
+        for (int i = 0; i < func.param_count && i < 10; i++) {
+            switch (params[i].type) {
+            case PARAM_INT8:
+            case PARAM_INT16:
+            case PARAM_INT32:
+                args[i] = params[i].int32_val;
+                break;
+            case PARAM_POINTER:
+                args[i] = params[i].ptr_val;
+                break;
+            case PARAM_FLOAT:
+                args[i] = *(uintptr_t*)&params[i].float_val;
+                break;
+            case PARAM_STRING:
+                args[i] = (uintptr_t)params[i].string_val;
+                break;
+            case PARAM_WSTRING:
+                args[i] = (uintptr_t)params[i].wstring_val;
+                break;
+            default:
+                LOG_ERROR("Unsupported parameter type: %d", params[i].type);
+                return false;
             }
+        }
 
-            // Call function based on parameter count
+        // Call function based on parameter count with SEH protection
+        __try {
             uintptr_t retval = 0;
-
             switch (func.param_count) {
             case 0: {
                 typedef uintptr_t(__stdcall* Func0)();
-                Func0 f = (Func0)func.address;
-                retval = f();
+                retval = ((Func0)func.address)();
                 break;
             }
             case 1: {
                 typedef uintptr_t(__stdcall* Func1)(uintptr_t);
-                Func1 f = (Func1)func.address;
-                retval = f(args[0]);
+                retval = ((Func1)func.address)(args[0]);
                 break;
             }
             case 2: {
                 typedef uintptr_t(__stdcall* Func2)(uintptr_t, uintptr_t);
-                Func2 f = (Func2)func.address;
-                retval = f(args[0], args[1]);
+                retval = ((Func2)func.address)(args[0], args[1]);
                 break;
             }
             case 3: {
                 typedef uintptr_t(__stdcall* Func3)(uintptr_t, uintptr_t, uintptr_t);
-                Func3 f = (Func3)func.address;
-                retval = f(args[0], args[1], args[2]);
+                retval = ((Func3)func.address)(args[0], args[1], args[2]);
                 break;
             }
             case 4: {
                 typedef uintptr_t(__stdcall* Func4)(uintptr_t, uintptr_t, uintptr_t, uintptr_t);
-                Func4 f = (Func4)func.address;
-                retval = f(args[0], args[1], args[2], args[3]);
+                retval = ((Func4)func.address)(args[0], args[1], args[2], args[3]);
                 break;
             }
             case 5: {
                 typedef uintptr_t(__stdcall* Func5)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
-                Func5 f = (Func5)func.address;
-                retval = f(args[0], args[1], args[2], args[3], args[4]);
+                retval = ((Func5)func.address)(args[0], args[1], args[2], args[3], args[4]);
                 break;
             }
             case 6: {
                 typedef uintptr_t(__stdcall* Func6)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
-                Func6 f = (Func6)func.address;
-                retval = f(args[0], args[1], args[2], args[3], args[4], args[5]);
+                retval = ((Func6)func.address)(args[0], args[1], args[2], args[3], args[4], args[5]);
                 break;
             }
             default:
@@ -587,11 +675,11 @@ namespace GW {
             if (result && func.has_return) {
                 *(uintptr_t*)result = retval;
             }
-
             return true;
         }
-        __except (EXCEPTION_EXECUTE_HANDLER) {
-            LOG_ERROR("Exception calling stdcall function at 0x%X", func.address);
+        __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+            EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+            LOG_ERROR("Access violation calling stdcall function at 0x%X", func.address);
             return false;
         }
     }
@@ -599,72 +687,64 @@ namespace GW {
     bool RPCBridge::CallCdecl(const FunctionSignature& func,
         const FunctionParam* params, void* result) {
 
-        __try {
-            // Convert parameters
-            uintptr_t args[10] = { 0 };
-
-            for (int i = 0; i < func.param_count && i < 10; i++) {
-                switch (params[i].type) {
-                case PARAM_INT8:
-                case PARAM_INT16:
-                case PARAM_INT32:
-                    args[i] = params[i].int32_val;
-                    break;
-                case PARAM_POINTER:
-                    args[i] = params[i].ptr_val;
-                    break;
-                case PARAM_FLOAT:
-                    args[i] = *(uintptr_t*)&params[i].float_val;
-                    break;
-                case PARAM_STRING:
-                    args[i] = (uintptr_t)params[i].string_val;
-                    break;
-                case PARAM_WSTRING:
-                    args[i] = (uintptr_t)params[i].wstring_val;
-                    break;
-                default:
-                    return false;
-                }
+        // Convert parameters
+        uintptr_t args[10] = { 0 };
+        for (int i = 0; i < func.param_count && i < 10; i++) {
+            switch (params[i].type) {
+            case PARAM_INT8:
+            case PARAM_INT16:
+            case PARAM_INT32:
+                args[i] = params[i].int32_val;
+                break;
+            case PARAM_POINTER:
+                args[i] = params[i].ptr_val;
+                break;
+            case PARAM_FLOAT:
+                args[i] = *(uintptr_t*)&params[i].float_val;
+                break;
+            case PARAM_STRING:
+                args[i] = (uintptr_t)params[i].string_val;
+                break;
+            case PARAM_WSTRING:
+                args[i] = (uintptr_t)params[i].wstring_val;
+                break;
+            default:
+                return false;
             }
+        }
 
-            // Call function with cdecl convention
+        // Call function with cdecl convention with SEH protection
+        __try {
             uintptr_t retval = 0;
-
             switch (func.param_count) {
             case 0: {
                 typedef uintptr_t(__cdecl* Func0)();
-                Func0 f = (Func0)func.address;
-                retval = f();
+                retval = ((Func0)func.address)();
                 break;
             }
             case 1: {
                 typedef uintptr_t(__cdecl* Func1)(uintptr_t);
-                Func1 f = (Func1)func.address;
-                retval = f(args[0]);
+                retval = ((Func1)func.address)(args[0]);
                 break;
             }
             case 2: {
                 typedef uintptr_t(__cdecl* Func2)(uintptr_t, uintptr_t);
-                Func2 f = (Func2)func.address;
-                retval = f(args[0], args[1]);
+                retval = ((Func2)func.address)(args[0], args[1]);
                 break;
             }
             case 3: {
                 typedef uintptr_t(__cdecl* Func3)(uintptr_t, uintptr_t, uintptr_t);
-                Func3 f = (Func3)func.address;
-                retval = f(args[0], args[1], args[2]);
+                retval = ((Func3)func.address)(args[0], args[1], args[2]);
                 break;
             }
             case 4: {
                 typedef uintptr_t(__cdecl* Func4)(uintptr_t, uintptr_t, uintptr_t, uintptr_t);
-                Func4 f = (Func4)func.address;
-                retval = f(args[0], args[1], args[2], args[3]);
+                retval = ((Func4)func.address)(args[0], args[1], args[2], args[3]);
                 break;
             }
             case 5: {
                 typedef uintptr_t(__cdecl* Func5)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
-                Func5 f = (Func5)func.address;
-                retval = f(args[0], args[1], args[2], args[3], args[4]);
+                retval = ((Func5)func.address)(args[0], args[1], args[2], args[3], args[4]);
                 break;
             }
             default:
@@ -675,90 +755,101 @@ namespace GW {
             if (result && func.has_return) {
                 *(uintptr_t*)result = retval;
             }
-
             return true;
         }
-        __except (EXCEPTION_EXECUTE_HANDLER) {
-            LOG_ERROR("Exception calling cdecl function at 0x%X", func.address);
+        __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+            EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+            LOG_ERROR("Access violation calling cdecl function at 0x%X", func.address);
             return false;
         }
     }
 
-    bool RPCBridge::CallFastcall(const FunctionSignature& func,
-        const FunctionParam* params, void* result) {
-        // Fastcall: first 2 params in ECX and EDX, rest on stack
-        // Not commonly used in Guild Wars
-        LOG_ERROR("Fastcall not implemented (rarely used in GW)");
-        return false;
-    }
-
     bool RPCBridge::CallThiscall(const FunctionSignature& func,
         const FunctionParam* params, void* result) {
-        // Thiscall: 'this' pointer in ECX, rest on stack
+
+        // Validate this pointer
+        if (func.param_count < 1) {
+            LOG_ERROR("Thiscall requires at least 1 parameter (this pointer)");
+            return false;
+        }
+
+        uintptr_t args[10] = { 0 };
+        for (int i = 0; i < func.param_count && i < 10; i++) {
+            switch (params[i].type) {
+            case PARAM_INT32:
+                args[i] = params[i].int32_val;
+                break;
+            case PARAM_POINTER:
+                args[i] = params[i].ptr_val;
+                break;
+            default:
+                args[i] = params[i].int32_val;
+                break;
+            }
+        }
+
+        // Validate this pointer
+        if (!args[0] || IsBadReadPtr((void*)args[0], sizeof(void*))) {
+            LOG_ERROR("Invalid this pointer: 0x%X", args[0]);
+            return false;
+        }
+
+        // Call thiscall function with SEH protection
         __try {
-            uintptr_t args[10] = { 0 };
-
-            for (int i = 0; i < func.param_count && i < 10; i++) {
-                switch (params[i].type) {
-                case PARAM_INT32:
-                    args[i] = params[i].int32_val;
-                    break;
-                case PARAM_POINTER:
-                    args[i] = params[i].ptr_val;
-                    break;
-                default:
-                    args[i] = params[i].int32_val;
-                    break;
-                }
-            }
-
             uintptr_t retval = 0;
-
-            // First param is 'this' pointer for thiscall
-            if (func.param_count < 1) {
-                LOG_ERROR("Thiscall requires at least 1 parameter (this pointer)");
-                return false;
-            }
-
             switch (func.param_count) {
             case 1: {
                 typedef uintptr_t(__thiscall* Func1)(uintptr_t);
-                Func1 f = (Func1)func.address;
-                retval = f(args[0]);
+                retval = ((Func1)func.address)(args[0]);
                 break;
             }
             case 2: {
                 typedef uintptr_t(__thiscall* Func2)(uintptr_t, uintptr_t);
-                Func2 f = (Func2)func.address;
-                retval = f(args[0], args[1]);
+                retval = ((Func2)func.address)(args[0], args[1]);
                 break;
             }
             case 3: {
                 typedef uintptr_t(__thiscall* Func3)(uintptr_t, uintptr_t, uintptr_t);
-                Func3 f = (Func3)func.address;
-                retval = f(args[0], args[1], args[2]);
+                retval = ((Func3)func.address)(args[0], args[1], args[2]);
                 break;
             }
             default:
-                LOG_ERROR("Too many parameters for thiscall: %d", func.param_count);
+                LOG_ERROR("Invalid parameter count for thiscall: %d", func.param_count);
                 return false;
             }
 
             if (result && func.has_return) {
                 *(uintptr_t*)result = retval;
             }
-
             return true;
         }
-        __except (EXCEPTION_EXECUTE_HANDLER) {
-            LOG_ERROR("Exception calling thiscall function at 0x%X", func.address);
+        __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+            EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+            LOG_ERROR("Access violation calling thiscall function at 0x%X", func.address);
             return false;
         }
     }
 
+    bool RPCBridge::CallFastcall(const FunctionSignature& func,
+        const FunctionParam* params, void* result) {
+        // Fastcall is rarely used in Guild Wars
+        // Implementation would require assembly or compiler intrinsics
+        LOG_ERROR("Fastcall not implemented (rarely used in GW)");
+        return false;
+    }
+
     uintptr_t RPCBridge::AllocateMemory(size_t size, DWORD protection) {
+        // Validate size
+        if (size == 0 || size > MAX_ALLOC_SIZE) {
+            LOG_ERROR("Invalid allocation size: %zu", size);
+            return 0;
+        }
+
         void* addr = VirtualAlloc(NULL, size, MEM_COMMIT | MEM_RESERVE, protection);
-        if (!addr) return 0;
+        if (!addr) {
+            LOG_ERROR("VirtualAlloc failed: %lu", GetLastError());
+            return 0;
+        }
 
         std::lock_guard<std::mutex> lock(allocations_mutex);
 
@@ -774,25 +865,44 @@ namespace GW {
     }
 
     bool RPCBridge::FreeMemory(uintptr_t address) {
+        if (!address) return false;
+
         std::lock_guard<std::mutex> lock(allocations_mutex);
 
         auto it = allocations.find(address);
-        if (it == allocations.end()) return false;
+        if (it == allocations.end()) {
+            LOG_ERROR("Address 0x%X not found in allocations", address);
+            return false;
+        }
 
         bool result = VirtualFree((LPVOID)address, 0, MEM_RELEASE) != 0;
         if (result) {
             allocations.erase(it);
             LOG_INFO("Freed memory at 0x%X", address);
         }
+        else {
+            LOG_ERROR("VirtualFree failed: %lu", GetLastError());
+        }
 
         return result;
     }
 
     bool RPCBridge::WriteMemory(uintptr_t address, const void* data, size_t size) {
-        if (!address || !data || size == 0) return false;
+        // Validate parameters
+        if (!address || !data || size == 0 || size > MAX_WRITE_SIZE) {
+            LOG_ERROR("Invalid write parameters: addr=0x%X, size=%zu", address, size);
+            return false;
+        }
+
+        // Check if address is writable
+        if (IsBadWritePtr((LPVOID)address, size)) {
+            LOG_ERROR("Address 0x%X is not writable for size %zu", address, size);
+            return false;
+        }
 
         DWORD oldProtect;
         if (!VirtualProtect((LPVOID)address, size, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+            LOG_ERROR("VirtualProtect failed: %lu", GetLastError());
             return false;
         }
 
@@ -805,18 +915,50 @@ namespace GW {
     }
 
     bool RPCBridge::ProtectMemory(uintptr_t address, size_t size, DWORD protection) {
+        // Validate parameters
+        if (!address || size == 0) {
+            LOG_ERROR("Invalid protect parameters: addr=0x%X, size=%zu", address, size);
+            return false;
+        }
+
+        // Check if address is valid
+        MEMORY_BASIC_INFORMATION mbi;
+        if (VirtualQuery((LPCVOID)address, &mbi, sizeof(mbi)) == 0) {
+            LOG_ERROR("VirtualQuery failed for address 0x%X", address);
+            return false;
+        }
+
         DWORD oldProtect;
         bool result = VirtualProtect((LPVOID)address, size, protection, &oldProtect) != 0;
 
         if (result) {
             LOG_INFO("Protected memory at 0x%X with 0x%X", address, protection);
         }
+        else {
+            LOG_ERROR("VirtualProtect failed: %lu", GetLastError());
+        }
 
         return result;
     }
 
     bool RPCBridge::InstallHook(const char* name, uintptr_t target, uintptr_t detour) {
-        if (!name || !target || !detour) return false;
+        if (!name || !target || !detour) {
+            LOG_ERROR("Invalid hook parameters");
+            return false;
+        }
+
+        // Validate target is executable
+        MEMORY_BASIC_INFORMATION mbi;
+        if (VirtualQuery((LPCVOID)target, &mbi, sizeof(mbi)) == 0) {
+            LOG_ERROR("Invalid target address: 0x%X", target);
+            return false;
+        }
+
+        if (!(mbi.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ |
+            PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))) {
+            LOG_ERROR("Target address 0x%X is not executable", target);
+            return false;
+        }
 
         std::lock_guard<std::mutex> lock(hooks_mutex);
 
@@ -851,7 +993,10 @@ namespace GW {
         std::lock_guard<std::mutex> lock(hooks_mutex);
 
         auto it = hooks.find(name);
-        if (it == hooks.end()) return false;
+        if (it == hooks.end()) {
+            LOG_ERROR("Hook %s not found", name);
+            return false;
+        }
 
         MH_DisableHook((LPVOID)it->second);
         MH_RemoveHook((LPVOID)it->second);
@@ -868,11 +1013,17 @@ namespace GW {
         std::lock_guard<std::mutex> lock(hooks_mutex);
 
         auto it = hooks.find(name);
-        if (it == hooks.end()) return false;
+        if (it == hooks.end()) {
+            LOG_ERROR("Hook %s not found", name);
+            return false;
+        }
 
         bool result = MH_EnableHook((LPVOID)it->second) == MH_OK;
         if (result) {
             LOG_INFO("Enabled hook %s", name);
+        }
+        else {
+            LOG_ERROR("Failed to enable hook %s", name);
         }
 
         return result;
@@ -884,11 +1035,17 @@ namespace GW {
         std::lock_guard<std::mutex> lock(hooks_mutex);
 
         auto it = hooks.find(name);
-        if (it == hooks.end()) return false;
+        if (it == hooks.end()) {
+            LOG_ERROR("Hook %s not found", name);
+            return false;
+        }
 
         bool result = MH_DisableHook((LPVOID)it->second) == MH_OK;
         if (result) {
             LOG_INFO("Disabled hook %s", name);
+        }
+        else {
+            LOG_ERROR("Failed to disable hook %s", name);
         }
 
         return result;
@@ -906,7 +1063,16 @@ namespace GW {
     }
 
     bool RPCBridge::RegisterEventBuffer(const char* name, uintptr_t buffer, size_t size, size_t max_events) {
-        if (!name || !buffer || size == 0) return false;
+        if (!name || !buffer || size == 0) {
+            LOG_ERROR("Invalid event buffer parameters");
+            return false;
+        }
+
+        // Validate buffer is writable
+        if (IsBadWritePtr((LPVOID)buffer, size)) {
+            LOG_ERROR("Event buffer at 0x%X is not writable", buffer);
+            return false;
+        }
 
         std::lock_guard<std::mutex> lock(events_mutex);
 
@@ -914,7 +1080,7 @@ namespace GW {
         eb.name = name;
         eb.address = buffer;
         eb.size = size;
-        eb.max_events = max_events;
+        eb.max_events = max_events > 0 ? max_events : 100;
 
         event_buffers[name] = eb;
 
@@ -928,7 +1094,10 @@ namespace GW {
         std::lock_guard<std::mutex> lock(events_mutex);
 
         auto it = event_buffers.find(name);
-        if (it == event_buffers.end()) return false;
+        if (it == event_buffers.end()) {
+            LOG_ERROR("Event buffer %s not found", name);
+            return false;
+        }
 
         event_buffers.erase(it);
         LOG_INFO("Unregistered event buffer: %s", name);
