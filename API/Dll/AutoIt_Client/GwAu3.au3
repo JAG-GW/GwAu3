@@ -3,9 +3,8 @@
 ; ==================================
 ; GwAu3 - Guild Wars AutoIt RPC Client
 ; ==================================
-; Version: 1.0
-; Author: Your Name
-; Description: Complete RPC client for Guild Wars DLL
+; Version: 1.1
+; Description: Complete RPC client for Guild Wars DLL with server control
 
 ; Core includes
 #include "Core/GWRPCProtocol.au3"
@@ -20,6 +19,9 @@
 ; Guild Wars includes
 #include "GuildWars/GWConstants.au3"
 #include "GuildWars/GWFunctions.au3"
+
+Global Const $GWAU3_VERSION = "1.1.0"
+Global Const $GWAU3_BUILD_DATE = @YEAR & "/" & @MON & "/" & @MDAY
 
 ; ==================================
 ; Main Functions
@@ -54,11 +56,56 @@ Func GwAu3_SetDebugMode($bDebug)
 EndFunc
 
 ; ==================================
-; Version Information
+; Server Control Functions (New)
 ; ==================================
 
-Global Const $GWAU3_VERSION = "1.0.0"
-Global Const $GWAU3_BUILD_DATE = @YEAR & "/" & @MON & "/" & @MDAY
+Func GwAu3_StopServer()
+    Return RPCServer_Stop()
+EndFunc
+
+Func GwAu3_StartServer($sPipeName = "")
+    Return RPCServer_Start($sPipeName)
+EndFunc
+
+Func GwAu3_RestartServer($sPipeName = "", $iWaitMs = 2000)
+    Return RPCServer_Restart($sPipeName, $iWaitMs)
+EndFunc
+
+Func GwAu3_GetServerStatus()
+    Return RPCServer_GetStatus()
+EndFunc
+
+Func GwAu3_IsServerRunning()
+    Return RPCServer_IsRunning()
+EndFunc
+
+; ==================================
+; DLL Control Functions (New)
+; ==================================
+
+Func GwAu3_DetachDLL($bForce = False)
+    Return RPCDLL_Detach($bForce)
+EndFunc
+
+Func GwAu3_GetDLLStatus()
+    Return RPCDLL_GetStatus()
+EndFunc
+
+Func GwAu3_IsDLLRunning()
+    Return RPCDLL_IsRunning()
+EndFunc
+
+; ==================================
+; Safe Shutdown (New)
+; ==================================
+
+Func GwAu3_SafeShutdown()
+    RPC_SafeShutdown()
+EndFunc
+
+; ==================================
+; Version Information
+; ==================================
 
 Func GwAu3_GetVersion()
     Return $GWAU3_VERSION

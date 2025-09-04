@@ -365,7 +365,7 @@ void RenderMainWindow() {
                 ImGui::Text("Status: %s", isRunning ? "Running" : "Stopped");
 
                 if (isRunning) {
-                    ImGui::Text("Pipe: \\\\.\\pipe\\GwAu3Server");
+                    ImGui::Text("Pipe: %s", GetPipeName().c_str());
 
                     if (ImGui::Button("Stop Server")) {
                         g_pipeUI->StopServer();
@@ -700,7 +700,7 @@ DWORD WINAPI MainThread(LPVOID param) {
 #else
     LOG_INFO("Running in headless mode - no UI");
 #endif
-    LOG_INFO("Named Pipe: \\\\.\\pipe\\GwAu3Server");
+    LOG_INFO("Named Pipe: %s", GetPipeName().c_str());
     LOG_INFO("===========================================");
 
     // Main loop - Wait for shutdown signal

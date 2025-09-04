@@ -1,12 +1,6 @@
 #include-once
 
 ; ==================================
-; GW RPC Protocol Constants & Structures
-; ==================================
-; Version: 1.0
-; Purpose: Protocol definitions for RPC communication
-
-; ==================================
 ; Request Types
 ; ==================================
 Global Const $RPC_SCAN_FIND = 1
@@ -35,6 +29,20 @@ Global Const $RPC_DISABLE_HOOK = 33
 Global Const $RPC_GET_PENDING_EVENTS = 40
 Global Const $RPC_REGISTER_EVENT_BUFFER = 41
 Global Const $RPC_UNREGISTER_EVENT_BUFFER = 42
+
+; ==================================
+; Server Control Commands
+; ==================================
+Global Const $RPC_SERVER_STATUS = 50
+Global Const $RPC_SERVER_STOP = 51
+Global Const $RPC_SERVER_START = 52
+Global Const $RPC_SERVER_RESTART = 53
+
+; ==================================
+; DLL Control Commands
+; ==================================
+Global Const $RPC_DLL_DETACH = 60
+Global Const $RPC_DLL_STATUS = 61
 
 ; ==================================
 ; Parameter Types
@@ -85,6 +93,21 @@ Global Const $RPC_RESPONSE_SIZE = 1544
 ; ==================================
 ; Default Values
 ; ==================================
-Global Const $RPC_DEFAULT_PIPE = "\\.\pipe\GwAu3Server"
+Global Const $RPC_DEFAULT_PIPE = "\\.\pipe\GwAu3Server_"
 Global Const $RPC_DEFAULT_TIMEOUT = 5000
 Global Const $RPC_MAX_RETRIES = 10
+
+; ==================================
+; Server Status Codes
+; ==================================
+Global Const $RPC_SERVER_STATUS_STOPPED = 0
+Global Const $RPC_SERVER_STATUS_RUNNING = 1
+Global Const $RPC_SERVER_STATUS_ERROR = 2
+
+; ==================================
+; DLL Status Codes
+; ==================================
+Global Const $RPC_DLL_STATUS_INITIALIZING = 0
+Global Const $RPC_DLL_STATUS_RUNNING = 1
+Global Const $RPC_DLL_STATUS_SHUTTING_DOWN = 2
+Global Const $RPC_DLL_STATUS_STOPPED = 3

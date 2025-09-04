@@ -77,6 +77,8 @@ namespace GW {
         bool HandleMemoryRequest(const PipeRequest& request, PipeResponse& response);
         bool HandleHookRequest(const PipeRequest& request, PipeResponse& response);
         bool HandleEventRequest(const PipeRequest& request, PipeResponse& response);
+        bool HandleServerControlRequest(const PipeRequest& request, PipeResponse& response);
+        bool HandleDLLControlRequest(const PipeRequest& request, PipeResponse& response);
 
         // Function calling helpers
         bool CallCdecl(const FunctionSignature& func, const FunctionParam* params, void* result);

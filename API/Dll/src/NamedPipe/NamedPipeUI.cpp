@@ -88,8 +88,8 @@ namespace GW {
             return true;
         }
 
-        if (server->Start(PIPE_NAME)) {
-            AddLog(LogEntry::Success, std::string("Server started on: ") + PIPE_NAME);
+        if (server->Start(GetPipeName().c_str())) {
+            AddLog(LogEntry::Success, std::string("Server started on: ") + GetPipeName().c_str());
             stats.startTime = std::chrono::system_clock::now();
             return true;
         }
@@ -206,7 +206,7 @@ namespace GW {
             auto now = std::chrono::system_clock::now();
             auto uptime = now - stats.startTime;
             ImGui::Text("Uptime: %s", FormatDuration(uptime).c_str());
-            ImGui::Text("Pipe: %s", PIPE_NAME);
+            ImGui::Text("Pipe: %s", GetPipeName().c_str());
         }
         else {
             ImGui::Text("Server is not running");

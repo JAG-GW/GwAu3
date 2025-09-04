@@ -1,6 +1,7 @@
 #include "NamedPipe/RPCBridge.h"
 #include "Utilities/Scanner.h"
 #include "Utilities/Debug.h"
+#include "DLLState.h"
 #include <MinHook.h>
 #include <algorithm>
 #include <queue>
@@ -57,6 +58,16 @@ namespace GW {
 
         try {
             switch (request.type) {
+                // Server control operations
+            case SERVER_STATUS:
+            case SERVER_STOP:
+            case SERVER_START:
+            case SERVER_RESTART:
+                return HandleServerControlRequest(request, response);
+                // DLL control operations
+            case DLL_DETACH:
+            case DLL_STATUS:
+                return HandleDLLControlRequest(request, response);
                 // Scanner operations
             case SCAN_FIND:
             case SCAN_FIND_ASSERTION:
@@ -383,6 +394,124 @@ namespace GW {
                 memcpy(response.event_data.events, events, sizeof(EventData) * count);
             }
             response.success = 1;
+            break;
+        }
+
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool RPCBridge::HandleServerControlRequest(const PipeRequest& request, PipeResponse& response) {
+        switch (request.type) {
+        case SERVER_STATUS: {
+            NamedPipeServer& server = NamedPipeServer::GetInstance();
+            if (server.IsRunning()) {
+                response.success = 1;
+                response.server_status.status = 1; // Running
+            }
+            else {
+                response.success = 1;
+                response.server_status.status = 0; // Stopped
+            }
+            LOG_INFO("Server status requested: %s",
+                server.IsRunning() ? "Running" : "Stopped");
+            break;
+        }
+
+        case SERVER_STOP: {
+            NamedPipeServer& server = NamedPipeServer::GetInstance();
+            if (server.IsRunning()) {
+                server.Stop();
+                response.success = 1;
+                LOG_INFO("Server stop requested and executed");
+            }
+            else {
+                response.success = 0;
+                strcpy_s(response.error_message, "Server is not running");
+                LOG_WARN("Server stop requested but server not running");
+            }
+            break;
+        }
+
+        case SERVER_START: {
+            NamedPipeServer& server = NamedPipeServer::GetInstance();
+            if (!server.IsRunning()) {
+                std::string pipeName = strlen(request.server_control.pipe_name) > 0 ?
+                    request.server_control.pipe_name :
+                    GetPipeName();
+
+                if (server.Start(pipeName)) {
+                    response.success = 1;
+                    LOG_INFO("Server started on: %s", pipeName.c_str());
+                }
+                else {
+                    response.success = 0;
+                    strcpy_s(response.error_message, "Failed to start server");
+                    LOG_ERROR("Failed to start server");
+                }
+            }
+            else {
+                response.success = 0;
+                strcpy_s(response.error_message, "Server is already running");
+                LOG_WARN("Server start requested but already running");
+            }
+            break;
+        }
+
+        case SERVER_RESTART: {
+            NamedPipeServer& server = NamedPipeServer::GetInstance();
+
+            // Stop if running
+            if (server.IsRunning()) {
+                server.Stop();
+                Sleep(100);
+            }
+
+            // Start
+            std::string pipeName = strlen(request.server_control.pipe_name) > 0 ?
+                request.server_control.pipe_name :
+                GetPipeName();
+
+            if (server.Start(pipeName)) {
+                response.success = 1;
+                LOG_INFO("Server restarted on: %s", pipeName.c_str());
+            }
+            else {
+                response.success = 0;
+                strcpy_s(response.error_message, "Failed to restart server");
+                LOG_ERROR("Failed to restart server");
+            }
+            break;
+        }
+
+        default:
+            return false;
+        }
+        return true;
+    }
+
+    bool RPCBridge::HandleDLLControlRequest(const PipeRequest& request, PipeResponse& response) {
+        switch (request.type) {
+        case DLL_STATUS: {
+            response.success = 1;
+            response.dll_status.status = static_cast<int>(GW::g_dllState.load());
+            LOG_INFO("DLL status requested: %d", response.dll_status.status);
+            break;
+        }
+
+        case DLL_DETACH: {
+            // Initiate shutdown
+            GW::RequestShutdown();
+
+            // Notify shutdown
+            extern std::condition_variable g_shutdownCV;
+            g_shutdownCV.notify_all();
+
+            response.success = 1;
+            LOG_INFO("DLL detach initiated");
             break;
         }
 

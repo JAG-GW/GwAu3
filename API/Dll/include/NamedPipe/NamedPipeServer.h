@@ -6,6 +6,8 @@
 #include <atomic>
 #include <functional>
 
+std::string GetPipeName();
+
 namespace GW {
 
 #pragma pack(push, 1)  // Force 1-byte alignment
@@ -46,7 +48,17 @@ namespace GW {
         // Event operations
         GET_PENDING_EVENTS = 40,
         REGISTER_EVENT_BUFFER = 41,
-        UNREGISTER_EVENT_BUFFER = 42
+        UNREGISTER_EVENT_BUFFER = 42,
+
+        // Server control operations (NEW)
+        SERVER_STATUS = 50,
+        SERVER_STOP = 51,
+        SERVER_START = 52,
+        SERVER_RESTART = 53,
+
+        // DLL control operations (NEW)
+        DLL_DETACH = 60,
+        DLL_STATUS = 61
     };
 
     // Parameter types for function calls
@@ -159,6 +171,18 @@ namespace GW {
                 uint32_t buffer_size;
                 uint32_t max_events;
             } event;
+
+            // Server control operations (NEW)
+            struct {
+                char pipe_name[256];
+                uint32_t wait_ms;
+            } server_control;
+
+            // DLL control operations (NEW)
+            struct {
+                uint8_t force;
+                uint8_t padding[3];
+            } dll_control;
         };
     };
 
@@ -210,6 +234,21 @@ namespace GW {
             } event_data;
         };
 
+        // Server status
+        struct {
+            int32_t status;
+            uint32_t client_count;
+            uint64_t uptime_ms;
+            char pipe_name[256];
+        } server_status;
+
+        // DLL status
+        struct {
+            int32_t status;
+            uint32_t version;
+            char build_info[256];
+        } dll_status;
+
         char error_message[256];
     };
 
@@ -250,7 +289,7 @@ namespace GW {
         static void Destroy();
 
         // Server control
-        bool Start(const std::string& pipeName = "\\\\.\\pipe\\GwAu3Server");
+        bool Start(const std::string& pipeName = "");
         void Stop();
         bool IsRunning() const { return running.load(); }
 
