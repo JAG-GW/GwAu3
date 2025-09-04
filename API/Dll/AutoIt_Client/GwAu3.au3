@@ -25,8 +25,7 @@
 ; Main Functions
 ; ==================================
 
-Func GwAu3_Initialize($bDebug = False)
-	Local $sPipeName = $RPC_DEFAULT_PIPE & $g_i_GWProcessId
+Func GwAu3_Initialize($sPipeName = $RPC_DEFAULT_PIPE, $bDebug = False)
     ; Connect to RPC server
     If Not RPCClient_Init($sPipeName, $bDebug) Then
         Return SetError(1, 0, False)

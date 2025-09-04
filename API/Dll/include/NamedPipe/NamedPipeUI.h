@@ -57,6 +57,7 @@ namespace GW {
 
     private:
         static NamedPipeUI* instance;
+        static constexpr const char* PIPE_NAME = "\\\\.\\pipe\\GwAu3Server";
         static constexpr size_t MAX_LOGS = 500;
 
         // État

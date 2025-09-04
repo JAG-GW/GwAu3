@@ -22,7 +22,7 @@ Func InitializeMoveTo()
     ConsoleWrite("========================================" & @CRLF)
 
     ; Connect to RPC server
-    If Not RPCClient_Init("\\.\pipe\GwAu3Server_29136", True) Then
+    If Not RPCClient_Init("\\.\pipe\GwAu3Server", True) Then
         ConsoleWrite("[ERROR] Failed to connect to RPC server" & @CRLF)
         Return False
     EndIf
@@ -197,7 +197,7 @@ Func DiagnoseMoveTo()
     ConsoleWrite("========================================" & @CRLF)
 
     ; Connect
-    If Not RPCClient_Init("\\.\pipe\GwAu3Server_29136", True) Then
+    If Not RPCClient_Init("\\.\pipe\GwAu3Server", True) Then
         ConsoleWrite("[ERROR] Failed to connect" & @CRLF)
         Return
     EndIf

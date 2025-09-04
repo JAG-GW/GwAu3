@@ -8,7 +8,7 @@ ConsoleWrite("GwAu3 Basic Example" & @CRLF)
 ConsoleWrite("===================" & @CRLF & @CRLF)
 
 ; Initialize
-If Not GwAu3_Initialize(True) Then
+If Not GwAu3_Initialize($RPC_DEFAULT_PIPE, True) Then
     MsgBox(0, "Error", "Failed to initialize GwAu3")
     Exit
 EndIf

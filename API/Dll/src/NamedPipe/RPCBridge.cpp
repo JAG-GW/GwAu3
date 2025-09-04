@@ -1,7 +1,6 @@
 #include "NamedPipe/RPCBridge.h"
 #include "Utilities/Scanner.h"
 #include "Utilities/Debug.h"
-#include "DllState.h"
 #include <MinHook.h>
 #include <algorithm>
 #include <queue>
@@ -16,22 +15,14 @@ namespace GW {
     static constexpr size_t MAX_WRITE_SIZE = 0x10000;  // 64KB max write
     static constexpr size_t MAX_ALLOC_SIZE = 0x100000; // 1MB max allocation
 
-    // Static members
     RPCBridge* RPCBridge::instance = nullptr;
     std::once_flag RPCBridge::init_flag;
-    HWND RPCBridge::game_window = nullptr;
-    WNDPROC RPCBridge::original_wndproc = nullptr;
-    bool RPCBridge::hook_installed = false;
 
-    RPCBridge::RPCBridge()
-        : polling_enabled(false)
-        , has_pending_calls(false) {
+    RPCBridge::RPCBridge() {
         LOG_INFO("RPCBridge initialized");
     }
 
     RPCBridge::~RPCBridge() {
-        Shutdown();
-
         // Clean up all allocations
         for (auto& alloc : allocations) {
             VirtualFree((LPVOID)alloc.second.address, 0, MEM_RELEASE);
@@ -59,115 +50,6 @@ namespace GW {
             delete instance;
             instance = nullptr;
         }
-    }
-
-    bool RPCBridge::Initialize() {
-        LOG_INFO("Initializing RPCBridge...");
-
-        // Install WndProc hook for processing calls even when minimized
-        if (!InstallProcessingHook()) {
-            LOG_WARN("Failed to install WndProc hook - will rely on EndScene only");
-        }
-
-        // Start polling thread
-        polling_enabled = true;
-        polling_thread = std::thread(&RPCBridge::PollingThreadFunc, this);
-        SetThreadPriority(polling_thread.native_handle(), THREAD_PRIORITY_BELOW_NORMAL);
-
-        LOG_SUCCESS("RPCBridge initialized with polling thread");
-        return true;
-    }
-
-    void RPCBridge::Shutdown() {
-        LOG_INFO("Shutting down RPCBridge...");
-
-        // Stop polling thread
-        if (polling_enabled) {
-            polling_enabled = false;
-            polling_cv.notify_all();
-
-            if (polling_thread.joinable()) {
-                polling_thread.join();
-            }
-        }
-
-        // Uninstall hook
-        UninstallProcessingHook();
-
-        LOG_INFO("RPCBridge shutdown complete");
-    }
-
-    void RPCBridge::PollingThreadFunc() {
-        LOG_INFO("RPC polling thread started (ThreadID: %lu)", GetCurrentThreadId());
-
-        while (polling_enabled.load()) {
-            // Check if DLL is shutting down
-            if (IsDllShuttingDown()) {
-                LOG_INFO("DLL shutting down, exiting polling thread");
-                break;
-            }
-
-            // If we have pending calls AND window is minimized
-            if (has_pending_calls.load()) {
-                // Check if window is minimized
-                if (game_window && IsIconic(game_window)) {
-                    // Force processing via Windows message
-                    PostMessage(game_window, WM_USER + 1337, 0, 0);
-                }
-            }
-
-            // Wait 50ms or until woken up
-            std::unique_lock<std::mutex> lock(polling_mutex);
-            polling_cv.wait_for(lock, std::chrono::milliseconds(50));
-        }
-
-        LOG_INFO("RPC polling thread exiting");
-    }
-
-    bool RPCBridge::InstallProcessingHook() {
-        // Find game window
-        game_window = FindWindowA("ArenaNet_Dx_Window_Class", nullptr);
-        if (!game_window) {
-            game_window = FindWindowA(nullptr, "Guild Wars");
-        }
-
-        if (!game_window) {
-            LOG_ERROR("Could not find game window for RPC hook");
-            return false;
-        }
-
-        // Install our WndProc
-        original_wndproc = (WNDPROC)SetWindowLongPtr(game_window, GWLP_WNDPROC, (LONG_PTR)HookedWndProc);
-        if (!original_wndproc) {
-            LOG_ERROR("Failed to hook WndProc");
-            return false;
-        }
-
-        hook_installed = true;
-        LOG_SUCCESS("WndProc hook installed for RPC processing");
-        return true;
-    }
-
-    void RPCBridge::UninstallProcessingHook() {
-        if (hook_installed && game_window && original_wndproc) {
-            SetWindowLongPtr(game_window, GWLP_WNDPROC, (LONG_PTR)original_wndproc);
-            hook_installed = false;
-            LOG_INFO("WndProc hook uninstalled");
-        }
-    }
-
-    LRESULT CALLBACK RPCBridge::HookedWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-        // Process our custom messages or timer
-        if (msg == WM_USER + 1337 || msg == WM_TIMER) {
-            RPCBridge::GetInstance().ProcessPendingCalls();
-        }
-
-        // Pass to original WndProc
-        if (original_wndproc) {
-            return CallWindowProc(original_wndproc, hWnd, msg, wParam, lParam);
-        }
-
-        return DefWindowProc(hWnd, msg, wParam, lParam);
     }
 
     bool RPCBridge::HandleRequest(const PipeRequest& request, PipeResponse& response) {
@@ -308,7 +190,7 @@ namespace GW {
                 strcpy_s(response.function_list.names[i], func.first.c_str());
                 i++;
             }
-            response.function_list.count = static_cast<uint32_t>(i);
+            response.function_list.count = i;
             response.success = 1;
             break;
         }
@@ -496,7 +378,7 @@ namespace GW {
             EventData events[10];  // Max 10 events per request
             size_t count = GetPendingEvents(request.event.name, events, 10);
 
-            response.event_data.event_count = static_cast<uint32_t>(count);
+            response.event_data.event_count = count;
             if (count > 0) {
                 memcpy(response.event_data.events, events, sizeof(EventData) * count);
             }
@@ -510,7 +392,6 @@ namespace GW {
 
         return true;
     }
-    // Continuation of RPCBridge.cpp
 
     bool RPCBridge::RegisterFunction(const char* name, uintptr_t address,
         uint8_t param_count, CallConvention conv, bool has_return) {
@@ -583,10 +464,9 @@ namespace GW {
         // Capture function name
         std::string func_name(name);
 
-        // Create execution function (will be executed in game thread)
+        // Create execution function
         pending->func = [this, func_name, params_copy, pending]() -> bool {
-            LOG_DEBUG("Executing %s in game thread (ThreadID: %lu)",
-                func_name.c_str(), GetCurrentThreadId());
+            LOG_DEBUG("Executing %s in game thread", func_name.c_str());
 
             // Get function signature
             FunctionSignature sig;
@@ -606,7 +486,7 @@ namespace GW {
                 return false;
             }
 
-            // Call function IN GAME THREAD CONTEXT
+            // Call function
             bool success = false;
             const FunctionParam* params_ptr = params_copy.empty() ? nullptr : params_copy.data();
 
@@ -656,15 +536,6 @@ namespace GW {
             }
 
             pending_calls.push(pending);
-            has_pending_calls = true;
-        }
-
-        // Wake up polling thread
-        polling_cv.notify_one();
-
-        // If window is active, post message to force processing
-        if (game_window && !IsIconic(game_window)) {
-            PostMessage(game_window, WM_USER + 1337, 0, 0);
         }
 
         // Wait for result with timeout
@@ -705,12 +576,9 @@ namespace GW {
                     pending_calls.pop();
                 }
             }
-
-            // Update flag
-            has_pending_calls = !pending_calls.empty();
         }
 
-        // Process calls IN GAME THREAD
+        // Process calls
         while (!calls_to_process.empty()) {
             auto call = calls_to_process.front();
             calls_to_process.pop();
@@ -1248,7 +1116,7 @@ namespace GW {
         EventData event;
         event.event_id = event_id;
         event.timestamp = GetTickCount();
-        event.data_size = (data_size < sizeof(event.data)) ? static_cast<uint32_t>(data_size) : sizeof(event.data);
+        event.data_size = (data_size < sizeof(event.data)) ? data_size : sizeof(event.data);
 
         if (data && data_size > 0) {
             memcpy(event.data, data, event.data_size);
@@ -1280,5 +1148,4 @@ namespace GW {
 
         return count;
     }
-
-} // namespace GW
+}

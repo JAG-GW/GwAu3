@@ -16,8 +16,7 @@ Global $g_sRPCPipeName = ""
 ; Connection Management
 ; ==================================
 
-Func RPCClient_Init($bDebug = False)
-	Local $sPipeName = $RPC_DEFAULT_PIPE & $g_i_GWProcessId
+Func RPCClient_Init($sPipeName = $RPC_DEFAULT_PIPE, $bDebug = False)
     $g_bRPCDebugMode = $bDebug
     $g_sRPCPipeName = $sPipeName
 

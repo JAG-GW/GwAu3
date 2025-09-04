@@ -6,16 +6,6 @@
 #include <sstream>
 #include <iomanip>
 
-std::string GetPipeName() {
-    static std::string pipeName;
-    if (pipeName.empty()) {
-        std::stringstream ss;
-        ss << "\\\\.\\pipe\\GwAu3Server_" << GetCurrentProcessId();
-        pipeName = ss.str();
-    }
-    return pipeName;
-}
-
 namespace GW {
 
     // Helper function to get request type name
@@ -136,9 +126,8 @@ namespace GW {
         }
     }
 
-    bool NamedPipeServer::Start(const std::string& pipeName) { 
-        std::string actualPipeName = pipeName.empty() ? GetPipeName() : pipeName;
-        LOG_DEBUG("NamedPipeServer::Start called with pipeName: %s", actualPipeName.c_str());
+    bool NamedPipeServer::Start(const std::string& pipeName) {
+        LOG_DEBUG("NamedPipeServer::Start called with pipeName: %s", pipeName.c_str());
 
         if (running) {
             LOG_WARN("Server already running, cannot start again");
@@ -146,20 +135,21 @@ namespace GW {
             return false;
         }
 
-        this->pipeName = actualPipeName;
+        this->pipeName = pipeName;
 
         // Reset stop event
         ResetEvent(hStopEvent);
+
         running = true;
 
-        LOG_INFO("Starting Named Pipe server on: %s", actualPipeName.c_str());
+        LOG_INFO("Starting Named Pipe server on: %s", pipeName.c_str());
 
         // Start server thread - detach to not block
         serverThread = std::thread(&NamedPipeServer::ServerLoop, this);
         serverThread.detach();
 
-        if (OnLog) OnLog("Named pipe server started on: " + actualPipeName);
-        LOG_SUCCESS("Named pipe server started: %s", actualPipeName.c_str());  // Correction ici
+        if (OnLog) OnLog("Named pipe server started on: " + pipeName);
+        LOG_SUCCESS("Named pipe server started: %s", pipeName.c_str());
 
         return true;
     }
