@@ -283,6 +283,20 @@ Func Item_MoveItem($a_v_Item, $a_i_BagNumber, $a_i_Slot)
     Return Core_SendPacket(0x10, $GC_I_HEADER_ITEM_MOVE, Item_ItemID($a_v_Item), Item_GetBagInfo($a_i_BagNumber, "ID"), $a_i_Slot - 1)
 EndFunc ;==>MoveItem
 
+;~ Description: Moves an Item and can split up a Stack
+Func Item_MoveItem_($a_v_Item, $a_i_BagNumber, $a_i_Slot, $a_i_Amount = 0)
+    Local $l_p_Item = Item_GetItemPtr($a_v_Item)
+    If $l_p_Item = 0 Then Return SetError(1, 0, 0)
+
+    Local $l_i_Quantity = Item_GetItemInfoByPtr($l_p_Item, "Quantity")
+    If $a_i_Amount = 0 Or $a_i_Amount > $l_i_Quantity Then $a_i_Amount = $l_i_Quantity
+    If $a_i_Amount >= $l_i_Quantity Then
+        Return Core_SendPacket(0x10, $GC_I_HEADER_ITEM_MOVE, Item_ItemID($a_v_Item), Item_GetBagInfo($a_i_BagNumber, "ID"), $a_i_Slot - 1)
+    Else
+        Return Core_SendPacket(0x14, $GC_I_HEADER_ITEM_SPLIT_STACK, Item_ItemID($a_v_Item), $a_i_Amount, Item_GetBagInfo($a_i_BagNumber, "ID"), $a_i_Slot - 1)
+    EndIf
+EndFunc ;==>Item_MoveItem_
+
 ;~ Description: Accepts unclaimed items after a mission.
 Func Item_AcceptAllItems()
     Return Core_SendPacket(0x8, $GC_I_HEADER_ITEMS_ACCEPT_UNCLAIMED, Item_GetBagInfo(7, "ID"))

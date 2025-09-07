@@ -109,7 +109,7 @@ Global Const $GC_I_EXTRAID_DYE_GRAY = 11
 Global Const $GC_I_EXTRAID_DYE_WHITE = 12
 Global Const $GC_I_EXTRAID_DYE_PINK = 13
 
-Global $GC_AI_EXTRAID_DYES[13] = [12, _
+Global Const $GC_AI_EXTRAID_DYES[13] = [12, _
     $GC_I_EXTRAID_DYE_BLUE, _
     $GC_I_EXTRAID_DYE_GREEN, _
     $GC_I_EXTRAID_DYE_PURPLE, _
@@ -327,11 +327,11 @@ Global Const $GC_S_MOD_SHIELD_PLUS_DIVINE 						= "14101824"	; +1 Divine 20%
 Global Const $GC_S_MOD_SHIELD_PLUS_STRENGTH 					= "14111824"	; +1 Strength 20%
 Global Const $GC_S_MOD_SHIELD_PLUS_TACTICS 						= "14151824"	; +1 Tactics 20%
 ; +10vs Monsters Mods
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_DEMONS 					= "A0848210"	; +10vs Demons
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_DRAGONS 					= "A0948210"	; +10vs Dragons
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_PLANTS 					= "A0348210"	; +10vs Plants
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_UNDEAD 					= "A0048210"	; +10vs Undead
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_TENGU 					= "A0748210"	; +10vs Tengu
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_DEMONS 					= "0A848210"	; +10vs Demons
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_DRAGONS 					= "0A948210"	; +10vs Dragons
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_PLANTS 					= "0A348210"	; +10vs Plants
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_UNDEAD 					= "0A048210"	; +10vs Undead
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_TENGU 					= "0A748210"	; +10vs Tengu
 Global Const $GC_S_MOD_SHIELD_PLUS_VS_CHARR 					= "0A014821"	; +10vs Charr
 Global Const $GC_S_MOD_SHIELD_PLUS_VS_TROLLS 					= "0A024821"	; +10vs Trolls
 Global Const $GC_S_MOD_SHIELD_PLUS_VS_SKELETONS 				= "0A044821"	; +10vs Skeletons
@@ -339,14 +339,14 @@ Global Const $GC_S_MOD_SHIELD_PLUS_VS_GIANTS 					= "0A054821"	; +10vs Giants
 Global Const $GC_S_MOD_SHIELD_PLUS_VS_DWARVES 					= "0A064821"	; +10vs Dwarves
 Global Const $GC_S_MOD_SHIELD_PLUS_VS_OGRES 					= "0A0A4821"	; +10vs Ogres
 ; +10vs Dmg - Elemental
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_LIGHTNING 				= "A0418210"	; +10vs Lightning
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_EARTH 					= "A0B18210"	; +10vs Earth
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_COLD 						= "A0318210"	; +10vs Cold
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_FIRE 						= "A0518210"	; +10vs Fire
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_LIGHTNING 				= "0A418210"	; +10vs Lightning
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_EARTH 					= "0AB18210"	; +10vs Earth
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_COLD 						= "0A318210"	; +10vs Cold
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_FIRE 						= "0A518210"	; +10vs Fire
 ; +10vs Dmg -Physical
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_PIERCING 					= "A0118210"	; +10vs Piercing
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_BLUNT 					= "A0018210"	; +10vs Blunt
-Global Const $GC_S_MOD_SHIELD_PLUS_VS_SLASHING 					= "A0218210"	; +10vs Slashing
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_PIERCING 					= "0A118210"	; +10vs Piercing
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_BLUNT 					= "0A018210"	; +10vs Blunt
+Global Const $GC_S_MOD_SHIELD_PLUS_VS_SLASHING 					= "0A218210"	; +10vs Slashing
 ; +20 vs Conditions
 Global Const $GC_S_MOD_SHIELD_VS_BLEEDING                       = "DE017824"	; +20%vs Bleeding
 Global Const $GC_S_MOD_SHIELD_VS_BLIND                          = "DF017824"	; +20%vs Blind
@@ -358,7 +358,7 @@ Global Const $GC_S_MOD_SHIELD_VS_DAZE                           = "E5017824"	; +
 Global Const $GC_S_MOD_SHIELD_VS_WEAKNESS                       = "E6017824"	; +20%vs Weakness
 ; Staff
 ;Generic 10% HCT
-Global Const $GC_S_MOD_STAFF_ALL10_CAST 						= "A0822"		; 10% HCT
+Global Const $GC_S_MOD_STAFF_ALL10_CAST 						= "000A0822"	; 10% HCT
 ; Mes mods
 Global Const $GC_S_MOD_STAFF_FAST_CASTING20_CASTING 			= "00141822"	; 20% FastCasting (Unconfirmed)
 Global Const $GC_S_MOD_STAFF_ILLUSION20_CASTING 				= "01141822"	; 20% Illusion
@@ -388,8 +388,8 @@ Global Const $GC_S_MOD_STAFF_SPAWNING20_CASTING 				= "24141822"	; 20% Spawning
 
 ; Wand/Offhand
 ; Universal mods
-Global Const $GC_S_MOD_CASTER_PLUS_FIVE 						= "5320823"		; +5^50
-Global Const $GC_S_MOD_CASTER_PLUS_FIVE_ENCH 					= "500F822"		; +5wEnch
+Global Const $GC_S_MOD_CASTER_PLUS_FIVE 						= "05320823"	; +5^50
+Global Const $GC_S_MOD_CASTER_PLUS_FIVE_ENCH 					= "0500F822"	; +5wEnch
 Global Const $GC_S_MOD_CASTER_ALL10_CAST 						= "000A0822"	; 10% cast
 Global Const $GC_S_MOD_CASTER_ALL10_RECHARGE 					= "000AA823"	; 10% recharge
 Global Const $GC_S_MOD_CASTER_ENERGY_ALWAYS15 					= "0F00D822"	; Energy +15
@@ -833,7 +833,7 @@ Global Const $GC_AI_ALL_EVENT[20] = [ 19, _
     $GC_I_MODELID_EVENT_PARTY_BEACON _
 ]
 
-Global $GC_AI_ALL_TROPHIES_EVENTS[7] = [ 6, _
+Global Const $GC_AI_ALL_TROPHIES_EVENTS[7] = [ 6, _
     $GC_I_MODELID_EVENT_RACING_MEDAL, _
     $GC_I_MODELID_EVENT_TOTS, _
     $GC_I_MODELID_EVENT_CC_SHARDS, _
@@ -880,7 +880,7 @@ Global Const $GC_I_MODELID_TROPHIES_GLADIATORS_ZAISHEN_STRONGBOX = 36667
 Global Const $GC_I_MODELID_TROPHIES_STRATEGISTS_ZAISHEN_STRONGBOX = 36668
 Global Const $GC_I_MODELID_TROPHIES_MINISTERIAL_COMMENDATION = 36985
 
-Global $GC_AI_ALL_TROPHIES[36] = [35, _
+Global Const $GC_AI_ALL_TROPHIES[36] = [35, _
     $GC_I_MODELID_TROPHIES_COPPER_ZAISHEN_COIN, _
     $GC_I_MODELID_TROPHIES_GOLD_ZAISHEN_COIN, _
     $GC_I_MODELID_TROPHIES_SILVER_ZAISHEN_COIN, _

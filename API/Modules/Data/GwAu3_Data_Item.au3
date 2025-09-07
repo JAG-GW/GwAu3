@@ -215,7 +215,7 @@ Func Item_GetBagItemArray($a_v_BagNumber)
     Return $l_ap_ItemArray
 EndFunc   ;==>GetBagItemArray
 
-Func Item_GetInventoryArray($a_b_IncludeEquipmentPack = False)
+Func Item_GetInventoryArray($a_i_IncludeBag1 = True, $a_i_IncludeBag2 = True, $a_i_IncludeBag3 = True, $a_i_IncludeBag4 = True, $a_b_IncludeEquipmentPack = False)
     Local Const $LC_I_OFFSET_ITEMID = 0x0
     Local Const $LC_I_OFFSET_BAG = 0xC
     Local Const $LC_I_OFFSET_ITEMTYPE = 0x20
@@ -227,16 +227,49 @@ Func Item_GetInventoryArray($a_b_IncludeEquipmentPack = False)
     Local Const $LC_I_OFFSET_MATSALV = 0x4A
     Local Const $LC_I_OFFSET_QUANTITY = 0x4C
     Local Const $LC_I_OFFSET_SLOT = 0x50
-    Local Const $LC_I_BYTE_PADDING = 0x1
 
     Local Const $LC_I_INVENTORY_ARRAY_COLS = 13
 
+    Local Const $LC_I_CAP_BACKPACK = 20
+    Local Const $LC_I_CAP_BELT = 10
+    Local Const $LC_I_CAP_BAG1 = 15
+    Local Const $LC_I_CAP_BAG2 = 15
+    Local Const $LC_I_CAP_EQUIP = 20
+
+    Local $l_i_Count = 0
+    If $a_i_IncludeBag1 Then $l_i_Count += 1
+    If $a_i_IncludeBag2 Then $l_i_Count += 1
+    If $a_i_IncludeBag3 Then $l_i_Count += 1
+    If $a_i_IncludeBag4 Then $l_i_Count += 1
+    If $a_b_IncludeEquipmentPack Then $l_i_Count += 1
+
+    Local $l_ai_BagList[$l_i_Count]
+    Local $l_i_MaxBagSlots = 0, $l_i_Pos = 0
+
+    If $a_i_IncludeBag1 Then
+        $l_ai_BagList[$l_i_Pos] = $GC_I_INVENTORY_BACKPACK
+        $l_i_MaxBagSlots += $LC_I_CAP_BACKPACK
+        $l_i_Pos += 1
+    EndIf
+    If $a_i_IncludeBag2 Then
+        $l_ai_BagList[$l_i_Pos] = $GC_I_INVENTORY_BELT_POUCH
+        $l_i_MaxBagSlots += $LC_I_CAP_BELT
+        $l_i_Pos += 1
+    EndIf
+    If $a_i_IncludeBag3 Then
+        $l_ai_BagList[$l_i_Pos] = $GC_I_INVENTORY_BAG1
+        $l_i_MaxBagSlots += $LC_I_CAP_BAG1
+        $l_i_Pos += 1
+    EndIf
+    If $a_i_IncludeBag4 Then
+        $l_ai_BagList[$l_i_Pos] = $GC_I_INVENTORY_BAG2
+        $l_i_MaxBagSlots += $LC_I_CAP_BAG2
+        $l_i_Pos += 1
+    EndIf
     If $a_b_IncludeEquipmentPack Then
-        Local $l_ai_BagList = [$GC_I_INVENTORY_BACKPACK, $GC_I_INVENTORY_BELT_POUCH, $GC_I_INVENTORY_BAG1, $GC_I_INVENTORY_BAG2, $GC_I_INVENTORY_EQUIPMENT_PACK]
-        Local $l_i_MaxBagSlots = 80
-    Else
-        Local $l_ai_BagList = [$GC_I_INVENTORY_BACKPACK, $GC_I_INVENTORY_BELT_POUCH, $GC_I_INVENTORY_BAG1, $GC_I_INVENTORY_BAG2]
-        Local $l_i_MaxBagSlots = 60
+        $l_ai_BagList[$l_i_Pos] = $GC_I_INVENTORY_EQUIPMENT_PACK
+        $l_i_MaxBagSlots += $LC_I_CAP_EQUIP
+        $l_i_Pos += 1
     EndIf
 
     Static $s_d_Struct_Item = DllStructCreate( _
@@ -554,7 +587,7 @@ Func Item_GetModByIdentifier($a_v_Item, $a_s_Identifier)
     $l_s_ModStruct = StringTrimLeft($l_s_ModStruct, 2)
     Local $l_s_Ident = StringUpper($a_s_Identifier)
 
-    For $i = 0 To StringLen($l_s_ModStruct) / 8 - 1
+    For $i = 0 To (StringLen($l_s_ModStruct) / 8) - 1
         Local $l_i_Base = 8 * $i
         If StringUpper(StringMid($l_s_ModStruct, $l_i_Base + 5, 4)) = $l_s_Ident Then
             $l_ai_Return[0] = Dec(StringMid($l_s_ModStruct, $l_i_Base + 1, 2))
@@ -576,6 +609,34 @@ Func Item_GetItemAttribute($a_v_Item)
 	Local $l_ai_Mod = Item_GetModByIdentifier($a_v_Item, "9827")
 	Return $l_ai_Mod[1]
 EndFunc   ;==>GetItemAttribute
+
+;~ Description: Returns an item's maximum damage/armor/energy.
+Func Item_GetItemMaxDmg($a_v_Item)
+    Local $l_s_ModStruct = Item_GetModStruct($a_v_Item)
+    If $l_s_ModStruct = "" Then Return 0
+
+    $l_s_ModStruct = StringUpper(StringTrimLeft($l_s_ModStruct, 2))
+
+    Local $l_i_Dmg = 0, $l_i_Energy = 0, $l_i_Armor = 0
+    For $i = 0 To (StringLen($l_s_ModStruct) / 8) - 1
+        Local $l_i_Base = 8 * $i
+        Local $l_s_Ident = StringMid($l_s_ModStruct, $l_i_Base + 5, 4)
+        Local $l_i_Byte = Dec(StringMid($l_s_ModStruct, $l_i_Base + 3, 2))
+
+        Switch $l_s_Ident
+            Case "A8A7"
+                $l_i_Dmg = $l_i_Byte
+            Case "C867"
+                $l_i_Energy = $l_i_Byte
+            Case "B8A7"
+                $l_i_Armor = $l_i_Byte
+        EndSwitch
+    Next
+
+    If $l_i_Dmg <> 0 Then Return $l_i_Dmg
+    If $l_i_Energy <> 0 Then Return $l_i_Energy
+    Return $l_i_Armor
+EndFunc   ;==>Item_GetItemMaxDmg
 
 ;~ Description: Returns 1 for Rune, 2 for Insignia, 0 if not found.
 Func Item_IsRuneOrInsignia($a_i_ModelID)
