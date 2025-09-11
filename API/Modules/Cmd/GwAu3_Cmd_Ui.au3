@@ -132,10 +132,15 @@ Func Ui_SetDifficulty($a_b_HardMode = False)
 EndFunc   ;==>Ui_SetDifficulty
 
 ;~ Description: Enters Mission/Challenge via Party Formation window. (False = Foreign Character, True = Native Character)
-Func Ui_EnterChallenge($a_b_Foreign = False, $a_WaitToLoad = True)
+Func Ui_EnterChallenge($a_b_Foreign = False, $a_b_WaitMapIsLoaded = True)
     DllStructSetData($g_d_EnterMission, 2, Not $a_b_Foreign)
-    Core_Enqueue($g_p_EnterMission, 8)
-	If $a_WaitToLoad Then Return Map_WaitMapLoading(-1, 1)
+    If $a_b_WaitMapIsLoaded Then
+        Map_InitMapIsLoaded()
+        Core_Enqueue($g_p_EnterMission, 8)
+        Map_WaitMapIsLoaded()
+    Else
+	    Core_Enqueue($g_p_EnterMission, 8)
+    EndIf
 EndFunc   ;==>Ui_EnterChallenge
 
 ;~ Description: Initiates map travel.
