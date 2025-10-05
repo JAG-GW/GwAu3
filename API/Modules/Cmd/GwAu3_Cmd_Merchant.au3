@@ -23,7 +23,6 @@ Func Merchant_GetMerchantItemPtr($a_i_ModelID = 0, $a_b_ByModelID = True, $a_i_I
 
 	For $i = 0 To Merchant_GetMerchantItemsSize() -1
 		$l_i_ItemID = Memory_Read($l_p_MerchantBase + 0x4 * $i)
-
 		If $l_i_ItemID Then
 			$l_ai_Offsets[4] = 0x4 * $l_i_ItemID
 			$l_p_ItemPtr = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offsets)[1]
@@ -376,8 +375,8 @@ Func Merchant_CollectorExchange($a_i_ModelID_ItemRecv, $a_i_ExchangeReq, $a_i_Mo
     Local Const $LC_I_OFFSET_MODELID = 0x2C
     Local Const $LC_I_OFFSET_QUANTITY = 0x4C
 
-    If $a_i_ModelID_ItemRecv <= 0 Or $a_i_ModelID_ItemGive <= 0 Then Return False
-    If $a_i_ExchangeReq <= 0 Or $a_i_ExchangeReq > $GC_I_MERCHANT_MAX_ITEM_STACK Then Return False
+    If $a_i_ModelID_ItemRecv <= 0 Or $a_i_ModelID_ItemGive <= 0 Then Return SetError(1, 0, False)
+    If $a_i_ExchangeReq <= 0 Or $a_i_ExchangeReq > $GC_I_MERCHANT_MAX_ITEM_STACK Then Return SetError(2, 0, False)
 
     Static $s_i_LastCount_UsedItemIDs = 0
     Static $s_d_CollectorExchange, $s_p_CollectorExchangePtr
@@ -450,7 +449,7 @@ Func Merchant_CollectorExchange($a_i_ModelID_ItemRecv, $a_i_ExchangeReq, $a_i_Mo
         If $l_i_Exchange_RemainingExchangeReq <= 0 Then ExitLoop
     Next
 
-    If $l_i_Exchange_RemainingExchangeReq > 0 Then Return False
+    If $l_i_Exchange_RemainingExchangeReq > 0 Then Return SetError(3, 0, False)
 
     ReDim $l_ai_Exchange_Quantities[$l_i_Exchange_Idx]
     ReDim $l_ai_Exchange_ItemIDs[$l_i_Exchange_Idx]
@@ -463,7 +462,7 @@ Func Merchant_CollectorExchange($a_i_ModelID_ItemRecv, $a_i_ExchangeReq, $a_i_Mo
     EndIf
 
     Local $l_i_ItemID_ItemRecv = Memory_Read(Merchant_GetMerchantItemPtr($a_i_ModelID_ItemRecv))
-    If $l_i_ItemID_ItemRecv = 0 Then Return False
+    If $l_i_ItemID_ItemRecv = 0 Then Return SetError(4, 0, False)
 
     DllStructSetData($s_d_CollectorExchange, 2, $l_i_ItemID_ItemRecv)
     DllStructSetData($s_d_CollectorExchange, 3, $l_i_Exchange_Idx)

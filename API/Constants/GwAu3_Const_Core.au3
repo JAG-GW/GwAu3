@@ -24,14 +24,16 @@ Global $g_h_GUI = 0
 
 Global $g_p_BasePointer
 Global $g_p_PacketLocation
+Global $g_p_SavedIndex
 Global $g_i_QueueCounter
 Global $g_i_QueueSize
 Global $g_p_QueueBase
 Global $g_p_PreGame
 Global $g_p_FrameArray
 Global $g_p_AreaInfo
-Global $g_p_ConnectionStatus
+Global $g_p_StatusCode
 Global $g_p_MapIsLoaded
+Global $g_p_TradePartner
 
 ;Skill
 Global $g_p_SkillBase
@@ -112,6 +114,18 @@ Global $g_f_LastMoveX = 0
 Global $g_f_LastMoveY = 0
 Global $g_f_ClickCoordsX = 0
 Global $g_f_ClickCoordsY = 0
+
+;Trade
+Global $g_d_TradeInitiate = DllStructCreate('ptr;dword;dword')
+Global $g_p_TradeInitiate = DllStructGetPtr($g_d_TradeInitiate)
+Global $g_d_TradeCancel = DllStructCreate('ptr')
+Global $g_p_TradeCancel = DllStructGetPtr($g_d_TradeCancel)
+Global $g_d_TradeAccept = DllStructCreate('ptr')
+Global $g_p_TradeAccept = DllStructGetPtr($g_d_TradeAccept)
+Global $g_d_TradeSubmitOffer = DllStructCreate('ptr;dword')
+Global $g_p_TradeSubmitOffer = DllStructGetPtr($g_d_TradeSubmitOffer)
+Global $g_d_TradeOfferItem = DllStructCreate('ptr;dword;dword')
+Global $g_p_TradeOfferItem = DllStructGetPtr($g_d_TradeOfferItem)
 
 ;UI
 Global $g_d_Dialog = DllStructCreate('ptr;dword')

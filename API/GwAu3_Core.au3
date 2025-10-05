@@ -52,7 +52,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     ; Core patterns
     Scanner_AddPattern('BasePointer', '506A0F6A00FF35', 0x8, 'Ptr')
     Scanner_AddPattern('Ping', '568B750889165E', -0x3, 'Ptr')
-	Scanner_AddPattern('ConnectionStatus', '8945088D45086A04', -0x10, 'Ptr')
+	Scanner_AddPattern('StatusCode', '8945088D45086A04', -0x10, 'Ptr')
     Scanner_AddPattern('PacketSend', 'C747540000000081E6', -0x50, 'Func')
     Scanner_AddPattern('PacketLocation', '83C40433C08BE55DC3A1', 0xB, 'Ptr')
     Scanner_AddPattern('Action', '8B7508578BF983FE09750C6876', -0x3, 'Func')
@@ -92,7 +92,9 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     Scanner_AddPattern('WorldConst', '8D0476C1E00405', 0x8, 'Ptr')
     Scanner_AddPattern('Region', '6A548D46248908', -0x3, 'Ptr')
 	Scanner_AddPattern('AreaInfo', '6BC67C5E05', 0x6, 'Ptr')
-	; Ui
+	; Trade patterns
+	Scanner_AddPattern('TradeCancel', 'C745FC01000000506A04', -0x6, 'Func')
+	; Ui patterns
 	Scanner_AddPattern('UIMessage', 'B900000000E8000000005DC3894508', -0x14, 'Func')
 	Scanner_AddPattern('CompassFlag', '8D451050566A4E57', -0x1F, 'Func')
 	Scanner_AddPattern('PartySearchButtonCallback', '8B450883EC08568BF18B480483F90D', -0x2, 'Func')
@@ -104,11 +106,12 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Scanner_AddPattern('AiMode', '683A000010FF36', 0x1, 'Ptr')
 	Scanner_AddPattern('HeroCommand', '33D268E0010000', 0x1, 'Ptr')
 	Scanner_AddPattern('HeroSkills', '8B4E04505185FF', 0x1, 'Ptr')
-	; hook
+	; Hook patterns
 	Scanner_AddPattern('Engine', '568B3085F67478EB038D4900D9460C', -0x22, 'Hook')
     Scanner_AddPattern('Render', 'F6C401741C68B1010000BA', -0x67, 'Hook')
 	Scanner_AddPattern('LoadFinished', '2BD9C1E303', 0xA0, 'Hook')
 	Scanner_AddPattern('HookedTrader', '50516A476A06', -0x2F, 'Hook')
+	Scanner_AddPattern('TradePartner', '6A008D45F8C745F801000000', -0xC, 'Hook')
 	If IsDeclared("g_b_AddPattern") Then Extend_AddPattern()
 
     $g_ap_ScanResults = Scanner_ScanAllPatterns()
@@ -119,12 +122,13 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     $g_p_BasePointer = Memory_Read(Scanner_GetScanResult('BasePointer', $g_ap_ScanResults, 'Ptr'))
     $g_p_PacketLocation = Memory_Read(Scanner_GetScanResult('PacketLocation', $g_ap_ScanResults, 'Ptr'))
     $g_p_Ping = Memory_Read(Scanner_GetScanResult('Ping', $g_ap_ScanResults, 'Ptr'))
-	$g_p_ConnectionStatus = Memory_Read(Scanner_GetScanResult('ConnectionStatus', $g_ap_ScanResults, 'Ptr'))
+	$g_p_StatusCode = Memory_Read(Scanner_GetScanResult('StatusCode', $g_ap_ScanResults, 'Ptr'))
     $g_p_PreGame = Memory_Read(Scanner_GetScanResult('PreGame', $g_ap_ScanResults, 'Ptr') + 0x35)
     $g_p_FrameArray = Memory_Read(Scanner_GetScanResult('FrameArray', $g_ap_ScanResults, 'Ptr') - 0x13)
 	Memory_SetValue('BasePointer', Ptr($g_p_BasePointer))
 	Memory_SetValue('PacketLocation', Ptr($g_p_PacketLocation))
 	Memory_SetValue('Ping', Ptr($g_p_Ping))
+	Memory_SetValue('StatusCode', Ptr($g_p_StatusCode))
 	Memory_SetValue('PreGame', Ptr($g_p_PreGame))
 	Memory_SetValue('FrameArray', Ptr($g_p_FrameArray))
 	Memory_SetValue('PacketSend', Ptr(Scanner_GetScanResult('PacketSend', $g_ap_ScanResults, 'Func')))
@@ -135,6 +139,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Debug("BasePointer: " & Memory_GetValue('BasePointer'), "Initialize", $g_h_EditText)
 	Log_Debug("PacketLocation: " & Memory_GetValue('PacketLocation'), "Initialize", $g_h_EditText)
 	Log_Debug("Ping: " & Memory_GetValue('Ping'), "Initialize", $g_h_EditText)
+	Log_Debug("StatusCode: " & Memory_GetValue('StatusCode'), "Initialize", $g_h_EditText)
 	Log_Debug("PreGame: " & Memory_GetValue('PreGame'), "Initialize", $g_h_EditText)
 	Log_Debug("FrameArray: " & Memory_GetValue('FrameArray'), "Initialize", $g_h_EditText)
 	Log_Debug("PacketSend: " & Memory_GetValue('PacketSend'), "Initialize", $g_h_EditText)
@@ -182,7 +187,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Debug("IncreaseAttribute: " & Memory_GetValue('IncreaseAttribute'), "Initialize", $g_h_EditText)
 	Log_Debug("DecreaseAttribute: " & Memory_GetValue('DecreaseAttribute'), "Initialize", $g_h_EditText)
 
-	;Trade
+	;Trader
 	$g_p_BuyItemBase = Memory_Read(Scanner_GetScanResult('BuyItemBase', $g_ap_ScanResults, 'Ptr'))
     $g_p_SalvageGlobal = Memory_Read(Scanner_GetScanResult('SalvageGlobal', $g_ap_ScanResults, 'Ptr') - 0x4)
 	Memory_SetValue('BuyItemBase', Ptr($g_p_BuyItemBase))
@@ -190,7 +195,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     Memory_SetValue('Transaction', Ptr(Scanner_GetScanResult('Transaction', $g_ap_ScanResults, 'Func')))
     Memory_SetValue('RequestQuote', Ptr(Scanner_GetScanResult('RequestQuote', $g_ap_ScanResults, 'Func')))
     Memory_SetValue('Salvage', Ptr(Scanner_GetScanResult('Salvage', $g_ap_ScanResults, 'Func')))
-	;Trade log
+	;Trader log
 	Log_Debug("BuyItemBase: " & Memory_GetValue('BuyItemBase'), "Initialize", $g_h_EditText)
 	Log_Debug("SalvageGlobal: " & Memory_GetValue('SalvageGlobal'), "Initialize", $g_h_EditText)
 	Log_Debug("Transaction: " & Memory_GetValue('Transaction'), "Initialize", $g_h_EditText)
@@ -234,6 +239,19 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Debug("Region: " & Memory_GetValue('Region'), "Initialize", $g_h_EditText)
 	Log_Debug("Move: " & Memory_GetValue('Move'), "Initialize", $g_h_EditText)
 	Log_Debug("AreaInfo: " & Memory_GetValue('AreaInfo'), "Initialize", $g_h_EditText)
+
+	;Trade
+	Memory_SetValue('TradeCancel', Ptr(Scanner_GetScanResult('TradeCancel', $g_ap_ScanResults, 'Func')))
+	$l_p_Temp = Scanner_GetScanResult('TradeCancel', $g_ap_ScanResults, 'Func')
+	Memory_SetValue('TradeAccept', Ptr($l_p_Temp + 0x60))
+	Memory_SetValue('TradeOfferItem', Ptr($l_p_Temp + 0x90))
+	Memory_SetValue('TradeSubmitOffer', Ptr($l_p_Temp + 0x190))
+	;Trade log
+	Log_Debug("TradeInitiate: " & Memory_GetValue('TradeInitiate'), "Initialize", $g_h_EditText)
+	Log_Debug("TradeCancel: " & Memory_GetValue('TradeCancel'), "Initialize", $g_h_EditText)
+	Log_Debug("TradeAccept: " & Memory_GetValue('TradeAccept'), "Initialize", $g_h_EditText)
+	Log_Debug("TradeOfferItem: " & Memory_GetValue('TradeOfferItem'), "Initialize", $g_h_EditText)
+	Log_Debug("TradeSubmitOffer: " & Memory_GetValue('TradeSubmitOffer'), "Initialize", $g_h_EditText)
 
 	;Ui
 	Memory_SetValue('UIMessage', Ptr(Scanner_GetScanResult('UIMessage', $g_ap_ScanResults, 'Func')))
@@ -295,6 +313,9 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     $l_p_Temp = Scanner_GetScanResult('HookedTrader', $g_ap_ScanResults, 'Hook')
     Memory_SetValue('TraderStart', Ptr($l_p_Temp))
     Memory_SetValue('TraderReturn', Ptr($l_p_Temp + 0x5))
+	$l_p_Temp = Scanner_GetScanResult('TradePartner', $g_ap_ScanResults, 'Hook')
+    Memory_SetValue('TradePartnerStart', Ptr($l_p_Temp))
+    Memory_SetValue('TradePartnerReturn', Ptr($l_p_Temp + 0x5))
 	;Hook log
 	Log_Debug("MainStart: " & Memory_GetValue('MainStart'), "Initialize", $g_h_EditText)
 	Log_Debug("MainReturn: " & Memory_GetValue('MainReturn'), "Initialize", $g_h_EditText)
@@ -304,6 +325,8 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Debug("LoadFinishedReturn: " & Memory_GetValue('LoadFinishedReturn'), "Initialize", $g_h_EditText)
 	Log_Debug("TraderStart: " & Memory_GetValue('TraderStart'), "Initialize", $g_h_EditText)
 	Log_Debug("TraderReturn: " & Memory_GetValue('TraderReturn'), "Initialize", $g_h_EditText)
+	Log_Debug("TradePartnerStart: " & Memory_GetValue('TradePartnerStart'), "Initialize", $g_h_EditText)
+	Log_Debug("TradePartnerReturn: " & Memory_GetValue('TradePartnerReturn'), "Initialize", $g_h_EditText)
 	If IsDeclared("g_b_Scanner") Then Extend_Scanner()
 
 
@@ -318,11 +341,13 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     $g_i_TraderQuoteID = Memory_GetValue('TraderQuoteID')
     $g_i_TraderCostID = Memory_GetValue('TraderCostID')
     $g_f_TraderCostValue = Memory_GetValue('TraderCostValue')
+	$g_p_SavedIndex = Memory_GetValue('SavedIndex')
 	$g_i_QueueCounter = Memory_Read(Memory_GetValue('QueueCounter'))
     $g_i_QueueSize = Memory_GetValue('QueueSize') - 1
     $g_p_QueueBase = Memory_GetValue('QueueBase')
     $g_b_DisableRendering = Memory_GetValue('DisableRendering')
 	$g_p_MapIsLoaded = Memory_GetValue('MapIsLoaded')
+	$g_p_TradePartner = Memory_GetValue('TradePartner')
 	If IsDeclared("g_b_InitializeResult") Then Extend_InitializeResult()
 
 
@@ -356,6 +381,12 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     DllStructSetData($g_d_MakeAgentArray, 1, Memory_GetValue('CommandMakeAgentArray'))
 	;Map
 	DllStructSetData($g_d_Move, 1, Memory_GetValue('CommandMove'))
+	;Trade
+	DllStructSetData($g_d_TradeInitiate, 1, Memory_GetValue('CommandTradeInitiate'))
+	DllStructSetData($g_d_TradeCancel, 1, Memory_GetValue('CommandTradeCancel'))
+	DllStructSetData($g_d_TradeAccept, 1, Memory_GetValue('CommandTradeAccept'))
+	DllStructSetData($g_d_TradeSubmitOffer, 1, Memory_GetValue('CommandTradeSubmitOffer'))
+	DllStructSetData($g_d_TradeOfferItem, 1, Memory_GetValue('CommandTradeOfferItem'))
 	;Ui
 	DllStructSetData($g_d_Dialog, 1, Memory_GetValue('CommandDialog'))
 	DllStructSetData($g_d_OpenChest, 1, Memory_GetValue('CommandOpenChest'))
@@ -373,7 +404,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	DllStructSetData($g_d_LockHeroTarget, 1, Memory_GetValue('CommandLockHeroTarget'))
 	DllStructSetData($g_d_ToggleHeroSkillState, 1, Memory_GetValue('CommandToggleHeroSkillState'))
 	;Ui-Msg
-	DllStructSetData($g_d_MoveMap, 1, Memory_GetValue('CommandUIMessage'))
+	DllStructSetData($g_d_MoveMap, 1, Memory_GetValue('CommandMoveMap'))
 
     If $a_b_ChangeTitle Then WinSetTitle($g_h_GWWindow, '', 'Guild Wars - ' & Player_GetCharname())
 
@@ -381,6 +412,19 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     Return $g_h_GWWindow
 EndFunc
 #EndRegion Initialization
+
+Func Core_Enqueue_($a_p_Ptr, $a_i_Size)
+    Local $l_i_Slot = $g_p_QueueBase + (256 * $g_i_QueueCounter)
+
+    DllCall("kernel32.dll", "bool", "WriteProcessMemory", "handle", $g_h_GWProcess, "ptr", $l_i_Slot + 4, "ptr", $a_p_Ptr + 4, "ulong_ptr", $a_i_Size - 4,"ptr", 0)
+    DllCall("kernel32.dll", "bool", "WriteProcessMemory", "handle", $g_h_GWProcess, "ptr", $l_i_Slot, "ptr", $a_p_Ptr, "ulong_ptr", 4, "ptr", 0)
+
+    If $g_i_QueueCounter = $g_i_QueueSize Then
+        $g_i_QueueCounter = 0
+    Else
+        $g_i_QueueCounter += 1
+    EndIf
+EndFunc
 
 Func Core_Enqueue($a_p_Ptr, $a_i_Size)
 	DllCall($g_h_Kernel32, 'int', 'WriteProcessMemory', 'int', $g_h_GWProcess, 'int', 256 * $g_i_QueueCounter + $g_p_QueueBase, 'ptr', $a_p_Ptr, 'int', $a_i_Size, 'int', '')
@@ -479,6 +523,21 @@ Func Core_GetGuildWarsWindow()
     If $l_h_Wnd <> 0 Then Return $l_h_Wnd
 EndFunc
 
-Func Core_GetDisconnected()
-	Return Memory_Read($g_p_ConnectionStatus, 'long') = 7
+Func Core_GetStatusCode()
+	Return Memory_Read($g_p_StatusCode, "long")
+EndFunc
+
+Func Core_GetStatusInGame()
+	$l_i_StatusCode = Core_GetStatusCode()
+	Return $l_i_StatusCode = 0
+EndFunc
+
+Func Core_GetStatusCharacterSelection()
+	$l_i_StatusCode = Core_GetStatusCode()
+	Return $l_i_StatusCode = 1
+EndFunc
+
+Func Core_GetStatusError()
+	$l_i_StatusCode = Core_GetStatusCode()
+	Return $l_i_StatusCode <> 0 And $l_i_StatusCode <> 1
 EndFunc

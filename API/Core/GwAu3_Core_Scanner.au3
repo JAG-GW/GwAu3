@@ -572,9 +572,9 @@ Func Scanner_ToFunctionStart($a_p_CallInstructionAddress, $a_i_ScanRange = 0x200
 EndFunc
 
 Func Scanner_GetHwnd($a_i_Proc)
-    Local $l_as_Wins = WinList()
+    Local $l_as_Wins = WinList("[CLASS:" & $GC_S_CLASS_DX_WINDOW & "]")
     For $l_i_Idx = 1 To UBound($l_as_Wins) - 1
-        If (WinGetProcess($l_as_Wins[$l_i_Idx][1]) == $a_i_Proc) And (BitAND(WinGetState($l_as_Wins[$l_i_Idx][1]), 2)) Then Return $l_as_Wins[$l_i_Idx][1]
+        If WinGetProcess($l_as_Wins[$l_i_Idx][1]) = $a_i_Proc Then Return $l_as_Wins[$l_i_Idx][1]; And BitAND(WinGetState($l_as_Wins[$l_i_Idx][1]), 2)
     Next
 EndFunc
 

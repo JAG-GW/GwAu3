@@ -12,23 +12,16 @@ Func Trade_GetTradeInfo($a_s_Info = "")
     If $l_p_Ptr = 0 Or $a_s_Info = "" Then Return 0
 
     Switch $a_s_Info
-        Case "Flags"
+        Case "State"
             Return Memory_Read($l_p_Ptr, "long")
-        Case "IsTradeClosed"
-            Local $l_i_Flags = Memory_Read($l_p_Ptr, "long")
-            Return BitAND($l_i_Flags, 0) = 0
+        Case "IsTradeClosed"          
+            Return Memory_Read($l_p_Ptr, "long") = 0
         Case "IsTradeInitiated"
-            Local $l_i_Flags = Memory_Read($l_p_Ptr, "long")
-            Return BitAND($l_i_Flags, 1) <> 0
-        Case "IsPartnerTradeOffered"
-            Local $l_i_Flags = Memory_Read($l_p_Ptr, "long")
-            Return BitAND($l_i_Flags, 2) <> 0
+            Return Memory_Read($l_p_Ptr, "long") = 1
         Case "IsPlayerTradeOffered"
-            Local $l_i_Flags = Memory_Read($l_p_Ptr, "long")
-            Return BitAND($l_i_Flags, 3) <> 0
+            Return Memory_Read($l_p_Ptr, "long") = 3
         Case "IsPlayerTradeAccepted"
-            Local $l_i_Flags = Memory_Read($l_p_Ptr, "long")
-            Return BitAND($l_i_Flags, 7) <> 0
+            Return Memory_Read($l_p_Ptr, "long") = 7
 
         Case "PlayerGold"
             Return Memory_Read($l_p_Ptr + 0x10, "long")

@@ -278,6 +278,11 @@ Func Item_DropItem($a_v_Item, $a_i_Amount = 0)
     Return Core_SendPacket(0xC, $GC_I_HEADER_DROP_ITEM, $l_i_ItemID, $a_i_Amount)
 EndFunc ;==>DropItem
 
+;Description: Destroys and Item f.e. Bonus items not needed
+Func Item_DestroyItem($a_v_ItemID)
+	Return Core_SendPacket(0x8, $GC_I_HEADER_ITEM_DESTROY, Item_ItemID($a_v_ItemID))
+EndFunc   ;==>DestroyItem
+
 ;~ Description: Moves an item.
 Func Item_MoveItem($a_v_Item, $a_i_BagNumber, $a_i_Slot)
     Return Core_SendPacket(0x10, $GC_I_HEADER_ITEM_MOVE, Item_ItemID($a_v_Item), Item_GetBagInfo($a_i_BagNumber, "ID"), $a_i_Slot - 1)

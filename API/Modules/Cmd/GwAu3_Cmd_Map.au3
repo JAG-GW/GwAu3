@@ -91,25 +91,29 @@ Func Map_MapIsLoaded()
     Return False
 EndFunc
 
-Func Map_WaitMapIsLoaded($a_i_Timeout = 15000)
+Func Map_WaitMapIsLoaded($a_i_Timeout = 30000)
     If Map_MapIsLoaded() Then Return True
     
-    Local $l_h_Timeout = TimerInit()
+    Local $l_b_TimedOut = False, $l_h_Timeout = TimerInit()
     Do
-        Sleep(150)
-    Until Map_MapIsLoaded() Or TimerDiff($l_h_Timeout) >= $a_i_Timeout
-    If TimerDiff($l_h_Timeout) >= $a_i_Timeout Then Return False
+        Sleep(50)
+        $l_b_TimedOut = (TimerDiff($l_h_Timeout) >= $a_i_Timeout)
+    Until Map_MapIsLoaded() Or $l_b_TimedOut
+    If $l_b_TimedOut Then Return False
+    
+    Sleep(250)
 
     $l_h_Timeout = TimerInit()
     If Game_GetGameInfo("IsCinematic") Then
         Cinematic_SkipCinematic()
         Do
-            Sleep(150)
-        Until Map_MapIsLoaded() Or TimerDiff($l_h_Timeout) >= $a_i_Timeout
-        If TimerDiff($l_h_Timeout) >= $a_i_Timeout Then Return False
+            Sleep(50)
+            $l_b_TimedOut = (TimerDiff($l_h_Timeout) >= $a_i_Timeout)
+    Until Map_MapIsLoaded() Or $l_b_TimedOut
+    If $l_b_TimedOut Then Return False
     EndIf
 
-    Other_PingSleep(150)
+    Sleep(250)
 
     Return True
 EndFunc

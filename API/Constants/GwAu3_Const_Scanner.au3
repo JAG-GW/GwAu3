@@ -1,5 +1,9 @@
 #include-once
 
+; GW Window Classes
+Global Const $GC_S_CLASS_DX_WINDOW = "ArenaNet_Dx_Window_Class"
+Global Const $GC_S_CLASS_DIALOG = "ArenaNet_Dialog_Class"
+
 ; Memory section definitions
 Global Const $GC_I_SECTION_TEXT = 0
 Global Const $GC_I_SECTION_RDATA = 1

@@ -669,6 +669,9 @@ Func _($a_s_ASM)
 		Case StringRegExp($a_s_ASM, 'mov dword[[][a-z,A-Z]{4,}[]],eax')
 			$g_i_ASMSize += 5
 			$g_s_ASMCode &= 'A3[' & StringMid($a_s_ASM, 11, StringLen($a_s_ASM) - 15) & ']'
+		Case StringRegExp($a_s_ASM, 'mov dword[[][a-z,A-Z]{4,}[]],esi')
+			$g_i_ASMSize += 6
+			$g_s_ASMCode &= '8935[' & StringMid($a_s_ASM, 11, StringLen($a_s_ASM) - 15) & ']'
 		Case StringRegExp($a_s_ASM, 'mov eax,dword[[]ecx[*]4[+][a-z,A-Z]{4,}[]]')
 			$g_i_ASMSize += 7
 			$g_s_ASMCode &= '8B048D[' & StringMid($a_s_ASM, 21, StringLen($a_s_ASM) - 21) & ']'
@@ -1149,6 +1152,8 @@ Func _($a_s_ASM)
 					$l_s_OpCode = '83F801'
 				Case 'cmp ebx,edi'
 					$l_s_OpCode = '3BDF'
+				Case 'cmp edx,ecx'
+					$l_s_OpCode = '39CA'
 				Case 'cmp eax,dword[esi+9C]'
 					$l_s_OpCode = '3B869C000000'
 				Case 'cmp al,f'
@@ -1619,7 +1624,7 @@ Func _($a_s_ASM)
 				; LoadFinished
 				Case 'push dword[edi+1C]'
 					$l_s_OpCode = 'FF771C'
-
+					
 				Case Else
 					Log_Error('Could not assemble: ' & $a_s_ASM, 'ASM', $g_h_EditText)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $a_s_ASM)
@@ -1782,6 +1787,7 @@ Func Assembler_ModifyMemory()
 	Assembler_CreateMain()
 	Assembler_CreateRenderingMod()
 	Assembler_CreateLoadFinished()
+	Assembler_CreateTradePartner()
 	Assembler_CreateCommands()
 	Assembler_CreateSkillCommands()
 	Assembler_CreateFriendCommands()
@@ -1798,6 +1804,7 @@ Func Assembler_ModifyMemory()
 	Assembler_CreateSalvageCommand()
 	Assembler_CreateAgentCommands()
 	Assembler_CreateMapCommands()
+	Assembler_CreateTradeCommands()
 	Assembler_CreateUICommands()
 	If IsDeclared("g_b_Assembler") Then Extend_Assembler()
 	$g_p_ASMMemory = Memory_Read(Memory_Read($g_p_GWBaseAddress), 'ptr')
@@ -1809,7 +1816,6 @@ Func Assembler_ModifyMemory()
 			Memory_Write(Memory_Read($g_p_GWBaseAddress), $g_p_ASMMemory)
 			Assembler_CompleteASMCode()
 			Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
-			$g_p_SecondInjection = $g_p_ASMMemory + $g_i_ASMCodeOffset
 			Memory_Write(Memory_GetValue('QueuePtr'), Memory_GetValue('QueueBase'))
 			If IsDeclared("g_b_Write") Then Extend_Write()
 		Case Else
@@ -1819,16 +1825,19 @@ Func Assembler_ModifyMemory()
 	Memory_WriteDetour('TraderStart', 'TraderProc')
 	Memory_WriteDetour('RenderingMod', 'RenderingModProc')
 	Memory_WriteDetour('LoadFinishedStart', 'LoadFinishedProc')
+	Memory_WriteDetour('TradePartnerStart', 'TradePartnerProc')
 	If IsDeclared("g_b_AssemblerWriteDetour") Then Extend_AssemblerWriteDetour()
 EndFunc
 
 Func Assembler_CreateData()
+	_('SavedIndex/4')
     _('QueueCounter/4')
     _('TraderQuoteID/4')
     _('TraderCostID/4')
     _('TraderCostValue/4')
     _('DisableRendering/4')
 	_('MapIsLoaded/4')
+	_('TradePartner/4')
 	_('AgentCopyCount/4')
 
 	If IsDeclared("g_b_AssemblerData") Then Extend_AssemblerData()
@@ -1840,8 +1849,7 @@ EndFunc
 Func Assembler_CreateMain()
     _('MainProc:')
     _('pushad')
-    _('push eax')
-    _('push ebx')
+    _('pushfd')
 
     _('mov eax,dword[BasePointer]')
     _('test eax,eax')
@@ -1871,8 +1879,6 @@ Func Assembler_CreateMain()
     _('jz RegularFlow')
 
     _('HandleCase:')
-    _('pop ebx')
-    _('pop eax')
     _('mov eax,dword[QueueCounter]')
     _('mov ecx,eax')
     _('shl eax,8')
@@ -1890,30 +1896,33 @@ Func Assembler_CreateMain()
     _('mov dword[QueueCounter],eax')
     _('jmp MainExit')
 
-    _('RegularFlow:')
-    _('pop ebx')
-    _('pop eax')
-    _('mov eax,dword[QueueCounter]')
-    _('mov ecx,eax')
-    _('shl eax,8')
-    _('add eax,QueueBase')
-    _('mov ebx,dword[eax]')
-    _('test ebx,ebx')
-    _('jz MainExit')
-    _('push ecx')
-    _('mov dword[eax],0')
-    _('jmp ebx')
+	_('RegularFlow:')
+	_('mov eax,dword[QueueCounter]')
+	_('mov ecx,eax')
+	_('shl eax,8')
+	_('add eax,QueueBase')
+	_('mov ebx,dword[eax]')
+	_('test ebx,ebx')
+	_('jz MainExit')
+	_('mov dword[SavedIndex],ecx')
+	_('mov dword[eax],0')
+	_('jmp ebx')
 
-    _('CommandReturn:')
-    _('pop eax')
-    _('inc eax')
-    _('cmp eax,QueueSize')
-    _('jnz MainSkipReset')
-    _('xor eax,eax')
-    _('MainSkipReset:')
-    _('mov dword[QueueCounter],eax')
+	_('CommandReturn:')
+	_('mov ecx,dword[SavedIndex]')
+    _('mov edx,dword[QueueCounter]')
+	_('cmp edx,ecx')
+	_('jnz MainExit')
+	_('mov eax,ecx')
+	_('inc eax')
+	_('cmp eax,QueueSize')
+	_('jnz MainSkipReset')
+	_('xor eax,eax')
+	_('MainSkipReset:')
+	_('mov dword[QueueCounter],eax')
 
     _('MainExit:')
+	_('popfd')
     _('popad')
     _('mov ebp,esp')
     _('fld st(0),dword[ebp+8]')
@@ -1953,17 +1962,19 @@ EndFunc
 
 Func Assembler_CreateLoadFinished()
     _('LoadFinishedProc:')
-    _('pushad')
-	_('pushfd')
-
     _('mov dword[MapIsLoaded],1')
-
-	_('popfd')
-    _('popad')
-
 	_('push dword[edi+1C]')
 	_('mov ecx,esi')
 	_('ljmp LoadFinishedReturn')
+EndFunc
+
+Func Assembler_CreateTradePartner()
+    _('TradePartnerProc:')
+	_('push esi')
+	_('mov esi,dword[ebp+C]')
+	_('push esi')
+	_('mov dword[TradePartner],esi')
+	_('ljmp TradePartnerReturn')
 EndFunc
 
 Func Assembler_CreateCommands()
@@ -2332,8 +2343,43 @@ Func Assembler_CreateMapCommands()
 	_('ljmp CommandReturn')
 EndFunc
 
+Func Assembler_CreateTradeCommands()
+	_('CommandTradeInitiate:')
+	_('push dword[eax+8]')
+	_('push dword[eax+4]')
+    _('call UIMessage')
+    _('add esp,8')
+    _('ljmp CommandReturn')
+
+	_('CommandTradeCancel:')
+	_('call TradeCancel')
+	_('ljmp CommandReturn')
+
+	_('CommandTradeAccept:')
+	_('call TradeAccept')
+	_('ljmp CommandReturn')
+
+	_('CommandTradeSubmitOffer:')
+	_('push dword[eax+4]')
+	_('call TradeSubmitOffer')
+	_('add esp,4')
+	_('push 0')
+	_('push 0')
+	_('push 10000166')
+	_('call UIMessage')
+	_('add esp,C')
+	_('ljmp CommandReturn')
+
+	_('CommandTradeOfferItem:')
+	_('push dword[eax+8]')
+    _('push dword[eax+4]')
+    _('call TradeOfferItem')
+    _('add esp,8')
+    _('ljmp CommandReturn')
+EndFunc
+
 Func Assembler_CreateUICommands()
-	_('CommandUIMessage:')
+	_('CommandMoveMap:')
 	_('push 0')
 	_('mov edx,eax')
 	_('add edx,8')
