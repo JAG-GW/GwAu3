@@ -121,7 +121,7 @@
 #include <SQLite.dll.au3>
 #include <String.au3>
 #include <Timers.au3>
-#include <UDFGlobalID.au3>
+;~ #include <UDFGlobalID.au3>
 #include <Visa.au3>
 #include <WinAPI.au3>
 #include <WinAPICom.au3>
