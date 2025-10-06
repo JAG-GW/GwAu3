@@ -46,8 +46,9 @@ Func Scanner_GWBaseAddress()
 EndFunc
 
 Func Scanner_InitializeSections($a_p_BaseAddress)
+    Local $l_i_BytesToBuffer
     Local $l_d_DosHeader = DllStructCreate("struct;word e_magic;byte[58];dword e_lfanew;endstruct")
-    Local $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress, DllStructGetPtr($l_d_DosHeader), DllStructGetSize($l_d_DosHeader), 0)
+    Local $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress, DllStructGetPtr($l_d_DosHeader), DllStructGetSize($l_d_DosHeader), $l_i_BytesToBuffer)
     If Not $l_b_Success Then
         Log_Error("Failed to read DOS header", "Sections", $g_h_EditText)
         Return False
@@ -61,7 +62,7 @@ Func Scanner_InitializeSections($a_p_BaseAddress)
     Local $l_i_ELfanew = DllStructGetData($l_d_DosHeader, "e_lfanew")
 
     Local $l_d_NtHeaders = DllStructCreate("struct;dword Signature;word Machine;word NumberOfSections;dword TimeDateStamp;dword PointerToSymbolTable;dword NumberOfSymbols;word SizeOfOptionalHeader;word Characteristics;endstruct")
-    $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress + $l_i_ELfanew, DllStructGetPtr($l_d_NtHeaders), DllStructGetSize($l_d_NtHeaders), 0)
+    $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress + $l_i_ELfanew, DllStructGetPtr($l_d_NtHeaders), DllStructGetSize($l_d_NtHeaders), $l_i_BytesToBuffer)
     If Not $l_b_Success Then
         Log_Error("Failed to read NT headers", "Sections", $g_h_EditText)
         Return False
@@ -95,7 +96,7 @@ Func Scanner_InitializeSections($a_p_BaseAddress)
         "endstruct")
 
     For $l_i_Idx = 0 To $l_i_NumberOfSections - 1
-        $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress + $l_i_SectionHeaderOffset + ($l_i_Idx * 40), DllStructGetPtr($l_d_SectionHeader), DllStructGetSize($l_d_SectionHeader), 0)
+        $l_b_Success = _WinAPI_ReadProcessMemory($g_h_GWProcess, $a_p_BaseAddress + $l_i_SectionHeaderOffset + ($l_i_Idx * 40), DllStructGetPtr($l_d_SectionHeader), DllStructGetSize($l_d_SectionHeader), $l_i_BytesToBuffer)
         If Not $l_b_Success Then
             Log_Warning("Failed to read section header " & $l_i_Idx, "Sections", $g_h_EditText)
             ContinueLoop
