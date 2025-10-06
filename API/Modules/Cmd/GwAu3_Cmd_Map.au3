@@ -68,16 +68,21 @@ Func Map_TravelTo($a_i_MapID, $a_i_Language = Map_GetCharacterInfo("Language"), 
     If $a_WaitToLoad Then Return Map_WaitMapLoading($a_i_MapID)
 EndFunc   ;==>TravelTo
 
-Func Map_WaitMapLoading($a_i_MapID = -1, $a_i_InstanceType = -1)
+Func Map_WaitMapLoading($a_i_MapID = -1, $a_i_InstanceType = -1, $a_i_Timeout = 30000)
+    Local $l_h_Timeout = TimerInit()
     Do
         Sleep(250)
         If Game_GetGameInfo("IsCinematic") Then
             Cinematic_SkipCinematic()
             Sleep(1000)
         EndIf
+        If TimerDiff($l_h_Timeout) > $a_i_Timeout Then Return False
     Until Agent_GetAgentPtr(-2) <> 0 And Agent_GetMaxAgents() <> 0 And World_GetWorldInfo("SkillbarArray") <> 0 And Party_GetPartyContextPtr() <> 0 _
     And ($a_i_InstanceType = -1 Or Map_GetInstanceInfo("Type") = $a_i_InstanceType) And ($a_i_MapID = -1 Or Map_GetCharacterInfo("MapID") = $a_i_MapID) And Not Game_GetGameInfo("IsCinematic")
-EndFunc
+
+    Other_RndSleep(2500)
+    Return True
+EndFunc ;==>WaitMapLoading
 
 Func Map_InitMapIsLoaded()
     Memory_Write($g_p_MapIsLoaded, 0)
@@ -109,8 +114,8 @@ Func Map_WaitMapIsLoaded($a_i_Timeout = 30000)
         Do
             Sleep(50)
             $l_b_TimedOut = (TimerDiff($l_h_Timeout) >= $a_i_Timeout)
-    Until Map_MapIsLoaded() Or $l_b_TimedOut
-    If $l_b_TimedOut Then Return False
+        Until Map_MapIsLoaded() Or $l_b_TimedOut
+        If $l_b_TimedOut Then Return False
     EndIf
 
     Sleep(250)
