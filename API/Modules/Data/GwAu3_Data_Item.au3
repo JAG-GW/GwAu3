@@ -309,8 +309,8 @@ Func Item_GetInventoryArray($a_i_IncludeBag1 = True, $a_i_IncludeBag2 = True, $a
         Local $l_ap_ItemArray = Item_GetBagItemArray($bag)
         Local $l_i_ItemCount = $l_ap_ItemArray[0]
 
-        For $slot = 1 To $l_i_ItemCount
-            Local $l_p_CacheItemPtr = $l_ap_ItemArray[$slot]
+        For $item = 1 To $l_i_ItemCount
+            Local $l_p_CacheItemPtr = $l_ap_ItemArray[$item]
             If $l_p_CacheItemPtr = 0 Then ContinueLoop
 
             DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
@@ -419,8 +419,8 @@ Func Item_GetStorageArray($a_b_IncludeMaterialStorage = False)
         Local $l_ap_ItemArray = Item_GetBagItemArray($bag)
         Local $l_i_ItemCount = $l_ap_ItemArray[0]
 
-        For $slot = 1 To $l_i_ItemCount
-            Local $l_p_CacheItemPtr = $l_ap_ItemArray[$slot]
+        For $item = 1 To $l_i_ItemCount
+            Local $l_p_CacheItemPtr = $l_ap_ItemArray[$item]
             If $l_p_CacheItemPtr = 0 Then ContinueLoop
 
             DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _

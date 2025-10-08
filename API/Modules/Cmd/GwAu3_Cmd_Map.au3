@@ -64,8 +64,12 @@ EndFunc   ;==>LeaveGH
 
 ;~ Description: Map travel to an outpost.
 Func Map_TravelTo($a_i_MapID, $a_i_Language = Map_GetCharacterInfo("Language"), $a_i_Region = Map_GetCharacterInfo("Region"), $a_i_District = 0, $a_WaitToLoad = True)
-    If Map_GetCharacterInfo("MapID") = $a_i_MapID And Map_GetInstanceInfo("IsOutpost") _
-        And $a_i_Language = Map_GetCharacterInfo("Language") And $a_i_Region = Map_GetCharacterInfo("Region") Then Return True
+    If Map_GetCharacterInfo("MapID") = $a_i_MapID _
+    And Map_GetInstanceInfo("IsOutpost") _
+    And $a_i_Language = Map_GetCharacterInfo("Language") _
+    And $a_i_Region = Map_GetCharacterInfo("Region") Then
+        Return True
+    EndIf
 	Map_InitMapIsLoaded()
     Map_MoveMap($a_i_MapID, $a_i_Region, $a_i_District, $a_i_Language)
     If $a_WaitToLoad Then Return Map_WaitMapIsLoaded()
@@ -80,13 +84,20 @@ Func Map_WaitMapLoading($a_i_MapID = -1, $a_i_InstanceType = -1, $a_i_Timeout = 
             Cinematic_SkipCinematic()
             Sleep(1000)
         EndIf
-		$l_b_TimedOut = (TimerDiff($l_h_Timeout) >= $a_i_Timeout)
-    Until Agent_GetAgentPtr(-2) <> 0 And Agent_GetMaxAgents() <> 0 And World_GetWorldInfo("SkillbarArray") <> 0 And Party_GetPartyContextPtr() <> 0 _
-		And ($a_i_InstanceType = -1 Or Map_GetInstanceInfo("Type") = $a_i_InstanceType) And ($a_i_MapID = -1 Or Map_GetCharacterInfo("MapID") = $a_i_MapID) And _
-		Not Game_GetGameInfo("IsCinematic") And Other_GetPing() <> 0 _
-		Or $l_b_TimedOut
-
+        $l_b_TimedOut = (TimerDiff($l_h_Timeout) >= $a_i_Timeout)
+    Until ( _
+        Agent_GetAgentPtr(-2) <> 0 _
+        And Agent_GetMaxAgents() <> 0 _
+        And World_GetWorldInfo("SkillbarArray") <> 0 _
+        And Party_GetPartyContextPtr() <> 0 _
+        And ($a_i_InstanceType = -1 Or Map_GetInstanceInfo("Type") = $a_i_InstanceType) _
+        And ($a_i_MapID = -1 Or Map_GetCharacterInfo("MapID") = $a_i_MapID) _
+        And Not Game_GetGameInfo("IsCinematic") _
+        And Other_GetPing() <> 0 _
+    ) Or $l_b_TimedOut
 	If $l_b_TimedOut Then Return False
+
+    Sleep(250)
 
 	Return True
 EndFunc
@@ -121,8 +132,8 @@ Func Map_WaitMapIsLoaded($a_i_Timeout = 30000)
         Do
             Sleep(50)
             $l_b_TimedOut = (TimerDiff($l_h_Timeout) >= $a_i_Timeout)
-    Until Map_MapIsLoaded() Or $l_b_TimedOut
-    If $l_b_TimedOut Then Return False
+        Until Map_MapIsLoaded() Or $l_b_TimedOut
+        If $l_b_TimedOut Then Return False
     EndIf
 
     Sleep(250)
