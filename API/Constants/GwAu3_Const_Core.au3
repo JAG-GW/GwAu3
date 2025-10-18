@@ -12,7 +12,7 @@ Global $g_p_InviteGuild = DllStructGetPtr($g_d_InviteGuild)
 Global $g_d_SendChat = DllStructCreate('ptr;dword')
 Global $g_p_SendChat = DllStructGetPtr($g_d_SendChat)
 
-Global $g_d_Action = DllStructCreate('ptr;dword;dword;')
+Global $g_d_Action = DllStructCreate('ptr;dword;dword;dword')
 Global $g_p_Action = DllStructGetPtr($g_d_Action)
 
 Global $g_d_Packet = DllStructCreate('ptr;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword;dword')

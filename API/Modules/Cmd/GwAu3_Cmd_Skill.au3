@@ -29,7 +29,7 @@ Func Skill_UseSkill($a_i_SkillSlot, $a_v_TargetID = -2, $a_b_CallTarget = False)
 EndFunc
 
 Func Skill_UseHeroSkill($a_i_HeroIndex, $a_i_SkillSlot, $a_v_TargetID = 0)
-    If $a_i_HeroIndex < 1 Or $a_i_HeroIndex > 8 Then
+    If $a_i_HeroIndex < 1 Or $a_i_HeroIndex > 7 Then
         Log_Error("Invalid hero index: " & $a_i_HeroIndex, "SkillMod", $g_h_EditText)
         Return False
     EndIf
@@ -59,7 +59,7 @@ Func Skill_UseHeroSkill($a_i_HeroIndex, $a_i_SkillSlot, $a_v_TargetID = 0)
 EndFunc
 
 Func Skill_CancelHeroSkill($a_i_HeroIndex, $a_i_SkillSlot)
-    If $a_i_HeroIndex < 1 Or $a_i_HeroIndex > 8 Then
+    If $a_i_HeroIndex < 1 Or $a_i_HeroIndex > 7 Then
         Log_Error("Invalid hero index: " & $a_i_HeroIndex, "SkillMod", $g_h_EditText)
         Return False
     EndIf

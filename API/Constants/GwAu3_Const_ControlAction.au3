@@ -2,7 +2,7 @@
 
 #Region Core_PerformAction
 Global Const $GC_I_ACTIONTYPE_ACTIVATE = 0x1E
-Global Const $GC_I_ACTIONTYPE_DESACTIVATE = 0x20
+Global Const $GC_I_ACTIONTYPE_DEACTIVATE = 0x20
 
 Global Const $GC_I_CONTROLACTION_NONE = 0x00
 Global Const $GC_I_CONTROLACTION_INTERACT = 0x80

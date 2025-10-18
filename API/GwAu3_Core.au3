@@ -435,10 +435,11 @@ Func Core_Enqueue($a_p_Ptr, $a_i_Size)
 	EndIf
 EndFunc
 
-Func Core_PerformAction($a_i_Action, $a_i_Flag)
+Func Core_PerformAction($a_i_Action, $a_i_Flag, $a_i_Type = 0)
 	DllStructSetData($g_d_Action, 2, $a_i_Action)
 	DllStructSetData($g_d_Action, 3, $a_i_Flag)
-	Core_Enqueue($g_p_Action, 12)
+	DllStructSetData($g_d_Action, 4, $a_i_Type)
+	Core_Enqueue($g_p_Action, 16)
 EndFunc
 
 Func Core_SendPacket($a_i_Size, $a_i_Header, $a_i_Param1 = 0, $a_i_Param2 = 0, $a_i_Param3 = 0, $a_i_Param4 = 0, $a_i_Param5 = 0, $a_i_Param6 = 0, $a_i_Param7 = 0, $a_i_Param8 = 0, $a_i_Param9 = 0, $a_i_Param10 = 0)

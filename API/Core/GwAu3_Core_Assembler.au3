@@ -1624,6 +1624,9 @@ Func _($a_s_ASM)
 				; LoadFinished
 				Case 'push dword[edi+1C]'
 					$l_s_OpCode = 'FF771C'
+				; Action
+				Case 'cmp dword[eax+C],0'
+					$l_s_OpCode = '83780C00'
 					
 				Case Else
 					Log_Error('Could not assemble: ' & $a_s_ASM, 'ASM', $g_h_EditText)
@@ -1993,7 +1996,14 @@ Func Assembler_CreateCommands()
 
 	_('CommandAction:')
 	_('mov ecx,dword[ActionBase]')
-	_('mov ecx,dword[ecx+c]')
+	_('cmp dword[eax+C],0')
+	_('jnz ActionType2')
+	_('ActionType1:')
+	_('mov ecx,dword[ecx+C]')
+	_('jmp ActionCommon')
+	_('ActionType2:')
+	_('mov ecx,dword[ecx+4]')
+	_('ActionCommon:')
 	_('add ecx,A0')
 	_('push 0')
 	_('add eax,4')
