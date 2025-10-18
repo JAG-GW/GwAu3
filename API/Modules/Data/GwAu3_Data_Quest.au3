@@ -2,7 +2,7 @@
 
 #Region Quest Related
 Func Quest_GetQuestInfo($a_i_QuestID, $a_s_Info = "")
-    Local $l_p_Ptr
+    Local $l_p_Ptr = 0
     Local $l_i_Size = World_GetWorldInfo("QuestLogSize")
     If $l_i_Size = 0 Or $a_s_Info = "" Then Return 0
 
@@ -11,6 +11,7 @@ Func Quest_GetQuestInfo($a_i_QuestID, $a_s_Info = "")
         Local $l_ap_QuestPtr = Memory_ReadPtr($g_p_BasePointer, $l_ai_OffsetQuestLog, "long")
         If $l_ap_QuestPtr[1] = $a_i_QuestID Then $l_p_Ptr = Ptr($l_ap_QuestPtr[0])
     Next
+    If $l_p_Ptr = 0 Then Return 0
 
     Switch $a_s_Info
         Case "QuestID"
