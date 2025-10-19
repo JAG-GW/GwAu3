@@ -108,3 +108,28 @@ Func Skill_LoadSkillBar($a_i_Skill1 = 0, $a_i_Skill2 = 0, $a_i_Skill3 = 0, $a_i_
     Return Core_SendPacket(0x2C, $GC_I_HEADER_SKILLBAR_LOAD, $l_i_HeroID, 8, $a_i_Skill1, $a_i_Skill2, $a_i_Skill3, $a_i_Skill4, $a_i_Skill5, $a_i_Skill6, $a_i_Skill7, $a_i_Skill8)
 EndFunc   ;==>LoadSkillBar
 
+; Unlock skill to dead boss (after using capture signet)
+Func Skill_UnlockSkillBossByID($a_i_SkillID)
+	Core_SendPacket(0x8, 0x5A, $a_i_SkillID)
+EndFunc
+
+; Buy to skill merchant
+Func Skill_BuySkillByID($a_i_SkillID)
+	Core_SendPacket(0x8, $GC_I_HEADER_DIALOG_SEND, '0x0A' & Hex($a_i_SkillID, 6))
+EndFunc
+
+; Unlock skill to Priest of Baltha
+Func Skill_UnlockSkillByID($a_i_SkillID)
+	Core_SendPacket(0x8, $GC_I_HEADER_DIALOG_SEND, '0x10' & Hex($a_i_SkillID, 6))
+EndFunc
+
+; Unlock skill in Tome
+Func Skill_UnlockTomeSkillByID($a_i_ItemID, $a_i_SkillID)
+	Core_SendPacket(0xC, $GC_I_HEADER_TOME_UNLOCK_SKILL, $a_i_ItemID, $a_i_SkillID)
+EndFunc
+
+; Select skill slot to replace by a skill quest
+; e.g. Disarm Trap for Venta Cimetery
+Func Skill_SkillForQuest($a_i_SkillSlot)
+	Core_SendPacket(0x8, 0x3B, $a_i_SkillSlot - 1)
+EndFunc
