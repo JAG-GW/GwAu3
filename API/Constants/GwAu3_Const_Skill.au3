@@ -30,6 +30,8 @@ Global Const $GC_AI_REP_BUFFS_LIGHTBRINGER[10] = [1898, 1831, 1844, 1846, 1849, 
 
 #Region All Skill Infos
 ; Skill Types
+Global Const $GC_I_SKILL_TYPE_BOUNTY = 1
+Global Const $GC_I_SKILL_TYPE_SCROLL = 2
 Global Const $GC_I_SKILL_TYPE_STANCE = 3
 Global Const $GC_I_SKILL_TYPE_HEX = 4
 Global Const $GC_I_SKILL_TYPE_SPELL = 5
@@ -40,11 +42,17 @@ Global Const $GC_I_SKILL_TYPE_WELL = 9
 Global Const $GC_I_SKILL_TYPE_SKILL = 10
 Global Const $GC_I_SKILL_TYPE_WARD = 11
 Global Const $GC_I_SKILL_TYPE_GLYPH = 12
+Global Const $GC_I_SKILL_TYPE_TITLE = 13
 Global Const $GC_I_SKILL_TYPE_ATTACK = 14
 Global Const $GC_I_SKILL_TYPE_SHOUT = 15
+Global Const $GC_I_SKILL_TYPE_SKILL2 = 16
+Global Const $GC_I_SKILL_TYPE_PASSIVE = 17
+Global Const $GC_I_SKILL_TYPE_ENVIRONMENTAL = 18
 Global Const $GC_I_SKILL_TYPE_PREPARATION = 19
+Global Const $GC_I_SKILL_TYPE_PETATTACK = 20
 Global Const $GC_I_SKILL_TYPE_TRAP = 21
 Global Const $GC_I_SKILL_TYPE_RITUAL = 22
+Global Const $GC_I_SKILL_TYPE_ENVIRONMENTALTRAP = 23
 Global Const $GC_I_SKILL_TYPE_ITEM_SPELL = 24
 Global Const $GC_I_SKILL_TYPE_WEAPON_SPELL = 25
 Global Const $GC_I_SKILL_TYPE_FORM = 26
@@ -178,145 +186,118 @@ Global Const $GC_I_SKILL_TARGET_MINION = 14
 Global Const $GC_I_SKILL_TARGET_GROUND = 16
 Global Const $GC_I_SKILL_TARGET_SPIRIT_ENEMY = 17 ; Custom
 
+; Skill Title
+Global Const $GC_I_SKILL_TITLE_KURZICK = 5
+Global Const $GC_I_SKILL_TITLE_LUXON = 6
+Global Const $GC_I_SKILL_TITLE_SUNSPEAR = 17
+Global Const $GC_I_SKILL_TITLE_LIGHTBRINGER = 20
+Global Const $GC_I_SKILL_TITLE_ASURA = 38
+Global Const $GC_I_SKILL_TITLE_DELDRIMOR = 39
+Global Const $GC_I_SKILL_TITLE_EBON_VANGUARD = 40
+Global Const $GC_I_SKILL_TITLE_NORN = 41
+Global Const $GC_I_SKILL_TITLE_NONE = 48
+
 ; Skill Campaign
 Global Const $GC_I_SKILL_CAMPAIGN_CORE = 0
 Global Const $GC_I_SKILL_CAMPAIGN_PROPHECIES = 1
 Global Const $GC_I_SKILL_CAMPAIGN_FACTIONS = 2
 Global Const $GC_I_SKILL_CAMPAIGN_NIGHTFALL = 3
 Global Const $GC_I_SKILL_CAMPAIGN_EOTN = 4
+Global Const $GC_I_SKILL_CAMPAIGN_BONUSPACK = 5
 
 ; Skill Special
-Global Const $GC_I_SKILL_SPECIAL_EXHAUSTION = 1 ; Exhaustion
-Global Const $GC_I_SKILL_SPECIAL_TOUCH = 2 ; Touch Skill
-Global Const $GC_I_SKILL_SPECIAL_TOUCH_EXHAUSTION = 3 ; Touch Skill with Exhaustion
-Global Const $GC_I_SKILL_SPECIAL_ELITE = 4 ; Elite Skill
-Global Const $GC_I_SKILL_SPECIAL_ELITE_EXHAUSTION = 5 ; Elite Skill with Exhaustion
-Global Const $GC_I_SKILL_SPECIAL_ELITE_TOUCH = 6 ; Elite Touch Skill
-Global Const $GC_I_SKILL_SPECIAL_RANGE_HALF = 8 ; Half Range Skill
-Global Const $GC_I_SKILL_SPECIAL_ELITE_RANGE_HALF = 12 ; Elite Skill Half Range
-Global Const $GC_I_SKILL_SPECIAL_INTERRUPTED_EASILY = 32 ; Easily interrupted
-Global Const $GC_I_SKILL_SPECIAL_ATTR_FAILURE = 64 ; 50% Failure below 4 attribute
-Global Const $GC_I_SKILL_SPECIAL_ATTR_FAILURE_KD = 65 ; 50% Failure below 4 attribute causes Knockdown
-Global Const $GC_I_SKILL_SPECIAL_ELITE_ATTR_FAILURE = 68 ; 50% Failure below 4 attribute Elite Skill
-Global Const $GC_I_SKILL_SPECIAL_ARMOR_LESS = 128 ; -40 Armor while using
-Global Const $GC_I_SKILL_SPECIAL_TRAP_RITUAL_PREP = 256 ; Preparation, Trap or Ritual
-Global Const $GC_I_SKILL_SPECIAL_ELITE_TRAP_RITUAL_PREP = 260 ; Preparation, Trap or Ritual Elite Skill
-Global Const $GC_I_SKILL_SPECIAL_TRAP_PIERCING = 288 ; Traps dealing Piercing Damage
-Global Const $GC_I_SKILL_SPECIAL_TRAP_SMOKE = 292 ; Smoke Trap (Armor ignoring elemental damage)
-Global Const $GC_I_SKILL_SPECIAL_PREP_ARMOR_LESS = 384 ; Preparation -40 Armor while using
-Global Const $GC_I_SKILL_SPECIAL_HEX_HEALTH_DEGEN = 512 ; Hex Health Degeneration
-Global Const $GC_I_SKILL_SPECIAL_ELITE_HEX_HEALTH_DEGEN = 516 ; Elite Hex Health Degeneration
-Global Const $GC_I_SKILL_SPECIAL_RESURRECTION = 2048 ; Resurrection Spell
-Global Const $GC_I_SKILL_SPECIAL_TOUCH_RESURRECTION = 2050 ; Touch Resurrection Spell
-Global Const $GC_I_SKILL_SPECIAL_ELITE_RESURRECTION = 2052 ; Elite Resurrection Spell
-Global Const $GC_I_SKILL_SPECIAL_RANGE_HALF_RESURRECTION = 2056 ; Resurrection Spell half range
-Global Const $GC_I_SKILL_SPECIAL_RESURRECTION_SPIRIT = 2304 ; Resurrection Spirit
-Global Const $GC_I_SKILL_SPECIAL_EXPERTISE_FAILURE = 4100 ; 50% Failure below 8 Expertise
-Global Const $GC_I_SKILL_SPECIAL_CONDITION = 8192 ; Condition
-Global Const $GC_I_SKILL_SPECIAL_MUST_FOLLOW_OHA = 32768 ; Skill Must follow Off-Hand Attack
-Global Const $GC_I_SKILL_SPECIAL_ELITE_MUST_FOLLOW_OHA = 32772 ; Elite Skill Must follow Off-Hand Attack
-Global Const $GC_I_SKILL_SPECIAL_CORPSE = 262144 ; Skill Exploits Fresh Corpse
-Global Const $GC_I_SKILL_SPECIAL_ELITE_CORPSE = 262148 ; Elite Skill Exploits Fresh Corpse
-Global Const $GC_I_SKILL_SPECIAL_CORPSE_FAILURE = 262208 ; Skill Exploits Fresh Corpse 50% failure below 5 Death Magic
-Global Const $GC_I_SKILL_SPECIAL_CORPSE_HEALTH_DEGEN = 262656 ; Skill Exploits Fresh Corpse - Health Degeneration
-Global Const $GC_I_SKILL_SPECIAL_PVE_SKILL = 524288 ; PVE Skill
-Global Const $GC_I_SKILL_SPECIAL_PVE_TOUCH = 524290 ; PVE Touch Skill
-Global Const $GC_I_SKILL_SPECIAL_PVE_ELITE = 524292 ; PVE Elite Skill
-Global Const $GC_I_SKILL_SPECIAL_PVE_CAP = 524304 ; Caps Elite Skill
-Global Const $GC_I_SKILL_SPECIAL_PVE_RITUAL = 524544 ; PVE Ritual Skill
-Global Const $GC_I_SKILL_SPECIAL_PVE_TRAP = 524576 ; PVE Trap Skill
-Global Const $GC_I_SKILL_SPECIAL_PVE_HEX_HEALTH_DEGEN = 524800 ; PVE Hex Health Degen Spell
-Global Const $GC_I_SKILL_SPECIAL_PVE_RESURRECTION = 526336 ; Resurrection Spell Sunspear
-Global Const $GC_I_SKILL_SPECIAL_ENCHANT_FLASH = 8388608 ; Flash Enchantment Skill
-Global Const $GC_I_SKILL_SPECIAL_PVE_ENCHANT_FLASH = 8388612 ; Elite Flash Enchantment Skill
-Global Const $GC_I_SKILL_SPECIAL_ATTR_FAILURE_ENCHANT_FLASH = 8388672 ; Flash Enchantment Skill 50% failure below 5 Windprayer
-Global Const $GC_I_SKILL_SPECIAL_BOSS = 1048576 ; Boss skill?
+Global Const $GC_I_SKILL_SPECIAL_FLAG_ANY = 0 					 ; Any special
+Global Const $GC_I_SKILL_SPECIAL_FLAG_OVERCAST = 0x1             ; Bit 0 (1)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_TOUCH = 0x2                ; Bit 1 (2)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_ELITE = 0x4                ; Bit 2 (4)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_HALF_RANGE = 0x8           ; Bit 3 (8)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_CAPTURE = 0x10			 ; Bit 4 (16)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_INTERRUPTED_EASILY = 0x20  ; Bit 5 (32)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_ATTR_FAILURE = 0x40        ; Bit 6 (64)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_ARMOR_LESS = 0x80          ; Bit 7 (128)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_TRAP_RITUAL_PREP = 0x100   ; Bit 8 (256)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_HEX_HEALTH_DEGEN = 0x200   ; Bit 9 (512)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_EVENT_SKILL = 0x400      	 ; Bit 10 (1024)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION = 0x800       ; Bit 11 (2048)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_OATH_SHOT = 0x1000 		 ; Bit 12 (4096)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_CONDITION = 0x2000         ; Bit 13 (8192)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_MONSTER_SKILL = 0x4000     ; Bit 14 (16384)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_MUST_FOLLOW_OHA = 0x8000   ; Bit 15 (32768)
+;~ Global Const $GC_I_SKILL_SPECIAL_FLAG ? = 0x10000	 		 ; Bit 16 (65536) never used
+;~ Global Const $GC_I_SKILL_SPECIAL_FLAG ? = 0x20000 			 ; Bit 17 (131072) monster skill only
+Global Const $GC_I_SKILL_SPECIAL_FLAG_CORPSE = 0x40000           ; Bit 18 (262144)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_PVE = 0x80000              ; Bit 19 (524288)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_BLESSING_DISGUISE = 0x100000 ; Bit 20 (1048576)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_PASSIVE_MONSTER = 0x200000 ; Bit 21 (2097152)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_PVP = 0x400000             ; Bit 22 (4194304)
+Global Const $GC_I_SKILL_SPECIAL_FLAG_ENCHANT_FLASH = 0x800000   ; Bit 23 (8388608)
+;~ Global Const $GC_I_SKILL_SPECIAL_FLAG ? = 0x1000000   		 ; Bit 24 (16777216) monster skill only
+;~ Global Const $GC_I_SKILL_SPECIAL_FLAG ? = 0x2000000   		 ; Bit 25 (33554432) monster skill only
 
 ; Skill Combo
+Global Const $GC_I_SKILL_COMBO_ANY = 0 ; Not a combo
 Global Const $GC_I_SKILL_COMBO_LEAD_ATTACK = 1 ; My Skill is Lead Attack
 Global Const $GC_I_SKILL_COMBO_OFF_HAND_ATTACK = 2 ; My Skill is Off-Hand Attack
 Global Const $GC_I_SKILL_COMBO_DUAL_ATTACK = 3 ; My Skill is Dual Attack
 
-; Skill COmbo Requirement
+; Skill Combo Requirement
+Global Const $GC_I_SKILL_COMBO_REQ_ANY = 0 ; No requirement
 Global Const $GC_I_SKILL_COMBO_REQ_DUAL_ATTACK = 1 ; Skill must follow a Dual Attack
 Global Const $GC_I_SKILL_COMBO_REQ_LEAD_ATTACK = 2 ; Skill must follow a Lead Attack
 Global Const $GC_I_SKILL_COMBO_REQ_OFF_HAND_ATTACK = 4 ; Skill must follow an Off-Hand Attack
 Global Const $GC_I_SKILL_COMBO_REQ_HEXED_FOE = 16 ; Skill must strike a Hexed foe
 
 ; Skill Effect 1
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_BLEEDING = 1 ; Inflicts Bleeding
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_BLINDED = 2 ; Inflicts Blinded
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_BURNING = 4 ; Inflicts Burning
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_CRIPPLED = 8 ; Inflicts Crippled
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_DEEP_WOUND = 16 ; Inflicts DeepWound
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_DISEASED = 32 ; Inflicts Diseased
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_SLOWER_MOVEMENT = 64 ; 50% slower Movement
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_KD = 128 ; Inflicts KD
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_POISONED = 256 ; Inflicts Poisoned
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_DAZED = 512 ; Inflicts Dazed
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_WEAKNESS = 1024 ; Inflicts Weakness
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_SLOWED = 2048 ; Slowed (nr 64 could be included here)
-Global Const $GC_I_SKILL_EFFECT1_INFLICTS_RD_H = 4096 ; Remove condition and heal (Only heal ?)
+Global Const $GC_I_SKILL_EFFECT1_ANY = 0 				  ; Inflicts Any Effect
+Global Const $GC_I_SKILL_EFFECT1_BLEEDING = 0x1           ; Bit 0 (1)
+Global Const $GC_I_SKILL_EFFECT1_BLINDED = 0x2            ; Bit 1 (2)
+Global Const $GC_I_SKILL_EFFECT1_BURNING = 0x4            ; Bit 2 (4)
+Global Const $GC_I_SKILL_EFFECT1_CRIPPLED = 0x8           ; Bit 3 (8)
+Global Const $GC_I_SKILL_EFFECT1_DEEP_WOUND = 0x10        ; Bit 4 (16)
+Global Const $GC_I_SKILL_EFFECT1_DISEASED = 0x20          ; Bit 5 (32)
+Global Const $GC_I_SKILL_EFFECT1_50_SLOWER_MOVEMENT = 0x40   ; Bit 6 (64)
+Global Const $GC_I_SKILL_EFFECT1_KNOCKDOWN = 0x80         ; Bit 7 (128)
+Global Const $GC_I_SKILL_EFFECT1_POISONED = 0x100         ; Bit 8 (256)
+Global Const $GC_I_SKILL_EFFECT1_DAZED = 0x200            ; Bit 9 (512)
+Global Const $GC_I_SKILL_EFFECT1_WEAKNESS = 0x400         ; Bit 10 (1024)
+Global Const $GC_I_SKILL_EFFECT1_WATER_HEX = 0x800        ; Bit 11 (2048)
+Global Const $GC_I_SKILL_EFFECT1_HEAL = 0x1000 			  ; Bit 12 (4096)
 
 ; Skill Effect 2
-Global Const $GC_I_SKILL_EFFECT2_UNCATEGORIZED = 0 ; All others that are not categorized but could maybe
-Global Const $GC_I_SKILL_EFFECT2_INTERRUPT = 1 ; Interrupting Skill
-Global Const $GC_I_SKILL_EFFECT2_OTHERS_HEAL = 2 ; Healing Spells that can't be cast on oneself (Blood Bond is wrong at this point)
-Global Const $GC_I_SKILL_EFFECT2_SELF_HEAL = 4 ; Healing Skills that are only Self-targetable
-Global Const $GC_I_SKILL_EFFECT2_HEALING = 6 ; Healing Skills (not sure if there is smth in common between all of those)
-Global Const $GC_I_SKILL_EFFECT2_RESURRECTION = 8 ; Resurrection Skill
-Global Const $GC_I_SKILL_EFFECT2_RESURRECTION_SIGNET = 16 ; Resurrection Signets
-Global Const $GC_I_SKILL_EFFECT2_SACRIFICING = 32 ; Sacrificing Skills (think Blood of the Aggressor is wrong here)
-Global Const $GC_I_SKILL_EFFECT2_SACRIFICING_HEAL = 36 ; Sacrificing Skills with Self-heal effect
-Global Const $GC_I_SKILL_EFFECT2_SACRIFICING_HEAL_OTHER = 38 ; Sacrificing Skills with Healing others Effect
-Global Const $GC_I_SKILL_EFFECT2_BLOCKING = 128 ; Blocking Skill
-Global Const $GC_I_SKILL_EFFECT2_ENERGY_GAIN = 256 ; Energy Gain Skill
-Global Const $GC_I_SKILL_EFFECT2_INTERRUPT_ENERGY_GAIN = 257 ; Energy Gain Interrupting Spell (could be added elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_SPELL_ENERGY_GAIN = 288 ; Energy Gain Spells (could be added Elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_STEAL_ENERGY_GAIN = 320 ; Energy Steal Skills
-Global Const $GC_I_SKILL_EFFECT2_CLOSE_RANGE = 512 ; Close Range Spells
-Global Const $GC_I_SKILL_EFFECT2_RANGE = 516 ; Still Close but a bit wider Range Spells
-Global Const $GC_I_SKILL_EFFECT2_TOUCH = 544 ; Touch Skills (but just 3 - can be put elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_ENERGY_DEGEN = 768 ; Energy Degen with Energy Gain (just one skill can be put elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_SURROUNDING = 1024 ; Skill affecting surrounding Enemies (just one - can be put elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_HEX_REMOVAL = 2048 ; Plain Hex Removal Skills
-Global Const $GC_I_SKILL_EFFECT2_HEX_REMOVAL_HEAL = 2054 ; Hex Removal Skill with Healing (just one spell can be put elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_HEX_REMOVAL_ENERGY = 2304 ; Hex Removal Skill with Energy gain or replacement of skill with removed Hex (just 2 Skills)
-Global Const $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL = 4096 ; Plain Condition Removal Skills
-Global Const $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL_ = 4102 ; Condition Removal Skills under certain circumstances (just 2 Skills - can be put elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_CONDITION_TRANSFER = 4608 ; Condition Transfer Skill (only one - can be put elsewhere)
-Global Const $GC_I_SKILL_EFFECT2_CONDITION_HEX_REMOVAL = 6144 ; Condition and Hex Removal Skills without any requirement (only 2 Skills)
-Global Const $GC_I_SKILL_EFFECT2_CONDITION_HEX_REMOVAL_HEAL = 6150 ; Healing Skill with Condition and Hex Remove (only 1 Skill)
-Global Const $GC_I_SKILL_EFFECT2_DERVISH_ENCHANT_REMOVAL = 8192 ; Remove of Dervish Enchantments Skills (Destructive was Glaive is wrong here)
-Global Const $GC_I_SKILL_EFFECT2_HEAL_DERVISH_ENCHANT_HEX_REMOVAL = 8196 ; Dervish Heal Skill with Derv Ench Removal + Hex Removal (just 1 Skill)
-Global Const $GC_I_SKILL_EFFECT2_DERVISH_HEAL = 8198 ; Dervish Heal Signet with Derv Ench Removal + Faster Recast (just 1 Skill)
-Global Const $GC_I_SKILL_EFFECT2_ENCHANT_REMOVE_ENERGY_REGEN = 8448 ; Elementalist Lose all Enchantment Skill + Energy Regen (just 1 Skill)
-Global Const $GC_I_SKILL_EFFECT2_CONDITION_HEX_REMOVAL_HEAL_LOOSE_ENCHANT = 14336 ; Heal Spell with Cond and Hex Removal + Lose all Enchantments
-Global Const $GC_I_SKILL_EFFECT2_REVERSAL_DAMAGE = 16384 ; Reversal of Damage Spells (a lot are missing in this category)
-Global Const $GC_I_SKILL_EFFECT2_ATTACK_MOVEMENT_SPEED = 32768 ; Attack Speed and Movement Speed Skills (a lot are missing in this category)
-Global Const $GC_I_SKILL_EFFECT2_KD = 65536 ; Attack that knocks you down when Foe has one of many conditions (just 2 Skills)
-Global Const $GC_I_SKILL_EFFECT2_ELEM_ATTUNEMENT = 131072 ; Elemental Attunement Enchantment
+Global Const $GC_I_SKILL_EFFECT2_ANY = 0 		  		  ; Does Any Effect
+Global Const $GC_I_SKILL_EFFECT2_INTERRUPT = 0x1          ; Bit 0 (1)
+Global Const $GC_I_SKILL_EFFECT2_CAN_HEAL_OTHER = 0x2     ; Bit 1 (2)
+Global Const $GC_I_SKILL_EFFECT2_CAN_HEAL_SELF = 0x4      ; Bit 2 (4)
+Global Const $GC_I_SKILL_EFFECT2_RESURRECTION = 0x8       ; Bit 3 (8)
+Global Const $GC_I_SKILL_EFFECT2_RES_SIGNET = 0x10        ; Bit 4 (16)
+Global Const $GC_I_SKILL_EFFECT2_SACRIFICING = 0x20       ; Bit 5 (32)
+Global Const $GC_I_SKILL_EFFECT2_ENERGY_STEAL = 0x40      ; Bit 6 (64)
+Global Const $GC_I_SKILL_EFFECT2_BLOCKING = 0x80          ; Bit 7 (128)
+Global Const $GC_I_SKILL_EFFECT2_ENERGY_GAIN = 0x100      ; Bit 8 (256)
+Global Const $GC_I_SKILL_EFFECT2_CLOSE_RANGE = 0x200      ; Bit 9 (512)
+Global Const $GC_I_SKILL_EFFECT2_SURROUNDING = 0x400      ; Bit 10 (1024)
+Global Const $GC_I_SKILL_EFFECT2_HEX_REMOVAL = 0x800      ; Bit 11 (2048)
+Global Const $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL = 0x1000 ; Bit 12 (4096)
+Global Const $GC_I_SKILL_EFFECT2_SELF_ENCHANT_REMOVAL = 0x2000 ; Bit 13 (8192)
+Global Const $GC_I_SKILL_EFFECT2_REVERSAL_DAMAGE = 0x4000  ; Bit 14 (16384)
+Global Const $GC_I_SKILL_EFFECT2_ATTACK_MOVEMENT_SPEED = 0x8000  ; Bit 15 (32768)
+Global Const $GC_I_SKILL_EFFECT2_SELF_KNOCKDOWN = 0x10000       ; Bit 16 (65536)
+Global Const $GC_I_SKILL_EFFECT2_SELF_TARGET_ENCHANT = 0x20000 ; Bit 17 (131072) (Elem Attunement, Aura of the Lich, Masochism)
 
-; SKILL REQUIREMENT
-Global Const $GC_I_SKILL_REQUIRE_BLEEDING = 1 ; Bleeding
-Global Const $GC_I_SKILL_REQUIRE_BLINDED = 2 ; Blinded
-Global Const $GC_I_SKILL_REQUIRE_BURNING = 4 ; Burning
-Global Const $GC_I_SKILL_REQUIRE_CRIPPLED = 8 ; Crippled
-Global Const $GC_I_SKILL_REQUIRE_CRIPPLED_BLEEDING = 9 ; Crippled + Bleeding
-Global Const $GC_I_SKILL_REQUIRE_DEEP_WOUND = 16 ; DeepWound
-Global Const $GC_I_SKILL_REQUIRE_BLEEDING_DEEP_WOUND = 17 ; Bleeding + Deep Wound
-Global Const $GC_I_SKILL_REQUIRE_DCBW = 25 ; Deep Wound or Crippled or Bleeding or Weakness (this warrior skills that include one of these randomly)
-Global Const $GC_I_SKILL_REQUIRE_DISEASED = 32 ; Diseased
-Global Const $GC_I_SKILL_REQUIRE_SLOWER_MOVEMENT = 64 ; 50% Slower Movement
-Global Const $GC_I_SKILL_REQUIRE_KD = 128 ; Knock Down
-Global Const $GC_I_SKILL_REQUIRE_KD_CRIPPLED = 136 ; Crippled + Knock Down
-Global Const $GC_I_SKILL_REQUIRE_POISONED = 256 ; Poisoned
-Global Const $GC_I_SKILL_REQUIRE_DAZED = 512 ; Dazed
-Global Const $GC_I_SKILL_REQUIRE_DAZED_BLINDED = 514 ; Dazed + Blinded
-Global Const $GC_I_SKILL_REQUIRE_WEAKNESS = 1024 ; Weakness
-Global Const $GC_I_SKILL_REQUIRE_WEAKNESS_DEEP_WOUND = 1040 ; Weakness + Deep Wound
-Global Const $GC_I_SKILL_REQUIRE_WEAKNESS_KD = 1152 ; Knock Down + Weakness
-Global Const $GC_I_SKILL_REQUIRE_SLOWED = 2048 ; Slowed (64 could be included here)
+; Skill Require Condition
+Global Const $GC_I_SKILL_REQUIRE_ANY = 0					; Require Any Condition
+Global Const $GC_I_SKILL_REQUIRE_BLEEDING = 0x1				; Bit 0 (1)
+Global Const $GC_I_SKILL_REQUIRE_BLINDED = 0x2				; Bit 1 (2)
+Global Const $GC_I_SKILL_REQUIRE_BURNING = 0x4				; Bit 2 (4)
+Global Const $GC_I_SKILL_REQUIRE_CRIPPLED = 0x8				; Bit 3 (8)
+Global Const $GC_I_SKILL_REQUIRE_DEEP_WOUND = 0x10			; Bit 4 (16)
+Global Const $GC_I_SKILL_REQUIRE_DISEASED = 0x20			; Bit 5 (32)
+Global Const $GC_I_SKILL_REQUIRE_SLOWER_MOVEMENT = 0x40		; Bit 6 (64)
+Global Const $GC_I_SKILL_REQUIRE_KNOCKDOWN = 0x80			; Bit 7 (128)
+Global Const $GC_I_SKILL_REQUIRE_POISONED = 0x100			; Bit 8 (256)
+Global Const $GC_I_SKILL_REQUIRE_DAZED = 0x200				; Bit 9 (512)
+Global Const $GC_I_SKILL_REQUIRE_WEAKNESS = 0x400			; Bit 10 (1024)
+Global Const $GC_I_SKILL_REQUIRE_UNKNOWN = 0x800			; Bit 11 (2048)
 
 ; Skill Weapon Requirement
 Global Const $GC_I_SKILL_REQUIRE_AXE = 1 ; All Axe Attacks
@@ -4048,7 +4029,7 @@ Global Const $GC_I_SKILL_ID_HEROIC_REFRAIN = 3431
 
 ;~ 22: Duration15
 ;~     131072 = Bonds
-    
+
 ;~ 23: Recharge
 
 ;~ 24: Scale0
