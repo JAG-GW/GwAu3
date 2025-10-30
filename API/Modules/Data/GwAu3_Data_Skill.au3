@@ -251,1106 +251,1106 @@ EndFunc   ;==>GetSkillbarInfo
 #EndRegion Skillbar Related
 
 #Region Campaign
-Func Cast_GetSkillCampaign($a_i_SkillID)
+Func Skill_GetSkillCampaign($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Campaign")
 EndFunc
 
-Func Cast_IsSkillCampaign($a_i_SkillID, $a_i_campaignType)
-	Return Cast_GetSkillCampaign($a_i_SkillID) = $a_i_campaignType
+Func Skill_IsSkillCampaign($a_i_SkillID, $a_i_campaignType)
+	Return Skill_GetSkillCampaign($a_i_SkillID) = $a_i_campaignType
 EndFunc
 
-Func Cast_IsCoreCampaign($a_i_SkillID)
-	Return Cast_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_CORE)
+Func Skill_IsCoreCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_CORE)
 EndFunc
 
-Func Cast_IsProphecyCampaign($a_i_SkillID)
-	Return Cast_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_PROPHECY)
+Func Skill_IsProphecyCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_PROPHECY)
 EndFunc
 
-Func Cast_IsFactionCampaign($a_i_SkillID)
-	Return Cast_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_FACTION)
+Func Skill_IsFactionCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_FACTION)
 EndFunc
 
-Func Cast_IsNightfallCampaign($a_i_SkillID)
-	Return Cast_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_NIGHTFALL)
+Func Skill_IsNightfallCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_NIGHTFALL)
 EndFunc
 
-Func Cast_IsEotNCampaign($a_i_SkillID)
-	Return Cast_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_EOTN)
+Func Skill_IsEotNCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_EOTN)
 EndFunc
 
-Func Cast_IsBonusMissionPackCampaign($a_i_SkillID)
-	Return Cast_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_BONUSPACK)
+Func Skill_IsBonusMissionPackCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_BONUSPACK)
 EndFunc
 #EndRegion Campaign
 
 #Region SkillType
-Func Cast_GetSkillType($a_i_SkillID)
+Func Skill_GetSkillType($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "SkillType")
 EndFunc
 
-Func Cast_IsSkillType($a_i_SkillID, $skillType)
-	Return Cast_GetSkillType($a_i_SkillID) = $skillType
+Func Skill_IsSkillType($a_i_SkillID, $skillType)
+	Return Skill_GetSkillType($a_i_SkillID) = $skillType
 EndFunc
 
-Func Cast_IsBountyType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_BOUNTY)
+Func Skill_IsBountyType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_BOUNTY)
 EndFunc
 
-Func Cast_IsScrollType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SCROLL)
+Func Skill_IsScrollType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SCROLL)
 EndFunc
 
-Func Cast_IsStanceType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_STANCE)
+Func Skill_IsStanceType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_STANCE)
 EndFunc
 
-Func Cast_IsHexType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_HEX)
+Func Skill_IsHexType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_HEX)
 EndFunc
 
-Func Cast_IsSpellType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SPELL)
+Func Skill_IsSpellType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SPELL)
 EndFunc
 
-Func Cast_IsEnchantmentType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENCHANTMENT)
+Func Skill_IsEnchantmentType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENCHANTMENT)
 EndFunc
 
-Func Cast_IsSignetType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SIGNET)
+Func Skill_IsSignetType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SIGNET)
 EndFunc
 
-Func Cast_IsConditionType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_CONDITION)
+Func Skill_IsConditionType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_CONDITION)
 EndFunc
 
-Func Cast_IsWellType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WELL)
+Func Skill_IsWellType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WELL)
 EndFunc
 
-Func Cast_IsSkillType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL)
+Func Skill_IsSkillType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL)
 EndFunc
 
-Func Cast_IsWardType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WARD)
+Func Skill_IsWardType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WARD)
 EndFunc
 
-Func Cast_IsGlyphType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_GLYPH)
+Func Skill_IsGlyphType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_GLYPH)
 EndFunc
 
-Func Cast_IsTitleType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_TITLE)
+Func Skill_IsTitleType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_TITLE)
 EndFunc
 
-Func Cast_IsAttackType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ATTACK)
+Func Skill_IsAttackType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ATTACK)
 EndFunc
 
-Func Cast_IsShoutType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SHOUT)
+Func Skill_IsShoutType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SHOUT)
 EndFunc
 
-Func Cast_IsSkill2Type($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL2)
+Func Skill_IsSkill2Type($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL2)
 EndFunc
 
-Func Cast_IsPassiveType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PASSIVE)
+Func Skill_IsPassiveType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PASSIVE)
 EndFunc
 
-Func Cast_IsEnvironmentalType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTAL)
+Func Skill_IsEnvironmentalType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTAL)
 EndFunc
 
-Func Cast_IsPreparationType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PREPARATION)
+Func Skill_IsPreparationType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PREPARATION)
 EndFunc
 
-Func Cast_IsPetAttackType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PETATTACK)
+Func Skill_IsPetAttackType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PETATTACK)
 EndFunc
 
-Func Cast_IsTrapType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_TRAP)
+Func Skill_IsTrapType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_TRAP)
 EndFunc
 
-Func Cast_IsRitualType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_RITUAL)
+Func Skill_IsRitualType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_RITUAL)
 EndFunc
 
-Func Cast_IsEnvironmentalTrapType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTALTRAP)
+Func Skill_IsEnvironmentalTrapType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTALTRAP)
 EndFunc
 
-Func Cast_IsItemSpellType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ITEM_SPELL)
+Func Skill_IsItemSpellType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ITEM_SPELL)
 EndFunc
 
-Func Cast_IsWeaponSpellType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WEAPON_SPELL)
+Func Skill_IsWeaponSpellType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WEAPON_SPELL)
 EndFunc
 
-Func Cast_IsFormType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_FORM)
+Func Skill_IsFormType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_FORM)
 EndFunc
 
-Func Cast_IsChantType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_CHANT)
+Func Skill_IsChantType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_CHANT)
 EndFunc
 
-Func Cast_IsEchoType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ECHO_REFRAIN)
+Func Skill_IsEchoType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ECHO_REFRAIN)
 EndFunc
 
-Func Cast_IsDisguiseType($a_i_SkillID)
-	Return Cast_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_DISGUISE)
+Func Skill_IsDisguiseType($a_i_SkillID)
+	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_DISGUISE)
 EndFunc
 #EndRegion SkillType
 
 #Region Skill Special
-Func Cast_GetSkillSpecial($a_i_SkillID)
+Func Skill_GetSkillSpecial($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Special")
 EndFunc
 
-Func Cast_HasSpecialFlag($a_i_SkillID, $i_Flag)
-	Local $i_Special = Cast_GetSkillSpecial($a_i_SkillID)
+Func Skill_HasSpecialFlag($a_i_SkillID, $i_Flag)
+	Local $i_Special = Skill_GetSkillSpecial($a_i_SkillID)
 	Return BitAND($i_Special, $i_Flag) <> 0
 EndFunc
 
-Func Cast_IsAnySpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ANY)
+Func Skill_IsAnySpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ANY)
 EndFunc
 
-Func Cast_IsOvercastSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_OVERCAST)
+Func Skill_IsOvercastSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_OVERCAST)
 EndFunc
 
-Func Cast_IsTouchSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_TOUCH)
+Func Skill_IsTouchSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_TOUCH)
 EndFunc
 
-Func Cast_IsEliteSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ELITE)
+Func Skill_IsEliteSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ELITE)
 EndFunc
 
-Func Cast_IsHalfRangeSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_HALF_RANGE)
+Func Skill_IsHalfRangeSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_HALF_RANGE)
 EndFunc
 
-Func Cast_IsCaptureSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_CAPTURE)
+Func Skill_IsCaptureSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_CAPTURE)
 EndFunc
 
-Func Cast_IsInterruptedEasilySpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_INTERRUPTED_EASILY)
+Func Skill_IsInterruptedEasilySpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_INTERRUPTED_EASILY)
 EndFunc
 
-Func Cast_IsAttrFailureSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ATTR_FAILURE)
+Func Skill_IsAttrFailureSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ATTR_FAILURE)
 EndFunc
 
-Func Cast_IsArmorLessSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ARMOR_LESS)
+Func Skill_IsArmorLessSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ARMOR_LESS)
 EndFunc
 
-Func Cast_IsTrapRitualPrepSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_TRAP_RITUAL_PREP)
+Func Skill_IsTrapRitualPrepSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_TRAP_RITUAL_PREP)
 EndFunc
 
-Func Cast_IsHexHealthDegenSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_HEX_HEALTH_DEGEN)
+Func Skill_IsHexHealthDegenSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_HEX_HEALTH_DEGEN)
 EndFunc
 
-Func Cast_IsEventSkillSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_EVENT_SKILL)
+Func Skill_IsEventSkillSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_EVENT_SKILL)
 EndFunc
 
-Func Cast_IsResurrectionSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION)
+Func Skill_IsResurrectionSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION)
 EndFunc
 
-Func Cast_IsOathShotSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_OATH_SHOT)
+Func Skill_IsOathShotSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_OATH_SHOT)
 EndFunc
 
-Func Cast_IsConditionSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_CONDITION)
+Func Skill_IsConditionSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_CONDITION)
 EndFunc
 
-Func Cast_IsMonsterSkillSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_MONSTER_SKILL)
+Func Skill_IsMonsterSkillSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_MONSTER_SKILL)
 EndFunc
 
-Func Cast_IsMustFollowOhaSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_MUST_FOLLOW_OHA)
+Func Skill_IsMustFollowOhaSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_MUST_FOLLOW_OHA)
 EndFunc
 
-Func Cast_IsCorpseSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_CORPSE)
+Func Skill_IsCorpseSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_CORPSE)
 EndFunc
 
-Func Cast_IsPVESpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_PVE)
+Func Skill_IsPVESpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_PVE)
 EndFunc
 
-Func Cast_IsBlessingDisguiseSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_BLESSING_DISGUISE)
+Func Skill_IsBlessingDisguiseSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_BLESSING_DISGUISE)
 EndFunc
 
-Func Cast_IsPassiveMonsterSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_PASSIVE_MONSTER)
+Func Skill_IsPassiveMonsterSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_PASSIVE_MONSTER)
 EndFunc
 
-Func Cast_IsPVPSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_PVP)
+Func Skill_IsPVPSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_PVP)
 EndFunc
 
-Func Cast_IsEnchantFlashSpecial($a_i_SkillID)
-	Return Cast_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ENCHANT_FLASH)
+Func Skill_IsEnchantFlashSpecial($a_i_SkillID)
+	Return Skill_HasSpecialFlag($a_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_ENCHANT_FLASH)
 EndFunc
 
-Func Cast_HasSeveralSpecialFlags($a_i_SkillID, $i_Flags)
-	Local $i_Special = Cast_GetSkillSpecial($a_i_SkillID)
+Func Skill_HasSeveralSpecialFlags($a_i_SkillID, $i_Flags)
+	Local $i_Special = Skill_GetSkillSpecial($a_i_SkillID)
 	Return BitAND($i_Special, $i_Flags) = $i_Flags
 EndFunc
 
-Func Cast_IsEliteTouch($a_i_SkillID)
-	Return Cast_HasAllSpecialFlags($a_i_SkillID, BitOR($GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_TOUCH))
+Func Skill_IsEliteTouch($a_i_SkillID)
+	Return Skill_HasAllSpecialFlags($a_i_SkillID, BitOR($GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_TOUCH))
 EndFunc
 
-Func Cast_IsEliteTouchWithExhaustion($a_i_SkillID)
+Func Skill_IsEliteTouchWithExhaustion($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_TOUCH, $GC_I_SKILL_SPECIAL_FLAG_OVERCAST)
-	Return Cast_HasAllSpecialFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasAllSpecialFlags($a_i_SkillID, $i_Flags)
 EndFunc
 #EndRegion Skill Special
 
 #Region Combo
-Func Cast_GetSkillCombo($a_i_SkillID)
+Func Skill_GetSkillCombo($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Combo")
 EndFunc
 
-Func Cast_IsSkillCombo($a_i_SkillID, $comboType)
-	Return Cast_GetSkillCombo($a_i_SkillID) = $comboType
+Func Skill_IsSkillCombo($a_i_SkillID, $comboType)
+	Return Skill_GetSkillCombo($a_i_SkillID) = $comboType
 EndFunc
 
-Func Cast_IsComboAny($a_i_SkillID)
-	Return Cast_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_ANY)
+Func Skill_IsComboAny($a_i_SkillID)
+	Return Skill_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_ANY)
 EndFunc
 
-Func Cast_IsComboLeadAttack($a_i_SkillID)
-	Return Cast_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_LEAD_ATTACK)
+Func Skill_IsComboLeadAttack($a_i_SkillID)
+	Return Skill_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_LEAD_ATTACK)
 EndFunc
 
-Func Cast_IsComboOffHandAttack($a_i_SkillID)
-	Return Cast_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_OFF_HAND_ATTACK)
+Func Skill_IsComboOffHandAttack($a_i_SkillID)
+	Return Skill_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_OFF_HAND_ATTACK)
 EndFunc
 
-Func Cast_IsComboDualAttack($a_i_SkillID)
-	Return Cast_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_DUAL_ATTACK)
+Func Skill_IsComboDualAttack($a_i_SkillID)
+	Return Skill_IsSkillCombo($a_i_SkillID, $GC_I_SKILL_COMBO_DUAL_ATTACK)
 EndFunc
 #EndRegion Combo
 
 #Region ComboRequirement
-Func Cast_GetSkillComboReq($a_i_SkillID)
+Func Skill_GetSkillComboReq($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "ComboReq")
 EndFunc
 
-Func Cast_IsSkillComboReq($a_i_SkillID, $comboReqType)
-	Return Cast_GetSkillComboReq($a_i_SkillID) = $comboReqType
+Func Skill_IsSkillComboReq($a_i_SkillID, $comboReqType)
+	Return Skill_GetSkillComboReq($a_i_SkillID) = $comboReqType
 EndFunc
 
-Func Cast_IsComboReqAny($a_i_SkillID)
-	Return Cast_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_ANY)
+Func Skill_IsComboReqAny($a_i_SkillID)
+	Return Skill_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_ANY)
 EndFunc
 
-Func Cast_IsComboReqDualAttack($a_i_SkillID)
-	Return Cast_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_DUAL_ATTACK)
+Func Skill_IsComboReqDualAttack($a_i_SkillID)
+	Return Skill_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_DUAL_ATTACK)
 EndFunc
 
-Func Cast_IsComboReqLeadAttack($a_i_SkillID)
-	Return Cast_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_LEAD_ATTACK)
+Func Skill_IsComboReqLeadAttack($a_i_SkillID)
+	Return Skill_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_LEAD_ATTACK)
 EndFunc
 
-Func Cast_IsComboReqOffHandAttack($a_i_SkillID)
-	Return Cast_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_OFF_HAND_ATTACK)
+Func Skill_IsComboReqOffHandAttack($a_i_SkillID)
+	Return Skill_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_OFF_HAND_ATTACK)
 EndFunc
 
-Func Cast_IsComboReqHexedFoe($a_i_SkillID)
-	Return Cast_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_HEXED_FOE)
+Func Skill_IsComboReqHexedFoe($a_i_SkillID)
+	Return Skill_IsSkillComboReq($a_i_SkillID, $GC_I_SKILL_COMBO_REQ_HEXED_FOE)
 EndFunc
 #EndRegion ComboRequirement
 
 #Region Effect1
-Func Cast_GetSkillEffect1($a_i_SkillID)
+Func Skill_GetSkillEffect1($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Effect1")
 EndFunc
 
-Func Cast_IsSkillEffect1($a_i_SkillID, $effectType)
-	Return Cast_GetSkillEffect1($a_i_SkillID) = $effectType
+Func Skill_IsSkillEffect1($a_i_SkillID, $effectType)
+	Return Skill_GetSkillEffect1($a_i_SkillID) = $effectType
 EndFunc
 
-Func Cast_HasEffect1Flag($a_i_SkillID, $i_Flag)
-	Local $i_Effect1 = Cast_GetSkillEffect1($a_i_SkillID)
+Func Skill_HasEffect1Flag($a_i_SkillID, $i_Flag)
+	Local $i_Effect1 = Skill_GetSkillEffect1($a_i_SkillID)
 	Return BitAND($i_Effect1, $i_Flag) <> 0
 EndFunc
 
-Func Cast_IsAnyEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_ANY)
+Func Skill_IsAnyEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_ANY)
 EndFunc
 
-Func Cast_IsBleedEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_BLEEDING)
+Func Skill_IsBleedEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_BLEEDING)
 EndFunc
 
-Func Cast_IsBlindEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_BLINDED)
+Func Skill_IsBlindEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_BLINDED)
 EndFunc
 
-Func Cast_IsBurnEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_BURNING)
+Func Skill_IsBurnEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_BURNING)
 EndFunc
 
-Func Cast_IsCrippleEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_CRIPPLED)
+Func Skill_IsCrippleEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_CRIPPLED)
 EndFunc
 
-Func Cast_IsDeepWoundEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_DEEP_WOUND)
+Func Skill_IsDeepWoundEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_DEEP_WOUND)
 EndFunc
 
-Func Cast_IsDiseaseEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_DISEASED)
+Func Skill_IsDiseaseEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_DISEASED)
 EndFunc
 
-Func Cast_IsSlowEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_50_SLOWER_MOVEMENT)
+Func Skill_IsSlowEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_50_SLOWER_MOVEMENT)
 EndFunc
 
-Func Cast_IsKnockDownEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_KNOCKDOWN)
+Func Skill_IsKnockDownEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_KNOCKDOWN)
 EndFunc
 
-Func Cast_IsPoisonEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_POISONED)
+Func Skill_IsPoisonEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_POISONED)
 EndFunc
 
-Func Cast_IsDazeEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_DAZED)
+Func Skill_IsDazeEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_DAZED)
 EndFunc
 
-Func Cast_IsWeakEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_WEAKNESS)
+Func Skill_IsWeakEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_WEAKNESS)
 EndFunc
 
-Func Cast_IsWaterHexEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_WATER_HEX)
+Func Skill_IsWaterHexEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_WATER_HEX)
 EndFunc
 
-Func Cast_IsHealEffect1($a_i_SkillID)
-	Return Cast_HasEffect1Flag($GC_I_SKILL_EFFECT1_HEAL)
+Func Skill_IsHealEffect1($a_i_SkillID)
+	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_HEAL)
 EndFunc
 
-Func Cast_HasSeveralEffect1Flags($a_i_SkillID, $i_Flags)
-	Local $i_Effect1 = Cast_GetSkillEffect1($a_i_SkillID)
+Func Skill_HasSeveralEffect1Flags($a_i_SkillID, $i_Flags)
+	Local $i_Effect1 = Skill_GetSkillEffect1($a_i_SkillID)
 	Return BitAND($i_Effect1, $i_Flags) = $i_Flags
 EndFunc
 
-Func Cast_IsBleedAndCripple($a_i_SkillID)
-	Return Cast_HasSeveralEffect1Flags($a_i_SkillID, BitOR($GC_I_SKILL_EFFECT1_BLEEDING, $GC_I_SKILL_EFFECT1_CRIPPLED))
+Func Skill_IsBleedAndCripple($a_i_SkillID)
+	Return Skill_HasSeveralEffect1Flags($a_i_SkillID, BitOR($GC_I_SKILL_EFFECT1_BLEEDING, $GC_I_SKILL_EFFECT1_CRIPPLED))
 EndFunc
 
-Func Cast_IsDazeAndBlind($a_i_SkillID)
+Func Skill_IsDazeAndBlind($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT1_BLINDED, $GC_I_SKILL_EFFECT1_DAZED)
-	Return Cast_HasSeveralEffect1Flags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralEffect1Flags($a_i_SkillID, $i_Flags)
 EndFunc
 #EndRegion Effect1
 
 #Region Effect2
-Func Cast_GetSkillEffect2($a_i_SkillID)
+Func Skill_GetSkillEffect2($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Effect2")
 EndFunc
 
-Func Cast_IsSkillEffect2($a_i_SkillID, $effectType)
-	Return Cast_GetSkillEffect2($a_i_SkillID) = $effectType
+Func Skill_IsSkillEffect2($a_i_SkillID, $effectType)
+	Return Skill_GetSkillEffect2($a_i_SkillID) = $effectType
 EndFunc
 
-Func Cast_HasEffect2Flag($a_i_SkillID, $i_Flag)
-	Local $i_Effect2 = Cast_GetSkillEffect2($a_i_SkillID)
+Func Skill_HasEffect2Flag($a_i_SkillID, $i_Flag)
+	Local $i_Effect2 = Skill_GetSkillEffect2($a_i_SkillID)
 	Return BitAND($i_Effect2, $i_Flag) <> 0
 EndFunc
 
-Func Cast_IsAnyEffect2($a_i_SkillID)
-	Return Cast_GetSkillEffect2($a_i_SkillID) <> 0
+Func Skill_IsAnyEffect2($a_i_SkillID)
+	Return Skill_GetSkillEffect2($a_i_SkillID) <> 0
 EndFunc
 
-Func Cast_IsInterruptEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_INTERRUPT)
+Func Skill_IsInterruptEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_INTERRUPT)
 EndFunc
 
-Func Cast_CanHealOtherEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CAN_HEAL_OTHER)
+Func Skill_CanHealOtherEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CAN_HEAL_OTHER)
 EndFunc
 
-Func Cast_CanHealSelfEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CAN_HEAL_SELF)
+Func Skill_CanHealSelfEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CAN_HEAL_SELF)
 EndFunc
 
-Func Cast_IsResurrectionEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_RESURRECTION)
+Func Skill_IsResurrectionEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_RESURRECTION)
 EndFunc
 
-Func Cast_IsResSignetEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_RES_SIGNET)
+Func Skill_IsResSignetEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_RES_SIGNET)
 EndFunc
 
-Func Cast_IsSacrificingEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SACRIFICING)
+Func Skill_IsSacrificingEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SACRIFICING)
 EndFunc
 
-Func Cast_IsEnergyStealEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_ENERGY_STEAL)
+Func Skill_IsEnergyStealEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_ENERGY_STEAL)
 EndFunc
 
-Func Cast_IsBlockingEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_BLOCKING)
+Func Skill_IsBlockingEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_BLOCKING)
 EndFunc
 
-Func Cast_IsEnergyGainEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_ENERGY_GAIN)
+Func Skill_IsEnergyGainEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_ENERGY_GAIN)
 EndFunc
 
-Func Cast_IsCloseRangeEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CLOSE_RANGE)
+Func Skill_IsCloseRangeEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CLOSE_RANGE)
 EndFunc
 
-Func Cast_IsSurroundingEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SURROUNDING)
+Func Skill_IsSurroundingEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SURROUNDING)
 EndFunc
 
-Func Cast_IsHexRemovalEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_HEX_REMOVAL)
+Func Skill_IsHexRemovalEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_HEX_REMOVAL)
 EndFunc
 
-Func Cast_IsConditionRemovalEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL)
+Func Skill_IsConditionRemovalEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL)
 EndFunc
 
-Func Cast_IsSelfEnchantRemovalEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SELF_ENCHANT_REMOVAL)
+Func Skill_IsSelfEnchantRemovalEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SELF_ENCHANT_REMOVAL)
 EndFunc
 
-Func Cast_IsReversalDamageEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_REVERSAL_DAMAGE)
+Func Skill_IsReversalDamageEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_REVERSAL_DAMAGE)
 EndFunc
 
-Func Cast_IsAttackMovementSpeedEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_ATTACK_MOVEMENT_SPEED)
+Func Skill_IsAttackMovementSpeedEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_ATTACK_MOVEMENT_SPEED)
 EndFunc
 
-Func Cast_IsSelfKnockdownEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SELF_KNOCKDOWN)
+Func Skill_IsSelfKnockdownEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SELF_KNOCKDOWN)
 EndFunc
 
-Func Cast_IsSelfTargetEnchantEffect2($a_i_SkillID)
-	Return Cast_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SELF_TARGET_ENCHANT)
+Func Skill_IsSelfTargetEnchantEffect2($a_i_SkillID)
+	Return Skill_HasEffect2Flag($a_i_SkillID, $GC_I_SKILL_EFFECT2_SELF_TARGET_ENCHANT)
 EndFunc
 
 ; === Combined Checks ===
-Func Cast_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
-	Local $i_Effect2 = Cast_GetSkillEffect2($a_i_SkillID)
+Func Skill_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
+	Local $i_Effect2 = Skill_GetSkillEffect2($a_i_SkillID)
 	Return BitAND($i_Effect2, $i_Flags) = $i_Flags
 EndFunc
 
 ; Heal (self or other)
-Func Cast_IsHealEffect2($a_i_SkillID)
+Func Skill_IsHealEffect2($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_CAN_HEAL_SELF, $GC_I_SKILL_EFFECT2_CAN_HEAL_OTHER)
-	Local $i_Effect2 = Cast_GetSkillEffect2($a_i_SkillID)
+	Local $i_Effect2 = Skill_GetSkillEffect2($a_i_SkillID)
 	Return BitAND($i_Effect2, $i_Flags) <> 0
 EndFunc
 
 ; Heal Both (self AND other)
-Func Cast_CanHealBothEffect2($a_i_SkillID)
+Func Skill_CanHealBothEffect2($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_CAN_HEAL_SELF, $GC_I_SKILL_EFFECT2_CAN_HEAL_OTHER)
-	Return Cast_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Sacrificing + Heal Self
-Func Cast_IsSacrificingHealSelf($a_i_SkillID)
+Func Skill_IsSacrificingHealSelf($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_SACRIFICING, $GC_I_SKILL_EFFECT2_CAN_HEAL_SELF)
-	Return Cast_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Sacrificing + Heal Other
-Func Cast_IsSacrificingHealOther($a_i_SkillID)
+Func Skill_IsSacrificingHealOther($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_SACRIFICING, $GC_I_SKILL_EFFECT2_CAN_HEAL_OTHER)
-	Return Cast_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Interrupt + Energy Gain
-Func Cast_IsInterruptEnergyGain($a_i_SkillID)
+Func Skill_IsInterruptEnergyGain($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_INTERRUPT, $GC_I_SKILL_EFFECT2_ENERGY_GAIN)
-	Return Cast_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Hex + Condition Removal
-Func Cast_IsHexConditionRemoval($a_i_SkillID)
+Func Skill_IsHexConditionRemoval($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_HEX_REMOVAL, $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL)
-	Return Cast_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralEffect2Flags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Hex + Condition Removal + Heal
-Func Cast_IsHexConditionRemovalHeal($a_i_SkillID)
+Func Skill_IsHexConditionRemovalHeal($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_HEX_REMOVAL, $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL)
 	$i_Flags = BitOR($i_Flags, BitOR($GC_I_SKILL_EFFECT2_CAN_HEAL_SELF, $GC_I_SKILL_EFFECT2_CAN_HEAL_OTHER))
-	Local $i_Effect2 = Cast_GetSkillEffect2($a_i_SkillID)
+	Local $i_Effect2 = Skill_GetSkillEffect2($a_i_SkillID)
 	; Au moins heal + (hex ou condition)
 	Return BitAND($i_Effect2, $GC_I_SKILL_EFFECT2_HEX_REMOVAL) <> 0 Or _
 	       BitAND($i_Effect2, $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL) <> 0 And _
-	       Cast_IsHealEffect2($a_i_SkillID)
+	       Skill_IsHealEffect2($a_i_SkillID)
 EndFunc
 
 ; Resurrection (any type)
-Func Cast_IsAnyResurrection($a_i_SkillID)
+Func Skill_IsAnyResurrection($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_EFFECT2_RESURRECTION, $GC_I_SKILL_EFFECT2_RES_SIGNET)
-	Local $i_Effect2 = Cast_GetSkillEffect2($a_i_SkillID)
+	Local $i_Effect2 = Skill_GetSkillEffect2($a_i_SkillID)
 	Return BitAND($i_Effect2, $i_Flags) <> 0
 EndFunc
 #EndRegion Effect2
 
 #Region RequireCondition
-Func Cast_GetSkillRequireCondition($a_i_SkillID)
+Func Skill_GetSkillRequireCondition($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "RequireCondition")
 EndFunc
 
-Func Cast_IsSkillRequireCondition($a_i_SkillID, $conditionType)
-	Return Cast_GetSkillRequireCondition($a_i_SkillID) = $conditionType
+Func Skill_IsSkillRequireCondition($a_i_SkillID, $conditionType)
+	Return Skill_GetSkillRequireCondition($a_i_SkillID) = $conditionType
 EndFunc
 
-Func Cast_HasRequireConditionFlag($a_i_SkillID, $i_Flag)
-	Local $i_Require = Cast_GetSkillRequireCondition($a_i_SkillID)
+Func Skill_HasRequireConditionFlag($a_i_SkillID, $i_Flag)
+	Local $i_Require = Skill_GetSkillRequireCondition($a_i_SkillID)
 	Return BitAND($i_Require, $i_Flag) <> 0
 EndFunc
 
-Func Cast_RequiresAnyCondition($a_i_SkillID)
-	Return Cast_GetSkillRequireCondition($a_i_SkillID) <> 0
+Func Skill_RequiresAnyCondition($a_i_SkillID)
+	Return Skill_GetSkillRequireCondition($a_i_SkillID) <> 0
 EndFunc
 
-Func Cast_RequiresBleeding($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_BLEEDING)
+Func Skill_RequiresBleeding($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_BLEEDING)
 EndFunc
 
-Func Cast_RequiresBlinded($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_BLINDED)
+Func Skill_RequiresBlinded($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_BLINDED)
 EndFunc
 
-Func Cast_RequiresBurning($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_BURNING)
+Func Skill_RequiresBurning($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_BURNING)
 EndFunc
 
-Func Cast_RequiresCrippled($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_CRIPPLED)
+Func Skill_RequiresCrippled($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_CRIPPLED)
 EndFunc
 
-Func Cast_RequiresDeepWound($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_DEEP_WOUND)
+Func Skill_RequiresDeepWound($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_DEEP_WOUND)
 EndFunc
 
-Func Cast_RequiresDiseased($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_DISEASED)
+Func Skill_RequiresDiseased($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_DISEASED)
 EndFunc
 
-Func Cast_RequiresSlowerMovement($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_SLOWER_MOVEMENT)
+Func Skill_RequiresSlowerMovement($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_SLOWER_MOVEMENT)
 EndFunc
 
-Func Cast_RequiresKnockdown($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_KNOCKDOWN)
+Func Skill_RequiresKnockdown($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_KNOCKDOWN)
 EndFunc
 
-Func Cast_RequiresPoisoned($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_POISONED)
+Func Skill_RequiresPoisoned($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_POISONED)
 EndFunc
 
-Func Cast_RequiresDazed($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_DAZED)
+Func Skill_RequiresDazed($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_DAZED)
 EndFunc
 
-Func Cast_RequiresWeakness($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_WEAKNESS)
+Func Skill_RequiresWeakness($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_WEAKNESS)
 EndFunc
 
-Func Cast_RequiresUnknownFlag($a_i_SkillID)
-	Return Cast_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_UNKNOWN)
+Func Skill_RequiresUnknownFlag($a_i_SkillID)
+	Return Skill_HasRequireConditionFlag($a_i_SkillID, $GC_I_SKILL_REQUIRE_UNKNOWN)
 EndFunc
 
 ; === Combined Checks ===
-Func Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
-	Local $i_Require = Cast_GetSkillRequireCondition($a_i_SkillID)
+Func Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Local $i_Require = Skill_GetSkillRequireCondition($a_i_SkillID)
 	Return BitAND($i_Require, $i_Flags) = $i_Flags
 EndFunc
 
 ; Crippled + Bleeding
-Func Cast_RequiresCrippledAndBleeding($a_i_SkillID)
+Func Skill_RequiresCrippledAndBleeding($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_CRIPPLED, $GC_I_SKILL_REQUIRE_BLEEDING)
-	Return Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Deep Wound + Bleeding
-Func Cast_RequiresDeepWoundAndBleeding($a_i_SkillID)
+Func Skill_RequiresDeepWoundAndBleeding($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_DEEP_WOUND, $GC_I_SKILL_REQUIRE_BLEEDING)
-	Return Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Knockdown + Crippled
-Func Cast_RequiresKnockdownAndCrippled($a_i_SkillID)
+Func Skill_RequiresKnockdownAndCrippled($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_KNOCKDOWN, $GC_I_SKILL_REQUIRE_CRIPPLED)
-	Return Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Dazed + Blinded
-Func Cast_RequiresDazedAndBlinded($a_i_SkillID)
+Func Skill_RequiresDazedAndBlinded($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_DAZED, $GC_I_SKILL_REQUIRE_BLINDED)
-	Return Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Weakness + Deep Wound
-Func Cast_RequiresWeaknessAndDeepWound($a_i_SkillID)
+Func Skill_RequiresWeaknessAndDeepWound($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_WEAKNESS, $GC_I_SKILL_REQUIRE_DEEP_WOUND)
-	Return Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Knockdown + Weakness
-Func Cast_RequiresKnockdownAndWeakness($a_i_SkillID)
+Func Skill_RequiresKnockdownAndWeakness($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_KNOCKDOWN, $GC_I_SKILL_REQUIRE_WEAKNESS)
-	Return Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Random (Deep Wound OR Crippled OR Bleeding OR Weakness)
-Func Cast_RequiresDCBW($a_i_SkillID)
+Func Skill_RequiresDCBW($a_i_SkillID)
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_DEEP_WOUND, $GC_I_SKILL_REQUIRE_CRIPPLED)
 	$i_Flags = BitOR($i_Flags, $GC_I_SKILL_REQUIRE_BLEEDING)
 	$i_Flags = BitOR($i_Flags, $GC_I_SKILL_REQUIRE_WEAKNESS)
-	Return Cast_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
+	Return Skill_HasSeveralRequireConditionFlags($a_i_SkillID, $i_Flags)
 EndFunc
 
 ; Check if requires ANY of the specified conditions (OR logic)
-Func Cast_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
-	Local $i_Require = Cast_GetSkillRequireCondition($a_i_SkillID)
+Func Skill_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
+	Local $i_Require = Skill_GetSkillRequireCondition($a_i_SkillID)
 	Return BitAND($i_Require, $i_Flags) <> 0
 EndFunc
 
 ; Common condition groups
-Func Cast_RequiresMovementCondition($a_i_SkillID)
+Func Skill_RequiresMovementCondition($a_i_SkillID)
 	; Crippled OR Slower Movement
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_CRIPPLED, $GC_I_SKILL_REQUIRE_SLOWER_MOVEMENT)
-	Return Cast_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
+	Return Skill_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
 EndFunc
 
-Func Cast_RequiresDamageCondition($a_i_SkillID)
+Func Skill_RequiresDamageCondition($a_i_SkillID)
 	; Bleeding OR Burning OR Poisoned OR Deep Wound
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_BLEEDING, $GC_I_SKILL_REQUIRE_BURNING)
 	$i_Flags = BitOR($i_Flags, $GC_I_SKILL_REQUIRE_POISONED)
 	$i_Flags = BitOR($i_Flags, $GC_I_SKILL_REQUIRE_DEEP_WOUND)
-	Return Cast_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
+	Return Skill_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
 EndFunc
 
-Func Cast_RequiresDisableCondition($a_i_SkillID)
+Func Skill_RequiresDisableCondition($a_i_SkillID)
 	; Knockdown OR Dazed OR Blinded OR Weakness
 	Local $i_Flags = BitOR($GC_I_SKILL_REQUIRE_KNOCKDOWN, $GC_I_SKILL_REQUIRE_DAZED)
 	$i_Flags = BitOR($i_Flags, $GC_I_SKILL_REQUIRE_BLINDED)
 	$i_Flags = BitOR($i_Flags, $GC_I_SKILL_REQUIRE_WEAKNESS)
-	Return Cast_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
+	Return Skill_RequiresAnyOfConditions($a_i_SkillID, $i_Flags)
 EndFunc
 
 #EndRegion RequireCondition
 
 #Region WeaponReq
-Func Cast_GetSkillWeaponReq($a_i_SkillID)
+Func Skill_GetSkillWeaponReq($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "WeaponReq")
 EndFunc
 
-Func Cast_IsSkillWeaponReq($a_i_SkillID, $weaponType)
-	Return Cast_GetSkillWeaponReq($a_i_SkillID) = $weaponType
+Func Skill_IsSkillWeaponReq($a_i_SkillID, $weaponType)
+	Return Skill_GetSkillWeaponReq($a_i_SkillID) = $weaponType
 EndFunc
 
-Func Cast_IsWeaponReqAxe($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_AXE)
+Func Skill_IsWeaponReqAxe($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_AXE)
 EndFunc
 
-Func Cast_IsWeaponReqBow($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_BOW)
+Func Skill_IsWeaponReqBow($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_BOW)
 EndFunc
 
-Func Cast_IsWeaponReqDagger($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_DAGGER)
+Func Skill_IsWeaponReqDagger($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_DAGGER)
 EndFunc
 
-Func Cast_IsWeaponReqHammer($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_HAMMER)
+Func Skill_IsWeaponReqHammer($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_HAMMER)
 EndFunc
 
-Func Cast_IsWeaponReqScythe($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_SCYTHE)
+Func Skill_IsWeaponReqScythe($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_SCYTHE)
 EndFunc
 
-Func Cast_IsWeaponReqSpear($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_SPEAR)
+Func Skill_IsWeaponReqSpear($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_SPEAR)
 EndFunc
 
-Func Cast_IsWeaponReqNoWeapon($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_NO_WEAPON)
+Func Skill_IsWeaponReqNoWeapon($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_NO_WEAPON)
 EndFunc
 
-Func Cast_IsWeaponReqSword($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_SWORD)
+Func Skill_IsWeaponReqSword($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_SWORD)
 EndFunc
 
-Func Cast_IsWeaponReqMeleeWeapon($a_i_SkillID)
-	Return Cast_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_MELEE_WEAPON)
+Func Skill_IsWeaponReqMeleeWeapon($a_i_SkillID)
+	Return Skill_IsSkillWeaponReq($a_i_SkillID, $GC_I_SKILL_REQUIRE_MELEE_WEAPON)
 EndFunc
 #EndRegion WeaponReq
 
 #Region Profession
-Func Cast_GetSkillProfession($a_i_SkillID)
+Func Skill_GetSkillProfession($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Profession")
 EndFunc
 
-Func Cast_IsSkillProfession($a_i_SkillID, $professionType)
-	Return Cast_GetSkillProfession($a_i_SkillID) = $professionType
+Func Skill_IsSkillProfession($a_i_SkillID, $professionType)
+	Return Skill_GetSkillProfession($a_i_SkillID) = $professionType
 EndFunc
 
-Func Cast_IsProfessionNone($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_NONE)
+Func Skill_IsProfessionNone($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_NONE)
 EndFunc
 
-Func Cast_IsProfessionWarrior($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_WARRIOR)
+Func Skill_IsProfessionWarrior($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_WARRIOR)
 EndFunc
 
-Func Cast_IsProfessionRanger($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_RANGER)
+Func Skill_IsProfessionRanger($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_RANGER)
 EndFunc
 
-Func Cast_IsProfessionMonk($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_MONK)
+Func Skill_IsProfessionMonk($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_MONK)
 EndFunc
 
-Func Cast_IsProfessionNecromancer($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_NECROMANCER)
+Func Skill_IsProfessionNecromancer($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_NECROMANCER)
 EndFunc
 
-Func Cast_IsProfessionMesmer($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_MESMER)
+Func Skill_IsProfessionMesmer($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_MESMER)
 EndFunc
 
-Func Cast_IsProfessionElementalist($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_ELEMENTALIST)
+Func Skill_IsProfessionElementalist($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_ELEMENTALIST)
 EndFunc
 
-Func Cast_IsProfessionAssassin($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_ASSASSIN)
+Func Skill_IsProfessionAssassin($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_ASSASSIN)
 EndFunc
 
-Func Cast_IsProfessionRitualist($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_RITUALIST)
+Func Skill_IsProfessionRitualist($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_RITUALIST)
 EndFunc
 
-Func Cast_IsProfessionParagon($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_PARAGON)
+Func Skill_IsProfessionParagon($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_PARAGON)
 EndFunc
 
-Func Cast_IsProfessionDervish($a_i_SkillID)
-	Return Cast_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_DERVISH)
+Func Skill_IsProfessionDervish($a_i_SkillID)
+	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_DERVISH)
 EndFunc
 #EndRegion Profession
 
 #Region Attribute
-Func Cast_GetSkillAttribute($a_i_SkillID)
+Func Skill_GetSkillAttribute($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Attribute")
 EndFunc
 
-Func Cast_IsSkillAttribute($a_i_SkillID, $attributeType)
-	Return Cast_GetSkillAttribute($a_i_SkillID) = $attributeType
+Func Skill_IsSkillAttribute($a_i_SkillID, $attributeType)
+	Return Skill_GetSkillAttribute($a_i_SkillID) = $attributeType
 EndFunc
 
-Func Cast_IsAttributeFastCasting($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_FAST_CASTING)
+Func Skill_IsAttributeFastCasting($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_FAST_CASTING)
 EndFunc
 
-Func Cast_IsAttributeIllusionMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_ILLUSION_MAGIC)
+Func Skill_IsAttributeIllusionMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_ILLUSION_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeDominationMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DOMINATION_MAGIC)
+Func Skill_IsAttributeDominationMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DOMINATION_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeInspirationMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_INSPIRATION_MAGIC)
+Func Skill_IsAttributeInspirationMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_INSPIRATION_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeBloodMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_BLOOD_MAGIC)
+Func Skill_IsAttributeBloodMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_BLOOD_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeDeathMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DEATH_MAGIC)
+Func Skill_IsAttributeDeathMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DEATH_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeSoulReaping($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SOUL_REAPING)
+Func Skill_IsAttributeSoulReaping($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SOUL_REAPING)
 EndFunc
 
-Func Cast_IsAttributeCurses($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_CURSES)
+Func Skill_IsAttributeCurses($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_CURSES)
 EndFunc
 
-Func Cast_IsAttributeAirMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_AIR_MAGIC)
+Func Skill_IsAttributeAirMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_AIR_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeEarthMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_EARTH_MAGIC)
+Func Skill_IsAttributeEarthMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_EARTH_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeFireMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_FIRE_MAGIC)
+Func Skill_IsAttributeFireMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_FIRE_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeWaterMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_WATER_MAGIC)
+Func Skill_IsAttributeWaterMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_WATER_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeEnergyStorage($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_ENERGY_STORAGE)
+Func Skill_IsAttributeEnergyStorage($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_ENERGY_STORAGE)
 EndFunc
 
-Func Cast_IsAttributeHealingPrayers($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_HEALING_PRAYERS)
+Func Skill_IsAttributeHealingPrayers($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_HEALING_PRAYERS)
 EndFunc
 
-Func Cast_IsAttributeSmitingPrayers($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SMITING_PRAYERS)
+Func Skill_IsAttributeSmitingPrayers($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SMITING_PRAYERS)
 EndFunc
 
-Func Cast_IsAttributeProtectionPrayers($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_PROTECTION_PRAYERS)
+Func Skill_IsAttributeProtectionPrayers($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_PROTECTION_PRAYERS)
 EndFunc
 
-Func Cast_IsAttributeDivineFavor($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DIVINE_FAVOR)
+Func Skill_IsAttributeDivineFavor($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DIVINE_FAVOR)
 EndFunc
 
-Func Cast_IsAttributeStrength($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_STRENGTH)
+Func Skill_IsAttributeStrength($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_STRENGTH)
 EndFunc
 
-Func Cast_IsAttributeAxeMastery($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_AXE_MASTERY)
+Func Skill_IsAttributeAxeMastery($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_AXE_MASTERY)
 EndFunc
 
-Func Cast_IsAttributeHammerMastery($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_HAMMER_MASTERY)
+Func Skill_IsAttributeHammerMastery($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_HAMMER_MASTERY)
 EndFunc
 
-Func Cast_IsAttributeSwordsmanship($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SWORDSMANSHIP)
+Func Skill_IsAttributeSwordsmanship($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SWORDSMANSHIP)
 EndFunc
 
-Func Cast_IsAttributeTactics($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_TACTICS)
+Func Skill_IsAttributeTactics($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_TACTICS)
 EndFunc
 
-Func Cast_IsAttributeBeastMastery($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_BEAST_MASTERY)
+Func Skill_IsAttributeBeastMastery($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_BEAST_MASTERY)
 EndFunc
 
-Func Cast_IsAttributeExpertise($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_EXPERTISE)
+Func Skill_IsAttributeExpertise($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_EXPERTISE)
 EndFunc
 
-Func Cast_IsAttributeWildernessSurvival($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_WILDERNESS_SURVIVAL)
+Func Skill_IsAttributeWildernessSurvival($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_WILDERNESS_SURVIVAL)
 EndFunc
 
-Func Cast_IsAttributeMarksmanship($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_MARKSMANSHIP)
+Func Skill_IsAttributeMarksmanship($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_MARKSMANSHIP)
 EndFunc
 
-Func Cast_IsAttributeDaggerMastery($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DAGGER_MASTERY)
+Func Skill_IsAttributeDaggerMastery($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DAGGER_MASTERY)
 EndFunc
 
-Func Cast_IsAttributeDeadlyArts($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DEADLY_ARTS)
+Func Skill_IsAttributeDeadlyArts($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_DEADLY_ARTS)
 EndFunc
 
-Func Cast_IsAttributeShadowArts($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SHADOW_ARTS)
+Func Skill_IsAttributeShadowArts($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SHADOW_ARTS)
 EndFunc
 
-Func Cast_IsAttributeCommuning($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_COMMUNING)
+Func Skill_IsAttributeCommuning($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_COMMUNING)
 EndFunc
 
-Func Cast_IsAttributeRestorationMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_RESTORATION_MAGIC)
+Func Skill_IsAttributeRestorationMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_RESTORATION_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeChannelingMagic($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_CHANNELING_MAGIC)
+Func Skill_IsAttributeChannelingMagic($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_CHANNELING_MAGIC)
 EndFunc
 
-Func Cast_IsAttributeCriticalStrikes($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_CRITICAL_STRIKES)
+Func Skill_IsAttributeCriticalStrikes($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_CRITICAL_STRIKES)
 EndFunc
 
-Func Cast_IsAttributeSpawningPower($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SPAWNING_POWER)
+Func Skill_IsAttributeSpawningPower($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SPAWNING_POWER)
 EndFunc
 
-Func Cast_IsAttributeSpearMastery($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SPEAR_MASTERY)
+Func Skill_IsAttributeSpearMastery($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SPEAR_MASTERY)
 EndFunc
 
-Func Cast_IsAttributeCommand($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_COMMAND)
+Func Skill_IsAttributeCommand($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_COMMAND)
 EndFunc
 
-Func Cast_IsAttributeMotivation($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_MOTIVATION)
+Func Skill_IsAttributeMotivation($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_MOTIVATION)
 EndFunc
 
-Func Cast_IsAttributeLeadership($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_LEADERSHIP)
+Func Skill_IsAttributeLeadership($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_LEADERSHIP)
 EndFunc
 
-Func Cast_IsAttributeScytheMastery($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SCYTHE_MASTERY)
+Func Skill_IsAttributeScytheMastery($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_SCYTHE_MASTERY)
 EndFunc
 
-Func Cast_IsAttributeWindPrayers($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_WIND_PRAYERS)
+Func Skill_IsAttributeWindPrayers($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_WIND_PRAYERS)
 EndFunc
 
-Func Cast_IsAttributeEarthPrayers($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_EARTH_PRAYERS)
+Func Skill_IsAttributeEarthPrayers($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_EARTH_PRAYERS)
 EndFunc
 
-Func Cast_IsAttributeMysticism($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_MYSTICISM)
+Func Skill_IsAttributeMysticism($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_MYSTICISM)
 EndFunc
 
-Func Cast_IsAttributeNone($a_i_SkillID)
-	Return Cast_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_ATTR_ID_NONE)
+Func Skill_IsAttributeNone($a_i_SkillID)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_ATTR_ID_NONE)
 EndFunc
 #EndRegion Attribute
 
 #Region Target
-Func Cast_GetSkillTarget($a_i_SkillID)
+Func Skill_GetSkillTarget($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Target")
 EndFunc
 
-Func Cast_IsSkillTarget($a_i_SkillID, $targetType)
-	Return Cast_GetSkillTarget($a_i_SkillID) = $targetType
+Func Skill_IsSkillTarget($a_i_SkillID, $targetType)
+	Return Skill_GetSkillTarget($a_i_SkillID) = $targetType
 EndFunc
 
-Func Cast_IsTargetSelf($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_SELF)
+Func Skill_IsTargetSelf($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_SELF)
 EndFunc
 
-Func Cast_IsTargetNone($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_NONE)
+Func Skill_IsTargetNone($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_NONE)
 EndFunc
 
-Func Cast_IsTargetSpirit($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_SPIRIT)
+Func Skill_IsTargetSpirit($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_SPIRIT)
 EndFunc
 
-Func Cast_IsTargetAnimal($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_ANIMAL)
+Func Skill_IsTargetAnimal($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_ANIMAL)
 EndFunc
 
-Func Cast_IsTargetCorpse($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_CORPSE)
+Func Skill_IsTargetCorpse($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_CORPSE)
 EndFunc
 
-Func Cast_IsTargetAlly($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_ALLY)
+Func Skill_IsTargetAlly($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_ALLY)
 EndFunc
 
-Func Cast_IsTargetOtherAlly($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_OTHER_ALLY)
+Func Skill_IsTargetOtherAlly($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_OTHER_ALLY)
 EndFunc
 
-Func Cast_IsTargetEnemy($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_ENEMY)
+Func Skill_IsTargetEnemy($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_ENEMY)
 EndFunc
 
-Func Cast_IsTargetDeadAlly($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_DEAD_ALLY)
+Func Skill_IsTargetDeadAlly($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_DEAD_ALLY)
 EndFunc
 
-Func Cast_IsTargetMinion($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_MINION)
+Func Skill_IsTargetMinion($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_MINION)
 EndFunc
 
-Func Cast_IsTargetGround($a_i_SkillID)
-	Return Cast_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_GROUND)
+Func Skill_IsTargetGround($a_i_SkillID)
+	Return Skill_IsSkillTarget($a_i_SkillID, $GC_I_SKILL_TARGET_GROUND)
 EndFunc
 #EndRegion Target
 
 #Region Title
-Func Cast_GetSkillTitle($a_i_SkillID)
+Func Skill_GetSkillTitle($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "Title")
 EndFunc
 
-Func Cast_IsSkillTitle($a_i_SkillID, $titleType)
-	Return Cast_GetSkillTitle($a_i_SkillID) = $titleType
+Func Skill_IsSkillTitle($a_i_SkillID, $titleType)
+	Return Skill_GetSkillTitle($a_i_SkillID) = $titleType
 EndFunc
 
-Func Cast_IsTitleKurzick($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_KURZICK)
+Func Skill_IsTitleKurzick($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_KURZICK)
 EndFunc
 
-Func Cast_IsTitleLuxon($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_LUXON)
+Func Skill_IsTitleLuxon($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_LUXON)
 EndFunc
 
-Func Cast_IsTitleSunspear($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_SUNSPEAR)
+Func Skill_IsTitleSunspear($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_SUNSPEAR)
 EndFunc
 
-Func Cast_IsTitleLightbringer($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_LIGHTBRINGER)
+Func Skill_IsTitleLightbringer($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_LIGHTBRINGER)
 EndFunc
 
-Func Cast_IsTitleAsura($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_ASURA)
+Func Skill_IsTitleAsura($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_ASURA)
 EndFunc
 
-Func Cast_IsTitleDeldrimor($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_DELDRIMOR)
+Func Skill_IsTitleDeldrimor($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_DELDRIMOR)
 EndFunc
 
-Func Cast_IsTitleEbonVanguard($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_EBON_VANGUARD)
+Func Skill_IsTitleEbonVanguard($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_EBON_VANGUARD)
 EndFunc
 
-Func Cast_IsTitleNorn($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_NORN)
+Func Skill_IsTitleNorn($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_NORN)
 EndFunc
 
-Func Cast_IsTitleNone($a_i_SkillID)
-	Return Cast_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_NONE)
+Func Skill_IsTitleNone($a_i_SkillID)
+	Return Skill_IsSkillTitle($a_i_SkillID, $GC_I_SKILL_TITLE_NONE)
 EndFunc
 #EndRegion Title
 
 #Region Cracked Armor
-Func Cast_InflictCA($a_i_SkillID)
+Func Skill_InflictCA($a_i_SkillID)
 	Switch $a_i_SkillID
 		Case 2236, 159, 228, 1099, 2148, 1498, 910, 2054, 937, 2059, 1765, 1360, 2214, 232, 205, 865, 2070, 2211, 2353
 			Return True
@@ -1359,12 +1359,12 @@ Func Cast_InflictCA($a_i_SkillID)
 	EndSwitch
 EndFunc
 
-Func Cast_RequireCA($a_i_SkillID)
+Func Skill_RequireCA($a_i_SkillID)
 	If $a_i_SkillID = 2074 Then Return True
 	Return False
 EndFunc
 
-Func Cast_BenefitWithCA($a_i_SkillID)
+Func Skill_BenefitWithCA($a_i_SkillID)
 	Switch $a_i_SkillID
 		Case 2197, 2198, 2228, 2194, 2140, 1082, 2299, 1097
 			Return True
