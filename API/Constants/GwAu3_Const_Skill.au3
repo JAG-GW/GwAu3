@@ -310,13 +310,6 @@ Global Const $GC_I_SKILL_REQUIRE_NO_WEAPON = 70 ; Ranged Attack non-Weapon Requi
 Global Const $GC_I_SKILL_REQUIRE_SWORD = 128 ; All Sword Attacks
 Global Const $GC_I_SKILL_REQUIRE_MELEE_WEAPON = 185 ; All Melee Attack non-Weapon Requirement
 
-; Allegiance
-Global Const $GC_I_ALLEGIANCE_ALLY = 0x1 ; Ally/non-attackable
-Global Const $GC_I_ALLEGIANCE_ENEMY = 0x3 ; Enemy
-Global Const $GC_I_ALLEGIANCE_SPIRIT = 0x4 ; Spirit or Pet
-Global Const $GC_I_ALLEGIANCE_MINION = 0x5 ; Minion
-Global Const $GC_I_ALLEGIANCE_NPC = 0x6 ; NPC/Minipet
-
 ; Typemap
 Global Const $GC_I_TYPEMAP_BOSS = 3072 ; 0xC00 Boss
 Global Const $GC_I_TYPEMAP_BOSS2 = 3073 ; 0xC01 Boss with higher drop rate

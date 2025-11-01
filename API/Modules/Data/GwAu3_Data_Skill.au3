@@ -63,26 +63,26 @@ Func Skill_GetSkillInfo($a_v_SkillID, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr + 0x33, "byte")
         Case "Overcast"
             Local $l_i_OverCast = Memory_Read($l_p_Ptr + 0x34, "byte")
-			Select
-				Case $l_i_OverCast = 0
-					Return 0
-				Case $l_i_OverCast = 5
+
+			Switch $l_i_OverCast
+				Case 5
 					Return 5
-				Case $l_i_OverCast = 10
+				Case 10
 					Return 10
 				Case Else
 					Return 0
-			EndSelect
+			EndSwitch
         Case "EnergyCost"
             Local $l_i_EnergyCost = Memory_Read($l_p_Ptr + 0x35, "byte")
-            Select
-                Case $l_i_EnergyCost = 11
+
+            Switch $l_i_EnergyCost
+                Case 11
                     Return 15
-                Case $l_i_EnergyCost = 12
+                Case 12
                     Return 25
                 Case Else
                     Return $l_i_EnergyCost
-            EndSelect
+            EndSwitch
         Case "HealthCost"
             Return Memory_Read($l_p_Ptr + 0x36, "byte")
         Case "h0037" ;Always 0
@@ -329,7 +329,7 @@ Func Skill_IsWellType($a_i_SkillID)
 	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WELL)
 EndFunc
 
-Func Skill_IsSkillType($a_i_SkillID)
+Func Skill_IsType($a_i_SkillID)
 	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL)
 EndFunc
 
