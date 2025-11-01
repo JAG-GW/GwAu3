@@ -282,6 +282,25 @@ EndFunc
 Func Skill_IsBonusMissionPackCampaign($a_i_SkillID)
 	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_BONUSPACK)
 EndFunc
+
+Func Skill_GetCampaignName($a_i_CampaignID)
+    Switch $a_i_CampaignID
+        Case $GC_I_SKILL_CAMPAIGN_CORE
+            Return "Core"
+        Case $GC_I_SKILL_CAMPAIGN_PROPHECIES
+            Return "Prophecies"
+        Case $GC_I_SKILL_CAMPAIGN_FACTIONS
+            Return "Factions"
+        Case $GC_I_SKILL_CAMPAIGN_NIGHTFALL
+            Return "Nightfall"
+        Case $GC_I_SKILL_CAMPAIGN_EOTN
+            Return "EotN"
+        Case $GC_I_SKILL_CAMPAIGN_BONUSPACK
+            Return "Bonus Pack"
+        Case Else
+            Return "Unknown"
+    EndSwitch
+EndFunc
 #EndRegion Campaign
 
 #Region SkillType
@@ -1064,6 +1083,36 @@ EndFunc
 
 Func Skill_IsProfessionDervish($a_i_SkillID)
 	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_DERVISH)
+EndFunc
+
+; Fonction pour obtenir le nom de la profession
+Func Skill_GetProfessionName($a_i_ProfessionID)
+    Switch $a_i_ProfessionID
+        Case $GC_I_PROFESSION_NONE
+            Return "None"
+        Case $GC_I_PROFESSION_WARRIOR
+            Return "Warrior"
+        Case $GC_I_PROFESSION_RANGER
+            Return "Ranger"
+        Case $GC_I_PROFESSION_MONK
+            Return "Monk"
+        Case $GC_I_PROFESSION_NECROMANCER
+            Return "Necromancer"
+        Case $GC_I_PROFESSION_MESMER
+            Return "Mesmer"
+        Case $GC_I_PROFESSION_ELEMENTALIST
+            Return "Elementalist"
+        Case $GC_I_PROFESSION_ASSASSIN
+            Return "Assassin"
+        Case $GC_I_PROFESSION_RITUALIST
+            Return "Ritualist"
+        Case $GC_I_PROFESSION_PARAGON
+            Return "Paragon"
+        Case $GC_I_PROFESSION_DERVISH
+            Return "Dervish"
+        Case Else
+            Return "Unknown"
+    EndSwitch
 EndFunc
 #EndRegion Profession
 
