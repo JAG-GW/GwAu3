@@ -34,7 +34,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
             $g_h_GWWindow = Scanner_GetHwnd($g_i_GWProcessId)
             Memory_Open($g_i_GWProcessId)
             If $g_h_GWProcess Then
-                If StringRegExp(Scanner_ScanForCharname(), $a_s_GW) = 1 Then
+				If StringCompare(StringStripWS(Scanner_ScanForCharname(), 3), StringStripWS($a_s_GW, 3)) = 0 Then
                     ExitLoop
                 EndIf
             EndIf
