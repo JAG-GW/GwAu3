@@ -30,31 +30,31 @@ Func Party_GetPartyContextInfo($a_s_Info = "")
         Case "MyPartyPtr"
             Return Memory_Read($l_p_Ptr + 0x54, "ptr")
 
-;~         Case "PlayerPartyID"
-;~             Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
-;~             Return Memory_Read($l_p_PartyPtr, "long")
+        Case "PlayerPartyID"
+            Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
+            Return Memory_Read($l_p_PartyPtr, "long")
 
-;~         Case "PlayerCount"
-;~             Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
-;~             Return Memory_Read($l_p_PartyPtr + 0xC, "long")
+        Case "PlayerCount"
+            Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
+            Return Memory_Read($l_p_PartyPtr + 0xC, "long")
 
-;~         Case "HenchmenCount"
-;~             Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
-;~             Return Memory_Read($l_p_PartyPtr + 0x1C, "long")
+        Case "HenchmenCount"
+            Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
+            Return Memory_Read($l_p_PartyPtr + 0x1C, "long")
 
-;~         Case "HeroCount"
-;~             Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
-;~             Return Memory_Read($l_p_PartyPtr + 0x2C, "long")
+        Case "HeroCount"
+            Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
+            Return Memory_Read($l_p_PartyPtr + 0x2C, "long")
 
-;~         Case "OtherCount" ; Spirit, Minions, Pets (not the Spirits and Minions of heroes, only your character)
-;~             Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
-;~             Return Memory_Read($l_p_PartyPtr + 0x3C, "long")
+        Case "OtherCount" ; Spirit, Minions, Pets (not the Spirits and Minions of heroes, only your character)
+            Local $l_p_PartyPtr = Memory_Read($l_p_Ptr + 0x54, "ptr")
+            Return Memory_Read($l_p_PartyPtr + 0x3C, "long")
 
-;~         Case "TotalPartySize"
-;~             Local $l_i_PlayerCount = GetPartyInfo("PlayerCount")
-;~             Local $l_i_HenchmenCount = GetPartyInfo("HenchmenCount")
-;~             Local $l_i_HeroCount = Party_GetMyPartyInfo("ArrayHeroPartyMemberSize")
-;~             Return $l_i_PlayerCount + $l_i_HenchmenCount + $l_i_HeroCount
+        Case "TotalPartySize"
+            Local $l_i_PlayerCount = GetPartyInfo("PlayerCount")
+            Local $l_i_HenchmenCount = GetPartyInfo("HenchmenCount")
+            Local $l_i_HeroCount = Party_GetMyPartyInfo("ArrayHeroPartyMemberSize")
+            Return $l_i_PlayerCount + $l_i_HenchmenCount + $l_i_HeroCount
 
     EndSwitch
     Return 0

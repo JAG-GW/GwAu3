@@ -210,4 +210,25 @@ Func World_GetWorldInfo($a_s_Info = "")
 
     Return 0
 EndFunc
+
+Func World_IsSkillLearnt($a_i_SkillID)
+    Local $l_p_WorldContext = World_GetWorldContextPtr()
+    If $l_p_WorldContext = 0 Then Return False
+
+    Local $l_p_UnlockedSkillsArray = Memory_Read($l_p_WorldContext + 0x710, "ptr")
+    If $l_p_UnlockedSkillsArray = 0 Then Return False
+
+    Local $l_i_ArraySize = Memory_Read($l_p_WorldContext + 0x710 + 0x8, "long")
+
+    Local $l_i_RealIndex = Floor($a_i_SkillID / 32)
+
+    If $l_i_RealIndex >= $l_i_ArraySize Then Return False
+
+    Local $l_i_Shift = Mod($a_i_SkillID, 32)
+    Local $l_i_Flag = BitShift(1, -$l_i_Shift)
+
+    Local $l_i_Value = Memory_Read($l_p_UnlockedSkillsArray + ($l_i_RealIndex * 4), "dword")
+
+    Return BitAND($l_i_Value, $l_i_Flag) <> 0
+EndFunc
 #EndRegion World Context

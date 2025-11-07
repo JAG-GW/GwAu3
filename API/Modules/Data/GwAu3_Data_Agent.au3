@@ -225,7 +225,7 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
             Return Memory_Read($l_p_AgentPtr + 0x128, "float")
         Case "h012C"
             Return Memory_Read($l_p_AgentPtr + 0x12C, "dword")
-        Case "HP"
+        Case "HP", "HPPercent"
             Return Memory_Read($l_p_AgentPtr + 0x130, "float")
         Case "MaxHP"
             Return Memory_Read($l_p_AgentPtr + 0x134, "dword")
@@ -305,7 +305,7 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
 
         Case "ModelState"
             Return Memory_Read($l_p_AgentPtr + 0x154, "dword")
-		Case "IsKnockedDown"
+		Case "IsKnockedDown", "IsKnocked"
 			Return Memory_Read($l_p_AgentPtr + 0x154, "dword") = 0x450
 		Case "IsMoving"
 			If Memory_Read($l_p_AgentPtr + 0xA0, "float") <> 0 Or Memory_Read($l_p_AgentPtr + 0xA4, "float") <> 0 Then Return True
@@ -632,6 +632,10 @@ Func Agent_GetDistance($a_i_Agent1ID, $a_i_Agent2ID = 0)
 
     Return Sqrt(($l_f_X1 - $l_f_X2)^2 + ($l_f_Y1 - $l_f_Y2)^2)
 EndFunc
+
+Func Agent_GetDistanceToXY($a_f_X, $a_f_Y, $a_i_AgentID = -2)
+	Return Sqrt(($a_f_X - Agent_GetAgentInfo($a_i_AgentID, "X")) ^ 2 + ($a_f_Y - Agent_GetAgentInfo($a_i_AgentID, "Y")) ^ 2)
+EndFunc   ;==>GetDistanceToXY
 
 #Region Effect Related
 Func Agent_GetAgentEffectArrayInfo($a_i_AgentID = -2, $a_s_Info = "")

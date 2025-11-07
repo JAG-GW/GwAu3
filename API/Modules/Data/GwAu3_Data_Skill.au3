@@ -282,6 +282,25 @@ EndFunc
 Func Skill_IsBonusMissionPackCampaign($a_i_SkillID)
 	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_BONUSPACK)
 EndFunc
+
+Func Skill_GetCampaignName($a_i_CampaignID)
+    Switch $a_i_CampaignID
+        Case $GC_I_SKILL_CAMPAIGN_CORE
+            Return "Core"
+        Case $GC_I_SKILL_CAMPAIGN_PROPHECIES
+            Return "Prophecies"
+        Case $GC_I_SKILL_CAMPAIGN_FACTIONS
+            Return "Factions"
+        Case $GC_I_SKILL_CAMPAIGN_NIGHTFALL
+            Return "Nightfall"
+        Case $GC_I_SKILL_CAMPAIGN_EOTN
+            Return "EotN"
+        Case $GC_I_SKILL_CAMPAIGN_BONUSPACK
+            Return "Bonus Pack"
+        Case Else
+            Return "Unknown"
+    EndSwitch
+EndFunc
 #EndRegion Campaign
 
 #Region SkillType
@@ -289,124 +308,124 @@ Func Skill_GetSkillType($a_i_SkillID)
 	Return Skill_GetSkillInfo($a_i_SkillID, "SkillType")
 EndFunc
 
-Func Skill_IsSkillType($a_i_SkillID, $skillType)
+Func Skill_IsType($a_i_SkillID, $skillType)
 	Return Skill_GetSkillType($a_i_SkillID) = $skillType
 EndFunc
 
 Func Skill_IsBountyType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_BOUNTY)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_BOUNTY)
 EndFunc
 
 Func Skill_IsScrollType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SCROLL)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_SCROLL)
 EndFunc
 
 Func Skill_IsStanceType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_STANCE)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_STANCE)
 EndFunc
 
 Func Skill_IsHexType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_HEX)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_HEX)
 EndFunc
 
 Func Skill_IsSpellType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SPELL)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_SPELL)
 EndFunc
 
 Func Skill_IsEnchantmentType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENCHANTMENT)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_ENCHANTMENT)
 EndFunc
 
 Func Skill_IsSignetType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SIGNET)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_SIGNET)
 EndFunc
 
 Func Skill_IsConditionType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_CONDITION)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_CONDITION)
 EndFunc
 
 Func Skill_IsWellType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WELL)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_WELL)
 EndFunc
 
-Func Skill_IsType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL)
+Func Skill_IsSkillType($a_i_SkillID)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL)
 EndFunc
 
 Func Skill_IsWardType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WARD)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_WARD)
 EndFunc
 
 Func Skill_IsGlyphType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_GLYPH)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_GLYPH)
 EndFunc
 
 Func Skill_IsTitleType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_TITLE)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_TITLE)
 EndFunc
 
 Func Skill_IsAttackType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ATTACK)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_ATTACK)
 EndFunc
 
 Func Skill_IsShoutType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SHOUT)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_SHOUT)
 EndFunc
 
 Func Skill_IsSkill2Type($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL2)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_SKILL2)
 EndFunc
 
 Func Skill_IsPassiveType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PASSIVE)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_PASSIVE)
 EndFunc
 
 Func Skill_IsEnvironmentalType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTAL)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTAL)
 EndFunc
 
 Func Skill_IsPreparationType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PREPARATION)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_PREPARATION)
 EndFunc
 
 Func Skill_IsPetAttackType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_PETATTACK)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_PETATTACK)
 EndFunc
 
 Func Skill_IsTrapType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_TRAP)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_TRAP)
 EndFunc
 
 Func Skill_IsRitualType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_RITUAL)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_RITUAL)
 EndFunc
 
 Func Skill_IsEnvironmentalTrapType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTALTRAP)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_ENVIRONMENTALTRAP)
 EndFunc
 
 Func Skill_IsItemSpellType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ITEM_SPELL)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_ITEM_SPELL)
 EndFunc
 
 Func Skill_IsWeaponSpellType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_WEAPON_SPELL)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_WEAPON_SPELL)
 EndFunc
 
 Func Skill_IsFormType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_FORM)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_FORM)
 EndFunc
 
 Func Skill_IsChantType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_CHANT)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_CHANT)
 EndFunc
 
 Func Skill_IsEchoType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_ECHO_REFRAIN)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_ECHO_REFRAIN)
 EndFunc
 
 Func Skill_IsDisguiseType($a_i_SkillID)
-	Return Skill_IsSkillType($a_i_SkillID, $GC_I_SKILL_TYPE_DISGUISE)
+	Return Skill_IsType($a_i_SkillID, $GC_I_SKILL_TYPE_DISGUISE)
 EndFunc
 #EndRegion SkillType
 
@@ -1064,6 +1083,36 @@ EndFunc
 
 Func Skill_IsProfessionDervish($a_i_SkillID)
 	Return Skill_IsSkillProfession($a_i_SkillID, $GC_I_PROFESSION_DERVISH)
+EndFunc
+
+; Fonction pour obtenir le nom de la profession
+Func Skill_GetProfessionName($a_i_ProfessionID)
+    Switch $a_i_ProfessionID
+        Case $GC_I_PROFESSION_NONE
+            Return "None"
+        Case $GC_I_PROFESSION_WARRIOR
+            Return "Warrior"
+        Case $GC_I_PROFESSION_RANGER
+            Return "Ranger"
+        Case $GC_I_PROFESSION_MONK
+            Return "Monk"
+        Case $GC_I_PROFESSION_NECROMANCER
+            Return "Necromancer"
+        Case $GC_I_PROFESSION_MESMER
+            Return "Mesmer"
+        Case $GC_I_PROFESSION_ELEMENTALIST
+            Return "Elementalist"
+        Case $GC_I_PROFESSION_ASSASSIN
+            Return "Assassin"
+        Case $GC_I_PROFESSION_RITUALIST
+            Return "Ritualist"
+        Case $GC_I_PROFESSION_PARAGON
+            Return "Paragon"
+        Case $GC_I_PROFESSION_DERVISH
+            Return "Dervish"
+        Case Else
+            Return "Unknown"
+    EndSwitch
 EndFunc
 #EndRegion Profession
 
