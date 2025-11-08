@@ -231,4 +231,27 @@ Func World_IsSkillLearnt($a_i_SkillID)
 
     Return BitAND($l_i_Value, $l_i_Flag) <> 0
 EndFunc
+
+Func World_GetSkillDuplicateCount($a_i_SkillID)
+    Local $l_p_WorldContext = World_GetWorldContextPtr()
+    If $l_p_WorldContext = 0 Then Return 0
+
+    Local $l_p_DupeSkillsArray = Memory_Read($l_p_WorldContext + 0x720, "ptr")
+    If $l_p_DupeSkillsArray = 0 Then Return 0
+
+    Local $l_i_ArraySize = Memory_Read($l_p_WorldContext + 0x720 + 0x8, "long")
+
+    For $i = 0 To $l_i_ArraySize - 1
+        Local $l_p_DupeSkill = $l_p_DupeSkillsArray + ($i * 0x4)
+
+        Local $l_i_CurrentSkillID = Memory_Read($l_p_DupeSkill + 0x0, "long")
+
+        If $l_i_CurrentSkillID = $a_i_SkillID Then
+            Local $l_i_Count = Memory_Read($l_p_DupeSkill + 0x4, "long")
+            Return $l_i_Count
+        EndIf
+    Next
+
+    Return 0
+EndFunc
 #EndRegion World Context
