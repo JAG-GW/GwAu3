@@ -1,11 +1,14 @@
 #RequireAdmin
 #include "../../API/_GwAu3.au3"
-#include "../../API/Pathfinding/SimplifyPath.au3"
+#include "../../API/Pathfinding/Pathfinder.au3"
 
 Global Const $GC_B_LOAD_LOGGED_CHARS = True
 Opt("GUIOnEventMode", True)
 Opt("GUICloseOnESC", False)
 Opt("ExpandVarStrings", 1)
+
+;~ DllCall(PATH)
+$DLL_PATH = "..\..\API\Pathfinding\GWPathfinder.dll"
 
 #Region Declarations
 Global $g_i_ProcessID = ""
@@ -159,59 +162,100 @@ Func CalculatePath()
     Out("")
     Out("=== Calculating Path ===")
 
+    ; Initialize Pathfinder if not already done
+    Static $s_b_PathfinderInit = False
+    If Not $s_b_PathfinderInit Then
+        If Pathfinder_Initialize() Then
+            Out("Pathfinder initialized successfully")
+            $s_b_PathfinderInit = True
+        Else
+            Out("ERROR: Failed to initialize Pathfinder!")
+            Out("Error code: " & @error)
+            If @error = 1 Then
+                Out("GWPathfinder.dll not found")
+            ElseIf @error = 2 Then
+                Out("Maps folder not found - Please extract maps.zip")
+            EndIf
+            Return
+        EndIf
+    EndIf
+
     ; Get current position
     Local $l_f_StartX = Agent_GetAgentInfo(-2, "X")
     Local $l_f_StartY = Agent_GetAgentInfo(-2, "Y")
 
     ; Get destination
-    $g_f_DestX = Number(GUICtrlRead($g_h_DestXInput))
-    $g_f_DestY = Number(GUICtrlRead($g_h_DestYInput))
+    Local $l_s_InputX = GUICtrlRead($g_h_DestXInput)
+    Local $l_s_InputY = GUICtrlRead($g_h_DestYInput)
+    Out("DEBUG: Input X = '" & $l_s_InputX & "', Input Y = '" & $l_s_InputY & "'")
+
+    $g_f_DestX = Number($l_s_InputX)
+    $g_f_DestY = Number($l_s_InputY)
 
     Local $l_i_MapID = Map_GetMapID()
-    Local $l_f_Aggressiveness = GUICtrlRead($g_h_AggressSlider) / 100
 
     Out("Map ID: " & $l_i_MapID)
     Out("From: (" & Round($l_f_StartX) & ", " & Round($l_f_StartY) & ")")
-    Out("To: (" & Round($g_f_DestX) & ", " & Round($g_f_DestY) & ")")
-    Out("Optimization: " & Round($l_f_Aggressiveness * 100, 0) & "%")
+    Out("To: (" & Round($g_f_DestX) & ", " & Round($g_f_DestY) & ")" & @CRLF)
 
-    ; Calculate path using the fixed function
+    ; Check if map is available
+    If Not Pathfinder_IsMapAvailable($l_i_MapID) Then
+        Out("ERROR: Map " & $l_i_MapID & " not available in pathfinding data!")
+        $g_b_PathCalculated = False
+        Return
+    EndIf
+
+    ; Calculate path
     Local $l_i_Timer = TimerInit()
-    ;$g_af2_CurrentPath = Pathfinding_GetPathCoords($l_i_MapID, $l_f_StartX, $l_f_StartY, $g_f_DestX, $g_f_DestY, $l_f_Aggressiveness)
-	$g_af2_CurrentPath = Pathfinding_GetSimplePathCoords($l_i_MapID, $l_f_StartX, $l_f_StartY, $g_f_DestX, $g_f_DestY)
+    Local $l_p_Result = Pathfinder_FindPathGW($l_i_MapID, $l_f_StartX, $l_f_StartY, $g_f_DestX, $g_f_DestY, 1250)
     Local $l_f_Time = TimerDiff($l_i_Timer)
 
-    If IsArray($g_af2_CurrentPath) And UBound($g_af2_CurrentPath) > 0 Then
-        Out("Path found in " & Round($l_f_Time, 2) & " ms")
-        Out("Waypoints: " & UBound($g_af2_CurrentPath))
-
-        ; Calculate total distance
-        Local $l_f_TotalDist = 0
-        For $i = 1 To UBound($g_af2_CurrentPath) - 1
-            Local $l_f_Dist = Sqrt( _
-                ($g_af2_CurrentPath[$i][0] - $g_af2_CurrentPath[$i-1][0])^2 + _
-                ($g_af2_CurrentPath[$i][1] - $g_af2_CurrentPath[$i-1][1])^2)
-            $l_f_TotalDist += $l_f_Dist
-        Next
-        Out("Total distance: " & Round($l_f_TotalDist))
-
-        ; Show first few waypoints
-        Local $l_i_ShowCount = UBound($g_af2_CurrentPath)
-        Out("First " & $l_i_ShowCount & " waypoints:")
-        For $i = 0 To $l_i_ShowCount - 1
-            Out("  " & "(" & Round($g_af2_CurrentPath[$i][0]) & ", " & _
-                Round($g_af2_CurrentPath[$i][1]) & ")")
-        Next
-
-        $g_b_PathCalculated = True
-        $g_i_CurrentWaypoint = 0
-        GUICtrlSetState($g_h_RunPathButton, $GUI_ENABLE)
-    Else
-        Out("Failed to find path!")
-        Out("Make sure the pathfinding data file exists for this map")
+    If $l_p_Result = 0 Then
+        Out("ERROR: Failed to find path!")
         $g_b_PathCalculated = False
-        GUICtrlSetState($g_h_RunPathButton, $GUI_DISABLE)
+        Return
     EndIf
+
+    ; Parse the PathResult structure
+    Local $l_t_Result = DllStructCreate($tagPathResult, $l_p_Result)
+    Local $l_i_ErrorCode = DllStructGetData($l_t_Result, "error_code")
+
+    If $l_i_ErrorCode <> 0 Then
+        Local $l_s_ErrorMsg = DllStructGetData($l_t_Result, "error_message")
+        Out("ERROR: " & $l_s_ErrorMsg & " (Code: " & $l_i_ErrorCode & ")")
+        Pathfinder_FreePathResult($l_p_Result)
+        $g_b_PathCalculated = False
+        Return
+    EndIf
+
+    Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
+    Local $l_p_Points = DllStructGetData($l_t_Result, "points")
+    Local $l_f_TotalCost = DllStructGetData($l_t_Result, "total_cost")
+
+    Out("Path found in " & Round($l_f_Time, 2) & " ms")
+    Out("Waypoints: " & $l_i_PointCount)
+    Out("Total cost: " & Round($l_f_TotalCost) & @CRLF)
+
+    ; Convert points to array
+    ReDim $g_af2_CurrentPath[$l_i_PointCount][2]
+    For $i = 0 To $l_i_PointCount - 1
+        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 8))
+        $g_af2_CurrentPath[$i][0] = DllStructGetData($l_t_Point, "x")
+        $g_af2_CurrentPath[$i][1] = DllStructGetData($l_t_Point, "y")
+    Next
+
+    ; Show all waypoints
+    Out("All waypoints:")
+    For $i = 0 To $l_i_PointCount - 1
+        Out("  " & ($i + 1) & ": (" & Round($g_af2_CurrentPath[$i][0]) & ", " & Round($g_af2_CurrentPath[$i][1]) & ")")
+    Next
+
+    ; Free the result (IMPORTANT to avoid memory leak!)
+    Pathfinder_FreePathResult($l_p_Result)
+
+    $g_b_PathCalculated = True
+    $g_i_CurrentWaypoint = 0
+    GUICtrlSetState($g_h_RunPathButton, $GUI_ENABLE)
 
     Out("=== End Calculation ===")
 EndFunc
@@ -268,7 +312,7 @@ Func RunPathUpdate()
         EndIf
     Else
         ; Move towards waypoint
-        agent_MoveLocation($l_f_WaypointX, $l_f_WaypointY)
+        Map_Move($l_f_WaypointX, $l_f_WaypointY, 0)
     EndIf
 EndFunc
 
