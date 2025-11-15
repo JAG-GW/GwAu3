@@ -207,51 +207,25 @@ Func CalculatePath()
 
     ; Calculate path
     Local $l_i_Timer = TimerInit()
-    Local $l_p_Result = Pathfinder_FindPathGW($l_i_MapID, $l_f_StartX, $l_f_StartY, $g_f_DestX, $g_f_DestY, 1250)
+    $g_af2_CurrentPath = Pathfinder_FindPathGW($l_i_MapID, $l_f_StartX, $l_f_StartY, $g_f_DestX, $g_f_DestY, 1250)
     Local $l_f_Time = TimerDiff($l_i_Timer)
 
-    If $l_p_Result = 0 Then
+    If Not IsArray($g_af2_CurrentPath) Then
         Out("ERROR: Failed to find path!")
+        Out("Error code: " & @error)
         $g_b_PathCalculated = False
         Return
     EndIf
 
-    ; Parse the PathResult structure
-    Local $l_t_Result = DllStructCreate($tagPathResult, $l_p_Result)
-    Local $l_i_ErrorCode = DllStructGetData($l_t_Result, "error_code")
-
-    If $l_i_ErrorCode <> 0 Then
-        Local $l_s_ErrorMsg = DllStructGetData($l_t_Result, "error_message")
-        Out("ERROR: " & $l_s_ErrorMsg & " (Code: " & $l_i_ErrorCode & ")")
-        Pathfinder_FreePathResult($l_p_Result)
-        $g_b_PathCalculated = False
-        Return
-    EndIf
-
-    Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
-    Local $l_p_Points = DllStructGetData($l_t_Result, "points")
-    Local $l_f_TotalCost = DllStructGetData($l_t_Result, "total_cost")
-
+    Local $l_i_PointCount = UBound($g_af2_CurrentPath)
     Out("Path found in " & Round($l_f_Time, 2) & " ms")
-    Out("Waypoints: " & $l_i_PointCount)
-    Out("Total cost: " & Round($l_f_TotalCost) & @CRLF)
-
-    ; Convert points to array
-    ReDim $g_af2_CurrentPath[$l_i_PointCount][2]
-    For $i = 0 To $l_i_PointCount - 1
-        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 8))
-        $g_af2_CurrentPath[$i][0] = DllStructGetData($l_t_Point, "x")
-        $g_af2_CurrentPath[$i][1] = DllStructGetData($l_t_Point, "y")
-    Next
+    Out("Waypoints: " & $l_i_PointCount & @CRLF)
 
     ; Show all waypoints
     Out("All waypoints:")
     For $i = 0 To $l_i_PointCount - 1
         Out("  " & ($i + 1) & ": (" & Round($g_af2_CurrentPath[$i][0]) & ", " & Round($g_af2_CurrentPath[$i][1]) & ")")
     Next
-
-    ; Free the result (IMPORTANT to avoid memory leak!)
-    Pathfinder_FreePathResult($l_p_Result)
 
     $g_b_PathCalculated = True
     $g_i_CurrentWaypoint = 0

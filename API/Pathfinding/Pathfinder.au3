@@ -22,7 +22,7 @@ Func Pathfinder_Shutdown()
     DllCall($DLL_PATH, "none:cdecl", "Shutdown")
 EndFunc
 
-Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRange = 0)
+Func Pathfinder_FindPathGWRaw($mapID, $startX, $startY, $destX, $destY, $simplifyRange = 1250)
     Local $result = DllCall($DLL_PATH, "ptr:cdecl", "FindPath", _
         "int", $mapID, _
         "float", $startX, _
@@ -36,6 +36,37 @@ Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRa
     EndIf
 
     Return $result[0]
+EndFunc
+
+Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRange = 1250)
+    Local $l_p_Result = Pathfinder_FindPathGWRaw($mapID, $startX, $startY, $destX, $destY, $simplifyRange)
+
+    If $l_p_Result = 0 Then
+        Return SetError(1, 0, 0)
+    EndIf
+
+    Local $l_t_Result = DllStructCreate($tagPathResult, $l_p_Result)
+    Local $l_i_ErrorCode = DllStructGetData($l_t_Result, "error_code")
+
+    If $l_i_ErrorCode <> 0 Then
+        Local $l_s_ErrorMsg = DllStructGetData($l_t_Result, "error_message")
+        Pathfinder_FreePathResult($l_p_Result)
+        Return SetError(2, $l_i_ErrorCode, 0)
+    EndIf
+
+    Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
+    Local $l_p_Points = DllStructGetData($l_t_Result, "points")
+
+    Local $a_Path[$l_i_PointCount][2]
+    For $i = 0 To $l_i_PointCount - 1
+        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 8))
+        $a_Path[$i][0] = DllStructGetData($l_t_Point, "x")
+        $a_Path[$i][1] = DllStructGetData($l_t_Point, "y")
+    Next
+
+    Pathfinder_FreePathResult($l_p_Result)
+
+    Return $a_Path
 EndFunc
 
 Func Pathfinder_FreePathResult($pResult)
