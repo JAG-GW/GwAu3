@@ -71,7 +71,9 @@ Func SmartCast_UseSkillEX($aSkillSlot, $aAgentID = -2)
 	Skill_UseSkill($aSkillSlot, $aAgentID)
 
 	;If it's melee attack wait until target is in nearby range
-	If Skill_IsAttackType($lSkillID) Or Skill_IsSkill2Type($lSkillID) Or Skill_IsSkillType($lSkillID) Or Skill_IsTouchSpecial($lSkillID) Then
+	Local $lSkilltype = $SkillBarCache[$aSkillSlot][$SkillType]
+	Local $lSpecial = $SkillBarCache[$aSkillSlot][$Special]
+	If $lSkilltype = $GC_I_SKILL_TYPE_ATTACK Or $lSkilltype = $GC_I_SKILL_TYPE_SKILL2 Or $lSkilltype = $GC_I_SKILL_TYPE_SKILL Or $lSpecial = $GC_I_SKILL_SPECIAL_FLAG_TOUCH Then
 		Do
 			Sleep(32)
 		Until Agent_GetDistance($aAgentID) <= 240 Or Agent_GetAgentInfo(-2, "IsDead") Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not SmartCast_CanCast($aSkillSlot)

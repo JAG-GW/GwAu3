@@ -6,7 +6,7 @@ Func CanUse_Bleeding()
 EndFunc
 
 Func BestTarget_Bleeding($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 479 - $GC_I_SKILL_ID_BLIND
@@ -15,7 +15,7 @@ Func CanUse_Blind()
 EndFunc
 
 Func BestTarget_Blind($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 480 - $GC_I_SKILL_ID_BURNING
@@ -24,7 +24,7 @@ Func CanUse_Burning()
 EndFunc
 
 Func BestTarget_Burning($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 481 - $GC_I_SKILL_ID_CRIPPLED
@@ -33,7 +33,7 @@ Func CanUse_Crippled()
 EndFunc
 
 Func BestTarget_Crippled($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 482 - $GC_I_SKILL_ID_DEEP_WOUND
@@ -42,7 +42,7 @@ Func CanUse_DeepWound()
 EndFunc
 
 Func BestTarget_DeepWound($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 483 - $GC_I_SKILL_ID_DISEASE
@@ -51,7 +51,7 @@ Func CanUse_Disease()
 EndFunc
 
 Func BestTarget_Disease($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 484 - $GC_I_SKILL_ID_POISON
@@ -60,7 +60,7 @@ Func CanUse_Poison()
 EndFunc
 
 Func BestTarget_Poison($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 485 - $GC_I_SKILL_ID_DAZED
@@ -69,7 +69,7 @@ Func CanUse_Dazed()
 EndFunc
 
 Func BestTarget_Dazed($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 486 - $GC_I_SKILL_ID_WEAKNESS
@@ -78,7 +78,7 @@ Func CanUse_Weakness()
 EndFunc
 
 Func BestTarget_Weakness($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2077 - $GC_I_SKILL_ID_CRACKED_ARMOR
@@ -87,6 +87,6 @@ Func CanUse_CrackedArmor()
 EndFunc
 
 Func BestTarget_CrackedArmor($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
