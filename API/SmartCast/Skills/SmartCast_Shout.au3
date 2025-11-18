@@ -579,6 +579,15 @@ Func BestTarget_SaveYourselvesLuxon($aAggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
+Func CanUse_SaveYourselvesKurzick()
+	If Anti_Shout() Then Return False
+	Return True
+EndFunc
+
+Func BestTarget_SaveYourselvesKurzick($aAggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
 Func CanUse_IMeantToDoThat()
 	If Anti_Shout() Then Return False
 	Return True

@@ -2,7 +2,7 @@
 
 ;Check if auto attack can be made
 Func SmartCast_CanAutoAttack()
-	If Agent_HasEffect($GC_I_SKILL_ID_Blind) Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_BLIND) Then Return False
 
 	Local $mEffects = Agent_GetEffectsArray(-2)
 	Local $lEffectCount = 0
@@ -51,7 +51,7 @@ Func SmartCast_CanCast($aSkillSlot)
 	EndIf
 
 	; Masochism: Sacrifice 5% of max HP when casting ANY spell
-	If Agent_HasEffect($GC_I_SKILL_ID_Masochism, -2) Then
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_Masochism) Then
 		$lTotalHealthCost = $lTotalHealthCost + (Agent_GetAgentInfo(-2, "MaxHP") * 0.05)
 	EndIf
 
@@ -77,23 +77,23 @@ Func SmartCast_CanCast($aSkillSlot)
 		Local $lSkillType = $SkillBarCache[$aSkillSlot][$SkillType]
 
 		; Check effects that INCREASE energy cost
-		If Agent_HasEffect($GC_I_SKILL_ID_Quickening_Zephyr, -2) Then
+		If CachedAgent_HasEffect($GC_I_SKILL_ID_Quickening_Zephyr) Then
 			$lEnergyCost = $lEnergyCost * 1.3 ; +30% energy cost
 		EndIf
 
-		If Agent_HasEffect($GC_I_SKILL_ID_Natures_Renewal, -2) Then
+		If CachedAgent_HasEffect($GC_I_SKILL_ID_Natures_Renewal) Then
 			If $lSkillType = $GC_I_SKILL_TYPE_HEX Or $lSkillType = $GC_I_SKILL_TYPE_ENCHANTMENT Then
 				$lEnergyCost = $lEnergyCost * 2 ; Double cost for hexes/enchantments
 			EndIf
 		EndIf
 
-		If Agent_HasEffect($GC_I_SKILL_ID_Primal_Echoes, -2) Then
+		If CachedAgent_HasEffect($GC_I_SKILL_ID_Primal_Echoes) Then
 			If $lSkillType = $GC_I_SKILL_TYPE_SIGNET Then
 				$lEnergyCost = $lEnergyCost + 10 ; Signets cost +10 energy
 			EndIf
 		EndIf
 
-		If Agent_HasEffect($GC_I_SKILL_ID_Roaring_Winds, -2) Then
+		If CachedAgent_HasEffect($GC_I_SKILL_ID_Roaring_Winds) Then
 			If $lSkillType = $GC_I_SKILL_TYPE_CHANT Or $lSkillType = $GC_I_SKILL_TYPE_SHOUT Then
 				$lEnergyCost = $lEnergyCost + 5 ; Chants/shouts cost +5 energy (average rank)
 			EndIf
@@ -158,7 +158,7 @@ Func SmartCast_CanCast($aSkillSlot)
 		Next
 
 		; Minimum cost is 1 (except for Way of the Empty Palm which makes it 0)
-		If $lEnergyCost < 1 And Not Agent_HasEffect($GC_I_SKILL_ID_Way_of_the_Empty_Palm, -2) Then
+		If $lEnergyCost < 1 And Not CachedAgent_HasEffect($GC_I_SKILL_ID_Way_of_the_Empty_Palm) Then
 			$lEnergyCost = 1
 		EndIf
 		If $lEnergyCost < 0 Then $lEnergyCost = 0
@@ -3408,6 +3408,8 @@ Func SmartCast_CanUse($aSkillSlot)
 			Return "CanUse_SpearOfFuryKurzick"
 		Case $GC_I_SKILL_ID_SUMMON_SPIRITS_KURZICK
 			Return "CanUse_SummonSpiritsKurzick"
+		Case $GC_I_SKILL_ID_SAVE_YOURSELVES_KURZICK
+			Return "CanUse_SaveYourselvesKurzick"
 		Case $GC_I_SKILL_ID_CRITICAL_AGILITY
 			Return "CanUse_CriticalAgility"
 		Case $GC_I_SKILL_ID_CRY_OF_PAIN

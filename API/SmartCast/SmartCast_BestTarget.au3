@@ -3242,6 +3242,8 @@ Func SmartCast_BestTarget($aSkillSlot)
 			Return "BestTarget_SelflessSpiritKurzick"
 		Case $GC_I_SKILL_ID_TRIPLE_SHOT_KURZICK
 			Return "BestTarget_TripleShotKurzick"
+		Case $GC_I_SKILL_ID_SAVE_YOURSELVES_KURZICK
+			Return "BestTarget_SaveYourselvesKurzick"
 		Case $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_KURZICK
 			Return "BestTarget_AuraOfHolyMightKurzick"
 		Case $GC_I_SKILL_ID_SPEAR_OF_FURY_KURZICK

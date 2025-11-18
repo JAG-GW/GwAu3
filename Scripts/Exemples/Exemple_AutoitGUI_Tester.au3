@@ -132,7 +132,8 @@ WEnd
 While $BotRunning
     Sleep(500)
     Out("Ready")
-
+	Cache_SkillBar()
+	Fight(Agent_GetAgentInfo(-2, "X"), Agent_GetAgentInfo(-2, "Y"), 1320, 3500)
     Out("Done")
     Sleep(5000)
 WEnd
