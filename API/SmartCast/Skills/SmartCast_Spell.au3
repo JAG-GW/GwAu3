@@ -2,8 +2,8 @@
 
 ; Skill ID: 5 - $GC_I_SKILL_ID_POWER_BLOCK
 Func CanUse_PowerBlock()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_GUILT, "HasEffect") Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_DIVERSION, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_GUILT) Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_DIVERSION) Then Return False
 	If Not Agent_GetAgentInfo($BestTarget, "IsCasting") Then Return False
 	Return True
 EndFunc
@@ -932,7 +932,7 @@ EndFunc
 
 ; Skill ID: 304 - $GC_I_SKILL_ID_LIGHT_OF_DWAYNA
 Func CanUse_LightOfDwayna()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -942,7 +942,7 @@ EndFunc
 
 ; Skill ID: 305 - $GC_I_SKILL_ID_RESURRECT
 Func CanUse_Resurrect()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -952,7 +952,7 @@ EndFunc
 
 ; Skill ID: 306 - $GC_I_SKILL_ID_REBIRTH
 Func CanUse_Rebirth()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -980,7 +980,7 @@ EndFunc
 
 ; Skill ID: 314 - $GC_I_SKILL_ID_RESTORE_LIFE
 Func CanUse_RestoreLife()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -1338,7 +1338,7 @@ EndFunc
 
 ; Skill ID: 791 - $GC_I_SKILL_ID_FLESH_OF_MY_FLESH
 Func CanUse_FleshOfMyFlesh()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -2334,7 +2334,7 @@ EndFunc
 
 ; Skill ID: 1128 - $GC_I_SKILL_ID_RESURRECTION_CHANT
 Func CanUse_ResurrectionChant()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -2525,7 +2525,7 @@ EndFunc
 
 ; Skill ID: 1263 - $GC_I_SKILL_ID_RENEW_LIFE
 Func CanUse_RenewLife()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -4499,7 +4499,7 @@ EndFunc
 
 ; Skill ID: 2866 - $GC_I_SKILL_ID_FLESH_OF_MY_FLESH_PVP
 Func CanUse_FleshOfMyFleshPvp()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 

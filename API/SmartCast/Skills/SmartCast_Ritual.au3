@@ -218,7 +218,7 @@ EndFunc
 
 ; Skill ID: 963 - $GC_I_SKILL_ID_RESTORATION
 Func CanUse_Restoration()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -597,7 +597,7 @@ EndFunc
 
 ; Skill ID: 3018 - $GC_I_SKILL_ID_RESTORATION_PVP
 Func CanUse_RestorationPvp()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 

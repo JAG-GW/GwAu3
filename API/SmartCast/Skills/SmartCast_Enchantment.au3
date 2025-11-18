@@ -758,7 +758,7 @@ EndFunc
 
 ; Skill ID: 315 - $GC_I_SKILL_ID_VENGEANCE
 Func CanUse_Vengeance()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -2196,7 +2196,7 @@ EndFunc
 
 ; Skill ID: 2109 - $GC_I_SKILL_ID_ETERNAL_AURA
 Func CanUse_EternalAura()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 

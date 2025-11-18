@@ -23,6 +23,9 @@ Func UseSkills($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
 			EndIf
 		EndIf
 
+;~ 	CACHE PLAYER EFFECTS (to reduce memory reads)
+		Cache_PlayerEffects()
+
 ;~ 	PRIORITY SKILLS
 		SmartCast_PrioritySkills()
 
@@ -112,6 +115,8 @@ Func _TryCastPrioritySkill($i)
 
 	If Call($CanUseCache[$i]) Then
 		SmartCast_UseSkillEX($i, $BestTarget)
+		; Actualize cache effect after casting priority skills
+		Cache_PlayerEffects()
 	EndIf
 EndFunc
 

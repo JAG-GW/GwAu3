@@ -3,9 +3,11 @@
 Func Anti_Chant()
 	;Cacophony did damage when cast a Chant
 	;If scale damage make more damage than our HP + 50 then true (don't cast)
-	If Effect_GetEffectArg($GC_I_SKILL_ID_CACOPHONY, "Scale") > (Agent_GetAgentInfo(-2, "CurrentHP") + 50) Then Return True
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_VOCAL_MINORITY, "HasEffect") Then Return True
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_WELL_OF_SILENCE, "HasEffect") Then Return True
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CACOPHONY) Then
+		If Effect_GetEffectArg($GC_I_SKILL_ID_CACOPHONY, "Scale") > (Agent_GetAgentInfo(-2, "CurrentHP") + 50) Then Return True
+	EndIf
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_VOCAL_MINORITY) Then Return True
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_WELL_OF_SILENCE) Then Return True
 	Return False
 EndFunc
 

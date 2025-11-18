@@ -2,7 +2,7 @@
 
 ;If there is the effect return true
 Func Anti_Signet()
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_IGNORANCE, "HasEffect") Then Return True
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_IGNORANCE) Then Return True
 	Return False
 EndFunc
 
@@ -107,7 +107,7 @@ EndFunc
 
 Func CanUse_DeathPactSignet()
 	If Anti_Signet() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -117,7 +117,7 @@ EndFunc
 
 Func CanUse_DeathPactSignetPvp()
 	If Anti_Signet() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -587,7 +587,7 @@ EndFunc
 
 Func CanUse_ResurrectionSignet()
 	If Anti_Signet() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -597,7 +597,7 @@ EndFunc
 
 Func CanUse_SignetOfReturn()
 	If Anti_Signet() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -607,7 +607,7 @@ EndFunc
 
 Func CanUse_SignetOfReturnPvp()
 	If Anti_Signet() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 

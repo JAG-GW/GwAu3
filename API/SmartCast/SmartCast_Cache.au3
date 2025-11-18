@@ -1,5 +1,8 @@
 #include-once
 
+; Global cache for player effects (updated each loop iteration)
+Global $PlayerEffectsCache[1] = [0]
+
 ; Script Start - Add your code below here
 Func Cache_SkillBar()
 	If Map_GetInstanceInfo("Type") = 2 Then Return
@@ -92,4 +95,29 @@ Func Cache_EndFormChangeBuild($aSkillSlot)
 			Cache_SkillBar()
 			Return True
 	EndSwitch
+EndFunc
+
+; Cache player effects to reduce memory reads
+; This should be called at the start of each UseSkills() loop iteration
+Func Cache_PlayerEffects()
+	Local $mEffects = Agent_GetEffectsArray(-2)
+	Local $lEffectCount = $mEffects[0]
+
+	; Resize the cache array to store all effect IDs
+	ReDim $PlayerEffectsCache[$lEffectCount + 1]
+	$PlayerEffectsCache[0] = $lEffectCount
+
+	; Store each effect ID in the cache
+	For $i = 1 To $lEffectCount
+		$PlayerEffectsCache[$i] = Memory_Read($mEffects[$i], 'long')
+	Next
+EndFunc
+
+; Check if player has a specific effect using the cache
+; This replaces Agent_HasEffect() for player effects only
+Func CachedAgent_HasEffect($aSkillID)
+	For $i = 1 To $PlayerEffectsCache[0]
+		If $PlayerEffectsCache[$i] = $aSkillID Then Return True
+	Next
+	Return False
 EndFunc

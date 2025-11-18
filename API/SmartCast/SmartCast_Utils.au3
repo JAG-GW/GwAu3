@@ -152,10 +152,4 @@ Func Agent_GetBuffsArray($aAgentID = -2)
 
 	Return $lBuffs
 EndFunc
-
-; Check if agent has a specific effect
-Func Agent_HasEffect($aSkillID, $aAgentID = -2)
-	Return Agent_GetAgentEffectInfo($aAgentID, $aSkillID, "HasEffect")
-EndFunc
-
 #EndRegion === Agent Effect Functions ===

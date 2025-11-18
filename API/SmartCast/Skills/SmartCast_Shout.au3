@@ -3,9 +3,11 @@
 Func Anti_Shout()
 	;Cacophony did damage when cast a shout
 	;If scale damage make more damage than our HP + 50 then true (don't cast)
-	If Effect_GetEffectArg($GC_I_SKILL_ID_CACOPHONY, "Scale") > (Agent_GetAgentInfo(-2, "CurrentHP") + 50) Then Return True
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_VOCAL_MINORITY, "HasEffect") Then Return True
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_WELL_OF_SILENCE, "HasEffect") Then Return True
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CACOPHONY) Then
+		If Effect_GetEffectArg($GC_I_SKILL_ID_CACOPHONY, "Scale") > (Agent_GetAgentInfo(-2, "CurrentHP") + 50) Then Return True
+	EndIf
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_VOCAL_MINORITY) Then Return True
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_WELL_OF_SILENCE) Then Return True
 	Return False
 EndFunc
 
@@ -425,7 +427,7 @@ EndFunc
 
 Func CanUse_WeShallReturn()
 	If Anti_Shout() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -651,7 +653,7 @@ EndFunc
 
 Func CanUse_ByUralsHammer()
 	If Anti_Shout() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
@@ -931,7 +933,7 @@ EndFunc
 
 Func CanUse_WeShallReturnPvp()
 	If Anti_Shout() Then Return False
-	If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Or Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
 
