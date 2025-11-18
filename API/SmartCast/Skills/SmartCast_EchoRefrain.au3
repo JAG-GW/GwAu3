@@ -6,7 +6,7 @@ Func CanUse_EnduringHarmony()
 EndFunc
 
 Func BestTarget_EnduringHarmony($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1575 - $GC_I_SKILL_ID_BLAZING_FINALE
@@ -15,7 +15,7 @@ Func CanUse_BlazingFinale()
 EndFunc
 
 Func BestTarget_BlazingFinale($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1576 - $GC_I_SKILL_ID_BURNING_REFRAIN
@@ -24,7 +24,7 @@ Func CanUse_BurningRefrain()
 EndFunc
 
 Func BestTarget_BurningRefrain($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1577 - $GC_I_SKILL_ID_FINALE_OF_RESTORATION
@@ -33,7 +33,7 @@ Func CanUse_FinaleOfRestoration()
 EndFunc
 
 Func BestTarget_FinaleOfRestoration($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1578 - $GC_I_SKILL_ID_MENDING_REFRAIN
@@ -42,7 +42,7 @@ Func CanUse_MendingRefrain()
 EndFunc
 
 Func BestTarget_MendingRefrain($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1579 - $GC_I_SKILL_ID_PURIFYING_FINALE
@@ -51,7 +51,7 @@ Func CanUse_PurifyingFinale()
 EndFunc
 
 Func BestTarget_PurifyingFinale($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1580 - $GC_I_SKILL_ID_BLADETURN_REFRAIN
@@ -60,7 +60,7 @@ Func CanUse_BladeturnRefrain()
 EndFunc
 
 Func BestTarget_BladeturnRefrain($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1773 - $GC_I_SKILL_ID_SOLDIERS_FURY
@@ -69,7 +69,7 @@ Func CanUse_SoldiersFury()
 EndFunc
 
 Func BestTarget_SoldiersFury($aAggroRange)
-	Return Agent_GetMyID()
+	Return 0 Agent_GetMyID()
 EndFunc
 
 ; Skill ID: 1774 - $GC_I_SKILL_ID_AGGRESSIVE_REFRAIN
@@ -78,7 +78,7 @@ Func CanUse_AggressiveRefrain()
 EndFunc
 
 Func BestTarget_AggressiveRefrain($aAggroRange)
-	Return Agent_GetMyID()
+	Return 0 Agent_GetMyID()
 EndFunc
 
 ; Skill ID: 1775 - $GC_I_SKILL_ID_ENERGIZING_FINALE
@@ -87,7 +87,7 @@ Func CanUse_EnergizingFinale()
 EndFunc
 
 Func BestTarget_EnergizingFinale($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2075 - $GC_I_SKILL_ID_HASTY_REFRAIN
@@ -96,7 +96,7 @@ Func CanUse_HastyRefrain()
 EndFunc
 
 Func BestTarget_HastyRefrain($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 3028 - $GC_I_SKILL_ID_BLAZING_FINALE_PVP
@@ -105,7 +105,7 @@ Func CanUse_BlazingFinalePvp()
 EndFunc
 
 Func BestTarget_BlazingFinalePvp($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 3029 - $GC_I_SKILL_ID_BLADETURN_REFRAIN_PVP
@@ -114,7 +114,7 @@ Func CanUse_BladeturnRefrainPvp()
 EndFunc
 
 Func BestTarget_BladeturnRefrainPvp($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 3062 - $GC_I_SKILL_ID_FINALE_OF_RESTORATION_PVP
@@ -123,7 +123,7 @@ Func CanUse_FinaleOfRestorationPvp()
 EndFunc
 
 Func BestTarget_FinaleOfRestorationPvp($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 3149 - $GC_I_SKILL_ID_MENDING_REFRAIN_PVP
@@ -132,7 +132,7 @@ Func CanUse_MendingRefrainPvp()
 EndFunc
 
 Func BestTarget_MendingRefrainPvp($aAggroRange)
-	Return Agent_GetMyID()
+	Return 0 Agent_GetMyID()
 EndFunc
 
 ; Skill ID: 3431 - $GC_I_SKILL_ID_HEROIC_REFRAIN
@@ -141,5 +141,5 @@ Func CanUse_HeroicRefrain()
 EndFunc
 
 Func BestTarget_HeroicRefrain($aAggroRange)
-	Return
+	Return 0
 EndFunc

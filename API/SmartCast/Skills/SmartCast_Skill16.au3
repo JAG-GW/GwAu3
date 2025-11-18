@@ -312,7 +312,7 @@ Func CanUse_DistractingLunge()
 EndFunc
 
 Func BestTarget_DistractingLunge($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1924 - $GC_I_SKILL_ID_ROLLERBEETLE_BLAST
@@ -321,7 +321,7 @@ Func CanUse_RollerbeetleBlast()
 EndFunc
 
 Func BestTarget_RollerbeetleBlast($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1925 - $GC_I_SKILL_ID_SPIT_ROCKS
@@ -330,7 +330,7 @@ Func CanUse_SpitRocks()
 EndFunc
 
 Func BestTarget_SpitRocks($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1932 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -477,7 +477,7 @@ Func CanUse_OathOfProtection()
 EndFunc
 
 Func BestTarget_OathOfProtection($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2928 - $GC_I_SKILL_ID_AMULET_OF_PROTECTION2
@@ -559,7 +559,7 @@ Func CanUse_ImpendingDhuum()
 EndFunc
 
 Func BestTarget_ImpendingDhuum($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 3202 - $GC_I_SKILL_ID_OATH_OF_PROTECTION2
@@ -568,7 +568,7 @@ Func CanUse_OathOfProtection2()
 EndFunc
 
 Func BestTarget_OathOfProtection2($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 3206 - $GC_I_SKILL_ID_SPECTRAL_INFUSION

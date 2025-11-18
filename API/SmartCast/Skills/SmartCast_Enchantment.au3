@@ -24,7 +24,7 @@ Func CanUse_SympatheticVisage()
 EndFunc
 
 Func BestTarget_SympatheticVisage($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 37 - $GC_I_SKILL_ID_ILLUSION_OF_HASTE
@@ -87,7 +87,7 @@ Func CanUse_DeathNova()
 EndFunc
 
 Func BestTarget_DeathNova($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 111 - $GC_I_SKILL_ID_AWAKEN_THE_BLOOD
@@ -105,7 +105,7 @@ Func CanUse_TaintedFlesh()
 EndFunc
 
 Func BestTarget_TaintedFlesh($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 114 - $GC_I_SKILL_ID_AURA_OF_THE_LICH
@@ -132,7 +132,7 @@ Func CanUse_DarkAura()
 EndFunc
 
 Func BestTarget_DarkAura($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 119 - $GC_I_SKILL_ID_BLOOD_IS_POWER
@@ -141,7 +141,7 @@ Func CanUse_BloodIsPower()
 EndFunc
 
 Func BestTarget_BloodIsPower($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 130 - $GC_I_SKILL_ID_DEMONIC_FLESH
@@ -204,7 +204,7 @@ Func CanUse_BloodRitual()
 EndFunc
 
 Func BestTarget_BloodRitual($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 160 - $GC_I_SKILL_ID_WINDBORNE_SPEED
@@ -213,7 +213,7 @@ Func CanUse_WindborneSpeed()
 EndFunc
 
 Func BestTarget_WindborneSpeed($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 164 - $GC_I_SKILL_ID_ELEMENTAL_ATTUNEMENT
@@ -339,7 +339,7 @@ Func CanUse_IceSpear()
 EndFunc
 
 Func BestTarget_IceSpear($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 216 - $GC_I_SKILL_ID_IRON_MIST
@@ -411,7 +411,7 @@ Func CanUse_LifeBond()
 EndFunc
 
 Func BestTarget_LifeBond($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 242 - $GC_I_SKILL_ID_BALTHAZARS_SPIRIT
@@ -420,7 +420,7 @@ Func CanUse_BalthazarsSpirit()
 EndFunc
 
 Func BestTarget_BalthazarsSpirit($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 243 - $GC_I_SKILL_ID_STRENGTH_OF_HONOR
@@ -429,7 +429,7 @@ Func CanUse_StrengthOfHonor()
 EndFunc
 
 Func BestTarget_StrengthOfHonor($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 244 - $GC_I_SKILL_ID_LIFE_ATTUNEMENT
@@ -438,7 +438,7 @@ Func CanUse_LifeAttunement()
 EndFunc
 
 Func BestTarget_LifeAttunement($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 245 - $GC_I_SKILL_ID_PROTECTIVE_SPIRIT
@@ -447,7 +447,7 @@ Func CanUse_ProtectiveSpirit()
 EndFunc
 
 Func BestTarget_ProtectiveSpirit($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 246 - $GC_I_SKILL_ID_DIVINE_INTERVENTION
@@ -456,7 +456,7 @@ Func CanUse_DivineIntervention()
 EndFunc
 
 Func BestTarget_DivineIntervention($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 248 - $GC_I_SKILL_ID_RETRIBUTION
@@ -465,7 +465,7 @@ Func CanUse_Retribution()
 EndFunc
 
 Func BestTarget_Retribution($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 249 - $GC_I_SKILL_ID_HOLY_WRATH
@@ -474,7 +474,7 @@ Func CanUse_HolyWrath()
 EndFunc
 
 Func BestTarget_HolyWrath($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 250 - $GC_I_SKILL_ID_ESSENCE_BOND
@@ -483,7 +483,7 @@ Func CanUse_EssenceBond()
 EndFunc
 
 Func BestTarget_EssenceBond($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 254 - $GC_I_SKILL_ID_VIGOROUS_SPIRIT
@@ -492,7 +492,7 @@ Func CanUse_VigorousSpirit()
 EndFunc
 
 Func BestTarget_VigorousSpirit($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 255 - $GC_I_SKILL_ID_WATCHFUL_SPIRIT
@@ -501,7 +501,7 @@ Func CanUse_WatchfulSpirit()
 EndFunc
 
 Func BestTarget_WatchfulSpirit($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 256 - $GC_I_SKILL_ID_BLESSED_AURA
@@ -528,7 +528,7 @@ Func CanUse_Guardian()
 EndFunc
 
 Func BestTarget_Guardian($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 259 - $GC_I_SKILL_ID_SHIELD_OF_DEFLECTION
@@ -537,7 +537,7 @@ Func CanUse_ShieldOfDeflection()
 EndFunc
 
 Func BestTarget_ShieldOfDeflection($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 260 - $GC_I_SKILL_ID_AURA_OF_FAITH
@@ -546,7 +546,7 @@ Func CanUse_AuraOfFaith()
 EndFunc
 
 Func BestTarget_AuraOfFaith($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 261 - $GC_I_SKILL_ID_SHIELD_OF_REGENERATION
@@ -555,7 +555,7 @@ Func CanUse_ShieldOfRegeneration()
 EndFunc
 
 Func BestTarget_ShieldOfRegeneration($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 262 - $GC_I_SKILL_ID_SHIELD_OF_JUDGMENT
@@ -564,7 +564,7 @@ Func CanUse_ShieldOfJudgment()
 EndFunc
 
 Func BestTarget_ShieldOfJudgment($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 263 - $GC_I_SKILL_ID_PROTECTIVE_BOND
@@ -573,7 +573,7 @@ Func CanUse_ProtectiveBond()
 EndFunc
 
 Func BestTarget_ProtectiveBond($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 266 - $GC_I_SKILL_ID_PEACE_AND_HARMONY
@@ -582,7 +582,7 @@ Func CanUse_PeaceAndHarmony()
 EndFunc
 
 Func BestTarget_PeaceAndHarmony($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 267 - $GC_I_SKILL_ID_JUDGES_INSIGHT
@@ -591,7 +591,7 @@ Func CanUse_JudgesInsight()
 EndFunc
 
 Func BestTarget_JudgesInsight($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 268 - $GC_I_SKILL_ID_UNYIELDING_AURA
@@ -609,7 +609,7 @@ Func CanUse_MarkOfProtection()
 EndFunc
 
 Func BestTarget_MarkOfProtection($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 270 - $GC_I_SKILL_ID_LIFE_BARRIER
@@ -618,7 +618,7 @@ Func CanUse_LifeBarrier()
 EndFunc
 
 Func BestTarget_LifeBarrier($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 271 - $GC_I_SKILL_ID_ZEALOTS_FIRE
@@ -636,7 +636,7 @@ Func CanUse_BalthazarsAura()
 EndFunc
 
 Func BestTarget_BalthazarsAura($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 273 - $GC_I_SKILL_ID_SPELL_BREAKER
@@ -645,7 +645,7 @@ Func CanUse_SpellBreaker()
 EndFunc
 
 Func BestTarget_SpellBreaker($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 274 - $GC_I_SKILL_ID_HEALING_SEED
@@ -654,7 +654,7 @@ Func CanUse_HealingSeed()
 EndFunc
 
 Func BestTarget_HealingSeed($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 284 - $GC_I_SKILL_ID_DIVINE_BOON
@@ -672,7 +672,7 @@ Func CanUse_HealingHands()
 EndFunc
 
 Func BestTarget_HealingHands($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 288 - $GC_I_SKILL_ID_HEALING_BREEZE
@@ -681,7 +681,7 @@ Func CanUse_HealingBreeze()
 EndFunc
 
 Func BestTarget_HealingBreeze($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 289 - $GC_I_SKILL_ID_VITAL_BLESSING
@@ -690,7 +690,7 @@ Func CanUse_VitalBlessing()
 EndFunc
 
 Func BestTarget_VitalBlessing($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 290 - $GC_I_SKILL_ID_MENDING
@@ -699,7 +699,7 @@ Func CanUse_Mending()
 EndFunc
 
 Func BestTarget_Mending($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 291 - $GC_I_SKILL_ID_LIVE_VICARIOUSLY
@@ -708,7 +708,7 @@ Func CanUse_LiveVicariously()
 EndFunc
 
 Func BestTarget_LiveVicariously($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 299 - $GC_I_SKILL_ID_SHIELDING_HANDS
@@ -717,7 +717,7 @@ Func CanUse_ShieldingHands()
 EndFunc
 
 Func BestTarget_ShieldingHands($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 307 - $GC_I_SKILL_ID_REVERSAL_OF_FORTUNE
@@ -726,7 +726,7 @@ Func CanUse_ReversalOfFortune()
 EndFunc
 
 Func BestTarget_ReversalOfFortune($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 308 - $GC_I_SKILL_ID_SUCCOR
@@ -735,7 +735,7 @@ Func CanUse_Succor()
 EndFunc
 
 Func BestTarget_Succor($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 309 - $GC_I_SKILL_ID_HOLY_VEIL
@@ -744,7 +744,7 @@ Func CanUse_HolyVeil()
 EndFunc
 
 Func BestTarget_HolyVeil($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 310 - $GC_I_SKILL_ID_DIVINE_SPIRIT
@@ -763,7 +763,7 @@ Func CanUse_Vengeance()
 EndFunc
 
 Func BestTarget_Vengeance($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 490 - $GC_I_SKILL_ID_VITAL_BLESSING_MONSTER_SKILL
@@ -777,7 +777,7 @@ Func CanUse_CharrBuff()
 EndFunc
 
 Func BestTarget_CharrBuff($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 532 - $GC_I_SKILL_ID_HEALING_BREEZE_AGNARS_RAGE
@@ -786,7 +786,7 @@ Func CanUse_HealingBreezeAgnarsRage()
 EndFunc
 
 Func BestTarget_HealingBreezeAgnarsRage($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 584 - $GC_I_SKILL_ID_DIVINE_FIRE
@@ -804,7 +804,7 @@ Func CanUse_ChimeraOfIntensity()
 EndFunc
 
 Func BestTarget_ChimeraOfIntensity($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 763 - $GC_I_SKILL_ID_JAUNDICED_GAZE
@@ -813,7 +813,7 @@ Func CanUse_JaundicedGaze()
 EndFunc
 
 Func BestTarget_JaundicedGaze($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 771 - $GC_I_SKILL_ID_AURA_OF_DISPLACEMENT
@@ -822,7 +822,7 @@ Func CanUse_AuraOfDisplacement()
 EndFunc
 
 Func BestTarget_AuraOfDisplacement($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 806 - $GC_I_SKILL_ID_CULTISTS_FERVOR
@@ -859,7 +859,7 @@ Func CanUse_VampiricSpirit()
 EndFunc
 
 Func BestTarget_VampiricSpirit($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 823 - $GC_I_SKILL_ID_BURNING_SPEED
@@ -895,7 +895,7 @@ Func CanUse_BorrowedEnergy()
 EndFunc
 
 Func BestTarget_BorrowedEnergy($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 837 - $GC_I_SKILL_ID_ENERGY_BOON
@@ -904,7 +904,7 @@ Func CanUse_EnergyBoon()
 EndFunc
 
 Func BestTarget_EnergyBoon($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 838 - $GC_I_SKILL_ID_DWAYNAS_SORROW
@@ -913,7 +913,7 @@ Func CanUse_DwaynasSorrow()
 EndFunc
 
 Func BestTarget_DwaynasSorrow($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 843 - $GC_I_SKILL_ID_GUST
@@ -922,7 +922,7 @@ Func CanUse_Gust()
 EndFunc
 
 Func BestTarget_Gust($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 848 - $GC_I_SKILL_ID_REVERSE_HEX
@@ -931,7 +931,7 @@ Func CanUse_ReverseHex()
 EndFunc
 
 Func BestTarget_ReverseHex($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 863 - $GC_I_SKILL_ID_ORDER_OF_APOSTASY
@@ -958,7 +958,7 @@ Func CanUse_RestfulBreeze()
 EndFunc
 
 Func BestTarget_RestfulBreeze($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 925 - $GC_I_SKILL_ID_RECALL
@@ -967,7 +967,7 @@ Func CanUse_Recall()
 EndFunc
 
 Func BestTarget_Recall($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 926 - $GC_I_SKILL_ID_SHARPEN_DAGGERS
@@ -1057,7 +1057,7 @@ Func CanUse_IceBreaker()
 EndFunc
 
 Func BestTarget_IceBreaker($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1027 - $GC_I_SKILL_ID_CRITICAL_DEFENSES
@@ -1111,7 +1111,7 @@ Func CanUse_AncestorsVisage()
 EndFunc
 
 Func BestTarget_AncestorsVisage($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1084 - $GC_I_SKILL_ID_SLIVER_ARMOR
@@ -1129,7 +1129,7 @@ Func CanUse_DoubleDragon()
 EndFunc
 
 Func BestTarget_DoubleDragon($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1114 - $GC_I_SKILL_ID_SPIRIT_BOND
@@ -1138,7 +1138,7 @@ Func CanUse_SpiritBond()
 EndFunc
 
 Func BestTarget_SpiritBond($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1115 - $GC_I_SKILL_ID_AIR_OF_ENCHANTMENT
@@ -1147,7 +1147,7 @@ Func CanUse_AirOfEnchantment()
 EndFunc
 
 Func BestTarget_AirOfEnchantment($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1123 - $GC_I_SKILL_ID_LIFE_SHEATH
@@ -1156,7 +1156,7 @@ Func CanUse_LifeSheath()
 EndFunc
 
 Func BestTarget_LifeSheath($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1152 - $GC_I_SKILL_ID_DEMONIC_AGILITY
@@ -1264,7 +1264,7 @@ Func CanUse_JaggedBones()
 EndFunc
 
 Func BestTarget_JaggedBones($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1356 - $GC_I_SKILL_ID_CONTAGION
@@ -1309,7 +1309,7 @@ Func CanUse_StoneSheath()
 EndFunc
 
 Func BestTarget_StoneSheath($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1375 - $GC_I_SKILL_ID_STONEFLESH_AURA
@@ -1345,7 +1345,7 @@ Func CanUse_JudgesIntervention()
 EndFunc
 
 Func BestTarget_JudgesIntervention($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1391 - $GC_I_SKILL_ID_SUPPORTIVE_SPIRIT
@@ -1354,7 +1354,7 @@ Func CanUse_SupportiveSpirit()
 EndFunc
 
 Func BestTarget_SupportiveSpirit($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1392 - $GC_I_SKILL_ID_WATCHFUL_HEALING
@@ -1363,7 +1363,7 @@ Func CanUse_WatchfulHealing()
 EndFunc
 
 Func BestTarget_WatchfulHealing($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1393 - $GC_I_SKILL_ID_HEALERS_BOON
@@ -1390,7 +1390,7 @@ Func CanUse_BalthazarsPendulum()
 EndFunc
 
 Func BestTarget_BalthazarsPendulum($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1399 - $GC_I_SKILL_ID_SHIELD_OF_ABSORPTION
@@ -1399,7 +1399,7 @@ Func CanUse_ShieldOfAbsorption()
 EndFunc
 
 Func BestTarget_ShieldOfAbsorption($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1400 - $GC_I_SKILL_ID_REVERSAL_OF_DAMAGE
@@ -1408,7 +1408,7 @@ Func CanUse_ReversalOfDamage()
 EndFunc
 
 Func BestTarget_ReversalOfDamage($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1450 - $GC_I_SKILL_ID_ABADDONS_CONSPIRACY
@@ -1417,7 +1417,7 @@ Func CanUse_AbaddonsConspiracy()
 EndFunc
 
 Func BestTarget_AbaddonsConspiracy($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1457 - $GC_I_SKILL_ID_ABADDONS_CHOSEN
@@ -1552,7 +1552,7 @@ Func CanUse_WatchfulIntervention()
 EndFunc
 
 Func BestTarget_WatchfulIntervention($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1505 - $GC_I_SKILL_ID_VOW_OF_PIETY
@@ -1768,7 +1768,7 @@ Func CanUse_ShadowMeld()
 EndFunc
 
 Func BestTarget_ShadowMeld($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1663 - $GC_I_SKILL_ID_ELEMENTAL_FLAME
@@ -1786,7 +1786,7 @@ Func CanUse_PensiveGuardian()
 EndFunc
 
 Func BestTarget_PensiveGuardian($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 1684 - $GC_I_SKILL_ID_SCRIBES_INSIGHT
@@ -2074,7 +2074,7 @@ Func CanUse_WitheringAura()
 EndFunc
 
 Func BestTarget_WitheringAura($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2005 - $GC_I_SKILL_ID_SMITERS_BOON
@@ -2092,7 +2092,7 @@ Func CanUse_PurifyingVeil()
 EndFunc
 
 Func BestTarget_PurifyingVeil($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2013 - $GC_I_SKILL_ID_GRENTHS_AURA
@@ -2110,7 +2110,7 @@ Func CanUse_PatientSpirit()
 EndFunc
 
 Func BestTarget_PatientSpirit($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2063 - $GC_I_SKILL_ID_AURA_OF_STABILITY
@@ -2119,7 +2119,7 @@ Func CanUse_AuraOfStability()
 EndFunc
 
 Func BestTarget_AuraOfStability($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2064 - $GC_I_SKILL_ID_SPOTLESS_MIND
@@ -2128,7 +2128,7 @@ Func CanUse_SpotlessMind()
 EndFunc
 
 Func BestTarget_SpotlessMind($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2065 - $GC_I_SKILL_ID_SPOTLESS_SOUL
@@ -2137,7 +2137,7 @@ Func CanUse_SpotlessSoul()
 EndFunc
 
 Func BestTarget_SpotlessSoul($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2091 - $GC_I_SKILL_ID_SHADOW_SANCTUARY_KURZICK
@@ -2191,7 +2191,7 @@ Func CanUse_SeedOfLife()
 EndFunc
 
 Func BestTarget_SeedOfLife($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2109 - $GC_I_SKILL_ID_ETERNAL_AURA
@@ -2246,7 +2246,7 @@ Func CanUse_MagneticSurge()
 EndFunc
 
 Func BestTarget_MagneticSurge($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2201 - $GC_I_SKILL_ID_SHIELD_OF_FORCE
@@ -2264,7 +2264,7 @@ Func CanUse_GreatDwarfArmor()
 EndFunc
 
 Func BestTarget_GreatDwarfArmor($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2249 - $GC_I_SKILL_ID_POLYMOCK_BLOCK
@@ -2384,7 +2384,7 @@ Func CanUse_AegisPvp()
 EndFunc
 
 Func BestTarget_AegisPvp($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2860 - $GC_I_SKILL_ID_ETHER_RENEWAL_PVP
@@ -2429,7 +2429,7 @@ Func CanUse_UnyieldingAuraPvp()
 EndFunc
 
 Func BestTarget_UnyieldingAuraPvp($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2892 - $GC_I_SKILL_ID_SPIRIT_BOND_PVP
@@ -2438,7 +2438,7 @@ Func CanUse_SpiritBondPvp()
 EndFunc
 
 Func BestTarget_SpiritBondPvp($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2895 - $GC_I_SKILL_ID_SMITERS_BOON_PVP
@@ -2456,7 +2456,7 @@ Func CanUse_BitGolemRectifier()
 EndFunc
 
 Func BestTarget_BitGolemRectifier($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 2915 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -2469,7 +2469,7 @@ Func CanUse_StrengthOfHonorPvp()
 EndFunc
 
 Func BestTarget_StrengthOfHonorPvp($aAggroRange)
-	Return
+	Return 0
 EndFunc
 
 ; Skill ID: 3003 - $GC_I_SKILL_ID_ARMOR_OF_UNFEELING_PVP
