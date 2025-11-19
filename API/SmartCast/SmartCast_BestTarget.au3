@@ -802,8 +802,6 @@ Func SmartCast_BestTarget($aSkillSlot)
 			Return "BestTarget_DistractingShot"
 		Case $GC_I_SKILL_ID_PRECISION_SHOT
 			Return "BestTarget_PrecisionShot"
-		Case $GC_I_SKILL_ID_SPLINTER_SHOT_MONSTER_SKILL
-			Return "BestTarget_SplinterShotMonsterSkill"
 		Case $GC_I_SKILL_ID_DETERMINED_SHOT
 			Return "BestTarget_DeterminedShot"
 		Case $GC_I_SKILL_ID_CALLED_SHOT
