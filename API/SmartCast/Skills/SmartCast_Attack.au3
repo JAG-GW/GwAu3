@@ -17,7 +17,7 @@ Func Anti_Attack()
 	If $lCommingDamage > (Agent_GetAgentInfo(-2, "CurrentHP") + 50) Then Return True
 
 	Return False
-EndIf
+EndFunc
 
 ; Skill ID: 320 - $GC_I_SKILL_ID_HAMSTRING
 Func CanUse_Hamstring()

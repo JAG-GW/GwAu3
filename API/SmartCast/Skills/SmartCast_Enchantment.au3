@@ -1,5 +1,9 @@
 #include-once
 
+Func Anti_Enchentment()
+
+EndFunc
+
 ; Skill ID: 32 - $GC_I_SKILL_ID_ILLUSION_OF_WEAKNESS
 Func CanUse_IllusionOfWeakness()
 	Return True
