@@ -3,19 +3,19 @@
 ;Check if auto attack can be made
 Func SmartCast_CanAutoAttack()
 	If CachedAgent_HasEffect($GC_I_SKILL_ID_BLIND) Then Return False
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_Spirit_Shackles) Then Return False
 
-	Local $mEffects = Agent_GetEffectsArray(-2)
-	Local $lEffectCount = 0
-
-	For $i = 1 To $mEffects[0]
-		Switch Memory_Read($mEffects[$i], 'long')
+	Local $lCommingDamage = 0
+	For $i = 1 To $PlayerEffectsCache[0]
+		Switch $PlayerEffectsCache[$i]
 			Case $GC_I_SKILL_ID_Ineptitude, $GC_I_SKILL_ID_Clumsiness, $GC_I_SKILL_ID_Wandering_Eye, $GC_I_SKILL_ID_Wandering_Eye_PvP, _
-				$GC_I_SKILL_ID_Spiteful_Spirit, $GC_I_SKILL_ID_Spoil_Victor,  $GC_I_SKILL_ID_Empathy, $GC_I_SKILL_ID_Empathy_PvP, $GC_I_SKILL_ID_Spirit_Shackles
-				$lEffectCount += 1
-				If Agent_GetAgentInfo(-2, "CurrentHP") < 200 Then Return False
+					$GC_I_SKILL_ID_Spiteful_Spirit, $GC_I_SKILL_ID_Spoil_Victor,  $GC_I_SKILL_ID_Empathy, $GC_I_SKILL_ID_Empathy_PvP
+
+				$lCommingDamage = $lCommingDamage + Effect_GetEffectArg($GC_I_SKILL_ID_Ineptitude, "Scale")
 		EndSwitch
-		If $lEffectCount >= 2 Then Return False
 	Next
+
+	If $lCommingDamage > (Agent_GetAgentInfo(-2, "CurrentHP") + 50) Then Return False
 
 	Return True
 EndFunc
@@ -38,10 +38,8 @@ Func SmartCast_CanCast($aSkillSlot)
 		$lTotalHealthCost = Agent_GetAgentInfo(-2, "MaxHP") * $lBaseSacrificeCost / 100
 
 		; Check effects that modify sacrifice cost
-		Local $mEffects = Agent_GetEffectsArray(-2)
-		For $i = 1 To $mEffects[0]
-			Local $lEffectID = Memory_Read($mEffects[$i], 'long')
-			Switch $lEffectID
+		For $i = 1 To $PlayerEffectsCache[0]
+			Switch $PlayerEffectsCache[$i]
 				Case $GC_I_SKILL_ID_Awaken_the_Blood
 					$lTotalHealthCost = $lTotalHealthCost + ($lTotalHealthCost * 0.5) ; +50% cost
 				Case $GC_I_SKILL_ID_Scourge_Sacrifice
@@ -100,10 +98,8 @@ Func SmartCast_CanCast($aSkillSlot)
 		EndIf
 
 		; Check for energy cost REDUCTION effects
-		Local $mEffects = Agent_GetEffectsArray(-2)
-		For $i = 1 To $mEffects[0]
-			Local $lEffectID = Memory_Read($mEffects[$i], 'long')
-			Switch $lEffectID
+		For $i = 1 To $PlayerEffectsCache[0]
+			Switch $PlayerEffectsCache[$i]
 				Case $GC_I_SKILL_ID_Glyph_of_Lesser_Energy
 					$lEnergyCost = $lEnergyCost - 18 ; -18 energy (max rank)
 				Case $GC_I_SKILL_ID_Glyph_of_Energy

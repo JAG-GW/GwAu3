@@ -1,16 +1,16 @@
 #include-once
 
-Func Fight($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
+Func SmartCast_Fight($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
 	$BestTarget = 0
 	Local $MyOldMap = Map_GetMapID(), $lMapLoadingOld = Map_GetInstanceInfo("Type")
 	Do
-		UseSkills($x, $y, $aAggroRange, $aMaxDistanceToXY)
+		SmartCast_UseSkills($x, $y, $aAggroRange, $aMaxDistanceToXY)
 		Sleep(32)
 	Until Count_NumberOf(-2, $aAggroRange, "Filter_IsLivingEnemy") = 0 Or Agent_GetAgentInfo(-2, "IsDead") Or Party_IsWiped() Or Map_GetMapID() <> $MyOldMap Or Map_GetInstanceInfo("Type") <> $lMapLoadingOld
 EndFunc   ;==>Fight
 
 ;~ Use this function to cast all of your skills or skills of a certain type.
-Func UseSkills($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
+Func SmartCast_UseSkills($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
 	For $i = 1 To 8
 		If Agent_GetAgentInfo(-2, "IsDead") Or Party_IsWiped() = 1 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Agent_GetAgentInfo(-2, "IsKnockedDown") Then Return
 		If Count_NumberOf(-2, $aAggroRange, "Filter_IsLivingEnemy") = 0 Then Return
@@ -102,12 +102,12 @@ Func SmartCast_PrioritySkills()
 	For $skillID In $aPrioritySkills
 		Local $slot = Skill_GetSlotByID($skillID)
 		If $slot > 0 Then
-			_TryCastPrioritySkill($slot)
+			SmartCast_CastPrioritySkill($slot)
 		EndIf
 	Next
 EndFunc
 
-Func _TryCastPrioritySkill($i)
+Func SmartCast_CastPrioritySkill($i)
 	If Not SmartCast_CanCast($i) Then Return
 
 	$BestTarget = Call($BestTargetCache[$i], $aAggroRange)

@@ -1,5 +1,24 @@
 #include-once
 
+Func Anti_Attack()
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_BLIND) Then Return True
+	If CachedAgent_HasEffect($GC_I_SKILL_ID_Spirit_Shackles) Then Return True
+
+	Local $lCommingDamage = 0
+	For $i = 1 To $PlayerEffectsCache[0]
+		Switch $PlayerEffectsCache[$i]
+			Case $GC_I_SKILL_ID_Ineptitude, $GC_I_SKILL_ID_Clumsiness, $GC_I_SKILL_ID_Wandering_Eye, $GC_I_SKILL_ID_Wandering_Eye_PvP, _
+					$GC_I_SKILL_ID_Spiteful_Spirit, $GC_I_SKILL_ID_Spoil_Victor,  $GC_I_SKILL_ID_Empathy, $GC_I_SKILL_ID_Empathy_PvP
+
+				$lCommingDamage = $lCommingDamage + Effect_GetEffectArg($GC_I_SKILL_ID_Ineptitude, "Scale")
+		EndSwitch
+	Next
+
+	If $lCommingDamage > (Agent_GetAgentInfo(-2, "CurrentHP") + 50) Then Return True
+
+	Return False
+EndIf
+
 ; Skill ID: 320 - $GC_I_SKILL_ID_HAMSTRING
 Func CanUse_Hamstring()
 	Return True
