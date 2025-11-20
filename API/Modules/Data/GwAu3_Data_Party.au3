@@ -51,8 +51,8 @@ Func Party_GetPartyContextInfo($a_s_Info = "")
             Return Memory_Read($l_p_PartyPtr + 0x3C, "long")
 
         Case "TotalPartySize"
-            Local $l_i_PlayerCount = GetPartyInfo("PlayerCount")
-            Local $l_i_HenchmenCount = GetPartyInfo("HenchmenCount")
+            Local $l_i_PlayerCount = Party_GetPartyContextInfo("PlayerCount")
+            Local $l_i_HenchmenCount = Party_GetPartyContextInfo("HenchmenCount")
             Local $l_i_HeroCount = Party_GetMyPartyInfo("ArrayHeroPartyMemberSize")
             Return $l_i_PlayerCount + $l_i_HenchmenCount + $l_i_HeroCount
 

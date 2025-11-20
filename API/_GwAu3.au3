@@ -153,5 +153,5 @@
 #include <Word.au3>
 
 #include "GwAu3_Core.au3"
-#include "Pathfinding/Pathfinder.au3"
-#include "SmartCast/_SmartCast.au3"
+;~ #include "Pathfinding/Pathfinder.au3"
+;~ #include "SmartCast/_SmartCast.au3"
