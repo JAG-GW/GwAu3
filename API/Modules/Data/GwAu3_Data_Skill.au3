@@ -263,12 +263,12 @@ Func Skill_IsCoreCampaign($a_i_SkillID)
 	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_CORE)
 EndFunc
 
-Func Skill_IsProphecyCampaign($a_i_SkillID)
-	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_PROPHECY)
+Func Skill_IsPropheciesCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_PROPHECIES)
 EndFunc
 
-Func Skill_IsFactionCampaign($a_i_SkillID)
-	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_FACTION)
+Func Skill_IsFactionsCampaign($a_i_SkillID)
+	Return Skill_IsSkillCampaign($a_i_SkillID, $GC_I_SKILL_CAMPAIGN_FACTIONS)
 EndFunc
 
 Func Skill_IsNightfallCampaign($a_i_SkillID)
@@ -536,14 +536,14 @@ Func Skill_HasSeveralSpecialFlags($a_i_SkillID, $i_Flags)
 	Return BitAND($i_Special, $i_Flags) = $i_Flags
 EndFunc
 
-Func Skill_IsEliteTouch($a_i_SkillID)
-	Return Skill_HasAllSpecialFlags($a_i_SkillID, BitOR($GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_TOUCH))
-EndFunc
+;~ Func Skill_IsEliteTouch($a_i_SkillID)
+;~ 	Return Skill_HasAllSpecialFlags($a_i_SkillID, BitOR($GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_TOUCH))
+;~ EndFunc
 
-Func Skill_IsEliteTouchWithExhaustion($a_i_SkillID)
-	Local $i_Flags = BitOR($GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_TOUCH, $GC_I_SKILL_SPECIAL_FLAG_OVERCAST)
-	Return Skill_HasAllSpecialFlags($a_i_SkillID, $i_Flags)
-EndFunc
+;~ Func Skill_IsEliteTouchWithExhaustion($a_i_SkillID)
+;~ 	Local $i_Flags = BitOR($GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_TOUCH, $GC_I_SKILL_SPECIAL_FLAG_OVERCAST)
+;~ 	Return Skill_HasAllSpecialFlags($a_i_SkillID, $i_Flags)
+;~ EndFunc
 #EndRegion Skill Special
 
 #Region Combo
@@ -621,55 +621,55 @@ Func Skill_IsAnyEffect1($a_i_SkillID)
 EndFunc
 
 Func Skill_IsBleedEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_BLEEDING)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_BLEEDING)
 EndFunc
 
 Func Skill_IsBlindEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_BLINDED)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_BLINDED)
 EndFunc
 
 Func Skill_IsBurnEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_BURNING)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_BURNING)
 EndFunc
 
 Func Skill_IsCrippleEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_CRIPPLED)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_CRIPPLED)
 EndFunc
 
 Func Skill_IsDeepWoundEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_DEEP_WOUND)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_DEEP_WOUND)
 EndFunc
 
 Func Skill_IsDiseaseEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_DISEASED)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_DISEASED)
 EndFunc
 
 Func Skill_IsSlowEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_50_SLOWER_MOVEMENT)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_50_SLOWER_MOVEMENT)
 EndFunc
 
 Func Skill_IsKnockDownEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_KNOCKDOWN)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_KNOCKDOWN)
 EndFunc
 
 Func Skill_IsPoisonEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_POISONED)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_POISONED)
 EndFunc
 
 Func Skill_IsDazeEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_DAZED)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_DAZED)
 EndFunc
 
 Func Skill_IsWeakEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_WEAKNESS)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_WEAKNESS)
 EndFunc
 
 Func Skill_IsWaterHexEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_WATER_HEX)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_WATER_HEX)
 EndFunc
 
 Func Skill_IsHealEffect1($a_i_SkillID)
-	Return Skill_HasEffect1Flag($GC_I_SKILL_EFFECT1_HEAL)
+	Return Skill_HasEffect1Flag($a_i_SkillID, $GC_I_SKILL_EFFECT1_HEAL)
 EndFunc
 
 Func Skill_HasSeveralEffect1Flags($a_i_SkillID, $i_Flags)

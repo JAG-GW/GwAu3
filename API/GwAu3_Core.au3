@@ -458,7 +458,7 @@ Func Core_SendPacket($a_i_Size, $a_i_Header, $a_i_Param1 = 0, $a_i_Param2 = 0, $
 	Core_Enqueue($g_p_Packet, 52)
 EndFunc
 
-Func Core_ControlAction($a_i_Action, $a_i_ActionType = $GC_I_ACTIONTYPE_ACTIVATE)
+Func Core_ControlAction($a_i_Action, $a_i_ActionType = $GC_I_CONTROL_TYPE_ACTIVATE)
 	Return Core_PerformAction($a_i_Action, $a_i_ActionType)
 EndFunc
 
