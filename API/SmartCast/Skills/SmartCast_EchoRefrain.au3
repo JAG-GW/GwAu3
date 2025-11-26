@@ -69,7 +69,7 @@ Func CanUse_SoldiersFury()
 EndFunc
 
 Func BestTarget_SoldiersFury($aAggroRange)
-	Return 0 Agent_GetMyID()
+	Return Agent_GetMyID()
 EndFunc
 
 ; Skill ID: 1774 - $GC_I_SKILL_ID_AGGRESSIVE_REFRAIN
@@ -78,7 +78,7 @@ Func CanUse_AggressiveRefrain()
 EndFunc
 
 Func BestTarget_AggressiveRefrain($aAggroRange)
-	Return 0 Agent_GetMyID()
+	Return Agent_GetMyID()
 EndFunc
 
 ; Skill ID: 1775 - $GC_I_SKILL_ID_ENERGIZING_FINALE
@@ -132,7 +132,7 @@ Func CanUse_MendingRefrainPvp()
 EndFunc
 
 Func BestTarget_MendingRefrainPvp($aAggroRange)
-	Return 0 Agent_GetMyID()
+	Return Agent_GetMyID()
 EndFunc
 
 ; Skill ID: 3431 - $GC_I_SKILL_ID_HEROIC_REFRAIN

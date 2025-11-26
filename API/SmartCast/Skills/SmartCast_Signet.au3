@@ -635,6 +635,16 @@ EndFunc
 
 Func CanUse_SignetOfSpirits()
 	If Anti_Signet() Then Return False
+
+	Local $lSpirit1 = Agent_FindByPlayerNumber(4229, -2, 5000, "Filter_IsControlledSpirit")
+	Local $lSpirit2 = Agent_FindByPlayerNumber(4230, -2, 5000, "Filter_IsControlledSpirit")
+	Local $lSpirit3 = Agent_FindByPlayerNumber(4231, -2, 5000, "Filter_IsControlledSpirit")
+
+	If $lSpirit1 <> 0 And $lSpirit2 <> 0 And $lSpirit3 <> 0 Then
+		If Agent_GetAgentInfo($lSpirit1, "HP") < 0.20 Or Agent_GetAgentInfo($lSpirit2, "HP") < 0.20 Or Agent_GetAgentInfo($lSpirit3, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 

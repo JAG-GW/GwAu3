@@ -2457,7 +2457,7 @@ Func CanUse_EssenceStrike()
 EndFunc
 
 Func BestTarget_EssenceStrike($aAggroRange)
-	Return 0
+	Return GetAgentsHighest(-2, 1320, "HP", "Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1228 - $GC_I_SKILL_ID_SPIRIT_SIPHON
@@ -3372,6 +3372,17 @@ EndFunc
 
 ; Skill ID: 2051 - $GC_I_SKILL_ID_SUMMON_SPIRITS_LUXON
 Func CanUse_SummonSpiritsLuxon()
+	Local $lSpiritsAt5000 = Count_NumberOf(-2, 5000, "Filter_IsControlledSpirit")
+	If $lSpiritsAt5000 = 0 Then Return False
+
+	Local $lSpiritsAt1000 = Count_NumberOf(-2, 1000, "Filter_IsControlledSpirit")
+
+	If $lSpiritsAt5000 > 0 And $lSpiritsAt1000 = $lSpiritsAt5000 Then
+		$lLowestSpirit = GetAgentsLowest(-2, 1320, "HP", "Filter_IsControlledSpirit")
+		If Agent_GetAgentInfo($lLowestSpirit, "HP") < 0.85 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -3471,6 +3482,17 @@ EndFunc
 
 ; Skill ID: 2100 - $GC_I_SKILL_ID_SUMMON_SPIRITS_KURZICK
 Func CanUse_SummonSpiritsKurzick()
+	Local $lSpiritsAt5000 = Count_NumberOf(-2, 5000, "Filter_IsControlledSpirit")
+	If $lSpiritsAt5000 = 0 Then Return False
+
+	Local $lSpiritsAt1000 = Count_NumberOf(-2, 1000, "Filter_IsControlledSpirit")
+
+	If $lSpiritsAt5000 > 0 And $lSpiritsAt1000 = $lSpiritsAt5000 Then
+		$lLowestSpirit = GetAgentsLowest(-2, 1320, "HP", "Filter_IsControlledSpirit")
+		If Agent_GetAgentInfo($lLowestSpirit, "HP") < 0.85 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -3606,6 +3628,13 @@ EndFunc
 
 ; Skill ID: 2224 - $GC_I_SKILL_ID_SUMMON_MURSAAT
 Func CanUse_SummonMursaat()
+	Local $lSpirit = Agent_FindByPlayerNumber(5847, -2, 2500, "Filter_IsLivingAlly")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -3615,6 +3644,13 @@ EndFunc
 
 ; Skill ID: 2225 - $GC_I_SKILL_ID_SUMMON_RUBY_DJINN
 Func CanUse_SummonRubyDjinn()
+	Local $lSpirit = Agent_FindByPlayerNumber(5848, -2, 2500, "Filter_IsLivingAlly")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -3624,6 +3660,13 @@ EndFunc
 
 ; Skill ID: 2226 - $GC_I_SKILL_ID_SUMMON_ICE_IMP
 Func CanUse_SummonIceImp()
+	Local $lSpirit = Agent_FindByPlayerNumber(5849, -2, 2500, "Filter_IsLivingAlly")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -3633,6 +3676,13 @@ EndFunc
 
 ; Skill ID: 2227 - $GC_I_SKILL_ID_SUMMON_NAGA_SHAMAN
 Func CanUse_SummonNagaShaman()
+	Local $lSpirit = Agent_FindByPlayerNumber(5850, -2, 2500, "Filter_IsLivingAlly")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -3651,6 +3701,7 @@ EndFunc
 
 ; Skill ID: 2235 - $GC_I_SKILL_ID_EBON_VANGUARD_ASSASSIN_SUPPORT
 Func CanUse_EbonVanguardAssassinSupport()
+	;5852
 	Return True
 EndFunc
 

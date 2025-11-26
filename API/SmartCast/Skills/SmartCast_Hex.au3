@@ -1150,7 +1150,7 @@ Func CanUse_PainfulBond()
 EndFunc
 
 Func BestTarget_PainfulBond($aAggroRange)
-	Return 0
+	Return GetAgentsBestAOE(-2, 1320, $GC_I_RANGE_NEAR, "Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1260 - $GC_I_SKILL_ID_MEEKNESS

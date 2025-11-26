@@ -155,6 +155,13 @@ EndFunc
 
 ; Skill ID: 871 - $GC_I_SKILL_ID_SHADOWSONG
 Func CanUse_Shadowsong()
+	Local $lSpirit = Agent_FindByPlayerNumber(4213, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -164,6 +171,13 @@ EndFunc
 
 ; Skill ID: 911 - $GC_I_SKILL_ID_UNION
 Func CanUse_Union()
+	Local $lSpirit = Agent_FindByPlayerNumber(4224, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -173,6 +187,10 @@ EndFunc
 
 ; Skill ID: 920 - $GC_I_SKILL_ID_DESTRUCTION
 Func CanUse_Destruction()
+	Local $lSpirit = Agent_FindByPlayerNumber(4215, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then Return False
+
 	Return True
 EndFunc
 
@@ -182,6 +200,13 @@ EndFunc
 
 ; Skill ID: 921 - $GC_I_SKILL_ID_DISSONANCE
 Func CanUse_Dissonance()
+	Local $lSpirit = Agent_FindByPlayerNumber(4221, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -191,6 +216,13 @@ EndFunc
 
 ; Skill ID: 923 - $GC_I_SKILL_ID_DISENCHANTMENT
 Func CanUse_Disenchantment()
+	Local $lSpirit = Agent_FindByPlayerNumber(4225, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -219,6 +251,11 @@ EndFunc
 ; Skill ID: 963 - $GC_I_SKILL_ID_RESTORATION
 Func CanUse_Restoration()
 	If CachedAgent_HasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or CachedAgent_HasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
+
+	Local $lSpirit = Agent_FindByPlayerNumber(4223, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then Return False
+
 	Return True
 EndFunc
 
@@ -228,6 +265,13 @@ EndFunc
 
 ; Skill ID: 981 - $GC_I_SKILL_ID_RECUPERATION
 Func CanUse_Recuperation()
+	Local $lSpirit = Agent_FindByPlayerNumber(4220, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -237,6 +281,13 @@ EndFunc
 
 ; Skill ID: 982 - $GC_I_SKILL_ID_SHELTER
 Func CanUse_Shelter()
+	Local $lSpirit = Agent_FindByPlayerNumber(4223, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -282,6 +333,13 @@ EndFunc
 
 ; Skill ID: 1249 - $GC_I_SKILL_ID_DISPLACEMENT
 Func CanUse_Displacement()
+	Local $lSpirit = Agent_FindByPlayerNumber(4217, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -291,6 +349,13 @@ EndFunc
 
 ; Skill ID: 1250 - $GC_I_SKILL_ID_PRESERVATION
 Func CanUse_Preservation()
+	Local $lSpirit = Agent_FindByPlayerNumber(4219, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -300,6 +365,10 @@ EndFunc
 
 ; Skill ID: 1251 - $GC_I_SKILL_ID_LIFE
 Func CanUse_Life()
+	Local $lSpirit = Agent_FindByPlayerNumber(4218, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then Return False
+
 	Return True
 EndFunc
 
@@ -309,6 +378,13 @@ EndFunc
 
 ; Skill ID: 1252 - $GC_I_SKILL_ID_EARTHBIND
 Func CanUse_Earthbind()
+	Local $lSpirit = Agent_FindByPlayerNumber(4222, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -318,6 +394,13 @@ EndFunc
 
 ; Skill ID: 1253 - $GC_I_SKILL_ID_BLOODSONG
 Func CanUse_Bloodsong()
+	Local $lSpirit = Agent_FindByPlayerNumber(4227, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -327,6 +410,13 @@ EndFunc
 
 ; Skill ID: 1255 - $GC_I_SKILL_ID_WANDERLUST
 Func CanUse_Wanderlust()
+	Local $lSpirit = Agent_FindByPlayerNumber(4228, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -336,6 +426,13 @@ EndFunc
 
 ; Skill ID: 1266 - $GC_I_SKILL_ID_SOOTHING
 Func CanUse_Soothing()
+	Local $lSpirit = Agent_FindByPlayerNumber(4216, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -381,6 +478,12 @@ EndFunc
 
 ; Skill ID: 1734 - $GC_I_SKILL_ID_GAZE_OF_FURY
 Func CanUse_GazeOfFury()
+	Local $lSpirit = Agent_FindByPlayerNumber(5722, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then Return False
+
+	If Count_NumberOf(-2, 1250, "Filter_IsControlledSpirit") = 0 Then Return False
+
 	Return True
 EndFunc
 
@@ -390,6 +493,13 @@ EndFunc
 
 ; Skill ID: 1745 - $GC_I_SKILL_ID_ANGUISH
 Func CanUse_Anguish()
+	Local $lSpirit = Agent_FindByPlayerNumber(5720, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -399,6 +509,13 @@ EndFunc
 
 ; Skill ID: 1747 - $GC_I_SKILL_ID_EMPOWERMENT
 Func CanUse_Empowerment()
+	Local $lSpirit = Agent_FindByPlayerNumber(5721, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -408,6 +525,13 @@ EndFunc
 
 ; Skill ID: 1748 - $GC_I_SKILL_ID_RECOVERY
 Func CanUse_Recovery()
+	Local $lSpirit = Agent_FindByPlayerNumber(5719, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -426,6 +550,13 @@ EndFunc
 
 ; Skill ID: 2110 - $GC_I_SKILL_ID_VAMPIRISM
 Func CanUse_Vampirism()
+	Local $lSpirit = Agent_FindByPlayerNumber(5723, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -435,6 +566,13 @@ EndFunc
 
 ; Skill ID: 2204 - $GC_I_SKILL_ID_REJUVENATION
 Func CanUse_Rejuvenation()
+	Local $lSpirit = Agent_FindByPlayerNumber(5853, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 
@@ -444,6 +582,13 @@ EndFunc
 
 ; Skill ID: 2205 - $GC_I_SKILL_ID_AGONY
 Func CanUse_Agony()
+	Local $lSpirit = Agent_FindByPlayerNumber(5854, -2, 2500, "Filter_IsControlledSpirit")
+
+	If $lSpirit <> 0 Then
+		If Agent_GetAgentInfo($lSpirit, "HP") < 0.20 Then Return True
+		Return False
+	EndIf
+
 	Return True
 EndFunc
 

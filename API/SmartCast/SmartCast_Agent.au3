@@ -29,6 +29,11 @@ Func Filter_IsDeadAlly($aAgentID)
 	Return True
 EndFunc
 
+Func Filter_IsBoss($aAgentID)
+	If Not Agent_GetAgentInfo($aAgentID, "HasBossGlow") Then Return False
+	Return True
+EndFunc
+
 Func Filter_ExcludeMe($aAgentID)
 	If $aAgentID = Agent_GetMyID() Then Return False
 	Return True
@@ -206,6 +211,34 @@ EndFunc
 
 Func Filter_IsAbove50HP($aAgentID)
 	Return Agent_GetAgentInfo($aAgentID, 'HP') > 0.5
+EndFunc
+#EndRegion
+
+#Region Find Agent
+Func Agent_FindByPlayerNumber($a_i_PlayerNumber, $a_i_AgentID = -2, $a_i_Range = 5000, $a_s_Filter = "")
+    Local $l_i_RefID = Agent_ConvertID($a_i_AgentID)
+    Local $l_f_RefX = Agent_GetAgentInfo($a_i_AgentID, "X")
+    Local $l_f_RefY = Agent_GetAgentInfo($a_i_AgentID, "Y")
+
+    Local $l_a_AgentArray = Agent_GetAgentArray(0xDB)
+    If Not IsArray($l_a_AgentArray) Or $l_a_AgentArray[0] = 0 Then Return 0
+
+    For $i = 1 To $l_a_AgentArray[0]
+        Local $l_p_AgentPtr = $l_a_AgentArray[$i]
+        Local $l_i_AgentID = Agent_GetAgentInfo($l_p_AgentPtr, "ID")
+
+        If $l_i_AgentID = $l_i_RefID Then ContinueLoop
+        If Agent_GetAgentInfo($l_p_AgentPtr, "PlayerNumber") <> $a_i_PlayerNumber Then ContinueLoop
+        If $a_s_Filter <> "" And Not _ApplyFilters($l_p_AgentPtr, $a_s_Filter) Then ContinueLoop
+
+        Local $l_f_AgentX = Agent_GetAgentInfo($l_p_AgentPtr, "X")
+        Local $l_f_AgentY = Agent_GetAgentInfo($l_p_AgentPtr, "Y")
+        Local $l_f_Distance = Sqrt(($l_f_AgentX - $l_f_RefX) ^ 2 + ($l_f_AgentY - $l_f_RefY) ^ 2)
+
+        If $l_f_Distance <= $a_i_Range Then Return $l_i_AgentID
+    Next
+
+    Return 0
 EndFunc
 #EndRegion
 

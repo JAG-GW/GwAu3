@@ -1703,7 +1703,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[72, "The Underworld", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 2, "Explorable Zone"], _
 	[73, "Riverside Province", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 5, "Mission Outpost"], _
 	[74, "Tournament6", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
-	[75, "The Hallof Heroes", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
+	[75, "The hall of Heroes", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 	[76, "Broken Tower", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 	[77, "Housezu Heltzer", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 13, "City"], _
 	[78, "The Courtyard", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
@@ -1972,7 +1972,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[341, "Fort Koga", 0, "Core", 3, "Battle Isles", 1, "Maguuma Jungle", 11, "Zaishen Battle"], _
 	[342, "Heroes Crypt", 0, "Core", 3, "Battle Isles", 2, "Ascalon", 11, "Zaishen Battle"], _
 	[343, "Shiverpeak Arena", 0, "Core", 3, "Battle Isles", 3, "Northern Shiverpeaks", 11, "Zaishen Battle"], _
-	[344, "The Hallof Heroes", 1, "Prophecies", 0, "Kryta", 4, "Heroes Ascent", 2, "Explorable Zone"], _
+	[344, "The hall of Heroes", 1, "Prophecies", 0, "Kryta", 4, "Heroes Ascent", 2, "Explorable Zone"], _
 	[345, "The Courtyard", 1, "Prophecies", 0, "Kryta", 4, "Heroes Ascent", 2, "Explorable Zone"], _
 	[346, "Scarred Earth", 1, "Prophecies", 0, "Kryta", 4, "Heroes Ascent", 2, "Explorable Zone"], _
 	[347, "The Underworld", 1, "Prophecies", 0, "Kryta", 4, "Heroes Ascent", 2, "Explorable Zone"], _
@@ -2191,7 +2191,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[560, "Cathedralof Flames", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 	[561, "The Troubled Keeper", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
 	[562, "Fortressof Jahai", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
-	[563, "Hallsof Chokhin", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
+	[563, "Halls of Chokhin", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 	[564, "Citadelof Dzagon", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 	[565, "Dynastic Tombs", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
 	[566, "Verdant Cascades", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 2, "Explorable Zone"], _
@@ -2228,7 +2228,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[597, "Track", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 	[598, "Antechamber", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 	[599, "Collision", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
-	[600, "The Hallof Heroes", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
+	[600, "The hall of Heroes", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 	[601, "Frozen Crevasse", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 	[602, "Frozen Depleted", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 	[603, "Frozen Fort", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
@@ -2274,7 +2274,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[643, "Sifhalla", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
 	[644, "Gunnars Hold", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 13, "City"], _
 	[645, "Olafstead", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
-	[646, "Hallof Monuments", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
+	[646, "hall of Monuments", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
 	[647, "Dalada Uplands", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 2, "Explorable Zone"], _
 	[648, "Doomlore Shrine", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 13, "City"], _
 	[649, "Grothmar Wardowns", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 2, "Explorable Zone"], _
@@ -2305,7 +2305,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[674, "Warband Training", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 2, "Explorable Zone"], _
 	[675, "Boreal Station", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
 	[676, "Catacombsof Kathandrax", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-	[677, "Hallof Primordus", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
+	[677, "hall of Primordus", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
 	[678, "Attackofthe Nornbear", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
 	[679, "Cinematic Cave Norn Cursed", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 14, "Mission Area"], _
 	[680, "Cinematic Steppe Interrogation", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 14, "Mission Area"], _
