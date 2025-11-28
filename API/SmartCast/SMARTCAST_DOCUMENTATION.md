@@ -2,7 +2,7 @@
 ## Technical and Customization Guide
 
 *Created by Greg-76 (Alusion)*
-*Complete Documentation - Version 1.0*
+*Complete Documentation - Version 2.0*
 
 ---
 
@@ -11,7 +11,7 @@
 1. [Overview](#1-overview)
 2. [System Architecture](#2-system-architecture)
 3. [Execution Flow](#3-execution-flow)
-4. [Cache System](#4-cache-system)
+4. [UAI Cache System](#4-uai-cache-system)
 5. [BestTarget System (Targeting)](#5-besttarget-system-targeting)
 6. [CanUse System (Conditions)](#6-canuse-system-conditions)
 7. [Resource Management System](#7-resource-management-system)
@@ -27,17 +27,17 @@
 ### What is SmartCast?
 
 **SmartCast** is an intelligent combat automation system for Guild Wars. It automatically manages:
-- ✅ Optimal targeting for each skill
-- ✅ Skill usage conditions
-- ✅ Resource management (energy, adrenaline, health)
-- ✅ Combos and skill chains
-- ✅ Form changes (Ursan, Raven, Volfen)
-- ✅ Intelligent auto-attacks
-- ✅ Weapon set switching
+- Optimal targeting for each skill
+- Skill usage conditions
+- Resource management (energy, adrenaline, health)
+- Combos and skill chains
+- Form changes (Ursan, Raven, Volfen)
+- Intelligent auto-attacks
+- Weapon set switching
 
 ### Weapon Set Switching
 
-The SmartCast system integrates an **automatic weapon set switching** feature currently under implementation. This feature will allow:
+The SmartCast system integrates an **automatic weapon set switching** feature. This feature allows:
 
 - **Automatic weapon switching** based on the skill being used
 - **Weapon set adaptation** according to skill modifiers (attribute, profession, type)
@@ -46,16 +46,16 @@ The SmartCast system integrates an **automatic weapon set switching** feature cu
 **Usage examples:**
 - A hybrid build could use a 40/40 for spells and automatically switch to a +20% enchantment bonus for enchantments.
 - An assassin could alternate between daggers for attacks and a hammer depending on the skills.
-- A monk low energy for using he's skill can switch to a set who give him more energy. (Same for HP)
+- A monk low on energy can switch to a set that gives more energy. (Same for HP)
 
-This functionality is managed by the `SmartCast_WeaponSets.au3` module and integrates seamlessly into the system's execution flow.
+This functionality is managed by the `Equipment/UtilityAI_WeaponSets.au3` module and integrates seamlessly into the system's execution flow.
 
 ### System Philosophy
 
 SmartCast works on a principle of **separation of concerns**:
 - **Each skill** has its own targeting function (`BestTarget_`)
 - **Each skill** has its own condition function (`CanUse_`)
-- The system **caches** information to optimize performance
+- The system **caches** information to optimize performance via the **UAI Cache System**
 
 ---
 
@@ -66,55 +66,125 @@ SmartCast works on a principle of **separation of concerns**:
 ```
 API/SmartCast/
 │
-├── _SmartCast.au3              # Main entry point (includes all modules)
-├── SmartCast_Core.au3          # System core (combat loop)
-├── SmartCast_BestTarget.au3    # Targeting functions
-├── SmartCast_CanUse.au3        # Usage conditions
-├── SmartCast_Cache.au3         # Skill cache system
+├── _UtilityAI.au3              # Main entry point (includes all modules)
 ├── SmartCast_Const.au3         # Constants and global variables
-├── SmartCast_Agent.au3         # Agent filters and queries
-├── SmartCast_Utils.au3         # Utility functions
-└── SmartCast_WeaponSets.au3    # Weapon set management
+│
+├── Core/                       # Core System
+│   ├── _Core.au3               # Entry point for core modules
+│   ├── UtilityAI_Core.au3      # System core (combat loop): UAI_Fight(), UAI_UseSkills()
+│   ├── UtilityAI_CanCast.au3   # Resource checks: UAI_CanCast(), UAI_CanAutoAttack()
+│   └── UtilityAI_Utils.au3     # Utility functions
+│
+├── Cache/                      # UAI Cache System
+│   ├── _Cache.au3              # Entry point for cache modules
+│   ├── UtilityAI_Cache.au3     # Cache coordination: Cache_SkillBar(), UAI_UpdateCache()
+│   ├── UtilityAI_AgentCache.au3       # Agent data cache
+│   ├── UtilityAI_StaticSkillCache.au3 # Static skill data cache
+│   ├── UtilityAI_DynamicSkillCache.au3# Dynamic skill data cache
+│   ├── UtilityAI_EffectsCache.au3     # Effects, Buffs, Visible Effects cache
+│   ├── UtilityAI_BestTargetCache.au3  # BestTarget dispatcher: UAI_GetBestTargetFunc()
+│   └── UtilityAI_CanUseCache.au3      # CanUse dispatcher: UAI_GetCanUseFunc()
+│
+├── Targeting/                  # Agent Targeting System
+│   ├── _Targeting.au3          # Entry point for targeting modules
+│   ├── UtilityAI_GetAgent.au3  # Targeting functions: UAI_GetNearestAgent(), UAI_GetBestAOETarget()
+│   └── UtilityAI_AgentFilter.au3 # Agent filters: UAI_Filter_IsLivingEnemy(), etc.
+│
+├── Equipment/                  # Equipment Management
+│   ├── _Equipment.au3          # Entry point for equipment modules
+│   └── UtilityAI_WeaponSets.au3 # Weapon set management: UAI_ChangeWeaponSet(), etc.
+│
+└── Skills/                     # Skill-Type Specific Implementations
+    ├── _Skills.au3             # Entry point (includes all skill type files)
+    ├── UtilityAI_Attack.au3    # Attack skills (melee, ranged, pet attacks)
+    ├── UtilityAI_Chant.au3     # Chant skills (Paragon)
+    ├── UtilityAI_Condition.au3 # Condition-inflicting skills
+    ├── UtilityAI_EchoRefrain.au3 # Echo and Refrain skills (Paragon)
+    ├── UtilityAI_Enchantment.au3 # Enchantment spells
+    ├── UtilityAI_Form.au3      # Form skills (Ursan, Raven, Volfen, etc.)
+    ├── UtilityAI_Glyph.au3     # Glyph skills (Elementalist)
+    ├── UtilityAI_Hex.au3       # Hex spells
+    ├── UtilityAI_ItemSpell.au3 # Item spells (Ritualist bundles)
+    ├── UtilityAI_PetAttack.au3 # Pet attack commands (Ranger)
+    ├── UtilityAI_Preparation.au3 # Preparation skills (Ranger)
+    ├── UtilityAI_Ritual.au3    # Binding Rituals (Ritualist spirits)
+    ├── UtilityAI_Shout.au3     # Shout skills (Warrior, Paragon)
+    ├── UtilityAI_Signet.au3    # Signet skills
+    ├── UtilityAI_Skill10.au3   # Special skill type 10
+    ├── UtilityAI_Skill16.au3   # Special skill type 16
+    ├── UtilityAI_Spell.au3     # Generic spell skills
+    ├── UtilityAI_Stance.au3    # Stance skills
+    ├── UtilityAI_Title.au3     # Title-based skills (Sunspear, Lightbringer, etc.)
+    ├── UtilityAI_Trap.au3      # Trap skills (Ranger, Assassin)
+    ├── UtilityAI_Ward.au3      # Ward spells (Elementalist)
+    ├── UtilityAI_WeaponSpell.au3 # Weapon spells (Ritualist)
+    └── UtilityAI_Well.au3      # Well spells (Necromancer)
 ```
+
+### Skills Folder Organization
+
+The `Skills/` folder contains **skill-type specific implementations** of `BestTarget_` and `CanUse_` functions. Each file groups skills by their **skill type** (as defined in the game data), making it easier to:
+
+- Find and modify behavior for specific skill types
+- Apply common logic to all skills of a given type
+- Maintain consistent targeting patterns within skill categories
+
+**How it works:**
+1. `Cache/UtilityAI_BestTargetCache.au3` and `Cache/UtilityAI_CanUseCache.au3` act as **dispatchers**
+2. They determine the skill ID and return the appropriate function name from `Skills/`
+3. Each `UtilityAI_<SkillType>.au3` file contains the actual `BestTarget_` and `CanUse_` implementations
+
+**Example:** When casting "Flare" (a Spell):
+1. `UAI_GetBestTargetFunc()` identifies it as Flare and returns "BestTarget_Flare"
+2. The function is called dynamically from `UtilityAI_Spell.au3`
+3. `BestTarget_Flare()` in that file returns the target
 
 ### Main Global Variables
 
 ```autoit
-Global $BestTarget = 0                    ; Current best target ID
-Global $LastCalledTarget = 0              ; Last called target
-Global $SkillBarCache[9][44]              ; Cache of all skill info
-Global $BestTargetCache[9]                ; BestTarget function cache
-Global $CanUseCache[9]                    ; CanUse function cache
-Global $CanUseSkill = True                ; Flag if skill can be used
-Global $SkillChanged = False              ; Flag for form changes
+Global $g_i_BestTarget = 0                ; Current best target ID
+Global $g_i_LastCalledTarget = 0          ; Last called target
+Global $g_amx2_SkillBarCache[9][44]       ; Cache of all skill info
+Global $g_as_BestTargetCache[9]           ; BestTarget function cache
+Global $g_as_CanUseCache[9]               ; CanUse function cache
+Global $g_b_CanUseSkill = True            ; Flag if skill can be used
+Global $g_b_SkillChanged = False          ; Flag for form changes
 ```
 
-### Skill Properties Enum
+### UAI Cache Global Variables
 
 ```autoit
-Global Enum $all = 0, $SkillID, $Campaign, $SkillType, $Special, $ComboReq,
-        $Effect1, $RequireCondition, $Effect2, $WeaponReq, $Profession,
-        $Attribute, $Title, $SkillIDPvP, $Combo, $Target, $SkillEquipType,
-        $Overcast, $EnergyCost, $HealthCost, $Adrenaline, $Activation,
-        $Aftercast, $Duration0, $Duration15, $Recharge, $SkillArguments,
-        $Scale0, $Scale15, $BonusScale0, $BonusScale15, $EffectConstant1,
-        $EffectConstant2, [... animations, icons, descriptions ...]
+; Agent Cache
+Global $g_a2D_AgentCache[1][64]           ; 2D array [AgentIndex][Property]
+Global $g_i_AgentCacheCount               ; Number of cached agents
+Global $g_i_PlayerCacheIndex              ; Player's index in cache
+
+; Static Skill Cache
+Global $g_a2D_StaticSkillCache[9][43]     ; Static skill data per slot
+
+; Dynamic Skill Cache
+Global $g_a2D_DynamicSkillCache[9][6]     ; Dynamic skill data per slot
+
+; Effects Cache
+Global $g_a_EffectsCache[1][1][1]         ; 3D array [AgentIndex][EffectIndex][Property]
+Global $g_a_BuffsCache[1][1][1]           ; 3D array [AgentIndex][BuffIndex][Property]
+Global $g_a_VisEffectsCache[1][1][1]      ; 3D array [AgentIndex][VisEffectIndex][Property]
 ```
 
 ---
 
 ## 3. EXECUTION FLOW
 
-### 3.1 Fight() Function - Main Entry Point
+### 3.1 UAI_Fight() Function - Main Entry Point
 
 ```autoit
-Func Fight($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
+Func UAI_Fight($a_f_X, $a_f_Y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500)
 ```
 
 **Parameters:**
-- `$x, $y` : Reference coordinates for combat
-- `$aAggroRange` : Maximum aggro distance (default: 1320)
-- `$aMaxDistanceToXY` : Max distance before leaving combat (default: 3500)
+- `$a_f_X, $a_f_Y` : Reference coordinates for combat
+- `$a_f_AggroRange` : Maximum aggro distance (default: 1320)
+- `$a_f_MaxDistanceToXY` : Max distance before leaving combat (default: 3500)
 
 **Operation:**
 1. Loop until:
@@ -122,85 +192,88 @@ Func Fight($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
    - Player is dead
    - Party is wiped
    - Map/instance change
-2. Calls `UseSkills()` each iteration
+2. Calls `UAI_UseSkills()` each iteration
 3. 32ms sleep between each iteration
 
-### 3.2 UseSkills() Function - Main Loop
+### 3.2 UAI_UseSkills() Function - Main Loop
 
 ```autoit
-Func UseSkills($x, $y, $aAggroRange = 1320, $aMaxDistanceToXY = 3500)
+Func UAI_UseSkills($a_f_X, $a_f_Y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500)
 ```
 
 **Execution sequence (for each skill slot 1-8):**
 
 ```
 ┌─────────────────────────────────────┐
-│ 1. Safety checks                   │
-│    - Player dead?                  │
-│    - Party wiped?                  │
-│    - Out of combat?                │
-│    - Knocked down?                 │
+│ 1. Update UAI Caches                │
+│    - UAI_UpdateAgentCache()         │
+│    - UAI_UpdateDynamicSkillbarCache()│
+│    - UAI_UpdateEffectsCache()       │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 2. Form change?                    │
-│    - Ursan/Raven/Volfen?           │
-│    - Re-cache skillbar             │
+│ 2. Safety checks                    │
+│    - Player dead?                   │
+│    - Party wiped?                   │
+│    - Out of combat?                 │
+│    - Knocked down?                  │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 3. Priority skills                 │
-│    - Assassin's Promise            │
-│    - Infuse Health                 │
-│    - Panic                         │
-│    - etc...                        │
+│ 3. Form change?                     │
+│    - Ursan/Raven/Volfen?            │
+│    - Re-cache skillbar              │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 4. Drop bundle (in progress)       │
+│ 4. Priority skills                  │
+│    - Assassin's Promise             │
+│    - Infuse Health                  │
+│    - Panic                          │
+│    - etc...                         │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 5. Intelligent auto-attack         │
-│    - Check CanAutoAttack()         │
-│    - Attack if allowed             │
-│    - Cancel if forbidden           │
+│ 5. Intelligent auto-attack          │
+│    - Check CanAutoAttack()          │
+│    - Attack if allowed              │
+│    - Cancel if forbidden            │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 6. Cast skill                      │
-│    ├─ SmartCast_CanCast($i)       │
-│    │   └─ Check recharge,          │
-│    │      adrenaline, resources    │
-│    │                               │
-│    ├─ BestTarget = Call($BestTargetCache[$i])
-│    │   └─ Call the function        │
-│    │      BestTarget_XXX()         │
-│    │                               │
-│    ├─ CanUseSkill = Call($CanUseCache[$i])
-│    │   └─ Call the function        │
-│    │      CanUse_XXX()             │
-│    │                               │
-│    └─ SmartCast_UseSkillEX($i, $BestTarget)
-│        └─ Cast the skill           │
+│ 6. Cast skill                       │
+│    ├─ UAI_CanCast($l_i_i)          │
+│    │   └─ Check recharge,           │
+│    │      adrenaline, resources     │
+│    │                                │
+│    ├─ $g_i_BestTarget = Call($g_as_BestTargetCache[$l_i_i])
+│    │   └─ Call the function         │
+│    │      BestTarget_XXX()          │
+│    │                                │
+│    ├─ $g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_i])
+│    │   └─ Call the function         │
+│    │      CanUse_XXX()              │
+│    │                                │
+│    └─ UAI_UseSkillEX($l_i_i, $g_i_BestTarget)
+│        └─ Cast the skill            │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 7. Distance check                  │
-│    - Too far from $x,$y?           │
-│    - Exit if > $aMaxDistanceToXY   │
+│ 7. Distance check                   │
+│    - Too far from $a_f_X,$a_f_Y?    │
+│    - Exit if > $a_f_MaxDistanceToXY │
 └─────────────────────────────────────┘
 ```
 
-### 3.3 SmartCast_UseSkillEX() Function - Cast a Skill
+### 3.3 UAI_UseSkillEX() Function - Cast a Skill
 
 ```autoit
-Func SmartCast_UseSkillEX($aSkillSlot, $aAgentID = -2)
+Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 ```
 
 **Sequence:**
 1. **Change target** if necessary
-2. **Use skill** via `Skill_UseSkill($aSkillSlot, $aAgentID)`
+2. **Use skill** via `Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)`
 3. **Intelligent waiting** based on type:
    - **Melee/Touch/Attack** : Wait until target is at 240 range
    - **Long range spell** : Wait until target is at 1320 range
@@ -212,53 +285,303 @@ Func SmartCast_UseSkillEX($aSkillSlot, $aAgentID = -2)
 
 ---
 
-## 4. CACHE SYSTEM
+## 4. UAI CACHE SYSTEM
 
-### 4.1 Cache_SkillBar() - Skill Bar Caching
+The **UAI (Utility AI) Cache System** is the new centralized caching system that replaces the old individual memory reads. It provides significant performance improvements by reading all necessary data in batches.
 
-**Objective:** Optimize performance by avoiding reading memory every frame
+### 4.1 Agent Cache (UtilityAI_AgentCache.au3)
 
-```autoit
-Func Cache_SkillBar()
-```
+Caches all agent (player, allies, enemies, NPCs) data in a single batch read.
 
-**Process:**
-1. **Reset** cache: `$SkillBarCache = 0`
-2. **For each slot 1-8:**
-   - Read **44 properties** of the skill from memory
-   - Store in `$SkillBarCache[$i][$property]`
-3. **Cache functions:**
-   - `$BestTargetCache[$i]` = name of function `BestTarget_XXX`
-   - `$CanUseCache[$i]` = name of function `CanUse_XXX`
-4. **Debug output:** Display info for each skill
-
-**Cached properties (44 total):**
-- Skill ID, campaign, type, attribute, profession
-- Costs (energy, health, adrenaline, overcast)
-- Timings (activation, aftercast, recharge)
-- Durations, scaling, effect constants
-- Animations, icons, descriptions
-
-### 4.2 Form Changes
-
-**Form Change Detection:**
+#### Update Function
 
 ```autoit
-Func Cache_FormChangeBuild($aSkillSlot)
-    Switch $SkillBarCache[$aSkillSlot][$SkillID]
-        Case $GC_I_SKILL_ID_URSAN_BLESSING,
-             $GC_I_SKILL_ID_VOLFEN_BLESSING,
-             $GC_I_SKILL_ID_RAVEN_BLESSING
-            Cache_SkillBar()  ; Re-cache the bar
-            Return True
-    EndSwitch
-    Return False
-EndFunc
+Func UAI_UpdateAgentCache()
 ```
 
-**End Form Detection:**
-- Detects form end (normal skills reappear)
-- Automatically re-caches skillbar
+Call this at the beginning of each combat loop iteration to refresh all agent data.
+
+#### Accessor Functions
+
+```autoit
+; Get player info (using cached player index)
+UAI_GetPlayerInfo($a_i_InfoType)
+
+; Get any agent's info by AgentID
+UAI_GetAgentInfoByID($a_i_AgentID, $a_i_InfoType)
+
+; Get agent's cache index from AgentID
+UAI_GetIndexByID($a_i_AgentID)
+```
+
+#### Available Agent Properties
+
+```autoit
+Global Enum $GC_UAI_AGENT_Ptr, _           ; Agent pointer
+    $GC_UAI_AGENT_ID, _                    ; Agent ID
+    $GC_UAI_AGENT_X, _                     ; X position
+    $GC_UAI_AGENT_Y, _                     ; Y position
+    $GC_UAI_AGENT_HP, _                    ; HP ratio (0.0 - 1.0)
+    $GC_UAI_AGENT_CurrentHP, _             ; Current HP value
+    $GC_UAI_AGENT_MaxHP, _                 ; Max HP value
+    $GC_UAI_AGENT_CurrentEnergy, _         ; Current Energy
+    $GC_UAI_AGENT_MaxEnergy, _             ; Max Energy
+    $GC_UAI_AGENT_ModelState, _            ; Model state
+    $GC_UAI_AGENT_TypeMap, _               ; Type map
+    $GC_UAI_AGENT_Allegiance, _            ; Allegiance
+    $GC_UAI_AGENT_WeaponItemType, _        ; Weapon type
+    $GC_UAI_AGENT_WeaponItemId, _          ; Weapon item ID
+    $GC_UAI_AGENT_OffhandItemType, _       ; Offhand type
+    $GC_UAI_AGENT_OffhandItemId, _         ; Offhand item ID
+    $GC_UAI_AGENT_IsLivingType, _          ; Is living agent
+    $GC_UAI_AGENT_IsCasting, _             ; Is casting
+    $GC_UAI_AGENT_IsAttacking, _           ; Is attacking
+    $GC_UAI_AGENT_IsMoving, _              ; Is moving
+    $GC_UAI_AGENT_IsKnocked, _             ; Is knocked down
+    $GC_UAI_AGENT_IsDead, _                ; Is dead
+    $GC_UAI_AGENT_Overcast, _              ; Overcast amount
+    ; ... and more
+```
+
+#### Usage Examples
+
+```autoit
+; Get player's HP ratio
+Local $l_f_MyHP = UAI_GetPlayerInfo($GC_UAI_AGENT_HP)
+
+; Get player's current energy
+Local $l_f_MyEnergy = UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy)
+
+; Check if player is casting
+If UAI_GetPlayerInfo($GC_UAI_AGENT_IsCasting) Then
+    ; Do something
+EndIf
+
+; Get enemy's HP by AgentID
+Local $l_f_EnemyHP = UAI_GetAgentInfoByID($l_i_EnemyID, $GC_UAI_AGENT_HP)
+```
+
+### 4.2 Static Skill Cache (UtilityAI_StaticSkillCache.au3)
+
+Caches **static** skill data that doesn't change during gameplay (costs, durations, types, etc.).
+
+#### Update Function
+
+```autoit
+Func UAI_CacheSkillBar()
+```
+
+Call this once when entering a map or when the skillbar changes (form transformation).
+
+#### Accessor Function
+
+```autoit
+UAI_GetStaticSkillInfo($a_i_Slot, $a_i_InfoType)
+```
+
+#### Available Static Skill Properties
+
+```autoit
+Global Enum $GC_UAI_STATIC_SKILL_SkillID, _
+    $GC_UAI_STATIC_SKILL_Campaign, _
+    $GC_UAI_STATIC_SKILL_SkillType, _
+    $GC_UAI_STATIC_SKILL_Special, _
+    $GC_UAI_STATIC_SKILL_ComboReq, _
+    $GC_UAI_STATIC_SKILL_Effect1, _
+    $GC_UAI_STATIC_SKILL_Condition, _
+    $GC_UAI_STATIC_SKILL_Effect2, _
+    $GC_UAI_STATIC_SKILL_WeaponReq, _
+    $GC_UAI_STATIC_SKILL_Profession, _
+    $GC_UAI_STATIC_SKILL_Attribute, _
+    $GC_UAI_STATIC_SKILL_EnergyCost, _
+    $GC_UAI_STATIC_SKILL_HealthCost, _
+    $GC_UAI_STATIC_SKILL_Adrenaline, _
+    $GC_UAI_STATIC_SKILL_Activation, _
+    $GC_UAI_STATIC_SKILL_Aftercast, _
+    $GC_UAI_STATIC_SKILL_Recharge, _
+    $GC_UAI_STATIC_SKILL_Overcast, _
+    ; ... and more
+```
+
+#### Usage Examples
+
+```autoit
+; Get skill type for slot 1
+Local $l_i_SkillType = UAI_GetStaticSkillInfo(1, $GC_UAI_STATIC_SKILL_SkillType)
+
+; Get energy cost for slot 3
+Local $l_i_EnergyCost = UAI_GetStaticSkillInfo(3, $GC_UAI_STATIC_SKILL_EnergyCost)
+
+; Get activation time for slot 5
+Local $l_f_Activation = UAI_GetStaticSkillInfo(5, $GC_UAI_STATIC_SKILL_Activation)
+```
+
+### 4.3 Dynamic Skill Cache (UtilityAI_DynamicSkillCache.au3)
+
+Caches **dynamic** skill data that changes during gameplay (recharge status, adrenaline, etc.).
+
+#### Update Function
+
+```autoit
+Func UAI_UpdateDynamicSkillbarCache()
+```
+
+Call this each combat loop iteration.
+
+#### Accessor Function
+
+```autoit
+UAI_GetDynamicSkillInfo($a_i_Slot, $a_i_InfoType)
+```
+
+#### Available Dynamic Skill Properties
+
+```autoit
+Global Enum $GC_UAI_DYNAMIC_SKILL_Adrenaline, _
+    $GC_UAI_DYNAMIC_SKILL_AdrenalineB, _
+    $GC_UAI_DYNAMIC_SKILL_IsRecharged, _
+    $GC_UAI_DYNAMIC_SKILL_SkillID, _
+    $GC_UAI_DYNAMIC_SKILL_Event, _
+    $GC_UAI_DYNAMIC_SKILL_RechargeTime
+```
+
+#### Usage Examples
+
+```autoit
+; Check if skill in slot 2 is recharged
+If UAI_GetDynamicSkillInfo(2, $GC_UAI_DYNAMIC_SKILL_IsRecharged) Then
+    ; Skill is ready
+EndIf
+
+; Get remaining recharge time for slot 4
+Local $l_f_RechargeTime = UAI_GetDynamicSkillInfo(4, $GC_UAI_DYNAMIC_SKILL_RechargeTime)
+
+; Get current adrenaline for slot 1
+Local $l_i_Adrenaline = UAI_GetDynamicSkillInfo(1, $GC_UAI_DYNAMIC_SKILL_Adrenaline)
+```
+
+### 4.4 Effects Cache (UtilityAI_EffectsCache.au3)
+
+Caches **Effects**, **Buffs**, and **Visible Effects** for all cached agents.
+
+#### Update Function
+
+```autoit
+Func UAI_UpdateEffectsCache()
+```
+
+This updates all three caches (effects, buffs, visible effects) at once.
+
+#### Effect Properties
+
+```autoit
+Global Enum $GC_UAI_EFFECT_SkillID, _
+    $GC_UAI_EFFECT_AttributeLevel, _
+    $GC_UAI_EFFECT_EffectID, _
+    $GC_UAI_EFFECT_CasterID, _
+    $GC_UAI_EFFECT_Duration, _
+    $GC_UAI_EFFECT_Timestamp, _
+    $GC_UAI_EFFECT_COUNT
+```
+
+#### Buff Properties
+
+```autoit
+Global Enum $GC_UAI_BUFF_SkillID, _
+    $GC_UAI_BUFF_Unknown, _
+    $GC_UAI_BUFF_BuffID, _
+    $GC_UAI_BUFF_TargetAgentID, _
+    $GC_UAI_BUFF_COUNT
+```
+
+#### Visible Effect Properties
+
+```autoit
+Global Enum $GC_UAI_VISEFFECT_Unknown, _
+    $GC_UAI_VISEFFECT_EffectID, _
+    $GC_UAI_VISEFFECT_HasEnded, _
+    $GC_UAI_VISEFFECT_COUNT
+```
+
+#### Effect Functions
+
+```autoit
+; Check if agent has a specific effect (by SkillID)
+UAI_AgentHasEffect($a_i_AgentID, $a_i_SkillID)
+UAI_PlayerHasEffect($a_i_SkillID)
+
+; Get effect info
+UAI_GetAgentEffectInfo($a_i_AgentID, $a_i_SkillID, $a_i_Property)
+UAI_GetPlayerEffectInfo($a_i_SkillID, $a_i_Property)
+
+; Get effect count
+UAI_GetAgentEffectCount($a_i_AgentID)
+UAI_GetPlayerEffectCount()
+```
+
+#### Buff Functions
+
+```autoit
+; Check if agent has a specific buff (by SkillID)
+UAI_AgentHasBuff($a_i_AgentID, $a_i_SkillID)
+UAI_PlayerHasBuff($a_i_SkillID)
+
+; Get buff info
+UAI_GetAgentBuffInfo($a_i_AgentID, $a_i_SkillID, $a_i_Property)
+UAI_GetPlayerBuffInfo($a_i_SkillID, $a_i_Property)
+
+; Get buff count
+UAI_GetAgentBuffCount($a_i_AgentID)
+UAI_GetPlayerBuffCount()
+```
+
+#### Visible Effect Functions
+
+```autoit
+; Check if agent has a specific visible effect (by EffectID)
+UAI_AgentHasVisibleEffect($a_i_AgentID, $a_i_EffectID)
+UAI_PlayerHasVisibleEffect($a_i_EffectID)
+
+; Get visible effect info
+UAI_GetAgentVisibleEffectInfo($a_i_AgentID, $a_i_EffectID, $a_i_Property)
+UAI_GetPlayerVisibleEffectInfo($a_i_EffectID, $a_i_Property)
+
+; Get visible effect count
+UAI_GetAgentVisibleEffectCount($a_i_AgentID)
+UAI_GetPlayerVisibleEffectCount()
+```
+
+#### Usage Examples
+
+```autoit
+; Check if player has Healing Signet effect
+If UAI_PlayerHasEffect($GC_I_SKILL_ID_HEALING_SIGNET) Then
+    ; Player has Healing Signet active
+EndIf
+
+; Check if enemy has a hex
+If UAI_AgentHasEffect($l_i_EnemyID, $GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then
+    ; Enemy has Spiteful Spirit
+EndIf
+
+; Get duration of an effect on player
+Local $l_f_Duration = UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_SHADOW_FORM, $GC_UAI_EFFECT_Duration)
+
+; Check number of effects on player
+Local $l_i_EffectCount = UAI_GetPlayerEffectCount()
+```
+
+### 4.5 Complete Cache Update Pattern
+
+```autoit
+; At the start of each combat loop iteration:
+UAI_UpdateAgentCache()           ; Update all agent data
+UAI_UpdateDynamicSkillbarCache() ; Update dynamic skill data
+UAI_UpdateEffectsCache()         ; Update effects, buffs, visible effects
+
+; On map load or form change:
+UAI_CacheSkillBar()              ; Update static skill data
+```
 
 ---
 
@@ -269,19 +592,19 @@ EndFunc
 **Each skill** has its own targeting function:
 
 ```autoit
-Func BestTarget_SkillName($aAggroRange)
+Func BestTarget_SkillName($a_f_AggroRange)
     ; Specific targeting logic
-    Return $TargetAgentID
+    Return $l_i_TargetAgentID
 EndFunc
 ```
 
 ### 5.2 Skill ID → Function Mapping
 
-The file `SmartCast_BestTarget.au3` contains a **giant switch**:
+The file `Cache/UtilityAI_BestTargetCache.au3` contains a **giant switch**:
 
 ```autoit
-Func SmartCast_BestTarget($aSkillSlot)
-    Switch $SkillBarCache[$aSkillSlot][$SkillID]
+Func UAI_GetBestTargetFunc($a_i_SkillSlot)
+    Switch UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillID)
         Case $GC_I_SKILL_ID_HEALING_SIGNET
             Return "BestTarget_HealingSignet"
         Case $GC_I_SKILL_ID_RESURRECTION_SIGNET
@@ -296,7 +619,7 @@ EndFunc
 #### A. Self-target
 
 ```autoit
-Func BestTarget_HealingSignet($aAggroRange)
+Func BestTarget_HealingSignet($a_f_AggroRange)
     Return Agent_GetMyID()
 EndFunc
 ```
@@ -309,8 +632,8 @@ EndFunc
 #### B. Target nearest enemy
 
 ```autoit
-Func BestTarget_PowerAttack($aAggroRange)
-    Return Nearest_Agent(-2, $aAggroRange, "Filter_IsLivingEnemy")
+Func BestTarget_PowerAttack($a_f_AggroRange)
+    Return UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
 EndFunc
 ```
 
@@ -321,8 +644,8 @@ EndFunc
 #### C. Target lowest HP ally
 
 ```autoit
-Func BestTarget_Heal($aAggroRange)
-    Return Lowest_HP_Agent(-2, $aAggroRange, "Filter_IsLivingAlly|Filter_ExcludeMe")
+Func BestTarget_Heal($a_f_AggroRange)
+    Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe")
 EndFunc
 ```
 
@@ -330,11 +653,11 @@ EndFunc
 - Healing spells
 - Protective buffs
 
-#### D. Target specific conditions
+#### D. Target with specific conditions
 
 ```autoit
-Func BestTarget_CureHex($aAggroRange)
-    Return Nearest_Agent_Conditional(-2, $aAggroRange, "Filter_IsLivingAlly|Filter_IsHexed")
+Func BestTarget_CureHex($a_f_AggroRange)
+    Return UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingAlly|UAI_Filter_IsHexed")
 EndFunc
 ```
 
@@ -342,61 +665,43 @@ EndFunc
 - Condition/hex removal
 - Situational skills
 
-#### E. Target corpse
+#### E. AOE Targeting - Best Group
 
 ```autoit
-Func BestTarget_AnimateBoneMinions($aAggroRange)
-    Return Nearest_Corpse(-2, $aAggroRange)
+Func BestTarget_FireStorm($a_f_AggroRange)
+    ; Returns the AgentID at the center of the largest enemy group
+    ; Priority 1: Most enemies in AOE range
+    ; Priority 2: If same count, lowest average HP wins
+    Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 ```
 
 **Used for:**
-- Necro skills (minions, wells)
-- Resurrections
-
-#### F. Complex targeting
-
-```autoit
-Func BestTarget_GripOfDeathlight($aAggroRange)
-    Local $lBestTarget = 0
-    Local $lBestPriority = -1
-
-    ; Search all enemies in range
-    For $i = 1 To GetMaxAgents()
-        Local $lAgentID = Agent_GetAgentByArrayIndex($i)
-        If Not Filter_IsLivingEnemy($lAgentID) Then ContinueLoop
-        If Agent_GetDistance($lAgentID) > $aAggroRange Then ContinueLoop
-
-        ; Priority calculation
-        Local $lPriority = 0
-        If Agent_HasEffect($GC_I_SKILL_ID_SomeHex, $lAgentID) Then $lPriority += 10
-        If Agent_GetAgentInfo($lAgentID, "HPPercent") < 0.5 Then $lPriority += 5
-
-        If $lPriority > $lBestPriority Then
-            $lBestPriority = $lPriority
-            $lBestTarget = $lAgentID
-        EndIf
-    Next
-
-    Return $lBestTarget
-EndFunc
-```
+- AOE damage spells
+- Ward placement
+- Well placement
 
 ### 5.4 Targeting Utility Functions
 
-The file `SmartCast_Agent.au3` provides these helpers:
+The file `Targeting/UtilityAI_GetAgent.au3` provides these helpers:
 
 ```autoit
 ; Basic targeting
-Nearest_Agent($aBaseAgentID, $aRange, $aFilterFunc)
-Farthest_Agent($aBaseAgentID, $aRange, $aFilterFunc)
+UAI_GetNearestAgent($a_i_BaseAgentID, $a_f_Range, $a_s_FilterFunc)
+UAI_GetFarthestAgent($a_i_BaseAgentID, $a_f_Range, $a_s_FilterFunc)
 
-; Property-based targeting
-GetAgentsLowest($aBaseAgentID, $aRange, $aProperty, $aFilterFunc)
-GetAgentsHighest($aBaseAgentID, $aRange, $aProperty, $aFilterFunc)
+; Property-based targeting (using UAI cache)
+UAI_GetAgentLowest($a_i_BaseAgentID, $a_f_Range, $a_i_Property, $a_s_FilterFunc)
+UAI_GetAgentHighest($a_i_BaseAgentID, $a_f_Range, $a_i_Property, $a_s_FilterFunc)
+
+; AOE targeting (prioritizes count, then average HP)
+UAI_GetBestAOETarget($a_i_AgentID, $a_f_Range, $a_f_AOERange, $a_s_CustomFilter)
 
 ; Counting
-Count_NumberOf($aBaseAgentID, $aRange, $aFilterFunc)
+UAI_CountAgents($a_i_BaseAgentID, $a_f_Range, $a_s_FilterFunc)
+
+; Find agent by player number
+UAI_FindAgentByPlayerNumber($a_i_PlayerNumber, $a_f_Range, $a_s_FilterFunc)
 ```
 
 ---
@@ -420,8 +725,8 @@ EndFunc
 Similar to BestTarget:
 
 ```autoit
-Func SmartCast_CanUse($aSkillSlot)
-    Switch $SkillBarCache[$aSkillSlot][$SkillID]
+Func UAI_GetCanUseFunc($a_i_SkillSlot)
+    Switch UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillID)
         Case $GC_I_SKILL_ID_HEALING_SIGNET
             Return "CanUse_HealingSignet"
         ; ... 3000+ cases ...
@@ -429,19 +734,19 @@ Func SmartCast_CanUse($aSkillSlot)
 EndFunc
 ```
 
-### 6.3 Condition Examples
+### 6.3 Condition Examples (Using UAI Cache)
 
 #### A. Simple condition (HP threshold)
 
 ```autoit
 Func CanUse_HealingSignet()
     ; Don't use if Ignorance is active
-    If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_IGNORANCE, "HasEffect") Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE) Then
         Return False
     EndIf
 
     ; Only if HP < 80%
-    If Agent_GetAgentInfo(-2, "HPPercent") > 0.80 Then
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.80 Then
         Return False
     EndIf
 
@@ -454,10 +759,10 @@ EndFunc
 ```autoit
 Func CanUse_ResurrectionSignet()
     ; Don't rez if Curse of Dhuum or Frozen Soil
-    If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_CURSE_OF_DHUUM, "HasEffect") Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Then
         Return False
     EndIf
-    If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_FROZEN_SOIL, "HasEffect") Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then
         Return False
     EndIf
 
@@ -470,15 +775,15 @@ EndFunc
 ```autoit
 Func CanUse_PowerBlock()
     ; Don't use if Guilt or Diversion
-    If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_GUILT, "HasEffect") Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Then
         Return False
     EndIf
-    If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_DIVERSION, "HasEffect") Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then
         Return False
     EndIf
 
     ; Only if target is casting
-    If Not Agent_GetAgentInfo($BestTarget, "IsCasting") Then
+    If Not UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_IsCasting) Then
         Return False
     EndIf
 
@@ -486,29 +791,19 @@ Func CanUse_PowerBlock()
 EndFunc
 ```
 
-#### D. Complex condition with multiple effects
+#### D. Complex condition with target state
 
 ```autoit
 Func CanUse_ComplexSkill()
-    ; Check self effects
-    Local $mEffects = Agent_GetEffectsArray(-2)
-    Local $lHasRequiredBuff = False
+    ; Check player has required buff
+    If Not UAI_PlayerHasEffect($GC_I_SKILL_ID_RequiredBuff) Then
+        Return False
+    EndIf
 
-    For $i = 1 To $mEffects[0]
-        Local $lEffectID = Memory_Read($mEffects[$i], 'long')
-        If $lEffectID = $GC_I_SKILL_ID_RequiredBuff Then
-            $lHasRequiredBuff = True
-            ExitLoop
-        EndIf
-    Next
-
-    If Not $lHasRequiredBuff Then Return False
-
-    ; Check target state
-    If Agent_GetAgentInfo($BestTarget, "HPPercent") > 0.5 Then Return False
-
-    ; Check environmental conditions
-    If Party_GetAverageHealth() < 0.3 Then Return False
+    ; Check target HP
+    If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) > 0.5 Then
+        Return False
+    EndIf
 
     Return True
 EndFunc
@@ -518,27 +813,31 @@ EndFunc
 
 ## 7. RESOURCE MANAGEMENT SYSTEM
 
-### 7.1 SmartCast_CanCast() - Resource Verification
+### 7.1 UAI_CanCast() - Resource Verification
 
 This function is called **before** `CanUse_` to check if the player has the necessary resources.
 
 ```autoit
-Func SmartCast_CanCast($aSkillSlot)
+Func UAI_CanCast($a_i_SkillSlot)
 ```
 
 **Checks performed:**
 
-#### A. Recharge
+#### A. Recharge (Using UAI Dynamic Cache)
 
 ```autoit
-If Not Skill_GetSkillbarInfo($aSkillSlot, "IsRecharged") Then Return False
+If Not UAI_GetDynamicSkillInfo($a_i_SkillSlot, $GC_UAI_DYNAMIC_SKILL_IsRecharged) Then
+    Return False
+EndIf
 ```
 
-#### B. Adrenaline
+#### B. Adrenaline (Using UAI Caches)
 
 ```autoit
-If $SkillBarCache[$aSkillSlot][$Adrenaline] <> 0 Then
-    If Skill_GetSkillbarInfo($aSkillSlot, "Adrenaline") < $SkillBarCache[$aSkillSlot][$Adrenaline] Then
+Local $l_i_RequiredAdrenaline = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Adrenaline)
+If $l_i_RequiredAdrenaline <> 0 Then
+    Local $l_i_CurrentAdrenaline = UAI_GetDynamicSkillInfo($a_i_SkillSlot, $GC_UAI_DYNAMIC_SKILL_Adrenaline)
+    If $l_i_CurrentAdrenaline < $l_i_RequiredAdrenaline Then
         Return False
     EndIf
 EndIf
@@ -547,120 +846,73 @@ EndIf
 #### C. Health Cost (Sacrifice + Masochism)
 
 ```autoit
-Local $lTotalHealthCost = 0
-
-; Base cost (sacrifice spells)
-Local $lBaseSacrificeCost = Skill_GetSkillInfo($SkillBarCache[$aSkillSlot][$SkillID], "HealthCost")
-If $lBaseSacrificeCost <> 0 Then
-    $lTotalHealthCost = Agent_GetAgentInfo(-2, "MaxHP") * $lBaseSacrificeCost / 100
+Local $l_i_HealthCost = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_HealthCost)
+If $l_i_HealthCost <> 0 Then
+    Local $l_i_MaxHP = UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP)
+    Local $l_f_TotalCost = $l_i_MaxHP * $l_i_HealthCost / 100
 
     ; Modifiers
-    If Agent_HasEffect($GC_I_SKILL_ID_Awaken_the_Blood, -2) Then
-        $lTotalHealthCost = $lTotalHealthCost + ($lTotalHealthCost * 0.5) ; +50%
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_Awaken_the_Blood) Then
+        $l_f_TotalCost = $l_f_TotalCost * 1.5 ; +50%
     EndIf
-    If Agent_HasEffect($GC_I_SKILL_ID_Scourge_Sacrifice, -2) Then
-        $lTotalHealthCost = $lTotalHealthCost * 2 ; Double
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_Scourge_Sacrifice) Then
+        $l_f_TotalCost = $l_f_TotalCost * 2 ; Double
     EndIf
-EndIf
 
-; Masochism : 5% max HP on ALL spells
-If Agent_HasEffect($GC_I_SKILL_ID_Masochism, -2) Then
-    $lTotalHealthCost = $lTotalHealthCost + (Agent_GetAgentInfo(-2, "MaxHP") * 0.05)
-EndIf
-
-If $lTotalHealthCost > 0 And Agent_GetAgentInfo(-2, "CurrentHP") <= $lTotalHealthCost Then
-    Return False
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) <= $l_f_TotalCost Then
+        Return False
+    EndIf
 EndIf
 ```
 
 #### D. Overcast
 
 ```autoit
-Local $lOvercastCost = Skill_GetSkillInfo($SkillBarCache[$aSkillSlot][$SkillID], "Overcast")
-If $lOvercastCost <> 0 Then
-    Local $lCurrentOvercast = Agent_GetAgentInfo(-2, "Overcast")
-    Local $lMaxEnergy = Agent_GetAgentInfo(-2, "MaxEnergy")
+Local $l_i_OvercastCost = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Overcast)
+If $l_i_OvercastCost <> 0 Then
+    Local $l_i_CurrentOvercast = UAI_GetPlayerInfo($GC_UAI_AGENT_Overcast)
+    Local $l_i_MaxEnergy = UAI_GetPlayerInfo($GC_UAI_AGENT_MaxEnergy)
 
     ; Don't exceed 50% of max energy in overcast
-    If ($lCurrentOvercast + $lOvercastCost) >= ($lMaxEnergy * 0.5) Then
+    If ($l_i_CurrentOvercast + $l_i_OvercastCost) >= ($l_i_MaxEnergy * 0.5) Then
         Return False
     EndIf
 EndIf
 ```
 
-#### E. Energy Cost (with complex modifiers)
+#### E. Energy Cost
 
 ```autoit
-Local $lBaseEnergyCost = $SkillBarCache[$aSkillSlot][$EnergyCost]
-Local $lEnergyCost = $lBaseEnergyCost
+Local $l_i_EnergyCost = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_EnergyCost)
 
-; INCREASE in cost
-If Agent_HasEffect($GC_I_SKILL_ID_Quickening_Zephyr, -2) Then
-    $lEnergyCost = $lEnergyCost * 1.3 ; +30%
-EndIf
+; Apply modifiers (Quickening Zephyr, Nature's Renewal, etc.)
+; Apply reductions (Glyph of Lesser Energy, etc.)
 
-If Agent_HasEffect($GC_I_SKILL_ID_Natures_Renewal, -2) Then
-    If $lSkillType = $GC_I_SKILL_TYPE_HEX Or $lSkillType = $GC_I_SKILL_TYPE_ENCHANTMENT Then
-        $lEnergyCost = $lEnergyCost * 2 ; Double for hex/enchant
-    EndIf
-EndIf
-
-If Agent_HasEffect($GC_I_SKILL_ID_Primal_Echoes, -2) Then
-    If $lSkillType = $GC_I_SKILL_TYPE_SIGNET Then
-        $lEnergyCost = $lEnergyCost + 10 ; +10 for signets
-    EndIf
-EndIf
-
-; REDUCTION in cost
-Local $mEffects = Agent_GetEffectsArray(-2)
-For $i = 1 To $mEffects[0]
-    Local $lEffectID = Memory_Read($mEffects[$i], 'long')
-    Switch $lEffectID
-        Case $GC_I_SKILL_ID_Glyph_of_Lesser_Energy
-            $lEnergyCost = $lEnergyCost - 18
-        Case $GC_I_SKILL_ID_Glyph_of_Energy
-            $lEnergyCost = $lEnergyCost - 25
-        Case $GC_I_SKILL_ID_Energizing_Wind
-            $lEnergyCost = $lEnergyCost - 15
-        ; ... 15+ other modifiers ...
-    EndSwitch
-Next
-
-; Minimum cost = 1 (except Way of the Empty Palm)
-If $lEnergyCost < 1 And Not Agent_HasEffect($GC_I_SKILL_ID_Way_of_the_Empty_Palm, -2) Then
-    $lEnergyCost = 1
-EndIf
-If $lEnergyCost < 0 Then $lEnergyCost = 0
-
-If Agent_GetAgentInfo(-2, "CurrentEnergy") < $lEnergyCost Then
+If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) < $l_i_EnergyCost Then
     Return False
 EndIf
 ```
 
-### 7.2 SmartCast_CanAutoAttack() - Auto-attack Management
+### 7.2 UAI_CanAutoAttack() - Auto-attack Management
 
 ```autoit
-Func SmartCast_CanAutoAttack()
+Func UAI_CanAutoAttack()
     ; Don't attack if Blind
-    If Agent_HasEffect($GC_I_SKILL_ID_Blind) Then Return False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_Blind) Then Return False
 
-    ; Count dangerous hexes
-    Local $mEffects = Agent_GetEffectsArray(-2)
-    Local $lEffectCount = 0
+    ; Check for dangerous hexes using effects cache
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_Ineptitude) Then Return False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_Clumsiness) Then Return False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_Empathy) Then Return False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_Spiteful_Spirit) Then Return False
 
-    For $i = 1 To $mEffects[0]
-        Switch Memory_Read($mEffects[$i], 'long')
-            Case $GC_I_SKILL_ID_Ineptitude, $GC_I_SKILL_ID_Clumsiness,
-                 $GC_I_SKILL_ID_Wandering_Eye, $GC_I_SKILL_ID_Spiteful_Spirit,
-                 $GC_I_SKILL_ID_Spoil_Victor, $GC_I_SKILL_ID_Empathy,
-                 $GC_I_SKILL_ID_Spirit_Shackles
-                $lEffectCount += 1
-                ; If HP < 200 and only one dangerous hex, don't attack
-                If Agent_GetAgentInfo(-2, "CurrentHP") < 200 Then Return False
-        EndSwitch
-        ; If 2+ dangerous hexes, NEVER attack
-        If $lEffectCount >= 2 Then Return False
-    Next
+    ; If HP < 200 and has any dangerous hex, don't attack
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) < 200 Then
+        If UAI_GetPlayerEffectCount() > 0 Then
+            ; Check for any dangerous effect
+            Return False
+        EndIf
+    EndIf
 
     Return True
 EndFunc
@@ -670,83 +922,97 @@ EndFunc
 
 ## 8. FILTERS AND UTILITIES
 
-### 8.1 Agent Filters (SmartCast_Agent.au3)
+### 8.1 Agent Filters (Targeting/UtilityAI_AgentFilter.au3)
 
 #### Basic Filters
 
 ```autoit
-Filter_IsLivingEnemy($aAgentID)        ; Living enemy
-Filter_IsDeadEnemy($aAgentID)          ; Dead enemy
-Filter_IsLivingAlly($aAgentID)         ; Living ally
-Filter_IsDeadAlly($aAgentID)           ; Dead ally
-Filter_ExcludeMe($aAgentID)            ; Exclude self
+UAI_Filter_IsLivingEnemy($a_i_AgentID)        ; Living enemy
+UAI_Filter_IsDeadEnemy($a_i_AgentID)          ; Dead enemy
+UAI_Filter_IsLivingAlly($a_i_AgentID)         ; Living ally
+UAI_Filter_IsDeadAlly($a_i_AgentID)           ; Dead ally
+UAI_Filter_ExcludeMe($a_i_AgentID)            ; Exclude self
 ```
 
-#### Condition Filters
+#### Condition Filters (Using UAI Cache)
 
 ```autoit
-Filter_IsDiseased($aAgentID)           ; Has Disease
-Filter_IsPoisoned($aAgentID)           ; Has Poison
-Filter_IsBlind($aAgentID)              ; Has Blind
-Filter_IsBurning($aAgentID)            ; Has Burning
-Filter_IsBleeding($aAgentID)           ; Has Bleeding
-Filter_IsCrippled($aAgentID)           ; Has Crippled
-Filter_IsDeepWounded($aAgentID)        ; Has Deep Wound
-Filter_IsDazed($aAgentID)              ; Has Dazed
-Filter_IsWeakness($aAgentID)           ; Has Weakness
+UAI_Filter_IsDiseased($a_i_AgentID)           ; Has Disease
+UAI_Filter_IsPoisoned($a_i_AgentID)           ; Has Poison
+UAI_Filter_IsBlind($a_i_AgentID)              ; Has Blind
+UAI_Filter_IsBurning($a_i_AgentID)            ; Has Burning
+UAI_Filter_IsBleeding($a_i_AgentID)           ; Has Bleeding
+UAI_Filter_IsCrippled($a_i_AgentID)           ; Has Crippled
+UAI_Filter_IsDeepWounded($a_i_AgentID)        ; Has Deep Wound
+UAI_Filter_IsDazed($a_i_AgentID)              ; Has Dazed
+UAI_Filter_IsWeakness($a_i_AgentID)           ; Has Weakness
 ```
 
-#### State Filters
+#### State Filters (Using UAI Cache)
 
 ```autoit
-Filter_IsEnchanted($aAgentID)          ; Has enchantments
-Filter_IsConditioned($aAgentID)        ; Has conditions
-Filter_IsHexed($aAgentID)              ; Has hexes
-Filter_IsDegenHexed($aAgentID)         ; Has degen hexes
-Filter_IsWeaponSpelled($aAgentID)      ; Has weapon spell
-Filter_IsKnocked($aAgentID)            ; Is knocked down
-Filter_IsMoving($aAgentID)             ; Is moving
-Filter_IsAttacking($aAgentID)          ; Is attacking
-Filter_IsCasting($aAgentID)            ; Is casting
-Filter_IsIdle($aAgentID)               ; Is idle
+UAI_Filter_IsEnchanted($a_i_AgentID)          ; Has enchantments
+UAI_Filter_IsConditioned($a_i_AgentID)        ; Has conditions
+UAI_Filter_IsHexed($a_i_AgentID)              ; Has hexes
+UAI_Filter_IsDegenHexed($a_i_AgentID)         ; Has degen hexes
+UAI_Filter_IsWeaponSpelled($a_i_AgentID)      ; Has weapon spell
+UAI_Filter_IsKnocked($a_i_AgentID)            ; Is knocked down
+UAI_Filter_IsMoving($a_i_AgentID)             ; Is moving
+UAI_Filter_IsAttacking($a_i_AgentID)          ; Is attacking
+UAI_Filter_IsCasting($a_i_AgentID)            ; Is casting
+UAI_Filter_IsIdle($a_i_AgentID)               ; Is idle
 ```
 
 #### Advanced Filters
 
 ```autoit
-Filter_IsSpirit($aAgentID)             ; Is a spirit
-Filter_IsControlledSpirit($aAgentID)   ; Is a player-controlled spirit
-Filter_IsMinion($aAgentID)             ; Is a minion
-Filter_IsControlledMinion($aAgentID)   ; Is a player-controlled minion
-Filter_IsBelow50HP($aAgentID)          ; HP < 50%
+UAI_Filter_IsSpirit($a_i_AgentID)             ; Is a spirit
+UAI_Filter_IsControlledSpirit($a_i_AgentID)   ; Is a player-controlled spirit
+UAI_Filter_IsMinion($a_i_AgentID)             ; Is a minion
+UAI_Filter_IsControlledMinion($a_i_AgentID)   ; Is a player-controlled minion
+UAI_Filter_IsBelow50HP($a_i_AgentID)          ; HP < 50%
 ```
 
-### 8.2 Utility Functions (SmartCast_Utils.au3)
+### 8.2 Utility Functions (Core/UtilityAI_Utils.au3)
 
 #### Skill Management
 
 ```autoit
-Skill_GetSlotByID($aSkillID)           ; Return slot of a skill by ID
-Skill_CheckSlotByID($aSkillID)         ; Check if a skill is in the bar
+Skill_GetSlotByID($a_i_SkillID)           ; Return slot of a skill by ID
+Skill_CheckSlotByID($a_i_SkillID)         ; Check if a skill is in the bar
 ```
 
 #### Party Management
 
 ```autoit
-Party_GetSize()                         ; Party size
-Party_GetHeroCount()                    ; Number of heroes
-Party_GetHeroID($aHeroNumber)          ; ID of specific hero
-Party_GetMembersArray()                ; Array of all members
-Party_GetAverageHealth()               ; Party HP average
-Party_IsWiped()                        ; Is party wiped?
+Party_GetSize()                           ; Party size
+Party_GetHeroCount()                      ; Number of heroes
+Party_GetHeroID($a_i_HeroNumber)          ; ID of specific hero
+Party_GetMembersArray()                   ; Array of all members
+Party_GetAverageHealth()                  ; Party HP average
+Party_IsWiped()                           ; Is party wiped?
 ```
 
-#### Effect Management
+#### Effect Management (Using UAI Cache)
 
 ```autoit
-Agent_GetEffectsArray($aAgentID)       ; Array of all effects
-Agent_GetBuffsArray($aAgentID)         ; Array of all buffs
-Agent_HasEffect($aSkillID, $aAgentID)  ; Has this effect?
+; Player effects
+UAI_PlayerHasEffect($a_i_SkillID)
+UAI_GetPlayerEffectInfo($a_i_SkillID, $a_i_Property)
+UAI_GetPlayerEffectCount()
+
+; Agent effects
+UAI_AgentHasEffect($a_i_AgentID, $a_i_SkillID)
+UAI_GetAgentEffectInfo($a_i_AgentID, $a_i_SkillID, $a_i_Property)
+UAI_GetAgentEffectCount($a_i_AgentID)
+
+; Player buffs
+UAI_PlayerHasBuff($a_i_SkillID)
+UAI_GetPlayerBuffCount()
+
+; Agent buffs
+UAI_AgentHasBuff($a_i_AgentID, $a_i_SkillID)
+UAI_GetAgentBuffCount($a_i_AgentID)
 ```
 
 ---
@@ -757,26 +1023,26 @@ Agent_HasEffect($aSkillID, $aAgentID)  ; Has this effect?
 
 **Example: Modify Healing Signet to only use at 50% HP**
 
-1. **Find the function in SmartCast_BestTarget.au3:**
+1. **Find the function in Skills/UtilityAI_Signet.au3:**
 
 ```autoit
-Func BestTarget_HealingSignet($aAggroRange)
+Func BestTarget_HealingSignet($a_f_AggroRange)
     Return Agent_GetMyID()
 EndFunc
 ```
 
 2. **No modification needed** (self-target is correct)
 
-3. **Modify the condition in SmartCast_CanUse.au3:**
+3. **Modify the condition in Skills/UtilityAI_Signet.au3:**
 
 ```autoit
 Func CanUse_HealingSignet()
-    If Agent_GetAgentEffectInfo(-2, $GC_I_SKILL_ID_IGNORANCE, "HasEffect") Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE) Then
         Return False
     EndIf
 
     ; MODIFICATION: Use at 50% instead of 80%
-    If Agent_GetAgentInfo(-2, "HPPercent") > 0.50 Then
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.50 Then
         Return False
     EndIf
 
@@ -789,54 +1055,44 @@ EndFunc
 **Example: Aegis targeted on the most threatened ally**
 
 ```autoit
-Func BestTarget_Aegis($aAggroRange)
-    Local $lBestTarget = 0
-    Local $lBestPriority = -9999
+Func BestTarget_Aegis($a_f_AggroRange)
+    Local $l_i_BestTarget = 0
+    Local $l_i_BestPriority = -9999
 
-    Local $lPartyArray = Party_GetMembersArray()
+    ; Iterate through cached agents
+    For $l_i_i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
 
-    For $i = 1 To $lPartyArray[0]
-        Local $lAgentID = $lPartyArray[$i]
-
-        ; Ignore dead
-        If Agent_GetAgentInfo($lAgentID, "IsDead") Then ContinueLoop
+        ; Apply filters
+        If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
 
         ; Ignore if already has Aegis
-        If Agent_HasEffect($GC_I_SKILL_ID_AEGIS, $lAgentID) Then ContinueLoop
+        If UAI_AgentHasEffect($l_i_AgentID, $GC_I_SKILL_ID_AEGIS) Then ContinueLoop
 
-        ; Ignore if too far
-        If Agent_GetDistance($lAgentID) > $aAggroRange Then ContinueLoop
+        ; Check distance
+        Local $l_f_Distance = _GetDistanceToAgent($l_i_AgentID)
+        If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
         ; Priority calculation
-        Local $lPriority = 0
+        Local $l_i_Priority = 0
 
         ; Lower HP = higher priority
-        Local $lHPPercent = Agent_GetAgentInfo($lAgentID, "HPPercent")
-        $lPriority += (1 - $lHPPercent) * 100
+        Local $l_f_HPPercent = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_HP]
+        $l_i_Priority += (1 - $l_f_HPPercent) * 100
 
         ; Bonus if ally is being attacked
-        If Agent_GetAgentInfo($lAgentID, "IsBeingAttacked") Then
-            $lPriority += 50
-        EndIf
-
-        ; Bonus if ally has Deep Wound
-        If Agent_GetAgentInfo($lAgentID, "IsDeepWounded") Then
-            $lPriority += 30
-        EndIf
-
-        ; Penalty if ally already has prots
-        If Agent_GetAgentInfo($lAgentID, "IsEnchanted") Then
-            $lPriority -= 20
+        If $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_IsAttacking] Then
+            $l_i_Priority += 50
         EndIf
 
         ; Update best target
-        If $lPriority > $lBestPriority Then
-            $lBestPriority = $lPriority
-            $lBestTarget = $lAgentID
+        If $l_i_Priority > $l_i_BestPriority Then
+            $l_i_BestPriority = $l_i_Priority
+            $l_i_BestTarget = $l_i_AgentID
         EndIf
     Next
 
-    Return $lBestTarget
+    Return $l_i_BestTarget
 EndFunc
 ```
 
@@ -847,32 +1103,28 @@ EndFunc
 ```autoit
 Func CanUse_ShadowForm()
     ; Don't use if already active
-    If Agent_HasEffect($GC_I_SKILL_ID_SHADOW_FORM, -2) Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_SHADOW_FORM) Then
         Return False
     EndIf
 
     ; Danger counter
-    Local $lDangerLevel = 0
+    Local $l_i_DangerLevel = 0
 
     ; Low HP = danger
-    If Agent_GetAgentInfo(-2, "HPPercent") < 0.5 Then $lDangerLevel += 2
-    If Agent_GetAgentInfo(-2, "HPPercent") < 0.3 Then $lDangerLevel += 3
+    Local $l_f_HP = UAI_GetPlayerInfo($GC_UAI_AGENT_HP)
+    If $l_f_HP < 0.5 Then $l_i_DangerLevel += 2
+    If $l_f_HP < 0.3 Then $l_i_DangerLevel += 3
 
     ; Nearby enemies = danger
-    Local $lEnemyCount = Count_NumberOf(-2, 500, "Filter_IsLivingEnemy")
-    $lDangerLevel += $lEnemyCount
-
-    ; Dangerous conditions
-    If Agent_GetAgentInfo(-2, "IsDeepWounded") Then $lDangerLevel += 2
-    If Agent_GetAgentInfo(-2, "IsBleeding") Then $lDangerLevel += 1
-    If Agent_GetAgentInfo(-2, "IsPoisoned") Then $lDangerLevel += 1
+    Local $l_i_EnemyCount = UAI_CountAgents(-2, 500, "UAI_Filter_IsLivingEnemy")
+    $l_i_DangerLevel += $l_i_EnemyCount
 
     ; Dangerous hexes
-    If Agent_HasEffect($GC_I_SKILL_ID_PRICE_OF_FAILURE, -2) Then $lDangerLevel += 3
-    If Agent_HasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT, -2) Then $lDangerLevel += 3
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_PRICE_OF_FAILURE) Then $l_i_DangerLevel += 3
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_DangerLevel += 3
 
     ; Danger threshold: only use if danger >= 5
-    If $lDangerLevel >= 5 Then
+    If $l_i_DangerLevel >= 5 Then
         Return True
     EndIf
 
@@ -882,12 +1134,12 @@ EndFunc
 
 ### 9.4 Add Priority Skills
 
-In `SmartCast_Core.au3`, function `SmartCast_PrioritySkills()`:
+In `Core/UtilityAI_Core.au3`, function `UAI_PrioritySkills()`:
 
 ```autoit
-Func SmartCast_PrioritySkills()
+Func UAI_PrioritySkills()
     ; Default priority skills
-    Local $aPrioritySkills[] = [
+    Local $l_ai_PrioritySkills[] = [
         $GC_I_SKILL_ID_ASSASSINS_PROMISE,
         $GC_I_SKILL_ID_EREMITES_ZEAL,
         $GC_I_SKILL_ID_PANIC,
@@ -905,56 +1157,12 @@ Func SmartCast_PrioritySkills()
         $GC_I_SKILL_ID_GLYPH_OF_SWIFTNESS  ; Important for E-burst
     ]
 
-    For $skillID In $aPrioritySkills
-        Local $slot = Skill_GetSlotByID($skillID)
-        If $slot > 0 Then
-            _TryCastPrioritySkill($slot)
+    For $l_i_SkillID In $l_ai_PrioritySkills
+        Local $l_i_Slot = Skill_GetSlotByID($l_i_SkillID)
+        If $l_i_Slot > 0 Then
+            _TryCastPrioritySkill($l_i_Slot)
         EndIf
     Next
-EndFunc
-```
-
-### 9.5 Create a Combo System
-
-**Example: Searing Flames Combo**
-
-```autoit
-Func BestTarget_SearingFlames($aAggroRange)
-    ; Search for an enemy that does NOT have Burning
-    Local $lTarget = Nearest_Agent_Without_Condition(-2, $aAggroRange,
-                                                      "Filter_IsLivingEnemy",
-                                                      $GC_I_SKILL_ID_BURNING)
-
-    ; If all have Burning, target nearest
-    If $lTarget = 0 Then
-        $lTarget = Nearest_Agent(-2, $aAggroRange, "Filter_IsLivingEnemy")
-    EndIf
-
-    Return $lTarget
-EndFunc
-
-Func CanUse_SearingFlames()
-    ; Check that we have Glyph of Lesser Energy active (for energy savings)
-    If Not Agent_HasEffect($GC_I_SKILL_ID_GLYPH_OF_LESSER_ENERGY, -2) Then
-        ; Try to cast Glyph if available
-        Local $lGlyphSlot = Skill_GetSlotByID($GC_I_SKILL_ID_GLYPH_OF_LESSER_ENERGY)
-        If $lGlyphSlot > 0 And SmartCast_CanCast($lGlyphSlot) Then
-            SmartCast_UseSkillEX($lGlyphSlot, Agent_GetMyID())
-            Sleep(250) ; Wait for activation
-        EndIf
-    EndIf
-
-    ; Check available energy
-    If Agent_GetAgentInfo(-2, "CurrentEnergy") < 15 Then
-        Return False
-    EndIf
-
-    ; Check that there are enemies
-    If Count_NumberOf(-2, 1320, "Filter_IsLivingEnemy") = 0 Then
-        Return False
-    EndIf
-
-    Return True
 EndFunc
 ```
 
@@ -968,62 +1176,32 @@ EndFunc
 
 ```autoit
 ; === WORD OF HEALING ===
-Func BestTarget_WordOfHealing($aAggroRange)
+Func BestTarget_WordOfHealing($a_f_AggroRange)
     ; Priority 1: Ally < 30% HP
-    Local $lTarget = Lowest_HP_Agent_Below_Threshold(-2, $aAggroRange,
-                                                      "Filter_IsLivingAlly",
-                                                      0.30)
-    If $lTarget <> 0 Then Return $lTarget
+    Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_HPBelow30")
+    If $l_i_Target <> 0 Then Return $l_i_Target
 
     ; Priority 2: Self if < 50%
-    If Agent_GetAgentInfo(-2, "HPPercent") < 0.50 Then
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) < 0.50 Then
         Return Agent_GetMyID()
     EndIf
 
     ; Priority 3: Lowest ally
-    Return Lowest_HP_Agent(-2, $aAggroRange, "Filter_IsLivingAlly")
+    Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly")
 EndFunc
 
 Func CanUse_WordOfHealing()
     ; Don't use if target > 80% HP
-    If Agent_GetAgentInfo($BestTarget, "HPPercent") > 0.80 Then
+    If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) > 0.80 Then
         Return False
     EndIf
 
     ; Don't use if under Guilt/Shame
-    If Agent_HasEffect($GC_I_SKILL_ID_GUILT, -2) Or
-       Agent_HasEffect($GC_I_SKILL_ID_SHAME, -2) Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Or
+       UAI_PlayerHasEffect($GC_I_SKILL_ID_SHAME) Then
         Return False
     EndIf
 
-    Return True
-EndFunc
-
-; === PATIENT SPIRIT ===
-Func BestTarget_PatientSpirit($aAggroRange)
-    Local $lPartyArray = Party_GetMembersArray()
-
-    For $i = 1 To $lPartyArray[0]
-        Local $lAgentID = $lPartyArray[$i]
-
-        ; Ignore if dead, too far, or already has Patient Spirit
-        If Agent_GetAgentInfo($lAgentID, "IsDead") Then ContinueLoop
-        If Agent_GetDistance($lAgentID) > $aAggroRange Then ContinueLoop
-        If Agent_HasEffect($GC_I_SKILL_ID_PATIENT_SPIRIT, $lAgentID) Then ContinueLoop
-
-        ; Target if HP < 70% and being attacked
-        If Agent_GetAgentInfo($lAgentID, "HPPercent") < 0.70 And
-           Agent_GetAgentInfo($lAgentID, "IsBeingAttacked") Then
-            Return $lAgentID
-        EndIf
-    Next
-
-    Return 0
-EndFunc
-
-Func CanUse_PatientSpirit()
-    ; Always usable if we found a target
-    If $BestTarget = 0 Then Return False
     Return True
 EndFunc
 ```
@@ -1034,111 +1212,75 @@ EndFunc
 
 ```autoit
 ; === DISCORD ===
-Func BestTarget_Discord($aAggroRange)
+Func BestTarget_Discord($a_f_AggroRange)
     ; Target enemy with MOST conditions (for max damage)
-    Local $lBestTarget = 0
-    Local $lMaxConditions = 0
+    Local $l_i_BestTarget = 0
+    Local $l_i_MaxConditions = 0
 
-    For $i = 1 To GetMaxAgents()
-        Local $lAgentID = Agent_GetAgentByArrayIndex($i)
-        If Not Filter_IsLivingEnemy($lAgentID) Then ContinueLoop
-        If Agent_GetDistance($lAgentID) > $aAggroRange Then ContinueLoop
+    For $l_i_i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+        If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
+
+        Local $l_f_Distance = _GetDistanceToAgent($l_i_AgentID)
+        If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
         ; Count conditions
-        Local $lCondCount = 0
-        If Filter_IsPoisoned($lAgentID) Then $lCondCount += 1
-        If Filter_IsDiseased($lAgentID) Then $lCondCount += 1
-        If Filter_IsBleeding($lAgentID) Then $lCondCount += 1
-        If Filter_IsWeakness($lAgentID) Then $lCondCount += 1
-        If Filter_IsCrippled($lAgentID) Then $lCondCount += 1
-        If Filter_IsDazed($lAgentID) Then $lCondCount += 1
-        If Filter_IsBlind($lAgentID) Then $lCondCount += 1
-        If Filter_IsBurning($lAgentID) Then $lCondCount += 1
-        If Filter_IsDeepWounded($lAgentID) Then $lCondCount += 1
+        Local $l_i_CondCount = 0
+        If UAI_Filter_IsPoisoned($l_i_AgentID) Then $l_i_CondCount += 1
+        If UAI_Filter_IsDiseased($l_i_AgentID) Then $l_i_CondCount += 1
+        If UAI_Filter_IsBleeding($l_i_AgentID) Then $l_i_CondCount += 1
+        If UAI_Filter_IsWeakness($l_i_AgentID) Then $l_i_CondCount += 1
+        If UAI_Filter_IsCrippled($l_i_AgentID) Then $l_i_CondCount += 1
 
-        If $lCondCount > $lMaxConditions Then
-            $lMaxConditions = $lCondCount
-            $lBestTarget = $lAgentID
+        If $l_i_CondCount > $l_i_MaxConditions Then
+            $l_i_MaxConditions = $l_i_CondCount
+            $l_i_BestTarget = $l_i_AgentID
         EndIf
     Next
 
     ; Fallback: nearest enemy
-    If $lBestTarget = 0 Then
-        $lBestTarget = Nearest_Agent(-2, $aAggroRange, "Filter_IsLivingEnemy")
+    If $l_i_BestTarget = 0 Then
+        $l_i_BestTarget = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
     EndIf
 
-    Return $lBestTarget
+    Return $l_i_BestTarget
 EndFunc
 
 Func CanUse_Discord()
     ; Only cast if target has AT LEAST 2 conditions
-    Local $lCondCount = 0
-    If Filter_IsPoisoned($BestTarget) Then $lCondCount += 1
-    If Filter_IsDiseased($BestTarget) Then $lCondCount += 1
-    If Filter_IsBleeding($BestTarget) Then $lCondCount += 1
-    If Filter_IsWeakness($BestTarget) Then $lCondCount += 1
-    If Filter_IsCrippled($BestTarget) Then $lCondCount += 1
+    Local $l_i_CondCount = 0
+    If UAI_Filter_IsPoisoned($g_i_BestTarget) Then $l_i_CondCount += 1
+    If UAI_Filter_IsDiseased($g_i_BestTarget) Then $l_i_CondCount += 1
+    If UAI_Filter_IsBleeding($g_i_BestTarget) Then $l_i_CondCount += 1
+    If UAI_Filter_IsWeakness($g_i_BestTarget) Then $l_i_CondCount += 1
+    If UAI_Filter_IsCrippled($g_i_BestTarget) Then $l_i_CondCount += 1
 
-    If $lCondCount < 2 Then Return False
+    If $l_i_CondCount < 2 Then Return False
 
-    Return True
-EndFunc
-
-; === ROTTING FLESH (apply before Discord) ===
-Func BestTarget_RottingFlesh($aAggroRange)
-    ; Target enemy with LEAST conditions (for optimal spread)
-    Return Nearest_Agent(-2, $aAggroRange, "Filter_IsLivingEnemy")
-EndFunc
-
-Func CanUse_RottingFlesh()
-    ; Cast in priority before Discord
     Return True
 EndFunc
 ```
 
-### 10.3 Assassin's Promise Build
+### 10.3 AOE Build with Best Target Selection
 
-**Objective:** Manage AP cycle + chain skills
+**Objective:** Maximize AOE damage by targeting the best group
 
 ```autoit
-; === ASSASSIN'S PROMISE ===
-Func BestTarget_AssassinsPromise($aAggroRange)
-    ; Target enemy with LOWEST HP (for quick kill)
-    Local $lTarget = Lowest_HP_Agent(-2, $aAggroRange, "Filter_IsLivingEnemy")
-
-    ; Bonus: if < 25% HP, it's perfect
-    If $lTarget <> 0 And Agent_GetAgentInfo($lTarget, "HPPercent") < 0.25 Then
-        Return $lTarget
-    EndIf
-
-    Return $lTarget
+; === FIRE STORM ===
+Func BestTarget_FireStorm($a_f_AggroRange)
+    ; Get the center of the largest enemy group
+    ; Priority: Most enemies, then lowest average HP
+    Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
-Func CanUse_AssassinsPromise()
-    ; Don't re-cast if already active on a target
-    If Agent_HasEffect($GC_I_SKILL_ID_ASSASSINS_PROMISE, $BestTarget) Then
-        Return False
-    EndIf
+Func CanUse_FireStorm()
+    ; Only cast if at least 3 enemies in AOE range
+    Local $l_i_BestTarget = UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
+    If $l_i_BestTarget = 0 Then Return False
 
-    ; Only cast if we have enough energy for the full combo
-    If Agent_GetAgentInfo(-2, "CurrentEnergy") < 25 Then
-        Return False
-    EndIf
-
-    ; Only cast if target < 50% HP
-    If Agent_GetAgentInfo($BestTarget, "HPPercent") > 0.50 Then
-        Return False
-    EndIf
-
-    Return True
-EndFunc
-
-; === SIPHON SPEED (cast after AP) ===
-Func CanUse_SiphonSpeed()
-    ; Only if AP is active on target
-    If Not Agent_HasEffect($GC_I_SKILL_ID_ASSASSINS_PROMISE, $BestTarget) Then
-        Return False
-    EndIf
+    ; Count enemies around best target
+    Local $l_i_Count = UAI_CountAgents($l_i_BestTarget, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
+    If $l_i_Count < 3 Then Return False
 
     Return True
 EndFunc
@@ -1150,62 +1292,63 @@ EndFunc
 
 ### 11.1 Performance
 
-#### A. Use cache intelligently
+#### A. Use UAI cache instead of direct memory reads
 
 ```autoit
-; ❌ BAD: Reads memory each time
-Func BestTarget_Skill($aAggroRange)
-    For $i = 1 To 100
-        Local $lSkillID = Skill_GetSkillbarInfo(1, "SkillID")  ; Memory read
-        ; ...
-    EndFor
+; BAD: Direct memory read each time
+Func CanUse_Skill()
+    If Agent_GetAgentInfo(-2, "HPPercent") > 0.80 Then Return False
+    If Agent_HasEffect($GC_I_SKILL_ID_IGNORANCE, -2) Then Return False
+    Return True
 EndFunc
 
-; ✅ GOOD: Uses cache
-Func BestTarget_Skill($aAggroRange)
-    Local $lSkillID = $SkillBarCache[1][$SkillID]  ; Read from cache
-    ; ...
+; GOOD: Use UAI cache
+Func CanUse_Skill()
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.80 Then Return False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE) Then Return False
+    Return True
 EndFunc
 ```
 
-#### B. Avoid unnecessary loops
+#### B. Iterate through cached agents instead of all agents
 
 ```autoit
-; ❌ BAD: Loop on all agents
-Func BestTarget_Skill($aAggroRange)
-    For $i = 1 To GetMaxAgents()
-        Local $lAgentID = Agent_GetAgentByArrayIndex($i)
-        If Filter_IsLivingEnemy($lAgentID) Then
-            Return $lAgentID
-        EndIf
+; BAD: Loop on all possible agents
+Func BestTarget_Skill($a_f_AggroRange)
+    For $l_i_i = 1 To GetMaxAgents()
+        Local $l_i_AgentID = Agent_GetAgentByArrayIndex($l_i_i)
+        ; ...
     Next
 EndFunc
 
-; ✅ GOOD: Use optimized helper function
-Func BestTarget_Skill($aAggroRange)
-    Return Nearest_Agent(-2, $aAggroRange, "Filter_IsLivingEnemy")
+; GOOD: Loop only through cached agents
+Func BestTarget_Skill($a_f_AggroRange)
+    For $l_i_i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+        ; ...
+    Next
 EndFunc
 ```
 
 #### C. Return early
 
 ```autoit
-; ❌ BAD: Checks everything even if already invalid
+; BAD: Checks everything even if already invalid
 Func CanUse_Skill()
-    Local $lValid = True
+    Local $l_b_Valid = True
 
-    If Agent_GetAgentInfo(-2, "HPPercent") > 0.80 Then $lValid = False
-    If Agent_HasEffect($GC_I_SKILL_ID_IGNORANCE, -2) Then $lValid = False
-    If $BestTarget = 0 Then $lValid = False
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.80 Then $l_b_Valid = False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE) Then $l_b_Valid = False
+    If $g_i_BestTarget = 0 Then $l_b_Valid = False
 
-    Return $lValid
+    Return $l_b_Valid
 EndFunc
 
-; ✅ GOOD: Return as soon as invalid
+; GOOD: Return as soon as invalid
 Func CanUse_Skill()
-    If Agent_GetAgentInfo(-2, "HPPercent") > 0.80 Then Return False
-    If Agent_HasEffect($GC_I_SKILL_ID_IGNORANCE, -2) Then Return False
-    If $BestTarget = 0 Then Return False
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.80 Then Return False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE) Then Return False
+    If $g_i_BestTarget = 0 Then Return False
 
     Return True
 EndFunc
@@ -1219,16 +1362,16 @@ EndFunc
 Func CanUse_ComplexSkill()
     ; Check safety conditions
     ; Don't cast if under Guilt (increases recharge by 10s)
-    If Agent_HasEffect($GC_I_SKILL_ID_GUILT, -2) Then Return False
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Then Return False
 
     ; Calculate surrounding danger
     ; Formula: nb_enemies * 10 + (1 - HP%) * 50
-    Local $lDanger = Count_NumberOf(-2, 500, "Filter_IsLivingEnemy") * 10
-    $lDanger += (1 - Agent_GetAgentInfo(-2, "HPPercent")) * 50
+    Local $l_i_Danger = UAI_CountAgents(-2, 500, "UAI_Filter_IsLivingEnemy") * 10
+    $l_i_Danger += (1 - UAI_GetPlayerInfo($GC_UAI_AGENT_HP)) * 50
 
     ; Danger threshold: 30
     ; Below this, the skill is not necessary
-    If $lDanger < 30 Then Return False
+    If $l_i_Danger < 30 Then Return False
 
     Return True
 EndFunc
@@ -1237,8 +1380,8 @@ EndFunc
 #### B. Name variables clearly
 
 ```autoit
-; ❌ BAD
-Func BestTarget_Skill($aAggroRange)
+; BAD
+Func BestTarget_Skill($a_f_AggroRange)
     Local $a = 0
     Local $b = -9999
     For $i = 1 To $x
@@ -1247,14 +1390,13 @@ Func BestTarget_Skill($aAggroRange)
     Next
 EndFunc
 
-; ✅ GOOD
-Func BestTarget_Skill($aAggroRange)
-    Local $lBestTarget = 0
-    Local $lBestPriority = -9999
-    Local $lPartyArray = Party_GetMembersArray()
+; GOOD
+Func BestTarget_Skill($a_f_AggroRange)
+    Local $l_i_BestTarget = 0
+    Local $l_i_BestPriority = -9999
 
-    For $i = 1 To $lPartyArray[0]
-        Local $lAgentID = $lPartyArray[$i]
+    For $l_i_i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
         ; ...
     Next
 EndFunc
@@ -1265,14 +1407,14 @@ EndFunc
 #### A. Use Out() for logging
 
 ```autoit
-Func BestTarget_Skill($aAggroRange)
-    Local $lTarget = Nearest_Agent(-2, $aAggroRange, "Filter_IsLivingEnemy")
+Func BestTarget_Skill($a_f_AggroRange)
+    Local $l_i_Target = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
 
     ; Debug log
-    Out("BestTarget_Skill : Target = " & $lTarget &
-        " (Range: " & Agent_GetDistance($lTarget) & ")")
+    Out("BestTarget_Skill : Target = " & $l_i_Target &
+        " (HP: " & UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) & ")")
 
-    Return $lTarget
+    Return $l_i_Target
 EndFunc
 ```
 
@@ -1281,13 +1423,13 @@ EndFunc
 ```autoit
 Func CanUse_Skill()
     ; Test each condition and log
-    If Agent_GetAgentInfo(-2, "HPPercent") > 0.80 Then
+    If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.80 Then
         Out("CanUse_Skill : FAILED - HP too high (" &
-            Agent_GetAgentInfo(-2, "HPPercent") & ")")
+            UAI_GetPlayerInfo($GC_UAI_AGENT_HP) & ")")
         Return False
     EndIf
 
-    If Agent_HasEffect($GC_I_SKILL_ID_IGNORANCE, -2) Then
+    If UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE) Then
         Out("CanUse_Skill : FAILED - Under Ignorance")
         Return False
     EndIf
@@ -1301,26 +1443,43 @@ EndFunc
 
 ## CONCLUSION
 
-The **SmartCast** system is an flexible and powerful framework for automating Guild Wars gameplay.
+The **SmartCast** system is a flexible and powerful framework for automating Guild Wars gameplay.
 
 ### Key Takeaways:
 
 1. **Modular architecture**: Each skill has its own targeting and condition functions
-2. **Intelligent cache**: Optimizes performance by avoiding repeated memory reads
+2. **UAI Cache System**: Centralized caching for optimal performance
+   - `UAI_UpdateAgentCache()` - Agent data
+   - `UAI_CacheSkillBar()` - Static skill data
+   - `UAI_UpdateDynamicSkillbarCache()` - Dynamic skill data
+   - `UAI_UpdateEffectsCache()` - Effects, Buffs, Visible Effects
 3. **Resource management**: Sophisticated system that accounts for all modifiers
 4. **Extensibility**: Easy to add/modify behaviors for each skill
 5. **Separation of concerns**: BestTarget (WHO), CanUse (WHEN), CanCast (CAN-WE)
 
+### UAI Cache Quick Reference:
+
+| Cache | Update Function | Access Functions |
+|-------|----------------|------------------|
+| Agent | `UAI_UpdateAgentCache()` | `UAI_GetPlayerInfo()`, `UAI_GetAgentInfoByID()` |
+| Static Skill | `UAI_CacheSkillBar()` | `UAI_GetStaticSkillInfo()` |
+| Dynamic Skill | `UAI_UpdateDynamicSkillbarCache()` | `UAI_GetDynamicSkillInfo()` |
+| Effects | `UAI_UpdateEffectsCache()` | `UAI_PlayerHasEffect()`, `UAI_AgentHasEffect()` |
+| Buffs | (via Effects) | `UAI_PlayerHasBuff()`, `UAI_AgentHasBuff()` |
+| Visible Effects | (via Effects) | `UAI_PlayerHasVisibleEffect()`, `UAI_AgentHasVisibleEffect()` |
+
 ### Going Further:
 
-- Study existing functions in `SmartCast_BestTarget.au3`
-- Analyze complex conditions in `SmartCast_CanUse.au3`
-- Create your own custom filters
+- Study existing functions in `Cache/UtilityAI_BestTargetCache.au3` and `Skills/*.au3`
+- Analyze complex conditions in `Cache/UtilityAI_CanUseCache.au3` and `Skills/*.au3`
+- Create your own custom filters in `Targeting/UtilityAI_AgentFilter.au3`
 - Optimize skill priorities according to your build
+- Use the UAI cache system for maximum performance
 
 **The system is designed to be modified and customized according to your specific needs!**
 
 ---
 
 *Documentation created by Greg-76 (Alusion)*
+*Version 2.0 - Updated with UAI Cache System*
 *For questions or improvements: [GitHub](https://github.com/JAG-GW/GwAu3)*

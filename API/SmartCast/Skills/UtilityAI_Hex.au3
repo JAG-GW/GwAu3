@@ -1,0 +1,2058 @@
+#include-once
+
+Func Anti_Hex()
+
+EndFunc
+
+; Skill ID: 19 - $GC_I_SKILL_ID_FRAGILITY
+Func CanUse_Fragility()
+	Return True
+EndFunc
+
+Func BestTarget_Fragility($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 20 - $GC_I_SKILL_ID_CONFUSION
+Func CanUse_Confusion()
+	Return True
+EndFunc
+
+Func BestTarget_Confusion($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 26 - $GC_I_SKILL_ID_EMPATHY
+Func CanUse_Empathy()
+	Return True
+EndFunc
+
+Func BestTarget_Empathy($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 28 - $GC_I_SKILL_ID_BACKFIRE
+Func CanUse_Backfire()
+	Return True
+EndFunc
+
+Func BestTarget_Backfire($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 30 - $GC_I_SKILL_ID_DIVERSION
+Func CanUse_Diversion()
+	Return True
+EndFunc
+
+Func BestTarget_Diversion($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 31 - $GC_I_SKILL_ID_CONJURE_PHANTASM
+Func CanUse_ConjurePhantasm()
+	Return True
+EndFunc
+
+Func BestTarget_ConjurePhantasm($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 35 - $GC_I_SKILL_ID_IGNORANCE
+Func CanUse_Ignorance()
+	Return True
+EndFunc
+
+Func BestTarget_Ignorance($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 36 - $GC_I_SKILL_ID_ARCANE_CONUNDRUM
+Func CanUse_ArcaneConundrum()
+	Return True
+EndFunc
+
+Func BestTarget_ArcaneConundrum($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 41 - $GC_I_SKILL_ID_ETHER_LORD
+Func CanUse_EtherLord()
+	Return True
+EndFunc
+
+Func BestTarget_EtherLord($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 43 - $GC_I_SKILL_ID_CLUMSINESS
+Func CanUse_Clumsiness()
+	Return True
+EndFunc
+
+Func BestTarget_Clumsiness($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 44 - $GC_I_SKILL_ID_PHANTOM_PAIN
+Func CanUse_PhantomPain()
+	Return True
+EndFunc
+
+Func BestTarget_PhantomPain($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 45 - $GC_I_SKILL_ID_ETHEREAL_BURDEN
+Func CanUse_EtherealBurden()
+	Return True
+EndFunc
+
+Func BestTarget_EtherealBurden($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 46 - $GC_I_SKILL_ID_GUILT
+Func CanUse_Guilt()
+	Return True
+EndFunc
+
+Func BestTarget_Guilt($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 47 - $GC_I_SKILL_ID_INEPTITUDE
+Func CanUse_Ineptitude()
+	Return True
+EndFunc
+
+Func BestTarget_Ineptitude($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 48 - $GC_I_SKILL_ID_SPIRIT_OF_FAILURE
+Func CanUse_SpiritOfFailure()
+	Return True
+EndFunc
+
+Func BestTarget_SpiritOfFailure($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 49 - $GC_I_SKILL_ID_MIND_WRACK
+Func CanUse_MindWrack()
+	Return True
+EndFunc
+
+Func BestTarget_MindWrack($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 50 - $GC_I_SKILL_ID_WASTRELS_WORRY
+Func CanUse_WastrelsWorry()
+	Return True
+EndFunc
+
+Func BestTarget_WastrelsWorry($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 51 - $GC_I_SKILL_ID_SHAME
+Func CanUse_Shame()
+	Return True
+EndFunc
+
+Func BestTarget_Shame($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 52 - $GC_I_SKILL_ID_PANIC
+Func CanUse_Panic()
+	Return True
+EndFunc
+
+Func BestTarget_Panic($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 53 - $GC_I_SKILL_ID_MIGRAINE
+Func CanUse_Migraine()
+	Return True
+EndFunc
+
+Func BestTarget_Migraine($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 54 - $GC_I_SKILL_ID_CRIPPLING_ANGUISH
+Func CanUse_CripplingAnguish()
+	Return True
+EndFunc
+
+Func BestTarget_CripplingAnguish($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 55 - $GC_I_SKILL_ID_FEVERED_DREAMS
+Func CanUse_FeveredDreams()
+	Return True
+EndFunc
+
+Func BestTarget_FeveredDreams($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 56 - $GC_I_SKILL_ID_SOOTHING_IMAGES
+Func CanUse_SoothingImages()
+	Return True
+EndFunc
+
+Func BestTarget_SoothingImages($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 66 - $GC_I_SKILL_ID_SPIRIT_SHACKLES
+Func CanUse_SpiritShackles()
+	Return True
+EndFunc
+
+Func BestTarget_SpiritShackles($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 76 - $GC_I_SKILL_ID_IMAGINED_BURDEN
+Func CanUse_ImaginedBurden()
+	Return True
+EndFunc
+
+Func BestTarget_ImaginedBurden($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 99 - $GC_I_SKILL_ID_PARASITIC_BOND
+Func CanUse_ParasiticBond()
+	Return True
+EndFunc
+
+Func BestTarget_ParasiticBond($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 100 - $GC_I_SKILL_ID_SOUL_BARBS
+Func CanUse_SoulBarbs()
+	Return True
+EndFunc
+
+Func BestTarget_SoulBarbs($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 101 - $GC_I_SKILL_ID_BARBS
+Func CanUse_Barbs()
+	Return True
+EndFunc
+
+Func BestTarget_Barbs($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 103 - $GC_I_SKILL_ID_PRICE_OF_FAILURE
+Func CanUse_PriceOfFailure()
+	Return True
+EndFunc
+
+Func BestTarget_PriceOfFailure($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 108 - $GC_I_SKILL_ID_SUFFERING
+Func CanUse_Suffering()
+	Return True
+EndFunc
+
+Func BestTarget_Suffering($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 109 - $GC_I_SKILL_ID_LIFE_SIPHON
+Func CanUse_LifeSiphon()
+	Return True
+EndFunc
+
+Func BestTarget_LifeSiphon($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 121 - $GC_I_SKILL_ID_SPITEFUL_SPIRIT
+Func CanUse_SpitefulSpirit()
+	Return True
+EndFunc
+
+Func BestTarget_SpitefulSpirit($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 122 - $GC_I_SKILL_ID_MALIGN_INTERVENTION
+Func CanUse_MalignIntervention()
+	Return True
+EndFunc
+
+Func BestTarget_MalignIntervention($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 123 - $GC_I_SKILL_ID_INSIDIOUS_PARASITE
+Func CanUse_InsidiousParasite()
+	Return True
+EndFunc
+
+Func BestTarget_InsidiousParasite($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 124 - $GC_I_SKILL_ID_SPINAL_SHIVERS
+Func CanUse_SpinalShivers()
+	Return True
+EndFunc
+
+Func BestTarget_SpinalShivers($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 125 - $GC_I_SKILL_ID_WITHER
+Func CanUse_Wither()
+	Return True
+EndFunc
+
+Func BestTarget_Wither($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 126 - $GC_I_SKILL_ID_LIFE_TRANSFER
+Func CanUse_LifeTransfer()
+	Return True
+EndFunc
+
+Func BestTarget_LifeTransfer($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 127 - $GC_I_SKILL_ID_MARK_OF_SUBVERSION
+Func CanUse_MarkOfSubversion()
+	Return True
+EndFunc
+
+Func BestTarget_MarkOfSubversion($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 128 - $GC_I_SKILL_ID_SOUL_LEECH
+Func CanUse_SoulLeech()
+	Return True
+EndFunc
+
+Func BestTarget_SoulLeech($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 129 - $GC_I_SKILL_ID_DEFILE_FLESH
+Func CanUse_DefileFlesh()
+	Return True
+EndFunc
+
+Func BestTarget_DefileFlesh($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 135 - $GC_I_SKILL_ID_FAINTHEARTEDNESS
+Func CanUse_Faintheartedness()
+	Return True
+EndFunc
+
+Func BestTarget_Faintheartedness($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 136 - $GC_I_SKILL_ID_SHADOW_OF_FEAR
+Func CanUse_ShadowOfFear()
+	Return True
+EndFunc
+
+Func BestTarget_ShadowOfFear($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 137 - $GC_I_SKILL_ID_RIGOR_MORTIS
+Func CanUse_RigorMortis()
+	Return True
+EndFunc
+
+Func BestTarget_RigorMortis($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 140 - $GC_I_SKILL_ID_MALAISE
+Func CanUse_Malaise()
+	Return True
+EndFunc
+
+Func BestTarget_Malaise($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 142 - $GC_I_SKILL_ID_LINGERING_CURSE
+Func CanUse_LingeringCurse()
+	Return True
+EndFunc
+
+Func BestTarget_LingeringCurse($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 150 - $GC_I_SKILL_ID_MARK_OF_PAIN
+Func CanUse_MarkOfPain()
+	Return True
+EndFunc
+
+Func BestTarget_MarkOfPain($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 173 - $GC_I_SKILL_ID_GRASPING_EARTH
+Func CanUse_GraspingEarth()
+	Return True
+EndFunc
+
+Func BestTarget_GraspingEarth($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 179 - $GC_I_SKILL_ID_INCENDIARY_BONDS
+Func CanUse_IncendiaryBonds()
+	Return True
+EndFunc
+
+Func BestTarget_IncendiaryBonds($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 190 - $GC_I_SKILL_ID_MARK_OF_RODGORT
+Func CanUse_MarkOfRodgort()
+	Return True
+EndFunc
+
+Func BestTarget_MarkOfRodgort($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 204 - $GC_I_SKILL_ID_RUST
+Func CanUse_Rust()
+	Return True
+EndFunc
+
+Func BestTarget_Rust($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 205 - $GC_I_SKILL_ID_LIGHTNING_SURGE
+Func CanUse_LightningSurge()
+	Return True
+EndFunc
+
+Func BestTarget_LightningSurge($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 209 - $GC_I_SKILL_ID_MIND_FREEZE
+Func CanUse_MindFreeze()
+	Return True
+EndFunc
+
+Func BestTarget_MindFreeze($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 210 - $GC_I_SKILL_ID_ICE_PRISON
+Func CanUse_IcePrison()
+	Return True
+EndFunc
+
+Func BestTarget_IcePrison($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 211 - $GC_I_SKILL_ID_ICE_SPIKES
+Func CanUse_IceSpikes()
+	Return True
+EndFunc
+
+Func BestTarget_IceSpikes($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 212 - $GC_I_SKILL_ID_FROZEN_BURST
+Func CanUse_FrozenBurst()
+	Return True
+EndFunc
+
+Func BestTarget_FrozenBurst($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 213 - $GC_I_SKILL_ID_SHARD_STORM
+Func CanUse_ShardStorm()
+	Return True
+EndFunc
+
+Func BestTarget_ShardStorm($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 222 - $GC_I_SKILL_ID_LIGHTNING_STRIKE
+Func CanUse_LightningStrike()
+	Return True
+EndFunc
+
+Func BestTarget_LightningStrike($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 227 - $GC_I_SKILL_ID_GLIMMERING_MARK
+Func CanUse_GlimmeringMark()
+	Return True
+EndFunc
+
+Func BestTarget_GlimmeringMark($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 234 - $GC_I_SKILL_ID_DEEP_FREEZE
+Func CanUse_DeepFreeze()
+	Return True
+EndFunc
+
+Func BestTarget_DeepFreeze($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 235 - $GC_I_SKILL_ID_BLURRED_VISION
+Func CanUse_BlurredVision()
+	Return True
+EndFunc
+
+Func BestTarget_BlurredVision($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 251 - $GC_I_SKILL_ID_SCOURGE_HEALING
+Func CanUse_ScourgeHealing()
+	Return True
+EndFunc
+
+Func BestTarget_ScourgeHealing($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 253 - $GC_I_SKILL_ID_SCOURGE_SACRIFICE
+Func CanUse_ScourgeSacrifice()
+	Return True
+EndFunc
+
+Func BestTarget_ScourgeSacrifice($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 264 - $GC_I_SKILL_ID_PACIFISM
+Func CanUse_Pacifism()
+	Return True
+EndFunc
+
+Func BestTarget_Pacifism($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 265 - $GC_I_SKILL_ID_AMITY
+Func CanUse_Amity()
+	Return True
+EndFunc
+
+Func BestTarget_Amity($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 505 - $GC_I_SKILL_ID_BURDEN_TOTEM
+Func CanUse_BurdenTotem()
+	Return True
+EndFunc
+
+Func BestTarget_BurdenTotem($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 533 - $GC_I_SKILL_ID_CRYSTAL_HAZE
+Func CanUse_CrystalHaze()
+	Return True
+EndFunc
+
+Func BestTarget_CrystalHaze($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 534 - $GC_I_SKILL_ID_CRYSTAL_BONDS
+Func CanUse_CrystalBonds()
+	Return True
+EndFunc
+
+Func BestTarget_CrystalBonds($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 542 - $GC_I_SKILL_ID_ORACLE_LINK
+Func CanUse_OracleLink()
+	Return True
+EndFunc
+
+Func BestTarget_OracleLink($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 567 - $GC_I_SKILL_ID_SPONTANEOUS_COMBUSTION
+Func CanUse_SpontaneousCombustion()
+	Return True
+EndFunc
+
+Func BestTarget_SpontaneousCombustion($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 570 - $GC_I_SKILL_ID_MARK_OF_INSECURITY
+Func CanUse_MarkOfInsecurity()
+	Return True
+EndFunc
+
+Func BestTarget_MarkOfInsecurity($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 764 - $GC_I_SKILL_ID_WAIL_OF_DOOM
+Func CanUse_WailOfDoom()
+	Return True
+EndFunc
+
+Func BestTarget_WailOfDoom($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 785 - $GC_I_SKILL_ID_MARK_OF_DEATH
+Func CanUse_MarkOfDeath()
+	Return True
+EndFunc
+
+Func BestTarget_MarkOfDeath($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 800 - $GC_I_SKILL_ID_ENDURING_TOXIN
+Func CanUse_EnduringToxin()
+	Return True
+EndFunc
+
+Func BestTarget_EnduringToxin($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 801 - $GC_I_SKILL_ID_SHROUD_OF_SILENCE
+Func CanUse_ShroudOfSilence()
+	Return True
+EndFunc
+
+Func BestTarget_ShroudOfSilence($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 802 - $GC_I_SKILL_ID_EXPOSE_DEFENSES
+Func CanUse_ExposeDefenses()
+	Return True
+EndFunc
+
+Func BestTarget_ExposeDefenses($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 803 - $GC_I_SKILL_ID_POWER_LEECH
+Func CanUse_PowerLeech()
+	Return True
+EndFunc
+
+Func BestTarget_PowerLeech($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 804 - $GC_I_SKILL_ID_ARCANE_LANGUOR
+Func CanUse_ArcaneLanguor()
+	Return True
+EndFunc
+
+Func BestTarget_ArcaneLanguor($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 808 - $GC_I_SKILL_ID_REAPERS_MARK1
+Func CanUse_ReapersMark1()
+	Return True
+EndFunc
+
+Func BestTarget_ReapersMark1($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 809 - $GC_I_SKILL_ID_SHATTERSTONE
+Func CanUse_Shatterstone()
+	Return True
+EndFunc
+
+Func BestTarget_Shatterstone($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 815 - $GC_I_SKILL_ID_SCORPION_WIRE
+Func CanUse_ScorpionWire()
+	Return True
+EndFunc
+
+Func BestTarget_ScorpionWire($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 816 - $GC_I_SKILL_ID_MIRRORED_STANCE
+Func CanUse_MirroredStance()
+	Return True
+EndFunc
+
+Func BestTarget_MirroredStance($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 820 - $GC_I_SKILL_ID_DEPRAVITY
+Func CanUse_Depravity()
+	Return True
+EndFunc
+
+Func BestTarget_Depravity($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 821 - $GC_I_SKILL_ID_ICY_VEINS
+Func CanUse_IcyVeins()
+	Return True
+EndFunc
+
+Func BestTarget_IcyVeins($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 822 - $GC_I_SKILL_ID_WEAKEN_KNEES
+Func CanUse_WeakenKnees()
+	Return True
+EndFunc
+
+Func BestTarget_WeakenKnees($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 827 - $GC_I_SKILL_ID_SIPHON_STRENGTH
+Func CanUse_SiphonStrength()
+	Return True
+EndFunc
+
+Func BestTarget_SiphonStrength($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 828 - $GC_I_SKILL_ID_VILE_MIASMA
+Func CanUse_VileMiasma()
+	Return True
+EndFunc
+
+Func BestTarget_VileMiasma($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 834 - $GC_I_SKILL_ID_RECKLESS_HASTE
+Func CanUse_RecklessHaste()
+	Return True
+EndFunc
+
+Func BestTarget_RecklessHaste($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 835 - $GC_I_SKILL_ID_BLOOD_BOND
+Func CanUse_BloodBond()
+	Return True
+EndFunc
+
+Func BestTarget_BloodBond($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 859 - $GC_I_SKILL_ID_CONJURE_NIGHTMARE
+Func CanUse_ConjureNightmare()
+	Return True
+EndFunc
+
+Func BestTarget_ConjureNightmare($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 861 - $GC_I_SKILL_ID_DISSIPATION
+Func CanUse_Dissipation()
+	Return True
+EndFunc
+
+Func BestTarget_Dissipation($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 878 - $GC_I_SKILL_ID_VISIONS_OF_REGRET
+Func CanUse_VisionsOfRegret()
+	Return True
+EndFunc
+
+Func BestTarget_VisionsOfRegret($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 879 - $GC_I_SKILL_ID_ILLUSION_OF_PAIN
+Func CanUse_IllusionOfPain()
+	Return True
+EndFunc
+
+Func BestTarget_IllusionOfPain($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 880 - $GC_I_SKILL_ID_STOLEN_SPEED
+Func CanUse_StolenSpeed()
+	Return True
+EndFunc
+
+Func BestTarget_StolenSpeed($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 883 - $GC_I_SKILL_ID_VOCAL_MINORITY
+Func CanUse_VocalMinority()
+	Return True
+EndFunc
+
+Func BestTarget_VocalMinority($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 898 - $GC_I_SKILL_ID_OVERLOAD
+Func CanUse_Overload()
+	Return True
+EndFunc
+
+Func BestTarget_Overload($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 899 - $GC_I_SKILL_ID_IMAGES_OF_REMORSE
+Func CanUse_ImagesOfRemorse()
+	Return True
+EndFunc
+
+Func BestTarget_ImagesOfRemorse($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 900 - $GC_I_SKILL_ID_SHARED_BURDEN
+Func CanUse_SharedBurden()
+	Return True
+EndFunc
+
+Func BestTarget_SharedBurden($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 901 - $GC_I_SKILL_ID_SOUL_BIND
+Func CanUse_SoulBind()
+	Return True
+EndFunc
+
+Func BestTarget_SoulBind($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 916 - $GC_I_SKILL_ID_LAMENTATION
+Func CanUse_Lamentation()
+	Return True
+EndFunc
+
+Func BestTarget_Lamentation($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 927 - $GC_I_SKILL_ID_SHAMEFUL_FEAR
+Func CanUse_ShamefulFear()
+	Return True
+EndFunc
+
+Func BestTarget_ShamefulFear($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 928 - $GC_I_SKILL_ID_SHADOW_SHROUD
+Func CanUse_ShadowShroud()
+	Return True
+EndFunc
+
+Func BestTarget_ShadowShroud($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 935 - $GC_I_SKILL_ID_RISING_BILE
+Func CanUse_RisingBile()
+	Return True
+EndFunc
+
+Func BestTarget_RisingBile($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 939 - $GC_I_SKILL_ID_ICY_SHACKLES
+Func CanUse_IcyShackles()
+	Return True
+EndFunc
+
+Func BestTarget_IcyShackles($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 950 - $GC_I_SKILL_ID_SHADOWY_BURDEN
+Func CanUse_ShadowyBurden()
+	Return True
+EndFunc
+
+Func BestTarget_ShadowyBurden($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 951 - $GC_I_SKILL_ID_SIPHON_SPEED
+Func CanUse_SiphonSpeed()
+	Return True
+EndFunc
+
+Func BestTarget_SiphonSpeed($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 953 - $GC_I_SKILL_ID_POWER_FLUX
+Func CanUse_PowerFlux()
+	Return True
+EndFunc
+
+Func BestTarget_PowerFlux($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 978 - $GC_I_SKILL_ID_MARK_OF_INSTABILITY
+Func CanUse_MarkOfInstability()
+	Return True
+EndFunc
+
+Func BestTarget_MarkOfInstability($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 979 - $GC_I_SKILL_ID_MISTRUST
+Func CanUse_Mistrust()
+	Return True
+EndFunc
+
+Func BestTarget_Mistrust($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 998 - $GC_I_SKILL_ID_TORCH_HEX
+Func CanUse_TorchHex()
+	Return True
+EndFunc
+
+Func BestTarget_TorchHex($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 999 - $GC_I_SKILL_ID_TORCH_DEGENERATION_HEX
+Func CanUse_TorchDegenerationHex()
+	Return True
+EndFunc
+
+Func BestTarget_TorchDegenerationHex($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 1009 - $GC_I_SKILL_ID_SNOW_DOWN_THE_SHIRT
+Func CanUse_SnowDownTheShirt()
+	Return True
+EndFunc
+
+Func BestTarget_SnowDownTheShirt($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1012 - $GC_I_SKILL_ID_ICICLES
+Func CanUse_Icicles()
+	Return True
+EndFunc
+
+Func BestTarget_Icicles($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1034 - $GC_I_SKILL_ID_SEEPING_WOUND
+Func CanUse_SeepingWound()
+	Return True
+EndFunc
+
+Func BestTarget_SeepingWound($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1035 - $GC_I_SKILL_ID_ASSASSINS_PROMISE
+Func CanUse_AssassinsPromise()
+	Return True
+EndFunc
+
+Func BestTarget_AssassinsPromise($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1044 - $GC_I_SKILL_ID_DARK_PRISON
+Func CanUse_DarkPrison()
+	Return True
+EndFunc
+
+Func BestTarget_DarkPrison($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1051 - $GC_I_SKILL_ID_EMPATHY_KORO
+Func CanUse_EmpathyKoro()
+	Return True
+EndFunc
+
+Func BestTarget_EmpathyKoro($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1055 - $GC_I_SKILL_ID_RECURRING_INSECURITY
+Func CanUse_RecurringInsecurity()
+	Return True
+EndFunc
+
+Func BestTarget_RecurringInsecurity($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1056 - $GC_I_SKILL_ID_KITAHS_BURDEN
+Func CanUse_KitahsBurden()
+	Return True
+EndFunc
+
+Func BestTarget_KitahsBurden($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1066 - $GC_I_SKILL_ID_SPOIL_VICTOR
+Func CanUse_SpoilVictor()
+	Return True
+EndFunc
+
+Func BestTarget_SpoilVictor($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1071 - $GC_I_SKILL_ID_SHIVERS_OF_DREAD
+Func CanUse_ShiversOfDread()
+	Return True
+EndFunc
+
+Func BestTarget_ShiversOfDread($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1085 - $GC_I_SKILL_ID_ASH_BLAST
+Func CanUse_AshBlast()
+	Return True
+EndFunc
+
+Func BestTarget_AshBlast($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1090 - $GC_I_SKILL_ID_SMOLDERING_EMBERS
+Func CanUse_SmolderingEmbers()
+	Return True
+EndFunc
+
+Func BestTarget_SmolderingEmbers($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1097 - $GC_I_SKILL_ID_TEINAIS_PRISON
+Func CanUse_TeinaisPrison()
+	Return True
+EndFunc
+
+Func BestTarget_TeinaisPrison($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1098 - $GC_I_SKILL_ID_MIRROR_OF_ICE
+Func CanUse_MirrorOfIce()
+	Return True
+EndFunc
+
+Func BestTarget_MirrorOfIce($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1157 - $GC_I_SKILL_ID_STAR_SHARDS
+Func CanUse_StarShards()
+	Return True
+EndFunc
+
+Func BestTarget_StarShards($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 1169 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 1235 - $GC_I_SKILL_ID_DULLED_WEAPON
+Func CanUse_DulledWeapon()
+	Return True
+EndFunc
+
+Func BestTarget_DulledWeapon($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1236 - $GC_I_SKILL_ID_BINDING_CHAINS
+Func CanUse_BindingChains()
+	Return True
+EndFunc
+
+Func BestTarget_BindingChains($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1237 - $GC_I_SKILL_ID_PAINFUL_BOND
+Func CanUse_PainfulBond()
+	Return True
+EndFunc
+
+Func BestTarget_PainfulBond($a_f_AggroRange)
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
+EndFunc
+
+; Skill ID: 1260 - $GC_I_SKILL_ID_MEEKNESS
+Func CanUse_Meekness()
+	Return True
+EndFunc
+
+Func BestTarget_Meekness($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1272 - $GC_I_SKILL_ID_SUICIDAL_IMPULSE
+Func CanUse_SuicidalImpulse()
+	Return True
+EndFunc
+
+Func BestTarget_SuicidalImpulse($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 1335 - $GC_I_SKILL_ID_WASTRELS_DEMISE
+Func CanUse_WastrelsDemise()
+	Return True
+EndFunc
+
+Func BestTarget_WastrelsDemise($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1341 - $GC_I_SKILL_ID_FRUSTRATION
+Func CanUse_Frustration()
+	Return True
+EndFunc
+
+Func BestTarget_Frustration($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1343 - $GC_I_SKILL_ID_ETHER_PHANTOM
+Func CanUse_EtherPhantom()
+	Return True
+EndFunc
+
+Func BestTarget_EtherPhantom($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1344 - $GC_I_SKILL_ID_WEB_OF_DISRUPTION
+Func CanUse_WebOfDisruption()
+	Return True
+EndFunc
+
+Func BestTarget_WebOfDisruption($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1345 - $GC_I_SKILL_ID_ENCHANTERS_CONUNDRUM
+Func CanUse_EnchantersConundrum()
+	Return True
+EndFunc
+
+Func BestTarget_EnchantersConundrum($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1358 - $GC_I_SKILL_ID_ULCEROUS_LUNGS
+Func CanUse_UlcerousLungs()
+	Return True
+EndFunc
+
+Func BestTarget_UlcerousLungs($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1360 - $GC_I_SKILL_ID_MARK_OF_FURY
+Func CanUse_MarkOfFury()
+	Return True
+EndFunc
+
+Func BestTarget_MarkOfFury($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1361 - $GC_I_SKILL_ID_RECURRING_SCOURGE
+Func CanUse_RecurringScourge()
+	Return True
+EndFunc
+
+Func BestTarget_RecurringScourge($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1362 - $GC_I_SKILL_ID_CORRUPT_ENCHANTMENT
+Func CanUse_CorruptEnchantment()
+	Return True
+EndFunc
+
+Func BestTarget_CorruptEnchantment($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1368 - $GC_I_SKILL_ID_CHILLING_WINDS
+Func CanUse_ChillingWinds()
+	Return True
+EndFunc
+
+Func BestTarget_ChillingWinds($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1382 - $GC_I_SKILL_ID_FREEZING_GUST
+Func CanUse_FreezingGust()
+	Return True
+EndFunc
+
+Func BestTarget_FreezingGust($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1398 - $GC_I_SKILL_ID_SCOURGE_ENCHANTMENT
+Func CanUse_ScourgeEnchantment()
+	Return True
+EndFunc
+
+Func BestTarget_ScourgeEnchantment($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1417 - $GC_I_SKILL_ID_VIAL_OF_PURIFIED_WATER
+Func CanUse_VialOfPurifiedWater()
+	Return True
+EndFunc
+
+Func BestTarget_VialOfPurifiedWater($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1433 - $GC_I_SKILL_ID_CORSAIRS_NET
+Func CanUse_CorsairsNet()
+	Return True
+EndFunc
+
+Func BestTarget_CorsairsNet($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1449 - $GC_I_SKILL_ID_LAST_RITES_OF_TORMENT
+Func CanUse_LastRitesOfTorment()
+	Return True
+EndFunc
+
+Func BestTarget_LastRitesOfTorment($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 1458 - $GC_I_SKILL_ID_ENCHANTMENT_COLLAPSE
+Func CanUse_EnchantmentCollapse()
+	Return True
+EndFunc
+
+Func BestTarget_EnchantmentCollapse($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1459 - $GC_I_SKILL_ID_CALL_OF_SACRIFICE
+Func CanUse_CallOfSacrifice()
+	Return True
+EndFunc
+
+Func BestTarget_CallOfSacrifice($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1478 - $GC_I_SKILL_ID_RENEWING_SURGE
+Func CanUse_RenewingSurge()
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 20 Then Return False
+	Return True
+EndFunc
+
+Func BestTarget_RenewingSurge($a_f_AggroRange)
+	Return UAI_GetAgentHighest(-2, 1320, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
+EndFunc
+
+; Skill ID: 1642 - $GC_I_SKILL_ID_HIDDEN_CALTROPS
+Func CanUse_HiddenCaltrops()
+	Return True
+EndFunc
+
+Func BestTarget_HiddenCaltrops($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1646 - $GC_I_SKILL_ID_AUGURY_OF_DEATH
+Func CanUse_AuguryOfDeath()
+	Return True
+EndFunc
+
+Func BestTarget_AuguryOfDeath($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1652 - $GC_I_SKILL_ID_SHADOW_PRISON
+Func CanUse_ShadowPrison()
+	Return True
+EndFunc
+
+Func BestTarget_ShadowPrison($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1655 - $GC_I_SKILL_ID_PRICE_OF_PRIDE
+Func CanUse_PriceOfPride()
+	Return True
+EndFunc
+
+Func BestTarget_PriceOfPride($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1656 - $GC_I_SKILL_ID_AIR_OF_DISENCHANTMENT
+Func CanUse_AirOfDisenchantment()
+	Return True
+EndFunc
+
+Func BestTarget_AirOfDisenchantment($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1688 - $GC_I_SKILL_ID_DEFENDERS_ZEAL
+Func CanUse_DefendersZeal()
+	Return True
+EndFunc
+
+Func BestTarget_DefendersZeal($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1707 - $GC_I_SKILL_ID_WORDS_OF_MADNESS_QWYTZYLKAK
+Func CanUse_WordsOfMadnessQwytzylkak()
+	Return True
+EndFunc
+
+Func BestTarget_WordsOfMadnessQwytzylkak($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 1710 - $GC_I_SKILL_ID_MADNESS_DART
+Func CanUse_MadnessDart()
+	Return True
+EndFunc
+
+Func BestTarget_MadnessDart($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1881 - $GC_I_SKILL_ID_BONDS_OF_TORMENT
+Func CanUse_BondsOfTorment()
+	Return True
+EndFunc
+
+Func BestTarget_BondsOfTorment($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1949 - $GC_I_SKILL_ID_ETHER_NIGHTMARE_LUXON
+Func CanUse_EtherNightmareLuxon()
+	Return True
+EndFunc
+
+Func BestTarget_EtherNightmareLuxon($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1996 - $GC_I_SKILL_ID_SUM_OF_ALL_FEARS
+Func CanUse_SumOfAllFears()
+	Return True
+EndFunc
+
+Func BestTarget_SumOfAllFears($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1998 - $GC_I_SKILL_ID_CACOPHONY
+Func CanUse_Cacophony()
+	Return True
+EndFunc
+
+Func BestTarget_Cacophony($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 1999 - $GC_I_SKILL_ID_WINTERS_EMBRACE
+Func CanUse_WintersEmbrace()
+	Return True
+EndFunc
+
+Func BestTarget_WintersEmbrace($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2000 - $GC_I_SKILL_ID_EARTHEN_SHACKLES
+Func CanUse_EarthenShackles()
+	Return True
+EndFunc
+
+Func BestTarget_EarthenShackles($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2052 - $GC_I_SKILL_ID_SHADOW_FANG
+Func CanUse_ShadowFang()
+	Return True
+EndFunc
+
+Func BestTarget_ShadowFang($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2053 - $GC_I_SKILL_ID_CALCULATED_RISK
+Func CanUse_CalculatedRisk()
+	Return True
+EndFunc
+
+Func BestTarget_CalculatedRisk($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2054 - $GC_I_SKILL_ID_SHRINKING_ARMOR
+Func CanUse_ShrinkingArmor()
+	Return True
+EndFunc
+
+Func BestTarget_ShrinkingArmor($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2056 - $GC_I_SKILL_ID_WANDERING_EYE
+Func CanUse_WanderingEye()
+	Return True
+EndFunc
+
+Func BestTarget_WanderingEye($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2058 - $GC_I_SKILL_ID_PUTRID_BILE
+Func CanUse_PutridBile()
+	Return True
+EndFunc
+
+Func BestTarget_PutridBile($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2086 - $GC_I_SKILL_ID_SNARING_WEB
+Func CanUse_SnaringWeb()
+	Return True
+EndFunc
+
+Func BestTarget_SnaringWeb($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2089 - $GC_I_SKILL_ID_WURM_BILE
+Func CanUse_WurmBile()
+	Return True
+EndFunc
+
+Func BestTarget_WurmBile($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2092 - $GC_I_SKILL_ID_ETHER_NIGHTMARE_KURZICK
+Func CanUse_EtherNightmareKurzick()
+	Return True
+EndFunc
+
+Func BestTarget_EtherNightmareKurzick($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2122 - $GC_I_SKILL_ID_SPIRIT_WORLD_RETREAT
+Func CanUse_SpiritWorldRetreat()
+	Return True
+EndFunc
+
+Func BestTarget_SpiritWorldRetreat($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 2137 - $GC_I_SKILL_ID_CONFUSING_IMAGES
+Func CanUse_ConfusingImages()
+	Return True
+EndFunc
+
+Func BestTarget_ConfusingImages($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2188 - $GC_I_SKILL_ID_DEFILE_DEFENSES
+Func CanUse_DefileDefenses()
+	Return True
+EndFunc
+
+Func BestTarget_DefileDefenses($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2237 - $GC_I_SKILL_ID_ATROPHY
+Func CanUse_Atrophy()
+	Return True
+EndFunc
+
+Func BestTarget_Atrophy($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2254 - $GC_I_SKILL_ID_POLYMOCK_GLYPH_DESTABILIZATION
+Func CanUse_PolymockGlyphDestabilization()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockGlyphDestabilization($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2255 - $GC_I_SKILL_ID_POLYMOCK_MIND_WRECK
+Func CanUse_PolymockMindWreck()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockMindWreck($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2261 - $GC_I_SKILL_ID_POLYMOCK_RISING_BILE
+Func CanUse_PolymockRisingBile()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockRisingBile($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2281 - $GC_I_SKILL_ID_POLYMOCK_GLYPH_FREEZE
+Func CanUse_PolymockGlyphFreeze()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockGlyphFreeze($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2284 - $GC_I_SKILL_ID_POLYMOCK_CALCULATED_RISK
+Func CanUse_PolymockCalculatedRisk()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockCalculatedRisk($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2285 - $GC_I_SKILL_ID_POLYMOCK_RECURRING_INSECURITY
+Func CanUse_PolymockRecurringInsecurity()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockRecurringInsecurity($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2286 - $GC_I_SKILL_ID_POLYMOCK_BACKFIRE
+Func CanUse_PolymockBackfire()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockBackfire($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2287 - $GC_I_SKILL_ID_POLYMOCK_GUILT
+Func CanUse_PolymockGuilt()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockGuilt($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2290 - $GC_I_SKILL_ID_POLYMOCK_PAINFUL_BOND
+Func CanUse_PolymockPainfulBond()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockPainfulBond($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2292 - $GC_I_SKILL_ID_POLYMOCK_MIGRAINE
+Func CanUse_PolymockMigraine()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockMigraine($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2304 - $GC_I_SKILL_ID_POLYMOCK_DIVERSION
+Func CanUse_PolymockDiversion()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockDiversion($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2307 - $GC_I_SKILL_ID_POLYMOCK_ICY_BONDS
+Func CanUse_PolymockIcyBonds()
+	Return True
+EndFunc
+
+Func BestTarget_PolymockIcyBonds($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2329 - $GC_I_SKILL_ID_CRYSTAL_SNARE
+Func CanUse_CrystalSnare()
+	Return True
+EndFunc
+
+Func BestTarget_CrystalSnare($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2330 - $GC_I_SKILL_ID_PARANOID_INDIGNATION
+Func CanUse_ParanoidIndignation()
+	Return True
+EndFunc
+
+Func BestTarget_ParanoidIndignation($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2357 - $GC_I_SKILL_ID_A_TOUCH_OF_GUILE
+Func CanUse_ATouchOfGuile()
+	Return True
+EndFunc
+
+Func BestTarget_ATouchOfGuile($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2415 - $GC_I_SKILL_ID_ASURAN_SCAN
+Func CanUse_AsuranScan()
+	Return True
+EndFunc
+
+Func BestTarget_AsuranScan($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2418 - $GC_I_SKILL_ID_PAIN_INVERTER
+Func CanUse_PainInverter()
+	Return True
+EndFunc
+
+Func BestTarget_PainInverter($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2501 - $GC_I_SKILL_ID_TONGUE_LASH
+Func CanUse_TongueLash()
+	Return True
+EndFunc
+
+Func BestTarget_TongueLash($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2503 - $GC_I_SKILL_ID_UNRELIABLE
+Func CanUse_Unreliable()
+	Return True
+EndFunc
+
+Func BestTarget_Unreliable($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 2514 - $GC_I_SKILL_ID_THE_MASTERS_MARK
+Func CanUse_TheMastersMark()
+	Return True
+EndFunc
+
+Func BestTarget_TheMastersMark($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2544 - $GC_I_SKILL_ID_TONGUE_WHIP
+Func CanUse_TongueWhip()
+	Return True
+EndFunc
+
+Func BestTarget_TongueWhip($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2546 - $GC_I_SKILL_ID_DISHONORABLE
+Func CanUse_Dishonorable()
+	Return True
+EndFunc
+
+Func BestTarget_Dishonorable($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 2627 - $GC_I_SKILL_ID_REAPERS_MARK2
+Func CanUse_ReapersMark2()
+	Return True
+EndFunc
+
+Func BestTarget_ReapersMark2($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2631 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 2672 - $GC_I_SKILL_ID_SPECTRAL_AGONY_SAUL_DALESSIO
+Func CanUse_SpectralAgonySaulDalessio()
+	Return True
+EndFunc
+
+Func BestTarget_SpectralAgonySaulDalessio($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2681 - $GC_I_SKILL_ID_SHARED_BURDEN_GWEN
+Func CanUse_SharedBurdenGwen()
+	Return True
+EndFunc
+
+Func BestTarget_SharedBurdenGwen($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2682 - $GC_I_SKILL_ID_SUM_OF_ALL_FEARS_GWEN
+Func CanUse_SumOfAllFearsGwen()
+	Return True
+EndFunc
+
+Func BestTarget_SumOfAllFearsGwen($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2734 - $GC_I_SKILL_ID_MIND_WRACK_PVP
+Func CanUse_MindWrackPvp()
+	Return True
+EndFunc
+
+Func BestTarget_MindWrackPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2756 - $GC_I_SKILL_ID_MAD_KINGS_FAN
+Func CanUse_MadKingsFan()
+	Return True
+EndFunc
+
+Func BestTarget_MadKingsFan($a_f_AggroRange)
+	Return Agent_GetMyID()
+EndFunc
+
+; Skill ID: 2803 - $GC_I_SKILL_ID_MIND_FREEZE_PVP
+Func CanUse_MindFreezePvp()
+	Return True
+EndFunc
+
+Func BestTarget_MindFreezePvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2906 - $GC_I_SKILL_ID_TARGET_ACQUISITION
+Func CanUse_TargetAcquisition()
+	Return True
+EndFunc
+
+Func BestTarget_TargetAcquisition($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2916 - $GC_I_SKILL_ID_NOX_PHANTOM
+Func CanUse_NoxPhantom()
+	Return True
+EndFunc
+
+Func BestTarget_NoxPhantom($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 2937 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 2942 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 2944 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 2945 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 2947 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 2950 - ;  $GC_I_SKILL_ID_UNKNOWN
+; Skill ID: 2998 - $GC_I_SKILL_ID_FRAGILITY_PVP
+Func CanUse_FragilityPvp()
+	Return True
+EndFunc
+
+Func BestTarget_FragilityPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3086 - $GC_I_SKILL_ID_WEIGHT_OF_DHUUM_HEX
+Func CanUse_WeightOfDhuumHex()
+	Return True
+EndFunc
+
+Func BestTarget_WeightOfDhuumHex($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3151 - $GC_I_SKILL_ID_EMPATHY_PVP
+Func CanUse_EmpathyPvp()
+	Return True
+EndFunc
+
+Func BestTarget_EmpathyPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3152 - $GC_I_SKILL_ID_CRIPPLING_ANGUISH_PVP
+Func CanUse_CripplingAnguishPvp()
+	Return True
+EndFunc
+
+Func BestTarget_CripplingAnguishPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3182 - $GC_I_SKILL_ID_PANIC_PVP
+Func CanUse_PanicPvp()
+	Return True
+EndFunc
+
+Func BestTarget_PanicPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3183 - $GC_I_SKILL_ID_MIGRAINE_PVP
+Func CanUse_MigrainePvp()
+	Return True
+EndFunc
+
+Func BestTarget_MigrainePvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3186 - $GC_I_SKILL_ID_SHARED_BURDEN_PVP
+Func CanUse_SharedBurdenPvp()
+	Return True
+EndFunc
+
+Func BestTarget_SharedBurdenPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3187 - $GC_I_SKILL_ID_STOLEN_SPEED_PVP
+Func CanUse_StolenSpeedPvp()
+	Return True
+EndFunc
+
+Func BestTarget_StolenSpeedPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3190 - $GC_I_SKILL_ID_FRUSTRATION_PVP
+Func CanUse_FrustrationPvp()
+	Return True
+EndFunc
+
+Func BestTarget_FrustrationPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3191 - $GC_I_SKILL_ID_MISTRUST_PVP
+Func CanUse_MistrustPvp()
+	Return True
+EndFunc
+
+Func BestTarget_MistrustPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3192 - $GC_I_SKILL_ID_ENCHANTERS_CONUNDRUM_PVP
+Func CanUse_EnchantersConundrumPvp()
+	Return True
+EndFunc
+
+Func BestTarget_EnchantersConundrumPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3195 - $GC_I_SKILL_ID_WANDERING_EYE_PVP
+Func CanUse_WanderingEyePvp()
+	Return True
+EndFunc
+
+Func BestTarget_WanderingEyePvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3196 - $GC_I_SKILL_ID_CALCULATED_RISK_PVP
+Func CanUse_CalculatedRiskPvp()
+	Return True
+EndFunc
+
+Func BestTarget_CalculatedRiskPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3200 - $GC_I_SKILL_ID_ISAIAHS_BALANCE
+Func CanUse_IsaiahsBalance()
+	Return True
+EndFunc
+
+Func BestTarget_IsaiahsBalance($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3208 - $GC_I_SKILL_ID_WASTRELS_DEMISE_PVP
+Func CanUse_WastrelsDemisePvp()
+	Return True
+EndFunc
+
+Func BestTarget_WastrelsDemisePvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3233 - $GC_I_SKILL_ID_SPOIL_VICTOR_PVP
+Func CanUse_SpoilVictorPvp()
+	Return True
+EndFunc
+
+Func BestTarget_SpoilVictorPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3234 - $GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP
+Func CanUse_VisionsOfRegretPvp()
+	Return True
+EndFunc
+
+Func BestTarget_VisionsOfRegretPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3243 - $GC_I_SKILL_ID_PROMISE_OF_DEATH
+Func CanUse_PromiseOfDeath()
+	Return True
+EndFunc
+
+Func BestTarget_PromiseOfDeath($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3289 - $GC_I_SKILL_ID_FEVERED_DREAMS_PVP
+Func CanUse_FeveredDreamsPvp()
+	Return True
+EndFunc
+
+Func BestTarget_FeveredDreamsPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3302 - $GC_I_SKILL_ID_SKY_NET
+Func CanUse_SkyNet()
+	Return True
+EndFunc
+
+Func BestTarget_SkyNet($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3374 - $GC_I_SKILL_ID_ILLUSION_OF_PAIN_PVP
+Func CanUse_IllusionOfPainPvp()
+	Return True
+EndFunc
+
+Func BestTarget_IllusionOfPainPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
+; Skill ID: 3386 - $GC_I_SKILL_ID_WEB_OF_DISRUPTION_PVP
+Func CanUse_WebOfDisruptionPvp()
+	Return True
+EndFunc
+
+Func BestTarget_WebOfDisruptionPvp($a_f_AggroRange)
+	Return 0
+EndFunc
+
