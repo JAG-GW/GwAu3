@@ -12,13 +12,15 @@ EndFunc   ;==>UAI_Fight
 ;~ Use this function to cast all of your skills or skills of a certain type.
 Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500)
 	For $l_i_i = 1 To 8
-;~ 	UPDATE AGENT CACHE FIRST
-		UAI_UpdateCache($a_f_AggroRange)
+		If UAI_GetStaticSkillInfo($l_i_i, $GC_UAI_STATIC_SKILL_SkillID) = 0 Then ContinueLoop
 
+;~ 	UPDATE CACHE FIRST
+		UAI_UpdateCache($a_f_AggroRange)
+		If $g_b_CacheWeaponSet Then UAI_ShouldSwitchWeaponSet()
+
+;~ 	CHECK PARTY
 		If UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Or Party_IsWiped() = 1 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or UAI_GetPlayerInfo($GC_UAI_AGENT_IsKnockedDown) Then Return
 		If UAI_CountAgents(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy") = 0 Then Return
-
-		If UAI_GetStaticSkillInfo($l_i_i, $GC_UAI_STATIC_SKILL_SkillID) = 0 Then ContinueLoop
 
 		If $g_b_SkillChanged = True Then
 			If Cache_EndFormChangeBuild($l_i_i) Then

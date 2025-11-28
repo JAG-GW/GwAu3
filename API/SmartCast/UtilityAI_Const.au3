@@ -15,16 +15,33 @@ Global Const $GC_UAI_WEAPONSET_OffhandType = 2
 Global Const $GC_UAI_WEAPONSET_OffhandId = 3
 Global Const $GC_UAI_WEAPONSET_MaxHP = 4
 Global Const $GC_UAI_WEAPONSET_MaxEnergy = 5
+;New: Mod-based scores for combat decisions
+Global Const $GC_UAI_WEAPONSET_OffensiveScore = 6    ;Sundering, Vampiric, Zealous, Damage+%, conditions
+Global Const $GC_UAI_WEAPONSET_DefensiveScore = 7   ;Armor+, HP+, Damage reduction, Shield
+Global Const $GC_UAI_WEAPONSET_CastingScore = 8     ;HCT, HSR, 40/40
+Global Const $GC_UAI_WEAPONSET_EnchantScore = 9     ;Enchant duration +20%
+Global Const $GC_UAI_WEAPONSET_IsRanged = 10        ;Bow, Spear, Wand, Staff
+Global Const $GC_UAI_WEAPONSET_HasShield = 11       ;Has shield equipped
+Global Const $GC_UAI_WEAPONSET_HasVampiric = 12     ;Has vampiric mod
+Global Const $GC_UAI_WEAPONSET_HasZealous = 13      ;Has zealous mod
 
-;Weapon Sets 2D Array: [SetIndex 0-3][DataIndex 0-5]
-Global $g_a2D_WeaponSets[4][6] = [ _
-	[0, 0, 0, 0, 0, 0], _
-	[0, 0, 0, 0, 0, 0], _
-	[0, 0, 0, 0, 0, 0], _
-	[0, 0, 0, 0, 0, 0]]
-;[Energy, Set]
+;Weapon Sets 2D Array: [SetIndex 0-3][DataIndex 0-13]
+Global $g_a2D_WeaponSets[4][14] = [ _
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], _
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+;Best set trackers: [Score/Value, SetNumber]
 Global $g_ai_High_Hp_Set[2] = [0, 0]
 Global $g_ai_High_Energy_Set[2] = [0, 0]
+Global $g_ai_Best_Offensive_Set[2] = [0, 0]
+Global $g_ai_Best_Defensive_Set[2] = [0, 0]
+Global $g_ai_Best_Casting_Set[2] = [0, 0]
+Global $g_ai_Best_Enchant_Set[2] = [0, 0]
+Global $g_ai_Best_Ranged_Set[2] = [0, 0]      ;[IsRanged (0/1), SetNumber]
+Global $g_ai_Best_Vampiric_Set[2] = [0, 0]    ;[HasVampiric (0/1), SetNumber]
+Global $g_ai_Best_Zealous_Set[2] = [0, 0]     ;[HasZealous (0/1), SetNumber]
 ;4 = set / 2 = weapon / 8 = Mods
 Global $g_as3_Weapon_Mods[4][2][8] = [ _
 		[["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]], _	;weapon set 1 / Weapon per set / mod per weapon
