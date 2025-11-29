@@ -48,6 +48,9 @@ Global $g_as3_Weapon_Mods[4][2][8] = [ _
         [["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]], _	;weapon set 2 / Weapon per set / mod per weapon
         [["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]], _	;weapon set 3 / Weapon per set / mod per weapon
 		[["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""]]]   ;weapon set 4 / Weapon per set / mod per weapon
+;Hysteresis flags to prevent flip-flop between sets
+Global $g_b_InDefensiveMode = False
+Global $g_b_InLowEnergyMode = False
 
 #Region Mods
 Global $g_as2_OtherWeaponsMods [24][3] = [ _

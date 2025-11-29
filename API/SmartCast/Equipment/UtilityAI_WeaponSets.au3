@@ -393,10 +393,6 @@ Func UAI_WeaponReqToItemType($a_i_WeaponReq)
 	EndSwitch
 EndFunc
 
-;Hysteresis flags to prevent flip-flop between sets
-Global $g_b_InDefensiveMode = False
-Global $g_b_InLowEnergyMode = False
-
 ;===================================================================================
 ; UAI_GetBestWeaponSetForCombat - Intelligent weapon set selection based on combat state
 ; Priority: Survival > Energy Management > Offensive/Situational

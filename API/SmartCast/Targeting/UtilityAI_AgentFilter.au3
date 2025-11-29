@@ -115,6 +115,246 @@ Func UAI_Filter_IsIdle($a_i_AgentID)
 	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsIdle)
 EndFunc
 
+Func UAI_Filter_IsWarrior($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 1 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsRanger($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 2 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsMonk($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 3 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsNecromancer($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 4 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsMesmer($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 5 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsElementalist($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 6 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsAssassin($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 7 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsRitualist($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 8 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsParagon($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 9 Then Return False
+
+	Return True
+EndFunc
+
+Func UAI_Filter_IsDervish($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
+
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return False
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return False
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	If $l_i_NpcPrimary <> 10 Then Return False
+
+	Return True
+EndFunc
+
 Func UAI_Filter_IsSpirit($a_i_AgentID)
 	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_Allegiance) <> 4 Then Return False
 	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber) <> 0 Then Return False
