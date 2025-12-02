@@ -74,6 +74,7 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 	If $g_b_CacheWeaponSet Then UAI_GetBestWeaponSetBySkillSlot($a_i_SkillSlot)
 
 	Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)
+	Sleep(128)
 
 	;If it's melee attack wait until target is in nearby range
 	Local $l_i_Skilltype = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillType)
@@ -148,13 +149,17 @@ Func UAI_PrioritySkills($a_f_AggroRange = 1320)
 EndFunc
 
 Func UAI_CastPrioritySkill($a_i_Slot, $a_f_AggroRange = 1320)
-	$g_i_BestTarget = Call($g_as_BestTargetCache[$a_i_Slot], $a_f_AggroRange)
-	If $g_i_BestTarget = 0 Then Return
+	If UAI_CanCast($a_i_Slot) Then
+		$g_i_BestTarget = Call($g_as_BestTargetCache[$a_i_Slot], $a_f_AggroRange)
+		If $g_i_BestTarget = 0 Then Return
 
-	If Call($g_as_CanUseCache[$a_i_Slot]) Then
-		UAI_UseSkillEX($a_i_Slot, $g_i_BestTarget)
-		; Actualize cache after casting priority skills
-		UAI_UpdateCache($a_f_AggroRange)
+		$g_b_CanUseSkill = Call($g_as_CanUseCache[$a_i_Slot])
+
+		If $g_b_CanUseSkill = True And Agent_GetDistance($g_i_BestTarget) < $a_f_AggroRange Then
+			UAI_UseSkillEX($a_i_Slot, $g_i_BestTarget)
+			If Cache_FormChangeBuild($a_i_Slot) Then $g_b_SkillChanged = True
+			UAI_UpdateCache($a_f_AggroRange)
+		EndIf
 	EndIf
 EndFunc
 
@@ -174,11 +179,16 @@ Func UAI_DropBundle()
 
 		; Check if skill is recharged (can drop bundle)
 		If UAI_CanCast($l_i_Slot) Then
-			; Drop bundle by using the skill on self
-			UAI_UseSkillEX($l_i_Slot, Agent_GetMyID())
-			; Actualize cache after casting item spell
-			UAI_UpdateCache($a_f_AggroRange)
-			Return
+			$g_i_BestTarget = Call($g_as_BestTargetCache[$l_i_Slot], $a_f_AggroRange)
+			If $g_i_BestTarget = 0 Then ContinueLoop
+
+			$g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_Slot])
+
+			If $g_b_CanUseSkill = True And Agent_GetDistance($g_i_BestTarget) < $a_f_AggroRange Then
+				UAI_UseSkillEX($l_i_Slot, $g_i_BestTarget)
+				If Cache_FormChangeBuild($l_i_Slot) Then $g_b_SkillChanged = True
+				UAI_UpdateCache($a_f_AggroRange)
+			EndIf
 		EndIf
 
 		; Check if skill is not recharged (but can drop bundle)

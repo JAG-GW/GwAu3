@@ -3,6 +3,7 @@
 Func Anti_Hex()
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Then Return True
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return True
+	If UAI_Filter_IsSpirit($g_i_BestTarget) Then Return False ;can't cast hex on spirit
 
 	Local $l_i_CommingDamage = 0
 
@@ -1102,7 +1103,7 @@ Func BestTarget_IcyVeins($a_f_AggroRange)
 	; Elite Hex Spell. (10...30...35 seconds.) Deals 20...92...110 cold damage to nearby foes if target foe dies. Initial effect: deals 10...74...90 cold damage.
 	; Concise description
 	; Hex Spell. (10...30...35 seconds.) Deals 20...92...110 cold damage to nearby foes if target foe dies. Initial effect: deals 10...74...90 cold damage.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 822 - $GC_I_SKILL_ID_WEAKEN_KNEES
@@ -1345,7 +1346,7 @@ Func BestTarget_RisingBile($a_f_AggroRange)
 	; Hex Spell. (20 seconds.) End effect: deals 1...5...6 damage for each second Rising Bile was in effect. Also damages other foes in the area.
 	; Concise description
 	; Spell. (20 seconds.) End effect: deals 1...5...6 damage for each second Rising Bile was in effect. Also damages other foes in the area.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 939 - $GC_I_SKILL_ID_ICY_SHACKLES
@@ -2152,7 +2153,7 @@ Func BestTarget_PutridBile($a_f_AggroRange)
 	; Hex Spell. (5...17...20 seconds.) Causes -1...3...3 Health degeneration. Deals 25...73...85 damage to all nearby foes if target foe dies.
 	; Concise description
 	; Spell. (5...17...20 seconds.) Causes -1...3...3 Health degeneration. Deals 25...73...85 damage to all nearby foes if target foe dies.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2086 - $GC_I_SKILL_ID_SNARING_WEB

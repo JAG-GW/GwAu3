@@ -422,7 +422,7 @@ Func BestTarget_PutridExplosion($a_f_AggroRange)
 	; Spell. The corpse nearest your target explodes, sending out a shockwave that deals 24...101...120 damage to nearby foes.
 	; Concise description
 	; Spell. Explodes a corpse, dealing 24...101...120 damage to foes near it. Exploits a fresh corpse.
-	Return 0
+	Return UAI_GetBestCorpseForEnemyPressure($a_f_AggroRange)
 EndFunc
 
 ; Skill ID: 96 - $GC_I_SKILL_ID_SOUL_FEAST

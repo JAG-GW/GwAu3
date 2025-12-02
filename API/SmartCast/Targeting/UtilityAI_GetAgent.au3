@@ -435,11 +435,11 @@ Func UAI_MoveTowardCorpse($a_i_TargetCorpseID)
 		Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
 
 		; Check if target corpse is now the nearest
-		If UAI_IsCorpseNearest($a_i_TargetCorpseID, $l_f_CurX, $l_f_CurY) Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+		If UAI_IsCorpseNearest($a_i_TargetCorpseID, $l_f_CurX, $l_f_CurY) Then Return True
 
 	Until $l_f_DistToTarget < $l_f_ArrivalDist Or $l_i_Timeout >= $l_i_MaxTimeout
 
-	Return False
+	Return True
 EndFunc
 
 ; Check if target corpse is the nearest corpse from given position
