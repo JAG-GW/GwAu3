@@ -111,11 +111,15 @@ Func UAI_PrioritySkills($a_f_AggroRange = 1320)
 	Local $l_ai_PriorityEffect2Flags[] = [$GC_I_SKILL_EFFECT2_ENERGY_STEAL, $GC_I_SKILL_EFFECT2_ENERGY_GAIN, _
 										  $GC_I_SKILL_EFFECT2_HEX_REMOVAL, $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL]
 
+	; Priority Skill Type (from $GC_UAI_STATIC_SKILL_SkillType)
+	Local $l_ai_PrioritySkillType[] = [$GC_I_SKILL_TYPE_WELL, $GC_I_SKILL_TYPE_GLYPH, $GC_I_SKILL_TYPE_PREPARATION, $GC_I_SKILL_TYPE_ITEM_SPELL]
+
 	; Check each skill slot
 	For $l_i_Slot = 1 To 8
 		If Not UAI_CanCast($l_i_Slot) Then ContinueLoop
 		Local $l_i_Special = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_Special)
 		Local $l_i_Effect2 = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_Effect2)
+		Local $l_i_Type = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillType)
 
 		; Check Special flags
 		For $l_i_Flag In $l_ai_PrioritySpecialFlags
@@ -128,6 +132,14 @@ Func UAI_PrioritySkills($a_f_AggroRange = 1320)
 		; Check Effect2 flags
 		For $l_i_Flag In $l_ai_PriorityEffect2Flags
 			If BitAND($l_i_Effect2, $l_i_Flag) Then
+				UAI_CastPrioritySkill($l_i_Slot, $a_f_AggroRange)
+				ExitLoop 2 ; Exit both loops after casting
+			EndIf
+		Next
+
+		; Check SkillType (direct value comparison, not flags)
+		For $l_i_PriorityType In $l_ai_PrioritySkillType
+			If $l_i_Type = $l_i_PriorityType Then
 				UAI_CastPrioritySkill($l_i_Slot, $a_f_AggroRange)
 				ExitLoop 2 ; Exit both loops after casting
 			EndIf

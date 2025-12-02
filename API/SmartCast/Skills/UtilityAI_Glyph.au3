@@ -1,11 +1,17 @@
 #include-once
 
 Func Anti_Glyph()
-
+	Local $l_i_Count = UAI_GetPlayerEffectCount()
+	For $l_i_i = 0 To $l_i_Count - 1
+		Local $l_i_SkillID = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_SkillID]
+		If Skill_IsGlyphType($l_i_SkillID) Then Return True
+	Next
+	Return False
 EndFunc
 
 ; Skill ID: 198 - $GC_I_SKILL_ID_GLYPH_OF_ELEMENTAL_POWER
 Func CanUse_GlyphOfElementalPower()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -19,6 +25,7 @@ EndFunc
 
 ; Skill ID: 199 - $GC_I_SKILL_ID_GLYPH_OF_ENERGY
 Func CanUse_GlyphOfEnergy()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -32,6 +39,7 @@ EndFunc
 
 ; Skill ID: 200 - $GC_I_SKILL_ID_GLYPH_OF_LESSER_ENERGY
 Func CanUse_GlyphOfLesserEnergy()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -45,6 +53,7 @@ EndFunc
 
 ; Skill ID: 201 - $GC_I_SKILL_ID_GLYPH_OF_CONCENTRATION
 Func CanUse_GlyphOfConcentration()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -58,6 +67,7 @@ EndFunc
 
 ; Skill ID: 202 - $GC_I_SKILL_ID_GLYPH_OF_SACRIFICE
 Func CanUse_GlyphOfSacrifice()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -71,6 +81,7 @@ EndFunc
 
 ; Skill ID: 203 - $GC_I_SKILL_ID_GLYPH_OF_RENEWAL
 Func CanUse_GlyphOfRenewal()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -84,6 +95,7 @@ EndFunc
 
 ; Skill ID: 1008 - $GC_I_SKILL_ID_HIDDEN_ROCK
 Func CanUse_HiddenRock()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -97,6 +109,7 @@ EndFunc
 
 ; Skill ID: 1096 - $GC_I_SKILL_ID_GLYPH_OF_ESSENCE
 Func CanUse_GlyphOfEssence()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -110,6 +123,7 @@ EndFunc
 
 ; Skill ID: 1376 - $GC_I_SKILL_ID_GLYPH_OF_RESTORATION
 Func CanUse_GlyphOfRestoration()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -123,6 +137,7 @@ EndFunc
 
 ; Skill ID: 2002 - $GC_I_SKILL_ID_GLYPH_OF_SWIFTNESS
 Func CanUse_GlyphOfSwiftness()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -136,6 +151,7 @@ EndFunc
 
 ; Skill ID: 2060 - $GC_I_SKILL_ID_GLYPH_OF_IMMOLATION
 Func CanUse_GlyphOfImmolation()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -149,6 +165,7 @@ EndFunc
 
 ; Skill ID: 2250 - $GC_I_SKILL_ID_POLYMOCK_GLYPH_OF_CONCENTRATION
 Func CanUse_PolymockGlyphOfConcentration()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 
@@ -162,6 +179,7 @@ EndFunc
 
 ; Skill ID: 2252 - $GC_I_SKILL_ID_POLYMOCK_GLYPH_OF_POWER
 Func CanUse_PolymockGlyphOfPower()
+	If Anti_Glyph() Then Return False
 	Return True
 EndFunc
 

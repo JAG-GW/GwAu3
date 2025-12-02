@@ -1,11 +1,17 @@
 #include-once
 
 Func Anti_Preparation()
-
+	Local $l_i_Count = UAI_GetPlayerEffectCount()
+	For $l_i_i = 0 To $l_i_Count - 1
+		Local $l_i_SkillID = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_SkillID]
+		If Skill_IsPreparationType($l_i_SkillID) Then Return True
+	Next
+	Return False
 EndFunc
 
 ; Skill ID: 429 - $GC_I_SKILL_ID_MELANDRUS_ARROWS
 Func CanUse_MelandrusArrows()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -15,6 +21,7 @@ EndFunc
 
 ; Skill ID: 430 - $GC_I_SKILL_ID_MARKSMANS_WAGER
 Func CanUse_MarksmansWager()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -24,6 +31,7 @@ EndFunc
 
 ; Skill ID: 431 - $GC_I_SKILL_ID_IGNITE_ARROWS
 Func CanUse_IgniteArrows()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -37,6 +45,7 @@ EndFunc
 
 ; Skill ID: 432 - $GC_I_SKILL_ID_READ_THE_WIND
 Func CanUse_ReadTheWind()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -50,6 +59,7 @@ EndFunc
 
 ; Skill ID: 433 - $GC_I_SKILL_ID_KINDLE_ARROWS
 Func CanUse_KindleArrows()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -63,6 +73,7 @@ EndFunc
 
 ; Skill ID: 434 - $GC_I_SKILL_ID_CHOKING_GAS
 Func CanUse_ChokingGas()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -76,6 +87,7 @@ EndFunc
 
 ; Skill ID: 435 - $GC_I_SKILL_ID_APPLY_POISON
 Func CanUse_ApplyPoison()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -89,6 +101,7 @@ EndFunc
 
 ; Skill ID: 893 - $GC_I_SKILL_ID_SEEKING_ARROWS
 Func CanUse_SeekingArrows()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -102,6 +115,7 @@ EndFunc
 
 ; Skill ID: 946 - $GC_I_SKILL_ID_TRAPPERS_FOCUS
 Func CanUse_TrappersFocus()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -111,6 +125,7 @@ EndFunc
 
 ; Skill ID: 1007 - $GC_I_SKILL_ID_YELLOW_SNOW
 Func CanUse_YellowSnow()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -124,6 +139,7 @@ EndFunc
 
 ; Skill ID: 1181 - $GC_I_SKILL_ID_CORRUPTED_BREATH
 Func CanUse_CorruptedBreath()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -137,6 +153,7 @@ EndFunc
 
 ; Skill ID: 1199 - $GC_I_SKILL_ID_GLASS_ARROWS
 Func CanUse_GlassArrows()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -150,6 +167,7 @@ EndFunc
 
 ; Skill ID: 1470 - $GC_I_SKILL_ID_BARBED_ARROWS
 Func CanUse_BarbedArrows()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -163,6 +181,7 @@ EndFunc
 
 ; Skill ID: 1723 - $GC_I_SKILL_ID_DISRUPTING_ACCURACY
 Func CanUse_DisruptingAccuracy()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -176,6 +195,7 @@ EndFunc
 
 ; Skill ID: 2068 - $GC_I_SKILL_ID_RAPID_FIRE
 Func CanUse_RapidFire()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -189,6 +209,7 @@ EndFunc
 
 ; Skill ID: 2145 - $GC_I_SKILL_ID_EXPERT_FOCUS
 Func CanUse_ExpertFocus()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -202,6 +223,7 @@ EndFunc
 
 ; Skill ID: 2969 - $GC_I_SKILL_ID_READ_THE_WIND_PvP
 Func CanUse_ReadTheWindPvP()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
@@ -211,6 +233,7 @@ EndFunc
 
 ; Skill ID: 3145 - $GC_I_SKILL_ID_GLASS_ARROWS_PvP
 Func CanUse_GlassArrowsPvP()
+	If Anti_Preparation() Then Return False
 	Return True
 EndFunc
 
