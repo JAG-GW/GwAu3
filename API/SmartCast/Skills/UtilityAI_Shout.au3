@@ -17,7 +17,7 @@ Func CanUse_ToTheLimit()
 EndFunc
 
 Func BestTarget_ToTheLimit($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_IWillAvengeYou()
@@ -30,7 +30,7 @@ Func BestTarget_IWillAvengeYou($a_f_AggroRange)
 	; Shout. For each dead ally, you gain 10 seconds of +3...6...7 Health regeneration and your attack speed increases by 25%.
 	; Concise description
 	; Shout. You have +3...6...7 Health regeneration and attack 25% faster (10 seconds for each dead ally).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ForGreatJustice()
@@ -39,7 +39,7 @@ Func CanUse_ForGreatJustice()
 EndFunc
 
 Func BestTarget_ForGreatJustice($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_WatchYourself()
@@ -52,7 +52,7 @@ Func BestTarget_WatchYourself($a_f_AggroRange)
 	; Shout. Party members within earshot gain +5...21...25 armor for 10 seconds. This shout ends after 10 incoming attacks.
 	; Concise description
 	; Shout. (10 seconds.) Party members in earshot have +5...21...25 armor. Ends after 10 incoming attacks.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Charge()
@@ -65,7 +65,7 @@ Func BestTarget_Charge($a_f_AggroRange)
 	; Elite Shout. Allies in earshot lose the Crippled condition. For 5...11...13 seconds, these allies move 33% faster.
 	; Concise description
 	; Elite Shout. (5...11...13 seconds.) Allies in earshot move 33% faster. Initial effect: these allies lose the Crippled condition.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_VictoryIsMine()
@@ -74,7 +74,7 @@ Func CanUse_VictoryIsMine()
 EndFunc
 
 Func BestTarget_VictoryIsMine($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FearMe()
@@ -87,7 +87,7 @@ Func BestTarget_FearMe($a_f_AggroRange)
 	; Shout. All nearby foes lose 1...3...4 Energy. For 1...12...15 second[s], your melee attacks gain +5...25...30% chance of a critical hit against stationary foes.
 	; Concise description
 	; Shout. (1...12...15 second[s].) You have +5...25...30% chance of a critical hit with melee attacks against stationary foes. Initial effect: nearby foes lose 1...3...4 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ShieldsUp()
@@ -100,7 +100,7 @@ Func BestTarget_ShieldsUp($a_f_AggroRange)
 	; Shout. For 5...10...11 seconds, you and all party members within earshot gain +60 armor against incoming projectile attacks.
 	; Concise description
 	; Shout. (5...10...11 seconds.) Party members in earshot have +60 armor against projectile attacks.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_IWillSurvive()
@@ -113,7 +113,7 @@ Func BestTarget_IWillSurvive($a_f_AggroRange)
 	; Shout. You gain +3 Health regeneration for each condition you are suffering. This regeneration expires after 5...10...11 seconds.
 	; Concise description
 	; Shout. (5...10...11 seconds.) You have +3 Health regeneration for each condition on you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_DontBelieveTheirLies()
@@ -122,7 +122,7 @@ Func CanUse_DontBelieveTheirLies()
 EndFunc
 
 Func BestTarget_DontBelieveTheirLies($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfFerocity()
@@ -135,7 +135,7 @@ Func BestTarget_CallOfFerocity($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">5%...50%
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfProtection()
@@ -148,7 +148,7 @@ Func BestTarget_CallOfProtection($a_f_AggroRange)
 	; Shout. For 120 seconds, your animal companion has a 5...17...20 base damage reduction.
 	; Concise description
 	; Shout. (120 seconds.) Your pet has 5...17...20 damage reduction.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfElementalProtection()
@@ -161,7 +161,7 @@ Func BestTarget_CallOfElementalProtection($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">1...11...14
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfVitality()
@@ -174,7 +174,7 @@ Func BestTarget_CallOfVitality($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">1...11...14
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfHaste()
@@ -187,7 +187,7 @@ Func BestTarget_CallOfHaste($a_f_AggroRange)
 	; Shout. For 30 seconds, your animal companion has a 33% faster attack speed and moves 33% faster.
 	; Concise description
 	; Shout. (30 seconds.) Your pet moves and attacks 33% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfHealing()
@@ -200,7 +200,7 @@ Func BestTarget_CallOfHealing($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">1...11...14
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfResilience()
@@ -213,7 +213,7 @@ Func BestTarget_CallOfResilience($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; Trivia">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfFeeding()
@@ -226,7 +226,7 @@ Func BestTarget_CallOfFeeding($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">1...11...14
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfTheHunter()
@@ -239,7 +239,7 @@ Func BestTarget_CallOfTheHunter($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">5...41...50
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfBrutality()
@@ -252,7 +252,7 @@ Func BestTarget_CallOfBrutality($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">5...41...50
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfDisruption()
@@ -265,7 +265,7 @@ Func BestTarget_CallOfDisruption($a_f_AggroRange)
 	; Ranger
 	; Concise description
 	; green; font-weight: bold;">5...41...50
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SymbioticBond()
@@ -278,7 +278,7 @@ Func BestTarget_SymbioticBond($a_f_AggroRange)
 	; Shout. For 120...264...300 seconds, your animal companion gains 1...3...3 Health regeneration, and half of all damage dealt to your animal companion is redirected to you.
 	; Concise description
 	; Shout. (120...264...300 seconds.) Your pet has +1...3...3 Health regeneration. Half of all damage dealt to your pet is redirected to you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_OtyughsCry()
@@ -287,7 +287,7 @@ Func CanUse_OtyughsCry()
 EndFunc
 
 Func BestTarget_OtyughsCry($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Retreat()
@@ -300,7 +300,7 @@ Func BestTarget_Retreat($a_f_AggroRange)
 	; Shout. If there are any dead allies within earshot, your party moves 33% faster for 5...10...11 seconds.
 	; Concise description
 	; Shout. (5...10...11 seconds.) Party members in earshot move 33% faster. No effect unless there are dead allies within earshot.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_KilroyStonekin()
@@ -313,7 +313,7 @@ Func BestTarget_KilroyStonekin($a_f_AggroRange)
 	; This article is about the NPC. For the quest, see Kilroy Stonekin (quest).
 	; Concise description
 	; This article is about the NPC. For the quest, see Kilroy Stonekin (quest).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_AimTrue()
@@ -322,7 +322,7 @@ Func CanUse_AimTrue()
 EndFunc
 
 Func BestTarget_AimTrue($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Coward()
@@ -335,7 +335,7 @@ Func BestTarget_Coward($a_f_AggroRange)
 	; Elite Shout. If target foe is moving, that foe is knocked down.
 	; Concise description
 	; Elite Shout. Causes knock-down if target foe is moving.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Headshot()
@@ -344,7 +344,7 @@ Func CanUse_Headshot()
 EndFunc
 
 Func BestTarget_Headshot($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_NoneShallPass()
@@ -353,7 +353,7 @@ Func CanUse_NoneShallPass()
 EndFunc
 
 Func BestTarget_NoneShallPass($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_OnYourKnees()
@@ -362,7 +362,7 @@ Func CanUse_OnYourKnees()
 EndFunc
 
 Func BestTarget_OnYourKnees($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_RemoveWithHaste()
@@ -371,7 +371,7 @@ Func CanUse_RemoveWithHaste()
 EndFunc
 
 Func BestTarget_RemoveWithHaste($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_MmmmSnowcone()
@@ -380,7 +380,7 @@ Func CanUse_MmmmSnowcone()
 EndFunc
 
 Func BestTarget_MmmmSnowcone($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_LetsGetEm()
@@ -389,7 +389,7 @@ Func CanUse_LetsGetEm()
 EndFunc
 
 Func BestTarget_LetsGetEm($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_YouWillDie()
@@ -398,7 +398,7 @@ Func CanUse_YouWillDie()
 EndFunc
 
 Func BestTarget_YouWillDie($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SongOfTheMists()
@@ -411,7 +411,7 @@ Func BestTarget_SongOfTheMists($a_f_AggroRange)
 	; Shout. For 10 seconds, each nearby ally gains +6 Energy regeneration. If an ally successfully uses a skill, Song of The Mists ends and steals 20 Health from the nearest foe.
 	; Concise description
 	; Shout. (10 seconds.) +6 Energy regeneration to nearby allies. If an ally successfully uses a skill, Song of The Mists ends and steals 20 Health from the nearest foe.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_PredatoryBond()
@@ -424,7 +424,7 @@ Func BestTarget_PredatoryBond($a_f_AggroRange)
 	; Shout. For 5...17...20 seconds, your animal companion attacks 25% faster and heals you for 1...25...31 Health with each successful attack.
 	; Concise description
 	; Shout. (5...17...20 seconds.) Your pet attacks 25% faster and you gain 1...25...31 Health whenever your pet makes a successful attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_EchoingBanishment()
@@ -437,7 +437,7 @@ Func BestTarget_EchoingBanishment($a_f_AggroRange)
 	; Shout. Target foe is banished to the mists and his spirit bound to Shiro. If the Spirit Binder is destroyed, the spirit is freed.
 	; Concise description
 	; Shout. Target foe is banished to the mists and his spirit bound to Shiro. If the Spirit Binder is destroyed, the spirit is freed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_YoureAllAlone()
@@ -446,7 +446,7 @@ Func CanUse_YoureAllAlone()
 EndFunc
 
 Func BestTarget_YoureAllAlone($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_EnemiesMustDie()
@@ -455,7 +455,7 @@ Func CanUse_EnemiesMustDie()
 EndFunc
 
 Func BestTarget_EnemiesMustDie($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_StrikeAsOne()
@@ -464,7 +464,7 @@ Func CanUse_StrikeAsOne()
 EndFunc
 
 Func BestTarget_StrikeAsOne($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Godspeed()
@@ -477,7 +477,7 @@ Func BestTarget_Godspeed($a_f_AggroRange)
 	; Shout. For 5...17...20 seconds, all allies within earshot move 25% faster while under the effects of an enchantment.
 	; Concise description
 	; Shout. (5...17...20 seconds.) Allies in earshot move 25% faster while enchanted.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_GoForTheEyes()
@@ -486,7 +486,7 @@ Func CanUse_GoForTheEyes()
 EndFunc
 
 Func BestTarget_GoForTheEyes($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_BraceYourself()
@@ -499,7 +499,7 @@ Func BestTarget_BraceYourself($a_f_AggroRange)
 	; Shout. For 5...13...15 seconds, the next time target other ally would be knocked down, all nearby foes take 15...63...75 damage instead.
 	; Concise description
 	; Shout. (5...13...15 seconds.) Prevents the next knock-down and deals 15...63...75 damage to all foes near target ally. Cannot self-target.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_StandYourGround()
@@ -508,7 +508,7 @@ Func CanUse_StandYourGround()
 EndFunc
 
 Func BestTarget_StandYourGround($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_LeadTheWay()
@@ -517,7 +517,7 @@ Func CanUse_LeadTheWay()
 EndFunc
 
 Func BestTarget_LeadTheWay($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_MakeHaste()
@@ -526,7 +526,7 @@ Func CanUse_MakeHaste()
 EndFunc
 
 Func BestTarget_MakeHaste($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_WeShallReturn()
@@ -536,7 +536,7 @@ Func CanUse_WeShallReturn()
 EndFunc
 
 Func BestTarget_WeShallReturn($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_NeverGiveUp()
@@ -545,7 +545,7 @@ Func CanUse_NeverGiveUp()
 EndFunc
 
 Func BestTarget_NeverGiveUp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_HelpMe()
@@ -554,7 +554,7 @@ Func CanUse_HelpMe()
 EndFunc
 
 Func BestTarget_HelpMe($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FallBack()
@@ -567,7 +567,7 @@ Func BestTarget_FallBack($a_f_AggroRange)
 	; Shout. For 4...9...10 seconds, all allies within earshot gain 5...13...15 Health per second while moving and move 33% faster. "Fall Back!" ends on an ally affected by this shout when that ally successfully hits with an attack.
 	; Concise description
 	; Shout. (4...9...10 seconds.) Allies in earshot gain 5...13...15 Health per second while moving and move 33% faster. Ends for an ally if that ally hits with an attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Incoming()
@@ -580,7 +580,7 @@ Func BestTarget_Incoming($a_f_AggroRange)
 	; Elite Shout. For 4...9...10 seconds, all allies within earshot move 33% faster, and gain 5...13...15 Health while moving.
 	; Concise description
 	; Elite Shout. (4...9...10 seconds) Allies in earshot move 33% faster and gain 5...13...15 Health while moving.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TheyreOnFire()
@@ -590,7 +590,7 @@ Func CanUse_TheyreOnFire()
 EndFunc
 
 Func BestTarget_TheyreOnFire($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_NeverSurrender()
@@ -599,7 +599,7 @@ Func CanUse_NeverSurrender()
 EndFunc
 
 Func BestTarget_NeverSurrender($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ItsJustAFleshWound()
@@ -608,7 +608,7 @@ Func CanUse_ItsJustAFleshWound()
 EndFunc
 
 Func BestTarget_ItsJustAFleshWound($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_RemoveQueenWail()
@@ -617,7 +617,7 @@ Func CanUse_RemoveQueenWail()
 EndFunc
 
 Func BestTarget_RemoveQueenWail($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_QueenWail()
@@ -630,7 +630,7 @@ Func BestTarget_QueenWail($a_f_AggroRange)
 	; Monster skill
 	; Concise description
 	; Trivia">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_MakeYourTime()
@@ -643,7 +643,7 @@ Func BestTarget_MakeYourTime($a_f_AggroRange)
 	; Shout. You gain 1 strike of adrenaline for each party member within earshot (maximum 1...4...5 adrenaline).
 	; Concise description
 	; Shout. You gain one adrenaline (maximum 1...4...5) for each party member in earshot.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CantTouchThis()
@@ -652,7 +652,7 @@ Func CanUse_CantTouchThis()
 EndFunc
 
 Func BestTarget_CantTouchThis($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FindTheirWeakness()
@@ -661,7 +661,7 @@ Func CanUse_FindTheirWeakness()
 EndFunc
 
 Func BestTarget_FindTheirWeakness($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ThePowerIsYours()
@@ -674,7 +674,7 @@ Func BestTarget_ThePowerIsYours($a_f_AggroRange)
 	; Elite Shout. For 3 seconds, all allies within earshot gain 0...1...1 Energy regeneration.
 	; Concise description
 	; Elite Shout. (3 seconds.) Allies within earshot gain 0...1...1 Energy regeneration.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ForgeTheWay()
@@ -683,7 +683,7 @@ Func CanUse_ForgeTheWay()
 EndFunc
 
 Func BestTarget_ForgeTheWay($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SteadyAim()
@@ -696,7 +696,7 @@ Func BestTarget_SteadyAim($a_f_AggroRange)
 	; Shout. For 10 seconds, the next time each ally within earshot throws a snowball, that snowball moves 100% faster.
 	; Concise description
 	; Shout. (10 seconds.) The next time each ally in earshot throws a snowball, that snowball moves 100% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SaveYourselvesLuxon()
@@ -705,7 +705,7 @@ Func CanUse_SaveYourselvesLuxon()
 EndFunc
 
 Func BestTarget_SaveYourselvesLuxon($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SaveYourselvesKurzick()
@@ -714,7 +714,7 @@ Func CanUse_SaveYourselvesKurzick()
 EndFunc
 
 Func BestTarget_SaveYourselvesKurzick($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_IMeantToDoThat()
@@ -723,7 +723,7 @@ Func CanUse_IMeantToDoThat()
 EndFunc
 
 Func BestTarget_IMeantToDoThat($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TheresNothingToFear()
@@ -732,7 +732,7 @@ Func CanUse_TheresNothingToFear()
 EndFunc
 
 Func BestTarget_TheresNothingToFear($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SpiritRoar()
@@ -745,7 +745,7 @@ Func BestTarget_SpiritRoar($a_f_AggroRange)
 	; Shout. This shout deals 50 holy damage to nearby foes, and 25 more holy damage to affected foes that have an enchantment on them.
 	; Concise description
 	; Shout. Deals 50 holy damage to nearby foes, and 25 more holy damage for each enchantment on them.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_VolfenBloodlustCurseOfTheNornbear()
@@ -754,7 +754,7 @@ Func CanUse_VolfenBloodlustCurseOfTheNornbear()
 EndFunc
 
 Func BestTarget_VolfenBloodlustCurseOfTheNornbear($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_RavenShriekAGateTooFar()
@@ -763,7 +763,7 @@ Func CanUse_RavenShriekAGateTooFar()
 EndFunc
 
 Func BestTarget_RavenShriekAGateTooFar($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Tremor()
@@ -776,7 +776,7 @@ Func BestTarget_Tremor($a_f_AggroRange)
 	; Shout. All foes within earshot are knocked down for 4 seconds.
 	; Concise description
 	; Shout. Causes knock-down (4 seconds) to foes in earshot.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ThunderingRoar()
@@ -785,7 +785,7 @@ Func CanUse_ThunderingRoar()
 EndFunc
 
 Func BestTarget_ThunderingRoar($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_DontTrip()
@@ -798,7 +798,7 @@ Func BestTarget_DontTrip($a_f_AggroRange)
 	; Shout. For 3...5 seconds, party members within earshot cannot be knocked down.
 	; Concise description
 	; Shout. (3...5 seconds.) Prevents knock-down; affects party members within earshot.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ByUralsHammer()
@@ -808,7 +808,7 @@ Func CanUse_ByUralsHammer()
 EndFunc
 
 Func BestTarget_ByUralsHammer($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_KraksCharge()
@@ -817,7 +817,7 @@ Func CanUse_KraksCharge()
 EndFunc
 
 Func BestTarget_KraksCharge($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_StandUp()
@@ -826,7 +826,7 @@ Func CanUse_StandUp()
 EndFunc
 
 Func BestTarget_StandUp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FinishHim()
@@ -839,7 +839,7 @@ Func BestTarget_FinishHim($a_f_AggroRange)
 	; "FH" redirects here. For the outpost, see Fishermen's Haven.
 	; Concise description
 	; green; font-weight: bold;">44...80
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_DodgeThis()
@@ -848,7 +848,7 @@ Func CanUse_DodgeThis()
 EndFunc
 
 Func BestTarget_DodgeThis($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_IAmTheStrongest()
@@ -857,7 +857,7 @@ Func CanUse_IAmTheStrongest()
 EndFunc
 
 Func BestTarget_IAmTheStrongest($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_IAmUnstoppable()
@@ -870,7 +870,7 @@ Func BestTarget_IAmUnstoppable($a_f_AggroRange)
 	; Shout. For 16...20 seconds, you have +24 armor and cannot be knocked down or Crippled.
 	; Concise description
 	; Shout. (16...20 seconds.) You have +24 armor and cannot be knocked-down or Crippled.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_YouMoveLikeADwarf()
@@ -883,7 +883,7 @@ Func BestTarget_YouMoveLikeADwarf($a_f_AggroRange)
 	; Shout. Target foe is knocked down and takes 44...80 damage. That foe is also Crippled for 8...15 seconds.
 	; Concise description
 	; Shout. Deals 44...80 damage, causes knock-down, and inflicts Crippled condition (8...15 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_YouAreAllWeaklings()
@@ -896,7 +896,7 @@ Func BestTarget_YouAreAllWeaklings($a_f_AggroRange)
 	; Shout. Target foe and foes adjacent to target are Weakened for 8...12 seconds.
 	; Concise description
 	; Shout. Inflicts Weakness condition (8...12 seconds). Also affects adjacent foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_UrsanRoar()
@@ -909,7 +909,7 @@ Func BestTarget_UrsanRoar($a_f_AggroRange)
 	; Shout. For 2...5 seconds, all enemies within earshot are Weakened and all allies deal +5...15 damage per attack.
 	; Concise description
 	; Shout. (2...5 seconds) Inflicts Weakness condition to foes in earshot. Allies in earshot deal +5...15 damage per attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_VolfenBloodlust()
@@ -922,7 +922,7 @@ Func BestTarget_VolfenBloodlust($a_f_AggroRange)
 	; Shout. For 2...7 seconds, you and all nearby allies attack 33% faster.
 	; Concise description
 	; Shout. (2...7 seconds.) You and nearby allies attack 33% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_RavenShriek()
@@ -935,7 +935,7 @@ Func BestTarget_RavenShriek($a_f_AggroRange)
 	; Shout. Remove Blindness from all allies within earshot. Cause Blindness to nearby foes for 4...10 seconds.
 	; Concise description
 	; Shout. Removes Blindness from allies in earshot. Inflicts Blindness condition (4...10 seconds) to nearby enemies.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_UrsanRoarBloodWashesBlood()
@@ -944,7 +944,7 @@ Func CanUse_UrsanRoarBloodWashesBlood()
 EndFunc
 
 Func BestTarget_UrsanRoarBloodWashesBlood($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_DestroyTheHumans()
@@ -953,7 +953,7 @@ Func CanUse_DestroyTheHumans()
 EndFunc
 
 Func BestTarget_DestroyTheHumans($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TengusMimicry()
@@ -962,7 +962,7 @@ Func CanUse_TengusMimicry()
 EndFunc
 
 Func BestTarget_TengusMimicry($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CallOfHastePvp()
@@ -971,7 +971,7 @@ Func CanUse_CallOfHastePvp()
 EndFunc
 
 Func BestTarget_CallOfHastePvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FormUpAndAdvance()
@@ -980,7 +980,7 @@ Func CanUse_FormUpAndAdvance()
 EndFunc
 
 Func BestTarget_FormUpAndAdvance($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_Advance()
@@ -989,7 +989,7 @@ Func CanUse_Advance()
 EndFunc
 
 Func BestTarget_Advance($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ForElona()
@@ -998,7 +998,7 @@ Func CanUse_ForElona()
 EndFunc
 
 Func BestTarget_ForElona($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CryOfMadness()
@@ -1011,7 +1011,7 @@ Func BestTarget_CryOfMadness($a_f_AggroRange)
 	; Elite Shout. Scream like a madman! Foes in the area lose 10 Energy and all adrenaline. For 10 seconds, allies within earshot move 25% faster and have +5 Health regeneration and +1 Energy regeneration.
 	; Concise description
 	; Elite Shout. Foes in the area lose 10 Energy and all adrenaline. Allies within earshot move 25% faster and have +5 Health regeneration and +1 Energy regeneration. (10 seconds.)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_MotivatingInsults()
@@ -1024,7 +1024,7 @@ Func BestTarget_MotivatingInsults($a_f_AggroRange)
 	; Monster
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ItsGoodToBeKing()
@@ -1033,7 +1033,7 @@ Func CanUse_ItsGoodToBeKing()
 EndFunc
 
 Func BestTarget_ItsGoodToBeKing($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_MaddeningLaughter()
@@ -1046,7 +1046,7 @@ Func BestTarget_MaddeningLaughter($a_f_AggroRange)
 	; Monster
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_WatchYourselfPvp()
@@ -1055,7 +1055,7 @@ Func CanUse_WatchYourselfPvp()
 EndFunc
 
 Func BestTarget_WatchYourselfPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_IncomingPvp()
@@ -1064,7 +1064,7 @@ Func CanUse_IncomingPvp()
 EndFunc
 
 Func BestTarget_IncomingPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_NeverSurrenderPvp()
@@ -1073,7 +1073,7 @@ Func CanUse_NeverSurrenderPvp()
 EndFunc
 
 Func BestTarget_NeverSurrenderPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ForGreatJusticePvp()
@@ -1082,7 +1082,7 @@ Func CanUse_ForGreatJusticePvp()
 EndFunc
 
 Func BestTarget_ForGreatJusticePvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_GoForTheEyesPvp()
@@ -1091,7 +1091,7 @@ Func CanUse_GoForTheEyesPvp()
 EndFunc
 
 Func BestTarget_GoForTheEyesPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_BraceYourselfPvp()
@@ -1100,7 +1100,7 @@ Func CanUse_BraceYourselfPvp()
 EndFunc
 
 Func BestTarget_BraceYourselfPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_CantTouchThisPvp()
@@ -1109,7 +1109,7 @@ Func CanUse_CantTouchThisPvp()
 EndFunc
 
 Func BestTarget_CantTouchThisPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_StandYourGroundPvp()
@@ -1118,7 +1118,7 @@ Func CanUse_StandYourGroundPvp()
 EndFunc
 
 Func BestTarget_StandYourGroundPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_WeShallReturnPvp()
@@ -1128,7 +1128,7 @@ Func CanUse_WeShallReturnPvp()
 EndFunc
 
 Func BestTarget_WeShallReturnPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FindTheirWeaknessPvp()
@@ -1137,7 +1137,7 @@ Func CanUse_FindTheirWeaknessPvp()
 EndFunc
 
 Func BestTarget_FindTheirWeaknessPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_NeverGiveUpPvp()
@@ -1146,7 +1146,7 @@ Func CanUse_NeverGiveUpPvp()
 EndFunc
 
 Func BestTarget_NeverGiveUpPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_HelpMePvp()
@@ -1155,7 +1155,7 @@ Func CanUse_HelpMePvp()
 EndFunc
 
 Func BestTarget_HelpMePvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FallBackPvp()
@@ -1164,7 +1164,7 @@ Func CanUse_FallBackPvp()
 EndFunc
 
 Func BestTarget_FallBackPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_PredatoryBondPvp()
@@ -1173,7 +1173,7 @@ Func CanUse_PredatoryBondPvp()
 EndFunc
 
 Func BestTarget_PredatoryBondPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_StickyGround()
@@ -1186,7 +1186,7 @@ Func BestTarget_StickyGround($a_f_AggroRange)
 	; Agent of the Mad King skill
 	; Concise description
 	; //en.wikipedia.org/wiki/Sic" class="extiw" title="w:Sic">
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SugarShock()
@@ -1199,7 +1199,7 @@ Func BestTarget_SugarShock($a_f_AggroRange)
 	; Shout. Knocks down target foe for 10 seconds.
 	; Concise description
 	; Shout. Causes knock-down (10 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TheMadKingsInfluence()
@@ -1208,7 +1208,7 @@ Func CanUse_TheMadKingsInfluence()
 EndFunc
 
 Func BestTarget_TheMadKingsInfluence($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TheresNotEnoughTime()
@@ -1217,7 +1217,7 @@ Func CanUse_TheresNotEnoughTime()
 EndFunc
 
 Func BestTarget_TheresNotEnoughTime($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_FindTheirWeaknessThackeray()
@@ -1226,7 +1226,7 @@ Func CanUse_FindTheirWeaknessThackeray()
 EndFunc
 
 Func BestTarget_FindTheirWeaknessThackeray($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TheresNothingToFearThackeray()
@@ -1235,7 +1235,7 @@ Func CanUse_TheresNothingToFearThackeray()
 EndFunc
 
 Func BestTarget_TheresNothingToFearThackeray($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TangoDown()
@@ -1244,7 +1244,7 @@ Func CanUse_TangoDown()
 EndFunc
 
 Func BestTarget_TangoDown($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_IllBeBack()
@@ -1253,7 +1253,7 @@ Func CanUse_IllBeBack()
 EndFunc
 
 Func BestTarget_IllBeBack($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_TogetherAsOne()
@@ -1262,5 +1262,5 @@ Func CanUse_TogetherAsOne()
 EndFunc
 
 Func BestTarget_TogetherAsOne($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc

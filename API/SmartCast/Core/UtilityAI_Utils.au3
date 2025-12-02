@@ -35,7 +35,7 @@ EndFunc
 
 ; Get hero ID by hero number (0 = player)
 Func Party_GetHeroID($a_i_HeroNumber)
-	If $a_i_HeroNumber = 0 Then Return Agent_GetMyID()
+	If $a_i_HeroNumber = 0 Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 	Return Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID")
 EndFunc
 
@@ -47,7 +47,7 @@ Func Party_GetMembersArray()
 	$l_ai_ReturnArray[0] = $l_i_PartySize
 
 	; Add player (index 0)
-	$l_ai_ReturnArray[1] = Agent_GetMyID()
+	$l_ai_ReturnArray[1] = UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 
 	; Add heroes
 	Local $l_i_Index = 2

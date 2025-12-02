@@ -320,7 +320,7 @@ Func UAI_GetBestWeaponSetBySkillSlot($a_i_SkillSlot)
 			EndIf
 
 		;--- Shout/Chant/Echo: No specific weapon needed, keep current or use defensive ===
-		Case $GC_I_SKILL_TYPE_SHOUT, $GC_I_SKILL_TYPE_CHANT, $GC_I_SKILL_TYPE_ECHO
+		Case $GC_I_SKILL_TYPE_SHOUT, $GC_I_SKILL_TYPE_CHANT, $GC_I_SKILL_TYPE_ECHO_REFRAIN
 			;Keep current weapon set
 			Return
 
@@ -516,7 +516,7 @@ Func UAI_ChangeWeaponSet($a_i_Set)
 		Core_PerformAction($l_i_SetToUse, $GC_I_CONTROL_TYPE_ACTIVATE)
 ;~ 		Item_SwitchWeaponSet($l_i_SetToUse)
 		Sleep(32)
-	Until UAI_IsOnWeaponSet($a_i_Set) Or TimerDiff($l_i_Deadlock) > 640
+	Until UAI_IsOnWeaponSet($a_i_Set) Or TimerDiff($l_i_Deadlock) > 400
 EndFunc
 
 ;Helper function to search mods in an upgrade array

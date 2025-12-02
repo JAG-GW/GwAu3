@@ -35,7 +35,7 @@ Func UAI_Filter_IsBoss($a_i_AgentID)
 EndFunc
 
 Func UAI_Filter_ExcludeMe($a_i_AgentID)
-	If $a_i_AgentID = Agent_GetMyID() Then Return False
+	If $a_i_AgentID = UAI_GetPlayerInfo($GC_UAI_AGENT_ID) Then Return False
 	Return True
 EndFunc
 

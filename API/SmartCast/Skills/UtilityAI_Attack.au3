@@ -835,7 +835,7 @@ Func CanUse_SiegeAttack4()
 EndFunc
 
 Func BestTarget_SiegeAttack4($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 511 - $GC_I_SKILL_ID_BRUTAL_MAULING
@@ -891,7 +891,7 @@ Func BestTarget_GiantStomp($a_f_AggroRange)
 	; This article is about the Monster skill. For the temporarily available Bonus Mission Pack skill, see Giant Stomp (Turai Ossa).
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 531 - $GC_I_SKILL_ID_AGNARS_RAGE
@@ -901,7 +901,7 @@ Func CanUse_AgnarsRage()
 EndFunc
 
 Func BestTarget_AgnarsRage($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 539 - $GC_I_SKILL_ID_HUNGER_OF_THE_LICH
@@ -925,7 +925,7 @@ Func CanUse_SiegeAttack1()
 EndFunc
 
 Func BestTarget_SiegeAttack1($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 578 - $GC_I_SKILL_ID_SIEGE_ATTACK2
@@ -935,7 +935,7 @@ Func CanUse_SiegeAttack2()
 EndFunc
 
 Func BestTarget_SiegeAttack2($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 775 - $GC_I_SKILL_ID_DEATH_BLOSSOM
@@ -1746,7 +1746,7 @@ Func CanUse_SiegeAttack3()
 EndFunc
 
 Func BestTarget_SiegeAttack3($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1402 - $GC_I_SKILL_ID_CRITICAL_CHOP
@@ -1854,7 +1854,7 @@ Func BestTarget_QuakeOfAhdashim($a_f_AggroRange)
 	; Attack. Players in the area are knocked down for 4 seconds and take 100 damage. If a player is carrying a bundle item, that bundle item is destroyed. This skill cannot be disabled.
 	; Concise description
 	; Attack. Deals 100 damage and knocks-down players in the area (4 seconds). If a player is carrying a bundle item, that bundle item is destroyed. This skill cannot be disabled.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1451 - $GC_I_SKILL_ID_HUNGERS_BITE
@@ -2380,7 +2380,7 @@ Func CanUse_SiegeAttackBombardment()
 EndFunc
 
 Func BestTarget_SiegeAttackBombardment($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1693 - $GC_I_SKILL_ID_COUNTERATTACK
@@ -2912,7 +2912,7 @@ Func BestTarget_ShatteredSpirit($a_f_AggroRange)
 	; Melee Attack. This attack removes 2 hexes on target boss and deals 50 more damage for each hex removed in this way.
 	; Concise description
 	; Melee Attack. This attack removes 2 hexes on target boss. Removal effect: +50 damage for each hex removed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2127 - $GC_I_SKILL_ID_UNSEEN_AGGRESSION
@@ -2926,7 +2926,7 @@ Func BestTarget_UnseenAggression($a_f_AggroRange)
 	; Monster
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2135 - $GC_I_SKILL_ID_TRAMPLING_OX

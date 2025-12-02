@@ -38,7 +38,7 @@ Func UAI_CountAgents($a_i_AgentID = -2, $a_f_Range = 1320, $a_s_Filter = "")
 
     ; Get reference position
     Local $l_f_RefX, $l_f_RefY
-    If $l_i_RefID = Agent_GetMyID() Then
+    If $l_i_RefID = UAI_GetPlayerInfo($GC_UAI_AGENT_ID) Then
         ; Use cached player position
         $l_f_RefX = UAI_GetPlayerX()
         $l_f_RefY = UAI_GetPlayerY()
@@ -323,5 +323,149 @@ Func UAI_PlayerHasOtherMesmerHex($a_i_ExcludeSkillID)
 	Next
 
 	Return False
+EndFunc
+
+; Helper: Find best corpse position for ally support wells
+; Returns player ID if best corpse is nearest, otherwise returns best corpse ID to move toward
+Func UAI_GetBestCorpseForAllySupport($a_f_Range)
+	Local $l_i_BestCorpse = 0
+	Local $l_i_BestCount = 0
+	Local $l_i_NearestCorpse = 0
+	Local $l_f_NearestDist = 999999
+
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		If Not UAI_Filter_IsDeadEnemy($l_i_AgentID) Then ContinueLoop
+
+		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		If $l_f_Distance > $a_f_Range Then ContinueLoop
+
+		; Track nearest corpse
+		If $l_f_Distance < $l_f_NearestDist Then
+			$l_f_NearestDist = $l_f_Distance
+			$l_i_NearestCorpse = $l_i_AgentID
+		EndIf
+
+		; Track best corpse (most allies)
+		Local $l_i_Count = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingAlly")
+
+		If $l_i_Count > $l_i_BestCount Then
+			$l_i_BestCount = $l_i_Count
+			$l_i_BestCorpse = $l_i_AgentID
+		EndIf
+	Next
+
+	If $l_i_BestCount = 0 Then Return 0
+
+	; If best corpse is nearest, return player ID to cast well
+	If $l_i_BestCorpse = $l_i_NearestCorpse Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+
+	; Otherwise move toward best corpse until it becomes nearest
+	If UAI_MoveTowardCorpse($l_i_BestCorpse) Then
+		Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	EndIf
+	Return 0
+EndFunc
+
+Func UAI_GetBestCorpseForEnemyPressure($a_f_Range)
+	Local $l_i_BestCorpse = 0
+	Local $l_i_BestCount = 0
+	Local $l_i_NearestCorpse = 0
+	Local $l_f_NearestDist = 999999
+
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		If Not UAI_Filter_IsDeadEnemy($l_i_AgentID) Then ContinueLoop
+
+		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		If $l_f_Distance > $a_f_Range Then ContinueLoop
+
+		; Track nearest corpse
+		If $l_f_Distance < $l_f_NearestDist Then
+			$l_f_NearestDist = $l_f_Distance
+			$l_i_NearestCorpse = $l_i_AgentID
+		EndIf
+
+		; Track best corpse (most enemies)
+		Local $l_i_Count = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy")
+
+		If $l_i_Count > $l_i_BestCount Then
+			$l_i_BestCount = $l_i_Count
+			$l_i_BestCorpse = $l_i_AgentID
+		EndIf
+	Next
+
+	If $l_i_BestCount = 0 Then Return 0
+
+	; If best corpse is nearest, return player ID to cast well
+	If $l_i_BestCorpse = $l_i_NearestCorpse Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+
+	; Otherwise move toward best corpse until it becomes nearest
+	If UAI_MoveTowardCorpse($l_i_BestCorpse) Then
+		Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	EndIf
+	Return 0
+EndFunc
+
+; Move to the target corpse position so it becomes the nearest one
+; Returns True if successfully positioned (target is now nearest), False otherwise
+Func UAI_MoveTowardCorpse($a_i_TargetCorpseID)
+	Local $l_f_TargetX = UAI_GetAgentInfoByID($a_i_TargetCorpseID, $GC_UAI_AGENT_X)
+	Local $l_f_TargetY = UAI_GetAgentInfoByID($a_i_TargetCorpseID, $GC_UAI_AGENT_Y)
+
+	; Wait until we reach destination or timeout
+	Local $l_i_Timeout = 0
+	Local Const $l_f_ArrivalDist = 80 ; Consider arrived when within 80 units
+	Local Const $l_i_MaxTimeout = 5000 ; Max 5 seconds
+
+	Do
+		Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+		Sleep(32)
+		$l_i_Timeout += 32
+
+		; Update current position
+		Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+		Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+
+		; Check distance to target corpse
+		Local $l_f_DiffX = $l_f_TargetX - $l_f_CurX
+		Local $l_f_DiffY = $l_f_TargetY - $l_f_CurY
+		Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
+
+		; Check if target corpse is now the nearest
+		If UAI_IsCorpseNearest($a_i_TargetCorpseID, $l_f_CurX, $l_f_CurY) Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+
+	Until $l_f_DistToTarget < $l_f_ArrivalDist Or $l_i_Timeout >= $l_i_MaxTimeout
+
+	Return False
+EndFunc
+
+; Check if target corpse is the nearest corpse from given position
+Func UAI_IsCorpseNearest($a_i_TargetCorpseID, $a_f_X, $a_f_Y)
+	Local $l_f_TargetX = UAI_GetAgentInfoByID($a_i_TargetCorpseID, $GC_UAI_AGENT_X)
+	Local $l_f_TargetY = UAI_GetAgentInfoByID($a_i_TargetCorpseID, $GC_UAI_AGENT_Y)
+	Local $l_f_DiffX = $l_f_TargetX - $a_f_X
+	Local $l_f_DiffY = $l_f_TargetY - $a_f_Y
+	Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
+
+	; Check all other corpses
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+		If Not UAI_Filter_IsDeadEnemy($l_i_AgentID) Then ContinueLoop
+		If $l_i_AgentID = $a_i_TargetCorpseID Then ContinueLoop
+
+		Local $l_f_OtherX = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
+		Local $l_f_OtherY = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		Local $l_f_OtherDiffX = $l_f_OtherX - $a_f_X
+		Local $l_f_OtherDiffY = $l_f_OtherY - $a_f_Y
+		Local $l_f_DistToOther = Sqrt($l_f_OtherDiffX * $l_f_OtherDiffX + $l_f_OtherDiffY * $l_f_OtherDiffY)
+
+		; If another corpse is closer, target is not nearest
+		If $l_f_DistToOther < $l_f_DistToTarget Then Return False
+	Next
+
+	Return True
 EndFunc
 #EndRegion

@@ -265,7 +265,7 @@ Func BestTarget_Disappear($a_f_AggroRange)
 	; Mesmer
 	; Concise description
 	; Trivia">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 77 - $GC_I_SKILL_ID_CHAOS_STORM
@@ -343,7 +343,7 @@ Func BestTarget_AnimateBoneHorror($a_f_AggroRange)
 	; Spell. Exploit nearest corpse to animate a level 1...14...17 bone horror.
 	; Concise description
 	; Spell. Creates a level 1...14...17 bone horror. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 84 - $GC_I_SKILL_ID_ANIMATE_BONE_FIEND
@@ -356,7 +356,7 @@ Func BestTarget_AnimateBoneFiend($a_f_AggroRange)
 	; Spell. Exploit nearest corpse to animate a level 1...14...17 bone fiend. Bone fiends can attack at range.
 	; Concise description
 	; Spell. Creates a level 1...14...17 bone fiend that can attack at range. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 85 - $GC_I_SKILL_ID_ANIMATE_BONE_MINIONS
@@ -369,7 +369,7 @@ Func BestTarget_AnimateBoneMinions($a_f_AggroRange)
 	; Spell. Exploit nearest corpse to animate two level 0...10...12 bone minions.
 	; Concise description
 	; Spell. Creates two level 0...10...12 bone minions. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 86 - $GC_I_SKILL_ID_GRENTHS_BALANCE
@@ -409,7 +409,7 @@ Func CanUse_VeratasSacrifice()
 EndFunc
 
 Func BestTarget_VeratasSacrifice($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 95 - $GC_I_SKILL_ID_PUTRID_EXPLOSION
@@ -435,7 +435,7 @@ Func BestTarget_SoulFeast($a_f_AggroRange)
 	; Spell. Exploit nearest corpse to gain 50...234...280 Health.
 	; Concise description
 	; Spell. You gain 50...234...280 Health. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 97 - $GC_I_SKILL_ID_NECROTIC_TRAVERSAL
@@ -448,7 +448,7 @@ Func BestTarget_NecroticTraversal($a_f_AggroRange)
 	; Spell. Exploit a random corpse. You teleport to that corpse's location and all nearby foes become Poisoned for 5...17...20 seconds.
 	; Concise description
 	; Spell. Teleport to a corpse's location. Inflicts Poisoned condition (5...17...20 seconds). Affects all nearby foes. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 98 - $GC_I_SKILL_ID_CONSUME_CORPSE
@@ -461,7 +461,7 @@ Func BestTarget_ConsumeCorpse($a_f_AggroRange)
 	; Spell. Exploit a random corpse. You teleport to that corpse's location and gain 25...85...100 Health and 5...17...20 Energy.
 	; Concise description
 	; Spell. Teleport to a corpse's location. You gain 25...85...100 Health and 5...17...20 Energy. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 102 - $GC_I_SKILL_ID_SHADOW_STRIKE
@@ -526,7 +526,7 @@ Func BestTarget_UnholyFeast($a_f_AggroRange)
 	; Spell. Steal up to 10...54...65 Health from up to 1...3...4 foes  in the area.
 	; Concise description
 	; Spell. Steals 10...54...65 Health from 1...3...4 foe[s] in the area around you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 112 - $GC_I_SKILL_ID_DESECRATE_ENCHANTMENTS
@@ -574,7 +574,7 @@ Func BestTarget_BloodOfTheMaster($a_f_AggroRange)
 	; Spell. All of your undead allies are healed for 30...99...116 Health. You sacrifice an additional 2% maximum Health per minion healed in this way.
 	; Concise description
 	; Spell. Heals your undead servants for 30...99...116. Healing cost: +2% Health sacrifice per servant healed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 133 - $GC_I_SKILL_ID_DARK_PACT
@@ -639,7 +639,7 @@ Func BestTarget_OfferingOfBlood($a_f_AggroRange)
 	; Elite Spell. You gain 8...18...20 Energy.
 	; Concise description
 	; Elite Spell. You gain 8...18...20 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 149 - $GC_I_SKILL_ID_PLAGUE_SENDING
@@ -743,7 +743,7 @@ Func BestTarget_Whirlwind($a_f_AggroRange)
 	; Spell. All adjacent foes take 15...63...75 cold damage. Attacking foes struck by Whirlwind are knocked down. If you are Overcast, this spell strikes nearby instead of adjacent.
 	; Concise description
 	; Spell. Hits foes adjacent to you. Deals 15...63...75 cold damage. Causes knock-down to attacking foes. Strikes nearby instead of adjacent if Overcast.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 167 - $GC_I_SKILL_ID_ERUPTION
@@ -808,7 +808,7 @@ Func BestTarget_Aftershock($a_f_AggroRange)
 	; Spell. Nearby foes are struck for 26...85...100 earth damage. Knocked down foes are struck for 10...56...68 additional earth damage.
 	; Concise description
 	; Spell. Deals 26...85...100 earth damage to nearby foes. Deals 10...56...68 more earth damage to knocked down foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 183 - $GC_I_SKILL_ID_INFERNO
@@ -821,7 +821,7 @@ Func BestTarget_Inferno($a_f_AggroRange)
 	; Spell. All adjacent foes are struck for 30...114...135 fire damage.
 	; Concise description
 	; Spell. Deals 30...114...135 fire damage to foes adjacent to you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 185 - $GC_I_SKILL_ID_MIND_BURN
@@ -873,7 +873,7 @@ Func BestTarget_FlameBurst($a_f_AggroRange)
 	; Spell. All nearby foes are struck for 15...99...120 fire damage.
 	; Concise description
 	; Spell. Deals 15...99...120 fire damage to all foes near you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 189 - $GC_I_SKILL_ID_RODGORTS_INVOCATION
@@ -947,7 +947,7 @@ Func BestTarget_LavaFont($a_f_AggroRange)
 	; Spell. For 5 seconds, foes adjacent to the location where this spell was cast are struck for 5...41...50 fire damage each second. If you are Overcast, this spell strikes nearby foes instead of adjacent ones.
 	; Concise description
 	; Spell. Deals 5...41...50 fire damage each second (5 seconds). Hits foes adjacent to your initial location. If Overcast, range increased to nearby.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 196 - $GC_I_SKILL_ID_SEARING_HEAT
@@ -999,7 +999,7 @@ Func BestTarget_CrystalWave($a_f_AggroRange)
 	; Spell. Foes adjacent to you are struck for 10...58...70 damage but are cured of any negative conditions. Each condition removed deals 5...13...15 damage.
 	; Concise description
 	; Spell. Deals 10...58...70 damage to all foes adjacent to you. Those foes lose all conditions and take 5...13...15 damage for each condition removed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 219 - $GC_I_SKILL_ID_OBSIDIAN_FLAME
@@ -1138,7 +1138,7 @@ Func BestTarget_SymbolOfWrath($a_f_AggroRange)
 	; Spell. For 5 seconds, foes adjacent to the location in which the spell was cast take 8...27...32 holy damage each second.
 	; Concise description
 	; Spell. Deals 8...27...32 holy damage each second (5 seconds). Hits foes adjacent to your initial location.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 252 - $GC_I_SKILL_ID_BANISH
@@ -1216,7 +1216,7 @@ Func BestTarget_DivineHealing($a_f_AggroRange)
 	; Spell. Heals you and party members within earshot for 15...51...60 points.
 	; Concise description
 	; Spell. Heals you and party members within earshot for 15...51...60.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 280 - $GC_I_SKILL_ID_HEAL_AREA
@@ -1229,7 +1229,7 @@ Func BestTarget_HealArea($a_f_AggroRange)
 	; Spell. Heal yourself and all adjacent creatures for 30...150...180 points.
 	; Concise description
 	; Spell. Heals you and adjacent allies and foes for 30...150...180.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 281 - $GC_I_SKILL_ID_ORISON_OF_HEALING
@@ -1290,7 +1290,7 @@ Func BestTarget_HealParty($a_f_AggroRange)
 	; Spell. Heal entire party for 30...66...75 Health.
 	; Concise description
 	; Spell. Heals entire party for 30...66...75.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 292 - $GC_I_SKILL_ID_INFUSE_HEALTH
@@ -1316,7 +1316,7 @@ Func BestTarget_Martyr($a_f_AggroRange)
 	; Elite Spell. Transfer all conditions and their remaining durations from your allies to you.
 	; Concise description
 	; Elite Spell. Transfer all conditions from all allies to you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 301 - $GC_I_SKILL_ID_REMOVE_HEX
@@ -1369,7 +1369,7 @@ Func BestTarget_LightOfDwayna($a_f_AggroRange)
 	; Spell. Resurrect all dead party members in the area. They are returned to life with 25% Health and zero Energy.
 	; Concise description
 	; Spell. Resurrects all dead party members in the area. (25% Health, zero Energy).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 305 - $GC_I_SKILL_ID_RESURRECT
@@ -1446,7 +1446,7 @@ Func CanUse_EruptionEnvironment()
 EndFunc
 
 Func BestTarget_EruptionEnvironment($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 489 - $GC_I_SKILL_ID_FIRE_STORM_ENVIRONMENT
@@ -1455,7 +1455,7 @@ Func CanUse_FireStormEnvironment()
 EndFunc
 
 Func BestTarget_FireStormEnvironment($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 491 - $GC_I_SKILL_ID_FOUNT_OF_MAGUUMA
@@ -1468,7 +1468,7 @@ Func BestTarget_FountOfMaguuma($a_f_AggroRange)
 	; Prophecies
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 492 - $GC_I_SKILL_ID_HEALING_FOUNTAIN
@@ -1481,7 +1481,7 @@ Func BestTarget_HealingFountain($a_f_AggroRange)
 	; Prophecies
 	; Concise description
 	; Related Skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 493 - $GC_I_SKILL_ID_ICY_GROUND
@@ -1494,7 +1494,7 @@ Func BestTarget_IcyGround($a_f_AggroRange)
 	; Core
 	; Concise description
 	; Locations">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 494 - $GC_I_SKILL_ID_MAELSTROM_ENVIRONMENT
@@ -1503,7 +1503,7 @@ Func CanUse_MaelstromEnvironment()
 EndFunc
 
 Func BestTarget_MaelstromEnvironment($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 495 - $GC_I_SKILL_ID_MURSAAT_TOWER_SKILL
@@ -1521,7 +1521,7 @@ Func CanUse_QuicksandEnvironmentEffect()
 EndFunc
 
 Func BestTarget_QuicksandEnvironmentEffect($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 497 - $GC_I_SKILL_ID_CURSE_OF_THE_BLOODSTONE
@@ -1534,7 +1534,7 @@ Func BestTarget_CurseOfTheBloodstone($a_f_AggroRange)
 	; Prophecies
 	; Concise description
 	; Note">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 498 - $GC_I_SKILL_ID_CHAIN_LIGHTNING_ENVIRONMENT
@@ -1543,7 +1543,7 @@ Func CanUse_ChainLightningEnvironment()
 EndFunc
 
 Func BestTarget_ChainLightningEnvironment($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 499 - $GC_I_SKILL_ID_OBELISK_LIGHTNING
@@ -1556,7 +1556,7 @@ Func BestTarget_ObeliskLightning($a_f_AggroRange)
 	; Core
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 500 - $GC_I_SKILL_ID_TAR
@@ -1569,7 +1569,7 @@ Func BestTarget_Tar($a_f_AggroRange)
 	; Core
 	; Concise description
 	; 302px;">
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 525 - $GC_I_SKILL_ID_NIBBLE
@@ -1582,7 +1582,7 @@ Func BestTarget_Nibble($a_f_AggroRange)
 	; Spell. Touch target corpse to gain 20 Health.
 	; Concise description
 	; Touch Spell. Touch target corpse to gain 20 Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 543 - $GC_I_SKILL_ID_GUARDIAN_PACIFY
@@ -1595,7 +1595,7 @@ Func BestTarget_GuardianPacify($a_f_AggroRange)
 	; Spell. Guardians become pacified until attacked.
 	; Concise description
 	; Spell. Guardians become pacified until attacked.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 544 - $GC_I_SKILL_ID_SOUL_VORTEX
@@ -1608,7 +1608,7 @@ Func BestTarget_SoulVortex($a_f_AggroRange)
 	; Spell. (monster only)
 	; Concise description
 	; Spell. (monster only)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 545 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -1671,7 +1671,7 @@ Func BestTarget_Vanish($a_f_AggroRange)
 	; Monster skill
 	; Concise description
 	; 1em; margin-bottom:1em; clear:both;" />
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 571 - $GC_I_SKILL_ID_DISRUPTING_DAGGER
@@ -1706,7 +1706,7 @@ Func BestTarget_DomainOfSkillDamage($a_f_AggroRange)
 	; Prophecies
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Domain_of_Skill_Damage","wgRelevantArticleId":120538,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","mmv.head","mmv.bootstrap.autostart","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 580 - $GC_I_SKILL_ID_DOMAIN_OF_ENERGY_DRAINING
@@ -1719,7 +1719,7 @@ Func BestTarget_DomainOfEnergyDraining($a_f_AggroRange)
 	; Spell. While you are in this area you suffer from Energy degeneration.
 	; Concise description
 	; Spell. While you are in this area you suffer from Energy degeneration.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 581 - $GC_I_SKILL_ID_DOMAIN_OF_ELEMENTS
@@ -1732,7 +1732,7 @@ Func BestTarget_DomainOfElements($a_f_AggroRange)
 	; Spell
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Domain_of_Elements","wgRelevantArticleId":120540,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","mmv.head","mmv.bootstrap.autostart","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 582 - $GC_I_SKILL_ID_DOMAIN_OF_HEALTH_DRAINING
@@ -1745,7 +1745,7 @@ Func BestTarget_DomainOfHealthDraining($a_f_AggroRange)
 	; Spell. While you are in this area you suffer from Health degeneration.
 	; Concise description
 	; Spell. While you are in this area you suffer from Health degeneration.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 583 - $GC_I_SKILL_ID_DOMAIN_OF_SLOW
@@ -1758,7 +1758,7 @@ Func BestTarget_DomainOfSlow($a_f_AggroRange)
 	; Spell. While you are in this area your movement is slowed.
 	; Concise description
 	; Spell. While you are in this area your movement is slowed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 585 - $GC_I_SKILL_ID_SWAMP_WATER
@@ -1771,7 +1771,7 @@ Func BestTarget_SwampWater($a_f_AggroRange)
 	; Prophecies
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 586 - $GC_I_SKILL_ID_JANTHIRS_GAZE
@@ -1780,7 +1780,7 @@ Func CanUse_JanthirsGaze()
 EndFunc
 
 Func BestTarget_JanthirsGaze($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 587 - $GC_I_SKILL_ID_FAKE_SPELL
@@ -1793,7 +1793,7 @@ Func BestTarget_FakeSpell($a_f_AggroRange)
 	; Spell
 	; Concise description
 	; 1em; margin-bottom:1em; clear:both;" />
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 589 - $GC_I_SKILL_ID_STORMCALLER_SKILL
@@ -1802,7 +1802,7 @@ Func CanUse_StormcallerSkill()
 EndFunc
 
 Func BestTarget_StormcallerSkill($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 591 - $GC_I_SKILL_ID_QUEST_SKILL
@@ -1815,7 +1815,7 @@ Func BestTarget_QuestSkill($a_f_AggroRange)
 	; Skill
 	; Concise description
 	; 20251201190841 Cache expiry: 86400 Reduced expiry: false Complications: [] CPU time usage: 0.012 seconds Real time usage: 0.019 seconds Preprocessor visited node count: 270/1000000 Post‐expand include size: 1220/2097152 bytes Template argument size: 218/2097152 bytes Highest expansion depth: 7/100 Expensive parser function count: 0/100 Unstrip recursion depth: 0/20 Unstrip post‐expand size: 0/5000000 bytes ExtLoops count: 0/1000 -->
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 592 - $GC_I_SKILL_ID_RURIK_MUST_LIVE
@@ -1828,7 +1828,7 @@ Func BestTarget_RurikMustLive($a_f_AggroRange)
 	; Spell
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Rurik_Must_Live","wgRelevantArticleId":244783,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","mmv.head","mmv.bootstrap.autostart","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 595 - $GC_I_SKILL_ID_RESTORE_LIFE_MONSTER_SKILL
@@ -1904,7 +1904,7 @@ Func CanUse_SorrowsFlame()
 EndFunc
 
 Func BestTarget_SorrowsFlame($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 797 - $GC_I_SKILL_ID_SORROWS_FIST
@@ -1913,7 +1913,7 @@ Func CanUse_SorrowsFist()
 EndFunc
 
 Func BestTarget_SorrowsFist($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 798 - $GC_I_SKILL_ID_BLAST_FURNACE
@@ -1926,7 +1926,7 @@ Func BestTarget_BlastFurnace($a_f_AggroRange)
 	; Monster
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 799 - $GC_I_SKILL_ID_BEGUILING_HAZE
@@ -1952,7 +1952,7 @@ Func BestTarget_AnimateVampiricHorror($a_f_AggroRange)
 	; Spell. Exploit nearest corpse to animate a level 1...14...17 Vampiric Horror. Whenever a Vampiric Horror you control deals damage, you gain the same amount of Health.
 	; Concise description
 	; Spell. Creates a level 1...14...17 vampiric horror. You gain Health equal to the damage it deals. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 817 - $GC_I_SKILL_ID_DISCORD
@@ -2017,7 +2017,7 @@ Func BestTarget_AnimateFleshGolem($a_f_AggroRange)
 	; Elite Spell. Exploit nearest corpse to animate a level 3...21...25 Flesh Golem. The Flesh Golem leaves an exploitable corpse. You can have only one Flesh Golem at a time.
 	; Concise description
 	; Elite Spell. Creates a level 3...21...25 flesh golem which leaves a fresh corpse when it dies. Exploits a fresh corpse. You can have only one flesh golem at a time.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 836 - $GC_I_SKILL_ID_RIDE_THE_LIGHTNING
@@ -2043,7 +2043,7 @@ Func BestTarget_PoisonedHeart($a_f_AggroRange)
 	; Spell. You and all adjacent foes are Poisoned for 5...13...15 seconds.
 	; Concise description
 	; Spell. Inflicts Poisoned condition (5...13...15 seconds) to adjacent foes. You are also Poisoned.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 841 - $GC_I_SKILL_ID_FETID_GROUND
@@ -2117,7 +2117,7 @@ Func BestTarget_Chomper($a_f_AggroRange)
 	; Spell. Chomper
 	; Concise description
 	; Spell. Chomper
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 858 - $GC_I_SKILL_ID_DANCING_DAGGERS
@@ -2396,7 +2396,7 @@ Func BestTarget_Shockwave($a_f_AggroRange)
 	; Elite Spell. All foes in the area take 15...51...60 earth damage and are Weakened for 1...8...10 second[s]. Nearby foes also take +15...51...60 earth damage and have Cracked Armor for 1...8...10 second[s]. Adjacent foes suffer the previous effects, take +15...51...60 earth damage, and are Blinded for 1...8...10 second[s].
 	; Concise description
 	; Elite Spell. Foes in the area take 15...51...60 earth damage and are Weakened (1...8...10 second[s]). Nearby foes also take +15...51...60 earth damage and have Cracked Armor (1...8...10 second[s]). Adjacent foes also take +15...51...60 earth damage and are Blinded (1...8...10 second[s]).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 940 - $GC_I_SKILL_ID_CRY_OF_LAMENT
@@ -2409,7 +2409,7 @@ Func BestTarget_CryOfLament($a_f_AggroRange)
 	; Monk
 	; Concise description
 	; green; font-weight: bold;">10...34...40
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 941 - $GC_I_SKILL_ID_BLESSED_LIGHT
@@ -2448,7 +2448,7 @@ Func BestTarget_Extinguish($a_f_AggroRange)
 	; Spell. Remove one condition from each party member. Party members relieved of Burning are healed for 10...82...100 Health.
 	; Concise description
 	; Spell. Affects all party members. Removes one condition. Party members relieved of Burning are healed for 10...82...100.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 952 - $GC_I_SKILL_ID_DEATHS_CHARGE
@@ -2526,7 +2526,7 @@ Func BestTarget_ReleaseEnchantments($a_f_AggroRange)
 	; Spell. Lose all enchantments. Each party member is healed for 5...29...35 Health for each Monk enchantment lost.
 	; Concise description
 	; Spell. Removes all of your enchantments. Heals all party members for 5...29...35 for each Monk Enchantment removed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 962 - $GC_I_SKILL_ID_SPIRIT_TRANSFER
@@ -2548,7 +2548,7 @@ Func CanUse_ArchemorusStrike()
 EndFunc
 
 Func BestTarget_ArchemorusStrike($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 966 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_1
@@ -2557,7 +2557,7 @@ Func CanUse_SpearOfArchemorusLevel1()
 EndFunc
 
 Func BestTarget_SpearOfArchemorusLevel1($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 967 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_2
@@ -2566,7 +2566,7 @@ Func CanUse_SpearOfArchemorusLevel2()
 EndFunc
 
 Func BestTarget_SpearOfArchemorusLevel2($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 968 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_3
@@ -2575,7 +2575,7 @@ Func CanUse_SpearOfArchemorusLevel3()
 EndFunc
 
 Func BestTarget_SpearOfArchemorusLevel3($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 969 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_4
@@ -2584,7 +2584,7 @@ Func CanUse_SpearOfArchemorusLevel4()
 EndFunc
 
 Func BestTarget_SpearOfArchemorusLevel4($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 970 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_5
@@ -2593,7 +2593,7 @@ Func CanUse_SpearOfArchemorusLevel5()
 EndFunc
 
 Func BestTarget_SpearOfArchemorusLevel5($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 971 - $GC_I_SKILL_ID_ARGOS_CRY
@@ -2615,7 +2615,7 @@ Func BestTarget_JadeFury($a_f_AggroRange)
 	; Spell. All foes in the area take 50 damage, are knocked down, and then take an additional 150 damage.
 	; Concise description
 	; Spell. Deals 50 damage, causes knock-down, and then deals an additional 150 damage. Affects foes in the area.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 973 - $GC_I_SKILL_ID_BLINDING_POWDER
@@ -2654,7 +2654,7 @@ Func BestTarget_FeastOfSouls($a_f_AggroRange)
 	; Spell. Destroy all nearby allies' spirits. For each spirit destroyed in this way, all party members are healed for 50...90...100 Health.
 	; Concise description
 	; Spell. Heals all party members for 50...90...100 for each nearby allied spirit. All nearby allied spirits are destroyed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 985 - $GC_I_SKILL_ID_CALTROPS
@@ -2741,7 +2741,7 @@ Func BestTarget_HolidayBlues($a_f_AggroRange)
 	; Spell. Sacrifice 50% maximum Health. All nearby foes take 50 damage, and you bring the Holiday Blues to this location. For 30 seconds, foes within the area suffer -15 Health degeneration.
 	; Concise description
 	; Spell. Deals 50 damage to nearby foes. Foes within the area have -15 Health degeneration (30 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1015 - $GC_I_SKILL_ID_FLURRY_OF_ICE
@@ -2880,7 +2880,7 @@ Func BestTarget_CelestialHaste($a_f_AggroRange)
 	; Spell. For 15 seconds, your entire party has 50% faster casting and all skills recharge 25% faster.
 	; Concise description
 	; Spell. (15 seconds.) Affects all party members. 50% faster casting. 25% faster skill recharge.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1061 - $GC_I_SKILL_ID_FEEDBACK
@@ -3041,7 +3041,7 @@ Func BestTarget_SecondWind($a_f_AggroRange)
 	; Elite Spell. You gain 1 Energy and 5 Health for each point of Energy restricted by Overcast. You lose all enchantments.
 	; Concise description
 	; Elite Spell. You gain 1 Energy and 5 Health for each point of Overcast. You lose all enchantments.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1094 - $GC_I_SKILL_ID_BREATH_OF_FIRE
@@ -3089,7 +3089,7 @@ Func BestTarget_ShieldOfSaintViktor($a_f_AggroRange)
 	; Spell. You are protected by the Shield of Saint Viktor. 80...1280 damage is absorbed.
 	; Concise description
 	; Spell. You are protected by the Shield of Saint Viktor. 80...1280 damage is absorbed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1107 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_1
@@ -3098,7 +3098,7 @@ Func CanUse_UrnOfSaintViktorLevel1()
 EndFunc
 
 Func BestTarget_UrnOfSaintViktorLevel1($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1108 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_2
@@ -3107,7 +3107,7 @@ Func CanUse_UrnOfSaintViktorLevel2()
 EndFunc
 
 Func BestTarget_UrnOfSaintViktorLevel2($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1109 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_3
@@ -3116,7 +3116,7 @@ Func CanUse_UrnOfSaintViktorLevel3()
 EndFunc
 
 Func BestTarget_UrnOfSaintViktorLevel3($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1110 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_4
@@ -3125,7 +3125,7 @@ Func CanUse_UrnOfSaintViktorLevel4()
 EndFunc
 
 Func BestTarget_UrnOfSaintViktorLevel4($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1111 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_5
@@ -3134,7 +3134,7 @@ Func CanUse_UrnOfSaintViktorLevel5()
 EndFunc
 
 Func BestTarget_UrnOfSaintViktorLevel5($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1113 - $GC_I_SKILL_ID_KIRINS_WRATH
@@ -3143,7 +3143,7 @@ Func CanUse_KirinsWrath()
 EndFunc
 
 Func BestTarget_KirinsWrath($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1117 - $GC_I_SKILL_ID_HEAVENS_DELIGHT
@@ -3156,7 +3156,7 @@ Func BestTarget_HeavensDelight($a_f_AggroRange)
 	; Spell. Heals you and party members within earshot for 15...51...60 points.
 	; Concise description
 	; Spell. Heals you and party members within earshot for 15...51...60 points.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1118 - $GC_I_SKILL_ID_HEALING_BURST
@@ -3178,7 +3178,7 @@ Func CanUse_KareisHealingCircle()
 EndFunc
 
 Func BestTarget_KareisHealingCircle($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1120 - $GC_I_SKILL_ID_JAMEIS_GAZE
@@ -3262,7 +3262,7 @@ Func CanUse_CathedralCollapse2()
 EndFunc
 
 Func BestTarget_CathedralCollapse2($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1175 - $GC_I_SKILL_ID_BLOOD_OF_ZU_HELTZER
@@ -3275,7 +3275,7 @@ Func BestTarget_BloodOfZuHeltzer($a_f_AggroRange)
 	; Spell. Magical barriers put in place by a zu Heltzer family member are opened.
 	; Concise description
 	; Spell. Magical barriers put in place by a zu Heltzer family member are opened.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1183 - $GC_I_SKILL_ID_CORRUPTED_DRAGON_SPORES
@@ -3314,7 +3314,7 @@ Func BestTarget_OfRoyalBlood($a_f_AggroRange)
 	; Monster
 	; Concise description
 	; 20251201191131 Cache expiry: 86400 Reduced expiry: false Complications: [] CPU time usage: 0.016 seconds Real time usage: 0.023 seconds Preprocessor visited node count: 292/1000000 Post‐expand include size: 2195/2097152 bytes Template argument size: 574/2097152 bytes Highest expansion depth: 7/100 Expensive parser function count: 0/100 Unstrip recursion depth: 0/20 Unstrip post‐expand size: 0/5000000 bytes ExtLoops count: 0/1000 -->
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1190 - $GC_I_SKILL_ID_PASSAGE_TO_TAHNNAKAI
@@ -3323,7 +3323,7 @@ Func CanUse_PassageToTahnnakai()
 EndFunc
 
 Func BestTarget_PassageToTahnnakai($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1215 - $GC_I_SKILL_ID_CLAMOR_OF_SOULS
@@ -3403,7 +3403,7 @@ Func BestTarget_SpiritSiphon($a_f_AggroRange)
 	; This article is about the Factions skill. For the version used by Master Riyo, see Spirit Siphon (Master Riyo).
 	; Concise description
 	; green; font-weight: bold;">15...43...50
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1233 - $GC_I_SKILL_ID_SOOTHING_MEMORIES
@@ -3438,7 +3438,7 @@ Func CanUse_ArchemorusStrikeCelestialSummoning()
 EndFunc
 
 Func BestTarget_ArchemorusStrikeCelestialSummoning($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1243 - $GC_I_SKILL_ID_SHIELD_OF_SAINT_VIKTOR_CELESTIAL_SUMMONING
@@ -3447,7 +3447,7 @@ Func CanUse_ShieldOfSaintViktorCelestialSummoning()
 EndFunc
 
 Func BestTarget_ShieldOfSaintViktorCelestialSummoning($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1245 - $GC_I_SKILL_ID_GAZE_FROM_BEYOND
@@ -3469,7 +3469,7 @@ Func BestTarget_HealingRing($a_f_AggroRange)
 	; Spell. Heal adjacent creatures for 30...150...180 Health. The caster is not healed.
 	; Concise description
 	; Spell. Heals adjacent allies and foes for 30...150...180. The caster is not healed.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1263 - $GC_I_SKILL_ID_RENEW_LIFE
@@ -3514,7 +3514,7 @@ Func CanUse_BattleCry2()
 EndFunc
 
 Func BestTarget_BattleCry2($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1278 - $GC_I_SKILL_ID_ELEMENTAL_DEFENSE_ZONE
@@ -3527,7 +3527,7 @@ Func BestTarget_ElementalDefenseZone($a_f_AggroRange)
 	; Factions
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1279 - $GC_I_SKILL_ID_MELEE_DEFENSE_ZONE
@@ -3540,7 +3540,7 @@ Func BestTarget_MeleeDefenseZone($a_f_AggroRange)
 	; Factions
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1283 - $GC_I_SKILL_ID_TURRET_ARROW
@@ -3553,7 +3553,7 @@ Func BestTarget_TurretArrow($a_f_AggroRange)
 	; Monster
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1284 - $GC_I_SKILL_ID_BLOOD_FLOWER_SKILL
@@ -3562,7 +3562,7 @@ Func CanUse_BloodFlowerSkill()
 EndFunc
 
 Func BestTarget_BloodFlowerSkill($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1285 - $GC_I_SKILL_ID_FIRE_FLOWER_SKILL
@@ -3571,7 +3571,7 @@ Func CanUse_FireFlowerSkill()
 EndFunc
 
 Func BestTarget_FireFlowerSkill($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1286 - $GC_I_SKILL_ID_POISON_ARROW_FLOWER
@@ -3580,7 +3580,7 @@ Func CanUse_PoisonArrowFlower()
 EndFunc
 
 Func BestTarget_PoisonArrowFlower($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1305 - $GC_I_SKILL_ID_SHIELDING_URN_SKILL
@@ -3589,7 +3589,7 @@ Func CanUse_ShieldingUrnSkill()
 EndFunc
 
 Func BestTarget_ShieldingUrnSkill($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1318 - $GC_I_SKILL_ID_FIREBALL_OBELISK
@@ -3598,7 +3598,7 @@ Func CanUse_FireballObelisk()
 EndFunc
 
 Func BestTarget_FireballObelisk($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1333 - $GC_I_SKILL_ID_EXTEND_CONDITIONS
@@ -3728,7 +3728,7 @@ Func BestTarget_AnimateShamblingHorror($a_f_AggroRange)
 	; Spell. Exploit nearest corpse to create a level 1...14...17 shambling horror. When the shambling horror dies, it is replaced by a level 0...12...15 jagged horror that causes Bleeding with each of its attacks.
 	; Concise description
 	; Spell. Creates a level 1...14...17 shambling horror. When the shambling horror dies, it is replaced by a level 0...12...15 jagged horror that causes Bleeding with each of its attacks. Exploits a fresh corpse.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1352 - $GC_I_SKILL_ID_ORDER_OF_UNDEATH
@@ -3741,7 +3741,7 @@ Func BestTarget_OrderOfUndeath($a_f_AggroRange)
 	; Elite Spell. For 5 seconds, your minions deal +3...13...16 damage, but you lose 2% of your maximum Health whenever one of your minions hits with an attack.
 	; Concise description
 	; Elite Spell. (5 seconds.) Your undead servants deal +3...13...16 damage. You lose 2% of your maximum Health whenever your servants hit.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1353 - $GC_I_SKILL_ID_PUTRID_FLESH
@@ -3876,7 +3876,7 @@ Func BestTarget_LightOfDeliverance($a_f_AggroRange)
 	; Elite Spell. All party members are healed for 5...57...70 Health.
 	; Concise description
 	; Elite Spell. Heals entire party for 5...57...70.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1401 - $GC_I_SKILL_ID_MENDING_TOUCH
@@ -3902,7 +3902,7 @@ Func BestTarget_StopPump($a_f_AggroRange)
 	; Monster skill
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Stop_Pump","wgRelevantArticleId":282756,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","mmv.head","mmv.bootstrap.autostart","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1430 - $GC_I_SKILL_ID_WAVE_OF_TORMENT
@@ -3915,7 +3915,7 @@ Func BestTarget_WaveOfTorment($a_f_AggroRange)
 	; Spell. All enemies in the area are hit for 150 damage.
 	; Concise description
 	; Spell. Deals 150 damage to all foes in the area.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1434 - $GC_I_SKILL_ID_CORRUPTED_HEALING
@@ -3941,7 +3941,7 @@ Func BestTarget_SummonTorment($a_f_AggroRange)
 	; Spell. Any nearby rifts or altars become much more Tormented
 	; Concise description
 	; Spell. Any nearby rifts or altars become much more Tormented.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1479 - $GC_I_SKILL_ID_OFFERING_OF_SPIRIT
@@ -3954,7 +3954,7 @@ Func BestTarget_OfferingOfSpirit($a_f_AggroRange)
 	; This article is about the Nightfall skill. For the temporarily available Bonus Mission Pack skill, see Offering of Spirit (Togo).
 	; Concise description
 	; green; font-weight: bold;">8...15...17
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1482 - $GC_I_SKILL_ID_RECLAIM_ESSENCE
@@ -3967,7 +3967,7 @@ Func BestTarget_ReclaimEssence($a_f_AggroRange)
 	; Elite Spell. All of your Spirits die. You gain 5...17...20 Energy and all of your Binding Rituals are recharged if a Spirit died in this way.
 	; Concise description
 	; Elite Spell. All of your Spirits die. If a Spirit dies in this way, you gain 5...17...20 Energy and all of your Binding Rituals are recharged.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1491 - $GC_I_SKILL_ID_MYSTIC_TWISTER
@@ -3980,7 +3980,7 @@ Func BestTarget_MysticTwister($a_f_AggroRange)
 	; Spell. Deals 10...50...60 cold damage to all nearby foes. If you are enchanted, this spell deals an additional 10...50...60 cold damage.
 	; Concise description
 	; Spell. Deals 10...50...60 cold damage to all nearby foes. Deals 10...50...60 more cold damage if you are enchanted.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1525 - $GC_I_SKILL_ID_NATURAL_HEALING
@@ -3993,7 +3993,7 @@ Func BestTarget_NaturalHealing($a_f_AggroRange)
 	; Spell. You are healed for 50...146...170 Health. If you are not enchanted, this spell activates 50% faster.
 	; Concise description
 	; Spell. Heals you for 50...146...170. This skill activates 50% faster if you are not enchanted.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1526 - $GC_I_SKILL_ID_IMBUE_HEALTH
@@ -4019,7 +4019,7 @@ Func BestTarget_MysticHealing($a_f_AggroRange)
 	; Spell. You are healed for 5...53...65 Health. Also heals all enchanted party members for 5...53...65 Health.
 	; Concise description
 	; Spell. Heals you for 5...53...65. Heals all enchanted party members for 5...53...65 Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1528 - $GC_I_SKILL_ID_DWAYNAS_TOUCH
@@ -4041,7 +4041,7 @@ Func BestTarget_PiousRestoration($a_f_AggroRange)
 	; Spell. You gain 80...136...150 Health and remove 1 Dervish enchantment. If an enchantment was removed in this way, you also lose 1...2...2 hex[es].
 	; Concise description
 	; Spell. Gain 80...136...150 Health and remove 1 Dervish enchantment. Removal effect: lose 1...2...2 hex[es].
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1532 - $GC_I_SKILL_ID_MYSTIC_SANDSTORM
@@ -4054,7 +4054,7 @@ Func BestTarget_MysticSandstorm($a_f_AggroRange)
 	; Spell. Create a sandstorm at your location that lasts 3 seconds. Each second, foes nearby this location take 10...18...20 earth damage. Attacking foes take an additional 10...18...20 damage. If you are enchanted when you cast this spell, it lasts twice as long.
 	; Concise description
 	; Spell. (3 seconds.) Deals 10...18...20 earth damage each second. Deals an additional 10...18...20 damage to attacking foes. Hits foes nearby your initial location. Lasts twice as long if you are enchanted.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1533 - $GC_I_SKILL_ID_WINDS_OF_DISENCHANTMENT
@@ -4067,7 +4067,7 @@ Func BestTarget_WindsOfDisenchantment($a_f_AggroRange)
 	; Spell. Lose 1 Dervish enchantment. If a Dervish enchantment was removed in this way, all nearby foes lose 1 enchantment and take 20...68...80 cold damage.
 	; Concise description
 	; Spell. Remove one of your Dervish enchantments. Removal effect: all nearby foes lose 1 enchantment and take 20...68...80 cold damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1534 - $GC_I_SKILL_ID_RENDING_TOUCH
@@ -4106,7 +4106,7 @@ Func BestTarget_SummoningOfTheScepter($a_f_AggroRange)
 	; Monster skill
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1611 - $GC_I_SKILL_ID_RISE_FROM_YOUR_GRAVE
@@ -4115,7 +4115,7 @@ Func CanUse_RiseFromYourGrave()
 EndFunc
 
 Func BestTarget_RiseFromYourGrave($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1651 - $GC_I_SKILL_ID_DEATHS_RETREAT
@@ -4198,7 +4198,7 @@ Func CanUse_BattleCry1()
 EndFunc
 
 Func BestTarget_BattleCry1($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1666 - $GC_I_SKILL_ID_MENDING_SHRINE_BONUS
@@ -4211,7 +4211,7 @@ Func BestTarget_MendingShrineBonus($a_f_AggroRange)
 	; Spell
 	; Concise description
 	; Locations">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1667 - $GC_I_SKILL_ID_ENERGY_SHRINE_BONUS
@@ -4224,7 +4224,7 @@ Func BestTarget_EnergyShrineBonus($a_f_AggroRange)
 	; Core
 	; Concise description
 	; Acquisition">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1668 - $GC_I_SKILL_ID_NORTHERN_HEALTH_SHRINE_BONUS
@@ -4237,7 +4237,7 @@ Func BestTarget_NorthernHealthShrineBonus($a_f_AggroRange)
 	; Spell. Your party members' maximum Health is increased by 120.
 	; Concise description
 	; Spell. Your party members have +120 maximum Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1669 - $GC_I_SKILL_ID_SOUTHERN_HEALTH_SHRINE_BONUS
@@ -4250,7 +4250,7 @@ Func BestTarget_SouthernHealthShrineBonus($a_f_AggroRange)
 	; Spell. Your party members' maximum Health is increased by 120.
 	; Concise description
 	; Spell. Your party members have +120 maximum Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1672 - $GC_I_SKILL_ID_TO_THE_PAIN_HERO_BATTLES
@@ -4259,7 +4259,7 @@ Func CanUse_ToThePainHeroBattles()
 EndFunc
 
 Func BestTarget_ToThePainHeroBattles($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1686 - $GC_I_SKILL_ID_GLIMMER_OF_LIGHT
@@ -4324,7 +4324,7 @@ Func BestTarget_SunspearSiege($a_f_AggroRange)
 	; Monster skill
 	; Concise description
 	; 1em; margin-bottom:1em; clear:both;" />
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1733 - $GC_I_SKILL_ID_WIELDERS_STRIKE
@@ -4368,7 +4368,7 @@ Func BestTarget_AltarBuff($a_f_AggroRange)
 	; Core
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1866 - $GC_I_SKILL_ID_CAPTURE_POINT
@@ -4381,7 +4381,7 @@ Func BestTarget_CapturePoint($a_f_AggroRange)
 	; Spell. While within the range of this capture point, heroes and henchmen take the initiative in attacking targets.
 	; Concise description
 	; Spell. While within the range of this catpure point, heroes and henchmen take the initiative in attacking targets.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1885 - $GC_I_SKILL_ID_BANISH_ENCHANTMENT
@@ -4407,7 +4407,7 @@ Func BestTarget_UnyieldingAnguish($a_f_AggroRange)
 	; Spell. Caster resurrects the nearest Anguished Soul.
 	; Concise description
 	; Spell. Caster resurrects the nearest Anguished Soul.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1938 - $GC_I_SKILL_ID_PUTRID_FLAMES
@@ -4420,7 +4420,7 @@ Func BestTarget_PutridFlames($a_f_AggroRange)
 	; Spell. All adjacent foes are struck for 100 fire damage and becomes Poisoned and Diseased for 10 seconds.
 	; Concise description
 	; Spell. Deals 100 fire damage; inflicts Poisoned and Diseased conditions (10 seconds); affects adjacent foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1983 - $GC_I_SKILL_ID_FIRE_DART
@@ -4433,7 +4433,7 @@ Func BestTarget_FireDart($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; deals 33 damage and inflicts Burning condition (4 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1984 - $GC_I_SKILL_ID_ICE_DART
@@ -4446,7 +4446,7 @@ Func BestTarget_IceDart($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; deals 33 damage and causes 33% slower movement (6 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1985 - $GC_I_SKILL_ID_POISON_DART
@@ -4459,7 +4459,7 @@ Func BestTarget_PoisonDart($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; deals 33 damage and inflicts Poisoned condition (8 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1994 - $GC_I_SKILL_ID_POWER_LOCK
@@ -4520,7 +4520,7 @@ Func BestTarget_BurningGround($a_f_AggroRange)
 	; Environment effect
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Burning_Ground","wgRelevantArticleId":307391,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2020 - $GC_I_SKILL_ID_FREEZING_GROUND
@@ -4533,7 +4533,7 @@ Func BestTarget_FreezingGround($a_f_AggroRange)
 	; Spell
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2021 - $GC_I_SKILL_ID_POISON_GROUND
@@ -4546,7 +4546,7 @@ Func BestTarget_PoisonGround($a_f_AggroRange)
 	; Environment effect
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Poison_Ground","wgRelevantArticleId":307390,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2022 - $GC_I_SKILL_ID_FIRE_JET
@@ -4559,7 +4559,7 @@ Func BestTarget_FireJet($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; 302px;">
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2024 - $GC_I_SKILL_ID_POISON_JET
@@ -4572,7 +4572,7 @@ Func BestTarget_PoisonJet($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2027 - $GC_I_SKILL_ID_FIRE_SPOUT
@@ -4585,7 +4585,7 @@ Func BestTarget_FireSpout($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; 302px;">
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2029 - $GC_I_SKILL_ID_POISON_SPOUT
@@ -4598,7 +4598,7 @@ Func BestTarget_PoisonSpout($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2045 - $GC_I_SKILL_ID_SARCOPHAGUS_SPORES
@@ -4607,7 +4607,7 @@ Func CanUse_SarcophagusSpores()
 EndFunc
 
 Func BestTarget_SarcophagusSpores($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2046 - $GC_I_SKILL_ID_EXPLODING_BARREL
@@ -4616,7 +4616,7 @@ Func CanUse_ExplodingBarrel()
 EndFunc
 
 Func BestTarget_ExplodingBarrel($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2051 - $GC_I_SKILL_ID_SUMMON_SPIRITS_LUXON
@@ -4636,7 +4636,7 @@ Func CanUse_SummonSpiritsLuxon()
 EndFunc
 
 Func BestTarget_SummonSpiritsLuxon($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2055 - $GC_I_SKILL_ID_ANEURYSM
@@ -4710,7 +4710,7 @@ Func CanUse_FleshreaversEscape()
 EndFunc
 
 Func BestTarget_FleshreaversEscape($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2083 - $GC_I_SKILL_ID_MANDRAGORS_CHARGE
@@ -4732,7 +4732,7 @@ Func BestTarget_RockSlide($a_f_AggroRange)
 	; Eye of the North
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2085 - $GC_I_SKILL_ID_AVALANCHE_EFFECT
@@ -4741,7 +4741,7 @@ Func CanUse_AvalancheEffect()
 EndFunc
 
 Func BestTarget_AvalancheEffect($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2087 - $GC_I_SKILL_ID_CEILING_COLLAPSE
@@ -4774,7 +4774,7 @@ Func CanUse_SummonSpiritsKurzick()
 EndFunc
 
 Func BestTarget_SummonSpiritsKurzick($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2102 - $GC_I_SKILL_ID_CRY_OF_PAIN
@@ -4800,7 +4800,7 @@ Func BestTarget_GolemFireShield($a_f_AggroRange)
 	; Spell. You are immune to the damage and effects from fire darts while in the area of the worker golem.
 	; Concise description
 	; Spell. You are immune to damage and effects from fire darts while in the area of the worker golem.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2165 - $GC_I_SKILL_ID_DIAMONDSHARD_GRAVE
@@ -4813,7 +4813,7 @@ Func BestTarget_DiamondshardGrave($a_f_AggroRange)
 	; Spell. Frozen condensation coalesces into spikes of ice, deals 140 damage, and causes Bleeding for 10 seconds.
 	; Concise description
 	; Spell. Frozen condensation coalesces into spikes of ice, deals 140 damage, and inflicts the Bleeding condition (10 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2167 - $GC_I_SKILL_ID_DIAMONDSHARD_MIST
@@ -4826,7 +4826,7 @@ Func BestTarget_DiamondshardMist($a_f_AggroRange)
 	; Spell. The Remnant of Antiquities begins freezing the condensation within the air, focusing it into crystal shards.
 	; Concise description
 	; Spell. Condensation in the air freezes into glittering shards. While in this area, you move 33% slower.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2172 - $GC_I_SKILL_ID_RAVEN_SWOOP_A_GATE_TOO_FAR
@@ -4918,7 +4918,7 @@ Func BestTarget_LightOfDeldrimor($a_f_AggroRange)
 	; Spell. All foes in the area are struck for 55...80 holy damage. The location of hidden objects are briefly indicated on your Compass. Any hidden objects in the area are revealed.
 	; Concise description
 	; Spell. Deals 55...80 holy damage to foes in the area. Pings hidden objects within the area on the compass.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2221 - $GC_I_SKILL_ID_BREATH_OF_THE_GREAT_DWARF
@@ -4931,7 +4931,7 @@ Func BestTarget_BreathOfTheGreatDwarf($a_f_AggroRange)
 	; Spell. All party members are relieved of Burning and are healed for 50...60 Health.
 	; Concise description
 	; Spell. Removes burning and heals for 50...60 Health. Affects party members.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2222 - $GC_I_SKILL_ID_SNOW_STORM
@@ -4964,7 +4964,7 @@ Func BestTarget_SummonMursaat($a_f_AggroRange)
 	; Spell. Summon a level 14...20 Mursaat that lives for 40...60 seconds and has Enervating Charge. Only 1 Asura Summon can be active at a time.
 	; Concise description
 	; Spell. Summon a level 14...20 Mursaat (40...60 lifespan) that has Enervating Charge. Only 1 Asura Summon can be active a time.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2225 - $GC_I_SKILL_ID_SUMMON_RUBY_DJINN
@@ -4984,7 +4984,7 @@ Func BestTarget_SummonRubyDjinn($a_f_AggroRange)
 	; Spell. Summon a level 14...20 Ruby Djinn that lives for 40...60 seconds and has Immolate. Only 1 Asura Summon can be active at a time.
 	; Concise description
 	; Spell. Summon a level 14...20 Ruby Djinn (40...60 lifespan) that has Immolate. Only 1 Asura Summon can be active a time.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2226 - $GC_I_SKILL_ID_SUMMON_ICE_IMP
@@ -5004,7 +5004,7 @@ Func BestTarget_SummonIceImp($a_f_AggroRange)
 	; Spell. Summon a level 14...20 Ice Imp that lives for 40...60 seconds and has Ice Spikes. Only 1 Asura Summon can be active a time.
 	; Concise description
 	; Spell. Summon a level 14...20 Ice Imp (40...60 lifespan) that has Ice Spikes. Only 1 Asura Summon can be active a time.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2227 - $GC_I_SKILL_ID_SUMMON_NAGA_SHAMAN
@@ -5024,7 +5024,7 @@ Func BestTarget_SummonNagaShaman($a_f_AggroRange)
 	; Spell. Summon a level 14...20 Naga Shaman that lives for 40...60 seconds and has Stoning. Only 1 Asura Summon can be active a time.
 	; Concise description
 	; Spell. Summon a level 14...20 Naga Shaman (40...60 lifespan) that has Stoning. Only 1 Asura Summon can be active a time.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2234 - $GC_I_SKILL_ID_EBON_VANGUARD_SNIPER_SUPPORT
@@ -5090,7 +5090,7 @@ Func BestTarget_OrderOfUnholyVigor($a_f_AggroRange)
 	; Spell. For 15 seconds, all of Zoldark's minions attack 33% faster.
 	; Concise description
 	; Spell. (15 seconds.) All Minions of Zoldark attack 33% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2257 - $GC_I_SKILL_ID_ORDER_OF_THE_LICH
@@ -5103,7 +5103,7 @@ Func BestTarget_OrderOfTheLich($a_f_AggroRange)
 	; Spell. For 15 seconds, all of Zoldark's minions have +3 Health regeneration and steal 15 Health each time they successfully hit with an attack.
 	; Concise description
 	; Spell. (15 seconds.) All Minions of Zoldark have +3 Health regeneration and steal 15 Health each time they hit with an attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2258 - $GC_I_SKILL_ID_MASTER_OF_NECROMANCY
@@ -5116,7 +5116,7 @@ Func BestTarget_MasterOfNecromancy($a_f_AggroRange)
 	; Spell. For 12 seconds, Zoldark has +10 armor and +5% maximum Health for each Minion of Zoldark that is currently alive.
 	; Concise description
 	; Spell. (12 seconds.) Zoldark gains +10 armor and +5% maximum Health for each Minion of Zoldark that is alive.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2259 - $GC_I_SKILL_ID_ANIMATE_UNDEAD
@@ -5129,7 +5129,7 @@ Func BestTarget_AnimateUndead($a_f_AggroRange)
 	; Spell. All of Zoldark's minions are resurrected with 100% Health and 50% Energy.
 	; Concise description
 	; Spell. All Minions of Zoldark are resurrected with 100% Health and 50% Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2260 - $GC_I_SKILL_ID_POLYMOCK_DEATHLY_CHILL
@@ -5585,7 +5585,7 @@ Func CanUse_MurakaisCensure()
 EndFunc
 
 Func BestTarget_MurakaisCensure($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2370 - $GC_I_SKILL_ID_MURAKAIS_CALAMITY
@@ -5594,7 +5594,7 @@ Func CanUse_MurakaisCalamity()
 EndFunc
 
 Func BestTarget_MurakaisCalamity($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2371 - $GC_I_SKILL_ID_MURAKAIS_STORM_OF_SOULS
@@ -5603,7 +5603,7 @@ Func CanUse_MurakaisStormOfSouls()
 EndFunc
 
 Func BestTarget_MurakaisStormOfSouls($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2386 - $GC_I_SKILL_ID_RAVEN_SWOOP
@@ -5629,7 +5629,7 @@ Func BestTarget_FilthyExplosion($a_f_AggroRange)
 	; Monster skill
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Filthy_Explosion","wgRelevantArticleId":282763,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","mmv.head","mmv.bootstrap.autostart","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2391 - $GC_I_SKILL_ID_MURAKAIS_CALL
@@ -5638,7 +5638,7 @@ Func CanUse_MurakaisCall()
 EndFunc
 
 Func BestTarget_MurakaisCall($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2398 - $GC_I_SKILL_ID_CONSUME_FLAMES
@@ -5651,7 +5651,7 @@ Func BestTarget_ConsumeFlames($a_f_AggroRange)
 	; This article is about the skill used by Arctic Nightmares during Flames of the Bear Spirit.&#32;&#32;For the skill used by Flame Djinn, see Consuming Flames.
 	; Concise description
 	; Notes">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2412 - $GC_I_SKILL_ID_SMOOTH_CRIMINAL
@@ -5712,7 +5712,7 @@ Func BestTarget_ReversePolarityFireShield($a_f_AggroRange)
 	; Spell. Living creatures standing within this shield have -50 armor against fire damage.
 	; Concise description
 	; Spell. Living creatures in the shield have -50 armor against fire damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2538 - $GC_I_SKILL_ID_ANIMATE_UNDEAD_PALAWA_JOKO
@@ -5721,7 +5721,7 @@ Func CanUse_AnimateUndeadPalawaJoko()
 EndFunc
 
 Func BestTarget_AnimateUndeadPalawaJoko($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2539 - $GC_I_SKILL_ID_ORDER_OF_UNHOLY_VIGOR_PALAWA_JOKO
@@ -5730,7 +5730,7 @@ Func CanUse_OrderOfUnholyVigorPalawaJoko()
 EndFunc
 
 Func BestTarget_OrderOfUnholyVigorPalawaJoko($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2540 - $GC_I_SKILL_ID_ORDER_OF_THE_LICH_PALAWA_JOKO
@@ -5739,7 +5739,7 @@ Func CanUse_OrderOfTheLichPalawaJoko()
 EndFunc
 
 Func BestTarget_OrderOfTheLichPalawaJoko($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2543 - $GC_I_SKILL_ID_WURM_SIEGE_EYE_OF_THE_NORTH
@@ -5814,7 +5814,7 @@ Func CanUse_SpikeTrapSpell()
 EndFunc
 
 Func BestTarget_SpikeTrapSpell($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2666 - $GC_I_SKILL_ID_FIRE_AND_BRIMSTONE
@@ -5872,7 +5872,7 @@ Func CanUse_OfferingOfSpiritTogo()
 EndFunc
 
 Func BestTarget_OfferingOfSpiritTogo($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2722 - $GC_I_SKILL_ID_REDEMPTION_OF_PURITY
@@ -5898,7 +5898,7 @@ Func BestTarget_PurifyEnergy($a_f_AggroRange)
 	; Spell. Remove an enchantment from all nearby foes. If enchantments are removed, you steal 1 Energy from each foe who loses an enchantment.
 	; Concise description
 	; Spell. Remove an enchantment from all nearby foes. Steal 1 energy from foes who lose an enchantment.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2724 - $GC_I_SKILL_ID_PURIFYING_FLAME
@@ -5911,7 +5911,7 @@ Func BestTarget_PurifyingFlame($a_f_AggroRange)
 	; Spell. Create a Purifying Flame at your location. For 5 seconds, this flame deals 10...10...10 damage to foes in the area. When Purifying Flame ends, foes in the area lose 1 enchantment, and allies in the area lose 1 hex.
 	; Concise description
 	; Spell. Create a Purifying Flame at your location. Deals 10...10...10 damage to foes in the area (5 seconds). When Purifying Flame ends, foes in the area lose 1 enchantment, and allies in the area lose 1 hex.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2725 - $GC_I_SKILL_ID_PURIFYING_PRAYER
@@ -5937,7 +5937,7 @@ Func BestTarget_PurifySoul($a_f_AggroRange)
 	; Spell. All friendly spirits within earshot gain +1 health regeneration for 3 seconds. All enemy spirits within earshot begin burning for 3 seconds.
 	; Concise description
 	; Spell. All friendly spirits within earshot gain +1 health regeneration for 3 seconds. All enemy spirits within earshot burn for 3 seconds.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2755 - $GC_I_SKILL_ID_JADE_BROTHERHOOD_BOMB
@@ -5950,7 +5950,7 @@ Func BestTarget_JadeBrotherhoodBomb($a_f_AggroRange)
 	; Spell. Self destruct, dealing 750 damage to adjacent foes, 500 damage to nearby foes and 250 damage to foes in the area
 	; Concise description
 	; Spell. Self destruct, dealing 750 damage to adjacent foes, 500 damage to nearby foes and 250 damage to foes in the area
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2759 - $GC_I_SKILL_ID_ROCKET_PROPELLED_GOBSTOPPER
@@ -6007,7 +6007,7 @@ Func BestTarget_AnimateCandyMinions($a_f_AggroRange)
 	; Spell
 	; Concise description
 	; #808080;">Requires a fresh corpse. You can have only 6 Candy Minions at a time.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2765 - $GC_I_SKILL_ID_TASTE_OF_UNDEATH
@@ -6154,7 +6154,7 @@ Func CanUse_LightOfDeliverancePvp()
 EndFunc
 
 Func BestTarget_LightOfDeliverancePvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2881 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -6177,7 +6177,7 @@ Func BestTarget_ReactorBlast($a_f_AggroRange)
 	; Spell. P.O.X. sets off an explosion, striking everything in the area for 200 damage and causing knockdown and Burning for 10 seconds.
 	; Concise description
 	; Spell. P.O.X sets off explosion in the area which deals 200 damage, causes knock down, and inflicts Burning (10 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2907 - $GC_I_SKILL_ID_NOX_BEAM
@@ -6221,7 +6221,7 @@ Func BestTarget_BitGolemCrash($a_f_AggroRange)
 	; Spell. All foes near the impact area suffer 250 damage and are knocked down.
 	; Concise description
 	; Spell. Deals 250 damage to all foes near the impact area and causes knockdown.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2914 - $GC_I_SKILL_ID_BIT_GOLEM_FORCE
@@ -6234,7 +6234,7 @@ Func BestTarget_BitGolemForce($a_f_AggroRange)
 	; Spell. All adjacent foes are struck for 150 damage.
 	; Concise description
 	; Spell. Deals 150 damage to all adjacent foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2917 - $GC_I_SKILL_ID_NOX_THUNDER
@@ -6252,7 +6252,7 @@ Func CanUse_NoxFire()
 EndFunc
 
 Func BestTarget_NoxFire($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2921 - $GC_I_SKILL_ID_NOX_KNUCKLE
@@ -6283,7 +6283,7 @@ Func BestTarget_ShrineBacklash($a_f_AggroRange)
 	; Spell
 	; Concise description
 	; 1em; margin-bottom:1em; clear:both;" />
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2935 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -6303,7 +6303,7 @@ Func BestTarget_WesternHealthShrineBonus($a_f_AggroRange)
 	; Spell. Your party members' maximum Health is increased by 120.
 	; Concise description
 	; Spell. Your party members have +120 maximum Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2958 - $GC_I_SKILL_ID_EASTERN_HEALTH_SHRINE_BONUS
@@ -6316,7 +6316,7 @@ Func BestTarget_EasternHealthShrineBonus($a_f_AggroRange)
 	; Spell. Your party members' maximum Health is increased by 120.
 	; Concise description
 	; Spell. Your party members have +120 maximum Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2964 - $GC_I_SKILL_ID_SNOWBALL2
@@ -6352,7 +6352,7 @@ Func CanUse_UnholyFeastPvp()
 EndFunc
 
 Func BestTarget_UnholyFeastPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3076 - $GC_I_SKILL_ID_EVERLASTING_MOBSTOPPER_SKILL
@@ -6374,7 +6374,7 @@ Func BestTarget_CurseOfDhuum($a_f_AggroRange)
 	; Core
 	; Concise description
 	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Curse_of_Dhuum","wgRelevantArticleId":228612,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","mmv.head","mmv.bootstrap.autostart","ext.popups"];
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3079 - $GC_I_SKILL_ID_DHUUMS_REST_REAPER_SKILL
@@ -6383,7 +6383,7 @@ Func CanUse_DhuumsRestReaperSkill()
 EndFunc
 
 Func BestTarget_DhuumsRestReaperSkill($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3081 - $GC_I_SKILL_ID_SUMMON_CHAMPION
@@ -6396,7 +6396,7 @@ Func BestTarget_SummonChampion($a_f_AggroRange)
 	; Spell. Summon a Champion of Dhuum.
 	; Concise description
 	; Spell. Summon a Champion of Dhuum.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3082 - $GC_I_SKILL_ID_SUMMON_MINIONS
@@ -6409,7 +6409,7 @@ Func BestTarget_SummonMinions($a_f_AggroRange)
 	; Spell. Summon Minions of Dhuum.
 	; Concise description
 	; Spell. Summon Minions of Dhuum.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3085 - $GC_I_SKILL_ID_JUDGMENT_OF_DHUUM
@@ -6422,7 +6422,7 @@ Func BestTarget_JudgmentOfDhuum($a_f_AggroRange)
 	; Spell. For 4 seconds, Dhuum deals 75 damage each second to foes in spirit range.
 	; Concise description
 	; Spell. For 4 seconds, Dhuum deals 75 damage each second to foes in spirit range.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3087 - $GC_I_SKILL_ID_DHUUMS_REST
@@ -6431,7 +6431,7 @@ Func CanUse_DhuumsRest()
 EndFunc
 
 Func BestTarget_DhuumsRest($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3088 - $GC_I_SKILL_ID_SPIRITUAL_HEALING
@@ -6602,7 +6602,7 @@ Func CanUse_HealPartyPvp()
 EndFunc
 
 Func BestTarget_HealPartyPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3242 - $GC_I_SKILL_ID_COMING_OF_SPRING
@@ -6691,7 +6691,7 @@ Func CanUse_MysticHealingPvp()
 EndFunc
 
 Func BestTarget_MysticHealingPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3290 - $GC_I_SKILL_ID_STUN_GRENADE
@@ -6765,7 +6765,7 @@ Func CanUse_MirrorShatter()
 EndFunc
 
 Func BestTarget_MirrorShatter($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3378 - $GC_I_SKILL_ID_PHASE_SHIELD
@@ -6778,7 +6778,7 @@ Func BestTarget_PhaseShield($a_f_AggroRange)
 	; This article is about the player skill. For the skill used by G.O.L.E.M. 2.0, see Phase Shield (monster skill).
 	; Concise description
 	; Acquisition">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3379 - $GC_I_SKILL_ID_REACTOR_BURST
@@ -6791,7 +6791,7 @@ Func BestTarget_ReactorBurst($a_f_AggroRange)
 	; Spell. Overload your reactor, removing a condition from yourself and dealing 150 damage to all adjacent foes. Foes struck by Reactor Burst are interrupted and set on fire for 3 seconds.
 	; Concise description
 	; Spell. Removes a condition. Deals 150 damage to adjacent foes and sets them on fire (3 seconds). Interrupts struck foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3382 - $GC_I_SKILL_ID_ANNIHILATOR_BEAM

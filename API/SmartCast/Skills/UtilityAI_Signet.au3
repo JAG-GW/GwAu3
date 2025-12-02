@@ -15,7 +15,7 @@ Func BestTarget_SignetOfCapture($a_f_AggroRange)
 	; Signet. Choose one skill from a nearby dead Boss of your profession. Signet of Capture is permanently replaced by that skill. If that skill was elite, gain 250 XP for every level you have earned.
 	; Concise description
 	; Signet. Choose one skill from a nearby dead Boss of your profession. Signet of Capture is permanently replaced by that skill. If that skill was elite, gain 250 XP for every level you have earned.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_AntidoteSignet()
@@ -28,7 +28,7 @@ Func BestTarget_AntidoteSignet($a_f_AggroRange)
 	; Signet. Cleanse yourself of Poison, Disease, and Blindness, and one additional condition.
 	; Concise description
 	; Signet. Remove Poison, Disease, and Blindness from yourself, and one additional condition.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_ArchersSignet()
@@ -37,7 +37,7 @@ Func CanUse_ArchersSignet()
 EndFunc
 
 Func BestTarget_ArchersSignet($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_BaneSignet()
@@ -72,7 +72,7 @@ Func CanUse_BarbedSignetPvp()
 EndFunc
 
 Func BestTarget_BarbedSignetPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_BlessedSignet()
@@ -85,7 +85,7 @@ Func BestTarget_BlessedSignet($a_f_AggroRange)
 	; Signet. For each enchantment you are maintaining, you gain 3 Energy. You cannot gain more than 3...20...24 Energy in this way.
 	; Concise description
 	; Signet. You gain 3 Energy for each enchantment you are maintaining. You cannot gain more than 3...20...24 Energy in this way.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_BoonSignet()
@@ -146,7 +146,7 @@ Func BestTarget_CauterySignet($a_f_AggroRange)
 	; Elite Signet. All party members lose all conditions. You are set on Fire  for 1 second for each condition removed in this way.
 	; Concise description
 	; Elite Signet. All party members lose all conditions. You begin Burning (one second for each condition removed).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_DeathPactSignet()
@@ -183,7 +183,7 @@ Func BestTarget_DolyakSignet($a_f_AggroRange)
 	; Signet. For 8...18...20 seconds, you have +10...34...40 armor and cannot be knocked down, but your movement is slowed by 75%.
 	; Concise description
 	; Signet. (8...18...20 seconds.) You have +10...34...40 armor and cannot be knocked-down. You move 75% slower.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_EtherSignet()
@@ -196,7 +196,7 @@ Func BestTarget_EtherSignet($a_f_AggroRange)
 	; Signet. If you have less than 5...9...10 Energy, gain 10...18...20 Energy.
 	; Concise description
 	; Signet. You gain 10...18...20 Energy. No effect unless you have less than 5...9...10 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_GlowingSignet()
@@ -236,7 +236,7 @@ Func BestTarget_HealingSignet($a_f_AggroRange)
 	; This article is about the Core skill. For the temporarily available Bonus Mission Pack skill, see Healing Signet (Turai Ossa).
 	; Concise description
 	; green; font-weight: bold;">82...154...172
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_KeystoneSignet()
@@ -249,7 +249,7 @@ Func BestTarget_KeystoneSignet($a_f_AggroRange)
 	; Elite Signet. All of your signets except Keystone Signet are recharged. For 20 seconds, the next 0...5...6 time[s] you use a signet that targets a foe, all other foes adjacent to your target take 15...51...60 damage and are interrupted.
 	; Concise description
 	; Elite Signet. (20 seconds.) Your next 0...5...6 signet[s] interrupt [sic] and deal 15...51...60 damage to other foes adjacent to your target. Initial Effect: [sic] recharges all of your other signets.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_LeechSignet()
@@ -275,7 +275,7 @@ Func BestTarget_LightbringerSignet($a_f_AggroRange)
 	; Signet. If you are within the area of a demonic servant of Abaddon, you gain 4...5 strikes of adrenaline and 22...24 Energy.
 	; Concise description
 	; Signet. You gain 4...5 strikes of adrenaline and 22...24 Energy if you are within the area of a demonic servant of Abaddon.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_PlagueSignet()
@@ -301,7 +301,7 @@ Func BestTarget_PoisonTipSignet($a_f_AggroRange)
 	; Signet. For 60 seconds, your next attack also inflicts Poison for 8...14...15 seconds.
 	; Concise description
 	; Signet. (60 seconds.) Inflicts Poisoned condition (8...14...15 seconds) with your next attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_PolymockBaneSignet()
@@ -327,7 +327,7 @@ Func BestTarget_PolymockEtherSignet($a_f_AggroRange)
 	; Signet. If you have 0 Energy, you gain 10 Energy.
 	; Concise description
 	; Signet. Gain 10 Energy if you have 0 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_PolymockSignetOfClumsiness()
@@ -366,7 +366,7 @@ Func BestTarget_RemedySignet($a_f_AggroRange)
 	; Signet. You lose 1 condition.
 	; Concise description
 	; Signet. You lose one condition.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SadistsSignet()
@@ -392,7 +392,7 @@ Func BestTarget_SignetOfAggression($a_f_AggroRange)
 	; Signet. If you are under the effects of a shout or chant, you gain 2 strikes of adrenaline.
 	; Concise description
 	; Signet. You gain 2 adrenaline if you are under the effects of a shout or chant.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfAgony()
@@ -405,7 +405,7 @@ Func BestTarget_SignetOfAgony($a_f_AggroRange)
 	; Signet. You suffer from Bleeding for 25 seconds. All nearby foes take 10...58...70 damage.
 	; Concise description
 	; Signet. Deals 10...58...70 damage to foes near you. You begin Bleeding (25 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfAgonyPvp()
@@ -414,7 +414,7 @@ Func CanUse_SignetOfAgonyPvp()
 EndFunc
 
 Func BestTarget_SignetOfAgonyPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfBinding()
@@ -480,7 +480,7 @@ Func BestTarget_SignetOfCreation($a_f_AggroRange)
 	; Signet. You gain 4 Energy for every summoned creature you control within earshot (maximum 3...10...12 Energy).
 	; Concise description
 	; Signet. Gain 4 Energy (maximum 3...10...12 Energy) for each summoned creature you control within earshot.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfCreationPvp()
@@ -489,7 +489,7 @@ Func CanUse_SignetOfCreationPvp()
 EndFunc
 
 Func BestTarget_SignetOfCreationPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfDeadlyCorruption()
@@ -576,7 +576,7 @@ Func BestTarget_SignetOfGhostlyMight($a_f_AggroRange)
 	; Elite Signet. For 5...17...20 seconds, all spirits you control within earshot attack 33% faster and deal 5...9...10 additional damage.
 	; Concise description
 	; Elite Signet. (5...17...20 seconds.) All spirits you control within earshot attack 33% faster and deal +5...9...10 damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfGhostlyMightPvp()
@@ -611,7 +611,7 @@ Func BestTarget_SignetOfIllusions($a_f_AggroRange)
 	; Elite Signet. Your next 1...3...3 spell[s] use your Illusion attribute instead of its normal attribute.
 	; Concise description
 	; Elite Signet. Your next 1...3...3 spell[s] use your Illusion attribute instead of its normal attribute.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfInfection()
@@ -698,7 +698,7 @@ Func BestTarget_SignetOfMysticSpeed($a_f_AggroRange)
 	; Signet. For 30 seconds, your next 1...3...3 self-targeting enchantment[s] cast instantly. Flash enchantments do not consume uses of this skill.
 	; Concise description
 	; Signet. (30 seconds.) Your next 1...3...3 self-targeted enchantments [sic] cast instantly. Flash enchantments do not consume uses of this skill.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfMysticWrath()
@@ -772,7 +772,7 @@ Func BestTarget_SignetOfRecall($a_f_AggroRange)
 	; Signet. For 10 seconds, you have -4 Energy regeneration. When this effect ends, you gain 13...19...20 Energy.
 	; Concise description
 	; Signet. (10 seconds.) You have -4 Energy regeneration. End effect: you gain 13...19...20 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfRejuvenation()
@@ -885,7 +885,7 @@ Func BestTarget_SignetOfSpirits($a_f_AggroRange)
 	; Elite Signet. Create 3 level 1...10...12 spirits. These spirits deal 5...17...20 damage with attacks and die after 60 seconds.
 	; Concise description
 	; Elite Signet. Creates 3 level 1...10...12 spirits (60 second lifespan). These spirits deal 5...17...20 damage with attacks.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfSpiritsPvp()
@@ -894,7 +894,7 @@ Func CanUse_SignetOfSpiritsPvp()
 EndFunc
 
 Func BestTarget_SignetOfSpiritsPvp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfStamina()
@@ -907,7 +907,7 @@ Func BestTarget_SignetOfStamina($a_f_AggroRange)
 	; Signet. You have +50...250...300 maximum Health. This signet ends if you successfully hit with an attack.
 	; Concise description
 	; Signet. You have +50...250...300 maximum Health. Ends if you hit with an attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfStrength()
@@ -920,7 +920,7 @@ Func BestTarget_SignetOfStrength($a_f_AggroRange)
 	; Signet. Your next 1...13...16 attack[s] deal +5 damage.
 	; Concise description
 	; Signet. Your attacks deal +5 damage. Ends after 1...13...16 attack[s].
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfSuffering()
@@ -933,7 +933,7 @@ Func BestTarget_SignetOfSuffering($a_f_AggroRange)
 	; Elite Signet. You suffer from Bleeding for 6 seconds. The next Necromancer skill that targets a foe causes Bleeding for 2...13...16 seconds.
 	; Concise description
 	; Elite Signet. You Bleed for 6 seconds. Applies Bleeding (2...13...16 seconds) to the target of your next Necromancer skill.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 Func CanUse_SignetOfSynergy()

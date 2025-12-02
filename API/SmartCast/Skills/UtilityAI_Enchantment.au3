@@ -52,7 +52,7 @@ Func BestTarget_IllusionOfWeakness($a_f_AggroRange)
 	; Enchantment Spell. You lose 50...202...240 Health. Illusion of Weakness ends if damage drops your Health below 25% of your maximum. When Illusion of Weakness ends, you gain 50...202...240 Health.
 	; Concise description
 	; Enchantment Spell. Lose 50...202...240 Health. End effect: you gain 50...202...240 Health. Ends if damage drops your Health below 25% of your maximum.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 33 - $GC_I_SKILL_ID_ILLUSIONARY_WEAPONRY
@@ -65,7 +65,7 @@ Func BestTarget_IllusionaryWeaponry($a_f_AggroRange)
 	; Elite Enchantment Spell. For 30 seconds, your melee attacks neither hit nor fail to hit. Instead, Illusionary Weaponry deals 8...34...40 damage to your targets for each melee attack. You have +5 armor for each equipped Illusion Magic skill.
 	; Concise description
 	; Elite Enchantment Spell. (30 seconds.) Deals 8...34...40 damage to foes in place of other damage or effects from melee attacks. You have +5 armor for each equipped Illusion Magic skill. Your melee attacks neither hit nor fail to hit.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 34 - $GC_I_SKILL_ID_SYMPATHETIC_VISAGE
@@ -91,7 +91,7 @@ Func BestTarget_IllusionOfHaste($a_f_AggroRange)
 	; Enchantment Spell. For 5...10...11 seconds you are no longer Crippled, and you move 33% faster. When Illusion of Haste ends, you become Crippled for 3 seconds.
 	; Concise description
 	; Enchantment Spell. (5...10...11 seconds.) You move 33% faster. Initial effect: removes Crippled condition. End effect: you are Crippled (3 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 38 - $GC_I_SKILL_ID_CHANNELING
@@ -104,7 +104,7 @@ Func BestTarget_Channeling($a_f_AggroRange)
 	; This article is about the skill Channeling. For the attribute, see Channeling Magic.
 	; Concise description
 	; green; font-weight: bold;">8...46...56
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 74 - $GC_I_SKILL_ID_ECHO
@@ -117,7 +117,7 @@ Func BestTarget_Echo($a_f_AggroRange)
 	; This article is about the elite Mesmer skill. For the skill type of the same name, see Echo (skill type).
 	; Concise description
 	; Acquisition">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 75 - $GC_I_SKILL_ID_ARCANE_ECHO
@@ -130,7 +130,7 @@ Func BestTarget_ArcaneEcho($a_f_AggroRange)
 	; Enchantment Spell. If you cast a spell in the next 20 seconds, Arcane Echo is replaced with that spell for 20 seconds. Arcane Echo ends prematurely if you use a non-spell skill.
 	; Concise description
 	; Enchantment Spell. (20 seconds.) Arcane Echo becomes the next spell you use (20 seconds). This enchantment ends if you use any skill that is not a spell.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 82 - $GC_I_SKILL_ID_MANTRA_OF_RECALL
@@ -143,7 +143,7 @@ Func BestTarget_MantraOfRecall($a_f_AggroRange)
 	; Elite Enchantment Spell. For 20 seconds, you gain no benefit from it. You gain 10...22...25 Energy when Mantra of Recall ends.
 	; Concise description
 	; Elite Enchantment Spell. (20 seconds.) End effect: you gain 10...22...25 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 88 - $GC_I_SKILL_ID_VERATAS_AURA
@@ -152,7 +152,7 @@ Func CanUse_VeratasAura()
 EndFunc
 
 Func BestTarget_VeratasAura($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 104 - $GC_I_SKILL_ID_DEATH_NOVA
@@ -178,7 +178,7 @@ Func BestTarget_AwakenTheBlood($a_f_AggroRange)
 	; Enchantment Spell. For 20...39...44 seconds, you gain +2 Blood Magic and +2 Curses, but whenever you sacrifice Health, you sacrifice 50% more than the normal amount.
 	; Concise description
 	; Enchantment Spell. (20...39...44 seconds.) You have +2 Blood Magic and Curses. Sacrifice 50% more Health than normal.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 113 - $GC_I_SKILL_ID_TAINTED_FLESH
@@ -204,7 +204,7 @@ Func BestTarget_AuraOfTheLich($a_f_AggroRange)
 	; Elite Enchantment Spell. All corpses within earshot are exploited and you animate a level 1...14...17 bone horror plus one for each corpse exploited in this way. For 5...37...45 seconds, your Death Magic attribute is increased by +1.
 	; Concise description
 	; Elite Enchantment Spell. Exploit all corpses in earshot. Animates a level 1...14...17 bone horror, plus one for each exploited corpse. You have +1 Death Magic (5...37...45 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 115 - $GC_I_SKILL_ID_BLOOD_RENEWAL
@@ -217,7 +217,7 @@ Func BestTarget_BloodRenewal($a_f_AggroRange)
 	; Enchantment Spell. For 7 seconds, you gain +3...5...6 Health regeneration. When Blood Renewal ends, you gain 40...160...190 Health.
 	; Concise description
 	; Enchantment Spell. (7 seconds.) You have +3...5...6 Health regeneration. End effect: heals you for 40...160...190.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 116 - $GC_I_SKILL_ID_DARK_AURA
@@ -256,7 +256,7 @@ Func BestTarget_DemonicFlesh($a_f_AggroRange)
 	; Enchantment Spell. For 30...54...60 seconds, whenever you use a skill that targets a foe, you deal 5...17...20 shadow damage to all other foes adjacent to you.
 	; Concise description
 	; Enchantment Spell. (30...54...60 seconds.) When using a skill on a foe, deal 5...17...20 shadow damage to all other foes adjacent to you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 134 - $GC_I_SKILL_ID_ORDER_OF_PAIN
@@ -269,7 +269,7 @@ Func BestTarget_OrderOfPain($a_f_AggroRange)
 	; Enchantment Spell. For 5 seconds, whenever a party member hits a foe with physical damage, that party member does +3...13...16 damage.
 	; Concise description
 	; Enchantment Spell. Enchants all party members (5 seconds). 3...13...16 more damage whenever these party members hit with physical damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 138 - $GC_I_SKILL_ID_DARK_BOND
@@ -282,7 +282,7 @@ Func BestTarget_DarkBond($a_f_AggroRange)
 	; Enchantment Spell. For the next 30...54...60 seconds, whenever you receive damage, your closest minion suffers 75% of that damage for you.
 	; Concise description
 	; Enchantment Spell. (30...54...60 seconds.) Transfers 75% of incoming damage from you to your nearest servant.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 139 - $GC_I_SKILL_ID_INFUSE_CONDITION
@@ -295,7 +295,7 @@ Func BestTarget_InfuseCondition($a_f_AggroRange)
 	; Enchantment Spell. For the next 15...51...60 seconds, whenever you receive a condition, that condition is transferred to your closest minion instead.
 	; Concise description
 	; Enchantment Spell. (15...51...60 seconds.) Whenever you receive a condition, it transfers from you to your closest undead servant.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 147 - $GC_I_SKILL_ID_DARK_FURY
@@ -308,7 +308,7 @@ Func BestTarget_DarkFury($a_f_AggroRange)
 	; Enchantment Spell. For 5 seconds, whenever any party member hits with an attack, that party member gains one hit of adrenaline. (50% failure chance with Blood Magic of 4 or less.)
 	; Concise description
 	; Enchantment Spell. Enchants party members (5 seconds). These party members gain one strike of adrenaline each time they hit with an attack. 50% failure chance unless Blood Magic 5 or more.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 148 - $GC_I_SKILL_ID_ORDER_OF_THE_VAMPIRE
@@ -321,7 +321,7 @@ Func BestTarget_OrderOfTheVampire($a_f_AggroRange)
 	; Elite Enchantment Spell. For 5 seconds, whenever a party member who is not under the effects of another Necromancer enchantment hits a foe with physical damage, that party member steals up to 3...13...16 Health.
 	; Concise description
 	; Elite Enchantment Spell. Enchants all party members (5 seconds.) These party members steal 3...13...16 Health with each physical damage attack. Party members under another Necromancer enchantment are not affected.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 157 - $GC_I_SKILL_ID_BLOOD_RITUAL
@@ -360,7 +360,7 @@ Func BestTarget_ElementalAttunement($a_f_AggroRange)
 	; Elite Enchantment Spell. For 25...53...60 seconds, you are attuned to Air, Fire, Water, and Earth and gain +1...2...2 to these attributes. You gain 50% of the base Energy cost of the skill each time you use magic associated with any of these elements.
 	; Concise description
 	; Elite Enchantment Spell. (25...53...60 seconds.) Your elemental attributes are increased by +1...2...2. You gain 50% of the Energy cost of any Air, Earth, Fire, and Water Magic skills you use.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 165 - $GC_I_SKILL_ID_ARMOR_OF_EARTH
@@ -373,7 +373,7 @@ Func BestTarget_ArmorOfEarth($a_f_AggroRange)
 	; Enchantment Spell. For 30 seconds, you gain 24...53...60 armor, but move 50...21...14% slower.
 	; Concise description
 	; Enchantment Spell. (30 seconds.) You have +24...53...60 armor. You move 50...21...14% slower.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 166 - $GC_I_SKILL_ID_KINETIC_ARMOR
@@ -386,7 +386,7 @@ Func BestTarget_KineticArmor($a_f_AggroRange)
 	; Enchantment Spell. For 8 seconds, you gain +20...68...80 armor. Whenever you cast a spell, Kinetic Armor is renewed for 8 seconds.
 	; Concise description
 	; Enchantment Spell. (8 seconds.) You have +20...68...80 armor. Renewal bonus: cast a spell.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 168 - $GC_I_SKILL_ID_MAGNETIC_AURA
@@ -399,7 +399,7 @@ Func BestTarget_MagneticAura($a_f_AggroRange)
 	; Enchantment Spell. For 1...4...5 second[s], you block the next attack against you and deal 10...42...50 damage to your attacker. If you are Overcast, all party members in earshot are also enchanted.
 	; Concise description
 	; Enchantment Spell. (1...4...5 second[s].) Block the next attack against you and reflect 10...42...50 damage to the attacker. If you are Overcast, enchant party members in earshot.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 169 - $GC_I_SKILL_ID_EARTH_ATTUNEMENT
@@ -412,7 +412,7 @@ Func BestTarget_EarthAttunement($a_f_AggroRange)
 	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Earth. You gain 1 Energy plus 30% of the base Energy cost of the skill each time you use Earth Magic.
 	; Concise description
 	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost when you use an Earth Magic skill.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 178 - $GC_I_SKILL_ID_ETHER_PRODIGY
@@ -425,7 +425,7 @@ Func BestTarget_EtherProdigy($a_f_AggroRange)
 	; Elite Enchantment Spell. Lose all enchantments. For 8...18...20 seconds, you gain +6 Energy regeneration. When Ether Prodigy ends, you lose 2 Health for each point of Energy you have.
 	; Concise description
 	; Elite Enchantment Spell. (8...18...20 seconds.) You have +6 Energy regeneration. End effect: lose 2 Health for each point of Energy you have. Lose all enchantments.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 180 - $GC_I_SKILL_ID_AURA_OF_RESTORATION
@@ -438,7 +438,7 @@ Func BestTarget_AuraOfRestoration($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, you gain 0...1...1 Energy and are healed for 200...440...500% of the Energy cost each time you cast a spell.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) You gain 0...1...1 Energy and are healed for 200...440...500% of the Energy cost each time you cast a spell.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 181 - $GC_I_SKILL_ID_ETHER_RENEWAL
@@ -451,7 +451,7 @@ Func BestTarget_EtherRenewal($a_f_AggroRange)
 	; "ER" redirects here. For the monk elite skill, see Empathic Removal.
 	; Concise description
 	; green; font-weight: bold;">5...17...20
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 182 - $GC_I_SKILL_ID_CONJURE_FLAME
@@ -464,7 +464,7 @@ Func BestTarget_ConjureFlame($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, if you're wielding a fire weapon, your attacks strike for an additional 5...17...20 fire damage.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) Your attacks hit for +5...17...20 fire damage. No effect unless your weapon deals fire damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 184 - $GC_I_SKILL_ID_FIRE_ATTUNEMENT
@@ -477,7 +477,7 @@ Func BestTarget_FireAttunement($a_f_AggroRange)
 	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Fire. You gain 1 Energy plus 30% of the base Energy cost of the skill each time you use Fire Magic.
 	; Concise description
 	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost when you use a Fire Magic skill.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 206 - $GC_I_SKILL_ID_ARMOR_OF_FROST
@@ -490,7 +490,7 @@ Func BestTarget_ArmorOfFrost($a_f_AggroRange)
 	; Enchantment Spell. For 10...29...34 seconds, you gain +40 armor against physical damage and have +1 Water Magic.
 	; Concise description
 	; Enchantment Spell. (10...29...34 seconds.) You have +40 armor against physical damage and have +1 Water Magic.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 207 - $GC_I_SKILL_ID_CONJURE_FROST
@@ -503,7 +503,7 @@ Func BestTarget_ConjureFrost($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, if you're wielding a cold weapon, your attacks strike for an additional 5...17...20 cold damage.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) Your attacks hit for +5...17...20 cold damage. No effect unless your weapon deals cold damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 208 - $GC_I_SKILL_ID_WATER_ATTUNEMENT
@@ -516,7 +516,7 @@ Func BestTarget_WaterAttunement($a_f_AggroRange)
 	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Water. You gain 1 Energy plus 30% of the base Energy cost of the skill each time you use Water Magic.
 	; Concise description
 	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost when you use a Water Magic skill.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 214 - $GC_I_SKILL_ID_ICE_SPEAR
@@ -542,7 +542,7 @@ Func BestTarget_IronMist($a_f_AggroRange)
 	; Enchantment Spell. For 8...14...15 seconds, you have +15 armor. Your Air Magic spells that target a foe activate and recharge 25% faster, but you are Overcast by 3 points.
 	; Concise description
 	; Enchantment Spell. (8...14...15 seconds.) Gain +15 armor. Air Magic spells that target a foe activate and recharge 25% faster, but you are Overcast by 3 points.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 218 - $GC_I_SKILL_ID_OBSIDIAN_FLESH
@@ -555,7 +555,7 @@ Func BestTarget_ObsidianFlesh($a_f_AggroRange)
 	; Elite Enchantment Spell. For 8...18...20 seconds, you gain +20 armor and cannot be the target of enemy spells, but cannot attack and have -2 energy degeneration.
 	; Concise description
 	; Elite Enchantment Spell. (8...18...20 seconds.) You have +20 armor and enemy spells cannot target you. You cannot attack and have -2 energy degeneration.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 221 - $GC_I_SKILL_ID_CONJURE_LIGHTNING
@@ -568,7 +568,7 @@ Func BestTarget_ConjureLightning($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, if you're wielding a lightning weapon, your attacks strike for an additional 5...17...20 lightning damage.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) Your attacks hit for +5...17...20 lightning damage. No effect unless your weapon deals lightning damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 225 - $GC_I_SKILL_ID_AIR_ATTUNEMENT
@@ -581,7 +581,7 @@ Func BestTarget_AirAttunement($a_f_AggroRange)
 	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Air. You gain 1 Energy plus 30% of the base Energy cost of the skill whenever you use Air Magic.
 	; Concise description
 	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost whenever you use an Air Magic skill.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 233 - $GC_I_SKILL_ID_SWIRLING_AURA
@@ -594,7 +594,7 @@ Func BestTarget_SwirlingAura($a_f_AggroRange)
 	; Enchantment Spell. For 5 seconds, you are enchanted with Swirling Aura and have 1...5...6 Health regeneration and a 50% chance to block projectiles. If you are Overcast when you cast this spell, all party members in earshot are also enchanted.
 	; Concise description
 	; Enchantment Spell. (5 seconds.) Gives 1...5...6 Health regeneration and a 50% chance to block projectiles. If Overcast, also enchants party members in earshot.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 236 - $GC_I_SKILL_ID_MIST_FORM
@@ -607,7 +607,7 @@ Func BestTarget_MistForm($a_f_AggroRange)
 	; Elite Enchantment Spell. For 10...38...45 seconds, you take 33% less damage from foes under the effects of Water Magic hexes. Whenever you cast an elemental spell, all non-spirit allies in earshot are healed for 50...210...250% of the Energy cost of the spell.
 	; Concise description
 	; Elite Enchantment Spell. (10...38...45 seconds.) Take 33% less damage from foes hexed with Water Magic. Heals non-spirit allies in earshot for 50...210...250% of the energy cost of your elemental spells.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 238 - $GC_I_SKILL_ID_ARMOR_OF_MIST
@@ -620,7 +620,7 @@ Func BestTarget_ArmorOfMist($a_f_AggroRange)
 	; Enchantment Spell. For 8...18...20 seconds, you gain +10...34...40 armor and move 33% faster.
 	; Concise description
 	; Enchantment Spell. (8...18...20 seconds.) You have +10...34...40 armor and move 33% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 241 - $GC_I_SKILL_ID_LIFE_BOND
@@ -776,7 +776,7 @@ Func BestTarget_BlessedAura($a_f_AggroRange)
 	; Enchantment Spell. While you maintain this enchantment, Monk enchantments you cast last 10...30...35% longer.
 	; Concise description
 	; Enchantment Spell. Monk enchantments you cast last 10...30...35% longer.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 257 - $GC_I_SKILL_ID_AEGIS
@@ -789,7 +789,7 @@ Func BestTarget_Aegis($a_f_AggroRange)
 	; This article is about the skill. For the shield with the same name, see Aegis (shield).
 	; Concise description
 	; green; font-weight: bold;">5...10...11
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 258 - $GC_I_SKILL_ID_GUARDIAN
@@ -902,7 +902,7 @@ Func BestTarget_UnyieldingAura($a_f_AggroRange)
 	; Elite Enchantment Spell. While you maintain this enchantment, your Monk spells heal for +15...51...60% more Health. When this enchantment ends one random other party member is resurrected with full Health and Energy and teleported to your location.
 	; Concise description
 	; Elite Enchantment Spell. Your Monk spells heal for +15...51...60%. End effect: a random other party member is resurrected with full Health and Energy and teleported to your location.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 269 - $GC_I_SKILL_ID_MARK_OF_PROTECTION
@@ -941,7 +941,7 @@ Func BestTarget_ZealotsFire($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, whenever you use a skill that targets an ally, all foes adjacent to that target are struck for 5...29...35 fire damage and you lose 1 Energy.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) Whenever you use a skill on an ally, all foes adjacent to that ally are hit for 5...29...35 fire damage. Damage cost: you lose 1 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 272 - $GC_I_SKILL_ID_BALTHAZARS_AURA
@@ -989,7 +989,7 @@ Func BestTarget_DivineBoon($a_f_AggroRange)
 	; Enchantment Spell. While you maintain this enchantment, whenever you cast a Protection Prayer  or Divine Favor spell that targets an ally, that ally is healed for 15...51...60 Health, and you lose 1 Energy.
 	; Concise description
 	; Enchantment Spell. Whenever you cast a Protection Prayer [sic] or Divine Favor spell on an ally, that ally is healed for 15...51...60. Heal cost: you lose 1 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 285 - $GC_I_SKILL_ID_HEALING_HANDS
@@ -1119,7 +1119,7 @@ Func BestTarget_DivineSpirit($a_f_AggroRange)
 	; Enchantment Spell. For 1...11...14 second[s], Monk Spells cost you 5 less Energy to cast. (Minimum cost: 1 Energy.)
 	; Concise description
 	; Enchantment Spell. (1...11...14 second[s].) Monk spells cost you 5 less Energy. Minimum cost: 1 Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 315 - $GC_I_SKILL_ID_VENGEANCE
@@ -1138,7 +1138,7 @@ EndFunc
 
 ; Skill ID: 490 - $GC_I_SKILL_ID_VITAL_BLESSING_MONSTER_SKILL
 Func BestTarget_VitalBlessingMonsterSkill($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 515 - $GC_I_SKILL_ID_CHARR_BUFF
@@ -1173,7 +1173,7 @@ Func BestTarget_DivineFire($a_f_AggroRange)
 	; Prophecies
 	; Concise description
 	; Acquisition">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 596 - $GC_I_SKILL_ID_CHIMERA_OF_INTENSITY
@@ -1221,7 +1221,7 @@ Func CanUse_CultistsFervor()
 EndFunc
 
 Func BestTarget_CultistsFervor($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 807 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -1231,7 +1231,7 @@ Func CanUse_LyssasAura()
 EndFunc
 
 Func BestTarget_LyssasAura($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 814 - $GC_I_SKILL_ID_SHADOW_REFUGE
@@ -1244,7 +1244,7 @@ Func BestTarget_ShadowRefuge($a_f_AggroRange)
 	; Enchantment Spell. For 6 seconds, you gain 5...9...10 Health regeneration. When Shadow Refuge ends, you gain 40...88...100 Health if you are attacking.
 	; Concise description
 	; Enchantment Spell. (6 seconds.) You have +5...9...10 Health regeneration. End effect: heals you for 40...88...100 if you are attacking.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 819 - $GC_I_SKILL_ID_VAMPIRIC_SPIRIT
@@ -1270,7 +1270,7 @@ Func BestTarget_BurningSpeed($a_f_AggroRange)
 	; Enchantment Spell. For 7 seconds, you are set on fire and move 30...42...45% faster. When Burning Speed ends, all adjacent foes are set on fire for 3...8...9 seconds.
 	; Concise description
 	; Enchantment Spell. (7 seconds.) You move 30...42...45% faster. You suffer from Burning (7 seconds). End effect: inflicts Burning condition (3...8...9 seconds) on adjacent foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 826 - $GC_I_SKILL_ID_SHADOW_FORM
@@ -1283,7 +1283,7 @@ Func BestTarget_ShadowForm($a_f_AggroRange)
 	; Elite Enchantment Spell. For 5...18...21 seconds, you cannot be the target of enemy spells, and you gain 5 damage reduction for each Assassin enchantment on you. You cannot deal more than 5...21...25 damage with a single skill or attack.
 	; Concise description
 	; Elite Enchantment Spell. (5...18...21 seconds.) Enemy spells cannot target you. Gain 5 damage reduction for each Assassin enchantment on you. You cannot deal more than 5...21...25 damage with a single skill or attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 829 - $GC_I_SKILL_ID_VERATAS_PROMISE
@@ -1292,7 +1292,7 @@ Func CanUse_VeratasPromise()
 EndFunc
 
 Func BestTarget_VeratasPromise($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 833 - $GC_I_SKILL_ID_BORROWED_ENERGY
@@ -1366,7 +1366,7 @@ Func BestTarget_OrderOfApostasy($a_f_AggroRange)
 	; Elite Enchantment Spell. For 5 seconds, whenever a party member hits a foe with physical damage, that foe loses one enchantment. For each Monk enchantment removed, you lose 25...17...15% maximum Health.
 	; Concise description
 	; Elite Enchantment Spell. Enchants all party members (5 seconds). These party members remove one enchantment when they deal physical damage. Removal cost: for each Monk enchantment, you lose 25...17...15% maximum Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 885 - $GC_I_SKILL_ID_SHIELD_GUARDIAN
@@ -1379,7 +1379,7 @@ Func BestTarget_ShieldGuardian($a_f_AggroRange)
 	; Enchantment Spell. For 1...3...4 seconds, all party members in earshot have a 75% chance to block incoming attacks. If an attack is blocked, all allies in earshot are healed for 10...34...40 and Shield Guardian ends.
 	; Concise description
 	; Enchantment Spell. (1...3...4 second[s]). Party members in earshot have a 75% chance to block attacks. Block effect: Allies in earshot are healed for 10...34...40, and Shield Guardian ends.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 886 - $GC_I_SKILL_ID_RESTFUL_BREEZE
@@ -1418,7 +1418,7 @@ Func BestTarget_SharpenDaggers($a_f_AggroRange)
 	; Enchantment Spell. For 5...25...30 seconds, your dagger attacks cause Bleeding for 5...13...15 seconds.
 	; Concise description
 	; Enchantment Spell. (5...25...30 seconds.) Your dagger attacks inflict the Bleeding condition (5...13...15 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 930 - $GC_I_SKILL_ID_AUSPICIOUS_INCANTATION
@@ -1431,7 +1431,7 @@ Func BestTarget_AuspiciousIncantation($a_f_AggroRange)
 	; Enchantment Spell. For 20 seconds, the next spell you cast is disabled for an additional 10...6...5 seconds, and you gain 110...182...200% of that spell's Energy cost.
 	; Concise description
 	; Enchantment Spell. (20 seconds.) Your next spell gives you 110...182...200% of its Energy cost. That spell takes 10...6...5 seconds longer to recharge.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 949 - $GC_I_SKILL_ID_WAY_OF_THE_FOX
@@ -1444,7 +1444,7 @@ Func BestTarget_WayOfTheFox($a_f_AggroRange)
 	; Enchantment Spell. For 10...30...35 seconds, your next 1...5...6 attack[s] cannot be blocked.
 	; Concise description
 	; Enchantment Spell. (10...30...35 seconds.) Your attacks are unblockable. Ends after 1...5...6 attack[s].
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 956 - $GC_I_SKILL_ID_ENERGY_FONT
@@ -1457,7 +1457,7 @@ Func BestTarget_EnergyFont($a_f_AggroRange)
 	; Elementalist
 	; Concise description
 	; green; font-weight: bold;">15...51...60
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 957 - $GC_I_SKILL_ID_SPELL_SHIELD
@@ -1470,7 +1470,7 @@ Func BestTarget_SpellShield($a_f_AggroRange)
 	; Enchantment Spell. For 5...17...20 seconds, while you are casting spells, foes cannot target you with spells. When Spell Shield ends, all your skills are disabled for 10...6...5 seconds.
 	; Concise description
 	; Enchantment Spell. (5...17...20 seconds.) While casting spells, you cannot be the target of spells. End effect: your skills are disabled (10...6...5 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 977 - $GC_I_SKILL_ID_WAY_OF_THE_LOTUS
@@ -1483,7 +1483,7 @@ Func BestTarget_WayOfTheLotus($a_f_AggroRange)
 	; Enchantment Spell. For 20 seconds, the next time you hit with a dual attack skill, you gain 5...17...20 Energy.
 	; Concise description
 	; Enchantment Spell. (20 seconds.) You gain 5...17...20 Energy the next time you hit with a dual attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 984 - $GC_I_SKILL_ID_TORCH_ENCHANTMENT
@@ -1496,7 +1496,7 @@ Func BestTarget_TorchEnchantment($a_f_AggroRange)
 	; Core
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 987 - $GC_I_SKILL_ID_WAY_OF_THE_EMPTY_PALM
@@ -1509,7 +1509,7 @@ Func BestTarget_WayOfTheEmptyPalm($a_f_AggroRange)
 	; Elite Enchantment Spell. For 5...17...20 seconds, off-hand and dual attacks cost no Energy.
 	; Concise description
 	; Elite Enchantment Spell. (5...17...20 seconds.) Your off-hand and dual attacks cost no Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1006 - $GC_I_SKILL_ID_ICE_FORT
@@ -1522,7 +1522,7 @@ Func BestTarget_IceFort($a_f_AggroRange)
 	; Enchantment Spell. For 10 seconds, you cannot be knocked down, you are immune to conditions, and all incoming damage is reduced to 0. Ice Fort ends if you move.
 	; Concise description
 	; Enchantment Spell. (10 seconds.) You cannot be knocked down, you are immune to conditions, and you take no damage. Ends if you move.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1013 - $GC_I_SKILL_ID_ICE_BREAKER
@@ -1548,7 +1548,7 @@ Func BestTarget_CriticalDefenses($a_f_AggroRange)
 	; Enchantment Spell. For 4...9...10 seconds, you have a 75% chance to block. Critical Defenses refreshes every time you land a critical hit.
 	; Concise description
 	; Enchantment Spell. (4...9...10 seconds.) You have a 75% chance to block. Renewal: every time you land a critical hit.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1028 - $GC_I_SKILL_ID_WAY_OF_PERFECTION
@@ -1561,7 +1561,7 @@ Func BestTarget_WayOfPerfection($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, whenever you successfully land a critical hit, you gain 10...34...40 Health.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) Your critical hits heal you for 10...34...40.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1029 - $GC_I_SKILL_ID_DARK_APOSTASY
@@ -1574,7 +1574,7 @@ Func BestTarget_DarkApostasy($a_f_AggroRange)
 	; Elite Enchantment Spell. For 3...14...17 seconds, every time you successfully land a critical hit, you remove one enchantment from your target. If you remove an enchantment in this way, you lose 10...5...4 Energy or Dark Apostasy ends.
 	; Concise description
 	; Elite Enchantment Spell. (3...14...17 seconds.) Your critical hits remove an enchantment. Removal cost: lose 10...5...4 Energy or Dark Apostasy ends.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1030 - $GC_I_SKILL_ID_LOCUSTS_FURY
@@ -1583,7 +1583,7 @@ Func CanUse_LocustsFury()
 EndFunc
 
 Func BestTarget_LocustsFury($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1031 - $GC_I_SKILL_ID_SHROUD_OF_DISTRESS
@@ -1596,7 +1596,7 @@ Func BestTarget_ShroudOfDistress($a_f_AggroRange)
 	; Enchantment Spell. For 30...54...60 seconds, if you are below 50% Health, you have 3...7...8 health regeneration and a 75% chance to block attacks.
 	; Concise description
 	; Enchantment Spell. (30...54...60 seconds.) You have 3...7...8 health regeneration and a 75% chance to block. No effect unless your Health is below 50%.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1054 - $GC_I_SKILL_ID_ANCESTORS_VISAGE
@@ -1618,7 +1618,7 @@ Func BestTarget_SliverArmor($a_f_AggroRange)
 	; Enchantment Spell. For 5...10...11 seconds, you have 25...45...50% chance to block attacks and whenever you are the target of a hostile spell or attack one nearby foe is struck for 5...29...35 earth damage.
 	; Concise description
 	; Enchantment Spell. (5...10...11 seconds.) You have 25...45...50% chance to block. Deals 5...29...35 earth damage to one nearby foe whenever you are the target of a hostile spell or attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1091 - $GC_I_SKILL_ID_DOUBLE_DRAGON
@@ -1683,7 +1683,7 @@ Func BestTarget_DemonicAgility($a_f_AggroRange)
 	; Enchantment Spell. For 30 seconds, This  demon creature has 100% chance to double strike when attacking in melee.
 	; Concise description
 	; Enchantment Spell. (30 seconds.) This demon creature has 100% chance to double strike when attacking in melee.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1153 - $GC_I_SKILL_ID_BLESSING_OF_THE_KIRIN
@@ -1696,7 +1696,7 @@ Func BestTarget_BlessingOfTheKirin($a_f_AggroRange)
 	; Enchantment Spell. For 30 seconds, the next time a nearby ally of this Kirin uses a skill, that ally is cured of Miasma or one condition.
 	; Concise description
 	; Enchantment Spell. (30 seconds.) When a nearby ally uses a skill, that ally is cured of Miasma or one condition.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1229 - $GC_I_SKILL_ID_EXPLOSIVE_GROWTH
@@ -1709,7 +1709,7 @@ Func BestTarget_ExplosiveGrowth($a_f_AggroRange)
 	; This article is about the skill. For the creature, see Explosive Growth (NPC).
 	; Concise description
 	; green; font-weight: bold;">15...51...60
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1230 - $GC_I_SKILL_ID_BOON_OF_CREATION
@@ -1722,7 +1722,7 @@ Func BestTarget_BoonOfCreation($a_f_AggroRange)
 	; Enchantment Spell. For 15...51...60 seconds, whenever you create a creature, you gain 5...41...50 Health and 1...5...6 Energy.
 	; Concise description
 	; Enchantment Spell. (15...51...60 seconds.) You gain 5...41...50 Health and 1...5...6 Energy whenever you create a creature.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1231 - $GC_I_SKILL_ID_SPIRIT_CHANNELING
@@ -1735,7 +1735,7 @@ Func BestTarget_SpiritChanneling($a_f_AggroRange)
 	; Elite Enchantment Spell. For 12 seconds, you have +1...5...6 Energy regeneration. When you cast this spell, you gain 3...10...12 Energy if you are within earshot of a spirit.
 	; Concise description
 	; Elite Enchantment Spell. (12 seconds.) You have +1...5...6 Energy regeneration. Initial effect: you gain 3...10...12 Energy if you are within earshot of a spirit.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1244 - $GC_I_SKILL_ID_GHOSTLY_HASTE
@@ -1748,7 +1748,7 @@ Func BestTarget_GhostlyHaste($a_f_AggroRange)
 	; Enchantment Spell. For 5...17...20 seconds, spells you cast while within earshot of a spirit recharge 25% faster.
 	; Concise description
 	; Enchantment Spell. (5...17...20 seconds.) Spells you cast recharge 25% faster. No effect unless you are within earshot of a spirit.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1261 - $GC_I_SKILL_ID_FRIGID_ARMOR
@@ -1761,7 +1761,7 @@ Func BestTarget_FrigidArmor($a_f_AggroRange)
 	; Enchantment Spell. For 10...22...25 seconds, you have +10...34...40 armor against physical damage and cannot be set on fire.
 	; Concise description
 	; Enchantment Spell. (10...22...25 seconds.) You have +10...34...40 armor against physical damage and immunity to Burning.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1311 - $GC_I_SKILL_ID_NIGHTMARE_REFUGE
@@ -1774,7 +1774,7 @@ Func BestTarget_NightmareRefuge($a_f_AggroRange)
 	; Monster
 	; Concise description
 	; Related skills">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1323 - $GC_I_SKILL_ID_SUGAR_RUSH_MEDIUM
@@ -1783,7 +1783,7 @@ Func CanUse_SugarRushMedium()
 EndFunc
 
 Func BestTarget_SugarRushMedium($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1338 - $GC_I_SKILL_ID_PERSISTENCE_OF_MEMORY
@@ -1796,7 +1796,7 @@ Func BestTarget_PersistenceOfMemory($a_f_AggroRange)
 	; Enchantment Spell. For 5...17...20 seconds, whenever a spell you cast is interrupted, that spell is instantly recharged.
 	; Concise description
 	; Enchantment Spell. (5...17...20 seconds.) Your interrupted spells recharge instantly.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1340 - $GC_I_SKILL_ID_SYMBOLIC_CELERITY
@@ -1809,7 +1809,7 @@ Func BestTarget_SymbolicCelerity($a_f_AggroRange)
 	; Enchantment Spell. For 36...55...60 seconds, all of your signets use your Fast Casting attribute instead of their normal attributes.
 	; Concise description
 	; Enchantment Spell. (36...55...60 seconds.) Your signets use your Fast Casting attribute.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1355 - $GC_I_SKILL_ID_JAGGED_BONES
@@ -1835,7 +1835,7 @@ Func BestTarget_Contagion($a_f_AggroRange)
 	; Elite Enchantment Spell. For 60 seconds, whenever you suffer from a new condition, all foes in the area suffer from that same condition and you sacrifice 10...6...5% maximum Health.
 	; Concise description
 	; Elite Enchantment Spell. (60 seconds.) Whenever you gain a condition, all foes in the area gain that same condition. You sacrifice 10...6...5% maximum Health each time this happens.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1357 - $GC_I_SKILL_ID_BLOODLETTING
@@ -1848,7 +1848,7 @@ Func BestTarget_Bloodletting($a_f_AggroRange)
 	; Necromancer
 	; Concise description
 	; green; font-weight: bold;">1...5...6
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1370 - $GC_I_SKILL_ID_STORM_DJINNS_HASTE
@@ -1857,7 +1857,7 @@ Func CanUse_StormDjinnsHaste()
 EndFunc
 
 Func BestTarget_StormDjinnsHaste($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1371 - $GC_I_SKILL_ID_STONE_STRIKER
@@ -1870,7 +1870,7 @@ Func BestTarget_StoneStriker($a_f_AggroRange)
 	; Enchantment Spell. For 5...25...30 seconds, whenever you take or deal elemental or physical damage, that damage is converted to earth damage.
 	; Concise description
 	; Enchantment Spell. (5...25...30 seconds.) Converts elemental and physical damage you take or deal to earth damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1373 - $GC_I_SKILL_ID_STONE_SHEATH
@@ -1896,7 +1896,7 @@ Func BestTarget_StonefleshAura($a_f_AggroRange)
 	; Enchantment Spell. For 5...13...15 seconds, damage you receive is reduced by 1...25...31, and you are immune to critical attacks.
 	; Concise description
 	; Enchantment Spell. (5...13...15 seconds.) Reduces damage you take by 1...25...31, and you are immune to critical hits.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1378 - $GC_I_SKILL_ID_MASTER_OF_MAGIC
@@ -1909,7 +1909,7 @@ Func BestTarget_MasterOfMagic($a_f_AggroRange)
 	; This article is about the skill Master of Magic. For the NPC on the Isle of the Nameless, see Master of Magic (NPC).
 	; Concise description
 	; green; font-weight: bold;">1...49...61
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1381 - $GC_I_SKILL_ID_FLAME_DJINNS_HASTE1
@@ -1918,7 +1918,7 @@ Func CanUse_FlameDjinnsHaste1()
 EndFunc
 
 Func BestTarget_FlameDjinnsHaste1($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1390 - $GC_I_SKILL_ID_JUDGES_INTERVENTION
@@ -1970,7 +1970,7 @@ Func BestTarget_HealersBoon($a_f_AggroRange)
 	; Elite Enchantment Spell. For 10...46...55 seconds.  Healing Prayers spells cast 50% faster and heal for 50% more Health.
 	; Concise description
 	; Elite Enchantment Spell. (10...46...55 seconds.) Healing Prayers spells cast 50% faster and heal for 50% more.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1394 - $GC_I_SKILL_ID_HEALERS_COVENANT
@@ -1979,7 +1979,7 @@ Func CanUse_HealersCovenant()
 EndFunc
 
 Func BestTarget_HealersCovenant($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1395 - $GC_I_SKILL_ID_BALTHAZARS_PENDULUM
@@ -2032,7 +2032,7 @@ Func CanUse_AbaddonsChosen()
 EndFunc
 
 Func BestTarget_AbaddonsChosen($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1480 - $GC_I_SKILL_ID_SPIRITS_GIFT
@@ -2041,7 +2041,7 @@ Func CanUse_SpiritsGift()
 EndFunc
 
 Func BestTarget_SpiritsGift($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1492 - $GC_I_SKILL_ID_REMOVE_WIND_PRAYERS_SKILL
@@ -2050,7 +2050,7 @@ Func CanUse_RemoveWindPrayersSkill()
 EndFunc
 
 Func BestTarget_RemoveWindPrayersSkill($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1493 - $GC_I_SKILL_ID_GRENTHS_FINGERS
@@ -2059,7 +2059,7 @@ Func CanUse_GrenthsFingers()
 EndFunc
 
 Func BestTarget_GrenthsFingers($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1494 - $GC_I_SKILL_ID_REMOVE_BOON_OF_THE_GODS
@@ -2068,7 +2068,7 @@ Func CanUse_RemoveBoonOfTheGods()
 EndFunc
 
 Func BestTarget_RemoveBoonOfTheGods($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1495 - $GC_I_SKILL_ID_AURA_OF_THORNS
@@ -2081,7 +2081,7 @@ Func BestTarget_AuraOfThorns($a_f_AggroRange)
 	; Flash Enchantment Spell. All nearby foes begin Bleeding for 5...13...15 seconds. For 30 seconds, this enchantment does nothing. When this enchantment ends, all nearby foes are Crippled for 3...7...8 seconds.
 	; Concise description
 	; Flash Enchantment Spell. (30 seconds.) Initial effect: inflicts Bleeding condition (5...13...15 seconds) on nearby foes. End effect: inflicts Crippled condition (3...7...8 seconds) on nearby foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1496 - $GC_I_SKILL_ID_BALTHAZARS_RAGE
@@ -2090,7 +2090,7 @@ Func CanUse_BalthazarsRage()
 EndFunc
 
 Func BestTarget_BalthazarsRage($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1497 - $GC_I_SKILL_ID_DUST_CLOAK
@@ -2103,7 +2103,7 @@ Func BestTarget_DustCloak($a_f_AggroRange)
 	; Flash Enchantment Spell. All adjacent foes are struck for 10...34...40 earth damage. For 30 seconds, your attacks deal earth damage. When this enchantment ends, all adjacent foes are Blinded for 1...3...4 second[s].
 	; Concise description
 	; Flash Enchantment Spell. (30 seconds.) Your attacks deal earth damage. Initial effect: deals 10...34...40 earth damage to adjacent foes. End effect: inflicts Blindness condition (1...3...4 second[s]) on adjacent foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1498 - $GC_I_SKILL_ID_STAGGERING_FORCE
@@ -2116,7 +2116,7 @@ Func BestTarget_StaggeringForce($a_f_AggroRange)
 	; Flash Enchantment Spell. All nearby foes are struck for 10...34...40 earth damage. For 30 seconds, your attacks deal earth damage. When this enchantment ends, all nearby foes have Cracked Armor for 1...8...10 second[s].
 	; Concise description
 	; Flash Enchantment Spell. (30 seconds.) Your attacks deal earth damage. Initial effect: deals 10...34...40 earth damage to nearby foes. End effect: inflicts Cracked Armor condition (1...8...10 second[s]) on nearby foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1499 - $GC_I_SKILL_ID_PIOUS_RENEWAL
@@ -2129,7 +2129,7 @@ Func BestTarget_PiousRenewal($a_f_AggroRange)
 	; Elite Flash Enchantment Spell. For 8 seconds, nothing happens. When this enchantment ends, Pious Renewal is recharged and you gain 0...4...5 Energy and 0...24...30 Health.
 	; Concise description
 	; Elite Flash Enchantment Spell. (8 seconds.) End Effect: recharges itself and you gain 0...4...5 Energy and 0...24...30 Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1500 - $GC_I_SKILL_ID_MIRAGE_CLOAK
@@ -2142,7 +2142,7 @@ Func BestTarget_MirageCloak($a_f_AggroRange)
 	; Flash Enchantment Spell. For 1...6...7 second[s], you have a 40...72...80% chance to block incoming attacks. When you cast this enchantment, all nearby foes are struck for 10...34...40 earth damage.
 	; Concise description
 	; Flash Enchantment Spell. (1...6...7 second[s].) You have 40...72...80% chance to block. Initial Effect: deals 10...34...40 earth damage to nearby foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1501 - $GC_I_SKILL_ID_REMOVE_BALTHAZARS_RAGE
@@ -2151,7 +2151,7 @@ Func CanUse_RemoveBalthazarsRage()
 EndFunc
 
 Func BestTarget_RemoveBalthazarsRage($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1502 - $GC_I_SKILL_ID_ARCANE_ZEAL
@@ -2164,7 +2164,7 @@ Func BestTarget_ArcaneZeal($a_f_AggroRange)
 	; Elite Enchantment Spell. For 10 seconds, whenever you cast a spell, you gain 1 Energy for each enchantment on you (maximum 1...6...7 Energy).
 	; Concise description
 	; Elite Enchantment Spell. (10 seconds.) You gain 1 Energy (maximum 1...6...7) for each enchantment on you whenever you cast a spell.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1503 - $GC_I_SKILL_ID_MYSTIC_VIGOR
@@ -2177,7 +2177,7 @@ Func BestTarget_MysticVigor($a_f_AggroRange)
 	; Enchantment Spell. For 20 seconds, every time you successfully hit with an attack, you gain 3...13...15 Health for each enchantment on you (maximum 25 Health).
 	; Concise description
 	; Enchantment Spell. (20 seconds.) You gain 3...13...15 Health (maximum 25) for each enchantment on you whenever you hit with an attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1504 - $GC_I_SKILL_ID_WATCHFUL_INTERVENTION
@@ -2203,7 +2203,7 @@ Func BestTarget_VowOfPiety($a_f_AggroRange)
 	; Enchantment Spell. For 20 seconds, you have +24 armor and +1...3...4 Health regeneration. Vow of Piety renews whenever an enchantment on you ends.
 	; Concise description
 	; Enchantment Spell. (20 seconds) +24 armor and +1...3...4 Health regeneration. Renewal: Whenever an enchantment on you ends.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1506 - $GC_I_SKILL_ID_VITAL_BOON
@@ -2216,7 +2216,7 @@ Func BestTarget_VitalBoon($a_f_AggroRange)
 	; Enchantment Spell. For 20 seconds, you have +40...88...100 maximum Health. When this enchantment ends, you are healed for 75...175...200 Health.
 	; Concise description
 	; Enchantment Spell. (20 seconds.) You have +40...88...100 maximum Health. End effect: Heals you for 75...175...200.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1507 - $GC_I_SKILL_ID_HEART_OF_HOLY_FLAME
@@ -2229,7 +2229,7 @@ Func BestTarget_HeartOfHolyFlame($a_f_AggroRange)
 	; Flash Enchantment Spell. All nearby foes take 5...25...30 holy damage. For 30 seconds, your attacks deal holy damage. When this enchantment ends, all nearby foes are set on fire for 2...4...5 seconds.
 	; Concise description
 	; Flash Enchantment Spell. (30 seconds.) Your attacks deal holy damage. Initial effect: deals 5...25...30 holy damage to nearby foes. End effect: inflicts Burning condition (2...4...5 seconds) on nearby foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1509 - $GC_I_SKILL_ID_FAITHFUL_INTERVENTION
@@ -2242,7 +2242,7 @@ Func BestTarget_FaithfulIntervention($a_f_AggroRange)
 	; Enchantment Spell. If damage drops your Health below 50%, Faithful Intervention ends. When Faithful Intervention ends, you are healed for 30...126...150 Health.
 	; Concise description
 	; Enchantment Spell. You gain 30...126...150 Health the next time damage drops your Health below 50%.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1510 - $GC_I_SKILL_ID_SAND_SHARDS
@@ -2255,7 +2255,7 @@ Func BestTarget_SandShards($a_f_AggroRange)
 	; Flash Enchantment Spell. For 30 seconds, the next 1...4...5 time[s] you hit with a scythe, all other adjacent foes take 10...50...60 earth damage.
 	; Concise description
 	; Flash Enchantment Spell. (30 seconds.) Deal 10...50...60 earth damage to all other adjacent foes whenever you hit with your scythe. Ends after 1...4...5 hit[s].
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1511 - $GC_I_SKILL_ID_INTIMIDATING_AURA_BETA_VERSION
@@ -2264,7 +2264,7 @@ Func CanUse_IntimidatingAuraBetaVersion()
 EndFunc
 
 Func BestTarget_IntimidatingAuraBetaVersion($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1512 - $GC_I_SKILL_ID_LYSSAS_HASTE
@@ -2273,7 +2273,7 @@ Func CanUse_LyssasHaste()
 EndFunc
 
 Func BestTarget_LyssasHaste($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1513 - $GC_I_SKILL_ID_GUIDING_HANDS
@@ -2286,7 +2286,7 @@ Func BestTarget_GuidingHands($a_f_AggroRange)
 	; Enchantment Spell. For 20 seconds, your next 0...2...3 attack[s] cannot be blocked. When activated, this skill removes the Blindness condition.
 	; Concise description
 	; Enchantment Spell. (20 seconds.) Your next 0...2...3 attack[s] cannot be blocked. Initial effect: removes Blindness.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1514 - $GC_I_SKILL_ID_FLEETING_STABILITY
@@ -2299,7 +2299,7 @@ Func BestTarget_FleetingStability($a_f_AggroRange)
 	; Flash Enchantment Spell. For 2...5...6 seconds, you cannot be knocked down and move 25% faster. This enchantment ends prematurely if it prevents a knockdown.
 	; Concise description
 	; Flash Enchantment Spell. (2...5...6 seconds.) You cannot be knocked down and move 25% faster. Ends if knockdown prevented.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1515 - $GC_I_SKILL_ID_ARMOR_OF_SANCTITY
@@ -2312,7 +2312,7 @@ Func BestTarget_ArmorOfSanctity($a_f_AggroRange)
 	; Enchantment Spell. All adjacent foes suffer from Weakness for 5...13...15 seconds. For 15 seconds, you take 5...17...20 less damage from foes suffering from a condition.
 	; Concise description
 	; Enchantment Spell. Inflicts Weakness condition on all adjacent foes (5...13...15). You take 5...17...20 less damage from foes with a condition. (15 seconds.)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1516 - $GC_I_SKILL_ID_MYSTIC_REGENERATION
@@ -2325,7 +2325,7 @@ Func BestTarget_MysticRegeneration($a_f_AggroRange)
 	; Enchantment Spell. For 5...17...20 seconds, you have +1...3...4 Health regeneration for each enchantment (maximum of 8) on you.
 	; Concise description
 	; Enchantment Spell. (5...17...20 seconds.) You have +1...3...4 Health regeneration for each enchantment (maximum of 8) on you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1517 - $GC_I_SKILL_ID_VOW_OF_SILENCE
@@ -2338,7 +2338,7 @@ Func BestTarget_VowOfSilence($a_f_AggroRange)
 	; Elite Enchantment Spell. For 5...9...10 seconds, you cannot be the target of spells, and you cannot cast spells.
 	; Concise description
 	; Elite Enchantment Spell. (5...9...10 seconds.) Spells cannot target you. You cannot cast spells.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1523 - $GC_I_SKILL_ID_MEDITATION
@@ -2351,7 +2351,7 @@ Func BestTarget_Meditation($a_f_AggroRange)
 	; Enchantment Spell. Lose all adrenaline. For 20 seconds, you gain 1...3...4 Energy every time an enchantment on you ends.
 	; Concise description
 	; Enchantment Spell. (20 seconds.) Lose all adrenaline. Gain 1...3...4 Energy whenever an enchantment on you ends.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1524 - $GC_I_SKILL_ID_EREMITES_ZEAL
@@ -2360,7 +2360,7 @@ Func CanUse_EremitesZeal()
 EndFunc
 
 Func BestTarget_EremitesZeal($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1531 - $GC_I_SKILL_ID_INTIMIDATING_AURA
@@ -2373,7 +2373,7 @@ Func BestTarget_IntimidatingAura($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, you have +40...88...100 max Health and take 1...8...10 less damage from foes with less Health than you.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) You have +40...88...100 max Health and take &#45;1...8...10 damage from foes with less Health than you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1540 - $GC_I_SKILL_ID_CONVICTION
@@ -2386,7 +2386,7 @@ Func BestTarget_Conviction($a_f_AggroRange)
 	; This article is about the skill. For the weapon with the same name, see Conviction (weapon).
 	; Concise description
 	; green; font-weight: bold;">1...3...3
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1541 - $GC_I_SKILL_ID_ENCHANTED_HASTE
@@ -2399,7 +2399,7 @@ Func BestTarget_EnchantedHaste($a_f_AggroRange)
 	; Flash Enchantment Spell. For 7 seconds, you move 25% faster. If this enchantment ends prematurely, you lose 1 condition.
 	; Concise description
 	; Flash Enchantment Spell. (7 seconds). You move 25% faster. Lose 1 condition if this enchantment ends prematurely.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1544 - $GC_I_SKILL_ID_WHIRLING_CHARGE
@@ -2412,7 +2412,7 @@ Func BestTarget_WhirlingCharge($a_f_AggroRange)
 	; Flash Enchantment Spell. For 1...5...6 second[s], you move 33% faster than normal. The next time you strike a foe, all other nearby foes take 10...50...60 cold damage and this enchantment ends.
 	; Concise description
 	; Flash Enchantment Spell. (1...5...6 second[s].) You move 33% faster. Deal 10...50...60 cold damage to all other nearby foes the next time you hit a foe and this enchantment ends.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1612 - $GC_I_SKILL_ID_SUGAR_RUSH_LONG
@@ -2421,7 +2421,7 @@ Func CanUse_SugarRushLong()
 EndFunc
 
 Func BestTarget_SugarRushLong($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1638 - $GC_I_SKILL_ID_DEADLY_HASTE
@@ -2434,7 +2434,7 @@ Func BestTarget_DeadlyHaste($a_f_AggroRange)
 	; Enchantment Spell. For 10...30...35 seconds, half-ranged spells cast 5...41...50% faster and recharge 5...41...50% faster.
 	; Concise description
 	; Enchantment Spell. (10...30...35 seconds.) Your half-ranged spells cast 5...41...50% faster and recharge 5...41...50% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1639 - $GC_I_SKILL_ID_ASSASSINS_REMEDY
@@ -2443,7 +2443,7 @@ Func CanUse_AssassinsRemedy()
 EndFunc
 
 Func BestTarget_AssassinsRemedy($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1640 - $GC_I_SKILL_ID_FOXS_PROMISE
@@ -2452,7 +2452,7 @@ Func CanUse_FoxsPromise()
 EndFunc
 
 Func BestTarget_FoxsPromise($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1641 - $GC_I_SKILL_ID_FEIGNED_NEUTRALITY
@@ -2465,7 +2465,7 @@ Func BestTarget_FeignedNeutrality($a_f_AggroRange)
 	; Enchantment Spell. For 4...9...10 seconds, you have +7 Health regeneration and +80 armor. This enchantment ends if you successfully hit with an attack or use a skill.
 	; Concise description
 	; Enchantment Spell. (4...9...10 seconds.) You have +7 Health regeneration and +80 armor. Ends if you hit with an attack or use a skill.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1654 - $GC_I_SKILL_ID_SHADOW_MELD
@@ -2491,7 +2491,7 @@ Func BestTarget_ElementalFlame($a_f_AggroRange)
 	; Enchantment Spell. For 10...30...35 seconds, whenever you apply an Elemental hex to a foe, that foe is set on fire for 1...4...5 second[s].
 	; Concise description
 	; Enchantment Spell. (10...30...35 seconds.) Inflicts Burning condition (1...4...5 second[s]) whenever you apply an Elemental hex to a target.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1683 - $GC_I_SKILL_ID_PENSIVE_GUARDIAN
@@ -2513,7 +2513,7 @@ Func CanUse_ScribesInsight()
 EndFunc
 
 Func BestTarget_ScribesInsight($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1685 - $GC_I_SKILL_ID_HOLY_HASTE
@@ -2526,7 +2526,7 @@ Func BestTarget_HolyHaste($a_f_AggroRange)
 	; Enchantment Spell. For 1...48...60 second[s], your Healing Prayers spells cast 50% faster. This enchantment ends if you cast another enchantment.
 	; Concise description
 	; Enchantment Spell. (1...48...60 second[s].) Your Healing Prayers spells cast 50% faster. Ends if you cast an enchantment.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1736 - $GC_I_SKILL_ID_SPIRITS_STRENGTH
@@ -2535,7 +2535,7 @@ Func CanUse_SpiritsStrength()
 EndFunc
 
 Func BestTarget_SpiritsStrength($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1737 - $GC_I_SKILL_ID_WIELDERS_ZEAL
@@ -2544,7 +2544,7 @@ Func CanUse_WieldersZeal()
 EndFunc
 
 Func BestTarget_WieldersZeal($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1738 - $GC_I_SKILL_ID_SIGHT_BEYOND_SIGHT
@@ -2557,7 +2557,7 @@ Func BestTarget_SightBeyondSight($a_f_AggroRange)
 	; Enchantment Spell. For 8...18...20 seconds, you cannot be Blinded.
 	; Concise description
 	; Enchantment Spell. (8...18...20 seconds). You are immune to Blindness.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1739 - $GC_I_SKILL_ID_RENEWING_MEMORIES
@@ -2570,7 +2570,7 @@ Func BestTarget_RenewingMemories($a_f_AggroRange)
 	; Enchantment Spell. For 5...17...20 seconds, while holding an item, any weapon and item Spells you cast cost 5...29...35% less Energy.
 	; Concise description
 	; Enchantment Spell. (5...17...20 seconds.) Your weapon and item spells cost 5...29...35% less Energy. No effect unless holding an item.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1740 - $GC_I_SKILL_ID_WIELDERS_REMEDY
@@ -2579,7 +2579,7 @@ Func CanUse_WieldersRemedy()
 EndFunc
 
 Func BestTarget_WieldersRemedy($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1754 - $GC_I_SKILL_ID_ONSLAUGHT
@@ -2592,7 +2592,7 @@ Func BestTarget_Onslaught($a_f_AggroRange)
 	; Elite Flash Enchantment Spell. For 3...13...15 seconds, you attack, move and gain adrenaline 25% faster.
 	; Concise description
 	; Elite Flash Enchantment Spell. (3...13...15 seconds.) You attack, move and gain adrenaline 25% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1755 - $GC_I_SKILL_ID_MYSTIC_CORRUPTION
@@ -2605,7 +2605,7 @@ Func BestTarget_MysticCorruption($a_f_AggroRange)
 	; Flash Enchantment Spell. All adjacent foes suffer from Disease for 1...2...2 second[s]. For 20 seconds, nothing happens. Disease duration is doubled if you are enchanted when you activate this skill. When this enchantment ends, all party members in earshot are cured of Disease.
 	; Concise description
 	; Flash Enchantment Spell. (20 seconds.) Initial Effect: all adjacent foes are Diseased (1...2...2 second[s].) Double duration if you are already enchanted. End Effect: party members in earshot lose Disease.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1756 - $GC_I_SKILL_ID_GRENTHS_GRASP
@@ -2614,7 +2614,7 @@ Func CanUse_GrenthsGrasp()
 EndFunc
 
 Func BestTarget_GrenthsGrasp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1757 - $GC_I_SKILL_ID_VEIL_OF_THORNS
@@ -2627,7 +2627,7 @@ Func BestTarget_VeilOfThorns($a_f_AggroRange)
 	; Flash Enchantment Spell. When you cast this enchantment, all nearby foes are struck for 5...41...50 piercing damage. For 5...21...25 seconds you take 5...29...35% less damage from spells.
 	; Concise description
 	; Flash Enchantment Spell. (5...21...25 seconds.) Spell damage is reduced by 5...29...35%. Initial Effect: nearby foes are struck for 5...41...50 piercing damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1758 - $GC_I_SKILL_ID_HARRIERS_GRASP
@@ -2636,7 +2636,7 @@ Func CanUse_HarriersGrasp()
 EndFunc
 
 Func BestTarget_HarriersGrasp($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1759 - $GC_I_SKILL_ID_VOW_OF_STRENGTH
@@ -2649,7 +2649,7 @@ Func BestTarget_VowOfStrength($a_f_AggroRange)
 	; Elite Enchantment Spell. For 15 seconds, whenever you attack a foe with your scythe, you deal 10...22...25 slashing damage to all adjacent foes.
 	; Concise description
 	; Elite Enchantment Spell. (15 seconds.) When you attack with a scythe, deals 10...22...25 slashing damage to adjacent foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1760 - $GC_I_SKILL_ID_EBON_DUST_AURA
@@ -2662,7 +2662,7 @@ Func BestTarget_EbonDustAura($a_f_AggroRange)
 	; Elite Flash Enchantment Spell. When you cast this enchantment, all nearby foes are Blinded for 1...6...7 second[s]. For 30 seconds, if you are wielding an earth weapon, your melee attacks deal +3...13...15 earth damage. When this enchantment ends, you are cured of Blindness.
 	; Concise description
 	; Elite Flash Enchantment Spell. (30 seconds.) Deal +3...13...15 earth damage with your melee attacks. Initial Effect: Blinds nearby foes for 1...6...7 second[s]. End Effect: removes Blindness. No effect unless wielding an earth weapon.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1761 - $GC_I_SKILL_ID_ZEALOUS_VOW
@@ -2675,7 +2675,7 @@ Func BestTarget_ZealousVow($a_f_AggroRange)
 	; Elite Enchantment Spell. For 20 seconds, you have -3 Energy regeneration, and you gain 1...5...6 Energy every time you hit with an attack.
 	; Concise description
 	; Elite Enchantment Spell. (20 seconds.) You gain 1...5...6 Energy each time you hit with an attack. You have -3 Energy regeneration.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1763 - $GC_I_SKILL_ID_ZEALOUS_RENEWAL
@@ -2688,7 +2688,7 @@ Func BestTarget_ZealousRenewal($a_f_AggroRange)
 	; Flash Enchantment Spell. All nearby foes take 5...25...30 holy damage. For 5...21...25 seconds, you have -1 Energy regeneration, and gain 1 Energy whenever you hit a foe. If this enchantment ends prematurely, you gain 1...4...5 Energy.
 	; Concise description
 	; Flash Enchantment Spell. (5...21...25 seconds.) Initial effect: deals 5...25...30 holy damage to nearby foes. You have -1 Energy regeneration and gain 1 Energy when you hit. Gain 1...4...5 Energy if this enchantment ends early.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1764 - $GC_I_SKILL_ID_ATTACKERS_INSIGHT
@@ -2697,7 +2697,7 @@ Func CanUse_AttackersInsight()
 EndFunc
 
 Func BestTarget_AttackersInsight($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1765 - $GC_I_SKILL_ID_RENDING_AURA
@@ -2710,7 +2710,7 @@ Func BestTarget_RendingAura($a_f_AggroRange)
 	; Flash Enchantment Spell. When you cast this enchantment, all nearby foes take 10...34...40 cold damage. For&#160;&#160;30  seconds, your attack skills remove enchantments from knocked-down foes. When this enchantment ends, nearby foes are affected by Cracked Armor for 1...8...10 second[s].
 	; Concise description
 	; Flash Enchantment Spell. (30 seconds.) Your attack skills remove enchantments from knocked-down foes. Initial effect: deals 10...34...40 cold damage to all nearby foes. End effect: nearby foes have Cracked Armor for 1...8...10 second[s].
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1766 - $GC_I_SKILL_ID_FEATHERFOOT_GRACE
@@ -2723,7 +2723,7 @@ Func BestTarget_FeatherfootGrace($a_f_AggroRange)
 	; Enchantment Spell. For 5...17...20 seconds, you move 25% faster, and conditions expire 25% faster.
 	; Concise description
 	; Enchantment Spell. (5...17...20 seconds.) You move 25% faster, and conditions expire 25% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1768 - $GC_I_SKILL_ID_HARRIERS_HASTE
@@ -2732,7 +2732,7 @@ Func CanUse_HarriersHaste()
 EndFunc
 
 Func BestTarget_HarriersHaste($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1787 - $GC_I_SKILL_ID_ACCELERATED_GROWTH
@@ -2745,7 +2745,7 @@ Func BestTarget_AcceleratedGrowth($a_f_AggroRange)
 	; Ritualist
 	; Concise description
 	; green; font-weight: bold;">15...51...60
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1820 - $GC_I_SKILL_ID_SPIRIT_FORM_REMAINS_OF_SAHLAHJA
@@ -2754,7 +2754,7 @@ Func CanUse_SpiritFormRemainsOfSahlahja()
 EndFunc
 
 Func BestTarget_SpiritFormRemainsOfSahlahja($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1821 - $GC_I_SKILL_ID_GODS_BLESSING
@@ -2763,7 +2763,7 @@ Func CanUse_GodsBlessing()
 EndFunc
 
 Func BestTarget_GodsBlessing($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1860 - $GC_I_SKILL_ID_SUGAR_RUSH_SHORT
@@ -2772,7 +2772,7 @@ Func CanUse_SugarRushShort()
 EndFunc
 
 Func BestTarget_SugarRushShort($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1916 - $GC_I_SKILL_ID_SUGAR_JOLT_SHORT
@@ -2781,7 +2781,7 @@ Func CanUse_SugarJoltShort()
 EndFunc
 
 Func BestTarget_SugarJoltShort($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1933 - $GC_I_SKILL_ID_SUGAR_JOLT_LONG
@@ -2790,7 +2790,7 @@ Func CanUse_SugarJoltLong()
 EndFunc
 
 Func BestTarget_SugarJoltLong($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1948 - $GC_I_SKILL_ID_SHADOW_SANCTUARY_LUXON2
@@ -2799,7 +2799,7 @@ Func CanUse_ShadowSanctuaryLuxon2()
 EndFunc
 
 Func BestTarget_ShadowSanctuaryLuxon2($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1951 - $GC_I_SKILL_ID_ELEMENTAL_LORD_LUXON
@@ -2808,7 +2808,7 @@ Func CanUse_ElementalLordLuxon()
 EndFunc
 
 Func BestTarget_ElementalLordLuxon($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1952 - $GC_I_SKILL_ID_SELFLESS_SPIRIT_LUXON
@@ -2817,7 +2817,7 @@ Func CanUse_SelflessSpiritLuxon()
 EndFunc
 
 Func BestTarget_SelflessSpiritLuxon($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1955 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_LUXON
@@ -2826,7 +2826,7 @@ Func CanUse_AuraOfHolyMightLuxon()
 EndFunc
 
 Func BestTarget_AuraOfHolyMightLuxon($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1989 - $GC_I_SKILL_ID_WAY_OF_THE_MANTIS
@@ -2839,7 +2839,7 @@ Func BestTarget_WayOfTheMantis($a_f_AggroRange)
 	; Assassin
 	; Concise description
 	; Trivia">edit
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1997 - $GC_I_SKILL_ID_WITHERING_AURA
@@ -2861,7 +2861,7 @@ Func CanUse_SmitersBoon()
 EndFunc
 
 Func BestTarget_SmitersBoon($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2007 - $GC_I_SKILL_ID_PURIFYING_VEIL
@@ -2883,7 +2883,7 @@ Func CanUse_GrenthsAura()
 EndFunc
 
 Func BestTarget_GrenthsAura($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2061 - $GC_I_SKILL_ID_PATIENT_SPIRIT
@@ -2944,7 +2944,7 @@ Func CanUse_ShadowSanctuaryKurzick()
 EndFunc
 
 Func BestTarget_ShadowSanctuaryKurzick($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2094 - $GC_I_SKILL_ID_ELEMENTAL_LORD_KURZICK
@@ -2953,7 +2953,7 @@ Func CanUse_ElementalLordKurzick()
 EndFunc
 
 Func BestTarget_ElementalLordKurzick($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2095 - $GC_I_SKILL_ID_SELFLESS_SPIRIT_KURZICK
@@ -2962,7 +2962,7 @@ Func CanUse_SelflessSpiritKurzick()
 EndFunc
 
 Func BestTarget_SelflessSpiritKurzick($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2098 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_KURZICK
@@ -2971,7 +2971,7 @@ Func CanUse_AuraOfHolyMightKurzick()
 EndFunc
 
 Func BestTarget_AuraOfHolyMightKurzick($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2101 - $GC_I_SKILL_ID_CRITICAL_AGILITY
@@ -2984,7 +2984,7 @@ Func BestTarget_CriticalAgility($a_f_AggroRange)
 	; Enchantment Spell. For 4 seconds and 1 second for each rank of Critical Strikes, you attack 33% faster and gain 15...25 armor. This skill reapplies itself every time you land a critical hit.
 	; Concise description
 	; Enchantment Spell. (4 seconds plus 1 second for each rank of Critical Strikes.) You attack 33% faster and gain +15...25 armor. Renewal: every time you land a critical hit.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2105 - $GC_I_SKILL_ID_SEED_OF_LIFE
@@ -3011,7 +3011,7 @@ Func BestTarget_EternalAura($a_f_AggroRange)
 	; Enchantment Spell. You have +100 max Health. When this enchantment ends, all party members in the area are resurrected with 40...50% Health and 20...30% Energy.
 	; Concise description
 	; Enchantment Spell. You have +100 max Health. End effect: all party members in the area are resurrected with 40...50% Health and 20...30% Energy.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2128 - $GC_I_SKILL_ID_VOLFEN_POUNCE_CURSE_OF_THE_NORNBEAR
@@ -3020,7 +3020,7 @@ Func CanUse_VolfenPounceCurseOfTheNornbear()
 EndFunc
 
 Func BestTarget_VolfenPounceCurseOfTheNornbear($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2138 - $GC_I_SKILL_ID_HEXERS_VIGOR
@@ -3029,7 +3029,7 @@ Func CanUse_HexersVigor()
 EndFunc
 
 Func BestTarget_HexersVigor($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2139 - $GC_I_SKILL_ID_MASOCHISM
@@ -3042,7 +3042,7 @@ Func BestTarget_Masochism($a_f_AggroRange)
 	; Enchantment Spell. For 10...34...40 seconds, you have +2 to your Death Magic and Soul Reaping attributes and sacrifice 5...3...3% of your maximum Health when you cast a spell.
 	; Concise description
 	; Enchantment Spell. (10...34...40 seconds.) You have +2 Death Magic and Soul Reaping. Sacrifice 5...3...3% Health when you cast a spell.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2187 - $GC_I_SKILL_ID_WAY_OF_THE_MASTER
@@ -3055,7 +3055,7 @@ Func BestTarget_WayOfTheMaster($a_f_AggroRange)
 	; Enchantment Spell. For 60 seconds, while holding a non-dagger weapon, you have an additional 3...27...33% chance to land a critical hit.
 	; Concise description
 	; Enchantment Spell. (60 seconds.) While holding a non-dagger weapon, you have +3...27...33% chance to land a critical hit.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2190 - $GC_I_SKILL_ID_MAGNETIC_SURGE
@@ -3081,7 +3081,7 @@ Func BestTarget_ShieldOfForce($a_f_AggroRange)
 	; Flash Enchantment Spell. For 1...13...16 second[s], blocks the next 1 attack against you. If an attack is blocked, all adjacent attacking foes are knocked down and suffer from Weakness for 5...17...20 seconds.
 	; Concise description
 	; Flash Enchantment Spell. (1...13...16 second[s].) Blocks the next 1 attack against you. Knocks down and inflicts Weakness (5...17...20 seconds) on all adjacent attacking foes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2220 - $GC_I_SKILL_ID_GREAT_DWARF_ARMOR
@@ -3107,7 +3107,7 @@ Func BestTarget_PolymockBlock($a_f_AggroRange)
 	; Enchantment Spell. For 2 seconds, the next enemy spell that targets you fails.
 	; Concise description
 	; Enchantment Spell. (2 seconds.) The next enemy spell that targets you fails.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2265 - $GC_I_SKILL_ID_POLYMOCK_LIGHTNING_DJINNS_HASTE
@@ -3116,7 +3116,7 @@ Func CanUse_PolymockLightningDjinnsHaste()
 EndFunc
 
 Func BestTarget_PolymockLightningDjinnsHaste($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2280 - $GC_I_SKILL_ID_POLYMOCK_FROZEN_ARMOR
@@ -3129,7 +3129,7 @@ Func BestTarget_PolymockFrozenArmor($a_f_AggroRange)
 	; Enchantment Spell. For 30 seconds, you gain 1,000 maximum Health.
 	; Concise description
 	; Enchantment Spell. (30 seconds.) You have +1,000 Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2328 - $GC_I_SKILL_ID_CRYSTAL_SHIELD
@@ -3142,7 +3142,7 @@ Func BestTarget_CrystalShield($a_f_AggroRange)
 	; Enchantment Spell. This creature conjures a shield that absorbs 250 damage.
 	; Concise description
 	; Enchantment Spell. The ettin conjures a shield that absorbs 250 damage. The ettin can cast spells but not attack.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2383 - $GC_I_SKILL_ID_VOLFEN_AGILITY
@@ -3155,7 +3155,7 @@ Func BestTarget_VolfenAgility($a_f_AggroRange)
 	; Enchantment Spell. For 10...20 seconds your Volfen Skills recharge 66% faster.
 	; Concise description
 	; Enchantment Spell. (10...20 seconds.) Your Volfen skills recharge 66% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2411 - $GC_I_SKILL_ID_MINDBENDER
@@ -3168,7 +3168,7 @@ Func BestTarget_Mindbender($a_f_AggroRange)
 	; Enchantment Spell. For 10...16 seconds, you move 20...33% faster and your Spells take 20% less time to cast.
 	; Concise description
 	; Enchantment Spell. (10...16 seconds.) You move 20...33% faster and cast Spells 20% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2417 - $GC_I_SKILL_ID_MENTAL_BLOCK
@@ -3181,7 +3181,7 @@ Func BestTarget_MentalBlock($a_f_AggroRange)
 	; Enchantment Spell. For 5...11 seconds you have a 50% chance to block attacks. This Enchantment is reapplied every time an enemy strikes you.
 	; Concise description
 	; Enchantment Spell. (5...11 seconds.) You have a 50% chance to block. Renewal: every time an enemy hits you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2423 - $GC_I_SKILL_ID_DWARVEN_STABILITY
@@ -3194,7 +3194,7 @@ Func BestTarget_DwarvenStability($a_f_AggroRange)
 	; Enchantment Spell. For 24...30 seconds, your stances last 55...100% longer. If you activated this skill while drunk, you cannot be knocked down.
 	; Concise description
 	; Enchantment Spell. (24...30 seconds.) Your stances last 55...100% longer. You cannot be knocked-down if you activated this skill while drunk . [sic]
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2635 - $GC_I_SKILL_ID_FLAME_DJINNS_HASTE2
@@ -3203,7 +3203,7 @@ Func CanUse_FlameDjinnsHaste2()
 EndFunc
 
 Func BestTarget_FlameDjinnsHaste2($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2638 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -3217,7 +3217,7 @@ Func BestTarget_DragonEmpireRage($a_f_AggroRange)
 	; Enchantment Spell. Unleash the rage of the Dragon Empire bloodline, dealing 300 damage to all nearby enemies. For 15 seconds you gain 200 maximum Health.
 	; Concise description
 	; Enchantment Spell. Unleash the rage of the Dragon Empire bloodline and deal 300 damage to nearby enemies. You gain 200 maximum health (15 seconds).
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2730 - $GC_I_SKILL_ID_AURA_OF_PURITY
@@ -3230,7 +3230,7 @@ Func BestTarget_AuraOfPurity($a_f_AggroRange)
 	; Flash Enchantment Spell. All adjacent foes lose 1 enchantment. For 10 seconds, your attacks deal +1...10...12 holy damage. When Aura of Purity ends, all adjacent foes lose one enchantment.
 	; Concise description
 	; Flash Enchantment Spell. Your attacks deal +1...10...12 holy damage (10 seconds). Initial effect: all adjacent foes lose 1 enchantment. End effect: all adjacent foes lose one enchantment.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2791 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -3241,7 +3241,7 @@ Func CanUse_MistFormPvP()
 EndFunc
 
 Func BestTarget_MistFormPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2857 - $GC_I_SKILL_ID_AEGIS_PvP
@@ -3259,7 +3259,7 @@ Func CanUse_EtherRenewalPvP()
 EndFunc
 
 Func BestTarget_EtherRenewalPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2862 - $GC_I_SKILL_ID_SHADOW_FORM_PvP
@@ -3268,7 +3268,7 @@ Func CanUse_ShadowFormPvP()
 EndFunc
 
 Func BestTarget_ShadowFormPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2869 - $GC_I_SKILL_ID_ASSASSINS_REMEDY_PvP
@@ -3277,7 +3277,7 @@ Func CanUse_AssassinsRemedyPvP()
 EndFunc
 
 Func BestTarget_AssassinsRemedyPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2884 - $GC_I_SKILL_ID_MYSTIC_REGENERATION_PvP
@@ -3286,7 +3286,7 @@ Func CanUse_MysticRegenerationPvP()
 EndFunc
 
 Func BestTarget_MysticRegenerationPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2891 - $GC_I_SKILL_ID_UNYIELDING_AURA_PvP
@@ -3313,7 +3313,7 @@ Func CanUse_SmitersBoonPvP()
 EndFunc
 
 Func BestTarget_SmitersBoonPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2912 - $GC_I_SKILL_ID_BIT_GOLEM_RECTIFIER
@@ -3348,7 +3348,7 @@ Func CanUse_ArmorOfUnfeelingPvP()
 EndFunc
 
 Func BestTarget_ArmorOfUnfeelingPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3048 - $GC_I_SKILL_ID_SHROUD_OF_DISTRESS_PvP
@@ -3357,7 +3357,7 @@ Func CanUse_ShroudOfDistressPvP()
 EndFunc
 
 Func BestTarget_ShroudOfDistressPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3054 - $GC_I_SKILL_ID_MASOCHISM_PvP
@@ -3366,7 +3366,7 @@ Func CanUse_MasochismPvP()
 EndFunc
 
 Func BestTarget_MasochismPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3181 - $GC_I_SKILL_ID_ILLUSIONARY_WEAPONRY_PvP
@@ -3375,7 +3375,7 @@ Func CanUse_IllusionaryWeaponryPvP()
 EndFunc
 
 Func BestTarget_IllusionaryWeaponryPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3267 - $GC_I_SKILL_ID_EBON_DUST_AURA_PvP
@@ -3384,7 +3384,7 @@ Func CanUse_EbonDustAuraPvP()
 EndFunc
 
 Func BestTarget_EbonDustAuraPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3268 - $GC_I_SKILL_ID_HEART_OF_HOLY_FLAME_PvP
@@ -3393,7 +3393,7 @@ Func CanUse_HeartOfHolyFlamePvP()
 EndFunc
 
 Func BestTarget_HeartOfHolyFlamePvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3269 - $GC_I_SKILL_ID_GUIDING_HANDS_PvP
@@ -3402,7 +3402,7 @@ Func CanUse_GuidingHandsPvP()
 EndFunc
 
 Func BestTarget_GuidingHandsPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3346 - $GC_I_SKILL_ID_AURA_OF_THORNS_PvP
@@ -3411,7 +3411,7 @@ Func CanUse_AuraOfThornsPvP()
 EndFunc
 
 Func BestTarget_AuraOfThornsPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3347 - $GC_I_SKILL_ID_DUST_CLOAK_PvP
@@ -3420,7 +3420,7 @@ Func CanUse_DustCloakPvP()
 EndFunc
 
 Func BestTarget_DustCloakPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3348 - $GC_I_SKILL_ID_LYSSAS_HASTE_PvP
@@ -3429,7 +3429,7 @@ Func CanUse_LyssasHastePvP()
 EndFunc
 
 Func BestTarget_LyssasHastePvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3365 - $GC_I_SKILL_ID_ONSLAUGHT_PvP
@@ -3438,7 +3438,7 @@ Func CanUse_OnslaughtPvP()
 EndFunc
 
 Func BestTarget_OnslaughtPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3373 - $GC_I_SKILL_ID_ILLUSION_OF_HASTE_PvP
@@ -3447,7 +3447,7 @@ Func CanUse_IllusionOfHastePvP()
 EndFunc
 
 Func BestTarget_IllusionOfHastePvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3375 - $GC_I_SKILL_ID_AURA_OF_RESTORATION_PvP
@@ -3456,7 +3456,7 @@ Func CanUse_AuraOfRestorationPvP()
 EndFunc
 
 Func BestTarget_AuraOfRestorationPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3397 - $GC_I_SKILL_ID_ELEMENTAL_FLAME_PvP
@@ -3465,7 +3465,7 @@ Func CanUse_ElementalFlamePvP()
 EndFunc
 
 Func BestTarget_ElementalFlamePvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3423 - $GC_I_SKILL_ID_SOUL_TAKER
@@ -3478,7 +3478,7 @@ Func BestTarget_SoulTaker($a_f_AggroRange)
 	; Elite Enchantment Spell. For 3...25...30 seconds, your attacks sacrifice 15...19...20 health and deal 15...19...20 more damage. PvE Skill
 	; Concise description
 	; Elite Enchantment Spell. (3...25...30 seconds.) Attacks deal +15...19...20 damage and sacrifice 15...19...20 health. PvE Skill
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3424 - $GC_I_SKILL_ID_OVER_THE_LIMIT
@@ -3491,7 +3491,7 @@ Func BestTarget_OverTheLimit($a_f_AggroRange)
 	; Elite Enchantment Spell. While you maintain this enchantment, your spells cast 15...19...20% faster, and recharge 15...43...50% faster, but you continuously gain Overcast. PvE Skill
 	; Concise description
 	; Elite Enchantment Spell. Spells cast 15...19...20% faster and recharge 15...43...50% faster. Continuously gain Overcast while active. PvE Skill
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3430 - $GC_I_SKILL_ID_VOW_OF_REVOLUTION
@@ -3504,6 +3504,6 @@ Func BestTarget_VowOfRevolution($a_f_AggroRange)
 	; Elite Enchantment Spell. For 3...9...10 seconds, you have +1...4...5 energy regeneration. This skill reapplies itself every time you use a non-Dervish skill. PvE Skill
 	; Concise description
 	; Elite Enchantment Spell. (3...9...10 seconds.) Gain +1...4...5 energy regeneration. Renewal: whenever you use a non-Dervish skill. PvE Skill
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 

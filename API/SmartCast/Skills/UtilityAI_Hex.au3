@@ -638,7 +638,7 @@ Func BestTarget_GraspingEarth($a_f_AggroRange)
 	; Hex Spell. Hexes foes near you for (5...17...20 seconds). These foes move 50% slower.
 	; Concise description
 	; Spell. Hexes foes near you for (5...17...20 seconds). These foes move 50% slower.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 179 - $GC_I_SKILL_ID_INCENDIARY_BONDS
@@ -742,7 +742,7 @@ Func BestTarget_FrozenBurst($a_f_AggroRange)
 	; Hex Spell. Hexes foes near you. These foes move 66% slower (3...7...8 seconds). Initial effect: deals 10...70...85 cold damage to foes near you.
 	; Concise description
 	; Spell. Hexes foes near you. These foes move 66% slower (3...7...8 seconds). Initial effect: deals 10...70...85 cold damage to foes near you.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 213 - $GC_I_SKILL_ID_SHARD_STORM
@@ -855,7 +855,7 @@ Func BestTarget_Amity($a_f_AggroRange)
 	; Elite Hex Spell. (8...18...20 seconds.) Foes adjacent to you cannot attack. Ends on any foes that take damage.
 	; Concise description
 	; Hex Spell. (8...18...20 seconds.) Foes adjacent to you cannot attack. Ends on any foes that take damage.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 505 - $GC_I_SKILL_ID_BURDEN_TOTEM
@@ -868,7 +868,7 @@ Func BestTarget_BurdenTotem($a_f_AggroRange)
 	; Hex Spell. (30 seconds.) Target foe moves 33% slower.
 	; Concise description
 	; Spell. (30 seconds.) Target foe moves 33% slower.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 533 - $GC_I_SKILL_ID_CRYSTAL_HAZE
@@ -920,7 +920,7 @@ Func BestTarget_SpontaneousCombustion($a_f_AggroRange)
 	; Hex Spell. Target starts burning and explodes.
 	; Concise description
 	; Spell. Target starts burning and explodes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 570 - $GC_I_SKILL_ID_MARK_OF_INSECURITY
@@ -1432,7 +1432,7 @@ Func CanUse_TorchHex()
 EndFunc
 
 Func BestTarget_TorchHex($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 999 - $GC_I_SKILL_ID_TORCH_DEGENERATION_HEX
@@ -1441,7 +1441,7 @@ Func CanUse_TorchDegenerationHex()
 EndFunc
 
 Func BestTarget_TorchDegenerationHex($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1009 - $GC_I_SKILL_ID_SNOW_DOWN_THE_SHIRT
@@ -1628,7 +1628,7 @@ Func BestTarget_StarShards($a_f_AggroRange)
 	; Hex Spell. Whenever a Celestial creature dies, all nearby foes are hexed with Star Shards (30 seconds). Star Shards does damage equal to the next skill damage that foe takes.
 	; Concise description
 	; Spell. Whenever a Celestial creature dies, all nearby foes are hexed with Star Shards (30 seconds). Star Shards does damage equal to the next skill damage that foe takes.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1169 - ;  $GC_I_SKILL_ID_UNKNOWN
@@ -1694,7 +1694,7 @@ Func BestTarget_SuicidalImpulse($a_f_AggroRange)
 	; Hex Spell. All foes in the area must attack Shiro within 10 seconds or lose half their Health.
 	; Concise description
 	; Spell. All foes in the area must attack Shiro within 10 seconds or lose half their Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1335 - $GC_I_SKILL_ID_WASTRELS_DEMISE
@@ -1881,7 +1881,7 @@ Func CanUse_LastRitesOfTorment()
 EndFunc
 
 Func BestTarget_LastRitesOfTorment($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1458 - $GC_I_SKILL_ID_ENCHANTMENT_COLLAPSE
@@ -2004,7 +2004,7 @@ Func CanUse_WordsOfMadnessQwytzylkak()
 EndFunc
 
 Func BestTarget_WordsOfMadnessQwytzylkak($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1710 - $GC_I_SKILL_ID_MADNESS_DART
@@ -2200,7 +2200,7 @@ Func BestTarget_SpiritWorldRetreat($a_f_AggroRange)
 	; Hex Spell. (3 seconds.) Hide in the Spirit World and hex all foes with -2 Energy degeneration. For each foe hexed, gain 75 Health.
 	; Concise description
 	; Spell. (3 seconds.) Hide in the Spirit World and hex all foes with -2 Energy degeneration. For each foe hexed, gain 75 Health.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2137 - $GC_I_SKILL_ID_CONFUSING_IMAGES
@@ -2430,7 +2430,7 @@ Func CanUse_Unreliable()
 EndFunc
 
 Func BestTarget_Unreliable($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2514 - $GC_I_SKILL_ID_THE_MASTERS_MARK
@@ -2469,7 +2469,7 @@ Func BestTarget_Dishonorable($a_f_AggroRange)
 	; Hex Spell. You are considered Dishonorable because teammates repeatedly reported you for leeching, or because you abandoned your team in PvP matches. You may not participate in PvP until this effect expires.
 	; Concise description
 	; Spell. You are considered Dishonorable because teammates repeatedly reported you for leeching, or because you abandoned your team in PvP matches. You may not participate in PvP until this effect expires.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2627 - $GC_I_SKILL_ID_REAPERS_MARK2
@@ -2532,7 +2532,7 @@ Func BestTarget_MadKingsFan($a_f_AggroRange)
 	; Hex Spell. Mad King Thorn is pleased by your undying support. Survive his celebration for bonus treats!
 	; Concise description
 	; Spell. Mad King Thorn is pleased by your undying support. Survive his celebration for bonus treats!
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2803 - $GC_I_SKILL_ID_MIND_FREEZE_PVP

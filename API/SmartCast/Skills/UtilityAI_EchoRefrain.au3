@@ -101,7 +101,7 @@ Func CanUse_SoldiersFury()
 EndFunc
 
 Func BestTarget_SoldiersFury($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1774 - $GC_I_SKILL_ID_AGGRESSIVE_REFRAIN
@@ -115,7 +115,7 @@ Func BestTarget_AggressiveRefrain($a_f_AggroRange)
 	; Echo. For 5...21...25 seconds, you attack 25% faster but have -20 armor. This echo is reapplied every time a chant or shout ends on you.
 	; Concise description
 	; Echo. (5...21...25 seconds.) You attack 25% faster. Renewal: whenever a chant or shout ends on you. You have -20 armor.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1775 - $GC_I_SKILL_ID_ENERGIZING_FINALE
@@ -177,7 +177,7 @@ Func CanUse_MendingRefrainPvP()
 EndFunc
 
 Func BestTarget_MendingRefrainPvP($a_f_AggroRange)
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 3431 - $GC_I_SKILL_ID_HEROIC_REFRAIN
@@ -186,7 +186,7 @@ Func CanUse_HeroicRefrain()
 EndFunc
 
 Func BestTarget_HeroicRefrain($a_f_AggroRange)
-	If Attribute_GetPartyAttributeInfo($GC_I_ATTR_LEADERSHIP, 0, "CurrentLevel") < 20 Then Return Agent_GetMyID()
+	If Attribute_GetPartyAttributeInfo($GC_I_ATTR_LEADERSHIP, 0, "CurrentLevel") < 20 Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 
 	Local $l_ai_PartyArray = Party_GetMembersArray()
 

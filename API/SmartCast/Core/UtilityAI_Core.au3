@@ -113,6 +113,7 @@ Func UAI_PrioritySkills($a_f_AggroRange = 1320)
 
 	; Check each skill slot
 	For $l_i_Slot = 1 To 8
+		If Not UAI_CanCast($l_i_Slot) Then ContinueLoop
 		Local $l_i_Special = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_Special)
 		Local $l_i_Effect2 = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_Effect2)
 
@@ -135,8 +136,6 @@ Func UAI_PrioritySkills($a_f_AggroRange = 1320)
 EndFunc
 
 Func UAI_CastPrioritySkill($a_i_Slot, $a_f_AggroRange = 1320)
-	If Not UAI_CanCast($a_i_Slot) Then Return
-
 	$g_i_BestTarget = Call($g_as_BestTargetCache[$a_i_Slot], $a_f_AggroRange)
 	If $g_i_BestTarget = 0 Then Return
 

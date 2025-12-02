@@ -258,7 +258,7 @@ Func BestTarget_WeaponOfAggression($a_f_AggroRange)
 	; Weapon Spell. For 5...13...15 seconds, you attack 25% faster.
 	; Concise description
 	; Weapon Spell. (5...13...15 seconds.) You attack 25% faster.
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 2148 - $GC_I_SKILL_ID_SUNDERING_WEAPON
@@ -341,6 +341,6 @@ Func BestTarget_WeaponsOfThreeForges($a_f_AggroRange)
 	; Elite Weapon Spell. For 3...17...20 seconds, each non-spirit ally in earshot gains the effect of a random Weapon Spell. PvE Skill
 	; Concise description
 	; Elite Weapon Spell. (3...17...20 seconds.) Allies in earshot gain the effect of a random Weapon Spell. Allied spirits are not affected. PvE Skill
-	Return Agent_GetMyID()
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
