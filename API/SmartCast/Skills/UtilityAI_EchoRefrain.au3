@@ -10,6 +10,10 @@ Func CanUse_EnduringHarmony()
 EndFunc
 
 Func BestTarget_EnduringHarmony($a_f_AggroRange)
+	; Description
+	; Echo. For 10...30...35 seconds, chants and shouts last 50% longer on target non-spirit ally.
+	; Concise description
+	; Echo. (10...30...35 seconds.) Chants and shouts last 50% longer on target ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -19,6 +23,10 @@ Func CanUse_BlazingFinale()
 EndFunc
 
 Func BestTarget_BlazingFinale($a_f_AggroRange)
+	; Description
+	; Echo. For 10...30...35 seconds, whenever a chant or shout ends on target non-spirit ally, all foes adjacent to that ally are set on Fire for 1...6...7 second[s].
+	; Concise description
+	; Echo. (10...30...35 seconds.) Inflicts Burning condition (1...6...7 second[s]) to adjacent foes whenever a chant or shout ends on target ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -28,6 +36,10 @@ Func CanUse_BurningRefrain()
 EndFunc
 
 Func BestTarget_BurningRefrain($a_f_AggroRange)
+	; Description
+	; Echo. For 20 seconds, if target non-spirit ally hits a foe with more Health than that ally, that foe is set on Fire  for 1...3...3 second[s]. This echo is reapplied every time a chant or shout ends on that ally.
+	; Concise description
+	; Echo. (20 seconds.) Inflicts Burning condition (1...3...3 second[s]) if target ally hits a foe with more Health. Renewal: Whenever a chant or shout ends on that ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -37,6 +49,10 @@ Func CanUse_FinaleOfRestoration()
 EndFunc
 
 Func BestTarget_FinaleOfRestoration($a_f_AggroRange)
+	; Description
+	; Echo. For 10...30...35 seconds, whenever a chant or shout ends on target non-spirit ally, that ally is healed for 15...63...75 Health.
+	; Concise description
+	; Echo. (10...30...35 seconds.) Target ally gains [sic] 15...63...75 Health whenever a shout or chant ends on that ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -46,6 +62,10 @@ Func CanUse_MendingRefrain()
 EndFunc
 
 Func BestTarget_MendingRefrain($a_f_AggroRange)
+	; Description
+	; Echo. For 15 seconds, target non-spirit ally has +2...3...3 Health regeneration. This echo is reapplied every time a chant or shout ends on that ally.
+	; Concise description
+	; Echo. (15 seconds.) Target ally has +2...3...3 Health regeneration. Renewal: whenever a chant or shout ends on that ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -55,6 +75,10 @@ Func CanUse_PurifyingFinale()
 EndFunc
 
 Func BestTarget_PurifyingFinale($a_f_AggroRange)
+	; Description
+	; Echo. For 10...30...35 seconds, target non-spirit ally loses 1 condition whenever a chant or shout ends on that ally.
+	; Concise description
+	; Echo. (10...30...35 seconds.) Target ally loses one condition whenever a chant or shout ends on that ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -64,6 +88,10 @@ Func CanUse_BladeturnRefrain()
 EndFunc
 
 Func BestTarget_BladeturnRefrain($a_f_AggroRange)
+	; Description
+	; Echo. For 20 seconds, target non-spirit ally has a 5...17...20% chance to block incoming attacks. This echo is reapplied every time a chant or shout ends on that ally.
+	; Concise description
+	; Echo. (20 seconds.) Target ally has 5...17...20% chance to block. Renewal: Whenever a chant or shout ends on that ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -83,6 +111,10 @@ Func CanUse_AggressiveRefrain()
 EndFunc
 
 Func BestTarget_AggressiveRefrain($a_f_AggroRange)
+	; Description
+	; Echo. For 5...21...25 seconds, you attack 25% faster but have -20 armor. This echo is reapplied every time a chant or shout ends on you.
+	; Concise description
+	; Echo. (5...21...25 seconds.) You attack 25% faster. Renewal: whenever a chant or shout ends on you. You have -20 armor.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -92,6 +124,10 @@ Func CanUse_EnergizingFinale()
 EndFunc
 
 Func BestTarget_EnergizingFinale($a_f_AggroRange)
+	; Description
+	; Echo. For 10...30...35 seconds, whenever a shout or chant ends on target non-spirit ally, that ally gains 1 Energy.
+	; Concise description
+	; Echo. (10...30...35 seconds.) Target ally gains 1 Energy whenever a shout or chant ends on that ally. Cannot target spirits.
 	Return 0
 EndFunc
 
@@ -101,42 +137,46 @@ Func CanUse_HastyRefrain()
 EndFunc
 
 Func BestTarget_HastyRefrain($a_f_AggroRange)
+	; Description
+	; Echo. For 3...9...11 seconds, target ally moves 25% faster. This echo is reapplied every time a chant or shout ends on that ally.
+	; Concise description
+	; Echo. (3...9...11 seconds.) Target ally moves 25% faster. Renewal: every time a chant or shout ends on this ally.
 	Return 0
 EndFunc
 
-; Skill ID: 3028 - $GC_I_SKILL_ID_BLAZING_FINALE_PVP
-Func CanUse_BlazingFinalePvp()
+; Skill ID: 3028 - $GC_I_SKILL_ID_BLAZING_FINALE_PvP
+Func CanUse_BlazingFinalePvP()
 	Return True
 EndFunc
 
-Func BestTarget_BlazingFinalePvp($a_f_AggroRange)
+Func BestTarget_BlazingFinalePvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 3029 - $GC_I_SKILL_ID_BLADETURN_REFRAIN_PVP
-Func CanUse_BladeturnRefrainPvp()
+; Skill ID: 3029 - $GC_I_SKILL_ID_BLADETURN_REFRAIN_PvP
+Func CanUse_BladeturnRefrainPvP()
 	Return True
 EndFunc
 
-Func BestTarget_BladeturnRefrainPvp($a_f_AggroRange)
+Func BestTarget_BladeturnRefrainPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 3062 - $GC_I_SKILL_ID_FINALE_OF_RESTORATION_PVP
-Func CanUse_FinaleOfRestorationPvp()
+; Skill ID: 3062 - $GC_I_SKILL_ID_FINALE_OF_RESTORATION_PvP
+Func CanUse_FinaleOfRestorationPvP()
 	Return True
 EndFunc
 
-Func BestTarget_FinaleOfRestorationPvp($a_f_AggroRange)
+Func BestTarget_FinaleOfRestorationPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 3149 - $GC_I_SKILL_ID_MENDING_REFRAIN_PVP
-Func CanUse_MendingRefrainPvp()
+; Skill ID: 3149 - $GC_I_SKILL_ID_MENDING_REFRAIN_PvP
+Func CanUse_MendingRefrainPvP()
 	Return True
 EndFunc
 
-Func BestTarget_MendingRefrainPvp($a_f_AggroRange)
+Func BestTarget_MendingRefrainPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 

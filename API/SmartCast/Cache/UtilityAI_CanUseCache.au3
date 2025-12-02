@@ -41,8 +41,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_MantraOfSignets"
 		Case $GC_I_SKILL_ID_FRAGILITY
 			Return "CanUse_Fragility"
-		Case $GC_I_SKILL_ID_CONFUSION
-			Return "CanUse_Confusion"
 		Case $GC_I_SKILL_ID_INSPIRED_ENCHANTMENT
 			Return "CanUse_InspiredEnchantment"
 		Case $GC_I_SKILL_ID_INSPIRED_HEX
@@ -955,24 +953,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_NaturesRenewal"
 		Case $GC_I_SKILL_ID_MUDDY_TERRAIN
 			Return "CanUse_MuddyTerrain"
-		Case $GC_I_SKILL_ID_BLEEDING
-			Return "CanUse_Bleeding"
-		Case $GC_I_SKILL_ID_BLIND
-			Return "CanUse_Blind"
-		Case $GC_I_SKILL_ID_BURNING
-			Return "CanUse_Burning"
-		Case $GC_I_SKILL_ID_CRIPPLED
-			Return "CanUse_Crippled"
-		Case $GC_I_SKILL_ID_DEEP_WOUND
-			Return "CanUse_DeepWound"
-		Case $GC_I_SKILL_ID_DISEASE
-			Return "CanUse_Disease"
-		Case $GC_I_SKILL_ID_POISON
-			Return "CanUse_Poison"
-		Case $GC_I_SKILL_ID_DAZED
-			Return "CanUse_Dazed"
-		Case $GC_I_SKILL_ID_WEAKNESS
-			Return "CanUse_Weakness"
 		Case $GC_I_SKILL_ID_ERUPTION_ENVIRONMENT
 			Return "CanUse_EruptionEnvironment"
 		Case $GC_I_SKILL_ID_FIRE_STORM_ENVIRONMENT
@@ -2913,16 +2893,12 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_ForgeTheWay"
 		Case $GC_I_SKILL_ID_ANTHEM_OF_AGGRESSION
 			Return "CanUse_AnthemOfAggression"
-		Case $GC_I_SKILL_ID_LIGHTBRINGER
-			Return "CanUse_Lightbringer"
 		Case $GC_I_SKILL_ID_LIGHTBRINGERS_GAZE
 			Return "CanUse_LightbringersGaze"
 		Case $GC_I_SKILL_ID_LIGHTBRINGER_SIGNET
 			Return "CanUse_LightbringerSignet"
 		Case $GC_I_SKILL_ID_SUNSPEAR_REBIRTH_SIGNET
 			Return "CanUse_SunspearRebirthSignet"
-		Case $GC_I_SKILL_ID_WISDOM
-			Return "CanUse_Wisdom"
 		Case $GC_I_SKILL_ID_MADDENED_STRIKE
 			Return "CanUse_MaddenedStrike"
 		Case $GC_I_SKILL_ID_SPIRIT_FORM_REMAINS_OF_SAHLAHJA
@@ -3707,10 +3683,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_MurakaisCalamity"
 		Case $GC_I_SKILL_ID_MURAKAIS_STORM_OF_SOULS
 			Return "CanUse_MurakaisStormOfSouls"
-		Case $GC_I_SKILL_ID_EDIFICATION
-			Return "CanUse_Edification"
-		Case $GC_I_SKILL_ID_HEART_OF_THE_NORN
-			Return "CanUse_HeartOfTheNorn"
 		Case $GC_I_SKILL_ID_URSAN_BLESSING
 			Return "CanUse_UrsanBlessing"
 		Case $GC_I_SKILL_ID_URSAN_STRIKE
@@ -3791,12 +3763,8 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_Winds"
 		Case $GC_I_SKILL_ID_DWARVEN_STABILITY
 			Return "CanUse_DwarvenStability"
-		Case $GC_I_SKILL_ID_STOUT_HEARTED
-			Return "CanUse_StoutHearted"
 		Case $GC_I_SKILL_ID_DECIPHER_INSCRIPTIONS
 			Return "CanUse_DecipherInscriptions"
-		Case $GC_I_SKILL_ID_REBEL_YELL
-			Return "CanUse_RebelYell"
 		Case $GC_I_SKILL_ID_ASURAN_FLAME_STAFF
 			Return "CanUse_AsuranFlameStaff"
 		Case $GC_I_SKILL_ID_HAUNTED_GROUND
@@ -3928,7 +3896,7 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_CALL_TO_THE_SPIRIT_REALM
 			Return "CanUse_CallToTheSpiritRealm"
 		Case $GC_I_SKILL_ID_CALL_OF_HASTE_PVP
-			Return "CanUse_CallOfHastePvp"
+			Return "CanUse_CallOfHastePvP"
 		Case $GC_I_SKILL_ID_HIDE
 			Return "CanUse_Hide"
 		Case $GC_I_SKILL_ID_FEIGN_DEATH
@@ -4026,7 +3994,7 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_FALKEN_QUICK
 			Return "CanUse_FalkenQuick"
 		Case $GC_I_SKILL_ID_MIND_WRACK_PVP
-			Return "CanUse_MindWrackPvp"
+			Return "CanUse_MindWrackPvP"
 		Case $GC_I_SKILL_ID_JADE_BROTHERHOOD_BOMB
 			Return "CanUse_JadeBrotherhoodBomb"
 		Case $GC_I_SKILL_ID_MAD_KINGS_FAN
@@ -4058,97 +4026,97 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_MADDENING_LAUGHTER
 			Return "CanUse_MaddeningLaughter"
 		Case $GC_I_SKILL_ID_MIND_FREEZE_PVP
-			Return "CanUse_MindFreezePvp"
+			Return "CanUse_MindFreezePvP"
 		Case $GC_I_SKILL_ID_MIND_SHOCK_PVP
-			Return "CanUse_MindShockPvp"
+			Return "CanUse_MindShockPvP"
 		Case $GC_I_SKILL_ID_MIST_FORM_PVP
-			Return "CanUse_MistFormPvp"
+			Return "CanUse_MistFormPvP"
 		Case $GC_I_SKILL_ID_WARD_AGAINST_HARM_PVP
-			Return "CanUse_WardAgainstHarmPvp"
+			Return "CanUse_WardAgainstHarmPvP"
 		Case $GC_I_SKILL_ID_RIDE_THE_LIGHTNING_PVP
-			Return "CanUse_RideTheLightningPvp"
+			Return "CanUse_RideTheLightningPvP"
 		Case $GC_I_SKILL_ID_ENRAGED_SMASH_PVP
-			Return "CanUse_EnragedSmashPvp"
+			Return "CanUse_EnragedSmashPvP"
 		Case $GC_I_SKILL_ID_OBSIDIAN_FLAME_PVP
-			Return "CanUse_ObsidianFlamePvp"
+			Return "CanUse_ObsidianFlamePvP"
 		Case $GC_I_SKILL_ID_ENERGY_DRAIN_PVP
-			Return "CanUse_EnergyDrainPvp"
+			Return "CanUse_EnergyDrainPvP"
 		Case $GC_I_SKILL_ID_ENERGY_TAP_PVP
-			Return "CanUse_EnergyTapPvp"
+			Return "CanUse_EnergyTapPvP"
 		Case $GC_I_SKILL_ID_WARD_AGAINST_MELEE_PVP
-			Return "CanUse_WardAgainstMeleePvp"
+			Return "CanUse_WardAgainstMeleePvP"
 		Case $GC_I_SKILL_ID_LIGHTNING_ORB_PVP
-			Return "CanUse_LightningOrbPvp"
+			Return "CanUse_LightningOrbPvP"
 		Case $GC_I_SKILL_ID_AEGIS_PVP
-			Return "CanUse_AegisPvp"
+			Return "CanUse_AegisPvP"
 		Case $GC_I_SKILL_ID_WATCH_YOURSELF_PVP
-			Return "CanUse_WatchYourselfPvp"
+			Return "CanUse_WatchYourselfPvP"
 		Case $GC_I_SKILL_ID_ENFEEBLE_PVP
-			Return "CanUse_EnfeeblePvp"
+			Return "CanUse_EnfeeblePvP"
 		Case $GC_I_SKILL_ID_ETHER_RENEWAL_PVP
-			Return "CanUse_EtherRenewalPvp"
+			Return "CanUse_EtherRenewalPvP"
 		Case $GC_I_SKILL_ID_PENETRATING_ATTACK_PVP
-			Return "CanUse_PenetratingAttackPvp"
+			Return "CanUse_PenetratingAttackPvP"
 		Case $GC_I_SKILL_ID_SHADOW_FORM_PVP
-			Return "CanUse_ShadowFormPvp"
+			Return "CanUse_ShadowFormPvP"
 		Case $GC_I_SKILL_ID_DISCORD_PVP
-			Return "CanUse_DiscordPvp"
+			Return "CanUse_DiscordPvP"
 		Case $GC_I_SKILL_ID_SUNDERING_ATTACK_PVP
-			Return "CanUse_SunderingAttackPvp"
+			Return "CanUse_SunderingAttackPvP"
 		Case $GC_I_SKILL_ID_RITUAL_LORD_PVP
-			Return "CanUse_RitualLordPvp"
+			Return "CanUse_RitualLordPvP"
 		Case $GC_I_SKILL_ID_FLESH_OF_MY_FLESH_PVP
-			Return "CanUse_FleshOfMyFleshPvp"
+			Return "CanUse_FleshOfMyFleshPvP"
 		Case $GC_I_SKILL_ID_ANCESTORS_RAGE_PVP
-			Return "CanUse_AncestorsRagePvp"
+			Return "CanUse_AncestorsRagePvP"
 		Case $GC_I_SKILL_ID_SPLINTER_WEAPON_PVP
-			Return "CanUse_SplinterWeaponPvp"
+			Return "CanUse_SplinterWeaponPvP"
 		Case $GC_I_SKILL_ID_ASSASSINS_REMEDY_PVP
-			Return "CanUse_AssassinsRemedyPvp"
+			Return "CanUse_AssassinsRemedyPvP"
 		Case $GC_I_SKILL_ID_BLINDING_SURGE_PVP
-			Return "CanUse_BlindingSurgePvp"
+			Return "CanUse_BlindingSurgePvP"
 		Case $GC_I_SKILL_ID_LIGHT_OF_DELIVERANCE_PVP
-			Return "CanUse_LightOfDeliverancePvp"
+			Return "CanUse_LightOfDeliverancePvP"
 		Case $GC_I_SKILL_ID_DEATH_PACT_SIGNET_PVP
-			Return "CanUse_DeathPactSignetPvp"
+			Return "CanUse_DeathPactSignetPvP"
 		Case $GC_I_SKILL_ID_MYSTIC_SWEEP_PVP
-			Return "CanUse_MysticSweepPvp"
+			Return "CanUse_MysticSweepPvP"
 		Case $GC_I_SKILL_ID_EREMITES_ATTACK_PVP
-			Return "CanUse_EremitesAttackPvp"
+			Return "CanUse_EremitesAttackPvP"
 		Case $GC_I_SKILL_ID_HARRIERS_TOSS_PVP
-			Return "CanUse_HarriersTossPvp"
+			Return "CanUse_HarriersTossPvP"
 		Case $GC_I_SKILL_ID_DEFENSIVE_ANTHEM_PVP
-			Return "CanUse_DefensiveAnthemPvp"
+			Return "CanUse_DefensiveAnthemPvP"
 		Case $GC_I_SKILL_ID_BALLAD_OF_RESTORATION_PVP
-			Return "CanUse_BalladOfRestorationPvp"
+			Return "CanUse_BalladOfRestorationPvP"
 		Case $GC_I_SKILL_ID_SONG_OF_RESTORATION_PVP
-			Return "CanUse_SongOfRestorationPvp"
+			Return "CanUse_SongOfRestorationPvP"
 		Case $GC_I_SKILL_ID_INCOMING_PVP
-			Return "CanUse_IncomingPvp"
+			Return "CanUse_IncomingPvP"
 		Case $GC_I_SKILL_ID_NEVER_SURRENDER_PVP
-			Return "CanUse_NeverSurrenderPvp"
+			Return "CanUse_NeverSurrenderPvP"
 		Case $GC_I_SKILL_ID_MANTRA_OF_INSCRIPTIONS_PVP
-			Return "CanUse_MantraOfInscriptionsPvp"
+			Return "CanUse_MantraOfInscriptionsPvP"
 		Case $GC_I_SKILL_ID_FOR_GREAT_JUSTICE_PVP
-			Return "CanUse_ForGreatJusticePvp"
+			Return "CanUse_ForGreatJusticePvP"
 		Case $GC_I_SKILL_ID_MYSTIC_REGENERATION_PVP
-			Return "CanUse_MysticRegenerationPvp"
+			Return "CanUse_MysticRegenerationPvP"
 		Case $GC_I_SKILL_ID_ENFEEBLING_BLOOD_PVP
-			Return "CanUse_EnfeeblingBloodPvp"
+			Return "CanUse_EnfeeblingBloodPvP"
 		Case $GC_I_SKILL_ID_SUMMONING_SICKNESS
 			Return "CanUse_SummoningSickness"
 		Case $GC_I_SKILL_ID_SIGNET_OF_JUDGMENT_PVP
-			Return "CanUse_SignetOfJudgmentPvp"
+			Return "CanUse_SignetOfJudgmentPvP"
 		Case $GC_I_SKILL_ID_CHILLING_VICTORY_PVP
-			Return "CanUse_ChillingVictoryPvp"
+			Return "CanUse_ChillingVictoryPvP"
 		Case $GC_I_SKILL_ID_UNYIELDING_AURA_PVP
-			Return "CanUse_UnyieldingAuraPvp"
+			Return "CanUse_UnyieldingAuraPvP"
 		Case $GC_I_SKILL_ID_SPIRIT_BOND_PVP
-			Return "CanUse_SpiritBondPvp"
+			Return "CanUse_SpiritBondPvP"
 		Case $GC_I_SKILL_ID_WEAPON_OF_WARDING_PVP
-			Return "CanUse_WeaponOfWardingPvp"
+			Return "CanUse_WeaponOfWardingPvP"
 		Case $GC_I_SKILL_ID_SMITERS_BOON_PVP
-			Return "CanUse_SmitersBoonPvp"
+			Return "CanUse_SmitersBoonPvP"
 		Case $GC_I_SKILL_ID_REACTOR_BLAST
 			Return "CanUse_ReactorBlast"
 		Case $GC_I_SKILL_ID_REACTOR_BLAST_TIMER
@@ -4190,7 +4158,7 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_OATH_OF_PROTECTION
 			Return "CanUse_OathOfProtection"
 		Case $GC_I_SKILL_ID_SLOTH_HUNTERS_SHOT_PVP
-			Return "CanUse_SlothHuntersShotPvp"
+			Return "CanUse_SlothHuntersShotPvP"
 		Case $GC_I_SKILL_ID_SHRINE_BACKLASH
 			Return "CanUse_ShrineBacklash"
 		Case $GC_I_SKILL_ID_AMULET_OF_PROTECTION2
@@ -4200,21 +4168,21 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_EASTERN_HEALTH_SHRINE_BONUS
 			Return "CanUse_EasternHealthShrineBonus"
 		Case $GC_I_SKILL_ID_EXPERTS_DEXTERITY_PVP
-			Return "CanUse_ExpertsDexterityPvp"
+			Return "CanUse_ExpertsDexterityPvP"
 		Case $GC_I_SKILL_ID_DELAYED_BLAST_BAMPH
 			Return "CanUse_DelayedBlastBamph"
 		Case $GC_I_SKILL_ID_SNOWBALL2
 			Return "CanUse_Snowball2"
 		Case $GC_I_SKILL_ID_SIGNET_OF_SPIRITS_PVP
-			Return "CanUse_SignetOfSpiritsPvp"
+			Return "CanUse_SignetOfSpiritsPvP"
 		Case $GC_I_SKILL_ID_SIGNET_OF_GHOSTLY_MIGHT_PVP
-			Return "CanUse_SignetOfGhostlyMightPvp"
+			Return "CanUse_SignetOfGhostlyMightPvP"
 		Case $GC_I_SKILL_ID_AVATAR_OF_GRENTH_PVP
-			Return "CanUse_AvatarOfGrenthPvp"
+			Return "CanUse_AvatarOfGrenthPvP"
 		Case $GC_I_SKILL_ID_OVERSIZED_TONIC_WARNING
 			Return "CanUse_OversizedTonicWarning"
 		Case $GC_I_SKILL_ID_READ_THE_WIND_PVP
-			Return "CanUse_ReadTheWindPvp"
+			Return "CanUse_ReadTheWindPvP"
 		Case $GC_I_SKILL_ID_BLUE_ROCK_CANDY_RUSH
 			Return "CanUse_BlueRockCandyRush"
 		Case $GC_I_SKILL_ID_GREEN_ROCK_CANDY_RUSH
@@ -4224,111 +4192,111 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_SEED_OF_RESURRECTION2
 			Return "CanUse_SeedOfResurrection2"
 		Case $GC_I_SKILL_ID_FRAGILITY_PVP
-			Return "CanUse_FragilityPvp"
+			Return "CanUse_FragilityPvP"
 		Case $GC_I_SKILL_ID_STRENGTH_OF_HONOR_PVP
-			Return "CanUse_StrengthOfHonorPvp"
+			Return "CanUse_StrengthOfHonorPvP"
 		Case $GC_I_SKILL_ID_GUNTHERS_GAZE
 			Return "CanUse_GunthersGaze"
 		Case $GC_I_SKILL_ID_WARRIORS_ENDURANCE_PVP
-			Return "CanUse_WarriorsEndurancePvp"
+			Return "CanUse_WarriorsEndurancePvP"
 		Case $GC_I_SKILL_ID_ARMOR_OF_UNFEELING_PVP
-			Return "CanUse_ArmorOfUnfeelingPvp"
+			Return "CanUse_ArmorOfUnfeelingPvP"
 		Case $GC_I_SKILL_ID_SIGNET_OF_CREATION_PVP
-			Return "CanUse_SignetOfCreationPvp"
+			Return "CanUse_SignetOfCreationPvP"
 		Case $GC_I_SKILL_ID_UNION_PVP
-			Return "CanUse_UnionPvp"
+			Return "CanUse_UnionPvP"
 		Case $GC_I_SKILL_ID_SHADOWSONG_PVP
-			Return "CanUse_ShadowsongPvp"
+			Return "CanUse_ShadowsongPvP"
 		Case $GC_I_SKILL_ID_PAIN_PVP
-			Return "CanUse_PainPvp"
+			Return "CanUse_PainPvP"
 		Case $GC_I_SKILL_ID_DESTRUCTION_PVP
-			Return "CanUse_DestructionPvp"
+			Return "CanUse_DestructionPvP"
 		Case $GC_I_SKILL_ID_SOOTHING_PVP
-			Return "CanUse_SoothingPvp"
+			Return "CanUse_SoothingPvP"
 		Case $GC_I_SKILL_ID_DISPLACEMENT_PVP
-			Return "CanUse_DisplacementPvp"
+			Return "CanUse_DisplacementPvP"
 		Case $GC_I_SKILL_ID_PRESERVATION_PVP
-			Return "CanUse_PreservationPvp"
+			Return "CanUse_PreservationPvP"
 		Case $GC_I_SKILL_ID_LIFE_PVP
-			Return "CanUse_LifePvp"
+			Return "CanUse_LifePvP"
 		Case $GC_I_SKILL_ID_RECUPERATION_PVP
-			Return "CanUse_RecuperationPvp"
+			Return "CanUse_RecuperationPvP"
 		Case $GC_I_SKILL_ID_DISSONANCE_PVP
-			Return "CanUse_DissonancePvp"
+			Return "CanUse_DissonancePvP"
 		Case $GC_I_SKILL_ID_EARTHBIND_PVP
-			Return "CanUse_EarthbindPvp"
+			Return "CanUse_EarthbindPvP"
 		Case $GC_I_SKILL_ID_SHELTER_PVP
-			Return "CanUse_ShelterPvp"
+			Return "CanUse_ShelterPvP"
 		Case $GC_I_SKILL_ID_DISENCHANTMENT_PVP
-			Return "CanUse_DisenchantmentPvp"
+			Return "CanUse_DisenchantmentPvP"
 		Case $GC_I_SKILL_ID_RESTORATION_PVP
-			Return "CanUse_RestorationPvp"
+			Return "CanUse_RestorationPvP"
 		Case $GC_I_SKILL_ID_BLOODSONG_PVP
-			Return "CanUse_BloodsongPvp"
+			Return "CanUse_BloodsongPvP"
 		Case $GC_I_SKILL_ID_WANDERLUST_PVP
-			Return "CanUse_WanderlustPvp"
+			Return "CanUse_WanderlustPvP"
 		Case $GC_I_SKILL_ID_SAVANNAH_HEAT_PVP
-			Return "CanUse_SavannahHeatPvp"
+			Return "CanUse_SavannahHeatPvP"
 		Case $GC_I_SKILL_ID_GAZE_OF_FURY_PVP
-			Return "CanUse_GazeOfFuryPvp"
+			Return "CanUse_GazeOfFuryPvP"
 		Case $GC_I_SKILL_ID_ANGUISH_PVP
-			Return "CanUse_AnguishPvp"
+			Return "CanUse_AnguishPvP"
 		Case $GC_I_SKILL_ID_EMPOWERMENT_PVP
-			Return "CanUse_EmpowermentPvp"
+			Return "CanUse_EmpowermentPvP"
 		Case $GC_I_SKILL_ID_RECOVERY_PVP
-			Return "CanUse_RecoveryPvp"
+			Return "CanUse_RecoveryPvP"
 		Case $GC_I_SKILL_ID_GO_FOR_THE_EYES_PVP
-			Return "CanUse_GoForTheEyesPvp"
+			Return "CanUse_GoForTheEyesPvP"
 		Case $GC_I_SKILL_ID_BRACE_YOURSELF_PVP
-			Return "CanUse_BraceYourselfPvp"
+			Return "CanUse_BraceYourselfPvP"
 		Case $GC_I_SKILL_ID_BLAZING_FINALE_PVP
-			Return "CanUse_BlazingFinalePvp"
+			Return "CanUse_BlazingFinalePvP"
 		Case $GC_I_SKILL_ID_BLADETURN_REFRAIN_PVP
-			Return "CanUse_BladeturnRefrainPvp"
+			Return "CanUse_BladeturnRefrainPvP"
 		Case $GC_I_SKILL_ID_SIGNET_OF_RETURN_PVP
-			Return "CanUse_SignetOfReturnPvp"
+			Return "CanUse_SignetOfReturnPvP"
 		Case $GC_I_SKILL_ID_CANT_TOUCH_THIS_PVP
-			Return "CanUse_CantTouchThisPvp"
+			Return "CanUse_CantTouchThisPvP"
 		Case $GC_I_SKILL_ID_STAND_YOUR_GROUND_PVP
-			Return "CanUse_StandYourGroundPvp"
+			Return "CanUse_StandYourGroundPvP"
 		Case $GC_I_SKILL_ID_WE_SHALL_RETURN_PVP
-			Return "CanUse_WeShallReturnPvp"
+			Return "CanUse_WeShallReturnPvP"
 		Case $GC_I_SKILL_ID_FIND_THEIR_WEAKNESS_PVP
-			Return "CanUse_FindTheirWeaknessPvp"
+			Return "CanUse_FindTheirWeaknessPvP"
 		Case $GC_I_SKILL_ID_NEVER_GIVE_UP_PVP
-			Return "CanUse_NeverGiveUpPvp"
+			Return "CanUse_NeverGiveUpPvP"
 		Case $GC_I_SKILL_ID_HELP_ME_PVP
-			Return "CanUse_HelpMePvp"
+			Return "CanUse_HelpMePvP"
 		Case $GC_I_SKILL_ID_FALL_BACK_PVP
-			Return "CanUse_FallBackPvp"
+			Return "CanUse_FallBackPvP"
 		Case $GC_I_SKILL_ID_AGONY_PVP
-			Return "CanUse_AgonyPvp"
+			Return "CanUse_AgonyPvP"
 		Case $GC_I_SKILL_ID_REJUVENATION_PVP
-			Return "CanUse_RejuvenationPvp"
+			Return "CanUse_RejuvenationPvP"
 		Case $GC_I_SKILL_ID_ANTHEM_OF_DISRUPTION_PVP
-			Return "CanUse_AnthemOfDisruptionPvp"
+			Return "CanUse_AnthemOfDisruptionPvP"
 		Case $GC_I_SKILL_ID_SHADOWSONG_MASTER_RIYO
 			Return "CanUse_ShadowsongMasterRiyo"
 		Case $GC_I_SKILL_ID_SPIRIT_SIPHON_MASTER_RIYO
 			Return "CanUse_SpiritSiphonMasterRiyo"
 		Case $GC_I_SKILL_ID_COMFORT_ANIMAL_PVP
-			Return "CanUse_ComfortAnimalPvp"
+			Return "CanUse_ComfortAnimalPvP"
 		Case $GC_I_SKILL_ID_MELANDRUS_ASSAULT_PVP
-			Return "CanUse_MelandrusAssaultPvp"
+			Return "CanUse_MelandrusAssaultPvP"
 		Case $GC_I_SKILL_ID_SHROUD_OF_DISTRESS_PVP
-			Return "CanUse_ShroudOfDistressPvp"
+			Return "CanUse_ShroudOfDistressPvP"
 		Case $GC_I_SKILL_ID_UNSEEN_FURY_PVP
-			Return "CanUse_UnseenFuryPvp"
+			Return "CanUse_UnseenFuryPvP"
 		Case $GC_I_SKILL_ID_PREDATORY_BOND_PVP
-			Return "CanUse_PredatoryBondPvp"
+			Return "CanUse_PredatoryBondPvP"
 		Case $GC_I_SKILL_ID_ENRAGED_LUNGE_PVP
-			Return "CanUse_EnragedLungePvp"
+			Return "CanUse_EnragedLungePvP"
 		Case $GC_I_SKILL_ID_CONVICTION_PVP
-			Return "CanUse_ConvictionPvp"
+			Return "CanUse_ConvictionPvP"
 		Case $GC_I_SKILL_ID_SIGNET_OF_DEADLY_CORRUPTION_PVP
-			Return "CanUse_SignetOfDeadlyCorruptionPvp"
+			Return "CanUse_SignetOfDeadlyCorruptionPvP"
 		Case $GC_I_SKILL_ID_MASOCHISM_PVP
-			Return "CanUse_MasochismPvp"
+			Return "CanUse_MasochismPvP"
 		Case $GC_I_SKILL_ID_PAIN_ATTACK_TOGO1
 			Return "CanUse_PainAttackTogo1"
 		Case $GC_I_SKILL_ID_PAIN_ATTACK_TOGO2
@@ -4336,17 +4304,17 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_PAIN_ATTACK_TOGO3
 			Return "CanUse_PainAttackTogo3"
 		Case $GC_I_SKILL_ID_UNHOLY_FEAST_PVP
-			Return "CanUse_UnholyFeastPvp"
+			Return "CanUse_UnholyFeastPvP"
 		Case $GC_I_SKILL_ID_SIGNET_OF_AGONY_PVP
-			Return "CanUse_SignetOfAgonyPvp"
+			Return "CanUse_SignetOfAgonyPvP"
 		Case $GC_I_SKILL_ID_ESCAPE_PVP
-			Return "CanUse_EscapePvp"
+			Return "CanUse_EscapePvP"
 		Case $GC_I_SKILL_ID_DEATH_BLOSSOM_PVP
-			Return "CanUse_DeathBlossomPvp"
+			Return "CanUse_DeathBlossomPvP"
 		Case $GC_I_SKILL_ID_FINALE_OF_RESTORATION_PVP
-			Return "CanUse_FinaleOfRestorationPvp"
+			Return "CanUse_FinaleOfRestorationPvP"
 		Case $GC_I_SKILL_ID_MANTRA_OF_RESOLVE_PVP
-			Return "CanUse_MantraOfResolvePvp"
+			Return "CanUse_MantraOfResolvePvP"
 		Case $GC_I_SKILL_ID_CHARM_ANIMAL2
 			Return "CanUse_CharmAnimal2"
 		Case $GC_I_SKILL_ID_CHARM_ANIMAL3
@@ -4404,29 +4372,29 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_GHOSTLY_FURY_REAPER_SKILL
 			Return "CanUse_GhostlyFuryReaperSkill"
 		Case $GC_I_SKILL_ID_STAGGERING_BLOW_PVP
-			Return "CanUse_StaggeringBlowPvp"
+			Return "CanUse_StaggeringBlowPvP"
 		Case $GC_I_SKILL_ID_LIGHTNING_REFLEXES_PVP
-			Return "CanUse_LightningReflexesPvp"
+			Return "CanUse_LightningReflexesPvP"
 		Case $GC_I_SKILL_ID_FIERCE_BLOW_PVP
-			Return "CanUse_FierceBlowPvp"
+			Return "CanUse_FierceBlowPvP"
 		Case $GC_I_SKILL_ID_RENEWING_SMASH_PVP
-			Return "CanUse_RenewingSmashPvp"
+			Return "CanUse_RenewingSmashPvP"
 		Case $GC_I_SKILL_ID_HEAL_AS_ONE_PVP
-			Return "CanUse_HealAsOnePvp"
+			Return "CanUse_HealAsOnePvP"
 		Case $GC_I_SKILL_ID_GLASS_ARROWS_PVP
-			Return "CanUse_GlassArrowsPvp"
+			Return "CanUse_GlassArrowsPvP"
 		Case $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI_PVP
-			Return "CanUse_ProtectiveWasKaolaiPvp"
+			Return "CanUse_ProtectiveWasKaolaiPvP"
 		Case $GC_I_SKILL_ID_KEEN_ARROW_PVP
-			Return "CanUse_KeenArrowPvp"
+			Return "CanUse_KeenArrowPvP"
 		Case $GC_I_SKILL_ID_ANTHEM_OF_ENVY_PVP
-			Return "CanUse_AnthemOfEnvyPvp"
+			Return "CanUse_AnthemOfEnvyPvP"
 		Case $GC_I_SKILL_ID_MENDING_REFRAIN_PVP
-			Return "CanUse_MendingRefrainPvp"
+			Return "CanUse_MendingRefrainPvP"
 		Case $GC_I_SKILL_ID_EMPATHY_PVP
-			Return "CanUse_EmpathyPvp"
+			Return "CanUse_EmpathyPvP"
 		Case $GC_I_SKILL_ID_CRIPPLING_ANGUISH_PVP
-			Return "CanUse_CripplingAnguishPvp"
+			Return "CanUse_CripplingAnguishPvP"
 		Case $GC_I_SKILL_ID_PAIN_ATTACK_SIGNET_OF_SPIRITS1
 			Return "CanUse_PainAttackSignetOfSpirits1"
 		Case $GC_I_SKILL_ID_PAIN_ATTACK_SIGNET_OF_SPIRITS2
@@ -4434,9 +4402,9 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_PAIN_ATTACK_SIGNET_OF_SPIRITS3
 			Return "CanUse_PainAttackSignetOfSpirits3"
 		Case $GC_I_SKILL_ID_SOLDIERS_STANCE_PVP
-			Return "CanUse_SoldiersStancePvp"
+			Return "CanUse_SoldiersStancePvP"
 		Case $GC_I_SKILL_ID_DESTRUCTIVE_WAS_GLAIVE_PVP
-			Return "CanUse_DestructiveWasGlaivePvp"
+			Return "CanUse_DestructiveWasGlaivePvP"
 		Case $GC_I_SKILL_ID_CHARM_DRAKE
 			Return "CanUse_CharmDrake"
 		Case $GC_I_SKILL_ID_THERES_NOT_ENOUGH_TIME
@@ -4460,41 +4428,41 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_GUILD_MONUMENT_PROTECTED
 			Return "CanUse_GuildMonumentProtected"
 		Case $GC_I_SKILL_ID_MANTRA_OF_SIGNETS_PVP
-			Return "CanUse_MantraOfSignetsPvp"
+			Return "CanUse_MantraOfSignetsPvP"
 		Case $GC_I_SKILL_ID_SHATTER_DELUSIONS_PVP
-			Return "CanUse_ShatterDelusionsPvp"
+			Return "CanUse_ShatterDelusionsPvP"
 		Case $GC_I_SKILL_ID_ILLUSIONARY_WEAPONRY_PVP
-			Return "CanUse_IllusionaryWeaponryPvp"
+			Return "CanUse_IllusionaryWeaponryPvP"
 		Case $GC_I_SKILL_ID_PANIC_PVP
-			Return "CanUse_PanicPvp"
+			Return "CanUse_PanicPvP"
 		Case $GC_I_SKILL_ID_MIGRAINE_PVP
-			Return "CanUse_MigrainePvp"
+			Return "CanUse_MigrainePvP"
 		Case $GC_I_SKILL_ID_ACCUMULATED_PAIN_PVP
-			Return "CanUse_AccumulatedPainPvp"
+			Return "CanUse_AccumulatedPainPvP"
 		Case $GC_I_SKILL_ID_PSYCHIC_INSTABILITY_PVP
-			Return "CanUse_PsychicInstabilityPvp"
+			Return "CanUse_PsychicInstabilityPvP"
 		Case $GC_I_SKILL_ID_SHARED_BURDEN_PVP
-			Return "CanUse_SharedBurdenPvp"
+			Return "CanUse_SharedBurdenPvP"
 		Case $GC_I_SKILL_ID_STOLEN_SPEED_PVP
-			Return "CanUse_StolenSpeedPvp"
+			Return "CanUse_StolenSpeedPvP"
 		Case $GC_I_SKILL_ID_UNNATURAL_SIGNET_PVP
-			Return "CanUse_UnnaturalSignetPvp"
+			Return "CanUse_UnnaturalSignetPvP"
 		Case $GC_I_SKILL_ID_SPIRITUAL_PAIN_PVP
-			Return "CanUse_SpiritualPainPvp"
+			Return "CanUse_SpiritualPainPvP"
 		Case $GC_I_SKILL_ID_FRUSTRATION_PVP
-			Return "CanUse_FrustrationPvp"
+			Return "CanUse_FrustrationPvP"
 		Case $GC_I_SKILL_ID_MISTRUST_PVP
-			Return "CanUse_MistrustPvp"
+			Return "CanUse_MistrustPvP"
 		Case $GC_I_SKILL_ID_ENCHANTERS_CONUNDRUM_PVP
-			Return "CanUse_EnchantersConundrumPvp"
+			Return "CanUse_EnchantersConundrumPvP"
 		Case $GC_I_SKILL_ID_SIGNET_OF_CLUMSINESS_PVP
-			Return "CanUse_SignetOfClumsinessPvp"
+			Return "CanUse_SignetOfClumsinessPvP"
 		Case $GC_I_SKILL_ID_MIRROR_OF_DISENCHANTMENT_PVP
-			Return "CanUse_MirrorOfDisenchantmentPvp"
+			Return "CanUse_MirrorOfDisenchantmentPvP"
 		Case $GC_I_SKILL_ID_WANDERING_EYE_PVP
-			Return "CanUse_WanderingEyePvp"
+			Return "CanUse_WanderingEyePvP"
 		Case $GC_I_SKILL_ID_CALCULATED_RISK_PVP
-			Return "CanUse_CalculatedRiskPvp"
+			Return "CanUse_CalculatedRiskPvP"
 		Case $GC_I_SKILL_ID_ADORATION
 			Return "CanUse_Adoration"
 		Case $GC_I_SKILL_ID_IMPENDING_DHUUM
@@ -4508,7 +4476,7 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_OATH_OF_PROTECTION2
 			Return "CanUse_OathOfProtection2"
 		Case $GC_I_SKILL_ID_DEFY_PAIN_PVP
-			Return "CanUse_DefyPainPvp"
+			Return "CanUse_DefyPainPvP"
 		Case $GC_I_SKILL_ID_ENTOURAGE
 			Return "CanUse_Entourage"
 		Case $GC_I_SKILL_ID_SPECTRAL_INFUSION
@@ -4516,15 +4484,15 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_ENTOURAGE_BUFFER
 			Return "CanUse_EntourageBuffer"
 		Case $GC_I_SKILL_ID_WASTRELS_DEMISE_PVP
-			Return "CanUse_WastrelsDemisePvp"
+			Return "CanUse_WastrelsDemisePvP"
 		Case $GC_I_SKILL_ID_BARBED_SIGNET_PVP
-			Return "CanUse_BarbedSignetPvp"
+			Return "CanUse_BarbedSignetPvP"
 		Case $GC_I_SKILL_ID_HEAL_PARTY_PVP
-			Return "CanUse_HealPartyPvp"
+			Return "CanUse_HealPartyPvP"
 		Case $GC_I_SKILL_ID_SPOIL_VICTOR_PVP
-			Return "CanUse_SpoilVictorPvp"
+			Return "CanUse_SpoilVictorPvP"
 		Case $GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP
-			Return "CanUse_VisionsOfRegretPvp"
+			Return "CanUse_VisionsOfRegretPvP"
 		Case $GC_I_SKILL_ID_KEIRANS_SNIPER_SHOT_HEARTS_OF_THE_NORTH
 			Return "CanUse_KeiransSniperShotHeartsOfTheNorth"
 		Case $GC_I_SKILL_ID_GRAVESTONE_MARKER
@@ -4554,9 +4522,9 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_RAIN_OF_ARROWS
 			Return "CanUse_RainOfArrows"
 		Case $GC_I_SKILL_ID_FOX_FANGS_PVP
-			Return "CanUse_FoxFangsPvp"
+			Return "CanUse_FoxFangsPvP"
 		Case $GC_I_SKILL_ID_WILD_STRIKE_PVP
-			Return "CanUse_WildStrikePvp"
+			Return "CanUse_WildStrikePvP"
 		Case $GC_I_SKILL_ID_ULTRA_SNOWBALL
 			Return "CanUse_UltraSnowball"
 		Case $GC_I_SKILL_ID_BLIZZARD
@@ -4570,29 +4538,29 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_ULTRA_SNOWBALL5
 			Return "CanUse_UltraSnowball5"
 		Case $GC_I_SKILL_ID_BANISHING_STRIKE_PVP
-			Return "CanUse_BanishingStrikePvp"
+			Return "CanUse_BanishingStrikePvP"
 		Case $GC_I_SKILL_ID_TWIN_MOON_SWEEP_PVP
-			Return "CanUse_TwinMoonSweepPvp"
+			Return "CanUse_TwinMoonSweepPvP"
 		Case $GC_I_SKILL_ID_IRRESISTIBLE_SWEEP_PVP
-			Return "CanUse_IrresistibleSweepPvp"
+			Return "CanUse_IrresistibleSweepPvP"
 		Case $GC_I_SKILL_ID_PIOUS_ASSAULT_PVP
-			Return "CanUse_PiousAssaultPvp"
+			Return "CanUse_PiousAssaultPvP"
 		Case $GC_I_SKILL_ID_EBON_DUST_AURA_PVP
-			Return "CanUse_EbonDustAuraPvp"
+			Return "CanUse_EbonDustAuraPvP"
 		Case $GC_I_SKILL_ID_HEART_OF_HOLY_FLAME_PVP
-			Return "CanUse_HeartOfHolyFlamePvp"
+			Return "CanUse_HeartOfHolyFlamePvP"
 		Case $GC_I_SKILL_ID_GUIDING_HANDS_PVP
-			Return "CanUse_GuidingHandsPvp"
+			Return "CanUse_GuidingHandsPvP"
 		Case $GC_I_SKILL_ID_AVATAR_OF_DWAYNA_PVP
-			Return "CanUse_AvatarOfDwaynaPvp"
+			Return "CanUse_AvatarOfDwaynaPvP"
 		Case $GC_I_SKILL_ID_AVATAR_OF_MELANDRU_PVP
-			Return "CanUse_AvatarOfMelandruPvp"
+			Return "CanUse_AvatarOfMelandruPvP"
 		Case $GC_I_SKILL_ID_MYSTIC_HEALING_PVP
-			Return "CanUse_MysticHealingPvp"
+			Return "CanUse_MysticHealingPvP"
 		Case $GC_I_SKILL_ID_SIGNET_OF_PIOUS_RESTRAINT_PVP
-			Return "CanUse_SignetOfPiousRestraintPvp"
+			Return "CanUse_SignetOfPiousRestraintPvP"
 		Case $GC_I_SKILL_ID_FEVERED_DREAMS_PVP
-			Return "CanUse_FeveredDreamsPvp"
+			Return "CanUse_FeveredDreamsPvP"
 		Case $GC_I_SKILL_ID_STUN_GRENADE
 			Return "CanUse_StunGrenade"
 		Case $GC_I_SKILL_ID_FRAGMENTATION_GRENADE
@@ -4622,29 +4590,29 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_DAMAGE_ASSESSMENT
 			Return "CanUse_DamageAssessment"
 		Case $GC_I_SKILL_ID_AURA_OF_THORNS_PVP
-			Return "CanUse_AuraOfThornsPvp"
+			Return "CanUse_AuraOfThornsPvP"
 		Case $GC_I_SKILL_ID_DUST_CLOAK_PVP
-			Return "CanUse_DustCloakPvp"
+			Return "CanUse_DustCloakPvP"
 		Case $GC_I_SKILL_ID_LYSSAS_HASTE_PVP
-			Return "CanUse_LyssasHastePvp"
+			Return "CanUse_LyssasHastePvP"
 		Case $GC_I_SKILL_ID_ONSLAUGHT_PVP
-			Return "CanUse_OnslaughtPvp"
+			Return "CanUse_OnslaughtPvP"
 		Case $GC_I_SKILL_ID_HEART_OF_FURY_PVP
-			Return "CanUse_HeartOfFuryPvp"
+			Return "CanUse_HeartOfFuryPvP"
 		Case $GC_I_SKILL_ID_WOUNDING_STRIKE_PVP
-			Return "CanUse_WoundingStrikePvp"
+			Return "CanUse_WoundingStrikePvP"
 		Case $GC_I_SKILL_ID_PIOUS_FURY_PVP
-			Return "CanUse_PiousFuryPvp"
+			Return "CanUse_PiousFuryPvP"
 		Case $GC_I_SKILL_ID_SMASH_OF_THE_TITANS
 			Return "CanUse_SmashOfTheTitans"
 		Case $GC_I_SKILL_ID_MIRROR_SHATTER
 			Return "CanUse_MirrorShatter"
 		Case $GC_I_SKILL_ID_ILLUSION_OF_HASTE_PVP
-			Return "CanUse_IllusionOfHastePvp"
+			Return "CanUse_IllusionOfHastePvP"
 		Case $GC_I_SKILL_ID_ILLUSION_OF_PAIN_PVP
-			Return "CanUse_IllusionOfPainPvp"
+			Return "CanUse_IllusionOfPainPvP"
 		Case $GC_I_SKILL_ID_AURA_OF_RESTORATION_PVP
-			Return "CanUse_AuraOfRestorationPvp"
+			Return "CanUse_AuraOfRestorationPvP"
 		Case $GC_I_SKILL_ID_SHAPESHIFT
 			Return "CanUse_Shapeshift"
 		Case $GC_I_SKILL_ID_PHASE_SHIELD
@@ -4660,13 +4628,13 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 		Case $GC_I_SKILL_ID_ANNIHILATOR_TOSS
 			Return "CanUse_AnnihilatorToss"
 		Case $GC_I_SKILL_ID_WEB_OF_DISRUPTION_PVP
-			Return "CanUse_WebOfDisruptionPvp"
+			Return "CanUse_WebOfDisruptionPvP"
 		Case $GC_I_SKILL_ID_LIGHTNING_HAMMER_PVP
-			Return "CanUse_LightningHammerPvp"
+			Return "CanUse_LightningHammerPvP"
 		Case $GC_I_SKILL_ID_ELEMENTAL_FLAME_PVP
-			Return "CanUse_ElementalFlamePvp"
+			Return "CanUse_ElementalFlamePvP"
 		Case $GC_I_SKILL_ID_SLIPPERY_GROUND_PVP
-			Return "CanUse_SlipperyGroundPvp"
+			Return "CanUse_SlipperyGroundPvP"
 		Case $GC_I_SKILL_ID_TONIC_TIPSINESS
 			Return "CanUse_TonicTipsiness"
 		Case $GC_I_SKILL_ID_GIFT_OF_BATTLE

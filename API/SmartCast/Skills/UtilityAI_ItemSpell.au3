@@ -1,7 +1,38 @@
 #include-once
 
 Func Anti_ItemSpell()
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return True
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SHAME) Then Return True
 
+	Local $l_i_CommingDamage = 0
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_BACKFIRE) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_BACKFIRE, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "BonusScale")
+		EndIf
+	EndIf
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "BonusScale")
+		EndIf
+	EndIf
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST, "Scale")
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST_PVP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST_PVP, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MARK_OF_SUBVERSION) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MARK_OF_SUBVERSION, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SOUL_LEECH) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SOUL_LEECH, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
+
+	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
+
+	Return False
 EndFunc
 
 ; Skill ID: 772 - $GC_I_SKILL_ID_GENEROUS_WAS_TSUNGRAI
@@ -10,6 +41,10 @@ Func CanUse_GenerousWasTsungrai()
 EndFunc
 
 Func BestTarget_GenerousWasTsungrai($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Tsungrai's ashes for up to 15...51...60 seconds and gain +50...122...140 maximum Health. When you drop his ashes, you gain 100...244...280 Health.
+	; Concise description
+	; Item Spell. (15...51...60 seconds.) You have +50...122...140 maximum Health. Drop effect: you gain 100...244...280 Health.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -19,6 +54,10 @@ Func CanUse_MightyWasVorizun()
 EndFunc
 
 Func BestTarget_MightyWasVorizun($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Vorizun's ashes for up to 15...51...60 seconds. While you hold his ashes, you gain +15 armor and +30 maximum Energy.
+	; Concise description
+	; Item Spell. (15...51...60 seconds.) You have +15 armor and +30 maximum Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -28,6 +67,10 @@ Func CanUse_BlindWasMingson()
 EndFunc
 
 Func BestTarget_BlindWasMingson($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Mingson's ashes for up to 15...51...60 seconds. When you drop his ashes, all nearby foes are Blinded for 3...7...8 seconds.
+	; Concise description
+	; Item Spell. (15...51...60 seconds.) Drop effect: inflicts Blindness condition (3...7...8 seconds) on all nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -37,6 +80,10 @@ Func CanUse_GraspingWasKuurong()
 EndFunc
 
 Func BestTarget_GraspingWasKuurong($a_f_AggroRange)
+	; Description
+	; Elite Item Spell. Hold Kuurong's ashes for up to 15...51...60 seconds. When you drop his ashes, all nearby foes are struck for 15...63...75 damage and knocked down.
+	; Concise description
+	; Elite Item Spell. (15...51...60 seconds.) Drop effect: deal 15...63...75 damage and knocks-down all nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -46,6 +93,10 @@ Func CanUse_VengefulWasKhanhei()
 EndFunc
 
 Func BestTarget_VengefulWasKhanhei($a_f_AggroRange)
+	; Description
+	; Elite Item Spell. Hold Khanhei's ashes for 5...10...11 seconds. Whenever a foe strikes you in combat while you are holding Khanhei's ashes, you steal 5...29...35 Health from that foe.
+	; Concise description
+	; Elite Item Spell. (5...10...11 seconds.) You steal 5...29...35 Health from every foe that hits you with an attack.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -55,6 +106,10 @@ Func CanUse_DefiantWasXinrae()
 EndFunc
 
 Func BestTarget_DefiantWasXinrae($a_f_AggroRange)
+	; Description
+	; Elite Item Spell. Hold Xinrae's ashes for up to 15...51...60 seconds. While you hold her ashes, you cannot lose more than 20% of your max Health from a single hit. When you drop her ashes, you steal 5...41...50 Health from all nearby foes.
+	; Concise description
+	; Elite Item Spell. (15...51...60 seconds.) You cannot lose more than 20% of your max Health from a single hit. Drop effect: steal 5...41...50 Health from nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -64,6 +119,10 @@ Func CanUse_TranquilWasTanasen()
 EndFunc
 
 Func BestTarget_TranquilWasTanasen($a_f_AggroRange)
+	; Description
+	; Elite Item Spell. Hold Tanasen's ashes for up to 5...17...20 seconds. While you hold his ashes, you have +10...22...25 armor and cannot be interrupted.
+	; Concise description
+	; Elite Item Spell. (5...17...20 seconds.) You have +10...22...25 armor. You cannot be interrupted.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -73,6 +132,10 @@ Func CanUse_CruelWasDaoshen()
 EndFunc
 
 Func BestTarget_CruelWasDaoshen($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Daoshen's ashes for up to 15...51...60 seconds. While you hold his ashes, all Ritualist skills have 10% armor penetration. When you drop his ashes, all nearby foes are struck for 15...71...85 lightning damage.
+	; Concise description
+	; Item Spell. (15...51...60 seconds.) Your Ritualist skills have 10% armor penetration. Drop effect: deals 15...71...85 lightning damage to all nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -82,6 +145,10 @@ Func CanUse_ProtectiveWasKaolai()
 EndFunc
 
 Func BestTarget_ProtectiveWasKaolai($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Kaolai's ashes for up to 15...51...60 seconds. While you hold his ashes, you gain 10 armor. When you drop his ashes, all party members are healed for 10...70...85 Health.
+	; Concise description
+	; Item Spell. (15...51...60 seconds.) You have +10 armor. Drop effect: all party members are healed for 10...70...85.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -91,6 +158,10 @@ Func CanUse_AttunedWasSongkai()
 EndFunc
 
 Func BestTarget_AttunedWasSongkai($a_f_AggroRange)
+	; Description
+	; Elite Item Spell. Hold Songkai's ashes for up to 45 seconds. While you hold her ashes, your spells and binding rituals cost &#45;5...41...50% of the base Energy to cast.
+	; Concise description
+	; Elite Item Spell. (45 seconds.) Your spells and binding rituals cost &#45;5...41...50% of the base Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -100,6 +171,10 @@ Func CanUse_ResilientWasXiko()
 EndFunc
 
 Func BestTarget_ResilientWasXiko($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Xiko's ashes for up to 5...17...20 seconds. For each hex or condition you are suffering from while holding her ashes, you gain +3 Health regeneration. When you drop her ashes, you lose 1...3...4 conditions.
+	; Concise description
+	; Item Spell. (5...17...20 seconds.) You have +3 Health regeneration for each hex or condition on you. Drop effect: you lose 1...3...4 condition[s].
 	Return Agent_GetMyID()
 EndFunc
 
@@ -109,6 +184,10 @@ Func CanUse_LivelyWasNaomei()
 EndFunc
 
 Func BestTarget_LivelyWasNaomei($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Naomei's ashes for up to 45 seconds. When you drop her ashes, all party members in the area are resurrected with 15...63...75% Health and zero Energy.
+	; Concise description
+	; Item Spell. (45 seconds.) Drop effect: resurrects party members in the area (15...63...75% Health and zero Energy).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -118,6 +197,10 @@ Func CanUse_AnguishedWasLingwah()
 EndFunc
 
 Func BestTarget_AnguishedWasLingwah($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Lingwah's ashes for up to 10...50...60 seconds. While you hold her ashes, your Ritualist hexes cost 1...4...5 less energy and last 33% longer. When you drop her ashes all your Ritualist hexes are recharged.
+	; Concise description
+	; Item Spell. (10...50...60 seconds.) Your Ritualist hexes cost 1...4...5 less energy and last 33% longer. Drop effect: all your Ritualist hexes are recharged.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -127,6 +210,10 @@ Func CanUse_VocalWasSogolon()
 EndFunc
 
 Func BestTarget_VocalWasSogolon($a_f_AggroRange)
+	; Description
+	; Item Spell. For 60 seconds, all shouts and chants you use last 20...44...50% longer.
+	; Concise description
+	; Item Spell. (60 seconds.) Shouts and chants you use last 20...44...50% longer.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -136,6 +223,10 @@ Func CanUse_DestructiveWasGlaive()
 EndFunc
 
 Func BestTarget_DestructiveWasGlaive($a_f_AggroRange)
+	; Description
+	; Elite Item Spell. Hold Glaive's ashes for up to 30...54...60 seconds. While you hold her ashes, all Ritualist skills have 20% armor penetration. When you drop her ashes, all foes in the area are struck for 15...71...85 lightning damage.
+	; Concise description
+	; Elite Item Spell. (30...54...60 seconds.) Your Ritualist skills have 20% armor penetration. Drop effect: deals 15...71...85 lightning damage to all foes in the area.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -145,6 +236,10 @@ Func CanUse_EnergeticWasLeeSa()
 EndFunc
 
 Func BestTarget_EnergeticWasLeeSa($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Lee Sa's ashes for 5...13...15 seconds. While you hold her ashes, you gain +2 Energy regeneration. When you drop her ashes, you gain +1...8...10 Energy.
+	; Concise description
+	; Item Spell. (5...13...15 seconds.) You have +2 Energy regeneration. Drop effect: you gain +1...8...10 Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -154,6 +249,10 @@ Func CanUse_PureWasLiMing()
 EndFunc
 
 Func BestTarget_PureWasLiMing($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Li Ming's ashes for 5...17...20 seconds. While you hold her ashes, conditions on you expire 10...42...50% faster. When you drop her ashes, all allies within earshot lose 1...3...4 condition[s].
+	; Concise description
+	; Item Spell. (5...17...20 seconds.) Conditions on you expire 10...42...50% faster. Drop effect: removes 1...3...4 condition[s] from allies in earshot.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -163,24 +262,28 @@ Func CanUse_CourageousWasSaidra()
 EndFunc
 
 Func BestTarget_CourageousWasSaidra($a_f_AggroRange)
+	; Description
+	; Item Spell. Hold Saidra's Ashes for up to 300 seconds. While you hold her ashes, you gain +30 maximum Energy. When you drop her ashes, all party members are healed for 200 Health.
+	; Concise description
+	; Item Spell. Hold Saidra's Ashes for up to 300 seconds. While you hold her ashes, you gain +30 maximum Energy. When you drop her ashes, all party members are healed for 200 Health.
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3146 - $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI_PVP
-Func CanUse_ProtectiveWasKaolaiPvp()
+; Skill ID: 3146 - $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI_PvP
+Func CanUse_ProtectiveWasKaolaiPvP()
 	Return True
 EndFunc
 
-Func BestTarget_ProtectiveWasKaolaiPvp($a_f_AggroRange)
+Func BestTarget_ProtectiveWasKaolaiPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3157 - $GC_I_SKILL_ID_DESTRUCTIVE_WAS_GLAIVE_PVP
-Func CanUse_DestructiveWasGlaivePvp()
+; Skill ID: 3157 - $GC_I_SKILL_ID_DESTRUCTIVE_WAS_GLAIVE_PvP
+Func CanUse_DestructiveWasGlaivePvP()
 	Return True
 EndFunc
 
-Func BestTarget_DestructiveWasGlaivePvp($a_f_AggroRange)
+Func BestTarget_DestructiveWasGlaivePvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 

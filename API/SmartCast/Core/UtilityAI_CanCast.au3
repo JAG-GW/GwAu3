@@ -166,3 +166,10 @@ Func UAI_CanCast($a_i_SkillSlot)
 
 	Return True
 EndFunc
+
+Func UAI_CanDrop($a_i_SkillSlot)
+	Switch UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillID)
+		Case
+	EndSwitch
+	Return False
+EndFunc

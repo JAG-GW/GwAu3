@@ -8,6 +8,12 @@ Global $g_b_CanUseSkill = True
 Global $g_b_SkillChanged = False
 Global $g_b_CacheWeaponSet = False
 
+;Slecet your combat mode:
+; Finisher = priorize lowest hp target
+; Pressure = priorize highest hp target
+Global $g_i_FightMode = 1
+Global Enum $g_i_FinisherMode, $g_i_PressureMode
+
 ;Weapon Set Data Indices
 Global Const $GC_UAI_WEAPONSET_WeaponType = 0
 Global Const $GC_UAI_WEAPONSET_WeaponId = 1

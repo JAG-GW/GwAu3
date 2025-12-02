@@ -105,3 +105,199 @@ Func Party_IsWiped()
 EndFunc
 
 #EndRegion === Party Functions ===
+
+#Region === Agent Estimation Functions ===
+
+; Profession constants for reference
+; 0 = None, 1 = Warrior, 2 = Ranger, 3 = Monk, 4 = Necromancer
+; 5 = Mesmer, 6 = Elementalist, 7 = Assassin, 8 = Ritualist, 9 = Paragon, 10 = Dervish
+
+; Get the primary profession of an agent (works for players, heroes, henchmen AND mobs)
+; For players: uses $GC_UAI_AGENT_Primary
+; For mobs (NPCs): reads from NpcArray in memory
+Func UAI_GetAgentProfession($a_i_AgentID)
+	; Check if it's a player/hero/henchman (LoginNumber != 0)
+	Local $l_i_LoginNumber = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LoginNumber)
+	If $l_i_LoginNumber <> 0 Then
+		Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_Primary)
+	EndIf
+
+	; It's a mob/NPC, read from NpcArray
+	Local $l_i_NpcIndex = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	Local $l_i_TransmogID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_TransmogNpcId)
+
+	If BitAND($l_i_TransmogID, 0x20000000) <> 0 Then
+		$l_i_NpcIndex = BitXOR($l_i_TransmogID, 0x20000000)
+	EndIf
+
+	If $l_i_NpcIndex = 0 Then Return 0
+
+	Local $l_p_NpcArray = World_GetWorldInfo("NpcArray")
+	Local $l_i_NpcArraySize = World_GetWorldInfo("NpcArraySize")
+	If $l_i_NpcIndex >= $l_i_NpcArraySize Then Return 0
+
+	Local $l_p_NpcPtr = $l_p_NpcArray + ($l_i_NpcIndex * 0x30)
+	Local $l_i_NpcPrimary = Memory_Read($l_p_NpcPtr + 0x14, "dword")
+
+	Return $l_i_NpcPrimary
+EndFunc
+
+; Get armor bonus based on profession
+; Warrior/Paragon: +20, Ranger/Assassin/Dervish: +10, Others: +0
+Func UAI_GetArmorBonus($a_i_Profession)
+	Switch $a_i_Profession
+		Case 1, 9  ; Warrior, Paragon
+			Return 20
+		Case 2, 7, 10  ; Ranger, Assassin, Dervish
+			Return 10
+		Case Else  ; Monk, Necro, Mesmer, Ele, Rit, None
+			Return 0
+	EndSwitch
+EndFunc
+
+; Get estimated max HP for an agent
+; Normal Mode: Level × 20 + 80
+; Hard Mode: Level × 20 + 80 + (Level - 20) × 20 if Level > 20
+; Exception: Enemy Dervishes don't get +25 HP bonus (but that's for players, not relevant here)
+Func UAI_GetEstimatedMaxHP($a_i_AgentID)
+	Local $l_i_Level = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_Level)
+	If $l_i_Level = 0 Then $l_i_Level = 20  ; Default to level 20 if unknown
+
+	Local $l_i_BaseHP = $l_i_Level * 20 + 80
+
+	; Hard Mode bonus: +20 HP per level above 20
+	If Party_GetPartyContextInfo("IsHardMode")() And $l_i_Level > 20 Then
+		$l_i_BaseHP += ($l_i_Level - 20) * 20
+	EndIf
+
+	Return $l_i_BaseHP
+EndFunc
+
+; Get estimated current HP for an agent
+; Formula: HP% × EstimatedMaxHP
+Func UAI_GetEstimatedCurrentHP($a_i_AgentID)
+	Local $l_f_HPPercent = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_HP)
+	Return Round($l_f_HPPercent * UAI_GetEstimatedMaxHP($a_i_AgentID))
+EndFunc
+
+; Get base armor rating for an agent
+; Formula: Level × 3 + ArmorBonus
+Func UAI_GetBaseArmor($a_i_AgentID)
+	Local $l_i_Level = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_Level)
+	Local $l_i_Primary = UAI_GetAgentProfession($a_i_AgentID)
+	If $l_i_Level = 0 Then $l_i_Level = 20  ; Default to level 20 if unknown
+	Return $l_i_Level * 3 + UAI_GetArmorBonus($l_i_Primary)
+EndFunc
+
+; Get physical armor rating for an agent
+; Warriors have +20 armor vs physical damage
+Func UAI_GetPhysicalArmor($a_i_AgentID)
+	Local $l_i_BaseArmor = UAI_GetBaseArmor($a_i_AgentID)
+	Local $l_i_Primary = UAI_GetAgentProfession($a_i_AgentID)
+
+	; Warriors have +20 vs physical
+	If $l_i_Primary = 1 Then  ; Warrior
+		Return $l_i_BaseArmor + 20
+	EndIf
+
+	Return $l_i_BaseArmor
+EndFunc
+
+; Get elemental armor rating for an agent
+; Rangers have +30 armor vs elemental damage
+Func UAI_GetElementalArmor($a_i_AgentID)
+	Local $l_i_BaseArmor = UAI_GetBaseArmor($a_i_AgentID)
+	Local $l_i_Primary = UAI_GetAgentProfession($a_i_AgentID)
+
+	; Rangers have +30 vs elemental
+	If $l_i_Primary = 2 Then  ; Ranger
+		Return $l_i_BaseArmor + 30
+	EndIf
+
+	Return $l_i_BaseArmor
+EndFunc
+
+; Calculate damage multiplier based on armor
+; Formula: 2 ^ ((60 - Armor) / 40)
+; Reference: 60 AL = 1.0x damage
+; Lower armor = more damage, higher armor = less damage
+Func UAI_GetDamageMultiplier($a_i_Armor)
+	; Clamp armor to reasonable values (minimum 0)
+	If $a_i_Armor < 0 Then $a_i_Armor = 0
+	Return 2 ^ ((60 - $a_i_Armor) / 40)
+EndFunc
+
+; Calculate effective armor after penetration
+; Penetration reduces armor by a percentage
+; Example: 20% penetration on 100 AL = 80 AL effective
+Func UAI_GetEffectiveArmor($a_i_BaseArmor, $a_f_Penetration = 0)
+	If $a_f_Penetration <= 0 Then Return $a_i_BaseArmor
+	If $a_f_Penetration > 1 Then $a_f_Penetration = 1  ; Cap at 100%
+	Return Round($a_i_BaseArmor * (1 - $a_f_Penetration))
+EndFunc
+
+; Estimate damage dealt to a target based on base damage and target's armor
+; $a_i_BaseDamage: Raw damage before armor
+; $a_i_AgentID: Target agent
+; $a_s_DamageType: "physical", "elemental", or "armor-ignoring"
+; $a_f_Penetration: Armor penetration (0.0 to 1.0, e.g., 0.20 for 20%)
+Func UAI_EstimateDamage($a_i_BaseDamage, $a_i_AgentID, $a_s_DamageType = "physical", $a_f_Penetration = 0)
+	; Armor-ignoring damage bypasses armor completely
+	If $a_s_DamageType = "armor-ignoring" Then Return $a_i_BaseDamage
+
+	; Get appropriate armor based on damage type
+	Local $l_i_Armor
+	Switch $a_s_DamageType
+		Case "physical"
+			$l_i_Armor = UAI_GetPhysicalArmor($a_i_AgentID)
+		Case "elemental", "fire", "cold", "lightning", "earth"
+			$l_i_Armor = UAI_GetElementalArmor($a_i_AgentID)
+		Case Else
+			$l_i_Armor = UAI_GetBaseArmor($a_i_AgentID)
+	EndSwitch
+
+	; Apply penetration
+	Local $l_i_EffectiveArmor = UAI_GetEffectiveArmor($l_i_Armor, $a_f_Penetration)
+
+	; Calculate final damage
+	Local $l_f_Multiplier = UAI_GetDamageMultiplier($l_i_EffectiveArmor)
+	Return Round($a_i_BaseDamage * $l_f_Multiplier)
+EndFunc
+
+; Check if agent is a caster (low armor profession)
+Func UAI_IsCaster($a_i_AgentID)
+	Local $l_i_Primary = UAI_GetAgentProfession($a_i_AgentID)
+	; Monk, Necro, Mesmer, Ele, Rit = casters (armor bonus = 0)
+	Switch $l_i_Primary
+		Case 3, 4, 5, 6, 8  ; Monk, Necro, Mesmer, Ele, Rit
+			Return True
+		Case Else
+			Return False
+	EndSwitch
+EndFunc
+
+; Check if agent is melee (high armor profession)
+Func UAI_IsMelee($a_i_AgentID)
+	Local $l_i_Primary = UAI_GetAgentProfession($a_i_AgentID)
+	; Warrior, Assassin, Dervish = melee
+	Switch $l_i_Primary
+		Case 1, 7, 10  ; Warrior, Assassin, Dervish
+			Return True
+		Case Else
+			Return False
+	EndSwitch
+EndFunc
+
+; Check if agent is ranged (Ranger, Paragon)
+Func UAI_IsRanged($a_i_AgentID)
+	Local $l_i_Primary = UAI_GetAgentProfession($a_i_AgentID)
+	; Ranger, Paragon = ranged physical
+	Switch $l_i_Primary
+		Case 2, 9  ; Ranger, Paragon
+			Return True
+		Case Else
+			Return False
+	EndSwitch
+EndFunc
+
+#EndRegion === Agent Estimation Functions ===

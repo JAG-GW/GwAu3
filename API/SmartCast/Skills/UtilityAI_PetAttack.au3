@@ -10,6 +10,10 @@ Func CanUse_BestialPounce()
 EndFunc
 
 Func BestTarget_BestialPounce($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Bestial Pounce that deals +5...17...20 damage. If the attack strikes a foe who is casting a spell, that foe is knocked down.
+	; Concise description
+	; Pet Attack. Deals +5...17...20 damage. Causes knock-down if target foe is casting a spell.
 	Return 0
 EndFunc
 
@@ -19,6 +23,10 @@ Func CanUse_MaimingStrike()
 EndFunc
 
 Func BestTarget_MaimingStrike($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Maiming Strike that deals +5...17...20 damage. If that attack hits a moving foe that foe becomes Crippled for 3...13...15 seconds.
+	; Concise description
+	; Pet Attack. Deals +5...17...20 damage. Inflicts Crippled condition (3...13...15 seconds) if target foe is moving.
 	Return 0
 EndFunc
 
@@ -28,6 +36,10 @@ Func CanUse_FeralLunge()
 EndFunc
 
 Func BestTarget_FeralLunge($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Feral Lunge that deals +5...29...35 damage. If the attack strikes a foe who is attacking, that foe suffers from Bleeding for 5...21...25 seconds.
+	; Concise description
+	; Pet Attack. Deals +5...29...35 damage. Inflicts Bleeding condition if target foe is attacking (5...21...25 seconds).
 	Return 0
 EndFunc
 
@@ -37,6 +49,10 @@ Func CanUse_ScavengerStrike()
 EndFunc
 
 Func BestTarget_ScavengerStrike($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Scavenger Strike that deals +10...22...25 damage. If the attack strikes a foe who is suffering a condition, you gain 3...13...15 Energy.
+	; Concise description
+	; Pet Attack. Deals +10...22...25 damage. You gain 3...13...15 Energy if target foe has a condition.
 	Return 0
 EndFunc
 
@@ -55,6 +71,10 @@ Func CanUse_FerociousStrike()
 EndFunc
 
 Func BestTarget_FerociousStrike($a_f_AggroRange)
+	; Description
+	; Elite Pet Attack. Your animal companion attempts a Ferocious Strike that deals +13...25...28 damage. If that attack hits, you gain adrenaline and 3...9...10 Energy.
+	; Concise description
+	; Elite Pet Attack. Deals +13...25...28 damage. You gain adrenaline and 3...9...10 energy.
 	Return 0
 EndFunc
 
@@ -73,6 +93,10 @@ Func CanUse_BrutalStrike()
 EndFunc
 
 Func BestTarget_BrutalStrike($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Brutal Strike that deals +5...29...35 damage. If that attack strikes a foe whose Health is below 50%, that foe takes an additional +5...29...35 damage.
+	; Concise description
+	; Pet Attack. Deals +5...29...35 damage. Deals +5...29...35 more damage if target foe is under 50% health.
 	Return 0
 EndFunc
 
@@ -82,6 +106,10 @@ Func CanUse_DisruptingLunge()
 EndFunc
 
 Func BestTarget_DisruptingLunge($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Disrupting Lunge that deals +1...10...12 damage. If that attack strikes a foe using a skill that skill is interrupted and is disabled for an additional 20 seconds.
+	; Concise description
+	; Pet Attack. Deals +1...10...12 damage. Interrupts a skill. Interruption effect: interrupted skill is disabled for +20 seconds.
 	Return 0
 EndFunc
 
@@ -91,6 +119,10 @@ Func CanUse_SavagePounce()
 EndFunc
 
 Func BestTarget_SavagePounce($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Savage Pounce that deals +5...17...20 damage. If the attack strikes a foe who is casting a spell, that foe is knocked down.
+	; Concise description
+	; Pet Attack. Deals +5...17...20 damage. Causes knock-down if target foe is casting a spell.
 	Return 0
 EndFunc
 
@@ -100,6 +132,10 @@ Func CanUse_EnragedLunge()
 EndFunc
 
 Func BestTarget_EnragedLunge($a_f_AggroRange)
+	; Description
+	; Elite Pet Attack. Your animal companion attempts an Enraged Lunge that applies a Deep Wound to target foe for 5...17...20 seconds and deals +10...42...50 damage.
+	; Concise description
+	; Elite Pet Attack. Inflicts Deep Wound condition (5...17...20 seconds) and deals +10...42...50 damage.
 	Return 0
 EndFunc
 
@@ -109,6 +145,10 @@ Func CanUse_BestialMauling()
 EndFunc
 
 Func BestTarget_BestialMauling($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Bestial Mauling that deals +5...17...20 damage. If the attack strikes a knocked-down foe, that foe is Dazed for 4...9...10 seconds.
+	; Concise description
+	; Pet Attack. Deals +5...17...20 damage. Inflicts Dazed condition (4...9...10 seconds) if target foe is knocked-down.
 	Return 0
 EndFunc
 
@@ -118,6 +158,10 @@ Func CanUse_PoisonousBite()
 EndFunc
 
 Func BestTarget_PoisonousBite($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion attempts a Poisonous Bite that Poisons target foe for 5...17...20 seconds.
+	; Concise description
+	; Pet Attack. Inflicts Poisoned condition (5...17...20 seconds).
 	Return 0
 EndFunc
 
@@ -127,24 +171,28 @@ Func CanUse_Pounce()
 EndFunc
 
 Func BestTarget_Pounce($a_f_AggroRange)
+	; Description
+	; Pet Attack. Your animal companion's next attack is a Pounce that deals +5...17...20 damage. If the attack strikes a moving foe, that foe is knocked down.
+	; Concise description
+	; Pet Attack. Deals +5...17...20 damage. Causes knock-down if target foe is moving.
 	Return 0
 EndFunc
 
-; Skill ID: 3047 - $GC_I_SKILL_ID_MELANDRUS_ASSAULT_PVP
-Func CanUse_MelandrusAssaultPvp()
+; Skill ID: 3047 - $GC_I_SKILL_ID_MELANDRUS_ASSAULT_PvP
+Func CanUse_MelandrusAssaultPvP()
 	Return True
 EndFunc
 
-Func BestTarget_MelandrusAssaultPvp($a_f_AggroRange)
+Func BestTarget_MelandrusAssaultPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 3051 - $GC_I_SKILL_ID_ENRAGED_LUNGE_PVP
-Func CanUse_EnragedLungePvp()
+; Skill ID: 3051 - $GC_I_SKILL_ID_ENRAGED_LUNGE_PvP
+Func CanUse_EnragedLungePvP()
 	Return True
 EndFunc
 
-Func BestTarget_EnragedLungePvp($a_f_AggroRange)
+Func BestTarget_EnragedLungePvP($a_f_AggroRange)
 	Return 0
 EndFunc
 

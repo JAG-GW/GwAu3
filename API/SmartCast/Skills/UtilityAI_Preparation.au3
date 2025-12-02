@@ -28,6 +28,10 @@ Func CanUse_IgniteArrows()
 EndFunc
 
 Func BestTarget_IgniteArrows($a_f_AggroRange)
+	; Description
+	; Preparation. For 24 seconds, your arrows explode on contact, dealing 3...15...18 fire damage to target and all adjacent foes.
+	; Concise description
+	; Preparation. (24 seconds.) Your arrows deal 3...15...18 fire damage to target and foes adjacent to target.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -37,6 +41,10 @@ Func CanUse_ReadTheWind()
 EndFunc
 
 Func BestTarget_ReadTheWind($a_f_AggroRange)
+	; Description
+	; Preparation. For 24 seconds, your arrows move twice as fast and deal 3...9...10 extra damage.
+	; Concise description
+	; Preparation. (24 seconds). +3...9...10 damage. Your arrows move twice as fast.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -46,6 +54,10 @@ Func CanUse_KindleArrows()
 EndFunc
 
 Func BestTarget_KindleArrows($a_f_AggroRange)
+	; Description
+	; Preparation. For 24 seconds, your arrows deal fire damage and hit for an additional 3...20...24 fire damage.
+	; Concise description
+	; Preparation. (24 seconds.) +3...20...24 fire damage. Your arrows deal fire damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -55,6 +67,10 @@ Func CanUse_ChokingGas()
 EndFunc
 
 Func BestTarget_ChokingGas($a_f_AggroRange)
+	; Description
+	; Preparation. For 1...10...12 seconds, your arrows deal 1...7...8 more damage and spread Choking Gas to all adjacent foes on impact. Choking Gas interrupts foes attempting to cast spells.
+	; Concise description
+	; Preparation. (1...10...12 seconds.) +1...7...8 damage. Spreads Choking Gas to foes adjacent to target. Choking Gas interrupts spells.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -64,6 +80,10 @@ Func CanUse_ApplyPoison()
 EndFunc
 
 Func BestTarget_ApplyPoison($a_f_AggroRange)
+	; Description
+	; Preparation. For 24 seconds, foes struck by your physical attacks become Poisoned for 3...13...15 seconds.
+	; Concise description
+	; Preparation. (24 seconds.) Your physical attacks inflict Poisoned condition (3...13...15 seconds).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -73,6 +93,10 @@ Func CanUse_SeekingArrows()
 EndFunc
 
 Func BestTarget_SeekingArrows($a_f_AggroRange)
+	; Description
+	; Preparation. For 3...12...14 seconds, your arrows cannot be blocked. Seeking Arrows ends if you fail to hit.
+	; Concise description
+	; Preparation. (3...12...14 seconds.) Your arrows are unblockable. Ends if you fail to hit.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -91,6 +115,10 @@ Func CanUse_YellowSnow()
 EndFunc
 
 Func BestTarget_YellowSnow($a_f_AggroRange)
+	; Description
+	; Snow fighting skill
+	; Concise description
+	; //en.wikipedia.org/wiki/Sic" class="extiw" title="w:Sic">
 	Return Agent_GetMyID()
 EndFunc
 
@@ -100,6 +128,10 @@ Func CanUse_CorruptedBreath()
 EndFunc
 
 Func BestTarget_CorruptedBreath($a_f_AggroRange)
+	; Description
+	; Preparation. For 20 seconds, whenever your attacks hit a foe, all nearby foes take 50 damage for each enchantment on your target.
+	; Concise description
+	; Preparation. (20 seconds.) Whenever your attacks hit, all nearby foes take 50 damage for each enchantment on your target.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -109,6 +141,10 @@ Func CanUse_GlassArrows()
 EndFunc
 
 Func BestTarget_GlassArrows($a_f_AggroRange)
+	; Description
+	; Elite Preparation. For 10...30...35 seconds, your arrows strike for +5...17...20 damage if they hit and cause Bleeding for 10...18...20 seconds if they are blocked.
+	; Concise description
+	; Elite Preparation. (10...30...35 seconds.) Your arrows deal +5...17...20 damage. Inflicts Bleeding condition if blocked (10...18...20 seconds).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -118,6 +154,10 @@ Func CanUse_BarbedArrows()
 EndFunc
 
 Func BestTarget_BarbedArrows($a_f_AggroRange)
+	; Description
+	; Preparation. For 24 seconds, your arrows cause Bleeding for 3...13...15 seconds. You have -40 armor while activating this skill.
+	; Concise description
+	; Preparation. (24 seconds.) Your arrows inflict Bleeding condition (3...13...15 seconds). You have -40 armor while activating this skill.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -127,6 +167,10 @@ Func CanUse_DisruptingAccuracy()
 EndFunc
 
 Func BestTarget_DisruptingAccuracy($a_f_AggroRange)
+	; Description
+	; Preparation. For 36 seconds, whenever your arrows critical, they also interrupt your target.
+	; Concise description
+	; Preparation. (36 seconds.) Interrupts an action whenever your arrows critical.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -136,6 +180,10 @@ Func CanUse_RapidFire()
 EndFunc
 
 Func BestTarget_RapidFire($a_f_AggroRange)
+	; Description
+	; Preparation. For 5...21...25 seconds, you attack 33% faster while wielding a bow.
+	; Concise description
+	; Preparation. (5...21...25 seconds.) You attack 33% faster while wielding a bow.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -145,24 +193,28 @@ Func CanUse_ExpertFocus()
 EndFunc
 
 Func BestTarget_ExpertFocus($a_f_AggroRange)
+	; Description
+	; Preparation. For 24 seconds, your bow attack skills cost 1...2...2 less Energy and deal 1...8...10 extra damage.
+	; Concise description
+	; Preparation. (24 seconds.) Your bow attack skills cost 1...2...2 less Energy and do +1...8...10 damage.
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 2969 - $GC_I_SKILL_ID_READ_THE_WIND_PVP
-Func CanUse_ReadTheWindPvp()
+; Skill ID: 2969 - $GC_I_SKILL_ID_READ_THE_WIND_PvP
+Func CanUse_ReadTheWindPvP()
 	Return True
 EndFunc
 
-Func BestTarget_ReadTheWindPvp($a_f_AggroRange)
+Func BestTarget_ReadTheWindPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3145 - $GC_I_SKILL_ID_GLASS_ARROWS_PVP
-Func CanUse_GlassArrowsPvp()
+; Skill ID: 3145 - $GC_I_SKILL_ID_GLASS_ARROWS_PvP
+Func CanUse_GlassArrowsPvP()
 	Return True
 EndFunc
 
-Func BestTarget_GlassArrowsPvp($a_f_AggroRange)
+Func BestTarget_GlassArrowsPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 

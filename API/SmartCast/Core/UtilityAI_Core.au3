@@ -1,7 +1,8 @@
 #include-once
 
-Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500)
+Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500, $a_i_FightMode = $g_i_FinisherMode)
 	$g_i_BestTarget = 0
+	$g_i_FightMode = $a_i_FightMode
 	Local $l_i_MyOldMap = Map_GetMapID(), $l_i_MapLoadingOld = Map_GetInstanceInfo("Type")
 	Do
 		UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange, $a_f_MaxDistanceToXY)
@@ -101,16 +102,35 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 EndFunc   ;==>UAI_UseSkillEX
 
 ;Priority skills, check at each loop if can cast
+;Uses Special flags and Effect2 flags to identify priority skills
 Func UAI_PrioritySkills($a_f_AggroRange = 1320)
-	Local $l_ai_PrioritySkills[] = [$GC_I_SKILL_ID_ASSASSINS_PROMISE, $GC_I_SKILL_ID_EREMITES_ZEAL, $GC_I_SKILL_ID_PANIC, $GC_I_SKILL_ID_INFUSE_HEALTH, _
-								$GC_I_SKILL_ID_SEED_OF_LIFE, $GC_I_SKILL_ID_HEALING_BURST, $GC_I_SKILL_ID_PATIENT_SPIRIT, $GC_I_SKILL_ID_LIFE_SHEATH, _
-								$GC_I_SKILL_ID_RESTORE_CONDITION, $GC_I_SKILL_ID_PEACE_AND_HARMONY]
+	; Priority Special flags (from $GC_UAI_STATIC_SKILL_Special)
+	Local $l_ai_PrioritySpecialFlags[] = [$GC_I_SKILL_SPECIAL_FLAG_RESURRECTION, $GC_I_SKILL_SPECIAL_FLAG_ELITE]
 
-	For $l_i_SkillID In $l_ai_PrioritySkills
-		Local $l_i_Slot = Skill_GetSlotByID($l_i_SkillID)
-		If $l_i_Slot > 0 Then
-			UAI_CastPrioritySkill($l_i_Slot, $a_f_AggroRange)
-		EndIf
+	; Priority Effect2 flags (from $GC_UAI_STATIC_SKILL_Effect2)
+	Local $l_ai_PriorityEffect2Flags[] = [$GC_I_SKILL_EFFECT2_ENERGY_STEAL, $GC_I_SKILL_EFFECT2_ENERGY_GAIN, _
+										  $GC_I_SKILL_EFFECT2_HEX_REMOVAL, $GC_I_SKILL_EFFECT2_CONDITION_REMOVAL]
+
+	; Check each skill slot
+	For $l_i_Slot = 1 To 8
+		Local $l_i_Special = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_Special)
+		Local $l_i_Effect2 = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_Effect2)
+
+		; Check Special flags
+		For $l_i_Flag In $l_ai_PrioritySpecialFlags
+			If BitAND($l_i_Special, $l_i_Flag) Then
+				UAI_CastPrioritySkill($l_i_Slot, $a_f_AggroRange)
+				ExitLoop 2 ; Exit both loops after casting
+			EndIf
+		Next
+
+		; Check Effect2 flags
+		For $l_i_Flag In $l_ai_PriorityEffect2Flags
+			If BitAND($l_i_Effect2, $l_i_Flag) Then
+				UAI_CastPrioritySkill($l_i_Slot, $a_f_AggroRange)
+				ExitLoop 2 ; Exit both loops after casting
+			EndIf
+		Next
 	Next
 EndFunc
 
@@ -127,10 +147,33 @@ Func UAI_CastPrioritySkill($a_i_Slot, $a_f_AggroRange = 1320)
 	EndIf
 EndFunc
 
+; Drop bundle if player has Item Spell buff and can cast (skill is recharged)
 Func UAI_DropBundle()
-	For $l_i_i = 1 To 8
-;~ 		Switch UAI_GetStaticSkillInfo($l_i_i, $GC_UAI_STATIC_SKILL_SkillID)
-;~ 			Case
-;~ 		EndSwitch
+	For $l_i_Slot = 1 To 8
+		; Check if skill is an Item Spell
+		Local $l_i_Type = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillType)
+		If $l_i_Type <> $GC_I_SKILL_TYPE_ITEM_SPELL Then ContinueLoop
+
+		; Get skill ID to check if player has the buff
+		Local $l_i_SkillID = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillID)
+		If $l_i_SkillID = 0 Then ContinueLoop
+
+		; Check if player has the Item Spell buff (holding the ashes)
+		If Not UAI_PlayerHasBuff($l_i_SkillID) Then ContinueLoop
+
+		; Check if skill is recharged (can drop bundle)
+		If UAI_CanCast($l_i_Slot) Then
+			; Drop bundle by using the skill on self
+			UAI_UseSkillEX($l_i_Slot, Agent_GetMyID())
+			; Actualize cache after casting item spell
+			UAI_UpdateCache($a_f_AggroRange)
+			Return
+		EndIf
+
+		; Check if skill is not recharged (but can drop bundle)
+		If UAI_CanDrop($l_i_Slot) Then
+			Core_ControlAction($GC_I_CONTROL_ACTION_DROP_ITEM)
+			Return
+		EndIf
 	Next
 EndFunc

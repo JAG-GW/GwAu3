@@ -1,7 +1,38 @@
 #include-once
 
 Func Anti_WeaponSpell()
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return True
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SHAME) Then Return True
 
+	Local $l_i_CommingDamage = 0
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_BACKFIRE) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_BACKFIRE, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "BonusScale")
+		EndIf
+	EndIf
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "BonusScale")
+		EndIf
+	EndIf
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST, "Scale")
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST_PVP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST_PVP, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MARK_OF_SUBVERSION) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MARK_OF_SUBVERSION, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SOUL_LEECH) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SOUL_LEECH, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
+
+	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
+
+	Return False
 EndFunc
 
 ; Skill ID: 787 - $GC_I_SKILL_ID_RESILIENT_WEAPON
@@ -10,6 +41,10 @@ Func CanUse_ResilientWeapon()
 EndFunc
 
 Func BestTarget_ResilientWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 3...10...12 seconds, target ally has a Resilient Weapon. While suffering from a hex or condition, that ally gains +1...5...6 Health regeneration and +24 armor.
+	; Concise description
+	; Weapon Spell. (3...10...12 seconds.) +1...5...6 Health regeneration and +24 armor. No effect unless target ally is hexed or has a condition.
 	Return 0
 EndFunc
 
@@ -19,6 +54,10 @@ Func CanUse_SplinterWeapon()
 EndFunc
 
 Func BestTarget_SplinterWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 20 seconds, target ally has a Splinter Weapon. Target ally's next 1...4...5 attack[s] deal 5...41...50 damage to up to 4 adjacent foes.
+	; Concise description
+	; Weapon Spell. (20 seconds.) Attacks deal 5...41...50 damage to 3 [sic] adjacent foes. Ends after 1...4...5 attack[s].
 	Return 0
 EndFunc
 
@@ -28,6 +67,10 @@ Func CanUse_WeaponOfWarding()
 EndFunc
 
 Func BestTarget_WeaponOfWarding($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 3...7...8 seconds, target ally has a Weapon of Warding that grants target ally +2...4...4 Health regeneration and a 50% chance to block.
+	; Concise description
+	; Weapon Spell. (3...7...8 seconds.) +2...4...4 Health regeneration. 50% chance to block.
 	Return 0
 EndFunc
 
@@ -37,6 +80,10 @@ Func CanUse_WailingWeapon()
 EndFunc
 
 Func BestTarget_WailingWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 3...8...9 seconds, target ally has a Wailing Weapon. Whenever the Wailing Weapon strikes an attacking foe, that foe is interrupted.
+	; Concise description
+	; Weapon Spell. (3...8...9 seconds.) Attacks interrupt attacking foes.
 	Return 0
 EndFunc
 
@@ -46,6 +93,10 @@ Func CanUse_NightmreWeapon()
 EndFunc
 
 Func BestTarget_NightmareWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 12 seconds, target ally has a Nightmare Weapon. Target ally's next 3 attacks are reduced by 10...42...50 damage and steal up to 10...42...50 Health.
+	; Concise description
+	; Weapon Spell. (12 seconds.) Target ally's attacks steal 10...42...50 Health but deal 10...42...50 less damage. Ends after 3 attacks.
 	Return 0
 EndFunc
 
@@ -55,6 +106,10 @@ Func CanUse_VengefulWeapon()
 EndFunc
 
 Func BestTarget_VengefulWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 8 seconds, the next time target ally takes damage or life steal from a foe, that ally steals up to 15...51...60 Health from that foe.
+	; Concise description
+	; Weapon Spell. (8 seconds.) Steals 15...51...60 Health from the next foe that deals damage or life steal to target ally.
 	Return 0
 EndFunc
 
@@ -64,6 +119,10 @@ Func CanUse_WeaponOfShadow()
 EndFunc
 
 Func BestTarget_WeaponOfShadow($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 1...6...7 second[s], target ally has a Weapon of Shadow. Whenever that ally is struck by an attack, that ally's attacker becomes Blinded for 5 seconds. The next 1...3...3 times  that ally hits with an attack, his target is Blinded for 5 seconds.
+	; Concise description
+	; Weapon Spell. (1...6...7 second[s].) Inflicts Blindness condition (5 seconds) on anyone who attacks target ally. Target ally's next 1...3...3 attack[s] inflict Blindness (5 seconds) if they hit.
 	Return 0
 EndFunc
 
@@ -73,6 +132,10 @@ Func CanUse_SpiritLightWeapon()
 EndFunc
 
 Func BestTarget_SpiritLightWeapon($a_f_AggroRange)
+	; Description
+	; Elite Weapon Spell. For 10 seconds, target ally gains 1...12...15 Health per second and an additional 1...12...15 Health per second if that ally is within earshot of a spirit.
+	; Concise description
+	; Elite Weapon Spell. (10 seconds.) Target ally gains 1...12...15 Health each second. 1...12...15 more healing per second while within earshot of a spirit.
 	Return 0
 EndFunc
 
@@ -82,6 +145,10 @@ Func CanUse_BrutalWeapon()
 EndFunc
 
 Func BestTarget_BrutalWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. Give target ally a Brutal Weapon for 10...34...40 seconds. The bearer's weapon strikes for +5...13...15 damage as long as the bearer is under no enchantments.
+	; Concise description
+	; Weapon Spell. (10...34...40 seconds.) Attacks deal +5...13...15 damage. No effect while target ally is enchanted.
 	Return 0
 EndFunc
 
@@ -91,6 +158,10 @@ Func CanUse_GuidedWeapon()
 EndFunc
 
 Func BestTarget_GuidedWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 4...9...10 seconds, target ally's attacks cannot be blocked.
+	; Concise description
+	; Weapon Spell. (4...9...10 seconds.) Attacks are unblockable.
 	Return 0
 EndFunc
 
@@ -100,6 +171,10 @@ Func CanUse_VitalWeapon()
 EndFunc
 
 Func BestTarget_VitalWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 5...25...30 seconds, target ally has a Vital Weapon and has +40...148...175 maximum Health.
+	; Concise description
+	; Weapon Spell. (5...25...30 seconds.) +40...148...175 maximum Health.
 	Return 0
 EndFunc
 
@@ -109,6 +184,10 @@ Func CanUse_WeaponOfQuickening()
 EndFunc
 
 Func BestTarget_WeaponOfQuickening($a_f_AggroRange)
+	; Description
+	; Elite Weapon Spell. For 5...21...25 seconds, target ally has a Weapon of Quickening, and spells and binding rituals recharge 33% faster.
+	; Concise description
+	; Elite Weapon Spell. (5...21...25 seconds.) Spells and binding rituals recharge 33% faster.
 	Return 0
 EndFunc
 
@@ -118,6 +197,10 @@ Func CanUse_WeaponOfFury()
 EndFunc
 
 Func BestTarget_WeaponOfFury($a_f_AggroRange)
+	; Description
+	; Elite Weapon Spell. For 5...17...20 seconds, target ally gains 5...41...50% more adrenaline and 1 Energy whenever that ally successfully hits with an attack.
+	; Concise description
+	; Elite Weapon Spell. (5...17...20 seconds.) 5...41...50% more adrenaline gain and +1 Energy whenever target ally hits with an attack.
 	Return 0
 EndFunc
 
@@ -145,6 +228,10 @@ Func CanUse_WeaponOfRemedy()
 EndFunc
 
 Func BestTarget_WeaponOfRemedy($a_f_AggroRange)
+	; Description
+	; Elite Weapon Spell. For 8 seconds, the next time target ally takes damage or life steal from a foe, that ally steals up to 15...63...75 Health from that foe and loses 1 condition.
+	; Concise description
+	; Elite Weapon Spell. (8 seconds.) The next time target ally takes damage or life steal from a foe, this ally steals 15...63...75 Health from that foe and loses 1 condition.
 	Return 0
 EndFunc
 
@@ -154,6 +241,10 @@ Func CanUse_WeaponOfMastery()
 EndFunc
 
 Func BestTarget_WeaponOfMastery($a_f_AggroRange)
+	; Description
+	; Ritualist
+	; Concise description
+	; green; font-weight: bold;">15...51...60
 	Return 0
 EndFunc
 
@@ -163,6 +254,10 @@ Func CanUse_WeaponOfAggression()
 EndFunc
 
 Func BestTarget_WeaponOfAggression($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 5...13...15 seconds, you attack 25% faster.
+	; Concise description
+	; Weapon Spell. (5...13...15 seconds.) You attack 25% faster.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -172,6 +267,10 @@ Func CanUse_SunderingWeapon()
 EndFunc
 
 Func BestTarget_SunderingWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 4...9...10 seconds, target ally's next 3 attacks have 10% armor penetration and cause Cracked Armor for 5...17...20 seconds.
+	; Concise description
+	; Weapon Spell. (4...9...10 seconds.) Target ally's next 3 attacks inflict Cracked Armor condition (5...17...20 seconds) and have 10% armor penetration.
 	Return 0
 EndFunc
 
@@ -181,6 +280,10 @@ Func CanUse_WeaponOfRenewal()
 EndFunc
 
 Func BestTarget_WeaponOfRenewal($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 4...9...10 seconds, the next time target ally hits with an attack skill, that ally gains 1...6...7 Energy.
+	; Concise description
+	; Weapon Spell. (4...9...10 seconds.) Target ally gains 1...6...7 Energy the next time this ally hits with an attack skill.
 	Return 0
 EndFunc
 
@@ -190,6 +293,10 @@ Func CanUse_GhostlyWeapon()
 EndFunc
 
 Func BestTarget_GhostlyWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 5...17...20 seconds, target other ally's next attack cannot be blocked.
+	; Concise description
+	; Weapon Spell. (5...17...20 seconds.) Target ally's next attack is unblockable. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -199,24 +306,28 @@ Func CanUse_GreatDwarfWeapon()
 EndFunc
 
 Func BestTarget_GreatDwarfWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 20 seconds, target other ally's weapon strikes for +15...20 damage and has a 28...40% chance to cause knock down.
+	; Concise description
+	; Weapon Spell. (20 seconds.) +15...20 weapon damage and 28...40% chance to cause knock-down with attacks. Cannot self-target.
 	Return 0
 EndFunc
 
-; Skill ID: 2868 - $GC_I_SKILL_ID_SPLINTER_WEAPON_PVP
-Func CanUse_SplinterWeaponPvp()
+; Skill ID: 2868 - $GC_I_SKILL_ID_SPLINTER_WEAPON_PvP
+Func CanUse_SplinterWeaponPvP()
 	Return True
 EndFunc
 
-Func BestTarget_SplinterWeaponPvp($a_f_AggroRange)
+Func BestTarget_SplinterWeaponPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 2893 - $GC_I_SKILL_ID_WEAPON_OF_WARDING_PVP
-Func CanUse_WeaponOfWardingPvp()
+; Skill ID: 2893 - $GC_I_SKILL_ID_WEAPON_OF_WARDING_PvP
+Func CanUse_WeaponOfWardingPvP()
 	Return True
 EndFunc
 
-Func BestTarget_WeaponOfWardingPvp($a_f_AggroRange)
+Func BestTarget_WeaponOfWardingPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
@@ -226,6 +337,10 @@ Func CanUse_WeaponsOfThreeForges()
 EndFunc
 
 Func BestTarget_WeaponsOfThreeForges($a_f_AggroRange)
+	; Description
+	; Elite Weapon Spell. For 3...17...20 seconds, each non-spirit ally in earshot gains the effect of a random Weapon Spell. PvE Skill
+	; Concise description
+	; Elite Weapon Spell. (3...17...20 seconds.) Allies in earshot gain the effect of a random Weapon Spell. Allied spirits are not affected. PvE Skill
 	Return Agent_GetMyID()
 EndFunc
 

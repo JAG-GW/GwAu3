@@ -1,7 +1,45 @@
 #include-once
 
-Func Anti_Enchentment()
+Func Anti_Enchantment()
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SHAME) Then Return True
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return True
 
+	Local $l_i_CommingDamage = 0
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_BACKFIRE) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_BACKFIRE, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "BonusScale")
+		EndIf
+	EndIf
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "BonusScale")
+		EndIf
+	EndIf
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST, "Scale")
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST_PVP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST_PVP, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MARK_OF_SUBVERSION) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MARK_OF_SUBVERSION, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SOUL_LEECH) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SOUL_LEECH, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPOIL_VICTOR) Then
+		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
+	EndIf
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPOIL_VICTOR_PVP) Then
+		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
+	EndIf
+
+	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
+
+	Return False
 EndFunc
 
 ; Skill ID: 32 - $GC_I_SKILL_ID_ILLUSION_OF_WEAKNESS
@@ -10,6 +48,10 @@ Func CanUse_IllusionOfWeakness()
 EndFunc
 
 Func BestTarget_IllusionOfWeakness($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. You lose 50...202...240 Health. Illusion of Weakness ends if damage drops your Health below 25% of your maximum. When Illusion of Weakness ends, you gain 50...202...240 Health.
+	; Concise description
+	; Enchantment Spell. Lose 50...202...240 Health. End effect: you gain 50...202...240 Health. Ends if damage drops your Health below 25% of your maximum.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -19,6 +61,10 @@ Func CanUse_IllusionaryWeaponry()
 EndFunc
 
 Func BestTarget_IllusionaryWeaponry($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 30 seconds, your melee attacks neither hit nor fail to hit. Instead, Illusionary Weaponry deals 8...34...40 damage to your targets for each melee attack. You have +5 armor for each equipped Illusion Magic skill.
+	; Concise description
+	; Elite Enchantment Spell. (30 seconds.) Deals 8...34...40 damage to foes in place of other damage or effects from melee attacks. You have +5 armor for each equipped Illusion Magic skill. Your melee attacks neither hit nor fail to hit.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -28,6 +74,10 @@ Func CanUse_SympatheticVisage()
 EndFunc
 
 Func BestTarget_SympatheticVisage($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 4...9...10 seconds, whenever target ally is hit by a melee attack, all adjacent foes lose all adrenaline and 3 Energy.
+	; Concise description
+	; Enchantment Spell. (4...9...10 seconds.) All adjacent foes lose all adrenaline and 3 Energy whenever a melee attack hits target ally.
 	Return 0
 EndFunc
 
@@ -37,6 +87,10 @@ Func CanUse_IllusionOfHaste()
 EndFunc
 
 Func BestTarget_IllusionOfHaste($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...10...11 seconds you are no longer Crippled, and you move 33% faster. When Illusion of Haste ends, you become Crippled for 3 seconds.
+	; Concise description
+	; Enchantment Spell. (5...10...11 seconds.) You move 33% faster. Initial effect: removes Crippled condition. End effect: you are Crippled (3 seconds).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -46,6 +100,10 @@ Func CanUse_Channeling()
 EndFunc
 
 Func BestTarget_Channeling($a_f_AggroRange)
+	; Description
+	; This article is about the skill Channeling. For the attribute, see Channeling Magic.
+	; Concise description
+	; green; font-weight: bold;">8...46...56
 	Return Agent_GetMyID()
 EndFunc
 
@@ -55,6 +113,10 @@ Func CanUse_Echo()
 EndFunc
 
 Func BestTarget_Echo($a_f_AggroRange)
+	; Description
+	; This article is about the elite Mesmer skill. For the skill type of the same name, see Echo (skill type).
+	; Concise description
+	; Acquisition">edit
 	Return Agent_GetMyID()
 EndFunc
 
@@ -64,6 +126,10 @@ Func CanUse_ArcaneEcho()
 EndFunc
 
 Func BestTarget_ArcaneEcho($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. If you cast a spell in the next 20 seconds, Arcane Echo is replaced with that spell for 20 seconds. Arcane Echo ends prematurely if you use a non-spell skill.
+	; Concise description
+	; Enchantment Spell. (20 seconds.) Arcane Echo becomes the next spell you use (20 seconds). This enchantment ends if you use any skill that is not a spell.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -73,6 +139,10 @@ Func CanUse_MantraOfRecall()
 EndFunc
 
 Func BestTarget_MantraOfRecall($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 20 seconds, you gain no benefit from it. You gain 10...22...25 Energy when Mantra of Recall ends.
+	; Concise description
+	; Elite Enchantment Spell. (20 seconds.) End effect: you gain 10...22...25 Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -91,6 +161,10 @@ Func CanUse_DeathNova()
 EndFunc
 
 Func BestTarget_DeathNova($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30 seconds, if target ally dies, all adjacent foes take 26...85...100 damage and are Poisoned for 15 seconds.
+	; Concise description
+	; Enchantment Spell. (30 seconds.) Deals 26...85...100 damage and inflicts Poisoned condition (15 seconds) on adjacent foes if target ally dies.
 	Return 0
 EndFunc
 
@@ -100,6 +174,10 @@ Func CanUse_AwakenTheBlood()
 EndFunc
 
 Func BestTarget_AwakenTheBlood($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 20...39...44 seconds, you gain +2 Blood Magic and +2 Curses, but whenever you sacrifice Health, you sacrifice 50% more than the normal amount.
+	; Concise description
+	; Enchantment Spell. (20...39...44 seconds.) You have +2 Blood Magic and Curses. Sacrifice 50% more Health than normal.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -109,6 +187,10 @@ Func CanUse_TaintedFlesh()
 EndFunc
 
 Func BestTarget_TaintedFlesh($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 20...39...44 seconds, target ally is immune to disease, and anyone striking that ally in melee becomes Diseased for 3...13...15 seconds.
+	; Concise description
+	; Elite Enchantment Spell. (20...39...44 seconds.) Foes who hit target ally in melee become Diseased (3...13...15 seconds); this ally is immune to Disease.
 	Return 0
 EndFunc
 
@@ -118,6 +200,10 @@ Func CanUse_AuraOfTheLich()
 EndFunc
 
 Func BestTarget_AuraOfTheLich($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. All corpses within earshot are exploited and you animate a level 1...14...17 bone horror plus one for each corpse exploited in this way. For 5...37...45 seconds, your Death Magic attribute is increased by +1.
+	; Concise description
+	; Elite Enchantment Spell. Exploit all corpses in earshot. Animates a level 1...14...17 bone horror, plus one for each exploited corpse. You have +1 Death Magic (5...37...45 seconds).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -127,6 +213,10 @@ Func CanUse_BloodRenewal()
 EndFunc
 
 Func BestTarget_BloodRenewal($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 7 seconds, you gain +3...5...6 Health regeneration. When Blood Renewal ends, you gain 40...160...190 Health.
+	; Concise description
+	; Enchantment Spell. (7 seconds.) You have +3...5...6 Health regeneration. End effect: heals you for 40...160...190.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -136,6 +226,10 @@ Func CanUse_DarkAura()
 EndFunc
 
 Func BestTarget_DarkAura($a_f_AggroRange)
+	; Description
+	; This article is about the skill.&#32;&#32;For the blessing from an avatar, see Dark Aura (blessing).&#32;&#32;For the blessing during Deactivating R.O.X., see Dark Aura (Deactivating R.O.X.).
+	; Concise description
+	; green; font-weight: bold;">5...41...50
 	Return 0
 EndFunc
 
@@ -145,6 +239,10 @@ Func CanUse_BloodIsPower()
 EndFunc
 
 Func BestTarget_BloodIsPower($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 10 seconds, target other ally gains +3...5...6 Energy regeneration.
+	; Concise description
+	; Elite Enchantment Spell. (10 seconds.) +3...5...6 Energy regeneration. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -154,6 +252,10 @@ Func CanUse_DemonicFlesh()
 EndFunc
 
 Func BestTarget_DemonicFlesh($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30...54...60 seconds, whenever you use a skill that targets a foe, you deal 5...17...20 shadow damage to all other foes adjacent to you.
+	; Concise description
+	; Enchantment Spell. (30...54...60 seconds.) When using a skill on a foe, deal 5...17...20 shadow damage to all other foes adjacent to you.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -163,6 +265,10 @@ Func CanUse_OrderOfPain()
 EndFunc
 
 Func BestTarget_OrderOfPain($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5 seconds, whenever a party member hits a foe with physical damage, that party member does +3...13...16 damage.
+	; Concise description
+	; Enchantment Spell. Enchants all party members (5 seconds). 3...13...16 more damage whenever these party members hit with physical damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -172,6 +278,10 @@ Func CanUse_DarkBond()
 EndFunc
 
 Func BestTarget_DarkBond($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For the next 30...54...60 seconds, whenever you receive damage, your closest minion suffers 75% of that damage for you.
+	; Concise description
+	; Enchantment Spell. (30...54...60 seconds.) Transfers 75% of incoming damage from you to your nearest servant.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -181,6 +291,10 @@ Func CanUse_InfuseCondition()
 EndFunc
 
 Func BestTarget_InfuseCondition($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For the next 15...51...60 seconds, whenever you receive a condition, that condition is transferred to your closest minion instead.
+	; Concise description
+	; Enchantment Spell. (15...51...60 seconds.) Whenever you receive a condition, it transfers from you to your closest undead servant.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -190,6 +304,10 @@ Func CanUse_DarkFury()
 EndFunc
 
 Func BestTarget_DarkFury($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5 seconds, whenever any party member hits with an attack, that party member gains one hit of adrenaline. (50% failure chance with Blood Magic of 4 or less.)
+	; Concise description
+	; Enchantment Spell. Enchants party members (5 seconds). These party members gain one strike of adrenaline each time they hit with an attack. 50% failure chance unless Blood Magic 5 or more.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -199,6 +317,10 @@ Func CanUse_OrderOfTheVampire()
 EndFunc
 
 Func BestTarget_OrderOfTheVampire($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5 seconds, whenever a party member who is not under the effects of another Necromancer enchantment hits a foe with physical damage, that party member steals up to 3...13...16 Health.
+	; Concise description
+	; Elite Enchantment Spell. Enchants all party members (5 seconds.) These party members steal 3...13...16 Health with each physical damage attack. Party members under another Necromancer enchantment are not affected.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -208,6 +330,10 @@ Func CanUse_BloodRitual()
 EndFunc
 
 Func BestTarget_BloodRitual($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8...13...14 seconds, target touched ally gains +3 Energy regeneration. Blood Ritual cannot be used on the caster.
+	; Concise description
+	; Enchantment Spell. (8...13...14 seconds.) +3 Energy regeneration. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -217,6 +343,10 @@ Func CanUse_WindborneSpeed()
 EndFunc
 
 Func BestTarget_WindborneSpeed($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...11...13 seconds, target ally moves 33% faster.
+	; Concise description
+	; Enchantment Spell. (5...11...13 seconds.) Target ally moves 33% faster.
 	Return 0
 EndFunc
 
@@ -226,6 +356,10 @@ Func CanUse_ElementalAttunement()
 EndFunc
 
 Func BestTarget_ElementalAttunement($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 25...53...60 seconds, you are attuned to Air, Fire, Water, and Earth and gain +1...2...2 to these attributes. You gain 50% of the base Energy cost of the skill each time you use magic associated with any of these elements.
+	; Concise description
+	; Elite Enchantment Spell. (25...53...60 seconds.) Your elemental attributes are increased by +1...2...2. You gain 50% of the Energy cost of any Air, Earth, Fire, and Water Magic skills you use.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -235,6 +369,10 @@ Func CanUse_ArmorOfEarth()
 EndFunc
 
 Func BestTarget_ArmorOfEarth($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30 seconds, you gain 24...53...60 armor, but move 50...21...14% slower.
+	; Concise description
+	; Enchantment Spell. (30 seconds.) You have +24...53...60 armor. You move 50...21...14% slower.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -244,6 +382,10 @@ Func CanUse_KineticArmor()
 EndFunc
 
 Func BestTarget_KineticArmor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8 seconds, you gain +20...68...80 armor. Whenever you cast a spell, Kinetic Armor is renewed for 8 seconds.
+	; Concise description
+	; Enchantment Spell. (8 seconds.) You have +20...68...80 armor. Renewal bonus: cast a spell.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -253,6 +395,10 @@ Func CanUse_MagneticAura()
 EndFunc
 
 Func BestTarget_MagneticAura($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 1...4...5 second[s], you block the next attack against you and deal 10...42...50 damage to your attacker. If you are Overcast, all party members in earshot are also enchanted.
+	; Concise description
+	; Enchantment Spell. (1...4...5 second[s].) Block the next attack against you and reflect 10...42...50 damage to the attacker. If you are Overcast, enchant party members in earshot.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -262,6 +408,10 @@ Func CanUse_EarthAttunement()
 EndFunc
 
 Func BestTarget_EarthAttunement($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Earth. You gain 1 Energy plus 30% of the base Energy cost of the skill each time you use Earth Magic.
+	; Concise description
+	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost when you use an Earth Magic skill.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -271,6 +421,10 @@ Func CanUse_EtherProdigy()
 EndFunc
 
 Func BestTarget_EtherProdigy($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. Lose all enchantments. For 8...18...20 seconds, you gain +6 Energy regeneration. When Ether Prodigy ends, you lose 2 Health for each point of Energy you have.
+	; Concise description
+	; Elite Enchantment Spell. (8...18...20 seconds.) You have +6 Energy regeneration. End effect: lose 2 Health for each point of Energy you have. Lose all enchantments.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -280,6 +434,10 @@ Func CanUse_AuraOfRestoration()
 EndFunc
 
 Func BestTarget_AuraOfRestoration($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, you gain 0...1...1 Energy and are healed for 200...440...500% of the Energy cost each time you cast a spell.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) You gain 0...1...1 Energy and are healed for 200...440...500% of the Energy cost each time you cast a spell.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -289,6 +447,10 @@ Func CanUse_EtherRenewal()
 EndFunc
 
 Func BestTarget_EtherRenewal($a_f_AggroRange)
+	; Description
+	; "ER" redirects here. For the monk elite skill, see Empathic Removal.
+	; Concise description
+	; green; font-weight: bold;">5...17...20
 	Return Agent_GetMyID()
 EndFunc
 
@@ -298,6 +460,10 @@ Func CanUse_ConjureFlame()
 EndFunc
 
 Func BestTarget_ConjureFlame($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, if you're wielding a fire weapon, your attacks strike for an additional 5...17...20 fire damage.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) Your attacks hit for +5...17...20 fire damage. No effect unless your weapon deals fire damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -307,6 +473,10 @@ Func CanUse_FireAttunement()
 EndFunc
 
 Func BestTarget_FireAttunement($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Fire. You gain 1 Energy plus 30% of the base Energy cost of the skill each time you use Fire Magic.
+	; Concise description
+	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost when you use a Fire Magic skill.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -316,6 +486,10 @@ Func CanUse_ArmorOfFrost()
 EndFunc
 
 Func BestTarget_ArmorOfFrost($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...29...34 seconds, you gain +40 armor against physical damage and have +1 Water Magic.
+	; Concise description
+	; Enchantment Spell. (10...29...34 seconds.) You have +40 armor against physical damage and have +1 Water Magic.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -325,6 +499,10 @@ Func CanUse_ConjureFrost()
 EndFunc
 
 Func BestTarget_ConjureFrost($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, if you're wielding a cold weapon, your attacks strike for an additional 5...17...20 cold damage.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) Your attacks hit for +5...17...20 cold damage. No effect unless your weapon deals cold damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -334,6 +512,10 @@ Func CanUse_WaterAttunement()
 EndFunc
 
 Func BestTarget_WaterAttunement($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Water. You gain 1 Energy plus 30% of the base Energy cost of the skill each time you use Water Magic.
+	; Concise description
+	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost when you use a Water Magic skill.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -343,6 +525,10 @@ Func CanUse_IceSpear()
 EndFunc
 
 Func BestTarget_IceSpear($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. Send out an Ice Spear, striking target foe for 10...50...60 cold damage if it hits. If you are Overcast, you gain +1...3...4 Health regeneration for 5 seconds.
+	; Concise description
+	; Enchantment Spell. Projectile: deals 10...50...60 cold damage. Gain +1...3...4 Health regeneration for 5 seconds if Overcast.
 	Return 0
 EndFunc
 
@@ -352,6 +538,10 @@ Func CanUse_IronMist()
 EndFunc
 
 Func BestTarget_IronMist($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8...14...15 seconds, you have +15 armor. Your Air Magic spells that target a foe activate and recharge 25% faster, but you are Overcast by 3 points.
+	; Concise description
+	; Enchantment Spell. (8...14...15 seconds.) Gain +15 armor. Air Magic spells that target a foe activate and recharge 25% faster, but you are Overcast by 3 points.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -361,6 +551,10 @@ Func CanUse_ObsidianFlesh()
 EndFunc
 
 Func BestTarget_ObsidianFlesh($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 8...18...20 seconds, you gain +20 armor and cannot be the target of enemy spells, but cannot attack and have -2 energy degeneration.
+	; Concise description
+	; Elite Enchantment Spell. (8...18...20 seconds.) You have +20 armor and enemy spells cannot target you. You cannot attack and have -2 energy degeneration.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -370,6 +564,10 @@ Func CanUse_ConjureLightning()
 EndFunc
 
 Func BestTarget_ConjureLightning($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, if you're wielding a lightning weapon, your attacks strike for an additional 5...17...20 lightning damage.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) Your attacks hit for +5...17...20 lightning damage. No effect unless your weapon deals lightning damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -379,6 +577,10 @@ Func CanUse_AirAttunement()
 EndFunc
 
 Func BestTarget_AirAttunement($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 36...55...60 seconds, you are attuned to Air. You gain 1 Energy plus 30% of the base Energy cost of the skill whenever you use Air Magic.
+	; Concise description
+	; Enchantment Spell. (36...55...60 seconds.) You gain 1 Energy plus 30% of the Energy cost whenever you use an Air Magic skill.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -388,6 +590,10 @@ Func CanUse_SwirlingAura()
 EndFunc
 
 Func BestTarget_SwirlingAura($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5 seconds, you are enchanted with Swirling Aura and have 1...5...6 Health regeneration and a 50% chance to block projectiles. If you are Overcast when you cast this spell, all party members in earshot are also enchanted.
+	; Concise description
+	; Enchantment Spell. (5 seconds.) Gives 1...5...6 Health regeneration and a 50% chance to block projectiles. If Overcast, also enchants party members in earshot.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -397,6 +603,10 @@ Func CanUse_MistForm()
 EndFunc
 
 Func BestTarget_MistForm($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 10...38...45 seconds, you take 33% less damage from foes under the effects of Water Magic hexes. Whenever you cast an elemental spell, all non-spirit allies in earshot are healed for 50...210...250% of the Energy cost of the spell.
+	; Concise description
+	; Elite Enchantment Spell. (10...38...45 seconds.) Take 33% less damage from foes hexed with Water Magic. Heals non-spirit allies in earshot for 50...210...250% of the energy cost of your elemental spells.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -406,6 +616,10 @@ Func CanUse_ArmorOfMist()
 EndFunc
 
 Func BestTarget_ArmorOfMist($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8...18...20 seconds, you gain +10...34...40 armor and move 33% faster.
+	; Concise description
+	; Enchantment Spell. (8...18...20 seconds.) You have +10...34...40 armor and move 33% faster.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -415,6 +629,10 @@ Func CanUse_LifeBond()
 EndFunc
 
 Func BestTarget_LifeBond($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, whenever target other ally takes damage from an attack, half the damage is redirected to you. The damage you receive this way is reduced by 3...25...30.
+	; Concise description
+	; Enchantment Spell. Half of the damage target ally takes from attacks is redirected to you. Redirected damage is reduced by 3...25...30. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -424,6 +642,10 @@ Func CanUse_BalthazarsSpirit()
 EndFunc
 
 Func BestTarget_BalthazarsSpirit($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, target ally gains adrenaline and 1 Energy after taking damage. (The amount of adrenaline gained increases depending on your rank in Smiting Prayers.)
+	; Concise description
+	; Enchantment Spell. Target ally gains adrenaline and 1 Energy when taking damage.
 	Return 0
 EndFunc
 
@@ -433,6 +655,10 @@ Func CanUse_StrengthOfHonor()
 EndFunc
 
 Func BestTarget_StrengthOfHonor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, target ally deals 5...21...25 more damage in melee.
+	; Concise description
+	; Enchantment Spell. Target ally deals 5...21...25 more damage in melee.
 	Return 0
 EndFunc
 
@@ -442,6 +668,10 @@ Func CanUse_LifeAttunement()
 EndFunc
 
 Func BestTarget_LifeAttunement($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, target ally deals 30% less damage with attacks, but gains 14...43...50% more Health when healed.
+	; Concise description
+	; Enchantment Spell. Target ally gains 14...43...50% more Health when healed. This ally deals 30% less damage with attacks.
 	Return 0
 EndFunc
 
@@ -451,6 +681,10 @@ Func CanUse_ProtectiveSpirit()
 EndFunc
 
 Func BestTarget_ProtectiveSpirit($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...19...23 seconds, target ally cannot lose more than 10% max Health due to damage from a single attack or spell.
+	; Concise description
+	; Enchantment Spell. (5...19...23 seconds.) Incoming damage is reduced to 10% of target ally's maximum Health.
 	Return 0
 EndFunc
 
@@ -460,6 +694,10 @@ Func CanUse_DivineIntervention()
 EndFunc
 
 Func BestTarget_DivineIntervention($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10 seconds, the next time target ally receives damage that would be fatal, the damage is negated and that ally is healed for 26...197...240 Health.
+	; Concise description
+	; Enchantment Spell. (10 seconds.) Negates the next fatal damage target ally takes. Negation effect: heals for 26...197...240.
 	Return 0
 EndFunc
 
@@ -469,6 +707,10 @@ Func CanUse_Retribution()
 EndFunc
 
 Func BestTarget_Retribution($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, whenever target ally takes attack damage, this spell deals 33% of the damage back to the source (maximum 5...17...20 damage).
+	; Concise description
+	; Enchantment Spell. Deals 33% of each attack's damage (maximum 5...17...20) back to the source.
 	Return 0
 EndFunc
 
@@ -478,6 +720,10 @@ Func CanUse_HolyWrath()
 EndFunc
 
 Func BestTarget_HolyWrath($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...26...30 seconds, the next 1...8...10 time[s] target other ally takes attack damage, this spell deals 66% of the damage back to the source (maximum of 5...41...50 damage).
+	; Concise description
+	; Enchantment Spell. (10...26...30 seconds). Deals 66% of each attack's damage (maximum 5...41...50) back to source. Ends after dealing damage 1...8...10 time[s]. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -487,6 +733,10 @@ Func CanUse_EssenceBond()
 EndFunc
 
 Func BestTarget_EssenceBond($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, whenever target ally takes physical or elemental damage, you gain 1 Energy.
+	; Concise description
+	; Enchantment Spell. You gain 1 Energy whenever target ally takes physical or elemental damage.
 	Return 0
 EndFunc
 
@@ -496,6 +746,10 @@ Func CanUse_VigorousSpirit()
 EndFunc
 
 Func BestTarget_VigorousSpirit($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30 seconds, each time target ally attacks or casts a spell, that ally is healed for 5...17...20 Health.
+	; Concise description
+	; Enchantment Spell. (30 seconds.) Heals for 5...17...20 each time target ally attacks or casts a spell.
 	Return 0
 EndFunc
 
@@ -505,6 +759,10 @@ Func CanUse_WatchfulSpirit()
 EndFunc
 
 Func BestTarget_WatchfulSpirit($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, target ally gains +2 Health regeneration. That ally is healed for 30...150...180 Health when Watchful Spirit ends.
+	; Concise description
+	; Enchantment Spell. +2 Health regeneration. End effect: heals for 30...150...180.
 	Return 0
 EndFunc
 
@@ -514,6 +772,10 @@ Func CanUse_BlessedAura()
 EndFunc
 
 Func BestTarget_BlessedAura($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, Monk enchantments you cast last 10...30...35% longer.
+	; Concise description
+	; Enchantment Spell. Monk enchantments you cast last 10...30...35% longer.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -523,6 +785,10 @@ Func CanUse_Aegis()
 EndFunc
 
 Func BestTarget_Aegis($a_f_AggroRange)
+	; Description
+	; This article is about the skill. For the shield with the same name, see Aegis (shield).
+	; Concise description
+	; green; font-weight: bold;">5...10...11
 	Return Agent_GetMyID()
 EndFunc
 
@@ -532,6 +798,10 @@ Func CanUse_Guardian()
 EndFunc
 
 Func BestTarget_Guardian($a_f_AggroRange)
+	; Description
+	; This article is about a monk skill. For the character title, see Guardian (title).
+	; Concise description
+	; green; font-weight: bold;">2...6...7
 	Return 0
 EndFunc
 
@@ -541,6 +811,10 @@ Func CanUse_ShieldOfDeflection()
 EndFunc
 
 Func BestTarget_ShieldOfDeflection($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 3...9...10 seconds, target ally has a 75% chance to block attacks and gains 15...27...30 armor.
+	; Concise description
+	; Elite Enchantment Spell. (3...9...10 seconds.) 75% chance to block. +15...27...30 armor.
 	Return 0
 EndFunc
 
@@ -550,6 +824,10 @@ Func CanUse_AuraOfFaith()
 EndFunc
 
 Func BestTarget_AuraOfFaith($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 3 seconds, target ally gains 50...90...100% more Health when healed and takes 5...41...50% less damage.
+	; Concise description
+	; Elite Enchantment Spell. (3 seconds.) Target ally gains 50...90...100% more Health when healed and takes 5...41...50% less damage.
 	Return 0
 EndFunc
 
@@ -559,6 +837,10 @@ Func CanUse_ShieldOfRegeneration()
 EndFunc
 
 Func BestTarget_ShieldOfRegeneration($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5...11...13 seconds, target ally gains +3...9...10 Health regeneration and 40 armor.
+	; Concise description
+	; Elite Enchantment Spell. (5...11...13 seconds.) +3...9...10 Health regeneration and +40 armor.
 	Return 0
 EndFunc
 
@@ -568,6 +850,10 @@ Func CanUse_ShieldOfJudgment()
 EndFunc
 
 Func BestTarget_ShieldOfJudgment($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 8...18...20 seconds, anyone striking target ally with an attack is knocked down and suffers 5...41...50 holy damage.
+	; Concise description
+	; Elite Enchantment Spell. (8...18...20 seconds.) Deals 5...41...50 holy damage to foes attacking [sic] target ally. Causes knock-down.
 	Return 0
 EndFunc
 
@@ -577,6 +863,10 @@ Func CanUse_ProtectiveBond()
 EndFunc
 
 Func BestTarget_ProtectiveBond($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, target ally cannot lose more than 5% max Health due to damage from a single attack or spell. When Protective Bond prevents damage, you lose 6...4...3 Energy or the spell ends.
+	; Concise description
+	; Enchantment Spell. Target ally cannot lose more than 5% max Health from a single attack or spell. Each time damage is reduced you lose 6...4...3 Energy or this spell ends.
 	Return 0
 EndFunc
 
@@ -586,6 +876,10 @@ Func CanUse_PeaceAndHarmony()
 EndFunc
 
 Func BestTarget_PeaceAndHarmony($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. Target ally loses 0...7...9 condition[s] and hex[es]. For 1...3...3 second[s], conditions and hexes expire 90% faster on that ally. All your Smiting Prayers are disabled for 20 seconds.
+	; Concise description
+	; Elite Enchantment Spell. Target ally loses 0...7...9 condition[s] and hex[es]. Conditions and hexes expire 90% faster on that ally (1...3...3 second[s]). Disables your Smiting Prayers (20 seconds).
 	Return 0
 EndFunc
 
@@ -604,6 +898,10 @@ Func CanUse_UnyieldingAura()
 EndFunc
 
 Func BestTarget_UnyieldingAura($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. While you maintain this enchantment, your Monk spells heal for +15...51...60% more Health. When this enchantment ends one random other party member is resurrected with full Health and Energy and teleported to your location.
+	; Concise description
+	; Elite Enchantment Spell. Your Monk spells heal for +15...51...60%. End effect: a random other party member is resurrected with full Health and Energy and teleported to your location.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -613,6 +911,10 @@ Func CanUse_MarkOfProtection()
 EndFunc
 
 Func BestTarget_MarkOfProtection($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 10 seconds, whenever target ally would take damage, that ally is healed for that amount instead, maximum 6...49...60. All your Protection Prayers are disabled for 5 seconds.
+	; Concise description
+	; Elite Enchantment Spell. (10 seconds.) Converts incoming damage to healing (maximum 6...49...60). All your Protection Prayers are disabled (5 seconds).
 	Return 0
 EndFunc
 
@@ -622,6 +924,10 @@ Func CanUse_LifeBarrier()
 EndFunc
 
 Func BestTarget_LifeBarrier($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. While you maintain this enchantment, damage dealt to target other ally is reduced by 20...44...50%. If your Health is below 50% when that ally takes damage, Life Barrier ends.
+	; Concise description
+	; Elite Enchantment Spell. Reduces damage by 20...44...50%. Cannot self-target. If your Health is below 50% when target takes damage, Life Barrier ends.
 	Return 0
 EndFunc
 
@@ -631,6 +937,10 @@ Func CanUse_ZealotsFire()
 EndFunc
 
 Func BestTarget_ZealotsFire($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, whenever you use a skill that targets an ally, all foes adjacent to that target are struck for 5...29...35 fire damage and you lose 1 Energy.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) Whenever you use a skill on an ally, all foes adjacent to that ally are hit for 5...29...35 fire damage. Damage cost: you lose 1 Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -649,6 +959,10 @@ Func CanUse_SpellBreaker()
 EndFunc
 
 Func BestTarget_SpellBreaker($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5...15...17 seconds, target ally cannot be the target of enemy spells.
+	; Concise description
+	; Elite Enchantment Spell. (5...15...17 seconds.) Target ally cannot be the target of enemy spells.
 	Return 0
 EndFunc
 
@@ -658,6 +972,10 @@ Func CanUse_HealingSeed()
 EndFunc
 
 Func BestTarget_HealingSeed($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10 seconds, whenever target other ally takes damage, that ally and all adjacent allies gain 3...25...30 Health.
+	; Concise description
+	; Enchantment Spell. (10 seconds.) Target and adjacent allies gain 3...25...30 Health whenever this ally takes damage. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -667,6 +985,10 @@ Func CanUse_DivineBoon()
 EndFunc
 
 Func BestTarget_DivineBoon($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, whenever you cast a Protection Prayer  or Divine Favor spell that targets an ally, that ally is healed for 15...51...60 Health, and you lose 1 Energy.
+	; Concise description
+	; Enchantment Spell. Whenever you cast a Protection Prayer [sic] or Divine Favor spell on an ally, that ally is healed for 15...51...60. Heal cost: you lose 1 Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -676,6 +998,10 @@ Func CanUse_HealingHands()
 EndFunc
 
 Func BestTarget_HealingHands($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 10 seconds, whenever target ally takes damage, that ally is healed for 5...29...35 Health.
+	; Concise description
+	; Elite Enchantment Spell. (10 seconds.) Heals for 5...29...35 whenever target takes damage.
 	Return 0
 EndFunc
 
@@ -685,6 +1011,10 @@ Func CanUse_HealingBreeze()
 EndFunc
 
 Func BestTarget_HealingBreeze($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 15 seconds, target ally gains +4...8...9 Health regeneration.
+	; Concise description
+	; Enchantment Spell. (15 seconds.) +4...8...9 Health regeneration.
 	Return 0
 EndFunc
 
@@ -694,6 +1024,10 @@ Func CanUse_VitalBlessing()
 EndFunc
 
 Func BestTarget_VitalBlessing($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, target ally has +40...168...200 maximum Health.
+	; Concise description
+	; Enchantment Spell. +40...168...200 maximum Health.
 	Return 0
 EndFunc
 
@@ -703,6 +1037,10 @@ Func CanUse_Mending()
 EndFunc
 
 Func BestTarget_Mending($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, target ally gains +1...3...4 Health regeneration.
+	; Concise description
+	; Enchantment Spell. +1...3...4 Health regeneration.
 	Return 0
 EndFunc
 
@@ -712,6 +1050,10 @@ Func CanUse_LiveVicariously()
 EndFunc
 
 Func BestTarget_LiveVicariously($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, whenever target ally hits a foe, you gain 2...14...17 Health.
+	; Concise description
+	; Enchantment Spell. You gain 2...14...17 Health whenever target ally hits a foe.
 	Return 0
 EndFunc
 
@@ -721,6 +1063,10 @@ Func CanUse_ShieldingHands()
 EndFunc
 
 Func BestTarget_ShieldingHands($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8 seconds, damage and life steal received by target ally is reduced by 3...15...18. When Shielding Hands ends, that ally is healed for 5...41...50 Health.
+	; Concise description
+	; Enchantment Spell. (8 seconds.) Reduces incoming damage and life steal by 3...15...18. End effect: heals for 5...41...50
 	Return 0
 EndFunc
 
@@ -730,6 +1076,10 @@ Func CanUse_ReversalOfFortune()
 EndFunc
 
 Func BestTarget_ReversalOfFortune($a_f_AggroRange)
+	; Description
+	; "RoF" redirects here. For the Prophecies mission, see Ring of Fire.
+	; Concise description
+	; green; font-weight: bold;">15...67...80
 	Return 0
 EndFunc
 
@@ -739,6 +1089,10 @@ Func CanUse_Succor()
 EndFunc
 
 Func BestTarget_Succor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this Enchantment, target other ally gains +1 Health and +1 Energy regeneration, but you lose 1 Energy each time that ally casts a Spell.
+	; Concise description
+	; Enchantment Spell. +1 Health regeneration and +1 Energy regeneration. Cannot self-target. You lose 1 Energy each time target ally casts a spell.
 	Return 0
 EndFunc
 
@@ -748,6 +1102,10 @@ Func CanUse_HolyVeil()
 EndFunc
 
 Func BestTarget_HolyVeil($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, any hex cast on target ally takes twice as long to cast. When Holy Veil ends, one hex is removed from target ally.
+	; Concise description
+	; Enchantment Spell. Doubles casting time of hexes cast on target ally. End effect: removes a hex.
 	Return 0
 EndFunc
 
@@ -757,6 +1115,10 @@ Func CanUse_DivineSpirit()
 EndFunc
 
 Func BestTarget_DivineSpirit($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 1...11...14 second[s], Monk Spells cost you 5 less Energy to cast. (Minimum cost: 1 Energy.)
+	; Concise description
+	; Enchantment Spell. (1...11...14 second[s].) Monk spells cost you 5 less Energy. Minimum cost: 1 Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -767,6 +1129,10 @@ Func CanUse_Vengeance()
 EndFunc
 
 Func BestTarget_Vengeance($a_f_AggroRange)
+	; Description
+	; This article is about the Monk skill. For the weapon, see Anniversary Daggers "Vengeance".
+	; Concise description
+	; #808080;">End effect: this ally dies.
 	Return 0
 EndFunc
 
@@ -781,6 +1147,10 @@ Func CanUse_CharrBuff()
 EndFunc
 
 Func BestTarget_CharrBuff($a_f_AggroRange)
+	; Description
+	; Monster skill
+	; Concise description
+	; 1em; margin-bottom:1em; clear:both;" />
 	Return 0
 EndFunc
 
@@ -799,6 +1169,10 @@ Func CanUse_DivineFire()
 EndFunc
 
 Func BestTarget_DivineFire($a_f_AggroRange)
+	; Description
+	; Prophecies
+	; Concise description
+	; Acquisition">edit
 	Return Agent_GetMyID()
 EndFunc
 
@@ -808,6 +1182,10 @@ Func CanUse_ChimeraOfIntensity()
 EndFunc
 
 Func BestTarget_ChimeraOfIntensity($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. Your skills recharge 50% faster, spells you cast cost 50% less Energy, and your movement speed is increased by 50%.
+	; Concise description
+	; Enchantment Spell. Your skills recharge 50% faster, spells you cast cost 50% less Energy, and your movement speed is increased by 50%.
 	Return 0
 EndFunc
 
@@ -817,6 +1195,10 @@ Func CanUse_JaundicedGaze()
 EndFunc
 
 Func BestTarget_JaundicedGaze($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. Remove an enchantment from target foe. If an enchantment is removed, for the next 1...12...15 second[s], your next enchantment spell casts 0...1...1 second[s] faster and costs 1...8...10 less Energy.
+	; Concise description
+	; Enchantment Spell. Removes an enchantment from target foe. Removal effect: your next enchantment casts 0...1...1 second[s] faster and costs 1...8...10 less Energy. (1...12...15 second[s])
 	Return 0
 EndFunc
 
@@ -826,6 +1208,10 @@ Func CanUse_AuraOfDisplacement()
 EndFunc
 
 Func BestTarget_AuraOfDisplacement($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. When you cast Aura of Displacement, Shadow Step to target foe. When you stop maintaining Aura of Displacement you return to your original location.
+	; Concise description
+	; Elite Enchantment Spell. Shadow Step to target foe. End effect: return to your original location.
 	Return 0
 EndFunc
 
@@ -854,6 +1240,10 @@ Func CanUse_ShadowRefuge()
 EndFunc
 
 Func BestTarget_ShadowRefuge($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 6 seconds, you gain 5...9...10 Health regeneration. When Shadow Refuge ends, you gain 40...88...100 Health if you are attacking.
+	; Concise description
+	; Enchantment Spell. (6 seconds.) You have +5...9...10 Health regeneration. End effect: heals you for 40...88...100 if you are attacking.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -863,6 +1253,10 @@ Func CanUse_VampiricSpirit()
 EndFunc
 
 Func BestTarget_VampiricSpirit($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. Steal up to 5...41...50 Health from target foe. For 10 seconds, you have +5...9...10 Health regeneration.
+	; Concise description
+	; Elite Enchantment Spell. Steal 5...41...50 Health from target foe. You have +5...9...10 Health regeneration (10 seconds).
 	Return 0
 EndFunc
 
@@ -872,6 +1266,10 @@ Func CanUse_BurningSpeed()
 EndFunc
 
 Func BestTarget_BurningSpeed($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 7 seconds, you are set on fire and move 30...42...45% faster. When Burning Speed ends, all adjacent foes are set on fire for 3...8...9 seconds.
+	; Concise description
+	; Enchantment Spell. (7 seconds.) You move 30...42...45% faster. You suffer from Burning (7 seconds). End effect: inflicts Burning condition (3...8...9 seconds) on adjacent foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -881,6 +1279,10 @@ Func CanUse_ShadowForm()
 EndFunc
 
 Func BestTarget_ShadowForm($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5...18...21 seconds, you cannot be the target of enemy spells, and you gain 5 damage reduction for each Assassin enchantment on you. You cannot deal more than 5...21...25 damage with a single skill or attack.
+	; Concise description
+	; Elite Enchantment Spell. (5...18...21 seconds.) Enemy spells cannot target you. Gain 5 damage reduction for each Assassin enchantment on you. You cannot deal more than 5...21...25 damage with a single skill or attack.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -899,6 +1301,10 @@ Func CanUse_BorrowedEnergy()
 EndFunc
 
 Func BestTarget_BorrowedEnergy($a_f_AggroRange)
+	; Description
+	; Mesmer
+	; Concise description
+	; green; font-weight: bold;">4...9...10
 	Return 0
 EndFunc
 
@@ -908,6 +1314,10 @@ Func CanUse_EnergyBoon()
 EndFunc
 
 Func BestTarget_EnergyBoon($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 36...55...60 seconds, Energy Boon raises the maximum Health of you and target ally by 1...3...3 for each point of your respective maximum Energy. When this enchantment is first applied, you and your target gain 1...10...12 Energy. You gain an additional 1 Energy for every 2 points you have in Energy Storage.
+	; Concise description
+	; Elite Enchantment Spell. (36...55...60 seconds.) Maximum Health for you and target ally is increased by 1...3...3 for each point of maximum Energy. Initial effect: Both gain 1...10...12 Energy. You gain +1 Energy for every 2 points of Energy Storage.
 	Return 0
 EndFunc
 
@@ -926,6 +1336,10 @@ Func CanUse_Gust()
 EndFunc
 
 Func BestTarget_Gust($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5...10...11 seconds, both you and target ally move 33% faster. When you cast this spell, all foes near you and your target take 15...59...70 cold damage. Foes struck by Gust while attacking or moving are knocked down.
+	; Concise description
+	; Elite Enchantment Spell. (5...10...11 seconds.) You and target ally move 33% faster. Initial effect: Foes near you and target ally are struck for 15...59...70 cold damage. Attacking or moving foes are knocked down.
 	Return 0
 EndFunc
 
@@ -935,6 +1349,10 @@ Func CanUse_ReverseHex()
 EndFunc
 
 Func BestTarget_ReverseHex($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. Remove one hex from target ally. If a hex was removed in this way, for 5...9...10 seconds, the next time target ally would take damage, that damage is reduced by 5...41...50.
+	; Concise description
+	; Enchantment Spell. (5...9...10 seconds.) Removes one hex from target ally. The next damage this ally takes is reduced by 5...41...50. No effect unless this ally is hexed.
 	Return 0
 EndFunc
 
@@ -944,6 +1362,10 @@ Func CanUse_OrderOfApostasy()
 EndFunc
 
 Func BestTarget_OrderOfApostasy($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5 seconds, whenever a party member hits a foe with physical damage, that foe loses one enchantment. For each Monk enchantment removed, you lose 25...17...15% maximum Health.
+	; Concise description
+	; Elite Enchantment Spell. Enchants all party members (5 seconds). These party members remove one enchantment when they deal physical damage. Removal cost: for each Monk enchantment, you lose 25...17...15% maximum Health.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -953,6 +1375,10 @@ Func CanUse_ShieldGuardian()
 EndFunc
 
 Func BestTarget_ShieldGuardian($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 1...3...4 seconds, all party members in earshot have a 75% chance to block incoming attacks. If an attack is blocked, all allies in earshot are healed for 10...34...40 and Shield Guardian ends.
+	; Concise description
+	; Enchantment Spell. (1...3...4 second[s]). Party members in earshot have a 75% chance to block attacks. Block effect: Allies in earshot are healed for 10...34...40, and Shield Guardian ends.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -962,6 +1388,10 @@ Func CanUse_RestfulBreeze()
 EndFunc
 
 Func BestTarget_RestfulBreeze($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8...16...18 seconds, target ally has +10 Health regeneration. This enchantment ends if that ally attacks or uses a skill.
+	; Concise description
+	; Enchantment Spell. (8...16...18 seconds.) +10 Health regeneration. Ends if target ally attacks or uses a skill.
 	Return 0
 EndFunc
 
@@ -971,6 +1401,10 @@ Func CanUse_Recall()
 EndFunc
 
 Func BestTarget_Recall($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain Recall, nothing happens. When Recall ends, you Shadow Step to the ally you targeted when you activated this skill and all of your skills are disabled for 10 seconds.
+	; Concise description
+	; Enchantment Spell. End effect: Shadow Step to target ally. Cannot self-target and disables all of your skills for 10 seconds when it ends.
 	Return 0
 EndFunc
 
@@ -980,6 +1414,10 @@ Func CanUse_SharpenDaggers()
 EndFunc
 
 Func BestTarget_SharpenDaggers($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...25...30 seconds, your dagger attacks cause Bleeding for 5...13...15 seconds.
+	; Concise description
+	; Enchantment Spell. (5...25...30 seconds.) Your dagger attacks inflict the Bleeding condition (5...13...15 seconds).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -989,6 +1427,10 @@ Func CanUse_AuspiciousIncantation()
 EndFunc
 
 Func BestTarget_AuspiciousIncantation($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 20 seconds, the next spell you cast is disabled for an additional 10...6...5 seconds, and you gain 110...182...200% of that spell's Energy cost.
+	; Concise description
+	; Enchantment Spell. (20 seconds.) Your next spell gives you 110...182...200% of its Energy cost. That spell takes 10...6...5 seconds longer to recharge.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -998,6 +1440,10 @@ Func CanUse_WayOfTheFox()
 EndFunc
 
 Func BestTarget_WayOfTheFox($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...30...35 seconds, your next 1...5...6 attack[s] cannot be blocked.
+	; Concise description
+	; Enchantment Spell. (10...30...35 seconds.) Your attacks are unblockable. Ends after 1...5...6 attack[s].
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1007,6 +1453,10 @@ Func CanUse_EnergyFont()
 EndFunc
 
 Func BestTarget_EnergyFont($a_f_AggroRange)
+	; Description
+	; Elementalist
+	; Concise description
+	; green; font-weight: bold;">15...51...60
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1016,6 +1466,10 @@ Func CanUse_SpellShield()
 EndFunc
 
 Func BestTarget_SpellShield($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...17...20 seconds, while you are casting spells, foes cannot target you with spells. When Spell Shield ends, all your skills are disabled for 10...6...5 seconds.
+	; Concise description
+	; Enchantment Spell. (5...17...20 seconds.) While casting spells, you cannot be the target of spells. End effect: your skills are disabled (10...6...5 seconds).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1025,6 +1479,10 @@ Func CanUse_WayOfTheLotus()
 EndFunc
 
 Func BestTarget_WayOfTheLotus($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 20 seconds, the next time you hit with a dual attack skill, you gain 5...17...20 Energy.
+	; Concise description
+	; Enchantment Spell. (20 seconds.) You gain 5...17...20 Energy the next time you hit with a dual attack.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1034,6 +1492,10 @@ Func CanUse_TorchEnchantment()
 EndFunc
 
 Func BestTarget_TorchEnchantment($a_f_AggroRange)
+	; Description
+	; Core
+	; Concise description
+	; Related skills">edit
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1043,6 +1505,10 @@ Func CanUse_WayOfTheEmptyPalm()
 EndFunc
 
 Func BestTarget_WayOfTheEmptyPalm($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5...17...20 seconds, off-hand and dual attacks cost no Energy.
+	; Concise description
+	; Elite Enchantment Spell. (5...17...20 seconds.) Your off-hand and dual attacks cost no Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1052,6 +1518,10 @@ Func CanUse_IceFort()
 EndFunc
 
 Func BestTarget_IceFort($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10 seconds, you cannot be knocked down, you are immune to conditions, and all incoming damage is reduced to 0. Ice Fort ends if you move.
+	; Concise description
+	; Enchantment Spell. (10 seconds.) You cannot be knocked down, you are immune to conditions, and you take no damage. Ends if you move.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1061,6 +1531,10 @@ Func CanUse_IceBreaker()
 EndFunc
 
 Func BestTarget_IceBreaker($a_f_AggroRange)
+	; Description
+	; This article is about the snow fighting skill. For the unique hammer, see The Ice Breaker.
+	; Concise description
+	; Acquisition">edit
 	Return 0
 EndFunc
 
@@ -1070,6 +1544,10 @@ Func CanUse_CriticalDefenses()
 EndFunc
 
 Func BestTarget_CriticalDefenses($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 4...9...10 seconds, you have a 75% chance to block. Critical Defenses refreshes every time you land a critical hit.
+	; Concise description
+	; Enchantment Spell. (4...9...10 seconds.) You have a 75% chance to block. Renewal: every time you land a critical hit.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1079,6 +1557,10 @@ Func CanUse_WayOfPerfection()
 EndFunc
 
 Func BestTarget_WayOfPerfection($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, whenever you successfully land a critical hit, you gain 10...34...40 Health.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) Your critical hits heal you for 10...34...40.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1088,6 +1570,10 @@ Func CanUse_DarkApostasy()
 EndFunc
 
 Func BestTarget_DarkApostasy($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 3...14...17 seconds, every time you successfully land a critical hit, you remove one enchantment from your target. If you remove an enchantment in this way, you lose 10...5...4 Energy or Dark Apostasy ends.
+	; Concise description
+	; Elite Enchantment Spell. (3...14...17 seconds.) Your critical hits remove an enchantment. Removal cost: lose 10...5...4 Energy or Dark Apostasy ends.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1106,6 +1592,10 @@ Func CanUse_ShroudOfDistress()
 EndFunc
 
 Func BestTarget_ShroudOfDistress($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30...54...60 seconds, if you are below 50% Health, you have 3...7...8 health regeneration and a 75% chance to block attacks.
+	; Concise description
+	; Enchantment Spell. (30...54...60 seconds.) You have 3...7...8 health regeneration and a 75% chance to block. No effect unless your Health is below 50%.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1124,6 +1614,10 @@ Func CanUse_SliverArmor()
 EndFunc
 
 Func BestTarget_SliverArmor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...10...11 seconds, you have 25...45...50% chance to block attacks and whenever you are the target of a hostile spell or attack one nearby foe is struck for 5...29...35 earth damage.
+	; Concise description
+	; Enchantment Spell. (5...10...11 seconds.) You have 25...45...50% chance to block. Deals 5...29...35 earth damage to one nearby foe whenever you are the target of a hostile spell or attack.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1133,6 +1627,10 @@ Func CanUse_DoubleDragon()
 EndFunc
 
 Func BestTarget_DoubleDragon($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. Invoke the power of the Dragon. For 8 seconds, you and target ally are enchanted with Double Dragon. Adjacent foes are dealt 5...25...30 fire damage each second. Additionally, when you or your ally use skills that target a foe, that foe is set on fire for 0...2...3 second[s].
+	; Concise description
+	; Elite Enchantment Spell. (8 seconds.) Enchants you and target ally. Adjacent foes take 5...25...30 fire damage each second. Skills that target a foe also inflict Burning (0...2...3 second[s]).
 	Return 0
 EndFunc
 
@@ -1142,6 +1640,10 @@ Func CanUse_SpiritBond()
 EndFunc
 
 Func BestTarget_SpiritBond($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8 seconds, whenever target ally takes more than 50 damage from the next 10 attacks or spells, that ally is healed for 30...78...90 Health.
+	; Concise description
+	; Enchantment Spell. (8 seconds.) Heals for 30...78...90 whenever target ally takes more than 50 damage. Ends after this ally takes damage from 10 attacks or spells.
 	Return 0
 EndFunc
 
@@ -1151,6 +1653,10 @@ Func CanUse_AirOfEnchantment()
 EndFunc
 
 Func BestTarget_AirOfEnchantment($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 4...9...10 seconds, enchantments cast on target other ally cost 5 less Energy (minimum 1 Energy).
+	; Concise description
+	; Elite Enchantment Spell. (4...9...10 seconds.) Enchantments cast on target ally cost 5 less Energy (minimum 1 Energy). Cannot self-target.
 	Return 0
 EndFunc
 
@@ -1160,6 +1666,10 @@ Func CanUse_LifeSheath()
 EndFunc
 
 Func BestTarget_LifeSheath($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. Remove 0...2...2 condition[s] from target ally. For 8 seconds, the next time that ally would take damage or life steal, that ally gains that amount of Health instead (maximum 20...84...100).
+	; Concise description
+	; Elite Enchantment Spell. (8 seconds.) Converts the next incoming damage or life steal (maximum 20...84...100) to healing. Initial effect: Removes 0...2...2 condition[s].
 	Return 0
 EndFunc
 
@@ -1169,6 +1679,10 @@ Func CanUse_DemonicAgility()
 EndFunc
 
 Func BestTarget_DemonicAgility($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30 seconds, This  demon creature has 100% chance to double strike when attacking in melee.
+	; Concise description
+	; Enchantment Spell. (30 seconds.) This demon creature has 100% chance to double strike when attacking in melee.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1178,6 +1692,10 @@ Func CanUse_BlessingOfTheKirin()
 EndFunc
 
 Func BestTarget_BlessingOfTheKirin($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30 seconds, the next time a nearby ally of this Kirin uses a skill, that ally is cured of Miasma or one condition.
+	; Concise description
+	; Enchantment Spell. (30 seconds.) When a nearby ally uses a skill, that ally is cured of Miasma or one condition.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1187,6 +1705,10 @@ Func CanUse_ExplosiveGrowth()
 EndFunc
 
 Func BestTarget_ExplosiveGrowth($a_f_AggroRange)
+	; Description
+	; This article is about the skill. For the creature, see Explosive Growth (NPC).
+	; Concise description
+	; green; font-weight: bold;">15...51...60
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1196,6 +1718,10 @@ Func CanUse_BoonOfCreation()
 EndFunc
 
 Func BestTarget_BoonOfCreation($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 15...51...60 seconds, whenever you create a creature, you gain 5...41...50 Health and 1...5...6 Energy.
+	; Concise description
+	; Enchantment Spell. (15...51...60 seconds.) You gain 5...41...50 Health and 1...5...6 Energy whenever you create a creature.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1205,6 +1731,10 @@ Func CanUse_SpiritChanneling()
 EndFunc
 
 Func BestTarget_SpiritChanneling($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 12 seconds, you have +1...5...6 Energy regeneration. When you cast this spell, you gain 3...10...12 Energy if you are within earshot of a spirit.
+	; Concise description
+	; Elite Enchantment Spell. (12 seconds.) You have +1...5...6 Energy regeneration. Initial effect: you gain 3...10...12 Energy if you are within earshot of a spirit.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1214,6 +1744,10 @@ Func CanUse_GhostlyHaste()
 EndFunc
 
 Func BestTarget_GhostlyHaste($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...17...20 seconds, spells you cast while within earshot of a spirit recharge 25% faster.
+	; Concise description
+	; Enchantment Spell. (5...17...20 seconds.) Spells you cast recharge 25% faster. No effect unless you are within earshot of a spirit.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1223,6 +1757,10 @@ Func CanUse_FrigidArmor()
 EndFunc
 
 Func BestTarget_FrigidArmor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...22...25 seconds, you have +10...34...40 armor against physical damage and cannot be set on fire.
+	; Concise description
+	; Enchantment Spell. (10...22...25 seconds.) You have +10...34...40 armor against physical damage and immunity to Burning.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1232,6 +1770,10 @@ Func CanUse_NightmareRefuge()
 EndFunc
 
 Func BestTarget_NightmareRefuge($a_f_AggroRange)
+	; Description
+	; Monster
+	; Concise description
+	; Related skills">edit
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1250,6 +1792,10 @@ Func CanUse_PersistenceOfMemory()
 EndFunc
 
 Func BestTarget_PersistenceOfMemory($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...17...20 seconds, whenever a spell you cast is interrupted, that spell is instantly recharged.
+	; Concise description
+	; Enchantment Spell. (5...17...20 seconds.) Your interrupted spells recharge instantly.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1259,6 +1805,10 @@ Func CanUse_SymbolicCelerity()
 EndFunc
 
 Func BestTarget_SymbolicCelerity($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 36...55...60 seconds, all of your signets use your Fast Casting attribute instead of their normal attributes.
+	; Concise description
+	; Enchantment Spell. (36...55...60 seconds.) Your signets use your Fast Casting attribute.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1268,6 +1818,10 @@ Func CanUse_JaggedBones()
 EndFunc
 
 Func BestTarget_JaggedBones($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 30 seconds, whenever target undead servant dies, it is replaced by a level 0...12...15 jagged horror that causes Bleeding with each of its attacks.
+	; Concise description
+	; Elite Enchantment Spell. (30 seconds.) When target undead servant dies, it is replaced by a level 0...12...15 jagged horror that inflicts Bleeding with attacks.
 	Return 0
 EndFunc
 
@@ -1277,6 +1831,10 @@ Func CanUse_Contagion()
 EndFunc
 
 Func BestTarget_Contagion($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 60 seconds, whenever you suffer from a new condition, all foes in the area suffer from that same condition and you sacrifice 10...6...5% maximum Health.
+	; Concise description
+	; Elite Enchantment Spell. (60 seconds.) Whenever you gain a condition, all foes in the area gain that same condition. You sacrifice 10...6...5% maximum Health each time this happens.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1286,6 +1844,10 @@ Func CanUse_Bloodletting()
 EndFunc
 
 Func BestTarget_Bloodletting($a_f_AggroRange)
+	; Description
+	; Necromancer
+	; Concise description
+	; green; font-weight: bold;">1...5...6
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1304,6 +1866,10 @@ Func CanUse_StoneStriker()
 EndFunc
 
 Func BestTarget_StoneStriker($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...25...30 seconds, whenever you take or deal elemental or physical damage, that damage is converted to earth damage.
+	; Concise description
+	; Enchantment Spell. (5...25...30 seconds.) Converts elemental and physical damage you take or deal to earth damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1313,6 +1879,10 @@ Func CanUse_StoneSheath()
 EndFunc
 
 Func BestTarget_StoneSheath($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5...17...20 seconds, you and target ally have +1...24...30 armor and are immune to critical hits. When you cast this spell, all foes near you and your target take 15...59...70 earth damage and are Weakened for 5...17...20 seconds.
+	; Concise description
+	; Elite Enchantment Spell. (5...17...20 seconds.) Gives you and target ally +1...24...30 armor and immunity to critical hits. Initial effect: Foes near you and target ally are struck for 15...59...70 earth damage and are Weakened (5...17...20 seconds).
 	Return 0
 EndFunc
 
@@ -1322,6 +1892,10 @@ Func CanUse_StonefleshAura()
 EndFunc
 
 Func BestTarget_StonefleshAura($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...13...15 seconds, damage you receive is reduced by 1...25...31, and you are immune to critical attacks.
+	; Concise description
+	; Enchantment Spell. (5...13...15 seconds.) Reduces damage you take by 1...25...31, and you are immune to critical hits.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1331,6 +1905,10 @@ Func CanUse_MasterOfMagic()
 EndFunc
 
 Func BestTarget_MasterOfMagic($a_f_AggroRange)
+	; Description
+	; This article is about the skill Master of Magic. For the NPC on the Isle of the Nameless, see Master of Magic (NPC).
+	; Concise description
+	; green; font-weight: bold;">1...49...61
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1349,6 +1927,10 @@ Func CanUse_JudgesIntervention()
 EndFunc
 
 Func BestTarget_JudgesIntervention($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10 seconds, the next time target ally receives damage that would be fatal, the damage is negated and one nearby foe takes 30...150...180 holy damage.
+	; Concise description
+	; Enchantment Spell. (10 seconds.) Negates the next fatal damage. Negation effect: deals 30...150...180 holy damage to one foe near target ally.
 	Return 0
 EndFunc
 
@@ -1358,6 +1940,10 @@ Func CanUse_SupportiveSpirit()
 EndFunc
 
 Func BestTarget_SupportiveSpirit($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...19...23 seconds, whenever target ally takes damage while knocked down, that ally is healed for 5...29...35 Health.
+	; Concise description
+	; Enchantment Spell. (5...19...23 seconds.) Heals for 5...29...35 whenever target ally takes damage while knocked-down.
 	Return 0
 EndFunc
 
@@ -1367,6 +1953,10 @@ Func CanUse_WatchfulHealing()
 EndFunc
 
 Func BestTarget_WatchfulHealing($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10 seconds, target ally gains +1...3...4 Health regeneration. If this skill ends prematurely, that ally gains 30...102...120 Health.
+	; Concise description
+	; Enchantment Spell. (10 seconds.) Target ally has +1...3...4 Health regeneration and gains 30...102...120 Health if this enchantment ends early.
 	Return 0
 EndFunc
 
@@ -1376,6 +1966,10 @@ Func CanUse_HealersBoon()
 EndFunc
 
 Func BestTarget_HealersBoon($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 10...46...55 seconds.  Healing Prayers spells cast 50% faster and heal for 50% more Health.
+	; Concise description
+	; Elite Enchantment Spell. (10...46...55 seconds.) Healing Prayers spells cast 50% faster and heal for 50% more.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1403,6 +1997,10 @@ Func CanUse_ShieldOfAbsorption()
 EndFunc
 
 Func BestTarget_ShieldOfAbsorption($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 3...6...7 seconds, damage received by target ally is reduced by 5 each time that ally is hit while under the effects of this enchantment.
+	; Concise description
+	; Enchantment Spell. (3...6...7 seconds.) Reduces incoming damage by 5 each time target ally takes damage.
 	Return 0
 EndFunc
 
@@ -1412,6 +2010,10 @@ Func CanUse_ReversalOfDamage()
 EndFunc
 
 Func BestTarget_ReversalOfDamage($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8 seconds, the next time target ally would take damage, the foe dealing the damage takes that damage instead (maximum 5...61...75).
+	; Concise description
+	; Enchantment Spell. (8 seconds.) Negates the next damage and hits the source for that same amount (maximum 5...61...75).
 	Return 0
 EndFunc
 
@@ -1475,6 +2077,10 @@ Func CanUse_AuraOfThorns()
 EndFunc
 
 Func BestTarget_AuraOfThorns($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. All nearby foes begin Bleeding for 5...13...15 seconds. For 30 seconds, this enchantment does nothing. When this enchantment ends, all nearby foes are Crippled for 3...7...8 seconds.
+	; Concise description
+	; Flash Enchantment Spell. (30 seconds.) Initial effect: inflicts Bleeding condition (5...13...15 seconds) on nearby foes. End effect: inflicts Crippled condition (3...7...8 seconds) on nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1493,6 +2099,10 @@ Func CanUse_DustCloak()
 EndFunc
 
 Func BestTarget_DustCloak($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. All adjacent foes are struck for 10...34...40 earth damage. For 30 seconds, your attacks deal earth damage. When this enchantment ends, all adjacent foes are Blinded for 1...3...4 second[s].
+	; Concise description
+	; Flash Enchantment Spell. (30 seconds.) Your attacks deal earth damage. Initial effect: deals 10...34...40 earth damage to adjacent foes. End effect: inflicts Blindness condition (1...3...4 second[s]) on adjacent foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1502,6 +2112,10 @@ Func CanUse_StaggeringForce()
 EndFunc
 
 Func BestTarget_StaggeringForce($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. All nearby foes are struck for 10...34...40 earth damage. For 30 seconds, your attacks deal earth damage. When this enchantment ends, all nearby foes have Cracked Armor for 1...8...10 second[s].
+	; Concise description
+	; Flash Enchantment Spell. (30 seconds.) Your attacks deal earth damage. Initial effect: deals 10...34...40 earth damage to nearby foes. End effect: inflicts Cracked Armor condition (1...8...10 second[s]) on nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1511,6 +2125,10 @@ Func CanUse_PiousRenewal()
 EndFunc
 
 Func BestTarget_PiousRenewal($a_f_AggroRange)
+	; Description
+	; Elite Flash Enchantment Spell. For 8 seconds, nothing happens. When this enchantment ends, Pious Renewal is recharged and you gain 0...4...5 Energy and 0...24...30 Health.
+	; Concise description
+	; Elite Flash Enchantment Spell. (8 seconds.) End Effect: recharges itself and you gain 0...4...5 Energy and 0...24...30 Health.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1520,6 +2138,10 @@ Func CanUse_MirageCloak()
 EndFunc
 
 Func BestTarget_MirageCloak($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. For 1...6...7 second[s], you have a 40...72...80% chance to block incoming attacks. When you cast this enchantment, all nearby foes are struck for 10...34...40 earth damage.
+	; Concise description
+	; Flash Enchantment Spell. (1...6...7 second[s].) You have 40...72...80% chance to block. Initial Effect: deals 10...34...40 earth damage to nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1538,6 +2160,10 @@ Func CanUse_ArcaneZeal()
 EndFunc
 
 Func BestTarget_ArcaneZeal($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 10 seconds, whenever you cast a spell, you gain 1 Energy for each enchantment on you (maximum 1...6...7 Energy).
+	; Concise description
+	; Elite Enchantment Spell. (10 seconds.) You gain 1 Energy (maximum 1...6...7) for each enchantment on you whenever you cast a spell.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1547,6 +2173,10 @@ Func CanUse_MysticVigor()
 EndFunc
 
 Func BestTarget_MysticVigor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 20 seconds, every time you successfully hit with an attack, you gain 3...13...15 Health for each enchantment on you (maximum 25 Health).
+	; Concise description
+	; Enchantment Spell. (20 seconds.) You gain 3...13...15 Health (maximum 25) for each enchantment on you whenever you hit with an attack.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1556,6 +2186,10 @@ Func CanUse_WatchfulIntervention()
 EndFunc
 
 Func BestTarget_WatchfulIntervention($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, the next time damage drops target ally's Health below 25%, that ally is healed for 50...170...200 Health.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) Heals for 50...170...200 the next time damage drops target ally's Health below 25%.
 	Return 0
 EndFunc
 
@@ -1565,6 +2199,10 @@ Func CanUse_VowOfPiety()
 EndFunc
 
 Func BestTarget_VowOfPiety($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 20 seconds, you have +24 armor and +1...3...4 Health regeneration. Vow of Piety renews whenever an enchantment on you ends.
+	; Concise description
+	; Enchantment Spell. (20 seconds) +24 armor and +1...3...4 Health regeneration. Renewal: Whenever an enchantment on you ends.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1574,6 +2212,10 @@ Func CanUse_VitalBoon()
 EndFunc
 
 Func BestTarget_VitalBoon($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 20 seconds, you have +40...88...100 maximum Health. When this enchantment ends, you are healed for 75...175...200 Health.
+	; Concise description
+	; Enchantment Spell. (20 seconds.) You have +40...88...100 maximum Health. End effect: Heals you for 75...175...200.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1583,6 +2225,10 @@ Func CanUse_HeartOfHolyFlame()
 EndFunc
 
 Func BestTarget_HeartOfHolyFlame($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. All nearby foes take 5...25...30 holy damage. For 30 seconds, your attacks deal holy damage. When this enchantment ends, all nearby foes are set on fire for 2...4...5 seconds.
+	; Concise description
+	; Flash Enchantment Spell. (30 seconds.) Your attacks deal holy damage. Initial effect: deals 5...25...30 holy damage to nearby foes. End effect: inflicts Burning condition (2...4...5 seconds) on nearby foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1592,6 +2238,10 @@ Func CanUse_FaithfulIntervention()
 EndFunc
 
 Func BestTarget_FaithfulIntervention($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. If damage drops your Health below 50%, Faithful Intervention ends. When Faithful Intervention ends, you are healed for 30...126...150 Health.
+	; Concise description
+	; Enchantment Spell. You gain 30...126...150 Health the next time damage drops your Health below 50%.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1601,6 +2251,10 @@ Func CanUse_SandShards()
 EndFunc
 
 Func BestTarget_SandShards($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. For 30 seconds, the next 1...4...5 time[s] you hit with a scythe, all other adjacent foes take 10...50...60 earth damage.
+	; Concise description
+	; Flash Enchantment Spell. (30 seconds.) Deal 10...50...60 earth damage to all other adjacent foes whenever you hit with your scythe. Ends after 1...4...5 hit[s].
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1628,6 +2282,10 @@ Func CanUse_GuidingHands()
 EndFunc
 
 Func BestTarget_GuidingHands($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 20 seconds, your next 0...2...3 attack[s] cannot be blocked. When activated, this skill removes the Blindness condition.
+	; Concise description
+	; Enchantment Spell. (20 seconds.) Your next 0...2...3 attack[s] cannot be blocked. Initial effect: removes Blindness.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1637,6 +2295,10 @@ Func CanUse_FleetingStability()
 EndFunc
 
 Func BestTarget_FleetingStability($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. For 2...5...6 seconds, you cannot be knocked down and move 25% faster. This enchantment ends prematurely if it prevents a knockdown.
+	; Concise description
+	; Flash Enchantment Spell. (2...5...6 seconds.) You cannot be knocked down and move 25% faster. Ends if knockdown prevented.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1646,6 +2308,10 @@ Func CanUse_ArmorOfSanctity()
 EndFunc
 
 Func BestTarget_ArmorOfSanctity($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. All adjacent foes suffer from Weakness for 5...13...15 seconds. For 15 seconds, you take 5...17...20 less damage from foes suffering from a condition.
+	; Concise description
+	; Enchantment Spell. Inflicts Weakness condition on all adjacent foes (5...13...15). You take 5...17...20 less damage from foes with a condition. (15 seconds.)
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1655,6 +2321,10 @@ Func CanUse_MysticRegeneration()
 EndFunc
 
 Func BestTarget_MysticRegeneration($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...17...20 seconds, you have +1...3...4 Health regeneration for each enchantment (maximum of 8) on you.
+	; Concise description
+	; Enchantment Spell. (5...17...20 seconds.) You have +1...3...4 Health regeneration for each enchantment (maximum of 8) on you.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1664,6 +2334,10 @@ Func CanUse_VowOfSilence()
 EndFunc
 
 Func BestTarget_VowOfSilence($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 5...9...10 seconds, you cannot be the target of spells, and you cannot cast spells.
+	; Concise description
+	; Elite Enchantment Spell. (5...9...10 seconds.) Spells cannot target you. You cannot cast spells.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1673,6 +2347,10 @@ Func CanUse_Meditation()
 EndFunc
 
 Func BestTarget_Meditation($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. Lose all adrenaline. For 20 seconds, you gain 1...3...4 Energy every time an enchantment on you ends.
+	; Concise description
+	; Enchantment Spell. (20 seconds.) Lose all adrenaline. Gain 1...3...4 Energy whenever an enchantment on you ends.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1691,6 +2369,10 @@ Func CanUse_IntimidatingAura()
 EndFunc
 
 Func BestTarget_IntimidatingAura($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, you have +40...88...100 max Health and take 1...8...10 less damage from foes with less Health than you.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) You have +40...88...100 max Health and take &#45;1...8...10 damage from foes with less Health than you.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1700,6 +2382,10 @@ Func CanUse_Conviction()
 EndFunc
 
 Func BestTarget_Conviction($a_f_AggroRange)
+	; Description
+	; This article is about the skill. For the weapon with the same name, see Conviction (weapon).
+	; Concise description
+	; green; font-weight: bold;">1...3...3
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1709,6 +2395,10 @@ Func CanUse_EnchantedHaste()
 EndFunc
 
 Func BestTarget_EnchantedHaste($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. For 7 seconds, you move 25% faster. If this enchantment ends prematurely, you lose 1 condition.
+	; Concise description
+	; Flash Enchantment Spell. (7 seconds). You move 25% faster. Lose 1 condition if this enchantment ends prematurely.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1718,6 +2408,10 @@ Func CanUse_WhirlingCharge()
 EndFunc
 
 Func BestTarget_WhirlingCharge($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. For 1...5...6 second[s], you move 33% faster than normal. The next time you strike a foe, all other nearby foes take 10...50...60 cold damage and this enchantment ends.
+	; Concise description
+	; Flash Enchantment Spell. (1...5...6 second[s].) You move 33% faster. Deal 10...50...60 cold damage to all other nearby foes the next time you hit a foe and this enchantment ends.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1736,6 +2430,10 @@ Func CanUse_DeadlyHaste()
 EndFunc
 
 Func BestTarget_DeadlyHaste($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...30...35 seconds, half-ranged spells cast 5...41...50% faster and recharge 5...41...50% faster.
+	; Concise description
+	; Enchantment Spell. (10...30...35 seconds.) Your half-ranged spells cast 5...41...50% faster and recharge 5...41...50% faster.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1763,6 +2461,10 @@ Func CanUse_FeignedNeutrality()
 EndFunc
 
 Func BestTarget_FeignedNeutrality($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 4...9...10 seconds, you have +7 Health regeneration and +80 armor. This enchantment ends if you successfully hit with an attack or use a skill.
+	; Concise description
+	; Enchantment Spell. (4...9...10 seconds.) You have +7 Health regeneration and +80 armor. Ends if you hit with an attack or use a skill.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1772,6 +2474,10 @@ Func CanUse_ShadowMeld()
 EndFunc
 
 Func BestTarget_ShadowMeld($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. Shadow Step to target other ally. When you stop maintaining this Enchantment, you return to your original location.
+	; Concise description
+	; Elite Enchantment Spell. Shadow Step to target ally. End effect: return to your original location. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -1781,6 +2487,10 @@ Func CanUse_ElementalFlame()
 EndFunc
 
 Func BestTarget_ElementalFlame($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...30...35 seconds, whenever you apply an Elemental hex to a foe, that foe is set on fire for 1...4...5 second[s].
+	; Concise description
+	; Enchantment Spell. (10...30...35 seconds.) Inflicts Burning condition (1...4...5 second[s]) whenever you apply an Elemental hex to a target.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1790,6 +2500,10 @@ Func CanUse_PensiveGuardian()
 EndFunc
 
 Func BestTarget_PensiveGuardian($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...10...11 seconds, target ally has a 50% chance to block attacks from enchanted foes.
+	; Concise description
+	; Enchantment Spell. (5...10...11 seconds.) 50% chance to block enchanted foes.
 	Return 0
 EndFunc
 
@@ -1808,6 +2522,10 @@ Func CanUse_HolyHaste()
 EndFunc
 
 Func BestTarget_HolyHaste($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 1...48...60 second[s], your Healing Prayers spells cast 50% faster. This enchantment ends if you cast another enchantment.
+	; Concise description
+	; Enchantment Spell. (1...48...60 second[s].) Your Healing Prayers spells cast 50% faster. Ends if you cast an enchantment.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1835,6 +2553,10 @@ Func CanUse_SightBeyondSight()
 EndFunc
 
 Func BestTarget_SightBeyondSight($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 8...18...20 seconds, you cannot be Blinded.
+	; Concise description
+	; Enchantment Spell. (8...18...20 seconds). You are immune to Blindness.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1844,6 +2566,10 @@ Func CanUse_RenewingMemories()
 EndFunc
 
 Func BestTarget_RenewingMemories($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...17...20 seconds, while holding an item, any weapon and item Spells you cast cost 5...29...35% less Energy.
+	; Concise description
+	; Enchantment Spell. (5...17...20 seconds.) Your weapon and item spells cost 5...29...35% less Energy. No effect unless holding an item.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1862,6 +2588,10 @@ Func CanUse_Onslaught()
 EndFunc
 
 Func BestTarget_Onslaught($a_f_AggroRange)
+	; Description
+	; Elite Flash Enchantment Spell. For 3...13...15 seconds, you attack, move and gain adrenaline 25% faster.
+	; Concise description
+	; Elite Flash Enchantment Spell. (3...13...15 seconds.) You attack, move and gain adrenaline 25% faster.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1871,6 +2601,10 @@ Func CanUse_MysticCorruption()
 EndFunc
 
 Func BestTarget_MysticCorruption($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. All adjacent foes suffer from Disease for 1...2...2 second[s]. For 20 seconds, nothing happens. Disease duration is doubled if you are enchanted when you activate this skill. When this enchantment ends, all party members in earshot are cured of Disease.
+	; Concise description
+	; Flash Enchantment Spell. (20 seconds.) Initial Effect: all adjacent foes are Diseased (1...2...2 second[s].) Double duration if you are already enchanted. End Effect: party members in earshot lose Disease.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1889,6 +2623,10 @@ Func CanUse_VeilOfThorns()
 EndFunc
 
 Func BestTarget_VeilOfThorns($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. When you cast this enchantment, all nearby foes are struck for 5...41...50 piercing damage. For 5...21...25 seconds you take 5...29...35% less damage from spells.
+	; Concise description
+	; Flash Enchantment Spell. (5...21...25 seconds.) Spell damage is reduced by 5...29...35%. Initial Effect: nearby foes are struck for 5...41...50 piercing damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1907,6 +2645,10 @@ Func CanUse_VowOfStrength()
 EndFunc
 
 Func BestTarget_VowOfStrength($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 15 seconds, whenever you attack a foe with your scythe, you deal 10...22...25 slashing damage to all adjacent foes.
+	; Concise description
+	; Elite Enchantment Spell. (15 seconds.) When you attack with a scythe, deals 10...22...25 slashing damage to adjacent foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1916,6 +2658,10 @@ Func CanUse_EbonDustAura()
 EndFunc
 
 Func BestTarget_EbonDustAura($a_f_AggroRange)
+	; Description
+	; Elite Flash Enchantment Spell. When you cast this enchantment, all nearby foes are Blinded for 1...6...7 second[s]. For 30 seconds, if you are wielding an earth weapon, your melee attacks deal +3...13...15 earth damage. When this enchantment ends, you are cured of Blindness.
+	; Concise description
+	; Elite Flash Enchantment Spell. (30 seconds.) Deal +3...13...15 earth damage with your melee attacks. Initial Effect: Blinds nearby foes for 1...6...7 second[s]. End Effect: removes Blindness. No effect unless wielding an earth weapon.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1925,6 +2671,10 @@ Func CanUse_ZealousVow()
 EndFunc
 
 Func BestTarget_ZealousVow($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 20 seconds, you have -3 Energy regeneration, and you gain 1...5...6 Energy every time you hit with an attack.
+	; Concise description
+	; Elite Enchantment Spell. (20 seconds.) You gain 1...5...6 Energy each time you hit with an attack. You have -3 Energy regeneration.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1934,6 +2684,10 @@ Func CanUse_ZealousRenewal()
 EndFunc
 
 Func BestTarget_ZealousRenewal($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. All nearby foes take 5...25...30 holy damage. For 5...21...25 seconds, you have -1 Energy regeneration, and gain 1 Energy whenever you hit a foe. If this enchantment ends prematurely, you gain 1...4...5 Energy.
+	; Concise description
+	; Flash Enchantment Spell. (5...21...25 seconds.) Initial effect: deals 5...25...30 holy damage to nearby foes. You have -1 Energy regeneration and gain 1 Energy when you hit. Gain 1...4...5 Energy if this enchantment ends early.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1952,6 +2706,10 @@ Func CanUse_RendingAura()
 EndFunc
 
 Func BestTarget_RendingAura($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. When you cast this enchantment, all nearby foes take 10...34...40 cold damage. For&#160;&#160;30  seconds, your attack skills remove enchantments from knocked-down foes. When this enchantment ends, nearby foes are affected by Cracked Armor for 1...8...10 second[s].
+	; Concise description
+	; Flash Enchantment Spell. (30 seconds.) Your attack skills remove enchantments from knocked-down foes. Initial effect: deals 10...34...40 cold damage to all nearby foes. End effect: nearby foes have Cracked Armor for 1...8...10 second[s].
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1961,6 +2719,10 @@ Func CanUse_FeatherfootGrace()
 EndFunc
 
 Func BestTarget_FeatherfootGrace($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...17...20 seconds, you move 25% faster, and conditions expire 25% faster.
+	; Concise description
+	; Enchantment Spell. (5...17...20 seconds.) You move 25% faster, and conditions expire 25% faster.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1979,6 +2741,10 @@ Func CanUse_AcceleratedGrowth()
 EndFunc
 
 Func BestTarget_AcceleratedGrowth($a_f_AggroRange)
+	; Description
+	; Ritualist
+	; Concise description
+	; green; font-weight: bold;">15...51...60
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2069,6 +2835,10 @@ Func CanUse_WayOfTheMantis()
 EndFunc
 
 Func BestTarget_WayOfTheMantis($a_f_AggroRange)
+	; Description
+	; Assassin
+	; Concise description
+	; Trivia">edit
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2078,6 +2848,10 @@ Func CanUse_WitheringAura()
 EndFunc
 
 Func BestTarget_WitheringAura($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...17...20 seconds, target ally's melee attacks cause Weakness for 5...17...20 seconds.
+	; Concise description
+	; Enchantment Spell. (5...17...20 seconds.) Target ally's melee attacks cause Weakness condition (5...17...20 seconds.)
 	Return 0
 EndFunc
 
@@ -2096,6 +2870,10 @@ Func CanUse_PurifyingVeil()
 EndFunc
 
 Func BestTarget_PurifyingVeil($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. While you maintain this enchantment, conditions expire 5...41...50% faster on target ally. When this enchantment ends, one condition is removed from that ally.
+	; Concise description
+	; Enchantment Spell. Conditions expire 5...41...50% faster on target ally. End effect: removes a condition.
 	Return 0
 EndFunc
 
@@ -2114,6 +2892,10 @@ Func CanUse_PatientSpirit()
 EndFunc
 
 Func BestTarget_PatientSpirit($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 2 seconds, target ally is enchanted with Patient Spirit. Unless this enchantment ends prematurely, that ally is healed for 30...102...120 Health when the enchantment ends.
+	; Concise description
+	; Enchantment Spell. (2 seconds.) End effect: heals for 30...102...120. No effect if ends early.
 	Return 0
 EndFunc
 
@@ -2123,6 +2905,10 @@ Func CanUse_AuraOfStability()
 EndFunc
 
 Func BestTarget_AuraOfStability($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 3...7...8 seconds, target other ally cannot be knocked down.
+	; Concise description
+	; Enchantment Spell. (3...7...8 seconds.) Target ally cannot be knocked-down. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -2132,6 +2918,10 @@ Func CanUse_SpotlessMind()
 EndFunc
 
 Func BestTarget_SpotlessMind($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 1...12...15 seconds, target other ally loses a hex every 5 seconds.
+	; Concise description
+	; Enchantment Spell. (1...12...15 seconds.) Removes a hex every 5 seconds. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -2141,6 +2931,10 @@ Func CanUse_SpotlessSoul()
 EndFunc
 
 Func BestTarget_SpotlessSoul($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 1...12...15 seconds, target other ally loses a condition every 3 seconds.
+	; Concise description
+	; Enchantment Spell. (1...12...15 seconds.) Removes a condition every 3 seconds. Cannot self-target.
 	Return 0
 EndFunc
 
@@ -2186,6 +2980,10 @@ Func CanUse_CriticalAgility()
 EndFunc
 
 Func BestTarget_CriticalAgility($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 4 seconds and 1 second for each rank of Critical Strikes, you attack 33% faster and gain 15...25 armor. This skill reapplies itself every time you land a critical hit.
+	; Concise description
+	; Enchantment Spell. (4 seconds plus 1 second for each rank of Critical Strikes.) You attack 33% faster and gain +15...25 armor. Renewal: every time you land a critical hit.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2195,6 +2993,10 @@ Func CanUse_SeedOfLife()
 EndFunc
 
 Func BestTarget_SeedOfLife($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 2...5 seconds, whenever target other ally takes damage, all party members are healed for 2 Health for each rank in Divine Favor.
+	; Concise description
+	; Enchantment Spell. (2...5) seconds. Heals party members for 2 for each rank in Divine Favor whenever target takes damage. Cannot self target.
 	Return 0
 EndFunc
 
@@ -2205,6 +3007,10 @@ Func CanUse_EternalAura()
 EndFunc
 
 Func BestTarget_EternalAura($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. You have +100 max Health. When this enchantment ends, all party members in the area are resurrected with 40...50% Health and 20...30% Energy.
+	; Concise description
+	; Enchantment Spell. You have +100 max Health. End effect: all party members in the area are resurrected with 40...50% Health and 20...30% Energy.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2232,6 +3038,10 @@ Func CanUse_Masochism()
 EndFunc
 
 Func BestTarget_Masochism($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...34...40 seconds, you have +2 to your Death Magic and Soul Reaping attributes and sacrifice 5...3...3% of your maximum Health when you cast a spell.
+	; Concise description
+	; Enchantment Spell. (10...34...40 seconds.) You have +2 Death Magic and Soul Reaping. Sacrifice 5...3...3% Health when you cast a spell.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2241,6 +3051,10 @@ Func CanUse_WayOfTheMaster()
 EndFunc
 
 Func BestTarget_WayOfTheMaster($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 60 seconds, while holding a non-dagger weapon, you have an additional 3...27...33% chance to land a critical hit.
+	; Concise description
+	; Enchantment Spell. (60 seconds.) While holding a non-dagger weapon, you have +3...27...33% chance to land a critical hit.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2250,6 +3064,10 @@ Func CanUse_MagneticSurge()
 EndFunc
 
 Func BestTarget_MagneticSurge($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. Target foe takes 15...63...75 damage. If you are Overcast, Magnetic Surge enchants all allies in earshot for 1...4...5 second[s] to block the next attack against them.
+	; Concise description
+	; Enchantment Spell. Deals 15...63...75 damage. If you are Overcast, allies in earshot are enchanted for 1...4...5 [sic] and block the next attack against them.
 	Return 0
 EndFunc
 
@@ -2259,6 +3077,10 @@ Func CanUse_ShieldOfForce()
 EndFunc
 
 Func BestTarget_ShieldOfForce($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. For 1...13...16 second[s], blocks the next 1 attack against you. If an attack is blocked, all adjacent attacking foes are knocked down and suffer from Weakness for 5...17...20 seconds.
+	; Concise description
+	; Flash Enchantment Spell. (1...13...16 second[s].) Blocks the next 1 attack against you. Knocks down and inflicts Weakness (5...17...20 seconds) on all adjacent attacking foes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2268,6 +3090,10 @@ Func CanUse_GreatDwarfArmor()
 EndFunc
 
 Func BestTarget_GreatDwarfArmor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 22...40 seconds, target ally has +24 armor, +60 maximum Health, and an additional +24 armor against Destroyers.
+	; Concise description
+	; Enchantment Spell. (22...40 seconds.) +24 armor and +60 maximum Health. Additional +24 armor against Destroyers.
 	Return 0
 EndFunc
 
@@ -2277,6 +3103,10 @@ Func CanUse_PolymockBlock()
 EndFunc
 
 Func BestTarget_PolymockBlock($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 2 seconds, the next enemy spell that targets you fails.
+	; Concise description
+	; Enchantment Spell. (2 seconds.) The next enemy spell that targets you fails.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2295,6 +3125,10 @@ Func CanUse_PolymockFrozenArmor()
 EndFunc
 
 Func BestTarget_PolymockFrozenArmor($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 30 seconds, you gain 1,000 maximum Health.
+	; Concise description
+	; Enchantment Spell. (30 seconds.) You have +1,000 Health.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2304,6 +3138,10 @@ Func CanUse_CrystalShield()
 EndFunc
 
 Func BestTarget_CrystalShield($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. This creature conjures a shield that absorbs 250 damage.
+	; Concise description
+	; Enchantment Spell. The ettin conjures a shield that absorbs 250 damage. The ettin can cast spells but not attack.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2313,6 +3151,10 @@ Func CanUse_VolfenAgility()
 EndFunc
 
 Func BestTarget_VolfenAgility($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...20 seconds your Volfen Skills recharge 66% faster.
+	; Concise description
+	; Enchantment Spell. (10...20 seconds.) Your Volfen skills recharge 66% faster.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2322,6 +3164,10 @@ Func CanUse_Mindbender()
 EndFunc
 
 Func BestTarget_Mindbender($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 10...16 seconds, you move 20...33% faster and your Spells take 20% less time to cast.
+	; Concise description
+	; Enchantment Spell. (10...16 seconds.) You move 20...33% faster and cast Spells 20% faster.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2331,6 +3177,10 @@ Func CanUse_MentalBlock()
 EndFunc
 
 Func BestTarget_MentalBlock($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 5...11 seconds you have a 50% chance to block attacks. This Enchantment is reapplied every time an enemy strikes you.
+	; Concise description
+	; Enchantment Spell. (5...11 seconds.) You have a 50% chance to block. Renewal: every time an enemy hits you.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2340,6 +3190,10 @@ Func CanUse_DwarvenStability()
 EndFunc
 
 Func BestTarget_DwarvenStability($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. For 24...30 seconds, your stances last 55...100% longer. If you activated this skill while drunk, you cannot be knocked down.
+	; Concise description
+	; Enchantment Spell. (24...30 seconds.) Your stances last 55...100% longer. You cannot be knocked-down if you activated this skill while drunk . [sic]
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2359,6 +3213,10 @@ Func CanUse_DragonEmpireRage()
 EndFunc
 
 Func BestTarget_DragonEmpireRage($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. Unleash the rage of the Dragon Empire bloodline, dealing 300 damage to all nearby enemies. For 15 seconds you gain 200 maximum Health.
+	; Concise description
+	; Enchantment Spell. Unleash the rage of the Dragon Empire bloodline and deal 300 damage to nearby enemies. You gain 200 maximum health (15 seconds).
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2368,89 +3226,93 @@ Func CanUse_AuraOfPurity()
 EndFunc
 
 Func BestTarget_AuraOfPurity($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. All adjacent foes lose 1 enchantment. For 10 seconds, your attacks deal +1...10...12 holy damage. When Aura of Purity ends, all adjacent foes lose one enchantment.
+	; Concise description
+	; Flash Enchantment Spell. Your attacks deal +1...10...12 holy damage (10 seconds). Initial effect: all adjacent foes lose 1 enchantment. End effect: all adjacent foes lose one enchantment.
 	Return Agent_GetMyID()
 EndFunc
 
 ; Skill ID: 2791 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2797 - ;  $GC_I_SKILL_ID_UNKNOWN
-; Skill ID: 2805 - $GC_I_SKILL_ID_MIST_FORM_PVP
-Func CanUse_MistFormPvp()
+; Skill ID: 2805 - $GC_I_SKILL_ID_MIST_FORM_PvP
+Func CanUse_MistFormPvP()
 	Return True
 EndFunc
 
-Func BestTarget_MistFormPvp($a_f_AggroRange)
+Func BestTarget_MistFormPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 2857 - $GC_I_SKILL_ID_AEGIS_PVP
-Func CanUse_AegisPvp()
+; Skill ID: 2857 - $GC_I_SKILL_ID_AEGIS_PvP
+Func CanUse_AegisPvP()
 	Return True
 EndFunc
 
-Func BestTarget_AegisPvp($a_f_AggroRange)
+Func BestTarget_AegisPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 2860 - $GC_I_SKILL_ID_ETHER_RENEWAL_PVP
-Func CanUse_EtherRenewalPvp()
+; Skill ID: 2860 - $GC_I_SKILL_ID_ETHER_RENEWAL_PvP
+Func CanUse_EtherRenewalPvP()
 	Return True
 EndFunc
 
-Func BestTarget_EtherRenewalPvp($a_f_AggroRange)
+Func BestTarget_EtherRenewalPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 2862 - $GC_I_SKILL_ID_SHADOW_FORM_PVP
-Func CanUse_ShadowFormPvp()
+; Skill ID: 2862 - $GC_I_SKILL_ID_SHADOW_FORM_PvP
+Func CanUse_ShadowFormPvP()
 	Return True
 EndFunc
 
-Func BestTarget_ShadowFormPvp($a_f_AggroRange)
+Func BestTarget_ShadowFormPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 2869 - $GC_I_SKILL_ID_ASSASSINS_REMEDY_PVP
-Func CanUse_AssassinsRemedyPvp()
+; Skill ID: 2869 - $GC_I_SKILL_ID_ASSASSINS_REMEDY_PvP
+Func CanUse_AssassinsRemedyPvP()
 	Return True
 EndFunc
 
-Func BestTarget_AssassinsRemedyPvp($a_f_AggroRange)
+Func BestTarget_AssassinsRemedyPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 2884 - $GC_I_SKILL_ID_MYSTIC_REGENERATION_PVP
-Func CanUse_MysticRegenerationPvp()
+; Skill ID: 2884 - $GC_I_SKILL_ID_MYSTIC_REGENERATION_PvP
+Func CanUse_MysticRegenerationPvP()
 	Return True
 EndFunc
 
-Func BestTarget_MysticRegenerationPvp($a_f_AggroRange)
+Func BestTarget_MysticRegenerationPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 2891 - $GC_I_SKILL_ID_UNYIELDING_AURA_PVP
-Func CanUse_UnyieldingAuraPvp()
+; Skill ID: 2891 - $GC_I_SKILL_ID_UNYIELDING_AURA_PvP
+Func CanUse_UnyieldingAuraPvP()
 	Return True
 EndFunc
 
-Func BestTarget_UnyieldingAuraPvp($a_f_AggroRange)
+Func BestTarget_UnyieldingAuraPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 2892 - $GC_I_SKILL_ID_SPIRIT_BOND_PVP
-Func CanUse_SpiritBondPvp()
+; Skill ID: 2892 - $GC_I_SKILL_ID_SPIRIT_BOND_PvP
+Func CanUse_SpiritBondPvP()
 	Return True
 EndFunc
 
-Func BestTarget_SpiritBondPvp($a_f_AggroRange)
+Func BestTarget_SpiritBondPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 2895 - $GC_I_SKILL_ID_SMITERS_BOON_PVP
-Func CanUse_SmitersBoonPvp()
+; Skill ID: 2895 - $GC_I_SKILL_ID_SMITERS_BOON_PvP
+Func CanUse_SmitersBoonPvP()
 	Return True
 EndFunc
 
-Func BestTarget_SmitersBoonPvp($a_f_AggroRange)
+Func BestTarget_SmitersBoonPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2460,6 +3322,10 @@ Func CanUse_BitGolemRectifier()
 EndFunc
 
 Func BestTarget_BitGolemRectifier($a_f_AggroRange)
+	; Description
+	; Enchantment Spell. N.O.X. is healed for 10 Health every second.
+	; Concise description
+	; Enchantment Spell. Heals N.O.X. for 10 every second.
 	Return 0
 EndFunc
 
@@ -2467,138 +3333,138 @@ EndFunc
 ; Skill ID: 2934 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2943 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2956 - ;  $GC_I_SKILL_ID_UNKNOWN
-; Skill ID: 2999 - $GC_I_SKILL_ID_STRENGTH_OF_HONOR_PVP
-Func CanUse_StrengthOfHonorPvp()
+; Skill ID: 2999 - $GC_I_SKILL_ID_STRENGTH_OF_HONOR_PvP
+Func CanUse_StrengthOfHonorPvP()
 	Return True
 EndFunc
 
-Func BestTarget_StrengthOfHonorPvp($a_f_AggroRange)
+Func BestTarget_StrengthOfHonorPvP($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 3003 - $GC_I_SKILL_ID_ARMOR_OF_UNFEELING_PVP
-Func CanUse_ArmorOfUnfeelingPvp()
+; Skill ID: 3003 - $GC_I_SKILL_ID_ARMOR_OF_UNFEELING_PvP
+Func CanUse_ArmorOfUnfeelingPvP()
 	Return True
 EndFunc
 
-Func BestTarget_ArmorOfUnfeelingPvp($a_f_AggroRange)
+Func BestTarget_ArmorOfUnfeelingPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3048 - $GC_I_SKILL_ID_SHROUD_OF_DISTRESS_PVP
-Func CanUse_ShroudOfDistressPvp()
+; Skill ID: 3048 - $GC_I_SKILL_ID_SHROUD_OF_DISTRESS_PvP
+Func CanUse_ShroudOfDistressPvP()
 	Return True
 EndFunc
 
-Func BestTarget_ShroudOfDistressPvp($a_f_AggroRange)
+Func BestTarget_ShroudOfDistressPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3054 - $GC_I_SKILL_ID_MASOCHISM_PVP
-Func CanUse_MasochismPvp()
+; Skill ID: 3054 - $GC_I_SKILL_ID_MASOCHISM_PvP
+Func CanUse_MasochismPvP()
 	Return True
 EndFunc
 
-Func BestTarget_MasochismPvp($a_f_AggroRange)
+Func BestTarget_MasochismPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3181 - $GC_I_SKILL_ID_ILLUSIONARY_WEAPONRY_PVP
-Func CanUse_IllusionaryWeaponryPvp()
+; Skill ID: 3181 - $GC_I_SKILL_ID_ILLUSIONARY_WEAPONRY_PvP
+Func CanUse_IllusionaryWeaponryPvP()
 	Return True
 EndFunc
 
-Func BestTarget_IllusionaryWeaponryPvp($a_f_AggroRange)
+Func BestTarget_IllusionaryWeaponryPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3267 - $GC_I_SKILL_ID_EBON_DUST_AURA_PVP
-Func CanUse_EbonDustAuraPvp()
+; Skill ID: 3267 - $GC_I_SKILL_ID_EBON_DUST_AURA_PvP
+Func CanUse_EbonDustAuraPvP()
 	Return True
 EndFunc
 
-Func BestTarget_EbonDustAuraPvp($a_f_AggroRange)
+Func BestTarget_EbonDustAuraPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3268 - $GC_I_SKILL_ID_HEART_OF_HOLY_FLAME_PVP
-Func CanUse_HeartOfHolyFlamePvp()
+; Skill ID: 3268 - $GC_I_SKILL_ID_HEART_OF_HOLY_FLAME_PvP
+Func CanUse_HeartOfHolyFlamePvP()
 	Return True
 EndFunc
 
-Func BestTarget_HeartOfHolyFlamePvp($a_f_AggroRange)
+Func BestTarget_HeartOfHolyFlamePvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3269 - $GC_I_SKILL_ID_GUIDING_HANDS_PVP
-Func CanUse_GuidingHandsPvp()
+; Skill ID: 3269 - $GC_I_SKILL_ID_GUIDING_HANDS_PvP
+Func CanUse_GuidingHandsPvP()
 	Return True
 EndFunc
 
-Func BestTarget_GuidingHandsPvp($a_f_AggroRange)
+Func BestTarget_GuidingHandsPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3346 - $GC_I_SKILL_ID_AURA_OF_THORNS_PVP
-Func CanUse_AuraOfThornsPvp()
+; Skill ID: 3346 - $GC_I_SKILL_ID_AURA_OF_THORNS_PvP
+Func CanUse_AuraOfThornsPvP()
 	Return True
 EndFunc
 
-Func BestTarget_AuraOfThornsPvp($a_f_AggroRange)
+Func BestTarget_AuraOfThornsPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3347 - $GC_I_SKILL_ID_DUST_CLOAK_PVP
-Func CanUse_DustCloakPvp()
+; Skill ID: 3347 - $GC_I_SKILL_ID_DUST_CLOAK_PvP
+Func CanUse_DustCloakPvP()
 	Return True
 EndFunc
 
-Func BestTarget_DustCloakPvp($a_f_AggroRange)
+Func BestTarget_DustCloakPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3348 - $GC_I_SKILL_ID_LYSSAS_HASTE_PVP
-Func CanUse_LyssasHastePvp()
+; Skill ID: 3348 - $GC_I_SKILL_ID_LYSSAS_HASTE_PvP
+Func CanUse_LyssasHastePvP()
 	Return True
 EndFunc
 
-Func BestTarget_LyssasHastePvp($a_f_AggroRange)
+Func BestTarget_LyssasHastePvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3365 - $GC_I_SKILL_ID_ONSLAUGHT_PVP
-Func CanUse_OnslaughtPvp()
+; Skill ID: 3365 - $GC_I_SKILL_ID_ONSLAUGHT_PvP
+Func CanUse_OnslaughtPvP()
 	Return True
 EndFunc
 
-Func BestTarget_OnslaughtPvp($a_f_AggroRange)
+Func BestTarget_OnslaughtPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3373 - $GC_I_SKILL_ID_ILLUSION_OF_HASTE_PVP
-Func CanUse_IllusionOfHastePvp()
+; Skill ID: 3373 - $GC_I_SKILL_ID_ILLUSION_OF_HASTE_PvP
+Func CanUse_IllusionOfHastePvP()
 	Return True
 EndFunc
 
-Func BestTarget_IllusionOfHastePvp($a_f_AggroRange)
+Func BestTarget_IllusionOfHastePvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3375 - $GC_I_SKILL_ID_AURA_OF_RESTORATION_PVP
-Func CanUse_AuraOfRestorationPvp()
+; Skill ID: 3375 - $GC_I_SKILL_ID_AURA_OF_RESTORATION_PvP
+Func CanUse_AuraOfRestorationPvP()
 	Return True
 EndFunc
 
-Func BestTarget_AuraOfRestorationPvp($a_f_AggroRange)
+Func BestTarget_AuraOfRestorationPvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
-; Skill ID: 3397 - $GC_I_SKILL_ID_ELEMENTAL_FLAME_PVP
-Func CanUse_ElementalFlamePvp()
+; Skill ID: 3397 - $GC_I_SKILL_ID_ELEMENTAL_FLAME_PvP
+Func CanUse_ElementalFlamePvP()
 	Return True
 EndFunc
 
-Func BestTarget_ElementalFlamePvp($a_f_AggroRange)
+Func BestTarget_ElementalFlamePvP($a_f_AggroRange)
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2608,6 +3474,10 @@ Func CanUse_SoulTaker()
 EndFunc
 
 Func BestTarget_SoulTaker($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 3...25...30 seconds, your attacks sacrifice 15...19...20 health and deal 15...19...20 more damage. PvE Skill
+	; Concise description
+	; Elite Enchantment Spell. (3...25...30 seconds.) Attacks deal +15...19...20 damage and sacrifice 15...19...20 health. PvE Skill
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2617,6 +3487,10 @@ Func CanUse_OverTheLimit()
 EndFunc
 
 Func BestTarget_OverTheLimit($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. While you maintain this enchantment, your spells cast 15...19...20% faster, and recharge 15...43...50% faster, but you continuously gain Overcast. PvE Skill
+	; Concise description
+	; Elite Enchantment Spell. Spells cast 15...19...20% faster and recharge 15...43...50% faster. Continuously gain Overcast while active. PvE Skill
 	Return Agent_GetMyID()
 EndFunc
 
@@ -2626,6 +3500,10 @@ Func CanUse_VowOfRevolution()
 EndFunc
 
 Func BestTarget_VowOfRevolution($a_f_AggroRange)
+	; Description
+	; Elite Enchantment Spell. For 3...9...10 seconds, you have +1...4...5 energy regeneration. This skill reapplies itself every time you use a non-Dervish skill. PvE Skill
+	; Concise description
+	; Elite Enchantment Spell. (3...9...10 seconds.) Gain +1...4...5 energy regeneration. Renewal: whenever you use a non-Dervish skill. PvE Skill
 	Return Agent_GetMyID()
 EndFunc
 

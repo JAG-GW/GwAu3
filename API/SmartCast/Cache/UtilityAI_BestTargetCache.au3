@@ -40,8 +40,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_MantraOfSignets"
 		Case $GC_I_SKILL_ID_FRAGILITY
 			Return "BestTarget_Fragility"
-		Case $GC_I_SKILL_ID_CONFUSION
-			Return "BestTarget_Confusion"
 		Case $GC_I_SKILL_ID_INSPIRED_ENCHANTMENT
 			Return "BestTarget_InspiredEnchantment"
 		Case $GC_I_SKILL_ID_INSPIRED_HEX
@@ -954,24 +952,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_NaturesRenewal"
 		Case $GC_I_SKILL_ID_MUDDY_TERRAIN
 			Return "BestTarget_MuddyTerrain"
-		Case $GC_I_SKILL_ID_BLEEDING
-			Return "BestTarget_Bleeding"
-		Case $GC_I_SKILL_ID_BLIND
-			Return "BestTarget_Blind"
-		Case $GC_I_SKILL_ID_BURNING
-			Return "BestTarget_Burning"
-		Case $GC_I_SKILL_ID_CRIPPLED
-			Return "BestTarget_Crippled"
-		Case $GC_I_SKILL_ID_DEEP_WOUND
-			Return "BestTarget_DeepWound"
-		Case $GC_I_SKILL_ID_DISEASE
-			Return "BestTarget_Disease"
-		Case $GC_I_SKILL_ID_POISON
-			Return "BestTarget_Poison"
-		Case $GC_I_SKILL_ID_DAZED
-			Return "BestTarget_Dazed"
-		Case $GC_I_SKILL_ID_WEAKNESS
-			Return "BestTarget_Weakness"
 		Case $GC_I_SKILL_ID_ERUPTION_ENVIRONMENT
 			Return "BestTarget_EruptionEnvironment"
 		Case $GC_I_SKILL_ID_FIRE_STORM_ENVIRONMENT
@@ -2920,16 +2900,12 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_ForgeTheWay"
 		Case $GC_I_SKILL_ID_ANTHEM_OF_AGGRESSION
 			Return "BestTarget_AnthemOfAggression"
-		Case $GC_I_SKILL_ID_LIGHTBRINGER
-			Return "BestTarget_Lightbringer"
 		Case $GC_I_SKILL_ID_LIGHTBRINGERS_GAZE
 			Return "BestTarget_LightbringersGaze"
 		Case $GC_I_SKILL_ID_LIGHTBRINGER_SIGNET
 			Return "BestTarget_LightbringerSignet"
 		Case $GC_I_SKILL_ID_SUNSPEAR_REBIRTH_SIGNET
 			Return "BestTarget_SunspearRebirthSignet"
-		Case $GC_I_SKILL_ID_WISDOM
-			Return "BestTarget_Wisdom"
 		Case $GC_I_SKILL_ID_MADDENED_STRIKE
 			Return "BestTarget_MaddenedStrike"
 		Case $GC_I_SKILL_ID_SPIRIT_FORM_REMAINS_OF_SAHLAHJA
@@ -3716,10 +3692,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_MurakaisCalamity"
 		Case $GC_I_SKILL_ID_MURAKAIS_STORM_OF_SOULS
 			Return "BestTarget_MurakaisStormOfSouls"
-		Case $GC_I_SKILL_ID_EDIFICATION
-			Return "BestTarget_Edification"
-		Case $GC_I_SKILL_ID_HEART_OF_THE_NORN
-			Return "BestTarget_HeartOfTheNorn"
 		Case $GC_I_SKILL_ID_URSAN_BLESSING
 			Return "BestTarget_UrsanBlessing"
 		Case $GC_I_SKILL_ID_URSAN_STRIKE
@@ -3800,12 +3772,8 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_Winds"
 		Case $GC_I_SKILL_ID_DWARVEN_STABILITY
 			Return "BestTarget_DwarvenStability"
-		Case $GC_I_SKILL_ID_STOUT_HEARTED
-			Return "BestTarget_StoutHearted"
 		Case $GC_I_SKILL_ID_DECIPHER_INSCRIPTIONS
 			Return "BestTarget_DecipherInscriptions"
-		Case $GC_I_SKILL_ID_REBEL_YELL
-			Return "BestTarget_RebelYell"
 		Case $GC_I_SKILL_ID_ASURAN_FLAME_STAFF
 			Return "BestTarget_AsuranFlameStaff"
 		Case $GC_I_SKILL_ID_HAUNTED_GROUND

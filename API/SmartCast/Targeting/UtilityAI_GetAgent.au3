@@ -198,13 +198,21 @@ Func UAI_GetAgentHighest($a_i_AgentID = -2, $a_f_Range = 1320, $a_i_Property = $
 	Return $l_i_HighestAgent
 EndFunc
 
+Func UAI_GetBestSingleTarget($a_i_AgentID = -2, $a_f_Range = 1320, $a_i_Property = $GC_UAI_AGENT_HP, $a_s_CustomFilter = "")
+	If $g_i_FightMode = $g_i_FinisherMode Then UAI_GetAgentHighest($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
+	If $g_i_FightMode = $g_i_PressureMode Then UAI_GetAgentLowest($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
+EndFunc
+
 ; Get best AOE target based on group size first, then average HP as tiebreaker
-; Priority: 1) Most enemies in AOE range, 2) Lowest average HP if same count
+; Priority: 1) Most enemies in AOE range, 2) HP comparison based on fight mode
+; $g_i_FightMode = $g_i_FinisherMode (0): Lowest average HP wins (finish weak enemies)
+; $g_i_FightMode = $g_i_PressureMode (1): Highest average HP wins (pressure strong enemies)
 ; Returns the agent at the center of the best group
 Func UAI_GetBestAOETarget($a_i_AgentID = -2, $a_f_Range = 1320, $a_f_AOERange = $GC_I_RANGE_ADJACENT, $a_s_CustomFilter = "")
 	Local $l_i_BestAgent = 0
 	Local $l_i_BestCount = 0
-	Local $l_f_BestAvgHP = 999999
+	; Initialize based on fight mode: 999999 for finisher (looking for min), 0 for pressure (looking for max)
+	Local $l_f_BestAvgHP = ($g_i_FightMode = $g_i_FinisherMode) ? 999999 : 0
 
 	; Get reference ID
 	Local $l_i_RefID = UAI_ConvertAgentID($a_i_AgentID)
@@ -231,14 +239,19 @@ Func UAI_GetBestAOETarget($a_i_AgentID = -2, $a_f_Range = 1320, $a_f_AOERange = 
 		Local $l_f_AvgHP = $l_av_GroupStats[1]
 
 		; Priority 1: More enemies wins
-		; Priority 2: If same count, lowest average HP wins
+		; Priority 2: HP comparison based on fight mode
 		If $l_i_Count > $l_i_BestCount Then
 			$l_i_BestCount = $l_i_Count
 			$l_f_BestAvgHP = $l_f_AvgHP
 			$l_i_BestAgent = $l_i_AgentID
-		ElseIf $l_i_Count = $l_i_BestCount And $l_f_AvgHP < $l_f_BestAvgHP Then
-			$l_f_BestAvgHP = $l_f_AvgHP
-			$l_i_BestAgent = $l_i_AgentID
+		ElseIf $l_i_Count = $l_i_BestCount Then
+			; Finisher mode: prefer lower HP (finish weak enemies)
+			; Pressure mode: prefer higher HP (pressure strong enemies)
+			Local $l_b_BetterHP = ($g_i_FightMode = $g_i_FinisherMode) ? ($l_f_AvgHP < $l_f_BestAvgHP) : ($l_f_AvgHP > $l_f_BestAvgHP)
+			If $l_b_BetterHP Then
+				$l_f_BestAvgHP = $l_f_AvgHP
+				$l_i_BestAgent = $l_i_AgentID
+			EndIf
 		EndIf
 	Next
 
@@ -289,5 +302,26 @@ Func _GetGroupStats($a_i_AgentID, $a_f_Range, $a_s_Filter)
 	If $l_i_Count > 0 Then $l_av_Result[1] = $l_f_TotalHP / $l_i_Count
 
 	Return $l_av_Result
+EndFunc
+#EndRegion
+
+#Region Helper
+; Helper: Check if player has another Mesmer hex besides the specified one
+Func UAI_PlayerHasOtherMesmerHex($a_i_ExcludeSkillID)
+	If $g_i_PlayerCacheIndex < 1 Then Return False
+
+	Local $l_i_Count = $g_ai_EffectsCount[$g_i_PlayerCacheIndex]
+	For $l_i_i = 0 To $l_i_Count - 1
+		Local $l_i_SkillID = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_SkillID]
+		If $l_i_SkillID = $a_i_ExcludeSkillID Then ContinueLoop
+
+		; Check if this skill is a Mesmer hex
+		If Skill_GetSkillInfo($l_i_SkillID, "Profession") = $GC_I_PROFESSION_MESMER Then
+			Local $l_i_SkillType = Skill_GetSkillInfo($l_i_SkillID, "SkillType")
+			If $l_i_SkillType = $GC_I_SKILL_TYPE_HEX Then Return True
+		EndIf
+	Next
+
+	Return False
 EndFunc
 #EndRegion

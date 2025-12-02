@@ -1,7 +1,45 @@
 #include-once
 
 Func Anti_Hex()
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Then Return True
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return True
 
+	Local $l_i_CommingDamage = 0
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_BACKFIRE) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_BACKFIRE, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET, "BonusScale")
+		EndIf
+	EndIf
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+		$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "Scale")
+		If Not UAI_PlayerHasOtherMesmerHex($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP) Then
+			$l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP, "BonusScale")
+		EndIf
+	EndIf
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST, "Scale")
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MISTRUST_PVP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MISTRUST_PVP, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MARK_OF_SUBVERSION) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_MARK_OF_SUBVERSION, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SOUL_LEECH) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SOUL_LEECH, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
+
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPOIL_VICTOR) Then
+		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
+	EndIf
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPOIL_VICTOR_PVP) Then
+		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
+	EndIf
+
+	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
+
+	Return False
 EndFunc
 
 ; Skill ID: 19 - $GC_I_SKILL_ID_FRAGILITY
@@ -10,6 +48,10 @@ Func CanUse_Fragility()
 EndFunc
 
 Func BestTarget_Fragility($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to target (8...18...20 seconds). These foes take 5...17...20 damage each time they gain or lose a condition.
+	; Concise description
+	; Spell. Also hexes foes adjacent to target (8...18...20 seconds). These foes take 5...17...20 damage each time they gain or lose a condition.
 	Return 0
 EndFunc
 
@@ -19,6 +61,10 @@ Func CanUse_Confusion()
 EndFunc
 
 Func BestTarget_Confusion($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8...18...21 seconds.) Target foe's attacks may damage any character in range, including the target.
+	; Concise description
+	; Spell. (8...18...21 seconds.) Target foe's attacks may damage any character in range, including the target.
 	Return 0
 EndFunc
 
@@ -28,6 +74,10 @@ Func CanUse_Empathy()
 EndFunc
 
 Func BestTarget_Empathy($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...13...15 seconds.) Target foe's attacks deal 1...12...15 less damage, and that foe takes 10...46...55 damage with each attack.
+	; Concise description
+	; Spell. (5...13...15 seconds.) Target foe's attacks deal 1...12...15 less damage, and that foe takes 10...46...55 damage with each attack.
 	Return 0
 EndFunc
 
@@ -37,6 +87,10 @@ Func CanUse_Backfire()
 EndFunc
 
 Func BestTarget_Backfire($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Target foe takes 35...119...140 damage whenever it casts a spell.
+	; Concise description
+	; Spell. (10 seconds.) Target foe takes 35...119...140 damage whenever it casts a spell.
 	Return 0
 EndFunc
 
@@ -46,6 +100,10 @@ Func CanUse_Diversion()
 EndFunc
 
 Func BestTarget_Diversion($a_f_AggroRange)
+	; Description
+	; Hex Spell. (6 seconds.) Target foe's next skill takes +10...47...56 seconds to recharge.
+	; Concise description
+	; Spell. (6 seconds.) Target foe's next skill takes +10...47...56 seconds to recharge.
 	Return 0
 EndFunc
 
@@ -55,6 +113,10 @@ Func CanUse_ConjurePhantasm()
 EndFunc
 
 Func BestTarget_ConjurePhantasm($a_f_AggroRange)
+	; Description
+	; Hex Spell. (2...13...16 seconds.) Causes -5 Health degeneration.
+	; Concise description
+	; Spell. (2...13...16 seconds.) Causes -5 Health degeneration.
 	Return 0
 EndFunc
 
@@ -64,6 +126,10 @@ Func CanUse_Ignorance()
 EndFunc
 
 Func BestTarget_Ignorance($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8...18...20 seconds.) Target foe cannot use signets.
+	; Concise description
+	; Spell. (8...18...20 seconds.) Target foe cannot use signets.
 	Return 0
 EndFunc
 
@@ -82,6 +148,10 @@ Func CanUse_EtherLord()
 EndFunc
 
 Func BestTarget_EtherLord($a_f_AggroRange)
+	; Description
+	; Hex Spell. You lose all Energy. Target foe has -1...3...3 Energy degeneration and you have +1...3...3 Energy regeneration (5...9...10 seconds).
+	; Concise description
+	; Spell. You lose all Energy. Target foe has -1...3...3 Energy degeneration and you have +1...3...3 Energy regeneration (5...9...10 seconds).
 	Return 0
 EndFunc
 
@@ -91,6 +161,10 @@ Func CanUse_Clumsiness()
 EndFunc
 
 Func BestTarget_Clumsiness($a_f_AggroRange)
+	; Description
+	; Hex Spell. (4 seconds.) Also hexes adjacent foes. Interrupts next attack. Interruption effect: deals 10...76...92 damage.
+	; Concise description
+	; Spell. (4 seconds.) Also hexes adjacent foes. Interrupts next attack. Interruption effect: deals 10...76...92 damage.
 	Return 0
 EndFunc
 
@@ -100,6 +174,10 @@ Func CanUse_PhantomPain()
 EndFunc
 
 Func BestTarget_PhantomPain($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Causes -1...3...4 Health degeneration. End effect: inflicts Deep Wound condition (5...17...20 seconds).
+	; Concise description
+	; Spell. (10 seconds.) Causes -1...3...4 Health degeneration. End effect: inflicts Deep Wound condition (5...17...20 seconds).
 	Return 0
 EndFunc
 
@@ -109,6 +187,10 @@ Func CanUse_EtherealBurden()
 EndFunc
 
 Func BestTarget_EtherealBurden($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Target foe moves 50% slower. End effect: you gain 10...16...18 Energy.
+	; Concise description
+	; Spell. (10 seconds.) Target foe moves 50% slower. End effect: you gain 10...16...18 Energy.
 	Return 0
 EndFunc
 
@@ -118,6 +200,10 @@ Func CanUse_Guilt()
 EndFunc
 
 Func BestTarget_Guilt($a_f_AggroRange)
+	; Description
+	; Hex Spell. (6 seconds.) Target foe's next spell fails and you steal 5...12...14 Energy. No effect unless this foe's spell targets one of your allies.
+	; Concise description
+	; Spell. (6 seconds.) Target foe's next spell fails and you steal 5...12...14 Energy. No effect unless this foe's spell targets one of your allies.
 	Return 0
 EndFunc
 
@@ -127,6 +213,10 @@ Func CanUse_Ineptitude()
 EndFunc
 
 Func BestTarget_Ineptitude($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (4 seconds.) Also hexes foes adjacent to target. Deals 30...114...135 damage. Inflicts Blindness condition (10 seconds). No effect unless hexed foe attacks.
+	; Concise description
+	; Hex Spell. (4 seconds.) Also hexes foes adjacent to target. Deals 30...114...135 damage. Inflicts Blindness condition (10 seconds). No effect unless hexed foe attacks.
 	Return 0
 EndFunc
 
@@ -136,6 +226,10 @@ Func CanUse_SpiritOfFailure()
 EndFunc
 
 Func BestTarget_SpiritOfFailure($a_f_AggroRange)
+	; Description
+	; Hex Spell. (30 seconds.) Target foe has 25% chance to miss. You gain 1...3...3 Energy whenever this foe misses.
+	; Concise description
+	; Spell. (30 seconds.) Target foe has 25% chance to miss. You gain 1...3...3 Energy whenever this foe misses.
 	Return 0
 EndFunc
 
@@ -145,6 +239,10 @@ Func CanUse_MindWrack()
 EndFunc
 
 Func BestTarget_MindWrack($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...33...40 seconds.) Causes 1 Energy loss each time foe is the target of your non-hex Mesmer skills. Deals 5...21...25 damage per point of Energy lost. If target foe's Energy drops to 0, it takes 15...83...100 damage and Mind Wrack ends.
+	; Concise description
+	; Spell. (5...33...40 seconds.) Causes 1 Energy loss each time foe is the target of your non-hex Mesmer skills. Deals 5...21...25 damage per point of Energy lost. If target foe's Energy drops to 0, it takes 15...83...100 damage and Mind Wrack ends.
 	Return 0
 EndFunc
 
@@ -154,6 +252,10 @@ Func CanUse_WastrelsWorry()
 EndFunc
 
 Func BestTarget_WastrelsWorry($a_f_AggroRange)
+	; Description
+	; Hex Spell. (3 seconds). End effect: causes 20...84...100 damage to target and adjacent foes. No effect and ends early if target foe uses a skill.
+	; Concise description
+	; Spell. (3 seconds). End effect: causes 20...84...100 damage to target and adjacent foes. No effect and ends early if target foe uses a skill.
 	Return 0
 EndFunc
 
@@ -163,6 +265,10 @@ Func CanUse_Shame()
 EndFunc
 
 Func BestTarget_Shame($a_f_AggroRange)
+	; Description
+	; Hex Spell. (6 seconds.) Target foe's next spell fails and you steal 5...12...14 Energy. No effect unless this foe's spell targeted one of its allies.
+	; Concise description
+	; Spell. (6 seconds.) Target foe's next spell fails and you steal 5...12...14 Energy. No effect unless this foe's spell targeted one of its allies.
 	Return 0
 EndFunc
 
@@ -172,6 +278,10 @@ Func CanUse_Panic()
 EndFunc
 
 Func BestTarget_Panic($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Also hexes foes near your target (1...8...10 second[s]). Interrupts all other nearby foes whenever a hexed foe successfully activates a skill.
+	; Concise description
+	; Hex Spell. Also hexes foes near your target (1...8...10 second[s]). Interrupts all other nearby foes whenever a hexed foe successfully activates a skill.
 	Return 0
 EndFunc
 
@@ -181,6 +291,10 @@ Func CanUse_Migraine()
 EndFunc
 
 Func BestTarget_Migraine($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...17...20 seconds.) Causes -1...7...8 Health degeneration and doubles skill activation time.
+	; Concise description
+	; Hex Spell. (5...17...20 seconds.) Causes -1...7...8 Health degeneration and doubles skill activation time.
 	Return 0
 EndFunc
 
@@ -190,6 +304,10 @@ Func CanUse_CripplingAnguish()
 EndFunc
 
 Func BestTarget_CripplingAnguish($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...17...20 seconds.) Target foe moves and attacks 50% slower and has -1...7...8 Health degeneration.
+	; Concise description
+	; Hex Spell. (5...17...20 seconds.) Target foe moves and attacks 50% slower and has -1...7...8 Health degeneration.
 	Return 0
 EndFunc
 
@@ -199,6 +317,10 @@ Func CanUse_FeveredDreams()
 EndFunc
 
 Func BestTarget_FeveredDreams($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (10...22...25 seconds.) Foes in the area also have any new conditions that target foe acquires. Inflicts Dazed on target foe (1...3...3 second[s]) if that foe has two or more conditions.
+	; Concise description
+	; Hex Spell. (10...22...25 seconds.) Foes in the area also have any new conditions that target foe acquires. Inflicts Dazed on target foe (1...3...3 second[s]) if that foe has two or more conditions.
 	Return 0
 EndFunc
 
@@ -208,6 +330,10 @@ Func CanUse_SoothingImages()
 EndFunc
 
 Func BestTarget_SoothingImages($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foe adjacent to target. (8...18...20 seconds). These foes cannot gain adrenaline.
+	; Concise description
+	; Spell. Also hexes foe adjacent to target. (8...18...20 seconds). These foes cannot gain adrenaline.
 	Return 0
 EndFunc
 
@@ -217,6 +343,10 @@ Func CanUse_SpiritShackles()
 EndFunc
 
 Func BestTarget_SpiritShackles($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...17...20). Target foe loses 5 Energy whenever it attacks.
+	; Concise description
+	; Spell. (5...17...20). Target foe loses 5 Energy whenever it attacks.
 	Return 0
 EndFunc
 
@@ -226,6 +356,10 @@ Func CanUse_ImaginedBurden()
 EndFunc
 
 Func BestTarget_ImaginedBurden($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8...18...20 seconds.) Target foe moves 50% slower.
+	; Concise description
+	; Spell. (8...18...20 seconds.) Target foe moves 50% slower.
 	Return 0
 EndFunc
 
@@ -235,6 +369,10 @@ Func CanUse_ParasiticBond()
 EndFunc
 
 Func BestTarget_ParasiticBond($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) Causes -1 Health degeneration. End effect: you are healed for 30...102...120 Health.
+	; Concise description
+	; Spell. (20 seconds.) Causes -1 Health degeneration. End effect: you are healed for 30...102...120 Health.
 	Return 0
 EndFunc
 
@@ -244,6 +382,10 @@ Func CanUse_SoulBarbs()
 EndFunc
 
 Func BestTarget_SoulBarbs($a_f_AggroRange)
+	; Description
+	; Hex Spell. (30 seconds.) Deals 15...27...30 damage when an enchantment or hex is cast on target foe.
+	; Concise description
+	; Spell. (30 seconds.) Deals 15...27...30 damage when an enchantment or hex is cast on target foe.
 	Return 0
 EndFunc
 
@@ -253,6 +395,10 @@ Func CanUse_Barbs()
 EndFunc
 
 Func BestTarget_Barbs($a_f_AggroRange)
+	; Description
+	; Hex Spell. (30 seconds.) Target foe takes 1...12...15 damage whenever it takes physical damage.
+	; Concise description
+	; Spell. (30 seconds.) Target foe takes 1...12...15 damage whenever it takes physical damage.
 	Return 0
 EndFunc
 
@@ -271,6 +417,10 @@ Func CanUse_Suffering()
 EndFunc
 
 Func BestTarget_Suffering($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes near target (6...25...30 seconds). These foes have -0...2...3 Health degeneration.
+	; Concise description
+	; Spell. Also hexes foes near target (6...25...30 seconds). These foes have -0...2...3 Health degeneration.
 	Return 0
 EndFunc
 
@@ -280,6 +430,10 @@ Func CanUse_LifeSiphon()
 EndFunc
 
 Func BestTarget_LifeSiphon($a_f_AggroRange)
+	; Description
+	; Hex Spell. (12...22...24 seconds.) Target foe has -1...3...3 Health degeneration. You have +1...3...3 Health regeneration.
+	; Concise description
+	; Spell. (12...22...24 seconds.) Target foe has -1...3...3 Health degeneration. You have +1...3...3 Health regeneration.
 	Return 0
 EndFunc
 
@@ -289,6 +443,10 @@ Func CanUse_SpitefulSpirit()
 EndFunc
 
 Func BestTarget_SpitefulSpirit($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (8...18...20 seconds.) Deals 5...29...35 damage to target and adjacent foes whenever this foe attacks or uses a skill.
+	; Concise description
+	; Hex Spell. (8...18...20 seconds.) Deals 5...29...35 damage to target and adjacent foes whenever this foe attacks or uses a skill.
 	Return 0
 EndFunc
 
@@ -298,6 +456,10 @@ Func CanUse_MalignIntervention()
 EndFunc
 
 Func BestTarget_MalignIntervention($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...17...20 seconds.) Target foe receives 20% less from healing. If this foe dies while suffering from this hex, a level 1...14...17 masterless bone horror is summoned.
+	; Concise description
+	; Spell. (5...17...20 seconds.) Target foe receives 20% less from healing. If this foe dies while suffering from this hex, a level 1...14...17 masterless bone horror is summoned.
 	Return 0
 EndFunc
 
@@ -307,6 +469,10 @@ Func CanUse_InsidiousParasite()
 EndFunc
 
 Func BestTarget_InsidiousParasite($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...13...15 seconds.) Steal 15...39...45 Health whenever target foe hits with an attack.
+	; Concise description
+	; Spell. (5...13...15 seconds.) Steal 15...39...45 Health whenever target foe hits with an attack.
 	Return 0
 EndFunc
 
@@ -325,6 +491,10 @@ Func CanUse_Wither()
 EndFunc
 
 Func BestTarget_Wither($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...29...35 seconds.) Causes -2...4...4 Health degeneration and -1 Energy degeneration. Deals 15...63...75 damage if target foe's Energy drops to 0. Ends if this foe's Energy drops to 0.
+	; Concise description
+	; Hex Spell. (5...29...35 seconds.) Causes -2...4...4 Health degeneration and -1 Energy degeneration. Deals 15...63...75 damage if target foe's Energy drops to 0. Ends if this foe's Energy drops to 0.
 	Return 0
 EndFunc
 
@@ -334,6 +504,10 @@ Func CanUse_LifeTransfer()
 EndFunc
 
 Func BestTarget_LifeTransfer($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Also hexes foes adjacent to target (6...11...12 second). Causes -3...7...8 Health degeneration. You have +3...7...8 Health regeneration.
+	; Concise description
+	; Hex Spell. Also hexes foes adjacent to target (6...11...12 second). Causes -3...7...8 Health degeneration. You have +3...7...8 Health regeneration.
 	Return 0
 EndFunc
 
@@ -343,6 +517,10 @@ Func CanUse_MarkOfSubversion()
 EndFunc
 
 Func BestTarget_MarkOfSubversion($a_f_AggroRange)
+	; Description
+	; Hex Spell. (6 seconds.) Target foe's next spell fails and you steal 10...76...92 Health. No effect unless this foe's spell targeted one of its allies.
+	; Concise description
+	; Spell. (6 seconds.) Target foe's next spell fails and you steal 10...76...92 Health. No effect unless this foe's spell targeted one of its allies.
 	Return 0
 EndFunc
 
@@ -352,6 +530,10 @@ Func CanUse_SoulLeech()
 EndFunc
 
 Func BestTarget_SoulLeech($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (10 seconds.) Steal 16...67...80 Health whenever target foe casts a spell.
+	; Concise description
+	; Hex Spell. (10 seconds.) Steal 16...67...80 Health whenever target foe casts a spell.
 	Return 0
 EndFunc
 
@@ -361,6 +543,10 @@ Func CanUse_DefileFlesh()
 EndFunc
 
 Func BestTarget_DefileFlesh($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...29...35 seconds.) Reduces healing target foe receives by 33%. Only skills with the word "heal" in the description are affected.
+	; Concise description
+	; Spell. (5...29...35 seconds.) Reduces healing target foe receives by 33%. Only skills with the word "heal" in the description are affected.
 	Return 0
 EndFunc
 
@@ -370,6 +556,10 @@ Func CanUse_Faintheartedness()
 EndFunc
 
 Func BestTarget_Faintheartedness($a_f_AggroRange)
+	; Description
+	; Hex Spell. (3...13...16 seconds.) Target foe attacks 50% slower and has -0...2...3 Health degeneration.
+	; Concise description
+	; Spell. (3...13...16 seconds.) Target foe attacks 50% slower and has -0...2...3 Health degeneration.
 	Return 0
 EndFunc
 
@@ -379,6 +569,10 @@ Func CanUse_ShadowOfFear()
 EndFunc
 
 Func BestTarget_ShadowOfFear($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to target (5...25...30 seconds). They attack 50% slower.
+	; Concise description
+	; Spell. Also hexes foes adjacent to target (5...25...30 seconds). They attack 50% slower.
 	Return 0
 EndFunc
 
@@ -388,6 +582,10 @@ Func CanUse_RigorMortis()
 EndFunc
 
 Func BestTarget_RigorMortis($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8...18...20 seconds.) Target foe cannot block.
+	; Concise description
+	; Spell. (8...18...20 seconds.) Target foe cannot block.
 	Return 0
 EndFunc
 
@@ -397,6 +595,10 @@ Func CanUse_Malaise()
 EndFunc
 
 Func BestTarget_Malaise($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...29...35 seconds.) Causes -1 Energy degeneration. Deals 5...41...50 damage if target foe's Energy drops to 0. You have -1 Health degeneration. Ends if this foe's Energy drops to 0.
+	; Concise description
+	; Spell. (5...29...35 seconds.) Causes -1 Energy degeneration. Deals 5...41...50 damage if target foe's Energy drops to 0. You have -1 Health degeneration. Ends if this foe's Energy drops to 0.
 	Return 0
 EndFunc
 
@@ -406,6 +608,10 @@ Func CanUse_LingeringCurse()
 EndFunc
 
 Func BestTarget_LingeringCurse($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (6...25...30 seconds.) Target and nearby foes have -0...2...3 Health degeneration and receive 20% less benefit from healing.
+	; Concise description
+	; Hex Spell. (6...25...30 seconds.) Target and nearby foes have -0...2...3 Health degeneration and receive 20% less benefit from healing.
 	Return 0
 EndFunc
 
@@ -415,6 +621,10 @@ Func CanUse_MarkOfPain()
 EndFunc
 
 Func BestTarget_MarkOfPain($a_f_AggroRange)
+	; Description
+	; Hex Spell. (30 seconds.) Deals 10...34...40 damage to adjacent foes whenever target foe takes physical damage.
+	; Concise description
+	; Spell. (30 seconds.) Deals 10...34...40 damage to adjacent foes whenever target foe takes physical damage.
 	Return 0
 EndFunc
 
@@ -424,6 +634,10 @@ Func CanUse_GraspingEarth()
 EndFunc
 
 Func BestTarget_GraspingEarth($a_f_AggroRange)
+	; Description
+	; Hex Spell. Hexes foes near you for (5...17...20 seconds). These foes move 50% slower.
+	; Concise description
+	; Spell. Hexes foes near you for (5...17...20 seconds). These foes move 50% slower.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -433,6 +647,10 @@ Func CanUse_IncendiaryBonds()
 EndFunc
 
 Func BestTarget_IncendiaryBonds($a_f_AggroRange)
+	; Description
+	; Hex Spell. (3 seconds.) End effect: deals 20...68...80 fire damage and inflicts Burning condition (1...3...3 second[s]) to foes near your target. Also triggers if foe dies.
+	; Concise description
+	; Spell. (3 seconds.) End effect: deals 20...68...80 fire damage and inflicts Burning condition (1...3...3 second[s]) to foes near your target. Also triggers if foe dies.
 	Return 0
 EndFunc
 
@@ -442,6 +660,10 @@ Func CanUse_MarkOfRodgort()
 EndFunc
 
 Func BestTarget_MarkOfRodgort($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes near your target (10...30...35 seconds). Inflicts Burning condition (1...3...4 second[s]) when these foes take fire damage.
+	; Concise description
+	; Spell. Also hexes foes near your target (10...30...35 seconds). Inflicts Burning condition (1...3...4 second[s]) when these foes take fire damage.
 	Return 0
 EndFunc
 
@@ -451,6 +673,10 @@ Func CanUse_Rust()
 EndFunc
 
 Func BestTarget_Rust($a_f_AggroRange)
+	; Description
+	; Hex Spell. Deals 10...58...70 cold damage to target and adjacent foes. Hexes target and adjacent foes (5...17...20 seconds). Doubles signet activation time. Interrupts and disables signets for 1...8...10 second[s] if you are Overcast.
+	; Concise description
+	; Spell. Deals 10...58...70 cold damage to target and adjacent foes. Hexes target and adjacent foes (5...17...20 seconds). Doubles signet activation time. Interrupts and disables signets for 1...8...10 second[s] if you are Overcast.
 	Return 0
 EndFunc
 
@@ -460,6 +686,10 @@ Func CanUse_LightningSurge()
 EndFunc
 
 Func BestTarget_LightningSurge($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (3 seconds.) End effect: deals 14...83...100 lightning damage, causes knock-down, and inflicts Cracked Armor (5...17...20 seconds). 25% armor penetration.
+	; Concise description
+	; Hex Spell. (3 seconds.) End effect: deals 14...83...100 lightning damage, causes knock-down, and inflicts Cracked Armor (5...17...20 seconds). 25% armor penetration.
 	Return 0
 EndFunc
 
@@ -469,6 +699,10 @@ Func CanUse_MindFreeze()
 EndFunc
 
 Func BestTarget_MindFreeze($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Deals 10...50...60 cold damage. If you have more Energy than target foe, deals +10...50...60 cold damage and causes 90% slower movement (1...4...5 second[s]).
+	; Concise description
+	; Hex Spell. Deals 10...50...60 cold damage. If you have more Energy than target foe, deals +10...50...60 cold damage and causes 90% slower movement (1...4...5 second[s]).
 	Return 0
 EndFunc
 
@@ -478,6 +712,10 @@ Func CanUse_IcePrison()
 EndFunc
 
 Func BestTarget_IcePrison($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8...18...20 seconds.) Target foe moves 66% slower.
+	; Concise description
+	; Spell. (8...18...20 seconds.) Target foe moves 66% slower.
 	Return 0
 EndFunc
 
@@ -487,6 +725,10 @@ Func CanUse_IceSpikes()
 EndFunc
 
 Func BestTarget_IceSpikes($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to target (2...5...6 seconds). These foes move 66% slower. Initial effect: deals 20...68...80 cold damage.
+	; Concise description
+	; Spell. Also hexes foes adjacent to target (2...5...6 seconds). These foes move 66% slower. Initial effect: deals 20...68...80 cold damage.
 	Return 0
 EndFunc
 
@@ -496,6 +738,10 @@ Func CanUse_FrozenBurst()
 EndFunc
 
 Func BestTarget_FrozenBurst($a_f_AggroRange)
+	; Description
+	; Hex Spell. Hexes foes near you. These foes move 66% slower (3...7...8 seconds). Initial effect: deals 10...70...85 cold damage to foes near you.
+	; Concise description
+	; Spell. Hexes foes near you. These foes move 66% slower (3...7...8 seconds). Initial effect: deals 10...70...85 cold damage to foes near you.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -505,6 +751,10 @@ Func CanUse_ShardStorm()
 EndFunc
 
 Func BestTarget_ShardStorm($a_f_AggroRange)
+	; Description
+	; Hex Spell. Projectile: deals 10...70...85 cold damage. Target foe moves 66% slower (2...5...6 seconds).
+	; Concise description
+	; Spell. Projectile: deals 10...70...85 cold damage. Target foe moves 66% slower (2...5...6 seconds).
 	Return 0
 EndFunc
 
@@ -514,6 +764,10 @@ Func CanUse_LightningStrike()
 EndFunc
 
 Func BestTarget_LightningStrike($a_f_AggroRange)
+	; Description
+	; Hex Spell. Deals 5...41...50 lightning damage. 25% armor penetration. Hex for 3 seconds if Overcast. End effect: deals 5...41...50 lightning damage.
+	; Concise description
+	; Spell. Deals 5...41...50 lightning damage. 25% armor penetration. Hex for 3 seconds if Overcast. End effect: deals 5...41...50 lightning damage.
 	Return 0
 EndFunc
 
@@ -532,6 +786,10 @@ Func CanUse_DeepFreeze()
 EndFunc
 
 Func BestTarget_DeepFreeze($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes in the area of your target (10 seconds). These foes move 66% slower. Initial effect: deals 10...70...85 cold damage.
+	; Concise description
+	; Spell. Also hexes foes in the area of your target (10 seconds). These foes move 66% slower. Initial effect: deals 10...70...85 cold damage.
 	Return 0
 EndFunc
 
@@ -541,6 +799,10 @@ Func CanUse_BlurredVision()
 EndFunc
 
 Func BestTarget_BlurredVision($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to target (4...9...10 seconds). They have 50% chance to miss.
+	; Concise description
+	; Spell. Also hexes foes adjacent to target (4...9...10 seconds). They have 50% chance to miss.
 	Return 0
 EndFunc
 
@@ -550,6 +812,10 @@ Func CanUse_ScourgeHealing()
 EndFunc
 
 Func BestTarget_ScourgeHealing($a_f_AggroRange)
+	; Description
+	; Hex Spell. (30 seconds.) Whenever target foe is healed, the healer takes 15...67...80 holy damage.
+	; Concise description
+	; Spell. (30 seconds.) Whenever target foe is healed, the healer takes 15...67...80 holy damage.
 	Return 0
 EndFunc
 
@@ -559,6 +825,10 @@ Func CanUse_ScourgeSacrifice()
 EndFunc
 
 Func BestTarget_ScourgeSacrifice($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to target (8...18...20 seconds). Doubles Health sacrifice.
+	; Concise description
+	; Spell. Also hexes foes adjacent to target (8...18...20 seconds). Doubles Health sacrifice.
 	Return 0
 EndFunc
 
@@ -568,6 +838,10 @@ Func CanUse_Pacifism()
 EndFunc
 
 Func BestTarget_Pacifism($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8...18...20 seconds.) Target foe cannot attack. Ends if this foe takes damage.
+	; Concise description
+	; Spell. (8...18...20 seconds.) Target foe cannot attack. Ends if this foe takes damage.
 	Return 0
 EndFunc
 
@@ -577,6 +851,10 @@ Func CanUse_Amity()
 EndFunc
 
 Func BestTarget_Amity($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (8...18...20 seconds.) Foes adjacent to you cannot attack. Ends on any foes that take damage.
+	; Concise description
+	; Hex Spell. (8...18...20 seconds.) Foes adjacent to you cannot attack. Ends on any foes that take damage.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -586,6 +864,10 @@ Func CanUse_BurdenTotem()
 EndFunc
 
 Func BestTarget_BurdenTotem($a_f_AggroRange)
+	; Description
+	; Hex Spell. (30 seconds.) Target foe moves 33% slower.
+	; Concise description
+	; Spell. (30 seconds.) Target foe moves 33% slower.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -595,6 +877,10 @@ Func CanUse_CrystalHaze()
 EndFunc
 
 Func BestTarget_CrystalHaze($a_f_AggroRange)
+	; Description
+	; Hex Spell. (monster only) (30 seconds.) Also affects foes near target. Causes -1 Energy degeneration. Causes 10 Overcast whenever foes use an Energy skill.
+	; Concise description
+	; Spell. (monster only) (30 seconds.) Also affects foes near target. Causes -1 Energy degeneration. Causes 10 Overcast whenever foes use an Energy skill.
 	Return 0
 EndFunc
 
@@ -604,6 +890,10 @@ Func CanUse_CrystalBonds()
 EndFunc
 
 Func BestTarget_CrystalBonds($a_f_AggroRange)
+	; Description
+	; Hex Spell. (monster only) Remove 1 enchantment. Target foe has reduced movement (15 seconds) and may not be the target of enchantments.
+	; Concise description
+	; Spell. (monster only) Remove 1 enchantment. Target foe has reduced movement (15 seconds) and may not be the target of enchantments.
 	Return 0
 EndFunc
 
@@ -613,6 +903,10 @@ Func CanUse_OracleLink()
 EndFunc
 
 Func BestTarget_OracleLink($a_f_AggroRange)
+	; Description
+	; Hex Spell. You share a portion of your Energy regeneration with the Oracle.
+	; Concise description
+	; Spell. You share a portion of your Energy regeneration with the Oracle.
 	Return 0
 EndFunc
 
@@ -622,6 +916,10 @@ Func CanUse_SpontaneousCombustion()
 EndFunc
 
 Func BestTarget_SpontaneousCombustion($a_f_AggroRange)
+	; Description
+	; Hex Spell. Target starts burning and explodes.
+	; Concise description
+	; Spell. Target starts burning and explodes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -631,6 +929,10 @@ Func CanUse_MarkOfInsecurity()
 EndFunc
 
 Func BestTarget_MarkOfInsecurity($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...21...25 seconds.) Causes 1...3...3 Health degeneration. Enchantments and stances expire 30...70...80% faster on target foe. Disables your non-Assassin skills (10 seconds).
+	; Concise description
+	; Hex Spell. (5...21...25 seconds.) Causes 1...3...3 Health degeneration. Enchantments and stances expire 30...70...80% faster on target foe. Disables your non-Assassin skills (10 seconds).
 	Return 0
 EndFunc
 
@@ -640,6 +942,10 @@ Func CanUse_WailOfDoom()
 EndFunc
 
 Func BestTarget_WailOfDoom($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (1...3...4 second[s].) Target foe's attributes are 0.
+	; Concise description
+	; Hex Spell. (1...3...4 second[s].) Target foe's attributes are 0.
 	Return 0
 EndFunc
 
@@ -649,6 +955,10 @@ Func CanUse_MarkOfDeath()
 EndFunc
 
 Func BestTarget_MarkOfDeath($a_f_AggroRange)
+	; Description
+	; Hex Spell. (4...9...10 seconds.) Target foe receives 33% less from healing.
+	; Concise description
+	; Spell. (4...9...10 seconds.) Target foe receives 33% less from healing.
 	Return 0
 EndFunc
 
@@ -658,6 +968,10 @@ Func CanUse_EnduringToxin()
 EndFunc
 
 Func BestTarget_EnduringToxin($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5 seconds.) Causes -1...4...5 Health degeneration. Renewal: if the target foe is moving when this hex ends.
+	; Concise description
+	; Spell. (5 seconds.) Causes -1...4...5 Health degeneration. Renewal: if the target foe is moving when this hex ends.
 	Return 0
 EndFunc
 
@@ -667,6 +981,10 @@ Func CanUse_ShroudOfSilence()
 EndFunc
 
 Func BestTarget_ShroudOfSilence($a_f_AggroRange)
+	; Description
+	; Hex Spell. (1...3...3 second[s].) Target foe cannot cast spells. Your spells are disabled for 15 seconds.
+	; Concise description
+	; Spell. (1...3...3 second[s].) Target foe cannot cast spells. Your spells are disabled for 15 seconds.
 	Return 0
 EndFunc
 
@@ -676,6 +994,10 @@ Func CanUse_ExposeDefenses()
 EndFunc
 
 Func BestTarget_ExposeDefenses($a_f_AggroRange)
+	; Description
+	; Hex Spell. (1...9...11 second[s].) Target foe cannot block your attacks.
+	; Concise description
+	; Spell. (1...9...11 second[s].) Target foe cannot block your attacks.
 	Return 0
 EndFunc
 
@@ -685,6 +1007,10 @@ Func CanUse_PowerLeech()
 EndFunc
 
 Func BestTarget_PowerLeech($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Interrupt a spell or a chant. Interruption effect: steal 5...13...15 Energy whenever target foe casts a spell (10 seconds).
+	; Concise description
+	; Hex Spell. Interrupt a spell or a chant. Interruption effect: steal 5...13...15 Energy whenever target foe casts a spell (10 seconds).
 	Return 0
 EndFunc
 
@@ -694,6 +1020,10 @@ Func CanUse_ArcaneLanguor()
 EndFunc
 
 Func BestTarget_ArcaneLanguor($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (1...8...10 second[s].) Target foe's spells cause 10 Overcast.
+	; Concise description
+	; Hex Spell. (1...8...10 second[s].) Target foe's spells cause 10 Overcast.
 	Return 0
 EndFunc
 
@@ -703,6 +1033,10 @@ Func CanUse_ReapersMark1()
 EndFunc
 
 Func BestTarget_ReapersMark1($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (30 seconds.) Causes -1...4...5 Health degeneration. You gain 5...13...15 Energy if target foe dies while suffering from this hex.
+	; Concise description
+	; Hex Spell. (30 seconds.) Causes -1...4...5 Health degeneration. You gain 5...13...15 Energy if target foe dies while suffering from this hex.
 	Return 0
 EndFunc
 
@@ -712,6 +1046,10 @@ Func CanUse_Shatterstone()
 EndFunc
 
 Func BestTarget_Shatterstone($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (3 seconds.) Initial effect: deals 25...85...100 cold damage. End effect: deals 25...85...100 cold damage to target and all nearby foes.
+	; Concise description
+	; Hex Spell. (3 seconds.) Initial effect: deals 25...85...100 cold damage. End effect: deals 25...85...100 cold damage to target and all nearby foes.
 	Return 0
 EndFunc
 
@@ -721,6 +1059,10 @@ Func CanUse_ScorpionWire()
 EndFunc
 
 Func BestTarget_ScorpionWire($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8...18...20 seconds.) Shadow Step to target foe and cause knock-down the next time this foe is more than 100' away from you.
+	; Concise description
+	; Spell. (8...18...20 seconds.) Shadow Step to target foe and cause knock-down the next time this foe is more than 100' away from you.
 	Return 0
 EndFunc
 
@@ -730,6 +1072,10 @@ Func CanUse_MirroredStance()
 EndFunc
 
 Func BestTarget_MirroredStance($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10...30...35 seconds.) You enter any stance used by target foe.
+	; Concise description
+	; Spell. (10...30...35 seconds.) You enter any stance used by target foe.
 	Return 0
 EndFunc
 
@@ -739,6 +1085,10 @@ Func CanUse_Depravity()
 EndFunc
 
 Func BestTarget_Depravity($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...17...20 seconds.) Causes 1...4...5 Energy loss whenever target foe casts a spell. One foe near your target also loses Energy.
+	; Concise description
+	; Hex Spell. (5...17...20 seconds.) Causes 1...4...5 Energy loss whenever target foe casts a spell. One foe near your target also loses Energy.
 	Return 0
 EndFunc
 
@@ -748,6 +1098,10 @@ Func CanUse_IcyVeins()
 EndFunc
 
 Func BestTarget_IcyVeins($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (10...30...35 seconds.) Deals 20...92...110 cold damage to nearby foes if target foe dies. Initial effect: deals 10...74...90 cold damage.
+	; Concise description
+	; Hex Spell. (10...30...35 seconds.) Deals 20...92...110 cold damage to nearby foes if target foe dies. Initial effect: deals 10...74...90 cold damage.
 	Return 0
 EndFunc
 
@@ -757,6 +1111,10 @@ Func CanUse_WeakenKnees()
 EndFunc
 
 Func BestTarget_WeakenKnees($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (1...13...16 second[s].) Target foe has -1...3...4 Health degeneration and takes 5...9...10 damage while moving.
+	; Concise description
+	; Hex Spell. (1...13...16 second[s].) Target foe has -1...3...4 Health degeneration and takes 5...9...10 damage while moving.
 	Return 0
 EndFunc
 
@@ -766,6 +1124,10 @@ Func CanUse_SiphonStrength()
 EndFunc
 
 Func BestTarget_SiphonStrength($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...17...20 seconds.) Target foe deals -5...41...50 attack damage. You have +33% chance to land a critical hit on this foe.
+	; Concise description
+	; Hex Spell. (5...17...20 seconds.) Target foe deals -5...41...50 attack damage. You have +33% chance to land a critical hit on this foe.
 	Return 0
 EndFunc
 
@@ -775,6 +1137,10 @@ Func CanUse_VileMiasma()
 EndFunc
 
 Func BestTarget_VileMiasma($a_f_AggroRange)
+	; Description
+	; Hex Spell. Causes -1...4...5 Health degeneration (10 seconds). Initial effect: deals 10...54...65 cold damage. Hex is only applied if target foe has a condition.
+	; Concise description
+	; Spell. Causes -1...4...5 Health degeneration (10 seconds). Initial effect: deals 10...54...65 cold damage. Hex is only applied if target foe has a condition.
 	Return 0
 EndFunc
 
@@ -784,6 +1150,10 @@ Func CanUse_RecklessHaste()
 EndFunc
 
 Func BestTarget_RecklessHaste($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to your target (6...11...12 seconds). These foes have 50% chance to miss, but attack 25% faster.
+	; Concise description
+	; Spell. Also hexes foes adjacent to your target (6...11...12 seconds). These foes have 50% chance to miss, but attack 25% faster.
 	Return 0
 EndFunc
 
@@ -793,6 +1163,10 @@ Func CanUse_BloodBond()
 EndFunc
 
 Func BestTarget_BloodBond($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to your target (3...10...12 seconds). Allies hitting these foes gain 5...17...20 health. If any of these foes dies while hexed, adjacent allies are healed for 20...84...100.
+	; Concise description
+	; Spell. Also hexes foes adjacent to your target (3...10...12 seconds). Allies hitting these foes gain 5...17...20 health. If any of these foes dies while hexed, adjacent allies are healed for 20...84...100.
 	Return 0
 EndFunc
 
@@ -802,6 +1176,10 @@ Func CanUse_ConjureNightmare()
 EndFunc
 
 Func BestTarget_ConjureNightmare($a_f_AggroRange)
+	; Description
+	; Hex Spell. (2...13...16 seconds.) Causes -8 Health degeneration.
+	; Concise description
+	; Spell. (2...13...16 seconds.) Causes -8 Health degeneration.
 	Return 0
 EndFunc
 
@@ -820,6 +1198,10 @@ Func CanUse_VisionsOfRegret()
 EndFunc
 
 Func BestTarget_VisionsOfRegret($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Also hexes foes adjacent to target (10 seconds). These foes take 15...39...45 damage whenever they use a skill and 5...41...50 additional damage if not under the effects of another Mesmer hex.
+	; Concise description
+	; Hex Spell. Also hexes foes adjacent to target (10 seconds). These foes take 15...39...45 damage whenever they use a skill and 5...41...50 additional damage if not under the effects of another Mesmer hex.
 	Return 0
 EndFunc
 
@@ -829,6 +1211,10 @@ Func CanUse_IllusionOfPain()
 EndFunc
 
 Func BestTarget_IllusionOfPain($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8 seconds.) Causes -3...9...10 Health degeneration and target foe takes 3...9...10 damage each second. End effect: that foe is healed for 36...103...120.
+	; Concise description
+	; Spell. (8 seconds.) Causes -3...9...10 Health degeneration and target foe takes 3...9...10 damage each second. End effect: that foe is healed for 36...103...120.
 	Return 0
 EndFunc
 
@@ -838,6 +1224,10 @@ Func CanUse_StolenSpeed()
 EndFunc
 
 Func BestTarget_StolenSpeed($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Also hexes adjacent foes (1...8...10 seconds). Doubles spell casting time. Spells cast by you or your allies have -50% casting times.
+	; Concise description
+	; Hex Spell. Also hexes adjacent foes (1...8...10 seconds). Doubles spell casting time. Spells cast by you or your allies have -50% casting times.
 	Return 0
 EndFunc
 
@@ -847,6 +1237,10 @@ Func CanUse_VocalMinority()
 EndFunc
 
 Func BestTarget_VocalMinority($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes near target (5...17...20 seconds). These foes cannot use shouts or chants.
+	; Concise description
+	; Spell. Also hexes foes near target (5...17...20 seconds). These foes cannot use shouts or chants.
 	Return 0
 EndFunc
 
@@ -856,6 +1250,10 @@ Func CanUse_Overload()
 EndFunc
 
 Func BestTarget_Overload($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5 seconds.) Causes -1...3...3 Health degeneration. If target foe is using a skill, that foe and all adjacent foes take 15...63...75 damage.
+	; Concise description
+	; Spell. (5 seconds.) Causes -1...3...3 Health degeneration. If target foe is using a skill, that foe and all adjacent foes take 15...63...75 damage.
 	Return 0
 EndFunc
 
@@ -865,6 +1263,10 @@ Func CanUse_ImagesOfRemorse()
 EndFunc
 
 Func BestTarget_ImagesOfRemorse($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...9...10 seconds.) Causes -1...3...3 Health degeneration. Initial effect: 10...44...52 damage if target foe is attacking.
+	; Concise description
+	; Spell. (5...9...10 seconds.) Causes -1...3...3 Health degeneration. Initial effect: 10...44...52 damage if target foe is attacking.
 	Return 0
 EndFunc
 
@@ -874,6 +1276,10 @@ Func CanUse_SharedBurden()
 EndFunc
 
 Func BestTarget_SharedBurden($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Also hexes foes near your target (5...17...20 seconds). These foes attack, cast spells, and move 50% slower.
+	; Concise description
+	; Hex Spell. Also hexes foes near your target (5...17...20 seconds). These foes attack, cast spells, and move 50% slower.
 	Return 0
 EndFunc
 
@@ -883,6 +1289,10 @@ Func CanUse_SoulBind()
 EndFunc
 
 Func BestTarget_SoulBind($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (30 seconds.) Every time target foe is healed, the healer takes 20...68...80 damage. Ends if target is suffering from a Smiting Prayers hex.
+	; Concise description
+	; Hex Spell. (30 seconds.) Every time target foe is healed, the healer takes 20...68...80 damage. Ends if target is suffering from a Smiting Prayers hex.
 	Return 0
 EndFunc
 
@@ -892,6 +1302,10 @@ Func CanUse_Lamentation()
 EndFunc
 
 Func BestTarget_Lamentation($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes near your target (5...17...20 seconds). Causes -0...2...3 Health degeneration. Initial effect: Deals 10...42...50 damage to these foes if you are within earshot of a spirit or corpse.
+	; Concise description
+	; Spell. Also hexes foes near your target (5...17...20 seconds). Causes -0...2...3 Health degeneration. Initial effect: Deals 10...42...50 damage to these foes if you are within earshot of a spirit or corpse.
 	Return 0
 EndFunc
 
@@ -901,6 +1315,10 @@ Func CanUse_ShamefulFear()
 EndFunc
 
 Func BestTarget_ShamefulFear($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Target foe takes 5...17...20 damage each second while moving, but moves 10% faster.
+	; Concise description
+	; Spell. (10 seconds.) Target foe takes 5...17...20 damage each second while moving, but moves 10% faster.
 	Return 0
 EndFunc
 
@@ -910,6 +1328,10 @@ Func CanUse_ShadowShroud()
 EndFunc
 
 Func BestTarget_ShadowShroud($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (3...8...9 seconds.) Target foe cannot be the target of enchantments.
+	; Concise description
+	; Hex Spell. (3...8...9 seconds.) Target foe cannot be the target of enchantments.
 	Return 0
 EndFunc
 
@@ -919,6 +1341,10 @@ Func CanUse_RisingBile()
 EndFunc
 
 Func BestTarget_RisingBile($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) End effect: deals 1...5...6 damage for each second Rising Bile was in effect. Also damages other foes in the area.
+	; Concise description
+	; Spell. (20 seconds.) End effect: deals 1...5...6 damage for each second Rising Bile was in effect. Also damages other foes in the area.
 	Return 0
 EndFunc
 
@@ -928,6 +1354,10 @@ Func CanUse_IcyShackles()
 EndFunc
 
 Func BestTarget_IcyShackles($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (1...8...10 second[s].) Target foe moves 66% slower. This foe moves 90% slower if enchanted.
+	; Concise description
+	; Hex Spell. (1...8...10 second[s].) Target foe moves 66% slower. This foe moves 90% slower if enchanted.
 	Return 0
 EndFunc
 
@@ -937,6 +1367,10 @@ Func CanUse_ShadowyBurden()
 EndFunc
 
 Func BestTarget_ShadowyBurden($a_f_AggroRange)
+	; Description
+	; Hex Spell. (3...13...15 seconds.) Target foe moves 25% slower and has 20 less armor against your attacks. Armor reduction only affects this foe while it has no other hexes.
+	; Concise description
+	; Spell. (3...13...15 seconds.) Target foe moves 25% slower and has 20 less armor against your attacks. Armor reduction only affects this foe while it has no other hexes.
 	Return 0
 EndFunc
 
@@ -946,6 +1380,10 @@ Func CanUse_SiphonSpeed()
 EndFunc
 
 Func BestTarget_SiphonSpeed($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...13...15 seconds.) Target foe moves 33% slower and you move 33% faster. Recharges 50% faster if cast on a moving foe.
+	; Concise description
+	; Spell. (5...13...15 seconds.) Target foe moves 33% slower and you move 33% faster. Recharges 50% faster if cast on a moving foe.
 	Return 0
 EndFunc
 
@@ -955,6 +1393,10 @@ Func CanUse_PowerFlux()
 EndFunc
 
 Func BestTarget_PowerFlux($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Interrupts a spell or chant. Interruption effect: -2 Energy degeneration (4...9...10 seconds).
+	; Concise description
+	; Hex Spell. Interrupts a spell or chant. Interruption effect: -2 Energy degeneration (4...9...10 seconds).
 	Return 0
 EndFunc
 
@@ -964,6 +1406,10 @@ Func CanUse_MarkOfInstability()
 EndFunc
 
 Func BestTarget_MarkOfInstability($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) Causes knock-down the next time you hit target foe with a dual attack.
+	; Concise description
+	; Spell. (20 seconds.) Causes knock-down the next time you hit target foe with a dual attack.
 	Return 0
 EndFunc
 
@@ -973,6 +1419,10 @@ Func CanUse_Mistrust()
 EndFunc
 
 Func BestTarget_Mistrust($a_f_AggroRange)
+	; Description
+	; Hex Spell. (6 seconds.) The next spell that target foe casts on one of your allies fails and deals 10...82...100 damage to target and nearby foes.
+	; Concise description
+	; Spell. (6 seconds.) The next spell that target foe casts on one of your allies fails and deals 10...82...100 damage to target and nearby foes.
 	Return 0
 EndFunc
 
@@ -1000,6 +1450,10 @@ Func CanUse_SnowDownTheShirt()
 EndFunc
 
 Func BestTarget_SnowDownTheShirt($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) Interrupts target foe whenever it takes damage.
+	; Concise description
+	; Spell. (20 seconds.) Interrupts target foe whenever it takes damage.
 	Return 0
 EndFunc
 
@@ -1009,6 +1463,10 @@ Func CanUse_Icicles()
 EndFunc
 
 Func BestTarget_Icicles($a_f_AggroRange)
+	; Description
+	; Hex Spell. Deals 75 cold damage to target and adjacent foes. These foes move 66% slower (5 seconds).
+	; Concise description
+	; Spell. Deals 75 cold damage to target and adjacent foes. These foes move 66% slower (5 seconds).
 	Return 0
 EndFunc
 
@@ -1018,6 +1476,10 @@ Func CanUse_SeepingWound()
 EndFunc
 
 Func BestTarget_SeepingWound($a_f_AggroRange)
+	; Description
+	; Hex Spell. (1...6...7 second[s].) Target foe moves 33% slower. This foe takes 5...21...25 damage each second while suffering from a condition.
+	; Concise description
+	; Spell. (1...6...7 second[s].) Target foe moves 33% slower. This foe takes 5...21...25 damage each second while suffering from a condition.
 	Return 0
 EndFunc
 
@@ -1027,6 +1489,10 @@ Func CanUse_AssassinsPromise()
 EndFunc
 
 Func BestTarget_AssassinsPromise($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...13...15 seconds.) You gain 5...17...20 Energy and all your skills recharge if target foe dies.
+	; Concise description
+	; Hex Spell. (5...13...15 seconds.) You gain 5...17...20 Energy and all your skills recharge if target foe dies.
 	Return 0
 EndFunc
 
@@ -1036,6 +1502,10 @@ Func CanUse_DarkPrison()
 EndFunc
 
 Func BestTarget_DarkPrison($a_f_AggroRange)
+	; Description
+	; Hex Spell. Shadow Step to target foe. This foe moves 33% slower (1...5...6 seconds).
+	; Concise description
+	; Spell. Shadow Step to target foe. This foe moves 33% slower (1...5...6 seconds).
 	Return 0
 EndFunc
 
@@ -1054,6 +1524,10 @@ Func CanUse_RecurringInsecurity()
 EndFunc
 
 Func BestTarget_RecurringInsecurity($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (10 seconds.) Causes -1...4...5 Health degeneration. Renewal: if target foe has another hex when Recurring Insecurity would end.
+	; Concise description
+	; Hex Spell. (10 seconds.) Causes -1...4...5 Health degeneration. Renewal: if target foe has another hex when Recurring Insecurity would end.
 	Return 0
 EndFunc
 
@@ -1063,6 +1537,10 @@ Func CanUse_KitahsBurden()
 EndFunc
 
 Func BestTarget_KitahsBurden($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Target foe moves 50% slower. End effect: you gain 10...16...18 Energy.
+	; Concise description
+	; Spell. (10 seconds.) Target foe moves 50% slower. End effect: you gain 10...16...18 Energy.
 	Return 0
 EndFunc
 
@@ -1072,6 +1550,10 @@ Func CanUse_SpoilVictor()
 EndFunc
 
 Func BestTarget_SpoilVictor($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (3...13...15 seconds.) Causes 25...85...100 Health loss whenever target foe attacks or casts spells on a creature with less Health.
+	; Concise description
+	; Hex Spell. (3...13...15 seconds.) Causes 25...85...100 Health loss whenever target foe attacks or casts spells on a creature with less Health.
 	Return 0
 EndFunc
 
@@ -1090,6 +1572,10 @@ Func CanUse_AshBlast()
 EndFunc
 
 Func BestTarget_AshBlast($a_f_AggroRange)
+	; Description
+	; Hex Spell. Deals 35...59...65 earth damage. Burning foes are hexed for 5 seconds and miss 20...64...75% of attacks. Also strikes adjacent.
+	; Concise description
+	; Spell. Deals 35...59...65 earth damage. Burning foes are hexed for 5 seconds and miss 20...64...75% of attacks. Also strikes adjacent.
 	Return 0
 EndFunc
 
@@ -1099,6 +1585,10 @@ Func CanUse_SmolderingEmbers()
 EndFunc
 
 Func BestTarget_SmolderingEmbers($a_f_AggroRange)
+	; Description
+	; Hex Spell. Deals 10...58...70 fire damage to target. If you are Overcast, foe is hexed for 3 seconds, taking 5...21...25 fire damage each second.
+	; Concise description
+	; Spell. Deals 10...58...70 fire damage to target. If you are Overcast, foe is hexed for 3 seconds, taking 5...21...25 fire damage each second.
 	Return 0
 EndFunc
 
@@ -1108,6 +1598,10 @@ Func CanUse_TeinaisPrison()
 EndFunc
 
 Func BestTarget_TeinaisPrison($a_f_AggroRange)
+	; Description
+	; Hex Spell. (1...5...6 second[s].) Target foe moves 66% slower. Foes with Cracked Armor have 5...8...9 Health degeneration.
+	; Concise description
+	; Spell. (1...5...6 second[s].) Target foe moves 66% slower. Foes with Cracked Armor have 5...8...9 Health degeneration.
 	Return 0
 EndFunc
 
@@ -1117,6 +1611,10 @@ Func CanUse_MirrorOfIce()
 EndFunc
 
 Func BestTarget_MirrorOfIce($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Deals 15...59...70 cold damage and slows foes by 66% (2...5...6 seconds). Hits foes near you and target ally. Recharges 50% faster if it hits a foe hexed with Water Magic.
+	; Concise description
+	; Hex Spell. Deals 15...59...70 cold damage and slows foes by 66% (2...5...6 seconds). Hits foes near you and target ally. Recharges 50% faster if it hits a foe hexed with Water Magic.
 	Return 0
 EndFunc
 
@@ -1126,6 +1624,10 @@ Func CanUse_StarShards()
 EndFunc
 
 Func BestTarget_StarShards($a_f_AggroRange)
+	; Description
+	; Hex Spell. Whenever a Celestial creature dies, all nearby foes are hexed with Star Shards (30 seconds). Star Shards does damage equal to the next skill damage that foe takes.
+	; Concise description
+	; Spell. Whenever a Celestial creature dies, all nearby foes are hexed with Star Shards (30 seconds). Star Shards does damage equal to the next skill damage that foe takes.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1136,6 +1638,10 @@ Func CanUse_DulledWeapon()
 EndFunc
 
 Func BestTarget_DulledWeapon($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes adjacent to your target (5...13...15 seconds). Removes ability to land a critical hit. Reduces damage by 1...12...15.
+	; Concise description
+	; Spell. Also hexes foes adjacent to your target (5...13...15 seconds). Removes ability to land a critical hit. Reduces damage by 1...12...15.
 	Return 0
 EndFunc
 
@@ -1145,6 +1651,10 @@ Func CanUse_BindingChains()
 EndFunc
 
 Func BestTarget_BindingChains($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes near your target. (3 seconds.) These foes move 90% slower and takes 1...24...30 damage each second while moving.
+	; Concise description
+	; Spell. Also hexes foes near your target. (3 seconds.) These foes move 90% slower and takes 1...24...30 damage each second while moving.
 	Return 0
 EndFunc
 
@@ -1154,6 +1664,10 @@ Func CanUse_PainfulBond()
 EndFunc
 
 Func BestTarget_PainfulBond($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes near your target (10...18...20 seconds). Spirits do 8...18...20 more damage against these foes.
+	; Concise description
+	; Spell. Also hexes foes near your target (10...18...20 seconds). Spirits do 8...18...20 more damage against these foes.
 	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
@@ -1163,6 +1677,10 @@ Func CanUse_Meekness()
 EndFunc
 
 Func BestTarget_Meekness($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes in the area of target (5...25...30 seconds). These foes attack 50% slower.
+	; Concise description
+	; Spell. Also hexes foes in the area of target (5...25...30 seconds). These foes attack 50% slower.
 	Return 0
 EndFunc
 
@@ -1172,6 +1690,10 @@ Func CanUse_SuicidalImpulse()
 EndFunc
 
 Func BestTarget_SuicidalImpulse($a_f_AggroRange)
+	; Description
+	; Hex Spell. All foes in the area must attack Shiro within 10 seconds or lose half their Health.
+	; Concise description
+	; Spell. All foes in the area must attack Shiro within 10 seconds or lose half their Health.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1181,6 +1703,10 @@ Func CanUse_WastrelsDemise()
 EndFunc
 
 Func BestTarget_WastrelsDemise($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5 seconds.) Each second while hexed, target foe and all foes adjacent to that foe take 1...8...10 damage. Foes take +1...8...10 damage each second this hex is in effect. Ends early if target foe uses a skill.
+	; Concise description
+	; Spell. (5 seconds.) Each second while hexed, target foe and all foes adjacent to that foe take 1...8...10 damage. Foes take +1...8...10 damage each second this hex is in effect. Ends early if target foe uses a skill.
 	Return 0
 EndFunc
 
@@ -1190,6 +1716,10 @@ Func CanUse_Frustration()
 EndFunc
 
 Func BestTarget_Frustration($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...17...20 seconds.) Causes 50% slower spell casting. Target foe takes 5...41...50 damage whenever interrupted. Deals double damage on skill interrupt.
+	; Concise description
+	; Spell. (5...17...20 seconds.) Causes 50% slower spell casting. Target foe takes 5...41...50 damage whenever interrupted. Deals double damage on skill interrupt.
 	Return 0
 EndFunc
 
@@ -1199,6 +1729,10 @@ Func CanUse_EtherPhantom()
 EndFunc
 
 Func BestTarget_EtherPhantom($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Causes -1 Energy degeneration. Causes 1...4...5 Energy loss if this hex ends early.
+	; Concise description
+	; Spell. (10 seconds.) Causes -1 Energy degeneration. Causes 1...4...5 Energy loss if this hex ends early.
 	Return 0
 EndFunc
 
@@ -1208,6 +1742,10 @@ Func CanUse_WebOfDisruption()
 EndFunc
 
 Func BestTarget_WebOfDisruption($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Initial effect: interrupts a skill. End effect: interrupts a skill.
+	; Concise description
+	; Spell. (10 seconds.) Initial effect: interrupts a skill. End effect: interrupts a skill.
 	Return 0
 EndFunc
 
@@ -1217,6 +1755,10 @@ Func CanUse_EnchantersConundrum()
 EndFunc
 
 Func BestTarget_EnchantersConundrum($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Causes 100...180...200% slower enchantment casting (10 seconds). Initial effect: deals 10...82...100 damage to target and adjacent foes if target foe is not enchanted.
+	; Concise description
+	; Hex Spell. Causes 100...180...200% slower enchantment casting (10 seconds). Initial effect: deals 10...82...100 damage to target and adjacent foes if target foe is not enchanted.
 	Return 0
 EndFunc
 
@@ -1226,6 +1768,10 @@ Func CanUse_UlcerousLungs()
 EndFunc
 
 Func BestTarget_UlcerousLungs($a_f_AggroRange)
+	; Description
+	; Hex Spell. Also hexes foes near your target (10...22...25 seconds). Causes -4 Health degeneration to any of these foes that are Bleeding. Inflicts Bleeding (3...13...15 seconds) whenever these foes use a shout or chant.
+	; Concise description
+	; Spell. Also hexes foes near your target (10...22...25 seconds). Causes -4 Health degeneration to any of these foes that are Bleeding. Inflicts Bleeding (3...13...15 seconds) whenever these foes use a shout or chant.
 	Return 0
 EndFunc
 
@@ -1235,6 +1781,10 @@ Func CanUse_MarkOfFury()
 EndFunc
 
 Func BestTarget_MarkOfFury($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5 seconds.) Allies hitting target foe gain 0...2...2 strike[s] of adrenaline. End effect: inflicts Cracked Armor (1...12...15 second[s].)
+	; Concise description
+	; Spell. (5 seconds.) Allies hitting target foe gain 0...2...2 strike[s] of adrenaline. End effect: inflicts Cracked Armor (1...12...15 second[s].)
 	Return 0
 EndFunc
 
@@ -1253,6 +1803,10 @@ Func CanUse_CorruptEnchantment()
 EndFunc
 
 Func BestTarget_CorruptEnchantment($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Removes one enchantment from target foe. Removal effect: -1...7...8 Health degeneration (10 seconds).
+	; Concise description
+	; Hex Spell. Removes one enchantment from target foe. Removal effect: -1...7...8 Health degeneration (10 seconds).
 	Return 0
 EndFunc
 
@@ -1262,6 +1816,10 @@ Func CanUse_ChillingWinds()
 EndFunc
 
 Func BestTarget_ChillingWinds($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) The next water hex on target foe lasts 25...85...100% longer. Initial effect: 30...54...60 cold damage. Also strikes adjacent.
+	; Concise description
+	; Spell. (10 seconds.) The next water hex on target foe lasts 25...85...100% longer. Initial effect: 30...54...60 cold damage. Also strikes adjacent.
 	Return 0
 EndFunc
 
@@ -1271,6 +1829,10 @@ Func CanUse_FreezingGust()
 EndFunc
 
 Func BestTarget_FreezingGust($a_f_AggroRange)
+	; Description
+	; Hex Spell. Deals 20...68...80 cold damage if target foe is hexed with Water Magic. Otherwise, this foe moves 66% slower (1...4...5 second[s]).
+	; Concise description
+	; Spell. Deals 20...68...80 cold damage if target foe is hexed with Water Magic. Otherwise, this foe moves 66% slower (1...4...5 second[s]).
 	Return 0
 EndFunc
 
@@ -1280,6 +1842,10 @@ Func CanUse_ScourgeEnchantment()
 EndFunc
 
 Func BestTarget_ScourgeEnchantment($a_f_AggroRange)
+	; Description
+	; Hex Spell. (30 seconds.) Deals 15...63...75 damage to anyone casting an enchantment on target foe.
+	; Concise description
+	; Spell. (30 seconds.) Deals 15...63...75 damage to anyone casting an enchantment on target foe.
 	Return 0
 EndFunc
 
@@ -1289,6 +1855,10 @@ Func CanUse_VialOfPurifiedWater()
 EndFunc
 
 Func BestTarget_VialOfPurifiedWater($a_f_AggroRange)
+	; Description
+	; Hex Spell. The purified waters of the vial affect one target (10 seconds). Harbingers become vulnerable to damage from all sources.
+	; Concise description
+	; Spell. The purified waters of the vial affect one target (10 seconds). Harbingers become vulnerable to damage from all sources.
 	Return 0
 EndFunc
 
@@ -1298,6 +1868,10 @@ Func CanUse_CorsairsNet()
 EndFunc
 
 Func BestTarget_CorsairsNet($a_f_AggroRange)
+	; Description
+	; Hex Spell. Quarter speed projectile: target and foes in the area move slower (10 seconds).
+	; Concise description
+	; Spell. Quarter speed projectile: target and foes in the area move slower (10 seconds).
 	Return 0
 EndFunc
 
@@ -1316,6 +1890,10 @@ Func CanUse_EnchantmentCollapse()
 EndFunc
 
 Func BestTarget_EnchantmentCollapse($a_f_AggroRange)
+	; Description
+	; Hex Spell. Target foe loses all enchantments each time this foe loses an enchantment.
+	; Concise description
+	; Spell. Target foe loses all enchantments each time this foe loses an enchantment.
 	Return 0
 EndFunc
 
@@ -1325,6 +1903,10 @@ Func CanUse_CallOfSacrifice()
 EndFunc
 
 Func BestTarget_CallOfSacrifice($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) Target loses 20 Health each second. Ends sooner if target is at less than 20% Health.
+	; Concise description
+	; Spell. (20 seconds.) Target loses 20 Health each second. Ends sooner if target is at less than 20% Health.
 	Return 0
 EndFunc
 
@@ -1335,6 +1917,10 @@ Func CanUse_RenewingSurge()
 EndFunc
 
 Func BestTarget_RenewingSurge($a_f_AggroRange)
+	; Description
+	; Hex Spell. (8 seconds.) Deals 2...10...12 damage each second. End effect: You gain 1...7...8 energy.
+	; Concise description
+	; Spell. (8 seconds.) Deals 2...10...12 damage each second. End effect: You gain 1...7...8 energy.
 	Return UAI_GetAgentHighest(-2, 1320, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
@@ -1344,6 +1930,10 @@ Func CanUse_HiddenCaltrops()
 EndFunc
 
 Func BestTarget_HiddenCaltrops($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (1...8...10 seconds.) Causes 50% slower movement. End effect: inflicts Crippled condition (1...12...15 seconds). Your non-Assassin skills are disabled (10 seconds.)
+	; Concise description
+	; Hex Spell. (1...8...10 seconds.) Causes 50% slower movement. End effect: inflicts Crippled condition (1...12...15 seconds). Your non-Assassin skills are disabled (10 seconds.)
 	Return 0
 EndFunc
 
@@ -1362,6 +1952,10 @@ Func CanUse_ShadowPrison()
 EndFunc
 
 Func BestTarget_ShadowPrison($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Shadow Step to target foe. This foe moves 66% slower (1...6...7 seconds).
+	; Concise description
+	; Hex Spell. Shadow Step to target foe. This foe moves 66% slower (1...6...7 seconds).
 	Return 0
 EndFunc
 
@@ -1371,6 +1965,10 @@ Func CanUse_PriceOfPride()
 EndFunc
 
 Func BestTarget_PriceOfPride($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...17...20 seconds.) Causes 1...6...7 Energy loss the next time target foe uses an elite skill.
+	; Concise description
+	; Spell. (5...17...20 seconds.) Causes 1...6...7 Energy loss the next time target foe uses an elite skill.
 	Return 0
 EndFunc
 
@@ -1380,6 +1978,10 @@ Func CanUse_AirOfDisenchantment()
 EndFunc
 
 Func BestTarget_AirOfDisenchantment($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. Also hexes foes near your target (5...17...20 seconds). Remove one enchantment from target and nearby foes. Enchantments expire 150...270...300% faster on those foes.
+	; Concise description
+	; Hex Spell. Also hexes foes near your target (5...17...20 seconds). Remove one enchantment from target and nearby foes. Enchantments expire 150...270...300% faster on those foes.
 	Return 0
 EndFunc
 
@@ -1389,6 +1991,10 @@ Func CanUse_DefendersZeal()
 EndFunc
 
 Func BestTarget_DefendersZeal($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (5...21...25 seconds.) You gain 2 Energy whenever target foe hits with an attack.
+	; Concise description
+	; Hex Spell. (5...21...25 seconds.) You gain 2 Energy whenever target foe hits with an attack.
 	Return 0
 EndFunc
 
@@ -1416,6 +2022,10 @@ Func CanUse_BondsOfTorment()
 EndFunc
 
 Func BestTarget_BondsOfTorment($a_f_AggroRange)
+	; Description
+	; Hex Spell. Any time the caster takes damage, all foes hexed with Bonds of Torment take equal cold damage.
+	; Concise description
+	; Spell. Any time the caster takes damage, all foes hexed with Bonds of Torment take equal cold damage.
 	Return 0
 EndFunc
 
@@ -1434,6 +2044,10 @@ Func CanUse_SumOfAllFears()
 EndFunc
 
 Func BestTarget_SumOfAllFears($a_f_AggroRange)
+	; Description
+	; Hex Spell. (1...8...10 second[s].) Target foe moves, attacks, and casts spells 33% slower.
+	; Concise description
+	; Spell. (1...8...10 second[s].) Target foe moves, attacks, and casts spells 33% slower.
 	Return 0
 EndFunc
 
@@ -1443,6 +2057,10 @@ Func CanUse_Cacophony()
 EndFunc
 
 Func BestTarget_Cacophony($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Deals 35...91...105 damage whenever target foe uses a shout or chant.
+	; Concise description
+	; Spell. (10 seconds.) Deals 35...91...105 damage whenever target foe uses a shout or chant.
 	Return 0
 EndFunc
 
@@ -1452,6 +2070,10 @@ Func CanUse_WintersEmbrace()
 EndFunc
 
 Func BestTarget_WintersEmbrace($a_f_AggroRange)
+	; Description
+	; Hex Spell. (2...5...6 seconds.) Target foe moves 66% slower and takes 5...13...15 damage while moving.
+	; Concise description
+	; Spell. (2...5...6 seconds.) Target foe moves 66% slower and takes 5...13...15 damage while moving.
 	Return 0
 EndFunc
 
@@ -1461,6 +2083,10 @@ Func CanUse_EarthenShackles()
 EndFunc
 
 Func BestTarget_EarthenShackles($a_f_AggroRange)
+	; Description
+	; Hex Spell. (3 seconds.) Target and nearby foes move 90% slower. Applies Weakness for 5...17...20 seconds when it ends.
+	; Concise description
+	; Spell. (3 seconds.) Target and nearby foes move 90% slower. Applies Weakness for 5...17...20 seconds when it ends.
 	Return 0
 EndFunc
 
@@ -1470,6 +2096,10 @@ Func CanUse_ShadowFang()
 EndFunc
 
 Func BestTarget_ShadowFang($a_f_AggroRange)
+	; Description
+	; Hex Spell. Shadow Step to target foe. End effect after 10 seconds: inflicts Deep Wound condition (5...17...20 seconds); you return to your original location.
+	; Concise description
+	; Spell. Shadow Step to target foe. End effect after 10 seconds: inflicts Deep Wound condition (5...17...20 seconds); you return to your original location.
 	Return 0
 EndFunc
 
@@ -1479,6 +2109,10 @@ Func CanUse_CalculatedRisk()
 EndFunc
 
 Func BestTarget_CalculatedRisk($a_f_AggroRange)
+	; Description
+	; Hex Spell. Target foe does +10 damage with attacks (3...20...24 seconds). There is a 50% chance that the damage from each attack (maximum 15...83...100) will be done to that foe instead.
+	; Concise description
+	; Spell. Target foe does +10 damage with attacks (3...20...24 seconds). There is a 50% chance that the damage from each attack (maximum 15...83...100) will be done to that foe instead.
 	Return 0
 EndFunc
 
@@ -1488,6 +2122,10 @@ Func CanUse_ShrinkingArmor()
 EndFunc
 
 Func BestTarget_ShrinkingArmor($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) Causes -1...3...4 Health degeneration. End effect: inflicts Cracked Armor condition (5...17...20 seconds).
+	; Concise description
+	; Spell. (10 seconds.) Causes -1...3...4 Health degeneration. End effect: inflicts Cracked Armor condition (5...17...20 seconds).
 	Return 0
 EndFunc
 
@@ -1497,6 +2135,10 @@ Func CanUse_WanderingEye()
 EndFunc
 
 Func BestTarget_WanderingEye($a_f_AggroRange)
+	; Description
+	; Hex Spell. (4 seconds.) Interrupts target foe's next attack. Interruption effect: 30...94...110 damage to nearby foes.
+	; Concise description
+	; Spell. (4 seconds.) Interrupts target foe's next attack. Interruption effect: 30...94...110 damage to nearby foes.
 	Return 0
 EndFunc
 
@@ -1506,6 +2148,10 @@ Func CanUse_PutridBile()
 EndFunc
 
 Func BestTarget_PutridBile($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...17...20 seconds.) Causes -1...3...3 Health degeneration. Deals 25...73...85 damage to all nearby foes if target foe dies.
+	; Concise description
+	; Spell. (5...17...20 seconds.) Causes -1...3...3 Health degeneration. Deals 25...73...85 damage to all nearby foes if target foe dies.
 	Return 0
 EndFunc
 
@@ -1515,6 +2161,10 @@ Func CanUse_SnaringWeb()
 EndFunc
 
 Func BestTarget_SnaringWeb($a_f_AggroRange)
+	; Description
+	; Hex Spell. Projectile: target and nearby foes are Crippled and activate skills 100% slower (15 seconds.)
+	; Concise description
+	; Spell. Projectile: target and nearby foes are Crippled and activate skills 100% slower (15 seconds.)
 	Return 0
 EndFunc
 
@@ -1524,6 +2174,10 @@ Func CanUse_WurmBile()
 EndFunc
 
 Func BestTarget_WurmBile($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) Deals 40 damage each second to nearby foes.
+	; Concise description
+	; Spell. (20 seconds.) Deals 40 damage each second to nearby foes.
 	Return 0
 EndFunc
 
@@ -1542,6 +2196,10 @@ Func CanUse_SpiritWorldRetreat()
 EndFunc
 
 Func BestTarget_SpiritWorldRetreat($a_f_AggroRange)
+	; Description
+	; Hex Spell. (3 seconds.) Hide in the Spirit World and hex all foes with -2 Energy degeneration. For each foe hexed, gain 75 Health.
+	; Concise description
+	; Spell. (3 seconds.) Hide in the Spirit World and hex all foes with -2 Energy degeneration. For each foe hexed, gain 75 Health.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1551,6 +2209,10 @@ Func CanUse_ConfusingImages()
 EndFunc
 
 Func BestTarget_ConfusingImages($a_f_AggroRange)
+	; Description
+	; Hex Spell. (2...8...10 seconds). Target foe takes twice as long to activate non-attack skills.
+	; Concise description
+	; Spell. (2...8...10 seconds). Target foe takes twice as long to activate non-attack skills.
 	Return 0
 EndFunc
 
@@ -1560,6 +2222,10 @@ Func CanUse_DefileDefenses()
 EndFunc
 
 Func BestTarget_DefileDefenses($a_f_AggroRange)
+	; Description
+	; Hex Spell. (5...17...20 seconds.) Deals 30...102...120 damage the next time target foe blocks.
+	; Concise description
+	; Spell. (5...17...20 seconds.) Deals 30...102...120 damage the next time target foe blocks.
 	Return 0
 EndFunc
 
@@ -1569,6 +2235,10 @@ Func CanUse_Atrophy()
 EndFunc
 
 Func BestTarget_Atrophy($a_f_AggroRange)
+	; Description
+	; Hex Spell. (3...6...7 seconds.) Reduces this foe's primary attribute to 0.
+	; Concise description
+	; Spell. (3...6...7 seconds.) Reduces this foe's primary attribute to 0.
 	Return 0
 EndFunc
 
@@ -1686,6 +2356,10 @@ Func CanUse_CrystalSnare()
 EndFunc
 
 Func BestTarget_CrystalSnare($a_f_AggroRange)
+	; Description
+	; Hex Spell. (10 seconds.) You move 50% slower. You take 100 damage if this hex ends before it is removed.
+	; Concise description
+	; Spell. (10 seconds.) You move 50% slower. You take 100 damage if this hex ends before it is removed.
 	Return 0
 EndFunc
 
@@ -1695,6 +2369,10 @@ Func CanUse_ParanoidIndignation()
 EndFunc
 
 Func BestTarget_ParanoidIndignation($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) -2 from your non-zero Attributes.
+	; Concise description
+	; Spell. (20 seconds.) -2 from your non-zero Attributes.
 	Return 0
 EndFunc
 
@@ -1704,6 +2382,10 @@ Func CanUse_ATouchOfGuile()
 EndFunc
 
 Func BestTarget_ATouchOfGuile($a_f_AggroRange)
+	; Description
+	; Hex Spell. Deals 44...80 damage. Target foe cannot attack (5...7...8 seconds) if it was knocked-down.
+	; Concise description
+	; Spell. Deals 44...80 damage. Target foe cannot attack (5...7...8 seconds) if it was knocked-down.
 	Return 0
 EndFunc
 
@@ -1713,6 +2395,10 @@ Func CanUse_AsuranScan()
 EndFunc
 
 Func BestTarget_AsuranScan($a_f_AggroRange)
+	; Description
+	; Hex Spell. (9...12 seconds.) You cannot miss target foe. If you kill this foe, you lose 5% Death Penalty.
+	; Concise description
+	; Spell. (9...12 seconds.) You cannot miss target foe. If you kill this foe, you lose 5% Death Penalty.
 	Return 0
 EndFunc
 
@@ -1731,6 +2417,10 @@ Func CanUse_TongueLash()
 EndFunc
 
 Func BestTarget_TongueLash($a_f_AggroRange)
+	; Description
+	; Hex Spell. (4 seconds.) Causes -12 Health degeneration; 25% chance to miss.
+	; Concise description
+	; Spell. (4 seconds.) Causes -12 Health degeneration; 25% chance to miss.
 	Return 0
 EndFunc
 
@@ -1749,6 +2439,10 @@ Func CanUse_TheMastersMark()
 EndFunc
 
 Func BestTarget_TheMastersMark($a_f_AggroRange)
+	; Description
+	; Hex Spell. (24 seconds.) Causes -1 Health degeneration. This hex ends if target foe is hit with The Sniper's Spear.
+	; Concise description
+	; Spell. (24 seconds.) Causes -1 Health degeneration. This hex ends if target foe is hit with The Sniper's Spear.
 	Return 0
 EndFunc
 
@@ -1758,6 +2452,10 @@ Func CanUse_TongueWhip()
 EndFunc
 
 Func BestTarget_TongueWhip($a_f_AggroRange)
+	; Description
+	; Hex Spell. Causes knock-down (3 seconds); inflicts a Deep Wound (10 seconds).
+	; Concise description
+	; Spell. Causes knock-down (3 seconds); inflicts a Deep Wound (10 seconds).
 	Return 0
 EndFunc
 
@@ -1767,6 +2465,10 @@ Func CanUse_Dishonorable()
 EndFunc
 
 Func BestTarget_Dishonorable($a_f_AggroRange)
+	; Description
+	; Hex Spell. You are considered Dishonorable because teammates repeatedly reported you for leeching, or because you abandoned your team in PvP matches. You may not participate in PvP until this effect expires.
+	; Concise description
+	; Spell. You are considered Dishonorable because teammates repeatedly reported you for leeching, or because you abandoned your team in PvP matches. You may not participate in PvP until this effect expires.
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1776,6 +2478,10 @@ Func CanUse_ReapersMark2()
 EndFunc
 
 Func BestTarget_ReapersMark2($a_f_AggroRange)
+	; Description
+	; Elite Hex Spell. (30 seconds.) Causes -1...4...5 Health degeneration. You gain 5...13...15 Energy if target foe dies while suffering from this hex.
+	; Concise description
+	; Hex Spell. (30 seconds.) Causes -1...4...5 Health degeneration. You gain 5...13...15 Energy if target foe dies while suffering from this hex.
 	Return 0
 EndFunc
 
@@ -1822,6 +2528,10 @@ Func CanUse_MadKingsFan()
 EndFunc
 
 Func BestTarget_MadKingsFan($a_f_AggroRange)
+	; Description
+	; Hex Spell. Mad King Thorn is pleased by your undying support. Survive his celebration for bonus treats!
+	; Concise description
+	; Spell. Mad King Thorn is pleased by your undying support. Survive his celebration for bonus treats!
 	Return Agent_GetMyID()
 EndFunc
 
@@ -1981,6 +2691,10 @@ Func CanUse_IsaiahsBalance()
 EndFunc
 
 Func BestTarget_IsaiahsBalance($a_f_AggroRange)
+	; Description
+	; Hex Spell. (20 seconds.) Also hexes nearby foes. The next skill used by target foes cost 25 Energy and recharges in 90 seconds.
+	; Concise description
+	; Spell. (20 seconds.) Also hexes nearby foes. The next skill used by target foes cost 25 Energy and recharges in 90 seconds.
 	Return 0
 EndFunc
 
@@ -2017,6 +2731,10 @@ Func CanUse_PromiseOfDeath()
 EndFunc
 
 Func BestTarget_PromiseOfDeath($a_f_AggroRange)
+	; Description
+	; Hex Spell. Target foe is Marked and can no longer evade attacks.
+	; Concise description
+	; Spell. Target foe is Marked and can no longer evade attacks.
 	Return 0
 EndFunc
 
@@ -2035,6 +2753,10 @@ Func CanUse_SkyNet()
 EndFunc
 
 Func BestTarget_SkyNet($a_f_AggroRange)
+	; Description
+	; Hex Spell. Launches a net. If it hits, your target is knocked down, and their movement speed is -66% for 10 seconds.
+	; Concise description
+	; Spell. Launches a net. If it hits, your target is knocked down, and their movement speed is -66% for 10 seconds.
 	Return 0
 EndFunc
 
