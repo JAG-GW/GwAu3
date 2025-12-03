@@ -17,6 +17,7 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 
 ;~ 	UPDATE CACHE FIRST
 		UAI_UpdateCache($a_f_AggroRange)
+		If UAI_CountAgents(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy") = 0 Then ExitLoop
 		If $g_b_CacheWeaponSet Then UAI_ShouldSwitchWeaponSet()
 
 ;~ 	CHECK PARTY
