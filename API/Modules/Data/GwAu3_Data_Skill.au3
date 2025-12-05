@@ -16,7 +16,7 @@ EndFunc
 
 Func Skill_GetSkillPtr($a_v_SkillID)
     If IsPtr($a_v_SkillID) Then Return $a_v_SkillID
-    Local $l_p_SkillPtr = $g_p_SkillBase + 0xA0 * $a_v_SkillID
+    Local $l_p_SkillPtr = $g_p_SkillBase + 0xA4 * $a_v_SkillID
     Return Ptr($l_p_SkillPtr)
 EndFunc
 

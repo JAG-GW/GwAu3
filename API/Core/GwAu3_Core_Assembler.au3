@@ -1966,6 +1966,13 @@ Func Assembler_CreateRenderingMod()
 	_('ljmp RenderingModReturn')
 EndFunc
 
+;~ Func Assembler_CreateRenderingMod_new()
+;~     _('RenderingModProc:')
+;~     _('add esp,8')
+;~     _('cmp dword[DisableRendering],1')
+;~     _('ljmp RenderingModReturn')
+;~ EndFunc
+
 Func Assembler_CreateLoadFinished()
     _('LoadFinishedProc:')
     _('mov dword[MapIsLoaded],1')
