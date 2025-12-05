@@ -110,6 +110,10 @@ Func Memory_GetScannedAddress($a_s_Label, $a_i_Offset)
     Return Memory_Read(Memory_GetLabelInfo($a_s_Label) + 8) - Memory_Read(Memory_GetLabelInfo($a_s_Label) + 4) + $a_i_Offset
 EndFunc
 
+;~ Func Memory_GetScannedAddress_new($a_s_Label, $a_i_Offset)
+;~     Return Memory_Read(Memory_GetLabelInfo($a_s_Label) + 8) - Memory_Read(Memory_GetLabelInfo($a_s_Label) + 4) + 1 + $a_i_Offset
+;~ EndFunc
+
 Func Memory_WriteDetour($a_s_From, $a_s_To)
     Memory_WriteBinary('E9' & Utils_SwapEndian(Hex(Memory_GetLabelInfo($a_s_To) - Memory_GetLabelInfo($a_s_From) - 5)), Memory_GetLabelInfo($a_s_From))
 EndFunc

@@ -704,6 +704,34 @@ Func Scanner_AddPattern($a_s_Name, $a_s_Pattern, $a_v_OffsetOrMsg = 0, $a_s_Type
     $g_amx2_Patterns[$l_i_Index][5] = $l_s_AssertionMsg
 EndFunc
 
+;~ Func Scanner_AddPattern_new($a_s_Name, $a_s_Pattern, $a_v_OffsetOrMsg = 0, $a_s_Type = 'Ptr', $a_i_OffsetIfAssertion = 0x0)
+;~     Local $l_i_Index = $g_amx2_Patterns[0][0] + 1
+;~     ReDim $g_amx2_Patterns[$l_i_Index + 1][6]
+;~     $g_amx2_Patterns[0][0] = $l_i_Index
+
+;~     Local $l_s_FullName = 'Scan' & $a_s_Name & $a_s_Type
+
+;~     Local $l_b_IsAssertion = False
+;~     Local $l_s_AssertionMsg = ""
+
+;~     If StringInStr($a_s_Pattern, ":\") Or StringInStr($a_s_Pattern, ":/") Then
+;~         $l_b_IsAssertion = True
+;~         $l_s_AssertionMsg = $a_v_OffsetOrMsg
+
+;~         Local $l_i_AssertIndex = UBound($g_amx2_AssertionPatterns)
+;~         ReDim $g_amx2_AssertionPatterns[$l_i_AssertIndex + 1][2]
+;~         $g_amx2_AssertionPatterns[$l_i_AssertIndex][0] = $a_s_Pattern
+;~         $g_amx2_AssertionPatterns[$l_i_AssertIndex][1] = $l_s_AssertionMsg
+;~     EndIf
+
+;~     $g_amx2_Patterns[$l_i_Index][0] = $l_s_FullName
+;~     $g_amx2_Patterns[$l_i_Index][1] = $a_s_Pattern
+;~     $g_amx2_Patterns[$l_i_Index][2] = $l_b_IsAssertion ? $a_i_OffsetIfAssertion : $a_v_OffsetOrMsg
+;~     $g_amx2_Patterns[$l_i_Index][3] = $a_s_Type
+;~     $g_amx2_Patterns[$l_i_Index][4] = $l_b_IsAssertion
+;~     $g_amx2_Patterns[$l_i_Index][5] = $l_s_AssertionMsg
+;~ EndFunc
+
 Func Scanner_ClearPatterns()
     ReDim $g_amx2_Patterns[1][6]
     $g_amx2_Patterns[0][0] = 0
@@ -746,7 +774,7 @@ Func Scanner_ScanAllPatterns()
     $g_i_ASMCodeOffset= 0
     $g_s_ASMCode = ''
 
-    _('MainModPtr/4')
+;~     _('MainModPtr/4')
 
     For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
         _($g_amx2_Patterns[$l_i_Idx][0] & ':')

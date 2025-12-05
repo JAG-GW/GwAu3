@@ -55,12 +55,14 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Scanner_AddPattern('StatusCode', '8945088D45086A04', -0x10, 'Ptr')
     Scanner_AddPattern('PacketSend', 'C747540000000081E6', -0x50, 'Func')
     Scanner_AddPattern('PacketLocation', '83C40433C08BE55DC3A1', 0xB, 'Ptr')
+;~ 	Scanner_AddPattern('Action', '8B7508578BF983FE09750C6877', -0x3, 'Func')
     Scanner_AddPattern('Action', '8B7508578BF983FE09750C6876', -0x3, 'Func')
     Scanner_AddPattern('ActionBase', '8D1C87899DF4', -0x3, 'Ptr')
 	Scanner_AddPattern('Environment', '6BC67C5E05', 0x6, 'Ptr')
     Scanner_AddPattern('PreGame', "P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene", 'Ptr')
     Scanner_AddPattern('FrameArray', "P:\Code\Engine\Frame\FrMsg.cpp", "frame", 'Ptr')
 	; Skill patterns
+;~ 	Scanner_AddPattern('SkillBase', '69C6A40000005E', 0xA, 'Ptr') / Scanner_AddPattern('SkillBase', "P:\Code\Gw\Const\ConstSkill.cpp", "index < arrsize(s_skill)", 'Ptr', 0x16) ;or 0x15
     Scanner_AddPattern('SkillBase', '8D04B6C1E00505', 0x8, 'Ptr')
     Scanner_AddPattern('SkillTimer', 'FFD68B4DF08BD88B4708', -0x3, 'Ptr')
     Scanner_AddPattern('UseSkill', '85F6745B83FE1174', -0x125, 'Func')
@@ -71,6 +73,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     Scanner_AddPattern('AddFriend', '8B751083FE037465', -0x47, 'Func')
     Scanner_AddPattern('RemoveFriend', '83F803741D83F8047418', 0x0, 'Func')
     ; Attribute patterns
+;~ 	Scanner_AddPattern('AttributeInfo', "P:\Code\Gw\Const\ConstAttrib.cpp", "index < arrsize(s_attrib)", 'Ptr', 0x12)
     Scanner_AddPattern('AttributeInfo', 'BA3300000089088d4004', -0x3, 'Ptr')
     Scanner_AddPattern('IncreaseAttribute', '8B7D088B702C8B1F3B9E00050000', -0x5A, 'Func')
     Scanner_AddPattern('DecreaseAttribute', '8B8AA800000089480C5DC3CC', 0x19, 'Func')
@@ -83,12 +86,14 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     ; Agent patterns
     Scanner_AddPattern('AgentBase', '8B0C9085C97419', -0x3, 'Ptr')
     Scanner_AddPattern('ChangeTarget', '3BDF0F95', -0x86, 'Func')
+;~ 	Scanner_AddPattern('CurrentTarget', '83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC55', -0xE, 'Ptr')
     Scanner_AddPattern('CurrentTarget', '83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCC55', -0xE, 'Ptr')
     Scanner_AddPattern('MyID', '83EC08568BF13B15', -0x3, 'Ptr')
     ; Map patterns
     Scanner_AddPattern('Move', '558BEC83EC208D45F0', 0x1, 'Func')
     Scanner_AddPattern('ClickCoords', '8B451C85C0741CD945F8', 0xD, 'Ptr')
     Scanner_AddPattern('InstanceInfo', '6A2C50E80000000083C408C7', 0xE, 'Ptr')
+;~ 	Scanner_AddPattern('WorldConst', "P:\Code\Gw\Const\ConstWorld.cpp", "index < arrsize(s_worldData)", 'Ptr', 0x16)
     Scanner_AddPattern('WorldConst', '8D0476C1E00405', 0x8, 'Ptr')
     Scanner_AddPattern('Region', '6A548D46248908', -0x3, 'Ptr')
 	Scanner_AddPattern('AreaInfo', '6BC67C5E05', 0x6, 'Ptr')
@@ -96,7 +101,8 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Scanner_AddPattern('TradeCancel', 'C745FC01000000506A04', -0x6, 'Func')
 	; Ui patterns
 	Scanner_AddPattern('UIMessage', 'B900000000E8000000005DC3894508', -0x14, 'Func')
-	Scanner_AddPattern('CompassFlag', '8D451050566A4E57', -0x1F, 'Func')
+;~ 	Scanner_AddPattern('CompassFlag', '8D451050566A4D57', -0x1F, 'Func')
+	Scanner_AddPattern('CompassFlag', '8D451050566A4D57', -0x1F, 'Func')
 	Scanner_AddPattern('PartySearchButtonCallback', '8B450883EC08568BF18B480483F90D', -0x2, 'Func')
 	Scanner_AddPattern('PartyWindowButtonCallback', '51837D0800568BF174', -0x2, 'Func')
 	Scanner_AddPattern('EnterMission', 'A900001000743A', 0x52, 'Func')
@@ -115,7 +121,6 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	If IsDeclared("g_b_AddPattern") Then Extend_AddPattern()
 
     $g_ap_ScanResults = Scanner_ScanAllPatterns()
-
 
 	Local $l_p_Temp
     ;Core

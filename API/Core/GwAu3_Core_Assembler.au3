@@ -1627,7 +1627,7 @@ Func _($a_s_ASM)
 				; Action
 				Case 'cmp dword[eax+C],0'
 					$l_s_OpCode = '83780C00'
-					
+
 				Case Else
 					Log_Error('Could not assemble: ' & $a_s_ASM, 'ASM', $g_h_EditText)
 					MsgBox(0x0, 'ASM', 'Could not assemble: ' & $a_s_ASM)
@@ -1823,6 +1823,9 @@ Func Assembler_ModifyMemory()
 			If IsDeclared("g_b_Write") Then Extend_Write()
 		Case Else
 			Assembler_CompleteASMCode()
+;~ 			Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
+;~ 			Memory_Write(Memory_GetValue('QueuePtr'), Memory_GetValue('QueueBase'))
+;~ 			If IsDeclared("g_b_Write") Then Extend_Write()
 	EndSwitch
 	Memory_WriteDetour('MainStart', 'MainProc')
 	Memory_WriteDetour('TraderStart', 'TraderProc')
@@ -2411,7 +2414,7 @@ Func Assembler_CreateUICommands()
 	_('call AddNPC')
 	_('add esp,4')
 	_('ljmp CommandReturn')
-	
+
 	_('CommandAddHero:')
 	_('push dword[eax+4]')
 	_('call AddHero')
