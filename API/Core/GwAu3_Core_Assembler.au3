@@ -1785,7 +1785,8 @@ EndFunc
 Func Assembler_ModifyMemory()
 	$g_i_ASMSize = 0
 	$g_i_ASMCodeOffset= 0
-	$g_s_ASMCode = ''
+	$g_s_ASMCode = ""
+	
 	Assembler_CreateData()
 	Assembler_CreateMain()
 	Assembler_CreateRenderingMod()
@@ -1810,29 +1811,39 @@ Func Assembler_ModifyMemory()
 	Assembler_CreateTradeCommands()
 	Assembler_CreateUICommands()
 	If IsDeclared("g_b_Assembler") Then Extend_Assembler()
-	$g_p_ASMMemory = Memory_Read(Memory_Read($g_p_GWBaseAddress), 'ptr')
 
-	Switch $g_p_ASMMemory
-		Case 0
-			$g_p_ASMMemory = DllCall($g_h_Kernel32, 'ptr', 'VirtualAllocEx', 'handle', $g_h_GWProcess, 'ptr', 0, 'ulong_ptr', $g_i_ASMSize, 'dword', 0x1000, 'dword', 64)
-			$g_p_ASMMemory = $g_p_ASMMemory[0]
-			Memory_Write(Memory_Read($g_p_GWBaseAddress), $g_p_ASMMemory)
-			Assembler_CompleteASMCode()
-			Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
-			Memory_Write(Memory_GetValue('QueuePtr'), Memory_GetValue('QueueBase'))
-			If IsDeclared("g_b_Write") Then Extend_Write()
-		Case Else
-			Assembler_CompleteASMCode()
-;~ 			Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
-;~ 			Memory_Write(Memory_GetValue('QueuePtr'), Memory_GetValue('QueueBase'))
-;~ 			If IsDeclared("g_b_Write") Then Extend_Write()
-	EndSwitch
-	Memory_WriteDetour('MainStart', 'MainProc')
-	Memory_WriteDetour('TraderStart', 'TraderProc')
-	Memory_WriteDetour('RenderingMod', 'RenderingModProc')
-	Memory_WriteDetour('LoadFinishedStart', 'LoadFinishedProc')
-	Memory_WriteDetour('TradePartnerStart', 'TradePartnerProc')
-	If IsDeclared("g_b_AssemblerWriteDetour") Then Extend_AssemblerWriteDetour()
+	Local $l_b_AllocCmd = False
+	$g_p_GwAu3Cmd = Memory_Read($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_CMDPTR, "ptr")
+	If $g_p_GwAu3Cmd = 0 Then
+        Local $l_av_CmdAlloc = DllCall($g_h_Kernel32, "ptr", "VirtualAllocEx", _
+            "handle", $g_h_GWProcess, _
+            "ptr", 0, _
+            "ulong_ptr", $g_i_ASMSize, _
+            "dword", 0x1000, _
+            "dword", 0x40)
+
+        $g_p_GwAu3Cmd = $l_av_CmdAlloc[0]
+
+        Memory_Write($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_CMDPTR, $g_p_GwAu3Cmd)
+
+		$l_b_AllocCmd = True
+	EndIf
+
+	$g_p_ASMMemory = $g_p_GwAu3Cmd
+	Assembler_CompleteASMCode()
+
+	If $l_b_AllocCmd Or $GC_B_DEV_MODE Then
+		Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
+		Memory_Write(Memory_GetValue('QueuePtr'), Memory_GetValue('QueueBase'))
+		If IsDeclared("g_b_Write") Then Extend_Write()
+
+		Memory_WriteDetour('MainStart', 'MainProc')
+		Memory_WriteDetour('TraderStart', 'TraderProc')
+		Memory_WriteDetour('RenderingMod', 'RenderingModProc')
+		Memory_WriteDetour('LoadFinishedStart', 'LoadFinishedProc')
+		Memory_WriteDetour('TradePartnerStart', 'TradePartnerProc')
+		If IsDeclared("g_b_AssemblerWriteDetour") Then Extend_AssemblerWriteDetour()
+    EndIf
 EndFunc
 
 Func Assembler_CreateData()

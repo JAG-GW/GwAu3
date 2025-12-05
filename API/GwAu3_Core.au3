@@ -339,9 +339,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Debug("TradePartnerReturn: " & Memory_GetValue('TradePartnerReturn'), "Initialize", $g_h_EditText)
 	If IsDeclared("g_b_Scanner") Then Extend_Scanner()
 
-
 	Memory_SetValue('QueueSize', '0x00000040')
-
 
     ; Modify memory
     Assembler_ModifyMemory()
@@ -359,7 +357,6 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	$g_p_MapIsLoaded = Memory_GetValue('MapIsLoaded')
 	$g_p_TradePartner = Memory_GetValue('TradePartner')
 	If IsDeclared("g_b_InitializeResult") Then Extend_InitializeResult()
-
 
     ; Setup command structures
     DllStructSetData($g_d_InviteGuild, 1, Memory_GetValue('CommandPacketSend'))

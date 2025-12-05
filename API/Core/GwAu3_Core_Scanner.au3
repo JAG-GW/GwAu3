@@ -575,7 +575,7 @@ EndFunc
 Func Scanner_GetHwnd($a_i_Proc)
     Local $l_as_Wins = WinList("[CLASS:" & $GC_S_CLASS_DX_WINDOW & "]")
     For $l_i_Idx = 1 To UBound($l_as_Wins) - 1
-        If WinGetProcess($l_as_Wins[$l_i_Idx][1]) = $a_i_Proc Then Return $l_as_Wins[$l_i_Idx][1]; And BitAND(WinGetState($l_as_Wins[$l_i_Idx][1]), 2)
+        If WinGetProcess($l_as_Wins[$l_i_Idx][1]) = $a_i_Proc Then Return $l_as_Wins[$l_i_Idx][1]
     Next
 EndFunc
 
@@ -676,6 +676,53 @@ Func Scanner_ScanForCharname()
     Return ''
 EndFunc
 
+Func Scanner_ScanForGwAu3()
+    Local $l_s_Header = $GC_S_GWAU3_HEADER_STR
+    Local $l_p_CurrentSearchAddress = 0x00000000
+    Local $l_ai_MBI[7]
+    Local $l_d_MBIBuffer = DllStructCreate("dword;dword;dword;dword;dword;dword;dword")
+    Local $l_i_Search, $l_s_TmpMemData, $l_i_Idx
+    Local Const $LC_I_PARTIAL_END = 0x01F00000
+
+    While True
+        Local $l_av_Ret = DllCall($g_h_Kernel32, "int", "VirtualQueryEx", _
+            "int", $g_h_GWProcess, _
+            "ptr", $l_p_CurrentSearchAddress, _
+            "ptr", DllStructGetPtr($l_d_MBIBuffer), _
+            "int", DllStructGetSize($l_d_MBIBuffer))
+
+        If $l_av_Ret[0] = 0 Then ExitLoop
+
+        For $l_i_Idx = 0 To 6
+            $l_ai_MBI[$l_i_Idx] = DllStructGetData($l_d_MBIBuffer, $l_i_Idx + 1)
+        Next
+
+        If $l_ai_MBI[4] = 4096 Then
+            Local $l_d_Buffer = DllStructCreate("byte[" & $l_ai_MBI[3] & "]")
+
+            DllCall($g_h_Kernel32, "int", "ReadProcessMemory", _
+                "int", $g_h_GWProcess, _
+                "ptr", $l_p_CurrentSearchAddress, _
+                "ptr", DllStructGetPtr($l_d_Buffer), _
+                "int", DllStructGetSize($l_d_Buffer), _
+                "int", "")
+
+            $l_s_TmpMemData = BinaryToString(DllStructGetData($l_d_Buffer, 1))
+
+            $l_i_Search = StringInStr($l_s_TmpMemData, $l_s_Header, 2)
+            If $l_i_Search > 0 Then
+                Local $l_p_HeaderAddr = $l_p_CurrentSearchAddress + ($l_i_Search - 1)
+                Return $l_p_HeaderAddr
+            EndIf
+        EndIf
+
+        $l_p_CurrentSearchAddress += $l_ai_MBI[3]
+        If $l_p_CurrentSearchAddress = 0 Then ExitLoop
+    WEnd
+
+    Return 0
+EndFunc
+
 Func Scanner_AddPattern($a_s_Name, $a_s_Pattern, $a_v_OffsetOrMsg = 0, $a_s_Type = 'Ptr')
     Local $l_i_Index = $g_amx2_Patterns[0][0] + 1
     ReDim $g_amx2_Patterns[$l_i_Index + 1][6]
@@ -753,7 +800,7 @@ Func Scanner_GetPatternInfo($a_s_Name, $a_s_Type = '')
     Return 0
 EndFunc
 
-Func Scanner_ScanAllPatterns()
+Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
     Local $l_p_GwBase = Scanner_ScanForProcess()
     Local $l_ap_Results[$g_amx2_Patterns[0][0] + 1]
     $l_ap_Results[0] = $g_amx2_Patterns[0][0]
@@ -771,47 +818,80 @@ Func Scanner_ScanAllPatterns()
     EndIf
 
     $g_i_ASMSize = 0
-    $g_i_ASMCodeOffset= 0
-    $g_s_ASMCode = ''
+    $g_i_ASMCodeOffset = 0
+    $g_s_ASMCode = ""
 
-;~     _('MainModPtr/4')
+    If $a_b_DynamicAlloc Then
+        $g_p_GwAu3Header = Scanner_ScanForGwAu3()
+        If $g_p_GwAu3Header = 0 Then 
+            Local $l_av_Alloc = DllCall($g_h_Kernel32, "ptr", "VirtualAllocEx", _
+            "handle", $g_h_GWProcess, _
+            "ptr", 0, _
+            "ulong_ptr", $GC_I_GWAU3_HEADER_SIZE, _
+            "dword", 0x1000, _
+            "dword", 0x40)
+
+            $g_p_GwAu3Header = $l_av_Alloc[0]
+        EndIf
+    Else
+        $g_p_GwAu3Header = $l_p_GwBase + 0x9EF000
+    EndIf
+
+    Memory_WriteBinary($GC_S_GWAU3_HEADER_BIN, $g_p_GwAu3Header)
 
     For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
-        _($g_amx2_Patterns[$l_i_Idx][0] & ':')
+        _($g_amx2_Patterns[$l_i_Idx][0] & ":")
         Scanner_AddPatternToASM($g_amx2_Patterns[$l_i_Idx][1])
     Next
 
     Assembler_CreateScanProcedure($l_p_GwBase)
 
-    $g_p_GWBaseAddress = $l_p_GwBase + 0x9DF000
-    Local $l_p_ScanMemory = Memory_Read($g_p_GWBaseAddress, 'ptr')
+    Local $l_b_AllocScan = False
+    $g_p_GwAu3Scan = Memory_Read($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_SCANPTR, "ptr")
+    If $g_p_GwAu3Scan = 0 Then
+        Local $l_av_ScanAlloc = DllCall($g_h_Kernel32, "ptr", "VirtualAllocEx", _
+            "handle", $g_h_GWProcess, _
+            "ptr", 0, _
+            "ulong_ptr", $g_i_ASMSize, _
+            "dword", 0x1000, _
+            "dword", 0x40)
 
-    If $l_p_ScanMemory = 0 Then
-        $g_p_ASMMemory = DllCall($g_h_Kernel32, 'ptr', 'VirtualAllocEx', 'handle', $g_h_GWProcess, 'ptr', 0, 'ulong_ptr', $g_i_ASMSize, 'dword', 0x1000, 'dword', 0x40)
-        $g_p_ASMMemory = $g_p_ASMMemory[0]
-        Memory_Write($g_p_GWBaseAddress, $g_p_ASMMemory)
-    Else
-        $g_p_ASMMemory = $l_p_ScanMemory
+        $g_p_GwAu3Scan = $l_av_ScanAlloc[0]
+
+        Memory_Write($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_SCANPTR, $g_p_GwAu3Scan)
+
+        $l_b_AllocScan = True
     EndIf
 
+    $g_p_ASMMemory = $g_p_GwAu3Scan
     Assembler_CompleteASMCode()
 
-    If $l_p_ScanMemory = 0 Then
+    If $l_b_AllocScan Or $GC_B_DEV_MODE Then
         Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
 
-        Local $l_h_Thread = DllCall($g_h_Kernel32, 'int', 'CreateRemoteThread', 'int', $g_h_GWProcess, 'ptr', 0, 'int', 0, 'int', Memory_GetLabelInfo('ScanProc'), 'ptr', 0, 'int', 0, 'int', 0)
-        $l_h_Thread = $l_h_Thread[0]
+        Local $l_h_Thread = DllCall($g_h_Kernel32, "int", "CreateRemoteThread", _
+            "int", $g_h_GWProcess, _
+            "ptr", 0, _
+            "int", 0, _
+            "int", Memory_GetLabelInfo("ScanProc"), _
+            "ptr", 0, _
+            "int", 0, _
+            "int", 0)
+            
+        $l_h_Thread = $l_h_Thread[0]  
 
         Local $l_av_Result
         Do
-            $l_av_Result = DllCall($g_h_Kernel32, 'int', 'WaitForSingleObject', 'int', $l_h_Thread, 'int', 50)
+            $l_av_Result = DllCall($g_h_Kernel32, "int", "WaitForSingleObject", "int", $l_h_Thread, "int", 50)
         Until $l_av_Result[0] <> 258
 
-        DllCall($g_h_Kernel32, 'int', 'CloseHandle', 'int', $l_h_Thread)
+        DllCall($g_h_Kernel32, "int", "CloseHandle", "int", $l_h_Thread)
     EndIf
 
     For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
-        $l_ap_Results[$l_i_Idx] = Memory_GetScannedAddress($g_amx2_Patterns[$l_i_Idx][0], $g_amx2_Patterns[$l_i_Idx][2])
+        $l_ap_Results[$l_i_Idx] = Memory_GetScannedAddress( _
+            $g_amx2_Patterns[$l_i_Idx][0], _
+            $g_amx2_Patterns[$l_i_Idx][2])
     Next
 
     Return $l_ap_Results
