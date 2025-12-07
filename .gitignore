@@ -1,6 +1,9 @@
 *.txt
 *.ini
-Extend/
+
+/Extend/*
 /Scripts/*
+
 !/Scripts/Exemples/
+!/Scripts/Tools/
 !/Scripts/Multi-Launcher/

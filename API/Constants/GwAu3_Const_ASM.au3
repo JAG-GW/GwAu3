@@ -2,7 +2,7 @@
 
 #Region Assembler Variables
 ; Variables for assembler functionality
-Global Const $GC_B_DEV_MODE = False ; Flag used for ASM development/testing
+Global $GC_B_DEV_MODE = False ; Flag used for ASM development/testing
 
 Global Const $GC_S_GWAU3_HEADER_BIN = "4757415533415049"
 Global Const $GC_S_GWAU3_HEADER_STR = "GWAU3API"
