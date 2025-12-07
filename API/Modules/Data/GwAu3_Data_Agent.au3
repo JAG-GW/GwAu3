@@ -76,7 +76,7 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
             Return Memory_Read($l_p_AgentPtr + 0x14, "dword")
         Case "Timer2"
             Return Memory_Read($l_p_AgentPtr + 0x18, "dword")
-        Case "h0018"
+        Case "h001C"
             Return Memory_Read($l_p_AgentPtr + 0x1C, "dword[4]")
         Case "ID"
             Return Memory_Read($l_p_AgentPtr + 0x2C, "long")
@@ -193,47 +193,49 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
             Return Memory_Read($l_p_AgentPtr + 0xFC, "ptr")
         Case "h0100"
             Return Memory_Read($l_p_AgentPtr + 0x100, "dword")
+		Case "h0104_new"
+			Return Memory_Read($l_p_AgentPtr + 0x104, "dword")
         Case "Tags"
-            Return Memory_Read(Memory_Read($l_p_AgentPtr + 0x104, "ptr"), "short")
-        Case "h0108"
-            Return Memory_Read($l_p_AgentPtr + 0x108, "short")
+            Return Memory_Read(Memory_Read($l_p_AgentPtr + 0x108, "ptr"), "short")
+        Case "h010C"
+            Return Memory_Read($l_p_AgentPtr + 0x10C, "short")
         Case "Primary"
-            Return Memory_Read($l_p_AgentPtr + 0x10A, "byte")
+            Return Memory_Read($l_p_AgentPtr + 0x10E, "byte")
         Case "Secondary"
-            Return Memory_Read($l_p_AgentPtr + 0x10B, "byte")
+            Return Memory_Read($l_p_AgentPtr + 0x10F, "byte")
         Case "Level"
-            Return Memory_Read($l_p_AgentPtr + 0x10C, "byte")
+            Return Memory_Read($l_p_AgentPtr + 0x110, "byte")
         Case "Team"
-            Return Memory_Read($l_p_AgentPtr + 0x10D, "byte")
-        Case "h010E"
-            Return Memory_Read($l_p_AgentPtr + 0x10E, "byte[2]")
-        Case "h0110"
-            Return Memory_Read($l_p_AgentPtr + 0x110, "dword")
-        Case "EnergyRegen"
-            Return Memory_Read($l_p_AgentPtr + 0x114, "float")
-        Case "Overcast"
+            Return Memory_Read($l_p_AgentPtr + 0x111, "byte")
+        Case "h0112"
+            Return Memory_Read($l_p_AgentPtr + 0x112, "byte[2]")
+        Case "h0114"
+            Return Memory_Read($l_p_AgentPtr + 0x114, "dword")
+        Case "EnergyPips", "EnergyRegen"
             Return Memory_Read($l_p_AgentPtr + 0x118, "float")
-        Case "EnergyPercent"
+        Case "Overcast"
             Return Memory_Read($l_p_AgentPtr + 0x11C, "float")
+        Case "EnergyPercent"
+            Return Memory_Read($l_p_AgentPtr + 0x120, "float")
         Case "MaxEnergy"
-            Return Memory_Read($l_p_AgentPtr + 0x120, "dword")
-		Case "CurrentEnergy"
-			Return Memory_Read($l_p_AgentPtr + 0x11C, "float") * Memory_Read($l_p_AgentPtr + 0x120, "dword")
-        Case "h0124"
             Return Memory_Read($l_p_AgentPtr + 0x124, "dword")
-        Case "HPPips"
-            Return Memory_Read($l_p_AgentPtr + 0x128, "float")
-        Case "h012C"
-            Return Memory_Read($l_p_AgentPtr + 0x12C, "dword")
+		Case "CurrentEnergy"
+			Return Memory_Read($l_p_AgentPtr + 0x120, "float") * Memory_Read($l_p_AgentPtr + 0x124, "dword")
+        Case "h0128"
+            Return Memory_Read($l_p_AgentPtr + 0x128, "dword")
+        Case "HPPips", "HPRegen"
+            Return Memory_Read($l_p_AgentPtr + 0x12C, "float")
+        Case "h0130"
+            Return Memory_Read($l_p_AgentPtr + 0x130, "dword")
         Case "HP", "HPPercent"
-            Return Memory_Read($l_p_AgentPtr + 0x130, "float")
+            Return Memory_Read($l_p_AgentPtr + 0x134, "float")
         Case "MaxHP"
-            Return Memory_Read($l_p_AgentPtr + 0x134, "dword")
+            Return Memory_Read($l_p_AgentPtr + 0x138, "dword")
 		Case "CurrentHP"
-			Return Memory_Read($l_p_AgentPtr + 0x130, "float") * Memory_Read($l_p_AgentPtr + 0x134, "dword")
+			Return Memory_Read($l_p_AgentPtr + 0x134, "float") * Memory_Read($l_p_AgentPtr + 0x138, "dword")
 
         Case "Effects"
-            Return Memory_Read($l_p_AgentPtr + 0x138, "dword")
+            Return Memory_Read($l_p_AgentPtr + 0x13C, "dword")
 		Case "EffectCount"
             Local $l_i_AgentID = Agent_ConvertID($a_i_AgentID)
             Local $l_a_Offset[4] = [0, 0x18, 0x2C, 0x508]
@@ -276,79 +278,77 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
 
 
 		Case "IsBleeding"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0001) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0001) > 0
 		Case "IsConditioned"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0002) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0002) > 0
 		Case "IsCrippled"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x000A) = 0xA
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x000A) = 0xA
 		Case "IsDead"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0010) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0010) > 0
 		Case "IsDeepWounded"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0020) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0020) > 0
 		Case "IsPoisoned"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0040) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0040) > 0
 		Case "IsEnchanted"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0080) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0080) > 0
 		Case "IsDegenHexed"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0400) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0400) > 0
 		Case "IsHexed"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x0800) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x0800) > 0
 		Case "IsWeaponSpelled"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x138, "dword"), 0x8000) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x13C, "dword"), 0x8000) > 0
 
-        Case "h013C"
-            Return Memory_Read($l_p_AgentPtr + 0x13C, "dword")
+        Case "h0140"
+            Return Memory_Read($l_p_AgentPtr + 0x140, "dword")
         Case "Hex"
-            Return Memory_Read($l_p_AgentPtr + 0x140, "byte")
-        Case "h0141"
-            Return Memory_Read($l_p_AgentPtr + 0x141, "byte[19]")
+            Return Memory_Read($l_p_AgentPtr + 0x144, "byte")
+        Case "h0145"
+            Return Memory_Read($l_p_AgentPtr + 0x145, "byte[19]")
 
         Case "ModelState"
-            Return Memory_Read($l_p_AgentPtr + 0x154, "dword")
+            Return Memory_Read($l_p_AgentPtr + 0x158, "dword")
 		Case "IsKnockedDown", "IsKnocked"
-			Return Memory_Read($l_p_AgentPtr + 0x154, "dword") = 0x450
+			Return Memory_Read($l_p_AgentPtr + 0x158, "dword") = 0x450
 		Case "IsMoving"
 			If Memory_Read($l_p_AgentPtr + 0xA0, "float") <> 0 Or Memory_Read($l_p_AgentPtr + 0xA4, "float") <> 0 Then Return True
-			If Memory_Read($l_p_AgentPtr + 0x154, "dword") = 12 Or Memory_Read($l_p_AgentPtr + 0x154, "dword") = 76 Or Memory_Read($l_p_AgentPtr + 0x154, "dword") = 204 Then Return True
+			If Memory_Read($l_p_AgentPtr + 0x158, "dword") = 12 Or Memory_Read($l_p_AgentPtr + 0x158, "dword") = 76 Or Memory_Read($l_p_AgentPtr + 0x158, "dword") = 204 Then Return True
 			Return False
 		Case "IsAttacking"
-			If Memory_Read($l_p_AgentPtr + 0x154, "dword") = 0x60 Or Memory_Read($l_p_AgentPtr + 0x154, "dword") = 0x440 Or Memory_Read($l_p_AgentPtr + 0x154, "dword") = 0x460 Then Return True
+			If Memory_Read($l_p_AgentPtr + 0x158, "dword") = 0x60 Or Memory_Read($l_p_AgentPtr + 0x158, "dword") = 0x440 Or Memory_Read($l_p_AgentPtr + 0x158, "dword") = 0x460 Then Return True
 			Return False
 		Case "IsCasting"
-			If Memory_Read($l_p_AgentPtr + 0x1B4, "short") <> 0 Then Return True
-			If Memory_Read($l_p_AgentPtr + 0x154, "dword") = 0x41 Or Memory_Read($l_p_AgentPtr + 0x154, "dword") = 0x245 Then Return True
+			If Memory_Read($l_p_AgentPtr + 0x1B8, "short") <> 0 Then Return True
+			If Memory_Read($l_p_AgentPtr + 0x158, "dword") = 0x41 Or Memory_Read($l_p_AgentPtr + 0x158, "dword") = 0x245 Then Return True
 			Return False
 		Case "IsIdle"
-			If Memory_Read($l_p_AgentPtr + 0x154, "dword") = 68 Or Memory_Read($l_p_AgentPtr + 0x154, "dword") = 64 Or Memory_Read($l_p_AgentPtr + 0x154, "dword") = 100 Then Return True
+			If Memory_Read($l_p_AgentPtr + 0x158, "dword") = 68 Or Memory_Read($l_p_AgentPtr + 0x158, "dword") = 64 Or Memory_Read($l_p_AgentPtr + 0x158, "dword") = 100 Then Return True
 			Return False
 
         Case "TypeMap"
-            Return Memory_Read($l_p_AgentPtr + 0x158, "dword")
+            Return Memory_Read($l_p_AgentPtr + 0x15C, "dword")
 		Case "InCombatStance"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x000001) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x000001) > 0
 		Case "HasQuest"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x000002) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x000002) > 0
 		Case "IsDeadByTypeMap"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x000008) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x000008) > 0
 		Case "IsFemale"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x000200) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x000200) > 0
 		Case "HasBossGlow"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x000400) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x000400) > 0
 		Case "IsHidingCap"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x001000) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x001000) > 0
 		Case "CanBeViewedInPartyWindow"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x20000) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x20000) > 0
 		Case "IsSpawned"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x040000) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x040000) > 0
 		Case "IsBeingObserved"
-			Return BitAND(Memory_Read($l_p_AgentPtr + 0x158, "dword"), 0x400000) > 0
+			Return BitAND(Memory_Read($l_p_AgentPtr + 0x15C, "dword"), 0x400000) > 0
 
-        Case "h015C"
-            Return Memory_Read($l_p_AgentPtr + 0x15C, "dword[4]")
+        Case "h0160"
+            Return Memory_Read($l_p_AgentPtr + 0x160, "dword[4]")
         Case "InSpiritRange"
-            Return Memory_Read($l_p_AgentPtr + 0x16C, "dword")
-
-
+            Return Memory_Read($l_p_AgentPtr + 0x170, "dword")
 		Case "VisibleEffectsPtr"
 			Return $l_p_AgentPtr + 0x174
 		Case "VisibleEffectsPrevLink"
@@ -361,42 +361,42 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
 		Case "HasVisibleEffects"
 			Return VisibleEffect_Count($a_i_AgentID) > 0
 
-        Case "h017C"
-            Return Memory_Read($l_p_AgentPtr + 0x17C, "dword")
+        Case "h0180"
+            Return Memory_Read($l_p_AgentPtr + 0x180, "dword")
 
         Case "LoginNumber"
-            Return Memory_Read($l_p_AgentPtr + 0x180, "dword")
+            Return Memory_Read($l_p_AgentPtr + 0x184, "dword")
 		Case "IsPlayer"
-			Return Memory_Read($l_p_AgentPtr + 0x180, "dword") <> 0
+			Return Memory_Read($l_p_AgentPtr + 0x184, "dword") <> 0
 		Case "IsNPC"
-			Return Memory_Read($l_p_AgentPtr + 0x180, "dword") = 0
+			Return Memory_Read($l_p_AgentPtr + 0x184, "dword") = 0
 
         Case "AnimationSpeed"
-            Return Memory_Read($l_p_AgentPtr + 0x184, "float")
+            Return Memory_Read($l_p_AgentPtr + 0x188, "float")
         Case "AnimationCode"
-            Return Memory_Read($l_p_AgentPtr + 0x188, "dword")
-        Case "AnimationId"
             Return Memory_Read($l_p_AgentPtr + 0x18C, "dword")
-        Case "h0190"
-            Return Memory_Read($l_p_AgentPtr + 0x190, "byte[32]")
+        Case "AnimationId"
+            Return Memory_Read($l_p_AgentPtr + 0x190, "dword")
+        Case "h0194"
+            Return Memory_Read($l_p_AgentPtr + 0x194, "byte[32]")
         Case "LastStrike"
-            Return Memory_Read($l_p_AgentPtr + 0x1B0, "byte")
+            Return Memory_Read($l_p_AgentPtr + 0x1B4, "byte")
         Case "Allegiance"
-            Return Memory_Read($l_p_AgentPtr + 0x1B1, "byte")
+            Return Memory_Read($l_p_AgentPtr + 0x1B5, "byte")
         Case "WeaponType"
-            Return Memory_Read($l_p_AgentPtr + 0x1B2, "short")
-        Case "Skill"
-            Return Memory_Read($l_p_AgentPtr + 0x1B4, "short")
-        Case "h01B6"
             Return Memory_Read($l_p_AgentPtr + 0x1B6, "short")
-        Case "WeaponItemType"
-            Return Memory_Read($l_p_AgentPtr + 0x1B8, "byte")
-        Case "OffhandItemType"
-            Return Memory_Read($l_p_AgentPtr + 0x1B9, "byte")
-        Case "WeaponItemId"
+        Case "Skill"
+            Return Memory_Read($l_p_AgentPtr + 0x1B8, "short")
+        Case "h01BA"
             Return Memory_Read($l_p_AgentPtr + 0x1BA, "short")
+        Case "WeaponItemType"
+            Return Memory_Read($l_p_AgentPtr + 0x1BC, "byte")
+        Case "OffhandItemType"
+            Return Memory_Read($l_p_AgentPtr + 0x1BD, "byte")
+        Case "WeaponItemId"
+            Return Memory_Read($l_p_AgentPtr + 0x1BE, "short")
         Case "OffhandItemId"
-            Return Memory_Read($l_p_AgentPtr + 0x1BC, "short")
+            Return Memory_Read($l_p_AgentPtr + 0x1C0, "short")
 
 		Case "Name"
 			Return 0 ;in progress

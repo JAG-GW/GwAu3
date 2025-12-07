@@ -1,7 +1,7 @@
 #RequireAdmin
 #include "../../API/_GwAu3.au3"
-#include "../../Tools/ImGui/ImGui.au3"
-#include "../../Tools/ImGui/ImGui_Utils.au3"
+#include "../../Utilities/ImGui/ImGui.au3"
+#include "../../Utilities/ImGui/ImGui_Utils.au3"
 
 Global Const $doLoadLoggedChars = True
 Opt("GUIOnEventMode", False)

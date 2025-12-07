@@ -62,8 +62,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     Scanner_AddPattern('PreGame', "P:\Code\Gw\Ui\UiPregame.cpp", "!s_scene", 'Ptr')
     Scanner_AddPattern('FrameArray', "P:\Code\Engine\Frame\FrMsg.cpp", "frame", 'Ptr')
 	; Skill patterns
-;~ 	Scanner_AddPattern('SkillBase', '69C6A40000005E', 0xA, 'Ptr') / Scanner_AddPattern('SkillBase', "P:\Code\Gw\Const\ConstSkill.cpp", "index < arrsize(s_skill)", 'Ptr', 0x16) ;or 0x15
-    Scanner_AddPattern('SkillBase', '8D04B6C1E00505', 0x8, 'Ptr')
+	Scanner_AddPattern('SkillBase', '69C6A40000005E', 0x9, 'Ptr') ;/ Scanner_AddPattern('SkillBase', "P:\Code\Gw\Const\ConstSkill.cpp", "index < arrsize(s_skill)", 'Ptr', 0x16) ;or 0x15
     Scanner_AddPattern('SkillTimer', 'FFD68B4DF08BD88B4708', -0x3, 'Ptr')
     Scanner_AddPattern('UseSkill', '85F6745B83FE1174', -0x125, 'Func')
     Scanner_AddPattern('UseHeroSkill', 'BA02000000B954080000', -0x59, 'Func')
@@ -87,8 +86,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     ; Agent patterns
     Scanner_AddPattern('AgentBase', '8B0C9085C97419', -0x3, 'Ptr')
     Scanner_AddPattern('ChangeTarget', '3BDF0F95', -0x86, 'Func')
-;~ 	Scanner_AddPattern('CurrentTarget', '83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC55', -0xE, 'Ptr')
-    Scanner_AddPattern('CurrentTarget', '83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCC55', -0xE, 'Ptr')
+	Scanner_AddPattern('CurrentTarget', '83C4085F8BE55DC3CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC55', -0xE, 'Ptr')
     Scanner_AddPattern('MyID', '83EC08568BF13B15', -0x3, 'Ptr')
     ; Map patterns
     Scanner_AddPattern('Move', '558BEC83EC208D45F0', 0x1, 'Func')

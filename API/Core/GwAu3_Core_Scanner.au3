@@ -823,7 +823,7 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
 
     If $a_b_DynamicAlloc Then
         $g_p_GwAu3Header = Scanner_ScanForGwAu3()
-        If $g_p_GwAu3Header = 0 Then 
+        If $g_p_GwAu3Header = 0 Then
             Local $l_av_Alloc = DllCall($g_h_Kernel32, "ptr", "VirtualAllocEx", _
             "handle", $g_h_GWProcess, _
             "ptr", 0, _
@@ -877,8 +877,8 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
             "ptr", 0, _
             "int", 0, _
             "int", 0)
-            
-        $l_h_Thread = $l_h_Thread[0]  
+
+        $l_h_Thread = $l_h_Thread[0]
 
         Local $l_av_Result
         Do

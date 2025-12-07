@@ -18,7 +18,7 @@
 #include <GuiRichEdit.au3>
 #include <StructureConstants.au3>
 #include <GuiImageList.au3>
-#include '../../Tools/_GUICtrlEmoji/_GUICtrlEmoji.au3'
+#include '../../Utilities/_GUICtrlEmoji/_GUICtrlEmoji.au3'
 
 ; --- Options ---
 Opt("GUIOnEventMode", 1)

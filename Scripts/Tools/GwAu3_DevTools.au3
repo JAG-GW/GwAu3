@@ -1,7 +1,7 @@
 #RequireAdmin
 #include "../../API/_GwAu3.au3"
-#include "../../Tools/ImGui/ImGui.au3"
-#include "../../Tools/ImGui/ImGui_Utils.au3"
+#include "../../Utilities/ImGui/ImGui.au3"
+#include "../../Utilities/ImGui/ImGui_Utils.au3"
 
 Global Const $doLoadLoggedChars = True
 $GC_B_DEV_MODE = True
@@ -68,6 +68,8 @@ Global $g_sInput_SlotNumber = "1"
 Global $g_sInput_Quantity = "1"
 Global $g_sInput_WeaponSet = "1"
 Global $g_sInput_SkillID = "0"
+Global $g_iInput_AccountSkillID = 1
+Global $g_iInput_SkillID = 1
 Global $g_sInput_BuffID = "0"
 Global $g_sInput_District = "0"
 Global $g_sInput_ControlAction = "0x80"
@@ -562,12 +564,6 @@ Func _GUI_Tab_QueueCommands()
         If _ImGui_Button("Move##qbtn") Then
             Map_Move(Number($g_sInput_X), Number($g_sInput_Y), 0)
             Log_Message("Map_Move(" & $g_sInput_X & ", " & $g_sInput_Y & ")", $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-        If _ImGui_Button("Get My Pos##q") Then
-            Local $pos = Agent_GetInfo(-2, "Pos")
-            $g_sInput_X = String(Round($pos[0], 2))
-            $g_sInput_Y = String(Round($pos[1], 2))
-            Log_Message("Current Pos: X=" & $g_sInput_X & ", Y=" & $g_sInput_Y, $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
 		_ImGui_Separator()
     EndIf
@@ -2034,12 +2030,17 @@ Func _GUI_Tab_DataFunctions()
         EndIf
         If _ImGui_IsItemHovered() Then _ImGui_SetTooltip("Account_GetAccountInfo($Info)" & @CRLF & "Info: AccountName, Wins, Losses, Rating, QualifierPoints, Rank, TournamentRewardPoints")
 
-        _ImGui_SetNextItemWidth(80)
-        _ImGui_InputText("Skill ID##accskill", $g_sInput_SkillID)
-        _ImGui_SameLine()
-        If _ImGui_Button("Is Skill Unlocked##acc") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("Skill " & $skillID & " unlocked: " & Account_IsSkillUnlocked($skillID), $c_UTILS_Msg_Type_Info, "DevTools")
+		_ImGui_NewLine()
+
+        _ImGui_SetNextItemWidth(120)
+        _ImGui_InputInt("Skill ID##accskill", $g_iInput_AccountSkillID, 1, 10)
+        If $g_iInput_AccountSkillID < 1 Then $g_iInput_AccountSkillID = 1
+        If $g_iInput_AccountSkillID > 3431 Then $g_iInput_AccountSkillID = 3431
+		_ImGui_Text("Skill Name: " & $GC_AMX2_SKILL_DATA[$g_iInput_AccountSkillID][1])
+        If Account_IsSkillUnlocked($g_iInput_AccountSkillID) Then
+            _ImGui_TextColored("Skill ID: " & $g_iInput_AccountSkillID & " is unlocked on this account", 0xFF00FF00)
+        Else
+            _ImGui_TextColored("Skill ID: " & $g_iInput_AccountSkillID & " is not unlocked on this account", 0xFFFF0000)
         EndIf
         _ImGui_Separator()
     EndIf
@@ -2047,9 +2048,7 @@ Func _GUI_Tab_DataFunctions()
     ; === AGENT ===
     If _ImGui_CollapsingHeader("Agent##data") Then
         _ImGui_SetNextItemWidth(80)
-        _ImGui_InputText("Agent ID##dataagent", $g_sInput_AgentID)
 
-        _ImGui_SameLine()
         If _ImGui_Button("My ID##ag") Then
             Local $myID = Agent_GetMyID()
             $g_sInput_AgentID = String($myID)
@@ -2067,130 +2066,110 @@ Func _GUI_Tab_DataFunctions()
             EndIf
         EndIf
 
-        _ImGui_SameLine()
-        If _ImGui_Button("Last Target##ag") Then
-            Local $lastTarget = Agent_GetLastTarget()
-            $g_sInput_AgentID = String($lastTarget)
-            Log_Message("Last Target: " & $lastTarget, $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
+        _ImGui_InputText("Agent ID##dataagent", $g_sInput_AgentID)
 
-        ; Agent Base Info
-        If _ImGui_Button("Get Base Info##ag") Then
-            Log_Message("Agent Base: " & Agent_GetAgentBase(), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Max Agents: " & Agent_GetMaxAgents(), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Agent Copy Count: " & Agent_GetAgentCopyCount(), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Agent Copy Base: " & Agent_GetAgentCopyBase(), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        ; Position & Movement
-        If _ImGui_Button("Position##ag") Then
+        ; All infos (ordre des offsets)
+        If _ImGui_Button("All Infos##ag") Then
             Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Position ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("X: " & Agent_GetAgentInfo($id, "X") & ", Y: " & Agent_GetAgentInfo($id, "Y") & ", Z: " & Agent_GetAgentInfo($id, "Z"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Plane: " & Agent_GetAgentInfo($id, "Plane"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Rotation: " & Agent_GetAgentInfo($id, "Rotation"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("MoveX: " & Agent_GetAgentInfo($id, "MoveX") & ", MoveY: " & Agent_GetAgentInfo($id, "MoveY"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Health/Energy##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Health/Energy ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("HP: " & Round(Agent_GetAgentInfo($id, "HP") * 100, 1) & "% (" & Agent_GetAgentInfo($id, "CurrentHP") & "/" & Agent_GetAgentInfo($id, "MaxHP") & ")", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("HPPips: " & Agent_GetAgentInfo($id, "HPPips"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Energy: " & Round(Agent_GetAgentInfo($id, "Energy") * 100, 1) & "% (" & Agent_GetAgentInfo($id, "CurrentEnergy") & "/" & Agent_GetAgentInfo($id, "MaxEnergy") & ")", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("EnergyRegen: " & Agent_GetAgentInfo($id, "EnergyRegen") & ", Overcast: " & Agent_GetAgentInfo($id, "Overcast"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Type/Team##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Type/Team ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Type: " & Agent_GetAgentInfo($id, "Type") & ", TypeMap: " & Agent_GetAgentInfo($id, "TypeMap"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsItemType: " & Agent_GetAgentInfo($id, "IsItemType") & ", IsGadgetType: " & Agent_GetAgentInfo($id, "IsGadgetType") & ", IsLivingType: " & Agent_GetAgentInfo($id, "IsLivingType"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Team: " & Agent_GetAgentInfo($id, "Team") & ", Allegiance: " & Agent_GetAgentInfo($id, "Allegiance"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Primary: " & Agent_GetAgentInfo($id, "Primary") & ", Secondary: " & Agent_GetAgentInfo($id, "Secondary") & ", Level: " & Agent_GetAgentInfo($id, "Level"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        If _ImGui_Button("State/Flags##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " State ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsDead: " & Agent_GetAgentInfo($id, "IsDead") & ", IsMoving: " & Agent_GetAgentInfo($id, "IsMoving"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsAttacking: " & Agent_GetAgentInfo($id, "IsAttacking") & ", IsCasting: " & Agent_GetAgentInfo($id, "IsCasting") & ", IsIdle: " & Agent_GetAgentInfo($id, "IsIdle"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsKnockedDown: " & Agent_GetAgentInfo($id, "IsKnockedDown") & ", InCombatStance: " & Agent_GetAgentInfo($id, "InCombatStance"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("InSpiritRange: " & Agent_GetAgentInfo($id, "InSpiritRange") & ", IsSpawned: " & Agent_GetAgentInfo($id, "IsSpawned"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("HasQuest: " & Agent_GetAgentInfo($id, "HasQuest") & ", HasBossGlow: " & Agent_GetAgentInfo($id, "HasBossGlow"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Conditions##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Conditions ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsBleeding: " & Agent_GetAgentInfo($id, "IsBleeding") & ", IsPoisoned: " & Agent_GetAgentInfo($id, "IsPoisoned"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsCrippled: " & Agent_GetAgentInfo($id, "IsCrippled") & ", IsDeepWounded: " & Agent_GetAgentInfo($id, "IsDeepWounded"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsConditioned: " & Agent_GetAgentInfo($id, "IsConditioned") & ", IsHexed: " & Agent_GetAgentInfo($id, "IsHexed"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsEnchanted: " & Agent_GetAgentInfo($id, "IsEnchanted") & ", IsWeaponSpelled: " & Agent_GetAgentInfo($id, "IsWeaponSpelled"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Model/Name##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Model ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("PlayerNumber: " & Agent_GetAgentInfo($id, "PlayerNumber"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("AgentModelType: " & Agent_GetAgentInfo($id, "AgentModelType"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("TransmogNpcId: " & Agent_GetAgentInfo($id, "TransmogNpcId"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("LoginNumber: " & Agent_GetAgentInfo($id, "LoginNumber"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsPlayer: " & Agent_GetAgentInfo($id, "IsPlayer") & ", IsNPC: " & Agent_GetAgentInfo($id, "IsNPC"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Name: " & Agent_GetAgentInfo($id, "Name"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        If _ImGui_Button("Combat##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Combat ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Skill: " & Agent_GetAgentInfo($id, "Skill"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("AttackSpeed: " & Agent_GetAgentInfo($id, "AttackSpeed") & ", AttackSpeedModifier: " & Agent_GetAgentInfo($id, "AttackSpeedModifier"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("WeaponType: " & Agent_GetAgentInfo($id, "WeaponType"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("WeaponItemType: " & Agent_GetAgentInfo($id, "WeaponItemType") & ", OffhandItemType: " & Agent_GetAgentInfo($id, "OffhandItemType"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("WeaponItemId: " & Agent_GetAgentInfo($id, "WeaponItemId") & ", OffhandItemId: " & Agent_GetAgentInfo($id, "OffhandItemId"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Effects##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Effects ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("EffectCount: " & Agent_GetAgentInfo($id, "EffectCount") & ", BuffCount: " & Agent_GetAgentInfo($id, "BuffCount"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("VisibleEffectCount: " & Agent_GetAgentInfo($id, "VisibleEffectCount") & ", HasVisibleEffects: " & Agent_GetAgentInfo($id, "HasVisibleEffects"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("=== Agent " & $id & " Infos ===", $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x00
+            Log_Message("vtable: " & Agent_GetAgentInfo($id, "vtable"), $c_UTILS_Msg_Type_Info, "DevTools")
+			Log_Message("h0004: " & Agent_GetAgentInfo($id, "h0004") & " | h0008: " & Agent_GetAgentInfo($id, "h0008") & " | h000C: " & Agent_GetAgentInfo($id, "h000C") & " | h0010: " & Agent_GetAgentInfo($id, "h0010"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Timer: " & Agent_GetAgentInfo($id, "Timer") & " | Timer2: " & Agent_GetAgentInfo($id, "Timer2"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h0018: " & Agent_GetAgentInfo($id, "h0018"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x2C - 0x48
+            Log_Message("ID: " & Agent_GetAgentInfo($id, "ID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Z: " & Agent_GetAgentInfo($id, "Z"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Width1: " & Agent_GetAgentInfo($id, "Width1") & " | Height1: " & Agent_GetAgentInfo($id, "Height1"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Width2: " & Agent_GetAgentInfo($id, "Width2") & " | Height2: " & Agent_GetAgentInfo($id, "Height2"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Width3: " & Agent_GetAgentInfo($id, "Width3") & " | Height3: " & Agent_GetAgentInfo($id, "Height3"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x4C - 0x6C
+            Log_Message("Rotation: " & Agent_GetAgentInfo($id, "Rotation") & " | RotationCos: " & Agent_GetAgentInfo($id, "RotationCos") & " | RotationSin: " & Agent_GetAgentInfo($id, "RotationSin"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("NameProperties: " & Agent_GetAgentInfo($id, "NameProperties") & " | Ground: " & Agent_GetAgentInfo($id, "Ground"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h0060: " & Agent_GetAgentInfo($id, "h0060"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("TerrainNormalX: " & Agent_GetAgentInfo($id, "TerrainNormalX") & " | TerrainNormalY: " & Agent_GetAgentInfo($id, "TerrainNormalY") & " | TerrainNormalZ: " & Agent_GetAgentInfo($id, "TerrainNormalZ"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h0070: " & Agent_GetAgentInfo($id, "h0070"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x74 - 0x80
+            Log_Message("X: " & Agent_GetAgentInfo($id, "X") & " | Y: " & Agent_GetAgentInfo($id, "Y") & " | Plane: " & Agent_GetAgentInfo($id, "Plane"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h0080: " & Agent_GetAgentInfo($id, "h0080"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x84 - 0x94
+            Log_Message("NameTagX: " & Agent_GetAgentInfo($id, "NameTagX") & " | NameTagY: " & Agent_GetAgentInfo($id, "NameTagY") & " | NameTagZ: " & Agent_GetAgentInfo($id, "NameTagZ"), $c_UTILS_Msg_Type_Info, "DevTools")
             Log_Message("VisualEffects: " & Agent_GetAgentInfo($id, "VisualEffects"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
+            Log_Message("h0092: " & Agent_GetAgentInfo($id, "h0092") & " | h0094: " & Agent_GetAgentInfo($id, "h0094"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x9C - Type
+            Log_Message("Type: " & Agent_GetAgentInfo($id, "Type") & " | IsItemType: " & Agent_GetAgentInfo($id, "IsItemType") & " | IsGadgetType: " & Agent_GetAgentInfo($id, "IsGadgetType") & " | IsLivingType: " & Agent_GetAgentInfo($id, "IsLivingType"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0xA0 - 0xB4
+            Log_Message("MoveX: " & Agent_GetAgentInfo($id, "MoveX") & " | MoveY: " & Agent_GetAgentInfo($id, "MoveY"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h00A8: " & Agent_GetAgentInfo($id, "h00A8"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("RotationCos2: " & Agent_GetAgentInfo($id, "RotationCos2") & " | RotationSin2: " & Agent_GetAgentInfo($id, "RotationSin2"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h00B4: " & Agent_GetAgentInfo($id, "h00B4"), $c_UTILS_Msg_Type_Info, "DevTools")
 
-        _ImGui_SameLine()
-        If _ImGui_Button("Animation##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Animation ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("AnimationType: " & Agent_GetAgentInfo($id, "AnimationType"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("AnimationSpeed: " & Agent_GetAgentInfo($id, "AnimationSpeed"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("AnimationCode: " & Agent_GetAgentInfo($id, "AnimationCode"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("AnimationId: " & Agent_GetAgentInfo($id, "AnimationId"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("ModelState: " & Agent_GetAgentInfo($id, "ModelState"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
+			If Agent_GetAgentInfo($id, "IsItemType") Then
+				Log_Message("=== ItemType Infos ===", $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0xC4 - 0xD4
+				Log_Message("Owner: " & Agent_GetAgentInfo($id, "Owner") , $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("ItemID: " & Agent_GetAgentInfo($id, "ItemID"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("CanPickUp: " & Agent_GetAgentInfo($id, "CanPickUp"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("ExtraType: " & Agent_GetAgentInfo($id, "ExtraType"), $c_UTILS_Msg_Type_Info, "DevTools")
+			EndIf
 
-        ; Equipment Info
-        If _ImGui_Button("Equipment##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Log_Message("=== Agent " & $id & " Equipment ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Weapon ModelFileID: " & Agent_GetAgentEquimentInfo($id, "Weapon_ModelFileID") & ", Type: " & Agent_GetAgentEquimentInfo($id, "Weapon_Type"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Offhand ModelFileID: " & Agent_GetAgentEquimentInfo($id, "Offhand_ModelFileID") & ", Type: " & Agent_GetAgentEquimentInfo($id, "Offhand_Type"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Chest ModelFileID: " & Agent_GetAgentEquimentInfo($id, "Chest_ModelFileID"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Head ModelFileID: " & Agent_GetAgentEquimentInfo($id, "Head_ModelFileID"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
+			If Agent_GetAgentInfo($id, "IsGadgetType") Then
+				Log_Message("=== GadgetType Infos ===", $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("ExtraType: " & Agent_GetAgentInfo($id, "ExtraType"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("GadgetID: " & Agent_GetAgentInfo($id, "GadgetID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            EndIf
 
-        ; Distance
-        _ImGui_SameLine()
-        If _ImGui_Button("Distance to Me##ag") Then
-            Local $id = Number($g_sInput_AgentID)
-            Local $dist = Agent_GetDistance(-2, $id)
-            Log_Message("Distance to Agent " & $id & ": " & Round($dist, 0), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
+			If Agent_GetAgentInfo($id, "IsLivingType") Then
+				Log_Message("=== LivingType Infos ===", $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("Owner: " & Agent_GetAgentInfo($id, "Owner"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h00D4: " & Agent_GetAgentInfo($id, "h00D4"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0xE0 - 0xFC
+				Log_Message("AnimationType: " & Agent_GetAgentInfo($id, "AnimationType"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h00E4: " & Agent_GetAgentInfo($id, "h00E4"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("AttackSpeed: " & Agent_GetAgentInfo($id, "AttackSpeed") & " | AttackSpeedModifier: " & Agent_GetAgentInfo($id, "AttackSpeedModifier"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("PlayerNumber: " & Agent_GetAgentInfo($id, "PlayerNumber") & " | AgentModelType: " & Agent_GetAgentInfo($id, "AgentModelType") & " | TransmogNpcId: " & Agent_GetAgentInfo($id, "TransmogNpcId"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("Equipment: " & Agent_GetAgentInfo($id, "Equipment"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x100 - 0x10E
+				Log_Message("h0100: " & Agent_GetAgentInfo($id, "h0100"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("Tags: " & Agent_GetAgentInfo($id, "Tags"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h0108: " & Agent_GetAgentInfo($id, "h0108"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("Primary: " & Agent_GetAgentInfo($id, "Primary") & " | Secondary: " & Agent_GetAgentInfo($id, "Secondary") & " | Level: " & Agent_GetAgentInfo($id, "Level") & " | Team: " & Agent_GetAgentInfo($id, "Team"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h010E: " & Agent_GetAgentInfo($id, "h010E") & " | h0110: " & Agent_GetAgentInfo($id, "h0110"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("EnergyRegen: " & Agent_GetAgentInfo($id, "EnergyRegen") & " | Overcast: " & Agent_GetAgentInfo($id, "Overcast") & " | EnergyPercent: " & Agent_GetAgentInfo($id, "EnergyPercent") & " | MaxEnergy: " & Agent_GetAgentInfo($id, "MaxEnergy") & " | CurrentEnergy: " & Agent_GetAgentInfo($id, "CurrentEnergy"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h0124: " & Agent_GetAgentInfo($id, "h0124"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("HPPips: " & Agent_GetAgentInfo($id, "HPPips"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h012C: " & Agent_GetAgentInfo($id, "h012C"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("HP: " & Agent_GetAgentInfo($id, "HP") & " | MaxHP: " & Agent_GetAgentInfo($id, "MaxHP") & " | CurrentHP: " & Agent_GetAgentInfo($id, "CurrentHP"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x138 - Effects
+				Log_Message("Effects: " & Agent_GetAgentInfo($id, "Effects") & " | EffectCount: " & Agent_GetAgentInfo($id, "EffectCount") & " | BuffCount: " & Agent_GetAgentInfo($id, "BuffCount"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("IsBleeding: " & Agent_GetAgentInfo($id, "IsBleeding") & " | IsConditioned: " & Agent_GetAgentInfo($id, "IsConditioned") & " | IsCrippled: " & Agent_GetAgentInfo($id, "IsCrippled") & " | IsDead: " & Agent_GetAgentInfo($id, "IsDead") & " | IsDeepWounded: " & Agent_GetAgentInfo($id, "IsDeepWounded") & " | IsPoisoned: " & Agent_GetAgentInfo($id, "IsPoisoned") & " | IsEnchanted: " & Agent_GetAgentInfo($id, "IsEnchanted") & " | IsDegenHexed: " & Agent_GetAgentInfo($id, "IsDegenHexed") & " | IsHexed: " & Agent_GetAgentInfo($id, "IsHexed") & " | IsWeaponSpelled: " & Agent_GetAgentInfo($id, "IsWeaponSpelled"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x13C - 0x154
+				Log_Message("h013C: " & Agent_GetAgentInfo($id, "h013C"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("Hex: " & Agent_GetAgentInfo($id, "Hex"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h0141: " & Agent_GetAgentInfo($id, "h0141"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x154 - ModelState
+				Log_Message("ModelState: " & Agent_GetAgentInfo($id, "ModelState") & " | IsKnockedDown: " & Agent_GetAgentInfo($id, "IsKnockedDown") & " | IsMoving: " & Agent_GetAgentInfo($id, "IsMoving") & " | IsAttacking: " & Agent_GetAgentInfo($id, "IsAttacking") & " | IsCasting: " & Agent_GetAgentInfo($id, "IsCasting") & " | IsIdle: " & Agent_GetAgentInfo($id, "IsIdle"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x158 - TypeMap
+				Log_Message("TypeMap: " & Agent_GetAgentInfo($id, "TypeMap") & " | InCombatStance: " & Agent_GetAgentInfo($id, "InCombatStance") & " | HasQuest: " & Agent_GetAgentInfo($id, "HasQuest") & " | IsDeadByTypeMap: " & Agent_GetAgentInfo($id, "IsDeadByTypeMap") & " | IsFemale: " & Agent_GetAgentInfo($id, "IsFemale") & " | HasBossGlow: " & Agent_GetAgentInfo($id, "HasBossGlow") & " | IsHidingCap: " & Agent_GetAgentInfo($id, "IsHidingCap") & " | CanBeViewedInPartyWindow: " & Agent_GetAgentInfo($id, "CanBeViewedInPartyWindow") & " | IsSpawned: " & Agent_GetAgentInfo($id, "IsSpawned") & " | IsBeingObserved: " & Agent_GetAgentInfo($id, "IsBeingObserved"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x15C - 0x16C
+				Log_Message("h015C: " & Agent_GetAgentInfo($id, "h015C"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("InSpiritRange: " & Agent_GetAgentInfo($id, "InSpiritRange"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x174 - VisibleEffects
+				Log_Message("VisibleEffectsPtr: " & Agent_GetAgentInfo($id, "VisibleEffectsPtr") & " | VisibleEffectsPrevLink: " & Agent_GetAgentInfo($id, "VisibleEffectsPrevLink") & " | VisibleEffectsNextNode: " & Agent_GetAgentInfo($id, "VisibleEffectsNextNode"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("VisibleEffectCount: " & Agent_GetAgentInfo($id, "VisibleEffectCount") & " | HasVisibleEffects: " & Agent_GetAgentInfo($id, "HasVisibleEffects"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h017C: " & Agent_GetAgentInfo($id, "h017C"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x180 - 0x190
+				Log_Message("LoginNumber: " & Agent_GetAgentInfo($id, "LoginNumber") & " | IsPlayer: " & Agent_GetAgentInfo($id, "IsPlayer") & " | IsNPC: " & Agent_GetAgentInfo($id, "IsNPC"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("AnimationSpeed: " & Agent_GetAgentInfo($id, "AnimationSpeed") & " | AnimationCode: " & Agent_GetAgentInfo($id, "AnimationCode") & " | AnimationId: " & Agent_GetAgentInfo($id, "AnimationId"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h0190: " & Agent_GetAgentInfo($id, "h0190"), $c_UTILS_Msg_Type_Info, "DevTools")
+				; 0x1B0 - 0x1BC
+				Log_Message("LastStrike: " & Agent_GetAgentInfo($id, "LastStrike") & " | Allegiance: " & Agent_GetAgentInfo($id, "Allegiance") & " | WeaponType: " & Agent_GetAgentInfo($id, "WeaponType") & " | Skill: " & Agent_GetAgentInfo($id, "Skill"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("h01B6: " & Agent_GetAgentInfo($id, "h01B6"), $c_UTILS_Msg_Type_Info, "DevTools")
+				Log_Message("WeaponItemType: " & Agent_GetAgentInfo($id, "WeaponItemType") & " | OffhandItemType: " & Agent_GetAgentInfo($id, "OffhandItemType") & " | WeaponItemId: " & Agent_GetAgentInfo($id, "WeaponItemId") & " | OffhandItemId: " & Agent_GetAgentInfo($id, "OffhandItemId"), $c_UTILS_Msg_Type_Info, "DevTools")
+			EndIf
+		EndIf
+
+		_ImGui_NewLine()
 
         ; Effect/Buff Info
         _ImGui_SetNextItemWidth(60)
@@ -2214,6 +2193,8 @@ Func _GUI_Tab_DataFunctions()
             Log_Message("BuffID: " & Agent_GetAgentBuffInfo($id, $skillID, "BuffID"), $c_UTILS_Msg_Type_Info, "DevTools")
             Log_Message("TargetAgentID: " & Agent_GetAgentBuffInfo($id, $skillID, "TargetAgentID"), $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
+
+		_ImGui_NewLine()
 
         ; NPC Info
         If _ImGui_Button("NPC Info##ag") Then
@@ -2861,121 +2842,79 @@ Func _GUI_Tab_DataFunctions()
 
     ; === SKILL ===
     If _ImGui_CollapsingHeader("Skill##data") Then
-        _ImGui_SetNextItemWidth(60)
-        _ImGui_InputText("Skill ID##skill", $g_sInput_SkillID)
-        _ImGui_SameLine()
-        _ImGui_SetNextItemWidth(40)
-        _ImGui_InputText("Hero##skill", $g_sInput_HeroIndex)
+        _ImGui_SetNextItemWidth(120)
+        _ImGui_InputInt("Skill ID##skill", $g_iInput_SkillID, 1, 10)
+        If $g_iInput_SkillID < 1 Then $g_iInput_SkillID = 1
+        If $g_iInput_SkillID > 3431 Then $g_iInput_SkillID = 3431
 
         _ImGui_SameLine()
-        If _ImGui_Button("Get Basic Info##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Basic ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("SkillID: " & Skill_GetSkillInfo($skillID, "SkillID") & ", GwVersion: " & Skill_GetSkillInfo($skillID, "GwVersion"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Campaign: " & Skill_GetSkillInfo($skillID, "Campaign") & " (" & Skill_GetCampaignName(Skill_GetSkillInfo($skillID, "Campaign")) & ")", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Profession: " & Skill_GetSkillInfo($skillID, "Profession") & " (" & Skill_GetProfessionName(Skill_GetSkillInfo($skillID, "Profession")) & ")", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("SkillType: " & Skill_GetSkillInfo($skillID, "SkillType") & ", Attribute: " & Skill_GetSkillInfo($skillID, "Attribute"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Title: " & Skill_GetSkillInfo($skillID, "Title") & ", SkillIDPvP: " & Skill_GetSkillInfo($skillID, "SkillIDPvP"), $c_UTILS_Msg_Type_Info, "DevTools")
+        If _ImGui_Button("All Infos##skill") Then
+            Local $id = $g_iInput_SkillID
+            Log_Message("=== Skill " & $id & " Infos ===", $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x00 - 0x08
+            Log_Message("SkillID: " & Skill_GetSkillInfo($id, "SkillID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("GwVersion: " & Skill_GetSkillInfo($id, "GwVersion"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Campaign: " & Skill_GetSkillInfo($id, "Campaign"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x0C - 0x24
+            Log_Message("SkillType: " & Skill_GetSkillInfo($id, "SkillType"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Special: " & Skill_GetSkillInfo($id, "Special"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("ComboReq: " & Skill_GetSkillInfo($id, "ComboReq"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("InflictsCondition: " & Skill_GetSkillInfo($id, "InflictsCondition"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("RequireCondition: " & Skill_GetSkillInfo($id, "RequireCondition"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("EffectFlag: " & Skill_GetSkillInfo($id, "EffectFlag"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("WeaponReq: " & Skill_GetSkillInfo($id, "WeaponReq"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x28 - 0x33
+            Log_Message("Profession: " & Skill_GetSkillInfo($id, "Profession"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Attribute: " & Skill_GetSkillInfo($id, "Attribute"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Title: " & Skill_GetSkillInfo($id, "Title"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("SkillIDPvP: " & Skill_GetSkillInfo($id, "SkillIDPvP"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Combo: " & Skill_GetSkillInfo($id, "Combo"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Target: " & Skill_GetSkillInfo($id, "Target"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h0032: " & Skill_GetSkillInfo($id, "h0032"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("SkillEquipType: " & Skill_GetSkillInfo($id, "SkillEquipType"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x34 - 0x4C
+            Log_Message("Overcast: " & Skill_GetSkillInfo($id, "Overcast"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("EnergyCost: " & Skill_GetSkillInfo($id, "EnergyCost"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("HealthCost: " & Skill_GetSkillInfo($id, "HealthCost"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("h0037: " & Skill_GetSkillInfo($id, "h0037"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Adrenaline: " & Skill_GetSkillInfo($id, "Adrenaline"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Activation: " & Skill_GetSkillInfo($id, "Activation"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Aftercast: " & Skill_GetSkillInfo($id, "Aftercast"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Duration0: " & Skill_GetSkillInfo($id, "Duration0") & " | Duration15: " & Skill_GetSkillInfo($id, "Duration15"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Recharge: " & Skill_GetSkillInfo($id, "Recharge"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x50 - 0x58
+            Log_Message("h0050: " & Skill_GetSkillInfo($id, "h0050") & " | h0052: " & Skill_GetSkillInfo($id, "h0052") & " | h0054: " & Skill_GetSkillInfo($id, "h0054") & " | h0056: " & Skill_GetSkillInfo($id, "h0056"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("SkillArguments: " & Skill_GetSkillInfo($id, "SkillArguments"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x5C - 0x70
+            Log_Message("Scale0: " & Skill_GetSkillInfo($id, "Scale0") & " | Scale15: " & Skill_GetSkillInfo($id, "Scale15"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("BonusScale0: " & Skill_GetSkillInfo($id, "BonusScale0") & " | BonusScale15: " & Skill_GetSkillInfo($id, "BonusScale15"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("EffectConstant1: " & Skill_GetSkillInfo($id, "EffectConstant1") & " | EffectConstant2: " & Skill_GetSkillInfo($id, "EffectConstant2"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x74 - 0x88
+            Log_Message("CasterOverheadAnimationID: " & Skill_GetSkillInfo($id, "CasterOverheadAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("CasterBodyAnimationID: " & Skill_GetSkillInfo($id, "CasterBodyAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("TargetBodyAnimationID: " & Skill_GetSkillInfo($id, "TargetBodyAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("TargetOverheadAnimationID: " & Skill_GetSkillInfo($id, "TargetOverheadAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("ProjectileAnimation1ID: " & Skill_GetSkillInfo($id, "ProjectileAnimation1ID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("ProjectileAnimation2ID: " & Skill_GetSkillInfo($id, "ProjectileAnimation2ID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            ; 0x8C - 0xA0
+            Log_Message("IconFileID: " & Skill_GetSkillInfo($id, "IconFileID"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("IconFileID2: " & Skill_GetSkillInfo($id, "IconFileID2"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("IconFileIDHD: " & Skill_GetSkillInfo($id, "IconFileIDHD"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Name: " & Skill_GetSkillInfo($id, "Name"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Concise: " & Skill_GetSkillInfo($id, "Concise"), $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Description: " & Skill_GetSkillInfo($id, "Description"), $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
 
-        If _ImGui_Button("Get Costs##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Costs ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("EnergyCost: " & Skill_GetSkillInfo($skillID, "EnergyCost") & ", HealthCost: " & Skill_GetSkillInfo($skillID, "HealthCost"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Overcast: " & Skill_GetSkillInfo($skillID, "Overcast") & ", Adrenaline: " & Skill_GetSkillInfo($skillID, "Adrenaline"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Activation: " & Skill_GetSkillInfo($skillID, "Activation") & "s, Aftercast: " & Skill_GetSkillInfo($skillID, "Aftercast") & "s", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Recharge: " & Skill_GetSkillInfo($skillID, "Recharge") & "s", $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Get Duration/Scale##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Duration/Scale ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Duration0: " & Skill_GetSkillInfo($skillID, "Duration0") & ", Duration15: " & Skill_GetSkillInfo($skillID, "Duration15"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Scale0: " & Skill_GetSkillInfo($skillID, "Scale0") & ", Scale15: " & Skill_GetSkillInfo($skillID, "Scale15"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("BonusScale0: " & Skill_GetSkillInfo($skillID, "BonusScale0") & ", BonusScale15: " & Skill_GetSkillInfo($skillID, "BonusScale15"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("SkillArguments: " & Skill_GetSkillInfo($skillID, "SkillArguments"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Get Calculated Args##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Local $heroNum = Number($g_sInput_HeroIndex)
-            Log_Message("=== Skill " & $skillID & " Args (Hero " & $heroNum & ") ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Duration: " & Skill_GetSkillArg($skillID, "Duration", $heroNum), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Scale: " & Skill_GetSkillArg($skillID, "Scale", $heroNum), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("BonusScale: " & Skill_GetSkillArg($skillID, "BonusScale", $heroNum), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        If _ImGui_Button("Get Flags##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Flags ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Special: " & Skill_GetSkillInfo($skillID, "Special") & ", ComboReq: " & Skill_GetSkillInfo($skillID, "ComboReq"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Effect1: " & Skill_GetSkillInfo($skillID, "Effect1") & ", Effect2: " & Skill_GetSkillInfo($skillID, "Effect2"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Condition: " & Skill_GetSkillInfo($skillID, "Condition") & ", WeaponReq: " & Skill_GetSkillInfo($skillID, "WeaponReq"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Combo: " & Skill_GetSkillInfo($skillID, "Combo") & ", Target: " & Skill_GetSkillInfo($skillID, "Target"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("SkillEquipType: " & Skill_GetSkillInfo($skillID, "SkillEquipType"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Get Effects##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Effects ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("AoeRange: " & Skill_GetSkillInfo($skillID, "AoeRange") & ", ConstEffect: " & Skill_GetSkillInfo($skillID, "ConstEffect"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Get Animations##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Animations ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("CasterOverheadAnimID: " & Skill_GetSkillInfo($skillID, "CasterOverheadAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("CasterBodyAnimID: " & Skill_GetSkillInfo($skillID, "CasterBodyAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("TargetBodyAnimID: " & Skill_GetSkillInfo($skillID, "TargetBodyAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("TargetOverheadAnimID: " & Skill_GetSkillInfo($skillID, "TargetOverheadAnimationID"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("ProjectileAnim1: " & Skill_GetSkillInfo($skillID, "ProjectileAnimation1ID") & ", Anim2: " & Skill_GetSkillInfo($skillID, "ProjectileAnimation2ID"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        If _ImGui_Button("Get Icons/Names##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Icons/Names ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IconFileID: " & Skill_GetSkillInfo($skillID, "IconFileID") & ", IconFileID2: " & Skill_GetSkillInfo($skillID, "IconFileID2"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Name: " & Skill_GetSkillInfo($skillID, "Name") & ", Concise: " & Skill_GetSkillInfo($skillID, "Concise"), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("Description: " & Skill_GetSkillInfo($skillID, "Description"), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Get Special Flags##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("=== Skill " & $skillID & " Special Checks ===", $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsElite: " & Skill_IsEliteSpecial($skillID) & ", IsTouch: " & Skill_IsTouchSpecial($skillID), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsOvercast: " & Skill_IsOvercastSpecial($skillID) & ", IsResurrection: " & Skill_IsResurrectionSpecial($skillID), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsPVE: " & Skill_IsPVESpecial($skillID) & ", IsPVP: " & Skill_IsPVPSpecial($skillID), $c_UTILS_Msg_Type_Info, "DevTools")
-            Log_Message("IsMonster: " & Skill_IsMonsterSkillSpecial($skillID) & ", IsCapture: " & Skill_IsCaptureSpecial($skillID), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        If _ImGui_Button("Get Last Used##skill") Then
-            Local $lastSkill = Skill_GetLastUsedSkill()
-            Local $lastTarget = Skill_GetLastTarget()
-            Log_Message("Last Used Skill: " & $lastSkill & ", Target: " & $lastTarget, $c_UTILS_Msg_Type_Info, "DevTools")
-            If $lastSkill > 0 Then $g_sInput_SkillID = String($lastSkill)
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Get Skill Timer##skill") Then
-            Log_Message("Skill Timer: " & Skill_GetSkillTimer(), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-
-        _ImGui_SameLine()
-        If _ImGui_Button("Get Skill Ptr##skill") Then
-            Local $skillID = Number($g_sInput_SkillID)
-            Log_Message("Skill Ptr: " & Skill_GetSkillPtr($skillID), $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
+		_ImGui_NewLine()
 
         ; Skillbar section
         _ImGui_Text("--- Skillbar ---")
         _ImGui_SetNextItemWidth(40)
         _ImGui_InputText("Slot##skillbar", $g_sInput_SkillSlot)
-        _ImGui_SameLine()
+		_ImGui_SameLine()
+        _ImGui_SetNextItemWidth(40)
+        _ImGui_InputText("Hero##skill", $g_sInput_HeroIndex)
+
         If _ImGui_Button("Get Slot Info##skill") Then
             Local $slot = Number($g_sInput_SkillSlot)
             Local $heroNum = Number($g_sInput_HeroIndex)
@@ -3570,11 +3509,19 @@ Func _GUI_MenuBar()
 EndFunc
 
 Func _GUI_AddOns_LogConsole()
+    Local Static $iLastMessageCount = 0
+    Local $iCurrentMessageCount = UBound($a_UTILS_Log_Messages)
+
     _ImGui_Text("Debug Console:")
     ; Use -1 for height to fill available space, leave room for buttons
     _ImGui_BeginChild("DebugConsole", -1, -30, True, $ImGuiWindowFlags_HorizontalScrollbar)
 
-    For $i = 0 To UBound($a_UTILS_Log_Messages) - 1
+    ; Check if user is at the bottom before rendering messages
+    Local $fScrollY = _ImGui_GetScrollY()
+    Local $fScrollMaxY = _ImGui_GetScrollMaxY()
+    Local $bWasAtBottom = ($fScrollMaxY <= 0) Or ($fScrollY >= $fScrollMaxY - 10)
+
+    For $i = 0 To $iCurrentMessageCount - 1
         ; Simplified format for right panel: [Type] [Author] Message
         _ImGui_Text("[")
         _ImGui_SameLine(0, 0)
@@ -3585,7 +3532,12 @@ Func _GUI_AddOns_LogConsole()
         _ImGui_TextColored($a_UTILS_Log_Messages[$i][6], $a_UTILS_Log_Messages[$i][7])
     Next
 
-    _ImGui_SetScrollFromPosY("DebugConsole", -0.05)
+    ; Auto-scroll only if there are new messages AND user was at the bottom
+    If $iCurrentMessageCount > $iLastMessageCount And $bWasAtBottom Then
+        _ImGui_SetScrollFromPosY("DebugConsole", -0.05)
+    EndIf
+    $iLastMessageCount = $iCurrentMessageCount
+
     _ImGui_EndChild()
 
     If _ImGui_Button("Clear##console") Then

@@ -37,11 +37,11 @@ Func Skill_GetSkillInfo($a_v_SkillID, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr + 0x10, "long")
         Case "ComboReq"
             Return Memory_Read($l_p_Ptr + 0x14, "long")
-        Case "Effect1"
+        Case "Effect1", "InflictsCondition"
             Return Memory_Read($l_p_Ptr + 0x18, "long")
         Case "Condition", "RequireCondition"
             Return Memory_Read($l_p_Ptr + 0x1C, "long")
-        Case "Effect2"
+        Case "Effect2", "EffectFlag"
             Return Memory_Read($l_p_Ptr + 0x20, "long")
         Case "WeaponReq"
             Return Memory_Read($l_p_Ptr + 0x24, "long")
@@ -145,12 +145,14 @@ Func Skill_GetSkillInfo($a_v_SkillID, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr + 0x8C, "dword")
         Case "IconFileID2"
             Return Memory_Read($l_p_Ptr + 0x90, "dword")
-        Case "Name"
+		Case "IconFileIDHD"
             Return Memory_Read($l_p_Ptr + 0x94, "dword")
-        Case "Concise"
+        Case "Name"
             Return Memory_Read($l_p_Ptr + 0x98, "dword")
-        Case "Description"
+        Case "Concise"
             Return Memory_Read($l_p_Ptr + 0x9C, "dword")
+        Case "Description"
+            Return Memory_Read($l_p_Ptr + 0xA0, "dword")
     EndSwitch
 
     Return 0
