@@ -1786,7 +1786,7 @@ Func Assembler_ModifyMemory()
 	$g_i_ASMSize = 0
 	$g_i_ASMCodeOffset= 0
 	$g_s_ASMCode = ""
-	
+
 	Assembler_CreateData()
 	Assembler_CreateMain()
 	Assembler_CreateRenderingMod()
@@ -2025,7 +2025,7 @@ Func Assembler_CreateCommands()
 	_('ActionType2:')
 	_('mov ecx,dword[ecx+4]')
 	_('ActionCommon:')
-	_('add ecx,A0')
+	_('add ecx,A8')
 	_('push 0')
 	_('add eax,4')
 	_('push eax')

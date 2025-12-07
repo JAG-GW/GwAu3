@@ -1,8 +1,8 @@
 #include-once
 
 #Region Core_PerformAction
-Global Const $GC_I_CONTROL_TYPE_ACTIVATE = 0x1E
-Global Const $GC_I_CONTROL_TYPE_DEACTIVATE = 0x20
+Global Const $GC_I_CONTROL_TYPE_ACTIVATE = 0x20
+Global Const $GC_I_CONTROL_TYPE_DEACTIVATE = 0x22
 
 Global Const $GC_I_CONTROL_ACTION_NONE = 0x00
 Global Const $GC_I_CONTROL_ACTION_ATTACK_INTERACT = 0x80
