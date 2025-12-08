@@ -978,7 +978,7 @@ Func _GUI_Tab_HeaderCommands()
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Attack+Call##h") Then
-            Agent_Attack(Agent_GetCurrentTarget()), True)
+            Agent_Attack(Agent_GetCurrentTarget(), True)
             Log_Message("Agent_Attack(" & Agent_GetCurrentTarget() & ", True)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
