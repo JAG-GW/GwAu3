@@ -141,7 +141,7 @@ EndFunc   ;==>Ui_EnterChallenge
 
 ;~ Description: Initiates map travel.
 Func Ui_MoveMap($a_i_MapID, $a_i_Region, $a_i_Language, $a_i_District)
-    DllStructSetData($g_d_MoveMap, 2, 0x1000017A)
+    DllStructSetData($g_d_MoveMap, 2, 0x1000017D)
     DllStructSetData($g_d_MoveMap, 3, $a_i_MapID)
     DllStructSetData($g_d_MoveMap, 4, $a_i_Region)
     DllStructSetData($g_d_MoveMap, 5, $a_i_Language)
