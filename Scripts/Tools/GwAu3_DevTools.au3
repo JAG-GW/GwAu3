@@ -955,36 +955,36 @@ Func _GUI_Tab_HeaderCommands()
     ; === Agent ===
     If _ImGui_CollapsingHeader("Agent##h") Then
         _ImGui_Text("Interaction Functions:")
-        _ImGui_PushItemWidth(100)
-        _ImGui_InputText("Agent ID##hinteract", $g_sInput_AgentID)
-        _ImGui_PopItemWidth()
+;~         _ImGui_PushItemWidth(100)
+;~         _ImGui_InputText("Agent ID##hinteract", $g_sInput_AgentID)
+;~         _ImGui_PopItemWidth()
         If _ImGui_Button("Go NPC##h") Then
-            Agent_GoNPC(Number($g_sInput_AgentID))
-            Log_Message("Agent_GoNPC(" & $g_sInput_AgentID & ")", $c_UTILS_Msg_Type_Info, "DevTools")
+            Agent_GoNPC(Agent_GetCurrentTarget())
+            Log_Message("Agent_GoNPC(" & Agent_GetCurrentTarget() & ")", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Go Player##h") Then
-            Agent_GoPlayer(Number($g_sInput_AgentID))
-            Log_Message("Agent_GoPlayer(" & $g_sInput_AgentID & ")", $c_UTILS_Msg_Type_Info, "DevTools")
+            Agent_GoPlayer(Agent_GetCurrentTarget())
+            Log_Message("Agent_GoPlayer(" & Agent_GetCurrentTarget() & ")", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Signpost##h") Then
-            Agent_GoSignpost(Number($g_sInput_AgentID))
-            Log_Message("Agent_GoSignpost(" & $g_sInput_AgentID & ")", $c_UTILS_Msg_Type_Info, "DevTools")
+            Agent_GoSignpost(Agent_GetCurrentTarget())
+            Log_Message("Agent_GoSignpost(" & Agent_GetCurrentTarget() & ")", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         If _ImGui_Button("Attack##h") Then
-            Agent_Attack(Number($g_sInput_AgentID))
-            Log_Message("Agent_Attack(" & $g_sInput_AgentID & ")", $c_UTILS_Msg_Type_Info, "DevTools")
+            Agent_Attack(Agent_GetCurrentTarget())
+            Log_Message("Agent_Attack(" & Agent_GetCurrentTarget() & ")", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Attack+Call##h") Then
-            Agent_Attack(Number($g_sInput_AgentID), True)
-            Log_Message("Agent_Attack(" & $g_sInput_AgentID & ", True)", $c_UTILS_Msg_Type_Info, "DevTools")
+            Agent_Attack(Agent_GetCurrentTarget()), True)
+            Log_Message("Agent_Attack(" & Agent_GetCurrentTarget() & ", True)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Call Target##h") Then
-            Agent_CallTarget(Number($g_sInput_AgentID))
-            Log_Message("Agent_CallTarget(" & $g_sInput_AgentID & ")", $c_UTILS_Msg_Type_Info, "DevTools")
+            Agent_CallTarget(Agent_GetCurrentTarget())
+            Log_Message("Agent_CallTarget(" & Agent_GetCurrentTarget() & ")", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Cancel Action##h") Then
@@ -1254,23 +1254,23 @@ Func _GUI_Tab_HeaderCommands()
         EndIf
         _ImGui_Text("Quick Travel:")
         If _ImGui_Button("Kamadan##h") Then
-            Map_TravelTo(148)
-            Log_Message("Map_TravelTo(148)", $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-        _ImGui_SameLine()
-        If _ImGui_Button("GT##h") Then
             Map_TravelTo(449)
             Log_Message("Map_TravelTo(449)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
+        If _ImGui_Button("GToB##h") Then
+            Map_TravelTo(248)
+            Log_Message("Map_TravelTo(248)", $c_UTILS_Msg_Type_Info, "DevTools")
+        EndIf
+        _ImGui_SameLine()
         If _ImGui_Button("EotN##h") Then
-            Map_TravelTo(857)
-            Log_Message("Map_TravelTo(857)", $c_UTILS_Msg_Type_Info, "DevTools")
+            Map_TravelTo(642)
+            Log_Message("Map_TravelTo(642)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("LA##h") Then
-            Map_TravelTo(4)
-            Log_Message("Map_TravelTo(4)", $c_UTILS_Msg_Type_Info, "DevTools")
+            Map_TravelTo(55)
+            Log_Message("Map_TravelTo(55)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Kaineng##h") Then
@@ -1289,12 +1289,12 @@ Func _GUI_Tab_HeaderCommands()
             Log_Message("Map_EnterChallenge(True)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         If _ImGui_Button("Travel GH##h") Then
-            Map_TravelGH(True)
+            Map_TravelGH()
             Log_Message("Map_TravelGH(True)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Leave GH##h") Then
-            Map_LeaveGH(True)
+            Map_LeaveGH()
             Log_Message("Map_LeaveGH(True)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
 		_ImGui_Separator()
