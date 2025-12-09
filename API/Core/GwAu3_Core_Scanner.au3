@@ -834,7 +834,7 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
             $g_p_GwAu3Header = $l_av_Alloc[0]
         EndIf
     Else
-        $g_p_GwAu3Header = $l_p_GwBase + 0x9EF000
+        $g_p_GwAu3Header = $l_p_GwBase + 0x9E8000
     EndIf
 
     Memory_WriteBinary($GC_S_GWAU3_HEADER_BIN, $g_p_GwAu3Header)
