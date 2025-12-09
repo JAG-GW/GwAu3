@@ -16,6 +16,7 @@ Global Const $GC_I_HEADER_TRADE_ACCEPT = 0x0007          	; Accept the trade off
 Global Const $GC_I_HEADER_ATTRIBUTE_DECREASE = 0x000E    	; Decrease an attribute value.
 Global Const $GC_I_HEADER_ATTRIBUTE_INCREASE = 0x000F    	; Increase an attribute value.
 ;~ Global Const $GC_I_HEADER_ATTRIBUTE_LOAD = 0x000E        ; Load attribute data.
+Global Const $GC_I_HEADER_SEND_CHAT = 0x0064        		; Send chat command.
 
 ; Quest and Hero operations
 Global Const $GC_I_HEADER_QUEST_ABANDON = 0x0011         	; Abandon the selected quest.

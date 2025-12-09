@@ -73,6 +73,7 @@ Global $g_iInput_SkillID = 1
 Global $g_sInput_BuffID = "0"
 Global $g_sInput_District = "0"
 Global $g_sInput_ControlAction = "0x80"
+Global $g_sInput_SkillTemplate = ""
 
 ; Quick Test tab variables
 Global $g_sQuickTest_Input1 = ""
@@ -334,27 +335,6 @@ Func _GUI_Tab_QueueCommands()
             Agent_ClearTarget()
             Log_Message("Agent_ClearTarget()", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
-        _ImGui_NewLine()
-        _ImGui_Text("Agent_MakeAgentArray - Create agent array snapshot")
-        If _ImGui_Button("All##qarray") Then
-            Agent_MakeAgentArray(0)
-            Log_Message("Agent_MakeAgentArray(0)", $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-        _ImGui_SameLine()
-        If _ImGui_Button("NPCs##qarray") Then
-            Agent_MakeAgentArray(0xDB)
-            Log_Message("Agent_MakeAgentArray(0xDB)", $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-        _ImGui_SameLine()
-        If _ImGui_Button("Players##qarray") Then
-            Agent_MakeAgentArray(0x200)
-            Log_Message("Agent_MakeAgentArray(0x200)", $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
-        _ImGui_SameLine()
-        If _ImGui_Button("Items##qarray") Then
-            Agent_MakeAgentArray(0x400)
-            Log_Message("Agent_MakeAgentArray(0x400)", $c_UTILS_Msg_Type_Info, "DevTools")
-        EndIf
 		_ImGui_Separator()
     EndIf
 
@@ -377,6 +357,18 @@ Func _GUI_Tab_QueueCommands()
         If _ImGui_Button("Decrease##qattr") Then
             Attribute_DecreaseAttribute(Number($g_sInput_AttributeID), Number($g_sInput_AttributeAmount), Number($g_sInput_HeroIndex))
             Log_Message("Attribute_DecreaseAttribute(" & $g_sInput_AttributeID & ", " & $g_sInput_AttributeAmount & ", " & $g_sInput_HeroIndex & ")", $c_UTILS_Msg_Type_Info, "DevTools")
+        EndIf
+		_ImGui_NewLine()
+		_ImGui_PushItemWidth(160)
+		_ImGui_InputText("Skill Template##qattr", $g_sInput_SkillTemplate)
+		_ImGui_PopItemWidth()
+		_ImGui_SameLine()
+		_ImGui_PushItemWidth(80)
+		_ImGui_InputText("Hero##qattr", $g_sInput_HeroIndex)
+		_ImGui_PopItemWidth()
+		If _ImGui_Button("Load##qattr") Then
+            Attribute_LoadSkillTemplate($g_sInput_SkillTemplate, Number($g_sInput_HeroIndex))
+            Log_Message("Attribute_LoadSkillTemplate(" & $g_sInput_SkillTemplate & ", " & Number($g_sInput_HeroIndex), $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
 		_ImGui_Separator()
     EndIf
@@ -402,6 +394,7 @@ Func _GUI_Tab_QueueCommands()
             Chat_SendChat($g_sInput_Message, $g_sInput_Channel)
             Log_Message("Chat_SendChat('" & $g_sInput_Message & "', '" & $g_sInput_Channel & "')", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
+		_ImGui_NewLine()
         _ImGui_Text("Quick Channels:")
         If _ImGui_Button("All (!)##qch") Then
             Chat_SendChat($g_sInput_Message, "!")
@@ -427,7 +420,7 @@ Func _GUI_Tab_QueueCommands()
             Chat_SendChat($g_sInput_Message, "%")
             Log_Message("Chat_SendChat('" & $g_sInput_Message & "', '%')", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
-        _ImGui_Separator()
+        _ImGui_NewLine()
         _ImGui_Text("Chat_SendWhisper - Send whisper")
         _ImGui_PushItemWidth(120)
         _ImGui_InputText("Receiver##qwhisp", $g_sInput_FriendName)
@@ -437,7 +430,7 @@ Func _GUI_Tab_QueueCommands()
             Chat_SendWhisper($g_sInput_FriendName, $g_sInput_Message)
             Log_Message("Chat_SendWhisper('" & $g_sInput_FriendName & "', '" & $g_sInput_Message & "')", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
-        _ImGui_Separator()
+        _ImGui_NewLine()
         _ImGui_Text("Chat_WriteChat - Local message (bot only)")
         If _ImGui_Button("Write Local##q") Then
             Chat_WriteChat($g_sInput_Message, "DevTools")

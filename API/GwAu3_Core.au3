@@ -360,7 +360,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     DllStructSetData($g_d_Packet, 1, Memory_GetValue('CommandPacketSend'))
     DllStructSetData($g_d_Action, 1, Memory_GetValue('CommandAction'))
     DllStructSetData($g_d_SendChat, 1, Memory_GetValue('CommandSendChat'))
-    DllStructSetData($g_d_SendChat, 2, 0x0063)
+    DllStructSetData($g_d_SendChat, 2, $GC_I_HEADER_SEND_CHAT)
 	;Skill
 	DllStructSetData($g_d_UseSkill, 1, Memory_GetValue('CommandUseSkill'))
     DllStructSetData($g_d_UseHeroSkill, 1, Memory_GetValue('CommandUseHeroSkill'))
