@@ -848,6 +848,10 @@ Func CanUse_DodgeThis()
 EndFunc
 
 Func BestTarget_DodgeThis($a_f_AggroRange)
+	; Description
+	; Shout. For 16...20 seconds, your next attack cannot be blocked and does +14...20 damage.
+	; Concise description
+	; Shout. (16...20 seconds.) Your next attack is unblockable and deals +14...20 damage.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
@@ -857,6 +861,10 @@ Func CanUse_IAmTheStrongest()
 EndFunc
 
 Func BestTarget_IAmTheStrongest($a_f_AggroRange)
+	; Description
+	; Shout. Your next 5...8 attacks do an additional +14...20 damage.
+	; Concise description
+	; Shout. Your next 5...8 attacks deal +14...20 damage.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 

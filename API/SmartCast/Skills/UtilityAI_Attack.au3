@@ -2028,7 +2028,7 @@ Func BestTarget_VictoriousSweep($a_f_AggroRange)
 	; Melee Attack. If this attack hits, you deal +5...21...25 damage. If target foe has less Health than you, you gain 30...70...80 Health.
 	; Concise description
 	; Melee Attack. Deals +5...21...25 damage. You gain 30...70...80 Health for each foe you hit that has less Health than you.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1489 - $GC_I_SKILL_ID_IRRESISTIBLE_SWEEP
@@ -2122,7 +2122,7 @@ Func BestTarget_ChillingVictory($a_f_AggroRange)
 	; Scythe Attack. If it hits, this attack strikes for +3...13...15 damage. For each foe hit who has less Health than you, that foe and all adjacent foes are struck for 10...26...30 cold damage.
 	; Concise description
 	; Scythe Attack. Deals +3...13...15 damage. Deals 10...26...30 cold damage to each foe hit who has less Health than you and foes adjacent to those targets.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1546 - $GC_I_SKILL_ID_BLAZING_SPEAR

@@ -2269,10 +2269,16 @@ EndFunc
 
 ; Skill ID: 1512 - $GC_I_SKILL_ID_LYSSAS_HASTE
 Func CanUse_LyssasHaste()
+	Local $l_i_NearestEnemy = UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
+	If UAI_GetAgentInfo($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_LyssasHaste($a_f_AggroRange)
+	; Description
+	; Flash Enchantment Spell. For 3...13...15 seconds, your Dervish enchantments recharge 33% faster. When you activate this enchantment, all adjacent foes are interrupted. When this enchantment ends, all adjacent foes are interrupted. 50% failure chance unless Wind Prayers 5 or higher.
+	; Concise description
+	; Flash Enchantment Spell. (3...13...15 seconds.) Your Dervish enchantments recharge 33% faster. Initial Effect: interrupts all adjacent foes. End Effect: interrupts all adjacent foes. 50% failure chance unless Wind Prayers 5 or higher.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
@@ -2879,6 +2885,8 @@ EndFunc
 
 ; Skill ID: 2013 - $GC_I_SKILL_ID_GRENTHS_AURA
 Func CanUse_GrenthsAura()
+	Local $l_i_NearestEnemy = UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
+	If UAI_GetAgentInfo($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
 	Return True
 EndFunc
 
