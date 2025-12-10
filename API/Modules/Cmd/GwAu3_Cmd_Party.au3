@@ -25,6 +25,11 @@ Func Party_KickNpc($a_i_NpcId)
     Return Core_SendPacket(0x8, $GC_I_HEADER_PARTY_KICK_NPC, $a_i_NpcId)
 EndFunc   ;==>Party_KickNpc
 
+;~ Description: Tick on party group.
+Func Party_Tick($a_b_Tick = True)
+    Return Core_SendPacket(0x8, $GC_I_HEADER_PARTY_TICK, $a_b_Tick)
+EndFunc   ;==>Party_KickNpc
+
 ;~ Description: Clear the position flag from a hero.
 Func Party_CancelHero($a_i_HeroNumber)
     Local $l_i_AgentID = Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID")

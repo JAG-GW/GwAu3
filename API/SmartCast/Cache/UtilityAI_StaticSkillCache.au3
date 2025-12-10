@@ -43,6 +43,7 @@ Global Enum $GC_UAI_STATIC_SKILL_SkillID, _
     $GC_UAI_STATIC_SKILL_ProjectileAnimation2ID, _
     $GC_UAI_STATIC_SKILL_IconFileID, _
     $GC_UAI_STATIC_SKILL_IconFileID2, _
+	$GC_UAI_STATIC_SKILL_IconFileIDHD, _
     $GC_UAI_STATIC_SKILL_Name, _
     $GC_UAI_STATIC_SKILL_Concise, _
     $GC_UAI_STATIC_SKILL_Description
@@ -90,9 +91,10 @@ Func UAI_StaticDataSkill($a_i_SkillID)
         "dword ProjectileAnimation2ID[0x88];" & _
         "dword IconFileID[0x8C];" & _
         "dword IconFileID2[0x90];" & _
-        "dword Name[0x94];" & _
-        "dword Concise[0x98];" & _
-        "dword Description[0x9C]")
+		"dword IconFileIDHD[0x94];" & _
+        "dword Name[0x98];" & _
+        "dword Concise[0x9C];" & _
+        "dword Description[0xA0]")
 
     Local $l_p_SkillPtr = Skill_GetSkillPtr($a_i_SkillID)
     If $l_p_SkillPtr = 0 Then Return SetError(1, 0, 0)

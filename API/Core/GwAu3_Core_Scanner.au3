@@ -887,13 +887,13 @@ Func Scanner_ScanAllPatterns()
         Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
 
         Local $l_h_Thread = DllCall($g_h_Kernel32, "int", "CreateRemoteThread", _
-            "int",  $g_h_GWProcess, _
-            "ptr",  0, _
-            "int",  0, _
-            "int",  Memory_GetLabelInfo("ScanProc"), _
-            "ptr",  0, _
-            "int",  0, _
-            "int",  0)
+            "int", $g_h_GWProcess, _
+            "ptr", 0, _
+            "int", 0, _
+            "int", Memory_GetLabelInfo("ScanProc"), _
+            "ptr", 0, _
+            "int", 0, _
+            "int", 0)
 
         $l_h_Thread = $l_h_Thread[0]
 

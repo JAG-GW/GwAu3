@@ -125,32 +125,32 @@ Func UAI_UpdateAgentCache($a_f_Range = 1320, $a_i_Type = 0xDB)
         "short AgentModelType[0xF6];" & _
         "dword TransmogNpcId[0xF8];" & _
         "ptr Equipment[0xFC];" & _
-        "byte Primary[0x10A];" & _
-        "byte Secondary[0x10B];" & _
-        "byte Level[0x10C];" & _
-        "byte Team[0x10D];" & _
-        "float EnergyRegen[0x114];" & _
-        "float Overcast[0x118];" & _
-        "float EnergyPercent[0x11C];" & _
-        "dword MaxEnergy[0x120];" & _
-        "float HPPips[0x128];" & _
-        "float HP[0x130];" & _
-        "dword MaxHP[0x134];" & _
-        "dword Effects[0x138];" & _
-        "dword ModelState[0x154];" & _
-        "dword TypeMap[0x158];" & _
-        "dword LoginNumber[0x180];" & _
-        "float AnimationSpeed[0x184];" & _
-        "dword AnimationCode[0x188];" & _
-        "dword AnimationId[0x18C];" & _
-        "byte LastStrike[0x1B0];" & _
-        "byte Allegiance[0x1B1];" & _
-        "short WeaponType[0x1B2];" & _
-        "short Skill[0x1B4];" & _
-        "byte WeaponItemType[0x1B8];" & _
-        "byte OffhandItemType[0x1B9];" & _
-        "short WeaponItemId[0x1BA];" & _
-        "short OffhandItemId[0x1BC]")
+        "byte Primary[0x10E];" & _
+        "byte Secondary[0x10F];" & _
+        "byte Level[0x110];" & _
+        "byte Team[0x111];" & _
+        "float EnergyRegen[0x118];" & _
+        "float Overcast[0x11C];" & _
+        "float EnergyPercent[0x120];" & _
+        "dword MaxEnergy[0x124];" & _
+        "float HPPips[0x12C];" & _
+        "float HP[0x134];" & _
+        "dword MaxHP[0x138];" & _
+        "dword Effects[0x13C];" & _
+        "dword ModelState[0x158];" & _
+        "dword TypeMap[0x15C];" & _
+        "dword LoginNumber[0x184];" & _
+        "float AnimationSpeed[0x188];" & _
+        "dword AnimationCode[0x18C];" & _
+        "dword AnimationId[0x190];" & _
+        "byte LastStrike[0x1B4];" & _
+        "byte Allegiance[0x1B5];" & _
+        "short WeaponType[0x1B6];" & _
+        "short Skill[0x1B8];" & _
+        "byte WeaponItemType[0x1BC];" & _
+        "byte OffhandItemType[0x1BD];" & _
+        "short WeaponItemId[0x1BE];" & _
+        "short OffhandItemId[0x1C0]")
 
     $g_i_AgentCacheCount = 0
     $g_i_PlayerCacheIndex = -1
