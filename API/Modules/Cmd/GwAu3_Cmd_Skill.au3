@@ -110,7 +110,7 @@ EndFunc   ;==>LoadSkillBar
 
 ; Unlock skill to dead boss (after using capture signet)
 Func Skill_UnlockSkillBossByID($a_i_SkillID)
-	Core_SendPacket(0x8, 0x5A, $a_i_SkillID)
+	Core_SendPacket(0x8, 0x005B, $a_i_SkillID)
 EndFunc
 
 ; Buy to skill merchant
