@@ -800,7 +800,7 @@ Func Scanner_GetPatternInfo($a_s_Name, $a_s_Type = '')
     Return 0
 EndFunc
 
-Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
+Func Scanner_ScanAllPatterns()
     Local $l_p_GwBase = Scanner_ScanForProcess()
     Local $l_ap_Results[$g_amx2_Patterns[0][0] + 1]
     $l_ap_Results[0] = $g_amx2_Patterns[0][0]
@@ -821,24 +821,6 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
     $g_i_ASMCodeOffset = 0
     $g_s_ASMCode = ""
 
-    If $a_b_DynamicAlloc Then
-        $g_p_GwAu3Header = Scanner_ScanForGwAu3()
-        If $g_p_GwAu3Header = 0 Then
-            Local $l_av_Alloc = DllCall($g_h_Kernel32, "ptr", "VirtualAllocEx", _
-            "handle", $g_h_GWProcess, _
-            "ptr", 0, _
-            "ulong_ptr", $GC_I_GWAU3_HEADER_SIZE, _
-            "dword", 0x1000, _
-            "dword", 0x40)
-
-            $g_p_GwAu3Header = $l_av_Alloc[0]
-        EndIf
-    Else
-        $g_p_GwAu3Header = $l_p_GwBase + 0x9E8000
-    EndIf
-
-    Memory_WriteBinary($GC_S_GWAU3_HEADER_BIN, $g_p_GwAu3Header)
-
     For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
         _($g_amx2_Patterns[$l_i_Idx][0] & ":")
         Scanner_AddPatternToASM($g_amx2_Patterns[$l_i_Idx][1])
@@ -846,8 +828,43 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
 
     Assembler_CreateScanProcedure($l_p_GwBase)
 
+    Local $l_b_NewHeader = False
+    Local $l_p_FixedHeader = $l_p_GwBase + 0x9E8000
+    Local $l_s_HeaderBytes = Memory_Read($l_p_FixedHeader, "byte[8]")
+
+    If $l_s_HeaderBytes = BinaryToString($GC_S_GWAU3_HEADER_STR) Then
+        $g_p_GwAu3Header = $l_p_FixedHeader
+
+    ElseIf $l_s_HeaderBytes = 0 Then
+        $g_p_GwAu3Header = $l_p_FixedHeader
+        $l_b_NewHeader = True
+
+    Else
+        $g_p_GwAu3Header = Scanner_ScanForGwAu3()
+        If $g_p_GwAu3Header = 0 Then
+            Local $l_av_Alloc = DllCall($g_h_Kernel32, "ptr", "VirtualAllocEx", _
+                "handle", $g_h_GWProcess, _
+                "ptr", 0, _
+                "ulong_ptr", $GC_I_GWAU3_HEADER_SIZE, _
+                "dword", 0x1000, _
+                "dword", 0x40)
+
+            $g_p_GwAu3Header = $l_av_Alloc[0]
+            If $g_p_GwAu3Header = 0 Then Return SetError(1, 0, 0)
+
+            $l_b_NewHeader = True
+        EndIf
+    EndIf
+
+    If $l_b_NewHeader Then
+        Memory_WriteBinary($GC_S_GWAU3_HEADER_BIN, $g_p_GwAu3Header)
+        Memory_Write($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_SCANPTR, 0)
+        Memory_Write($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_CMDPTR, 0)
+    EndIf
+
     Local $l_b_AllocScan = False
     $g_p_GwAu3Scan = Memory_Read($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_SCANPTR, "ptr")
+
     If $g_p_GwAu3Scan = 0 Then
         Local $l_av_ScanAlloc = DllCall($g_h_Kernel32, "ptr", "VirtualAllocEx", _
             "handle", $g_h_GWProcess, _
@@ -857,9 +874,9 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
             "dword", 0x40)
 
         $g_p_GwAu3Scan = $l_av_ScanAlloc[0]
+        If $g_p_GwAu3Scan = 0 Then Return SetError(2, 0, 0)
 
         Memory_Write($g_p_GwAu3Header + $GC_I_GWAU3_OFFSET_SCANPTR, $g_p_GwAu3Scan)
-
         $l_b_AllocScan = True
     EndIf
 
@@ -870,13 +887,13 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
         Memory_WriteBinary($g_s_ASMCode, $g_p_ASMMemory + $g_i_ASMCodeOffset)
 
         Local $l_h_Thread = DllCall($g_h_Kernel32, "int", "CreateRemoteThread", _
-            "int", $g_h_GWProcess, _
-            "ptr", 0, _
-            "int", 0, _
-            "int", Memory_GetLabelInfo("ScanProc"), _
-            "ptr", 0, _
-            "int", 0, _
-            "int", 0)
+            "int",  $g_h_GWProcess, _
+            "ptr",  0, _
+            "int",  0, _
+            "int",  Memory_GetLabelInfo("ScanProc"), _
+            "ptr",  0, _
+            "int",  0, _
+            "int",  0)
 
         $l_h_Thread = $l_h_Thread[0]
 
@@ -889,9 +906,7 @@ Func Scanner_ScanAllPatterns($a_b_DynamicAlloc = False)
     EndIf
 
     For $l_i_Idx = 1 To $g_amx2_Patterns[0][0]
-        $l_ap_Results[$l_i_Idx] = Memory_GetScannedAddress( _
-            $g_amx2_Patterns[$l_i_Idx][0], _
-            $g_amx2_Patterns[$l_i_Idx][2])
+        $l_ap_Results[$l_i_Idx] = Memory_GetScannedAddress($g_amx2_Patterns[$l_i_Idx][0], $g_amx2_Patterns[$l_i_Idx][2])
     Next
 
     Return $l_ap_Results
