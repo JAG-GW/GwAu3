@@ -1,11 +1,12 @@
 #include-once
 
 Func Anti_EchoRefrain()
-
+	Return False
 EndFunc
 
 ; Skill ID: 1574 - $GC_I_SKILL_ID_ENDURING_HARMONY
 Func CanUse_EnduringHarmony()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -19,6 +20,7 @@ EndFunc
 
 ; Skill ID: 1575 - $GC_I_SKILL_ID_BLAZING_FINALE
 Func CanUse_BlazingFinale()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -32,6 +34,7 @@ EndFunc
 
 ; Skill ID: 1576 - $GC_I_SKILL_ID_BURNING_REFRAIN
 Func CanUse_BurningRefrain()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -45,6 +48,7 @@ EndFunc
 
 ; Skill ID: 1577 - $GC_I_SKILL_ID_FINALE_OF_RESTORATION
 Func CanUse_FinaleOfRestoration()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -58,6 +62,7 @@ EndFunc
 
 ; Skill ID: 1578 - $GC_I_SKILL_ID_MENDING_REFRAIN
 Func CanUse_MendingRefrain()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -71,6 +76,7 @@ EndFunc
 
 ; Skill ID: 1579 - $GC_I_SKILL_ID_PURIFYING_FINALE
 Func CanUse_PurifyingFinale()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -84,6 +90,7 @@ EndFunc
 
 ; Skill ID: 1580 - $GC_I_SKILL_ID_BLADETURN_REFRAIN
 Func CanUse_BladeturnRefrain()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -97,6 +104,7 @@ EndFunc
 
 ; Skill ID: 1773 - $GC_I_SKILL_ID_SOLDIERS_FURY
 Func CanUse_SoldiersFury()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -106,6 +114,7 @@ EndFunc
 
 ; Skill ID: 1774 - $GC_I_SKILL_ID_AGGRESSIVE_REFRAIN
 Func CanUse_AggressiveRefrain()
+	If Anti_EchoRefrain() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_AGGRESSIVE_REFRAIN) And UAI_GetAgentEffectTimeRemaining(-2, $GC_I_SKILL_ID_AGGRESSIVE_REFRAIN) > 3000 Then Return False
 	Return True
 EndFunc
@@ -120,6 +129,7 @@ EndFunc
 
 ; Skill ID: 1775 - $GC_I_SKILL_ID_ENERGIZING_FINALE
 Func CanUse_EnergizingFinale()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -133,6 +143,7 @@ EndFunc
 
 ; Skill ID: 2075 - $GC_I_SKILL_ID_HASTY_REFRAIN
 Func CanUse_HastyRefrain()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -146,6 +157,7 @@ EndFunc
 
 ; Skill ID: 3028 - $GC_I_SKILL_ID_BLAZING_FINALE_PvP
 Func CanUse_BlazingFinalePvP()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -155,6 +167,7 @@ EndFunc
 
 ; Skill ID: 3029 - $GC_I_SKILL_ID_BLADETURN_REFRAIN_PvP
 Func CanUse_BladeturnRefrainPvP()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -164,6 +177,7 @@ EndFunc
 
 ; Skill ID: 3062 - $GC_I_SKILL_ID_FINALE_OF_RESTORATION_PvP
 Func CanUse_FinaleOfRestorationPvP()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -173,6 +187,7 @@ EndFunc
 
 ; Skill ID: 3149 - $GC_I_SKILL_ID_MENDING_REFRAIN_PvP
 Func CanUse_MendingRefrainPvP()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 
@@ -182,6 +197,7 @@ EndFunc
 
 ; Skill ID: 3431 - $GC_I_SKILL_ID_HEROIC_REFRAIN
 Func CanUse_HeroicRefrain()
+	If Anti_EchoRefrain() Then Return False
 	Return True
 EndFunc
 

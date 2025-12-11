@@ -1,7 +1,7 @@
 #include-once
 
 Func Anti_Ritual()
-
+	Return False
 EndFunc
 
 ; Skill ID: 462 - $GC_I_SKILL_ID_WINTER

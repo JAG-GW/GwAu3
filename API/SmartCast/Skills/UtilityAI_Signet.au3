@@ -659,7 +659,7 @@ Func BestTarget_SignetOfLostSouls($a_f_AggroRange)
 	; Signet. If target foe is below 50% Health, you gain 10...82...100 Health and 1...8...10 Energy.
 	; Concise description
 	; Signet. You gain 10...82...100 Health and 1...8...10 Energy if target foe is below 50% Health.
-	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsBelow50HP")
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsBelow50HP")
 EndFunc
 
 Func CanUse_SignetOfMalice()

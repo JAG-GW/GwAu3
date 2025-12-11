@@ -1,7 +1,6 @@
 #include-once
 
 Func Anti_Well()
-	If Not UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_IsDead) Then Return True
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return True
 
 	Local $l_i_CommingDamage = 0
@@ -30,6 +29,8 @@ Func Anti_Well()
 
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
 
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
+
 	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 
 	Return False
@@ -46,7 +47,7 @@ Func BestTarget_WellOfPower($a_f_AggroRange)
 	; Elite Well Spell. Exploit nearest corpse to create a Well of Power at that location. For 8...18...20 seconds, allies within the area of Well of Power gain +1...5...6 Health regeneration and +2 Energy regeneration.
 	; Concise description
 	; Elite Well Spell. (8...18...20 seconds.) Allies in this well have +1...5...6 Health regeneration and +2 Energy regeneration. Exploits a fresh corpse.
-	Return UAI_GetBestCorpseForAllySupport($a_f_AggroRange)
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 92 - $GC_I_SKILL_ID_WELL_OF_BLOOD
@@ -60,7 +61,7 @@ Func BestTarget_WellOfBlood($a_f_AggroRange)
 	; Well Spell. Exploit nearest corpse to create a Well of Blood at its location. For 8...18...20 seconds, allies in that area receive +1...5...6 Health regeneration.
 	; Concise description
 	; Well Spell. (8...18...20 seconds.) Allies in this well have +1...5...6 Health regeneration. Exploits a fresh corpse.
-	Return UAI_GetBestCorpseForAllySupport($a_f_AggroRange)
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 93 - $GC_I_SKILL_ID_WELL_OF_SUFFERING
@@ -116,7 +117,7 @@ Func BestTarget_WellOfDarkness($a_f_AggroRange)
 	; Well Spell. Exploit nearest corpse to create a Well of Darkness for 5...41...50 seconds. Hexed foes within the Well of Darkness miss 50% of the time.
 	; Concise description
 	; Well Spell. (5...41...50 seconds.) Hexed foes in this well have 50% chance to miss. Exploits a fresh corpse.
-	Return UAI_GetBestCorpseForAllySupport($a_f_AggroRange)
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1660 - $GC_I_SKILL_ID_WELL_OF_SILENCE

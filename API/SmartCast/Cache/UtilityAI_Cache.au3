@@ -16,10 +16,10 @@ Func Cache_SkillBar()
 
 	For $l_i_i = 1 To 8
 		Local $l_i_SkillID = UAI_GetStaticSkillInfo($l_i_i, $GC_UAI_STATIC_SKILL_SkillID)
-		Out("Skill Name:          " & $GC_AMX2_SKILL_DATA[$l_i_SkillID][1])
-		Out("    - SkillID:           " & $l_i_SkillID)
-		Out("    - BestTarget:    " & $g_as_BestTargetCache[$l_i_i])
-		Out("    - CanUse:         " & $g_as_CanUseCache[$l_i_i] & @CRLF)
+;~ 		Out("Skill Name:          " & $GC_AMX2_SKILL_DATA[$l_i_SkillID][1])
+;~ 		Out("    - SkillID:           " & $l_i_SkillID)
+;~ 		Out("    - BestTarget:    " & $g_as_BestTargetCache[$l_i_i])
+;~ 		Out("    - CanUse:         " & $g_as_CanUseCache[$l_i_i] & @CRLF)
 	Next
 
 	If $g_b_CacheWeaponSet Then UAI_DeterminateWeaponSets()

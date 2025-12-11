@@ -1,7 +1,7 @@
 #include-once
 
 Func Anti_Skill16()
-
+	Return False
 EndFunc
 
 ; Skill ID: 318 - $GC_I_SKILL_ID_DEFY_PAIN

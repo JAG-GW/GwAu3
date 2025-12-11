@@ -30,6 +30,8 @@ Func Anti_WeaponSpell()
 
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
 
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
+
 	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 
 	Return False
@@ -37,6 +39,7 @@ EndFunc
 
 ; Skill ID: 787 - $GC_I_SKILL_ID_RESILIENT_WEAPON
 Func CanUse_ResilientWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -50,6 +53,7 @@ EndFunc
 
 ; Skill ID: 792 - $GC_I_SKILL_ID_SPLINTER_WEAPON
 Func CanUse_SplinterWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -63,6 +67,7 @@ EndFunc
 
 ; Skill ID: 793 - $GC_I_SKILL_ID_WEAPON_OF_WARDING
 Func CanUse_WeaponOfWarding()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -76,6 +81,7 @@ EndFunc
 
 ; Skill ID: 794 - $GC_I_SKILL_ID_WAILING_WEAPON
 Func CanUse_WailingWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -89,6 +95,7 @@ EndFunc
 
 ; Skill ID: 795 - $GC_I_SKILL_ID_NIGHTMARE_WEAPON
 Func CanUse_NightmreWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -102,6 +109,7 @@ EndFunc
 
 ; Skill ID: 964 - $GC_I_SKILL_ID_VENGEFUL_WEAPON
 Func CanUse_VengefulWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -115,6 +123,7 @@ EndFunc
 
 ; Skill ID: 983 - $GC_I_SKILL_ID_WEAPON_OF_SHADOW
 Func CanUse_WeaponOfShadow()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -128,6 +137,7 @@ EndFunc
 
 ; Skill ID: 1257 - $GC_I_SKILL_ID_SPIRIT_LIGHT_WEAPON
 Func CanUse_SpiritLightWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -141,6 +151,7 @@ EndFunc
 
 ; Skill ID: 1258 - $GC_I_SKILL_ID_BRUTAL_WEAPON
 Func CanUse_BrutalWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -154,6 +165,7 @@ EndFunc
 
 ; Skill ID: 1259 - $GC_I_SKILL_ID_GUIDED_WEAPON
 Func CanUse_GuidedWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -167,6 +179,7 @@ EndFunc
 
 ; Skill ID: 1267 - $GC_I_SKILL_ID_VITAL_WEAPON
 Func CanUse_VitalWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -180,6 +193,7 @@ EndFunc
 
 ; Skill ID: 1268 - $GC_I_SKILL_ID_WEAPON_OF_QUICKENING
 Func CanUse_WeaponOfQuickening()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -193,6 +207,7 @@ EndFunc
 
 ; Skill ID: 1749 - $GC_I_SKILL_ID_WEAPON_OF_FURY
 Func CanUse_WeaponOfFury()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -206,6 +221,7 @@ EndFunc
 
 ; Skill ID: 1750 - $GC_I_SKILL_ID_XINRAES_WEAPON
 Func CanUse_XinraesWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -215,6 +231,7 @@ EndFunc
 
 ; Skill ID: 1751 - $GC_I_SKILL_ID_WARMONGERS_WEAPON
 Func CanUse_WarmongersWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -224,6 +241,7 @@ EndFunc
 
 ; Skill ID: 1752 - $GC_I_SKILL_ID_WEAPON_OF_REMEDY
 Func CanUse_WeaponOfRemedy()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -237,6 +255,7 @@ EndFunc
 
 ; Skill ID: 1786 - $GC_I_SKILL_ID_WEAPON_OF_MASTERY
 Func CanUse_WeaponOfMastery()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -250,6 +269,7 @@ EndFunc
 
 ; Skill ID: 2073 - $GC_I_SKILL_ID_WEAPON_OF_AGGRESSION
 Func CanUse_WeaponOfAggression()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -263,6 +283,7 @@ EndFunc
 
 ; Skill ID: 2148 - $GC_I_SKILL_ID_SUNDERING_WEAPON
 Func CanUse_SunderingWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -276,6 +297,7 @@ EndFunc
 
 ; Skill ID: 2149 - $GC_I_SKILL_ID_WEAPON_OF_RENEWAL
 Func CanUse_WeaponOfRenewal()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -289,6 +311,7 @@ EndFunc
 
 ; Skill ID: 2206 - $GC_I_SKILL_ID_GHOSTLY_WEAPON
 Func CanUse_GhostlyWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -302,6 +325,7 @@ EndFunc
 
 ; Skill ID: 2219 - $GC_I_SKILL_ID_GREAT_DWARF_WEAPON
 Func CanUse_GreatDwarfWeapon()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -315,6 +339,7 @@ EndFunc
 
 ; Skill ID: 2868 - $GC_I_SKILL_ID_SPLINTER_WEAPON_PvP
 Func CanUse_SplinterWeaponPvP()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -324,6 +349,7 @@ EndFunc
 
 ; Skill ID: 2893 - $GC_I_SKILL_ID_WEAPON_OF_WARDING_PvP
 Func CanUse_WeaponOfWardingPvP()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 
@@ -333,6 +359,7 @@ EndFunc
 
 ; Skill ID: 3429 - $GC_I_SKILL_ID_WEAPONS_OF_THREE_FORGES
 Func CanUse_WeaponsOfThreeForges()
+	If Anti_WeaponSpell() Then Return False
 	Return True
 EndFunc
 

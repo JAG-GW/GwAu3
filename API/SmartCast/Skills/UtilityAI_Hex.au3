@@ -3,7 +3,7 @@
 Func Anti_Hex()
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Then Return True
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return True
-	If UAI_Filter_IsSpirit($g_i_BestTarget) Then Return False ;can't cast hex on spirit
+	If UAI_Filter_IsSpirit($g_i_BestTarget) Then Return True ;can't cast hex on spirit
 
 	Local $l_i_CommingDamage = 0
 
@@ -38,6 +38,8 @@ Func Anti_Hex()
 		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
 	EndIf
 
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
+
 	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 
 	Return False
@@ -45,6 +47,7 @@ EndFunc
 
 ; Skill ID: 19 - $GC_I_SKILL_ID_FRAGILITY
 Func CanUse_Fragility()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -58,6 +61,7 @@ EndFunc
 
 ; Skill ID: 20 - $GC_I_SKILL_ID_CONFUSION
 Func CanUse_Confusion()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -71,6 +75,7 @@ EndFunc
 
 ; Skill ID: 26 - $GC_I_SKILL_ID_EMPATHY
 Func CanUse_Empathy()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -84,6 +89,7 @@ EndFunc
 
 ; Skill ID: 28 - $GC_I_SKILL_ID_BACKFIRE
 Func CanUse_Backfire()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -97,6 +103,7 @@ EndFunc
 
 ; Skill ID: 30 - $GC_I_SKILL_ID_DIVERSION
 Func CanUse_Diversion()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -110,6 +117,7 @@ EndFunc
 
 ; Skill ID: 31 - $GC_I_SKILL_ID_CONJURE_PHANTASM
 Func CanUse_ConjurePhantasm()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -123,6 +131,7 @@ EndFunc
 
 ; Skill ID: 35 - $GC_I_SKILL_ID_IGNORANCE
 Func CanUse_Ignorance()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -136,6 +145,7 @@ EndFunc
 
 ; Skill ID: 36 - $GC_I_SKILL_ID_ARCANE_CONUNDRUM
 Func CanUse_ArcaneConundrum()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -145,6 +155,7 @@ EndFunc
 
 ; Skill ID: 41 - $GC_I_SKILL_ID_ETHER_LORD
 Func CanUse_EtherLord()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -158,6 +169,7 @@ EndFunc
 
 ; Skill ID: 43 - $GC_I_SKILL_ID_CLUMSINESS
 Func CanUse_Clumsiness()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -171,6 +183,7 @@ EndFunc
 
 ; Skill ID: 44 - $GC_I_SKILL_ID_PHANTOM_PAIN
 Func CanUse_PhantomPain()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -184,6 +197,7 @@ EndFunc
 
 ; Skill ID: 45 - $GC_I_SKILL_ID_ETHEREAL_BURDEN
 Func CanUse_EtherealBurden()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -197,6 +211,7 @@ EndFunc
 
 ; Skill ID: 46 - $GC_I_SKILL_ID_GUILT
 Func CanUse_Guilt()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -210,6 +225,7 @@ EndFunc
 
 ; Skill ID: 47 - $GC_I_SKILL_ID_INEPTITUDE
 Func CanUse_Ineptitude()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -223,6 +239,7 @@ EndFunc
 
 ; Skill ID: 48 - $GC_I_SKILL_ID_SPIRIT_OF_FAILURE
 Func CanUse_SpiritOfFailure()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -236,6 +253,7 @@ EndFunc
 
 ; Skill ID: 49 - $GC_I_SKILL_ID_MIND_WRACK
 Func CanUse_MindWrack()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -249,6 +267,7 @@ EndFunc
 
 ; Skill ID: 50 - $GC_I_SKILL_ID_WASTRELS_WORRY
 Func CanUse_WastrelsWorry()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -262,6 +281,7 @@ EndFunc
 
 ; Skill ID: 51 - $GC_I_SKILL_ID_SHAME
 Func CanUse_Shame()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -275,6 +295,7 @@ EndFunc
 
 ; Skill ID: 52 - $GC_I_SKILL_ID_PANIC
 Func CanUse_Panic()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -288,6 +309,7 @@ EndFunc
 
 ; Skill ID: 53 - $GC_I_SKILL_ID_MIGRAINE
 Func CanUse_Migraine()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -301,6 +323,7 @@ EndFunc
 
 ; Skill ID: 54 - $GC_I_SKILL_ID_CRIPPLING_ANGUISH
 Func CanUse_CripplingAnguish()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -314,6 +337,7 @@ EndFunc
 
 ; Skill ID: 55 - $GC_I_SKILL_ID_FEVERED_DREAMS
 Func CanUse_FeveredDreams()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -327,6 +351,7 @@ EndFunc
 
 ; Skill ID: 56 - $GC_I_SKILL_ID_SOOTHING_IMAGES
 Func CanUse_SoothingImages()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -340,6 +365,7 @@ EndFunc
 
 ; Skill ID: 66 - $GC_I_SKILL_ID_SPIRIT_SHACKLES
 Func CanUse_SpiritShackles()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -353,6 +379,7 @@ EndFunc
 
 ; Skill ID: 76 - $GC_I_SKILL_ID_IMAGINED_BURDEN
 Func CanUse_ImaginedBurden()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -366,6 +393,7 @@ EndFunc
 
 ; Skill ID: 99 - $GC_I_SKILL_ID_PARASITIC_BOND
 Func CanUse_ParasiticBond()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -379,6 +407,7 @@ EndFunc
 
 ; Skill ID: 100 - $GC_I_SKILL_ID_SOUL_BARBS
 Func CanUse_SoulBarbs()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -392,6 +421,7 @@ EndFunc
 
 ; Skill ID: 101 - $GC_I_SKILL_ID_BARBS
 Func CanUse_Barbs()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -405,6 +435,7 @@ EndFunc
 
 ; Skill ID: 103 - $GC_I_SKILL_ID_PRICE_OF_FAILURE
 Func CanUse_PriceOfFailure()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -414,6 +445,7 @@ EndFunc
 
 ; Skill ID: 108 - $GC_I_SKILL_ID_SUFFERING
 Func CanUse_Suffering()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -427,6 +459,7 @@ EndFunc
 
 ; Skill ID: 109 - $GC_I_SKILL_ID_LIFE_SIPHON
 Func CanUse_LifeSiphon()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -440,6 +473,7 @@ EndFunc
 
 ; Skill ID: 121 - $GC_I_SKILL_ID_SPITEFUL_SPIRIT
 Func CanUse_SpitefulSpirit()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -453,6 +487,7 @@ EndFunc
 
 ; Skill ID: 122 - $GC_I_SKILL_ID_MALIGN_INTERVENTION
 Func CanUse_MalignIntervention()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -466,6 +501,7 @@ EndFunc
 
 ; Skill ID: 123 - $GC_I_SKILL_ID_INSIDIOUS_PARASITE
 Func CanUse_InsidiousParasite()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -479,6 +515,7 @@ EndFunc
 
 ; Skill ID: 124 - $GC_I_SKILL_ID_SPINAL_SHIVERS
 Func CanUse_SpinalShivers()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -488,6 +525,7 @@ EndFunc
 
 ; Skill ID: 125 - $GC_I_SKILL_ID_WITHER
 Func CanUse_Wither()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -501,6 +539,7 @@ EndFunc
 
 ; Skill ID: 126 - $GC_I_SKILL_ID_LIFE_TRANSFER
 Func CanUse_LifeTransfer()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -514,6 +553,7 @@ EndFunc
 
 ; Skill ID: 127 - $GC_I_SKILL_ID_MARK_OF_SUBVERSION
 Func CanUse_MarkOfSubversion()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -527,6 +567,7 @@ EndFunc
 
 ; Skill ID: 128 - $GC_I_SKILL_ID_SOUL_LEECH
 Func CanUse_SoulLeech()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -540,6 +581,7 @@ EndFunc
 
 ; Skill ID: 129 - $GC_I_SKILL_ID_DEFILE_FLESH
 Func CanUse_DefileFlesh()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -553,6 +595,7 @@ EndFunc
 
 ; Skill ID: 135 - $GC_I_SKILL_ID_FAINTHEARTEDNESS
 Func CanUse_Faintheartedness()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -566,6 +609,7 @@ EndFunc
 
 ; Skill ID: 136 - $GC_I_SKILL_ID_SHADOW_OF_FEAR
 Func CanUse_ShadowOfFear()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -579,6 +623,7 @@ EndFunc
 
 ; Skill ID: 137 - $GC_I_SKILL_ID_RIGOR_MORTIS
 Func CanUse_RigorMortis()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -592,6 +637,7 @@ EndFunc
 
 ; Skill ID: 140 - $GC_I_SKILL_ID_MALAISE
 Func CanUse_Malaise()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -605,6 +651,7 @@ EndFunc
 
 ; Skill ID: 142 - $GC_I_SKILL_ID_LINGERING_CURSE
 Func CanUse_LingeringCurse()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -618,6 +665,7 @@ EndFunc
 
 ; Skill ID: 150 - $GC_I_SKILL_ID_MARK_OF_PAIN
 Func CanUse_MarkOfPain()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -631,6 +679,7 @@ EndFunc
 
 ; Skill ID: 173 - $GC_I_SKILL_ID_GRASPING_EARTH
 Func CanUse_GraspingEarth()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -644,6 +693,7 @@ EndFunc
 
 ; Skill ID: 179 - $GC_I_SKILL_ID_INCENDIARY_BONDS
 Func CanUse_IncendiaryBonds()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -657,6 +707,7 @@ EndFunc
 
 ; Skill ID: 190 - $GC_I_SKILL_ID_MARK_OF_RODGORT
 Func CanUse_MarkOfRodgort()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -670,6 +721,7 @@ EndFunc
 
 ; Skill ID: 204 - $GC_I_SKILL_ID_RUST
 Func CanUse_Rust()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -683,6 +735,7 @@ EndFunc
 
 ; Skill ID: 205 - $GC_I_SKILL_ID_LIGHTNING_SURGE
 Func CanUse_LightningSurge()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -696,6 +749,7 @@ EndFunc
 
 ; Skill ID: 209 - $GC_I_SKILL_ID_MIND_FREEZE
 Func CanUse_MindFreeze()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -709,6 +763,7 @@ EndFunc
 
 ; Skill ID: 210 - $GC_I_SKILL_ID_ICE_PRISON
 Func CanUse_IcePrison()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -722,6 +777,7 @@ EndFunc
 
 ; Skill ID: 211 - $GC_I_SKILL_ID_ICE_SPIKES
 Func CanUse_IceSpikes()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -735,6 +791,7 @@ EndFunc
 
 ; Skill ID: 212 - $GC_I_SKILL_ID_FROZEN_BURST
 Func CanUse_FrozenBurst()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -748,6 +805,7 @@ EndFunc
 
 ; Skill ID: 213 - $GC_I_SKILL_ID_SHARD_STORM
 Func CanUse_ShardStorm()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -761,6 +819,7 @@ EndFunc
 
 ; Skill ID: 222 - $GC_I_SKILL_ID_LIGHTNING_STRIKE
 Func CanUse_LightningStrike()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -774,6 +833,7 @@ EndFunc
 
 ; Skill ID: 227 - $GC_I_SKILL_ID_GLIMMERING_MARK
 Func CanUse_GlimmeringMark()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -783,6 +843,7 @@ EndFunc
 
 ; Skill ID: 234 - $GC_I_SKILL_ID_DEEP_FREEZE
 Func CanUse_DeepFreeze()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -796,6 +857,7 @@ EndFunc
 
 ; Skill ID: 235 - $GC_I_SKILL_ID_BLURRED_VISION
 Func CanUse_BlurredVision()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -809,6 +871,7 @@ EndFunc
 
 ; Skill ID: 251 - $GC_I_SKILL_ID_SCOURGE_HEALING
 Func CanUse_ScourgeHealing()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -822,6 +885,7 @@ EndFunc
 
 ; Skill ID: 253 - $GC_I_SKILL_ID_SCOURGE_SACRIFICE
 Func CanUse_ScourgeSacrifice()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -835,6 +899,7 @@ EndFunc
 
 ; Skill ID: 264 - $GC_I_SKILL_ID_PACIFISM
 Func CanUse_Pacifism()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -848,6 +913,7 @@ EndFunc
 
 ; Skill ID: 265 - $GC_I_SKILL_ID_AMITY
 Func CanUse_Amity()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -861,6 +927,7 @@ EndFunc
 
 ; Skill ID: 505 - $GC_I_SKILL_ID_BURDEN_TOTEM
 Func CanUse_BurdenTotem()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -874,6 +941,7 @@ EndFunc
 
 ; Skill ID: 533 - $GC_I_SKILL_ID_CRYSTAL_HAZE
 Func CanUse_CrystalHaze()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -887,6 +955,7 @@ EndFunc
 
 ; Skill ID: 534 - $GC_I_SKILL_ID_CRYSTAL_BONDS
 Func CanUse_CrystalBonds()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -900,6 +969,7 @@ EndFunc
 
 ; Skill ID: 542 - $GC_I_SKILL_ID_ORACLE_LINK
 Func CanUse_OracleLink()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -913,6 +983,7 @@ EndFunc
 
 ; Skill ID: 567 - $GC_I_SKILL_ID_SPONTANEOUS_COMBUSTION
 Func CanUse_SpontaneousCombustion()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -926,6 +997,7 @@ EndFunc
 
 ; Skill ID: 570 - $GC_I_SKILL_ID_MARK_OF_INSECURITY
 Func CanUse_MarkOfInsecurity()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -939,6 +1011,7 @@ EndFunc
 
 ; Skill ID: 764 - $GC_I_SKILL_ID_WAIL_OF_DOOM
 Func CanUse_WailOfDoom()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -952,6 +1025,7 @@ EndFunc
 
 ; Skill ID: 785 - $GC_I_SKILL_ID_MARK_OF_DEATH
 Func CanUse_MarkOfDeath()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -965,6 +1039,7 @@ EndFunc
 
 ; Skill ID: 800 - $GC_I_SKILL_ID_ENDURING_TOXIN
 Func CanUse_EnduringToxin()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -978,6 +1053,7 @@ EndFunc
 
 ; Skill ID: 801 - $GC_I_SKILL_ID_SHROUD_OF_SILENCE
 Func CanUse_ShroudOfSilence()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -991,6 +1067,7 @@ EndFunc
 
 ; Skill ID: 802 - $GC_I_SKILL_ID_EXPOSE_DEFENSES
 Func CanUse_ExposeDefenses()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1004,6 +1081,7 @@ EndFunc
 
 ; Skill ID: 803 - $GC_I_SKILL_ID_POWER_LEECH
 Func CanUse_PowerLeech()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1017,6 +1095,7 @@ EndFunc
 
 ; Skill ID: 804 - $GC_I_SKILL_ID_ARCANE_LANGUOR
 Func CanUse_ArcaneLanguor()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1030,6 +1109,7 @@ EndFunc
 
 ; Skill ID: 808 - $GC_I_SKILL_ID_REAPERS_MARK1
 Func CanUse_ReapersMark1()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1043,6 +1123,7 @@ EndFunc
 
 ; Skill ID: 809 - $GC_I_SKILL_ID_SHATTERSTONE
 Func CanUse_Shatterstone()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1056,6 +1137,7 @@ EndFunc
 
 ; Skill ID: 815 - $GC_I_SKILL_ID_SCORPION_WIRE
 Func CanUse_ScorpionWire()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1069,6 +1151,7 @@ EndFunc
 
 ; Skill ID: 816 - $GC_I_SKILL_ID_MIRRORED_STANCE
 Func CanUse_MirroredStance()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1082,6 +1165,7 @@ EndFunc
 
 ; Skill ID: 820 - $GC_I_SKILL_ID_DEPRAVITY
 Func CanUse_Depravity()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1095,6 +1179,7 @@ EndFunc
 
 ; Skill ID: 821 - $GC_I_SKILL_ID_ICY_VEINS
 Func CanUse_IcyVeins()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1108,6 +1193,7 @@ EndFunc
 
 ; Skill ID: 822 - $GC_I_SKILL_ID_WEAKEN_KNEES
 Func CanUse_WeakenKnees()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1121,6 +1207,7 @@ EndFunc
 
 ; Skill ID: 827 - $GC_I_SKILL_ID_SIPHON_STRENGTH
 Func CanUse_SiphonStrength()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1134,6 +1221,7 @@ EndFunc
 
 ; Skill ID: 828 - $GC_I_SKILL_ID_VILE_MIASMA
 Func CanUse_VileMiasma()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1147,6 +1235,7 @@ EndFunc
 
 ; Skill ID: 834 - $GC_I_SKILL_ID_RECKLESS_HASTE
 Func CanUse_RecklessHaste()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1160,6 +1249,7 @@ EndFunc
 
 ; Skill ID: 835 - $GC_I_SKILL_ID_BLOOD_BOND
 Func CanUse_BloodBond()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1173,6 +1263,7 @@ EndFunc
 
 ; Skill ID: 859 - $GC_I_SKILL_ID_CONJURE_NIGHTMARE
 Func CanUse_ConjureNightmare()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1186,6 +1277,7 @@ EndFunc
 
 ; Skill ID: 861 - $GC_I_SKILL_ID_DISSIPATION
 Func CanUse_Dissipation()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1195,6 +1287,7 @@ EndFunc
 
 ; Skill ID: 878 - $GC_I_SKILL_ID_VISIONS_OF_REGRET
 Func CanUse_VisionsOfRegret()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1208,6 +1301,7 @@ EndFunc
 
 ; Skill ID: 879 - $GC_I_SKILL_ID_ILLUSION_OF_PAIN
 Func CanUse_IllusionOfPain()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1221,6 +1315,7 @@ EndFunc
 
 ; Skill ID: 880 - $GC_I_SKILL_ID_STOLEN_SPEED
 Func CanUse_StolenSpeed()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1234,6 +1329,7 @@ EndFunc
 
 ; Skill ID: 883 - $GC_I_SKILL_ID_VOCAL_MINORITY
 Func CanUse_VocalMinority()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1247,6 +1343,7 @@ EndFunc
 
 ; Skill ID: 898 - $GC_I_SKILL_ID_OVERLOAD
 Func CanUse_Overload()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1260,6 +1357,7 @@ EndFunc
 
 ; Skill ID: 899 - $GC_I_SKILL_ID_IMAGES_OF_REMORSE
 Func CanUse_ImagesOfRemorse()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1273,6 +1371,7 @@ EndFunc
 
 ; Skill ID: 900 - $GC_I_SKILL_ID_SHARED_BURDEN
 Func CanUse_SharedBurden()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1286,6 +1385,7 @@ EndFunc
 
 ; Skill ID: 901 - $GC_I_SKILL_ID_SOUL_BIND
 Func CanUse_SoulBind()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1299,6 +1399,7 @@ EndFunc
 
 ; Skill ID: 916 - $GC_I_SKILL_ID_LAMENTATION
 Func CanUse_Lamentation()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1312,6 +1413,7 @@ EndFunc
 
 ; Skill ID: 927 - $GC_I_SKILL_ID_SHAMEFUL_FEAR
 Func CanUse_ShamefulFear()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1325,6 +1427,7 @@ EndFunc
 
 ; Skill ID: 928 - $GC_I_SKILL_ID_SHADOW_SHROUD
 Func CanUse_ShadowShroud()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1338,6 +1441,7 @@ EndFunc
 
 ; Skill ID: 935 - $GC_I_SKILL_ID_RISING_BILE
 Func CanUse_RisingBile()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1351,6 +1455,7 @@ EndFunc
 
 ; Skill ID: 939 - $GC_I_SKILL_ID_ICY_SHACKLES
 Func CanUse_IcyShackles()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1364,6 +1469,7 @@ EndFunc
 
 ; Skill ID: 950 - $GC_I_SKILL_ID_SHADOWY_BURDEN
 Func CanUse_ShadowyBurden()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1377,6 +1483,7 @@ EndFunc
 
 ; Skill ID: 951 - $GC_I_SKILL_ID_SIPHON_SPEED
 Func CanUse_SiphonSpeed()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1390,6 +1497,7 @@ EndFunc
 
 ; Skill ID: 953 - $GC_I_SKILL_ID_POWER_FLUX
 Func CanUse_PowerFlux()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1403,6 +1511,7 @@ EndFunc
 
 ; Skill ID: 978 - $GC_I_SKILL_ID_MARK_OF_INSTABILITY
 Func CanUse_MarkOfInstability()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1416,6 +1525,7 @@ EndFunc
 
 ; Skill ID: 979 - $GC_I_SKILL_ID_MISTRUST
 Func CanUse_Mistrust()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1429,6 +1539,7 @@ EndFunc
 
 ; Skill ID: 998 - $GC_I_SKILL_ID_TORCH_HEX
 Func CanUse_TorchHex()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1438,6 +1549,7 @@ EndFunc
 
 ; Skill ID: 999 - $GC_I_SKILL_ID_TORCH_DEGENERATION_HEX
 Func CanUse_TorchDegenerationHex()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1447,6 +1559,7 @@ EndFunc
 
 ; Skill ID: 1009 - $GC_I_SKILL_ID_SNOW_DOWN_THE_SHIRT
 Func CanUse_SnowDownTheShirt()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1460,6 +1573,7 @@ EndFunc
 
 ; Skill ID: 1012 - $GC_I_SKILL_ID_ICICLES
 Func CanUse_Icicles()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1473,6 +1587,7 @@ EndFunc
 
 ; Skill ID: 1034 - $GC_I_SKILL_ID_SEEPING_WOUND
 Func CanUse_SeepingWound()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1486,6 +1601,7 @@ EndFunc
 
 ; Skill ID: 1035 - $GC_I_SKILL_ID_ASSASSINS_PROMISE
 Func CanUse_AssassinsPromise()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1499,6 +1615,7 @@ EndFunc
 
 ; Skill ID: 1044 - $GC_I_SKILL_ID_DARK_PRISON
 Func CanUse_DarkPrison()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1512,6 +1629,7 @@ EndFunc
 
 ; Skill ID: 1051 - $GC_I_SKILL_ID_EMPATHY_KORO
 Func CanUse_EmpathyKoro()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1521,6 +1639,7 @@ EndFunc
 
 ; Skill ID: 1055 - $GC_I_SKILL_ID_RECURRING_INSECURITY
 Func CanUse_RecurringInsecurity()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1534,6 +1653,7 @@ EndFunc
 
 ; Skill ID: 1056 - $GC_I_SKILL_ID_KITAHS_BURDEN
 Func CanUse_KitahsBurden()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1547,6 +1667,7 @@ EndFunc
 
 ; Skill ID: 1066 - $GC_I_SKILL_ID_SPOIL_VICTOR
 Func CanUse_SpoilVictor()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1560,6 +1681,7 @@ EndFunc
 
 ; Skill ID: 1071 - $GC_I_SKILL_ID_SHIVERS_OF_DREAD
 Func CanUse_ShiversOfDread()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1569,6 +1691,7 @@ EndFunc
 
 ; Skill ID: 1085 - $GC_I_SKILL_ID_ASH_BLAST
 Func CanUse_AshBlast()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1582,6 +1705,7 @@ EndFunc
 
 ; Skill ID: 1090 - $GC_I_SKILL_ID_SMOLDERING_EMBERS
 Func CanUse_SmolderingEmbers()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1595,6 +1719,7 @@ EndFunc
 
 ; Skill ID: 1097 - $GC_I_SKILL_ID_TEINAIS_PRISON
 Func CanUse_TeinaisPrison()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1608,6 +1733,7 @@ EndFunc
 
 ; Skill ID: 1098 - $GC_I_SKILL_ID_MIRROR_OF_ICE
 Func CanUse_MirrorOfIce()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1621,6 +1747,7 @@ EndFunc
 
 ; Skill ID: 1157 - $GC_I_SKILL_ID_STAR_SHARDS
 Func CanUse_StarShards()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1635,6 +1762,7 @@ EndFunc
 ; Skill ID: 1169 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 1235 - $GC_I_SKILL_ID_DULLED_WEAPON
 Func CanUse_DulledWeapon()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1648,6 +1776,7 @@ EndFunc
 
 ; Skill ID: 1236 - $GC_I_SKILL_ID_BINDING_CHAINS
 Func CanUse_BindingChains()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1661,6 +1790,7 @@ EndFunc
 
 ; Skill ID: 1237 - $GC_I_SKILL_ID_PAINFUL_BOND
 Func CanUse_PainfulBond()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1674,6 +1804,7 @@ EndFunc
 
 ; Skill ID: 1260 - $GC_I_SKILL_ID_MEEKNESS
 Func CanUse_Meekness()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1687,6 +1818,7 @@ EndFunc
 
 ; Skill ID: 1272 - $GC_I_SKILL_ID_SUICIDAL_IMPULSE
 Func CanUse_SuicidalImpulse()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1700,6 +1832,7 @@ EndFunc
 
 ; Skill ID: 1335 - $GC_I_SKILL_ID_WASTRELS_DEMISE
 Func CanUse_WastrelsDemise()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1713,6 +1846,7 @@ EndFunc
 
 ; Skill ID: 1341 - $GC_I_SKILL_ID_FRUSTRATION
 Func CanUse_Frustration()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1726,6 +1860,7 @@ EndFunc
 
 ; Skill ID: 1343 - $GC_I_SKILL_ID_ETHER_PHANTOM
 Func CanUse_EtherPhantom()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1739,6 +1874,7 @@ EndFunc
 
 ; Skill ID: 1344 - $GC_I_SKILL_ID_WEB_OF_DISRUPTION
 Func CanUse_WebOfDisruption()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1752,6 +1888,7 @@ EndFunc
 
 ; Skill ID: 1345 - $GC_I_SKILL_ID_ENCHANTERS_CONUNDRUM
 Func CanUse_EnchantersConundrum()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1765,6 +1902,7 @@ EndFunc
 
 ; Skill ID: 1358 - $GC_I_SKILL_ID_ULCEROUS_LUNGS
 Func CanUse_UlcerousLungs()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1778,6 +1916,7 @@ EndFunc
 
 ; Skill ID: 1360 - $GC_I_SKILL_ID_MARK_OF_FURY
 Func CanUse_MarkOfFury()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1791,6 +1930,7 @@ EndFunc
 
 ; Skill ID: 1361 - $GC_I_SKILL_ID_RECURRING_SCOURGE
 Func CanUse_RecurringScourge()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1800,6 +1940,7 @@ EndFunc
 
 ; Skill ID: 1362 - $GC_I_SKILL_ID_CORRUPT_ENCHANTMENT
 Func CanUse_CorruptEnchantment()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1813,6 +1954,7 @@ EndFunc
 
 ; Skill ID: 1368 - $GC_I_SKILL_ID_CHILLING_WINDS
 Func CanUse_ChillingWinds()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1826,6 +1968,7 @@ EndFunc
 
 ; Skill ID: 1382 - $GC_I_SKILL_ID_FREEZING_GUST
 Func CanUse_FreezingGust()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1839,6 +1982,7 @@ EndFunc
 
 ; Skill ID: 1398 - $GC_I_SKILL_ID_SCOURGE_ENCHANTMENT
 Func CanUse_ScourgeEnchantment()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1852,6 +1996,7 @@ EndFunc
 
 ; Skill ID: 1417 - $GC_I_SKILL_ID_VIAL_OF_PURIFIED_WATER
 Func CanUse_VialOfPurifiedWater()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1865,6 +2010,7 @@ EndFunc
 
 ; Skill ID: 1433 - $GC_I_SKILL_ID_CORSAIRS_NET
 Func CanUse_CorsairsNet()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1878,6 +2024,7 @@ EndFunc
 
 ; Skill ID: 1449 - $GC_I_SKILL_ID_LAST_RITES_OF_TORMENT
 Func CanUse_LastRitesOfTorment()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1887,6 +2034,7 @@ EndFunc
 
 ; Skill ID: 1458 - $GC_I_SKILL_ID_ENCHANTMENT_COLLAPSE
 Func CanUse_EnchantmentCollapse()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1900,6 +2048,7 @@ EndFunc
 
 ; Skill ID: 1459 - $GC_I_SKILL_ID_CALL_OF_SACRIFICE
 Func CanUse_CallOfSacrifice()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1913,6 +2062,7 @@ EndFunc
 
 ; Skill ID: 1478 - $GC_I_SKILL_ID_RENEWING_SURGE
 Func CanUse_RenewingSurge()
+	If Anti_Hex() Then Return False
 	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 20 Then Return False
 	Return True
 EndFunc
@@ -1927,6 +2077,7 @@ EndFunc
 
 ; Skill ID: 1642 - $GC_I_SKILL_ID_HIDDEN_CALTROPS
 Func CanUse_HiddenCaltrops()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1940,6 +2091,7 @@ EndFunc
 
 ; Skill ID: 1646 - $GC_I_SKILL_ID_AUGURY_OF_DEATH
 Func CanUse_AuguryOfDeath()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1949,6 +2101,7 @@ EndFunc
 
 ; Skill ID: 1652 - $GC_I_SKILL_ID_SHADOW_PRISON
 Func CanUse_ShadowPrison()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1962,6 +2115,7 @@ EndFunc
 
 ; Skill ID: 1655 - $GC_I_SKILL_ID_PRICE_OF_PRIDE
 Func CanUse_PriceOfPride()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1975,6 +2129,7 @@ EndFunc
 
 ; Skill ID: 1656 - $GC_I_SKILL_ID_AIR_OF_DISENCHANTMENT
 Func CanUse_AirOfDisenchantment()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -1988,6 +2143,7 @@ EndFunc
 
 ; Skill ID: 1688 - $GC_I_SKILL_ID_DEFENDERS_ZEAL
 Func CanUse_DefendersZeal()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2001,6 +2157,7 @@ EndFunc
 
 ; Skill ID: 1707 - $GC_I_SKILL_ID_WORDS_OF_MADNESS_QWYTZYLKAK
 Func CanUse_WordsOfMadnessQwytzylkak()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2010,6 +2167,7 @@ EndFunc
 
 ; Skill ID: 1710 - $GC_I_SKILL_ID_MADNESS_DART
 Func CanUse_MadnessDart()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2019,6 +2177,7 @@ EndFunc
 
 ; Skill ID: 1881 - $GC_I_SKILL_ID_BONDS_OF_TORMENT
 Func CanUse_BondsOfTorment()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2032,6 +2191,7 @@ EndFunc
 
 ; Skill ID: 1949 - $GC_I_SKILL_ID_ETHER_NIGHTMARE_LUXON
 Func CanUse_EtherNightmareLuxon()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2041,6 +2201,7 @@ EndFunc
 
 ; Skill ID: 1996 - $GC_I_SKILL_ID_SUM_OF_ALL_FEARS
 Func CanUse_SumOfAllFears()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2054,6 +2215,7 @@ EndFunc
 
 ; Skill ID: 1998 - $GC_I_SKILL_ID_CACOPHONY
 Func CanUse_Cacophony()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2067,6 +2229,7 @@ EndFunc
 
 ; Skill ID: 1999 - $GC_I_SKILL_ID_WINTERS_EMBRACE
 Func CanUse_WintersEmbrace()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2080,6 +2243,7 @@ EndFunc
 
 ; Skill ID: 2000 - $GC_I_SKILL_ID_EARTHEN_SHACKLES
 Func CanUse_EarthenShackles()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2093,6 +2257,7 @@ EndFunc
 
 ; Skill ID: 2052 - $GC_I_SKILL_ID_SHADOW_FANG
 Func CanUse_ShadowFang()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2106,6 +2271,7 @@ EndFunc
 
 ; Skill ID: 2053 - $GC_I_SKILL_ID_CALCULATED_RISK
 Func CanUse_CalculatedRisk()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2119,6 +2285,7 @@ EndFunc
 
 ; Skill ID: 2054 - $GC_I_SKILL_ID_SHRINKING_ARMOR
 Func CanUse_ShrinkingArmor()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2132,6 +2299,7 @@ EndFunc
 
 ; Skill ID: 2056 - $GC_I_SKILL_ID_WANDERING_EYE
 Func CanUse_WanderingEye()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2145,6 +2313,7 @@ EndFunc
 
 ; Skill ID: 2058 - $GC_I_SKILL_ID_PUTRID_BILE
 Func CanUse_PutridBile()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2158,6 +2327,7 @@ EndFunc
 
 ; Skill ID: 2086 - $GC_I_SKILL_ID_SNARING_WEB
 Func CanUse_SnaringWeb()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2171,6 +2341,7 @@ EndFunc
 
 ; Skill ID: 2089 - $GC_I_SKILL_ID_WURM_BILE
 Func CanUse_WurmBile()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2184,6 +2355,7 @@ EndFunc
 
 ; Skill ID: 2092 - $GC_I_SKILL_ID_ETHER_NIGHTMARE_KURZICK
 Func CanUse_EtherNightmareKurzick()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2193,6 +2365,7 @@ EndFunc
 
 ; Skill ID: 2122 - $GC_I_SKILL_ID_SPIRIT_WORLD_RETREAT
 Func CanUse_SpiritWorldRetreat()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2206,6 +2379,7 @@ EndFunc
 
 ; Skill ID: 2137 - $GC_I_SKILL_ID_CONFUSING_IMAGES
 Func CanUse_ConfusingImages()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2219,6 +2393,7 @@ EndFunc
 
 ; Skill ID: 2188 - $GC_I_SKILL_ID_DEFILE_DEFENSES
 Func CanUse_DefileDefenses()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2232,6 +2407,7 @@ EndFunc
 
 ; Skill ID: 2237 - $GC_I_SKILL_ID_ATROPHY
 Func CanUse_Atrophy()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2245,6 +2421,7 @@ EndFunc
 
 ; Skill ID: 2254 - $GC_I_SKILL_ID_POLYMOCK_GLYPH_DESTABILIZATION
 Func CanUse_PolymockGlyphDestabilization()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2254,6 +2431,7 @@ EndFunc
 
 ; Skill ID: 2255 - $GC_I_SKILL_ID_POLYMOCK_MIND_WRECK
 Func CanUse_PolymockMindWreck()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2263,6 +2441,7 @@ EndFunc
 
 ; Skill ID: 2261 - $GC_I_SKILL_ID_POLYMOCK_RISING_BILE
 Func CanUse_PolymockRisingBile()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2272,6 +2451,7 @@ EndFunc
 
 ; Skill ID: 2281 - $GC_I_SKILL_ID_POLYMOCK_GLYPH_FREEZE
 Func CanUse_PolymockGlyphFreeze()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2281,6 +2461,7 @@ EndFunc
 
 ; Skill ID: 2284 - $GC_I_SKILL_ID_POLYMOCK_CALCULATED_RISK
 Func CanUse_PolymockCalculatedRisk()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2290,6 +2471,7 @@ EndFunc
 
 ; Skill ID: 2285 - $GC_I_SKILL_ID_POLYMOCK_RECURRING_INSECURITY
 Func CanUse_PolymockRecurringInsecurity()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2299,6 +2481,7 @@ EndFunc
 
 ; Skill ID: 2286 - $GC_I_SKILL_ID_POLYMOCK_BACKFIRE
 Func CanUse_PolymockBackfire()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2308,6 +2491,7 @@ EndFunc
 
 ; Skill ID: 2287 - $GC_I_SKILL_ID_POLYMOCK_GUILT
 Func CanUse_PolymockGuilt()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2317,6 +2501,7 @@ EndFunc
 
 ; Skill ID: 2290 - $GC_I_SKILL_ID_POLYMOCK_PAINFUL_BOND
 Func CanUse_PolymockPainfulBond()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2326,6 +2511,7 @@ EndFunc
 
 ; Skill ID: 2292 - $GC_I_SKILL_ID_POLYMOCK_MIGRAINE
 Func CanUse_PolymockMigraine()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2335,6 +2521,7 @@ EndFunc
 
 ; Skill ID: 2304 - $GC_I_SKILL_ID_POLYMOCK_DIVERSION
 Func CanUse_PolymockDiversion()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2344,6 +2531,7 @@ EndFunc
 
 ; Skill ID: 2307 - $GC_I_SKILL_ID_POLYMOCK_ICY_BONDS
 Func CanUse_PolymockIcyBonds()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2353,6 +2541,7 @@ EndFunc
 
 ; Skill ID: 2329 - $GC_I_SKILL_ID_CRYSTAL_SNARE
 Func CanUse_CrystalSnare()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2366,6 +2555,7 @@ EndFunc
 
 ; Skill ID: 2330 - $GC_I_SKILL_ID_PARANOID_INDIGNATION
 Func CanUse_ParanoidIndignation()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2379,6 +2569,7 @@ EndFunc
 
 ; Skill ID: 2357 - $GC_I_SKILL_ID_A_TOUCH_OF_GUILE
 Func CanUse_ATouchOfGuile()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2392,6 +2583,7 @@ EndFunc
 
 ; Skill ID: 2415 - $GC_I_SKILL_ID_ASURAN_SCAN
 Func CanUse_AsuranScan()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2405,6 +2597,7 @@ EndFunc
 
 ; Skill ID: 2418 - $GC_I_SKILL_ID_PAIN_INVERTER
 Func CanUse_PainInverter()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2414,6 +2607,7 @@ EndFunc
 
 ; Skill ID: 2501 - $GC_I_SKILL_ID_TONGUE_LASH
 Func CanUse_TongueLash()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2427,6 +2621,7 @@ EndFunc
 
 ; Skill ID: 2503 - $GC_I_SKILL_ID_UNRELIABLE
 Func CanUse_Unreliable()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2436,6 +2631,7 @@ EndFunc
 
 ; Skill ID: 2514 - $GC_I_SKILL_ID_THE_MASTERS_MARK
 Func CanUse_TheMastersMark()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2449,6 +2645,7 @@ EndFunc
 
 ; Skill ID: 2544 - $GC_I_SKILL_ID_TONGUE_WHIP
 Func CanUse_TongueWhip()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2462,6 +2659,7 @@ EndFunc
 
 ; Skill ID: 2546 - $GC_I_SKILL_ID_DISHONORABLE
 Func CanUse_Dishonorable()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2475,6 +2673,7 @@ EndFunc
 
 ; Skill ID: 2627 - $GC_I_SKILL_ID_REAPERS_MARK2
 Func CanUse_ReapersMark2()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2489,6 +2688,7 @@ EndFunc
 ; Skill ID: 2631 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2672 - $GC_I_SKILL_ID_SPECTRAL_AGONY_SAUL_DALESSIO
 Func CanUse_SpectralAgonySaulDalessio()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2498,6 +2698,7 @@ EndFunc
 
 ; Skill ID: 2681 - $GC_I_SKILL_ID_SHARED_BURDEN_GWEN
 Func CanUse_SharedBurdenGwen()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2507,6 +2708,7 @@ EndFunc
 
 ; Skill ID: 2682 - $GC_I_SKILL_ID_SUM_OF_ALL_FEARS_GWEN
 Func CanUse_SumOfAllFearsGwen()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2516,6 +2718,7 @@ EndFunc
 
 ; Skill ID: 2734 - $GC_I_SKILL_ID_MIND_WRACK_PVP
 Func CanUse_MindWrackPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2525,6 +2728,7 @@ EndFunc
 
 ; Skill ID: 2756 - $GC_I_SKILL_ID_MAD_KINGS_FAN
 Func CanUse_MadKingsFan()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2538,6 +2742,7 @@ EndFunc
 
 ; Skill ID: 2803 - $GC_I_SKILL_ID_MIND_FREEZE_PVP
 Func CanUse_MindFreezePvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2547,6 +2752,7 @@ EndFunc
 
 ; Skill ID: 2906 - $GC_I_SKILL_ID_TARGET_ACQUISITION
 Func CanUse_TargetAcquisition()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2556,6 +2762,7 @@ EndFunc
 
 ; Skill ID: 2916 - $GC_I_SKILL_ID_NOX_PHANTOM
 Func CanUse_NoxPhantom()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2571,6 +2778,7 @@ EndFunc
 ; Skill ID: 2950 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2998 - $GC_I_SKILL_ID_FRAGILITY_PVP
 Func CanUse_FragilityPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2580,6 +2788,7 @@ EndFunc
 
 ; Skill ID: 3086 - $GC_I_SKILL_ID_WEIGHT_OF_DHUUM_HEX
 Func CanUse_WeightOfDhuumHex()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2589,6 +2798,7 @@ EndFunc
 
 ; Skill ID: 3151 - $GC_I_SKILL_ID_EMPATHY_PVP
 Func CanUse_EmpathyPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2598,6 +2808,7 @@ EndFunc
 
 ; Skill ID: 3152 - $GC_I_SKILL_ID_CRIPPLING_ANGUISH_PVP
 Func CanUse_CripplingAnguishPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2607,6 +2818,7 @@ EndFunc
 
 ; Skill ID: 3182 - $GC_I_SKILL_ID_PANIC_PVP
 Func CanUse_PanicPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2616,6 +2828,7 @@ EndFunc
 
 ; Skill ID: 3183 - $GC_I_SKILL_ID_MIGRAINE_PVP
 Func CanUse_MigrainePvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2625,6 +2838,7 @@ EndFunc
 
 ; Skill ID: 3186 - $GC_I_SKILL_ID_SHARED_BURDEN_PVP
 Func CanUse_SharedBurdenPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2634,6 +2848,7 @@ EndFunc
 
 ; Skill ID: 3187 - $GC_I_SKILL_ID_STOLEN_SPEED_PVP
 Func CanUse_StolenSpeedPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2643,6 +2858,7 @@ EndFunc
 
 ; Skill ID: 3190 - $GC_I_SKILL_ID_FRUSTRATION_PVP
 Func CanUse_FrustrationPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2652,6 +2868,7 @@ EndFunc
 
 ; Skill ID: 3191 - $GC_I_SKILL_ID_MISTRUST_PVP
 Func CanUse_MistrustPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2661,6 +2878,7 @@ EndFunc
 
 ; Skill ID: 3192 - $GC_I_SKILL_ID_ENCHANTERS_CONUNDRUM_PVP
 Func CanUse_EnchantersConundrumPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2670,6 +2888,7 @@ EndFunc
 
 ; Skill ID: 3195 - $GC_I_SKILL_ID_WANDERING_EYE_PVP
 Func CanUse_WanderingEyePvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2679,6 +2898,7 @@ EndFunc
 
 ; Skill ID: 3196 - $GC_I_SKILL_ID_CALCULATED_RISK_PVP
 Func CanUse_CalculatedRiskPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2688,6 +2908,7 @@ EndFunc
 
 ; Skill ID: 3200 - $GC_I_SKILL_ID_ISAIAHS_BALANCE
 Func CanUse_IsaiahsBalance()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2701,6 +2922,7 @@ EndFunc
 
 ; Skill ID: 3208 - $GC_I_SKILL_ID_WASTRELS_DEMISE_PVP
 Func CanUse_WastrelsDemisePvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2710,6 +2932,7 @@ EndFunc
 
 ; Skill ID: 3233 - $GC_I_SKILL_ID_SPOIL_VICTOR_PVP
 Func CanUse_SpoilVictorPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2719,6 +2942,7 @@ EndFunc
 
 ; Skill ID: 3234 - $GC_I_SKILL_ID_VISIONS_OF_REGRET_PVP
 Func CanUse_VisionsOfRegretPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2728,6 +2952,7 @@ EndFunc
 
 ; Skill ID: 3243 - $GC_I_SKILL_ID_PROMISE_OF_DEATH
 Func CanUse_PromiseOfDeath()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2741,6 +2966,7 @@ EndFunc
 
 ; Skill ID: 3289 - $GC_I_SKILL_ID_FEVERED_DREAMS_PVP
 Func CanUse_FeveredDreamsPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2750,6 +2976,7 @@ EndFunc
 
 ; Skill ID: 3302 - $GC_I_SKILL_ID_SKY_NET
 Func CanUse_SkyNet()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2763,6 +2990,7 @@ EndFunc
 
 ; Skill ID: 3374 - $GC_I_SKILL_ID_ILLUSION_OF_PAIN_PVP
 Func CanUse_IllusionOfPainPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 
@@ -2772,6 +3000,7 @@ EndFunc
 
 ; Skill ID: 3386 - $GC_I_SKILL_ID_WEB_OF_DISRUPTION_PVP
 Func CanUse_WebOfDisruptionPvp()
+	If Anti_Hex() Then Return False
 	Return True
 EndFunc
 

@@ -39,6 +39,8 @@ Func Anti_Spell()
 		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
 	EndIf
 
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
+
 	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 
 	Return False
@@ -46,6 +48,7 @@ EndFunc
 
 ; Skill ID: 5 - $GC_I_SKILL_ID_POWER_BLOCK
 Func CanUse_PowerBlock()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return False
 	If Not UAI_GetAgentInfoByID($BestTarget, $GC_UAI_AGENT_IsCasting) Then Return False
@@ -62,6 +65,7 @@ EndFunc
 
 ; Skill ID: 21 - $GC_I_SKILL_ID_INSPIRED_ENCHANTMENT
 Func CanUse_InspiredEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -75,6 +79,7 @@ EndFunc
 
 ; Skill ID: 22 - $GC_I_SKILL_ID_INSPIRED_HEX
 Func CanUse_InspiredHex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -88,6 +93,7 @@ EndFunc
 
 ; Skill ID: 23 - $GC_I_SKILL_ID_POWER_SPIKE
 Func CanUse_PowerSpike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -101,6 +107,7 @@ EndFunc
 
 ; Skill ID: 24 - $GC_I_SKILL_ID_POWER_LEAK
 Func CanUse_PowerLeak()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -114,6 +121,7 @@ EndFunc
 
 ; Skill ID: 25 - $GC_I_SKILL_ID_POWER_DRAIN
 Func CanUse_PowerDrain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -127,6 +135,7 @@ EndFunc
 
 ; Skill ID: 27 - $GC_I_SKILL_ID_SHATTER_DELUSIONS
 Func CanUse_ShatterDelusions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -140,6 +149,7 @@ EndFunc
 
 ; Skill ID: 39 - $GC_I_SKILL_ID_ENERGY_SURGE
 Func CanUse_EnergySurge()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -153,6 +163,7 @@ EndFunc
 
 ; Skill ID: 40 - $GC_I_SKILL_ID_ETHER_FEAST
 Func CanUse_EtherFeast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -166,6 +177,7 @@ EndFunc
 
 ; Skill ID: 42 - $GC_I_SKILL_ID_ENERGY_BURN
 Func CanUse_EnergyBurn()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -179,6 +191,7 @@ EndFunc
 
 ; Skill ID: 57 - $GC_I_SKILL_ID_CRY_OF_FRUSTRATION
 Func CanUse_CryOfFrustration()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -192,6 +205,7 @@ EndFunc
 
 ; Skill ID: 64 - $GC_I_SKILL_ID_MIMIC
 Func CanUse_Mimic()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -205,6 +219,7 @@ EndFunc
 
 ; Skill ID: 65 - $GC_I_SKILL_ID_ARCANE_MIMICRY
 Func CanUse_ArcaneMimicry()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -218,6 +233,7 @@ EndFunc
 
 ; Skill ID: 67 - $GC_I_SKILL_ID_SHATTER_HEX
 Func CanUse_ShatterHex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -231,6 +247,7 @@ EndFunc
 
 ; Skill ID: 68 - $GC_I_SKILL_ID_DRAIN_ENCHANTMENT
 Func CanUse_DrainEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -244,6 +261,7 @@ EndFunc
 
 ; Skill ID: 69 - $GC_I_SKILL_ID_SHATTER_ENCHANTMENT
 Func CanUse_ShatterEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -257,6 +275,7 @@ EndFunc
 
 ; Skill ID: 70 - $GC_I_SKILL_ID_DISAPPEAR
 Func CanUse_Disappear()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -270,6 +289,7 @@ EndFunc
 
 ; Skill ID: 77 - $GC_I_SKILL_ID_CHAOS_STORM
 Func CanUse_ChaosStorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -283,6 +303,7 @@ EndFunc
 
 ; Skill ID: 78 - $GC_I_SKILL_ID_EPIDEMIC
 Func CanUse_Epidemic()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -296,6 +317,7 @@ EndFunc
 
 ; Skill ID: 79 - $GC_I_SKILL_ID_ENERGY_DRAIN
 Func CanUse_EnergyDrain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -309,6 +331,7 @@ EndFunc
 
 ; Skill ID: 80 - $GC_I_SKILL_ID_ENERGY_TAP
 Func CanUse_EnergyTap()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -322,6 +345,7 @@ EndFunc
 
 ; Skill ID: 81 - $GC_I_SKILL_ID_ARCANE_THIEVERY
 Func CanUse_ArcaneThievery()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -335,6 +359,7 @@ EndFunc
 
 ; Skill ID: 83 - $GC_I_SKILL_ID_ANIMATE_BONE_HORROR
 Func CanUse_AnimateBoneHorror()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -348,6 +373,7 @@ EndFunc
 
 ; Skill ID: 84 - $GC_I_SKILL_ID_ANIMATE_BONE_FIEND
 Func CanUse_AnimateBoneFiend()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -361,6 +387,7 @@ EndFunc
 
 ; Skill ID: 85 - $GC_I_SKILL_ID_ANIMATE_BONE_MINIONS
 Func CanUse_AnimateBoneMinions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -374,6 +401,7 @@ EndFunc
 
 ; Skill ID: 86 - $GC_I_SKILL_ID_GRENTHS_BALANCE
 Func CanUse_GrenthsBalance()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -383,6 +411,7 @@ EndFunc
 
 ; Skill ID: 87 - $GC_I_SKILL_ID_VERATAS_GAZE
 Func CanUse_VeratasGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -392,6 +421,7 @@ EndFunc
 
 ; Skill ID: 89 - $GC_I_SKILL_ID_DEATHLY_CHILL
 Func CanUse_DeathlyChill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -405,6 +435,7 @@ EndFunc
 
 ; Skill ID: 90 - $GC_I_SKILL_ID_VERATAS_SACRIFICE
 Func CanUse_VeratasSacrifice()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -414,6 +445,7 @@ EndFunc
 
 ; Skill ID: 95 - $GC_I_SKILL_ID_PUTRID_EXPLOSION
 Func CanUse_PutridExplosion()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -427,6 +459,7 @@ EndFunc
 
 ; Skill ID: 96 - $GC_I_SKILL_ID_SOUL_FEAST
 Func CanUse_SoulFeast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -440,6 +473,7 @@ EndFunc
 
 ; Skill ID: 97 - $GC_I_SKILL_ID_NECROTIC_TRAVERSAL
 Func CanUse_NecroticTraversal()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -453,6 +487,7 @@ EndFunc
 
 ; Skill ID: 98 - $GC_I_SKILL_ID_CONSUME_CORPSE
 Func CanUse_ConsumeCorpse()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -466,6 +501,7 @@ EndFunc
 
 ; Skill ID: 102 - $GC_I_SKILL_ID_SHADOW_STRIKE
 Func CanUse_ShadowStrike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -479,6 +515,7 @@ EndFunc
 
 ; Skill ID: 105 - $GC_I_SKILL_ID_DEATHLY_SWARM
 Func CanUse_DeathlySwarm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -492,6 +529,7 @@ EndFunc
 
 ; Skill ID: 106 - $GC_I_SKILL_ID_ROTTING_FLESH
 Func CanUse_RottingFlesh()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -505,6 +543,7 @@ EndFunc
 
 ; Skill ID: 107 - $GC_I_SKILL_ID_VIRULENCE
 Func CanUse_Virulence()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -518,6 +557,7 @@ EndFunc
 
 ; Skill ID: 110 - $GC_I_SKILL_ID_UNHOLY_FEAST
 Func CanUse_UnholyFeast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -531,6 +571,7 @@ EndFunc
 
 ; Skill ID: 112 - $GC_I_SKILL_ID_DESECRATE_ENCHANTMENTS
 Func CanUse_DesecrateEnchantments()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -544,6 +585,7 @@ EndFunc
 
 ; Skill ID: 117 - $GC_I_SKILL_ID_ENFEEBLE1
 Func CanUse_Enfeeble1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -553,6 +595,7 @@ EndFunc
 
 ; Skill ID: 118 - $GC_I_SKILL_ID_ENFEEBLING_BLOOD
 Func CanUse_EnfeeblingBlood()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -566,6 +609,7 @@ EndFunc
 
 ; Skill ID: 120 - $GC_I_SKILL_ID_BLOOD_OF_THE_MASTER
 Func CanUse_BloodOfTheMaster()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -579,6 +623,7 @@ EndFunc
 
 ; Skill ID: 133 - $GC_I_SKILL_ID_DARK_PACT
 Func CanUse_DarkPact()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -592,6 +637,7 @@ EndFunc
 
 ; Skill ID: 141 - $GC_I_SKILL_ID_REND_ENCHANTMENTS
 Func CanUse_RendEnchantments()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -605,6 +651,7 @@ EndFunc
 
 ; Skill ID: 143 - $GC_I_SKILL_ID_STRIP_ENCHANTMENT
 Func CanUse_StripEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -618,6 +665,7 @@ EndFunc
 
 ; Skill ID: 144 - $GC_I_SKILL_ID_CHILBLAINS
 Func CanUse_Chilblains()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -631,6 +679,7 @@ EndFunc
 
 ; Skill ID: 146 - $GC_I_SKILL_ID_OFFERING_OF_BLOOD
 Func CanUse_OfferingOfBlood()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -644,6 +693,7 @@ EndFunc
 
 ; Skill ID: 149 - $GC_I_SKILL_ID_PLAGUE_SENDING
 Func CanUse_PlagueSending()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -657,6 +707,7 @@ EndFunc
 
 ; Skill ID: 151 - $GC_I_SKILL_ID_FEAST_OF_CORRUPTION
 Func CanUse_FeastOfCorruption()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -670,6 +721,7 @@ EndFunc
 
 ; Skill ID: 152 - $GC_I_SKILL_ID_TASTE_OF_DEATH
 Func CanUse_TasteOfDeath()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -683,6 +735,7 @@ EndFunc
 
 ; Skill ID: 153 - $GC_I_SKILL_ID_VAMPIRIC_GAZE
 Func CanUse_VampiricGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -696,6 +749,7 @@ EndFunc
 
 ; Skill ID: 159 - $GC_I_SKILL_ID_WEAKEN_ARMOR
 Func CanUse_WeakenArmor()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -709,6 +763,7 @@ EndFunc
 
 ; Skill ID: 161 - $GC_I_SKILL_ID_LIGHTNING_STORM
 Func CanUse_LightningStorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -722,6 +777,7 @@ EndFunc
 
 ; Skill ID: 162 - $GC_I_SKILL_ID_GALE
 Func CanUse_Gale()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -735,6 +791,7 @@ EndFunc
 
 ; Skill ID: 163 - $GC_I_SKILL_ID_WHIRLWIND
 Func CanUse_Whirlwind()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -748,6 +805,7 @@ EndFunc
 
 ; Skill ID: 167 - $GC_I_SKILL_ID_ERUPTION
 Func CanUse_Eruption()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -761,6 +819,7 @@ EndFunc
 
 ; Skill ID: 170 - $GC_I_SKILL_ID_EARTHQUAKE
 Func CanUse_Earthquake()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -774,6 +833,7 @@ EndFunc
 
 ; Skill ID: 171 - $GC_I_SKILL_ID_STONING
 Func CanUse_Stoning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -787,6 +847,7 @@ EndFunc
 
 ; Skill ID: 172 - $GC_I_SKILL_ID_STONE_DAGGERS
 Func CanUse_StoneDaggers()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -800,6 +861,7 @@ EndFunc
 
 ; Skill ID: 174 - $GC_I_SKILL_ID_AFTERSHOCK
 Func CanUse_Aftershock()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -813,6 +875,7 @@ EndFunc
 
 ; Skill ID: 183 - $GC_I_SKILL_ID_INFERNO
 Func CanUse_Inferno()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -826,6 +889,7 @@ EndFunc
 
 ; Skill ID: 185 - $GC_I_SKILL_ID_MIND_BURN
 Func CanUse_MindBurn()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -839,6 +903,7 @@ EndFunc
 
 ; Skill ID: 186 - $GC_I_SKILL_ID_FIREBALL
 Func CanUse_Fireball()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -852,6 +917,7 @@ EndFunc
 
 ; Skill ID: 187 - $GC_I_SKILL_ID_METEOR
 Func CanUse_Meteor()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -865,6 +931,7 @@ EndFunc
 
 ; Skill ID: 188 - $GC_I_SKILL_ID_FLAME_BURST
 Func CanUse_FlameBurst()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -878,6 +945,7 @@ EndFunc
 
 ; Skill ID: 189 - $GC_I_SKILL_ID_RODGORTS_INVOCATION
 Func CanUse_RodgortsInvocation()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -887,6 +955,7 @@ EndFunc
 
 ; Skill ID: 191 - $GC_I_SKILL_ID_IMMOLATE
 Func CanUse_Immolate()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -900,6 +969,7 @@ EndFunc
 
 ; Skill ID: 192 - $GC_I_SKILL_ID_METEOR_SHOWER
 Func CanUse_MeteorShower()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -913,6 +983,7 @@ EndFunc
 
 ; Skill ID: 193 - $GC_I_SKILL_ID_PHOENIX
 Func CanUse_Phoenix()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -926,6 +997,7 @@ EndFunc
 
 ; Skill ID: 194 - $GC_I_SKILL_ID_FLARE
 Func CanUse_Flare()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -939,6 +1011,7 @@ EndFunc
 
 ; Skill ID: 195 - $GC_I_SKILL_ID_LAVA_FONT
 Func CanUse_LavaFont()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -952,6 +1025,7 @@ EndFunc
 
 ; Skill ID: 196 - $GC_I_SKILL_ID_SEARING_HEAT
 Func CanUse_SearingHeat()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -965,6 +1039,7 @@ EndFunc
 
 ; Skill ID: 197 - $GC_I_SKILL_ID_FIRE_STORM
 Func CanUse_FireStorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -978,6 +1053,7 @@ EndFunc
 
 ; Skill ID: 215 - $GC_I_SKILL_ID_MAELSTROM
 Func CanUse_Maelstrom()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -991,6 +1067,7 @@ EndFunc
 
 ; Skill ID: 217 - $GC_I_SKILL_ID_CRYSTAL_WAVE
 Func CanUse_CrystalWave()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1004,6 +1081,7 @@ EndFunc
 
 ; Skill ID: 219 - $GC_I_SKILL_ID_OBSIDIAN_FLAME
 Func CanUse_ObsidianFlame()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1017,6 +1095,7 @@ EndFunc
 
 ; Skill ID: 220 - $GC_I_SKILL_ID_BLINDING_FLASH
 Func CanUse_BlindingFlash()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1030,6 +1109,7 @@ EndFunc
 
 ; Skill ID: 223 - $GC_I_SKILL_ID_CHAIN_LIGHTNING
 Func CanUse_ChainLightning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1043,6 +1123,7 @@ EndFunc
 
 ; Skill ID: 224 - $GC_I_SKILL_ID_ENERVATING_CHARGE
 Func CanUse_EnervatingCharge()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1056,6 +1137,7 @@ EndFunc
 
 ; Skill ID: 226 - $GC_I_SKILL_ID_MIND_SHOCK
 Func CanUse_MindShock()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1069,6 +1151,7 @@ EndFunc
 
 ; Skill ID: 228 - $GC_I_SKILL_ID_THUNDERCLAP
 Func CanUse_Thunderclap()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1082,6 +1165,7 @@ EndFunc
 
 ; Skill ID: 229 - $GC_I_SKILL_ID_LIGHTNING_ORB1
 Func CanUse_LightningOrb1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1091,6 +1175,7 @@ EndFunc
 
 ; Skill ID: 230 - $GC_I_SKILL_ID_LIGHTNING_JAVELIN
 Func CanUse_LightningJavelin()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1104,6 +1189,7 @@ EndFunc
 
 ; Skill ID: 237 - $GC_I_SKILL_ID_WATER_TRIDENT
 Func CanUse_WaterTrident()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1117,6 +1203,7 @@ EndFunc
 
 ; Skill ID: 240 - $GC_I_SKILL_ID_SMITE
 Func CanUse_Smite()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1130,6 +1217,7 @@ EndFunc
 
 ; Skill ID: 247 - $GC_I_SKILL_ID_SYMBOL_OF_WRATH
 Func CanUse_SymbolOfWrath()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1143,6 +1231,7 @@ EndFunc
 
 ; Skill ID: 252 - $GC_I_SKILL_ID_BANISH
 Func CanUse_Banish()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1156,6 +1245,7 @@ EndFunc
 
 ; Skill ID: 275 - $GC_I_SKILL_ID_MEND_CONDITION
 Func CanUse_MendCondition()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1169,6 +1259,7 @@ EndFunc
 
 ; Skill ID: 276 - $GC_I_SKILL_ID_RESTORE_CONDITION
 Func CanUse_RestoreCondition()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1182,6 +1273,7 @@ EndFunc
 
 ; Skill ID: 277 - $GC_I_SKILL_ID_MEND_AILMENT
 Func CanUse_MendAilment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1195,6 +1287,7 @@ EndFunc
 
 ; Skill ID: 278 - $GC_I_SKILL_ID_PURGE_CONDITIONS
 Func CanUse_PurgeConditions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1208,6 +1301,7 @@ EndFunc
 
 ; Skill ID: 279 - $GC_I_SKILL_ID_DIVINE_HEALING
 Func CanUse_DivineHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1221,6 +1315,7 @@ EndFunc
 
 ; Skill ID: 280 - $GC_I_SKILL_ID_HEAL_AREA
 Func CanUse_HealArea()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1234,6 +1329,7 @@ EndFunc
 
 ; Skill ID: 281 - $GC_I_SKILL_ID_ORISON_OF_HEALING
 Func CanUse_OrisonOfHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1247,6 +1343,7 @@ EndFunc
 
 ; Skill ID: 282 - $GC_I_SKILL_ID_WORD_OF_HEALING
 Func CanUse_WordOfHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1260,6 +1357,7 @@ EndFunc
 
 ; Skill ID: 283 - $GC_I_SKILL_ID_DWAYNAS_KISS
 Func CanUse_DwaynasKiss()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1269,6 +1367,7 @@ EndFunc
 
 ; Skill ID: 286 - $GC_I_SKILL_ID_HEAL_OTHER
 Func CanUse_HealOther()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1282,6 +1381,7 @@ EndFunc
 
 ; Skill ID: 287 - $GC_I_SKILL_ID_HEAL_PARTY
 Func CanUse_HealParty()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1295,6 +1395,7 @@ EndFunc
 
 ; Skill ID: 292 - $GC_I_SKILL_ID_INFUSE_HEALTH
 Func CanUse_InfuseHealth()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1308,6 +1409,7 @@ EndFunc
 
 ; Skill ID: 298 - $GC_I_SKILL_ID_MARTYR
 Func CanUse_Martyr()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1321,6 +1423,7 @@ EndFunc
 
 ; Skill ID: 301 - $GC_I_SKILL_ID_REMOVE_HEX
 Func CanUse_RemoveHex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1334,6 +1437,7 @@ EndFunc
 
 ; Skill ID: 302 - $GC_I_SKILL_ID_SMITE_HEX
 Func CanUse_SmiteHex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1347,6 +1451,7 @@ EndFunc
 
 ; Skill ID: 303 - $GC_I_SKILL_ID_CONVERT_HEXES
 Func CanUse_ConvertHexes()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1360,6 +1465,7 @@ EndFunc
 
 ; Skill ID: 304 - $GC_I_SKILL_ID_LIGHT_OF_DWAYNA
 Func CanUse_LightOfDwayna()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -1374,6 +1480,7 @@ EndFunc
 
 ; Skill ID: 305 - $GC_I_SKILL_ID_RESURRECT
 Func CanUse_Resurrect()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -1388,6 +1495,7 @@ EndFunc
 
 ; Skill ID: 306 - $GC_I_SKILL_ID_REBIRTH
 Func CanUse_Rebirth()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -1402,6 +1510,7 @@ EndFunc
 
 ; Skill ID: 311 - $GC_I_SKILL_ID_DRAW_CONDITIONS
 Func CanUse_DrawConditions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1415,6 +1524,7 @@ EndFunc
 
 ; Skill ID: 313 - $GC_I_SKILL_ID_HEALING_TOUCH
 Func CanUse_HealingTouch()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1428,6 +1538,7 @@ EndFunc
 
 ; Skill ID: 314 - $GC_I_SKILL_ID_RESTORE_LIFE
 Func CanUse_RestoreLife()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -1442,6 +1553,7 @@ EndFunc
 
 ; Skill ID: 488 - $GC_I_SKILL_ID_ERUPTION_ENVIRONMENT
 Func CanUse_EruptionEnvironment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1451,6 +1563,7 @@ EndFunc
 
 ; Skill ID: 489 - $GC_I_SKILL_ID_FIRE_STORM_ENVIRONMENT
 Func CanUse_FireStormEnvironment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1460,6 +1573,7 @@ EndFunc
 
 ; Skill ID: 491 - $GC_I_SKILL_ID_FOUNT_OF_MAGUUMA
 Func CanUse_FountOfMaguuma()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1473,6 +1587,7 @@ EndFunc
 
 ; Skill ID: 492 - $GC_I_SKILL_ID_HEALING_FOUNTAIN
 Func CanUse_HealingFountain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1486,6 +1601,7 @@ EndFunc
 
 ; Skill ID: 493 - $GC_I_SKILL_ID_ICY_GROUND
 Func CanUse_IcyGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1499,6 +1615,7 @@ EndFunc
 
 ; Skill ID: 494 - $GC_I_SKILL_ID_MAELSTROM_ENVIRONMENT
 Func CanUse_MaelstromEnvironment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1508,6 +1625,7 @@ EndFunc
 
 ; Skill ID: 495 - $GC_I_SKILL_ID_MURSAAT_TOWER_SKILL
 Func CanUse_MursaatTowerSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1517,6 +1635,7 @@ EndFunc
 
 ; Skill ID: 496 - $GC_I_SKILL_ID_QUICKSAND_ENVIRONMENT_EFFECT
 Func CanUse_QuicksandEnvironmentEffect()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1526,6 +1645,7 @@ EndFunc
 
 ; Skill ID: 497 - $GC_I_SKILL_ID_CURSE_OF_THE_BLOODSTONE
 Func CanUse_CurseOfTheBloodstone()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1539,6 +1659,7 @@ EndFunc
 
 ; Skill ID: 498 - $GC_I_SKILL_ID_CHAIN_LIGHTNING_ENVIRONMENT
 Func CanUse_ChainLightningEnvironment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1548,6 +1669,7 @@ EndFunc
 
 ; Skill ID: 499 - $GC_I_SKILL_ID_OBELISK_LIGHTNING
 Func CanUse_ObeliskLightning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1561,6 +1683,7 @@ EndFunc
 
 ; Skill ID: 500 - $GC_I_SKILL_ID_TAR
 Func CanUse_Tar()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1574,6 +1697,7 @@ EndFunc
 
 ; Skill ID: 525 - $GC_I_SKILL_ID_NIBBLE
 Func CanUse_Nibble()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1587,6 +1711,7 @@ EndFunc
 
 ; Skill ID: 543 - $GC_I_SKILL_ID_GUARDIAN_PACIFY
 Func CanUse_GuardianPacify()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1600,6 +1725,7 @@ EndFunc
 
 ; Skill ID: 544 - $GC_I_SKILL_ID_SOUL_VORTEX
 Func CanUse_SoulVortex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1614,6 +1740,7 @@ EndFunc
 ; Skill ID: 545 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 560 - $GC_I_SKILL_ID_RESURRECT_GARGOYLE
 Func CanUse_ResurrectGargoyle()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1623,6 +1750,7 @@ EndFunc
 
 ; Skill ID: 562 - $GC_I_SKILL_ID_LIGHTNING_ORB2
 Func CanUse_LightningOrb2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1632,6 +1760,7 @@ EndFunc
 
 ; Skill ID: 563 - $GC_I_SKILL_ID_WURM_SIEGE_DUNES_OF_DESPAIR
 Func CanUse_WurmSiegeDunesOfDespair()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1641,6 +1770,7 @@ EndFunc
 
 ; Skill ID: 564 - $GC_I_SKILL_ID_WURM_SIEGE
 Func CanUse_WurmSiege()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1650,6 +1780,7 @@ EndFunc
 
 ; Skill ID: 566 - $GC_I_SKILL_ID_SHIVER_TOUCH
 Func CanUse_ShiverTouch()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1663,6 +1794,7 @@ EndFunc
 
 ; Skill ID: 568 - $GC_I_SKILL_ID_VANISH
 Func CanUse_Vanish()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1676,6 +1808,7 @@ EndFunc
 
 ; Skill ID: 571 - $GC_I_SKILL_ID_DISRUPTING_DAGGER
 Func CanUse_DisruptingDagger()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1689,6 +1822,7 @@ EndFunc
 
 ; Skill ID: 576 - $GC_I_SKILL_ID_STATUES_BLESSING
 Func CanUse_StatuesBlessing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1698,6 +1832,7 @@ EndFunc
 
 ; Skill ID: 579 - $GC_I_SKILL_ID_DOMAIN_OF_SKILL_DAMAGE
 Func CanUse_DomainOfSkillDamage()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1711,6 +1846,7 @@ EndFunc
 
 ; Skill ID: 580 - $GC_I_SKILL_ID_DOMAIN_OF_ENERGY_DRAINING
 Func CanUse_DomainOfEnergyDraining()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1724,6 +1860,7 @@ EndFunc
 
 ; Skill ID: 581 - $GC_I_SKILL_ID_DOMAIN_OF_ELEMENTS
 Func CanUse_DomainOfElements()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1737,6 +1874,7 @@ EndFunc
 
 ; Skill ID: 582 - $GC_I_SKILL_ID_DOMAIN_OF_HEALTH_DRAINING
 Func CanUse_DomainOfHealthDraining()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1750,6 +1888,7 @@ EndFunc
 
 ; Skill ID: 583 - $GC_I_SKILL_ID_DOMAIN_OF_SLOW
 Func CanUse_DomainOfSlow()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1763,6 +1902,7 @@ EndFunc
 
 ; Skill ID: 585 - $GC_I_SKILL_ID_SWAMP_WATER
 Func CanUse_SwampWater()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1776,6 +1916,7 @@ EndFunc
 
 ; Skill ID: 586 - $GC_I_SKILL_ID_JANTHIRS_GAZE
 Func CanUse_JanthirsGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1785,6 +1926,7 @@ EndFunc
 
 ; Skill ID: 587 - $GC_I_SKILL_ID_FAKE_SPELL
 Func CanUse_FakeSpell()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1798,6 +1940,7 @@ EndFunc
 
 ; Skill ID: 589 - $GC_I_SKILL_ID_STORMCALLER_SKILL
 Func CanUse_StormcallerSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1807,6 +1950,7 @@ EndFunc
 
 ; Skill ID: 591 - $GC_I_SKILL_ID_QUEST_SKILL
 Func CanUse_QuestSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1820,6 +1964,7 @@ EndFunc
 
 ; Skill ID: 592 - $GC_I_SKILL_ID_RURIK_MUST_LIVE
 Func CanUse_RurikMustLive()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1831,13 +1976,9 @@ Func BestTarget_RurikMustLive($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 595 - $GC_I_SKILL_ID_RESTORE_LIFE_MONSTER_SKILL
-Func BestTarget_RestoreLifeMonsterSkill($a_f_AggroRange)
-	Return 0
-EndFunc
-
 ; Skill ID: 766 - $GC_I_SKILL_ID_GAZE_OF_CONTEMPT
 Func CanUse_GazeOfContempt()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1851,6 +1992,7 @@ EndFunc
 
 ; Skill ID: 769 - $GC_I_SKILL_ID_VIPERS_DEFENSE
 Func CanUse_VipersDefense()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1860,6 +2002,7 @@ EndFunc
 
 ; Skill ID: 770 - $GC_I_SKILL_ID_RETURN
 Func CanUse_Return()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1873,6 +2016,7 @@ EndFunc
 
 ; Skill ID: 784 - $GC_I_SKILL_ID_ENTANGLING_ASP
 Func CanUse_EntanglingAsp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1886,6 +2030,7 @@ EndFunc
 
 ; Skill ID: 791 - $GC_I_SKILL_ID_FLESH_OF_MY_FLESH
 Func CanUse_FleshOfMyFlesh()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -1900,6 +2045,7 @@ EndFunc
 
 ; Skill ID: 796 - $GC_I_SKILL_ID_SORROWS_FLAME
 Func CanUse_SorrowsFlame()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1909,6 +2055,7 @@ EndFunc
 
 ; Skill ID: 797 - $GC_I_SKILL_ID_SORROWS_FIST
 Func CanUse_SorrowsFist()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1918,6 +2065,7 @@ EndFunc
 
 ; Skill ID: 798 - $GC_I_SKILL_ID_BLAST_FURNACE
 Func CanUse_BlastFurnace()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1931,6 +2079,7 @@ EndFunc
 
 ; Skill ID: 799 - $GC_I_SKILL_ID_BEGUILING_HAZE
 Func CanUse_BeguilingHaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1944,6 +2093,7 @@ EndFunc
 
 ; Skill ID: 805 - $GC_I_SKILL_ID_ANIMATE_VAMPIRIC_HORROR
 Func CanUse_AnimateVampiricHorror()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1957,6 +2107,7 @@ EndFunc
 
 ; Skill ID: 817 - $GC_I_SKILL_ID_DISCORD
 Func CanUse_Discord()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1970,6 +2121,7 @@ EndFunc
 
 ; Skill ID: 824 - $GC_I_SKILL_ID_LAVA_ARROWS
 Func CanUse_LavaArrows()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1983,6 +2135,7 @@ EndFunc
 
 ; Skill ID: 825 - $GC_I_SKILL_ID_BED_OF_COALS
 Func CanUse_BedOfCoals()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -1996,6 +2149,7 @@ EndFunc
 
 ; Skill ID: 830 - $GC_I_SKILL_ID_RAY_OF_JUDGMENT
 Func CanUse_RayOfJudgment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2009,6 +2163,7 @@ EndFunc
 
 ; Skill ID: 832 - $GC_I_SKILL_ID_ANIMATE_FLESH_GOLEM
 Func CanUse_AnimateFleshGolem()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2022,6 +2177,7 @@ EndFunc
 
 ; Skill ID: 836 - $GC_I_SKILL_ID_RIDE_THE_LIGHTNING
 Func CanUse_RideTheLightning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2035,6 +2191,7 @@ EndFunc
 
 ; Skill ID: 840 - $GC_I_SKILL_ID_POISONED_HEART
 Func CanUse_PoisonedHeart()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2048,6 +2205,7 @@ EndFunc
 
 ; Skill ID: 841 - $GC_I_SKILL_ID_FETID_GROUND
 Func CanUse_FetidGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2061,6 +2219,7 @@ EndFunc
 
 ; Skill ID: 842 - $GC_I_SKILL_ID_ARC_LIGHTNING
 Func CanUse_ArcLightning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2074,6 +2233,7 @@ EndFunc
 
 ; Skill ID: 844 - $GC_I_SKILL_ID_CHURNING_EARTH
 Func CanUse_ChurningEarth()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2087,6 +2247,7 @@ EndFunc
 
 ; Skill ID: 845 - $GC_I_SKILL_ID_LIQUID_FLAME
 Func CanUse_LiquidFlame()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2100,6 +2261,7 @@ EndFunc
 
 ; Skill ID: 846 - $GC_I_SKILL_ID_STEAM1
 Func CanUse_Steam1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2109,6 +2271,7 @@ EndFunc
 
 ; Skill ID: 855 - $GC_I_SKILL_ID_CHOMPER
 Func CanUse_Chomper()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2122,6 +2285,7 @@ EndFunc
 
 ; Skill ID: 858 - $GC_I_SKILL_ID_DANCING_DAGGERS
 Func CanUse_DancingDaggers()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2135,6 +2299,7 @@ EndFunc
 
 ; Skill ID: 862 - $GC_I_SKILL_ID_RAVENOUS_GAZE
 Func CanUse_RavenousGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2148,6 +2313,7 @@ EndFunc
 
 ; Skill ID: 864 - $GC_I_SKILL_ID_OPPRESSIVE_GAZE
 Func CanUse_OppressiveGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2161,6 +2327,7 @@ EndFunc
 
 ; Skill ID: 865 - $GC_I_SKILL_ID_LIGHTNING_HAMMER
 Func CanUse_LightningHammer()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2174,6 +2341,7 @@ EndFunc
 
 ; Skill ID: 866 - $GC_I_SKILL_ID_VAPOR_BLADE
 Func CanUse_VaporBlade()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2187,6 +2355,7 @@ EndFunc
 
 ; Skill ID: 867 - $GC_I_SKILL_ID_HEALING_LIGHT
 Func CanUse_HealingLight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2198,13 +2367,9 @@ Func BestTarget_HealingLight($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 873 - $GC_I_SKILL_ID_RESURRECT_MONSTER_SKILL
-Func BestTarget_ResurrectMonsterSkill($a_f_AggroRange)
-	Return 0
-EndFunc
-
 ; Skill ID: 877 - $GC_I_SKILL_ID_LYSSAS_BALANCE
 Func CanUse_LyssasBalance()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2214,6 +2379,7 @@ EndFunc
 
 ; Skill ID: 884 - $GC_I_SKILL_ID_SEARING_FLAMES1
 Func CanUse_SearingFlames1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2223,6 +2389,7 @@ EndFunc
 
 ; Skill ID: 897 - $GC_I_SKILL_ID_OATH_OF_HEALING
 Func CanUse_OathOfHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2236,6 +2403,7 @@ EndFunc
 
 ; Skill ID: 902 - $GC_I_SKILL_ID_BLOOD_OF_THE_AGGRESSOR
 Func CanUse_BloodOfTheAggressor()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2249,6 +2417,7 @@ EndFunc
 
 ; Skill ID: 903 - $GC_I_SKILL_ID_ICY_PRISM
 Func CanUse_IcyPrism()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2262,6 +2431,7 @@ EndFunc
 
 ; Skill ID: 910 - $GC_I_SKILL_ID_SPIRIT_RIFT
 Func CanUse_SpiritRift()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2275,6 +2445,7 @@ EndFunc
 
 ; Skill ID: 914 - $GC_I_SKILL_ID_CONSUME_SOUL
 Func CanUse_ConsumeSoul()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2288,6 +2459,7 @@ EndFunc
 
 ; Skill ID: 915 - $GC_I_SKILL_ID_SPIRIT_LIGHT
 Func CanUse_SpiritLight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2301,6 +2473,7 @@ EndFunc
 
 ; Skill ID: 917 - $GC_I_SKILL_ID_RUPTURE_SOUL
 Func CanUse_RuptureSoul()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2314,6 +2487,7 @@ EndFunc
 
 ; Skill ID: 918 - $GC_I_SKILL_ID_SPIRIT_TO_FLESH
 Func CanUse_SpiritToFlesh()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2323,6 +2497,7 @@ EndFunc
 
 ; Skill ID: 919 - $GC_I_SKILL_ID_SPIRIT_BURN
 Func CanUse_SpiritBurn()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2336,6 +2511,7 @@ EndFunc
 
 ; Skill ID: 931 - $GC_I_SKILL_ID_POWER_RETURN
 Func CanUse_PowerReturn()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2349,6 +2525,7 @@ EndFunc
 
 ; Skill ID: 932 - $GC_I_SKILL_ID_COMPLICATE
 Func CanUse_Complicate()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2362,6 +2539,7 @@ EndFunc
 
 ; Skill ID: 933 - $GC_I_SKILL_ID_SHATTER_STORM
 Func CanUse_ShatterStorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2375,6 +2553,7 @@ EndFunc
 
 ; Skill ID: 936 - $GC_I_SKILL_ID_ENVENOM_ENCHANTMENTS
 Func CanUse_EnvenomEnchantments()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2388,6 +2567,7 @@ EndFunc
 
 ; Skill ID: 937 - $GC_I_SKILL_ID_SHOCKWAVE
 Func CanUse_Shockwave()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2401,6 +2581,7 @@ EndFunc
 
 ; Skill ID: 940 - $GC_I_SKILL_ID_CRY_OF_LAMENT
 Func CanUse_CryOfLament()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2414,6 +2595,7 @@ EndFunc
 
 ; Skill ID: 941 - $GC_I_SKILL_ID_BLESSED_LIGHT
 Func CanUse_BlessedLight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2427,6 +2609,7 @@ EndFunc
 
 ; Skill ID: 942 - $GC_I_SKILL_ID_WITHDRAW_HEXES
 Func CanUse_WithdrawHexes()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2440,6 +2623,7 @@ EndFunc
 
 ; Skill ID: 943 - $GC_I_SKILL_ID_EXTINGUISH
 Func CanUse_Extinguish()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2453,6 +2637,7 @@ EndFunc
 
 ; Skill ID: 952 - $GC_I_SKILL_ID_DEATHS_CHARGE
 Func CanUse_DeathsCharge()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2466,6 +2651,7 @@ EndFunc
 
 ; Skill ID: 954 - $GC_I_SKILL_ID_EXPEL_HEXES
 Func CanUse_ExpelHexes()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2479,6 +2665,7 @@ EndFunc
 
 ; Skill ID: 955 - $GC_I_SKILL_ID_RIP_ENCHANTMENT
 Func CanUse_RipEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2492,6 +2679,7 @@ EndFunc
 
 ; Skill ID: 958 - $GC_I_SKILL_ID_HEALING_WHISPER
 Func CanUse_HealingWhisper()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2505,6 +2693,7 @@ EndFunc
 
 ; Skill ID: 959 - $GC_I_SKILL_ID_ETHEREAL_LIGHT
 Func CanUse_EtherealLight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2518,6 +2707,7 @@ EndFunc
 
 ; Skill ID: 960 - $GC_I_SKILL_ID_RELEASE_ENCHANTMENTS
 Func CanUse_ReleaseEnchantments()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2531,6 +2721,7 @@ EndFunc
 
 ; Skill ID: 962 - $GC_I_SKILL_ID_SPIRIT_TRANSFER
 Func CanUse_SpiritTransfer()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2544,6 +2735,7 @@ EndFunc
 
 ; Skill ID: 965 - $GC_I_SKILL_ID_ARCHEMORUS_STRIKE
 Func CanUse_ArchemorusStrike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2553,6 +2745,7 @@ EndFunc
 
 ; Skill ID: 966 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_1
 Func CanUse_SpearOfArchemorusLevel1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2562,6 +2755,7 @@ EndFunc
 
 ; Skill ID: 967 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_2
 Func CanUse_SpearOfArchemorusLevel2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2571,6 +2765,7 @@ EndFunc
 
 ; Skill ID: 968 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_3
 Func CanUse_SpearOfArchemorusLevel3()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2580,6 +2775,7 @@ EndFunc
 
 ; Skill ID: 969 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_4
 Func CanUse_SpearOfArchemorusLevel4()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2589,6 +2785,7 @@ EndFunc
 
 ; Skill ID: 970 - $GC_I_SKILL_ID_SPEAR_OF_ARCHEMORUS_LEVEL_5
 Func CanUse_SpearOfArchemorusLevel5()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2598,6 +2795,7 @@ EndFunc
 
 ; Skill ID: 971 - $GC_I_SKILL_ID_ARGOS_CRY
 Func CanUse_ArgosCry()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2607,6 +2805,7 @@ EndFunc
 
 ; Skill ID: 972 - $GC_I_SKILL_ID_JADE_FURY
 Func CanUse_JadeFury()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2620,6 +2819,7 @@ EndFunc
 
 ; Skill ID: 973 - $GC_I_SKILL_ID_BLINDING_POWDER
 Func CanUse_BlindingPowder()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2633,6 +2833,7 @@ EndFunc
 
 ; Skill ID: 974 - $GC_I_SKILL_ID_MANTIS_TOUCH
 Func CanUse_MantisTouch()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2646,6 +2847,7 @@ EndFunc
 
 ; Skill ID: 980 - $GC_I_SKILL_ID_FEAST_OF_SOULS
 Func CanUse_FeastOfSouls()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2659,6 +2861,7 @@ EndFunc
 
 ; Skill ID: 985 - $GC_I_SKILL_ID_CALTROPS
 Func CanUse_Caltrops()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2672,6 +2875,7 @@ EndFunc
 
 ; Skill ID: 991 - $GC_I_SKILL_ID_DENY_HEXES
 Func CanUse_DenyHexes()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2685,6 +2889,7 @@ EndFunc
 
 ; Skill ID: 1000 - $GC_I_SKILL_ID_BLINDING_SNOW
 Func CanUse_BlindingSnow()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2698,6 +2903,7 @@ EndFunc
 
 ; Skill ID: 1001 - $GC_I_SKILL_ID_AVALANCHE_SKILL
 Func CanUse_AvalancheSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2707,6 +2913,7 @@ EndFunc
 
 ; Skill ID: 1002 - $GC_I_SKILL_ID_SNOWBALL
 Func CanUse_Snowball()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2720,6 +2927,7 @@ EndFunc
 
 ; Skill ID: 1003 - $GC_I_SKILL_ID_MEGA_SNOWBALL
 Func CanUse_MegaSnowball()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2733,6 +2941,7 @@ EndFunc
 
 ; Skill ID: 1011 - $GC_I_SKILL_ID_HOLIDAY_BLUES
 Func CanUse_HolidayBlues()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2746,6 +2955,7 @@ EndFunc
 
 ; Skill ID: 1015 - $GC_I_SKILL_ID_FLURRY_OF_ICE
 Func CanUse_FlurryOfIce()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2759,6 +2969,7 @@ EndFunc
 
 ; Skill ID: 1016 - $GC_I_SKILL_ID_SNOWBALL_NPC
 Func CanUse_SnowballNpc()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2768,6 +2979,7 @@ EndFunc
 
 ; Skill ID: 1032 - $GC_I_SKILL_ID_HEART_OF_SHADOW
 Func CanUse_HeartOfShadow()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2781,6 +2993,7 @@ EndFunc
 
 ; Skill ID: 1038 - $GC_I_SKILL_ID_CRIPPLING_DAGGER
 Func CanUse_CripplingDagger()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2794,6 +3007,7 @@ EndFunc
 
 ; Skill ID: 1040 - $GC_I_SKILL_ID_SPIRIT_WALK
 Func CanUse_SpiritWalk()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2807,6 +3021,7 @@ EndFunc
 
 ; Skill ID: 1048 - $GC_I_SKILL_ID_REVEALED_ENCHANTMENT
 Func CanUse_RevealedEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2820,6 +3035,7 @@ EndFunc
 
 ; Skill ID: 1049 - $GC_I_SKILL_ID_REVEALED_HEX
 Func CanUse_RevealedHex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2833,6 +3049,7 @@ EndFunc
 
 ; Skill ID: 1052 - $GC_I_SKILL_ID_ACCUMULATED_PAIN
 Func CanUse_AccumulatedPain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2846,6 +3063,7 @@ EndFunc
 
 ; Skill ID: 1053 - $GC_I_SKILL_ID_PSYCHIC_DISTRACTION
 Func CanUse_PsychicDistraction()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2859,6 +3077,7 @@ EndFunc
 
 ; Skill ID: 1057 - $GC_I_SKILL_ID_PSYCHIC_INSTABILITY
 Func CanUse_PsychicInstability()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2872,6 +3091,7 @@ EndFunc
 
 ; Skill ID: 1060 - $GC_I_SKILL_ID_CELESTIAL_HASTE
 Func CanUse_CelestialHaste()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2885,6 +3105,7 @@ EndFunc
 
 ; Skill ID: 1061 - $GC_I_SKILL_ID_FEEDBACK
 Func CanUse_Feedback()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2898,6 +3119,7 @@ EndFunc
 
 ; Skill ID: 1062 - $GC_I_SKILL_ID_ARCANE_LARCENY
 Func CanUse_ArcaneLarceny()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2911,6 +3133,7 @@ EndFunc
 
 ; Skill ID: 1067 - $GC_I_SKILL_ID_LIFEBANE_STRIKE
 Func CanUse_LifebaneStrike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2924,6 +3147,7 @@ EndFunc
 
 ; Skill ID: 1068 - $GC_I_SKILL_ID_BITTER_CHILL
 Func CanUse_BitterChill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2937,6 +3161,7 @@ EndFunc
 
 ; Skill ID: 1069 - $GC_I_SKILL_ID_TASTE_OF_PAIN
 Func CanUse_TasteOfPain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2950,6 +3175,7 @@ EndFunc
 
 ; Skill ID: 1070 - $GC_I_SKILL_ID_DEFILE_ENCHANTMENTS
 Func CanUse_DefileEnchantments()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2963,6 +3189,7 @@ EndFunc
 
 ; Skill ID: 1075 - $GC_I_SKILL_ID_VAMPIRIC_SWARM
 Func CanUse_VampiricSwarm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2976,6 +3203,7 @@ EndFunc
 
 ; Skill ID: 1076 - $GC_I_SKILL_ID_BLOOD_DRINKER
 Func CanUse_BloodDrinker()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2989,6 +3217,7 @@ EndFunc
 
 ; Skill ID: 1081 - $GC_I_SKILL_ID_TEINAIS_WIND
 Func CanUse_TeinaisWind()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -2998,6 +3227,7 @@ EndFunc
 
 ; Skill ID: 1082 - $GC_I_SKILL_ID_SHOCK_ARROW
 Func CanUse_ShockArrow()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3011,6 +3241,7 @@ EndFunc
 
 ; Skill ID: 1083 - $GC_I_SKILL_ID_UNSTEADY_GROUND
 Func CanUse_UnsteadyGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3024,6 +3255,7 @@ EndFunc
 
 ; Skill ID: 1086 - $GC_I_SKILL_ID_DRAGONS_STOMP
 Func CanUse_DragonsStomp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3033,6 +3265,7 @@ EndFunc
 
 ; Skill ID: 1088 - $GC_I_SKILL_ID_SECOND_WIND
 Func CanUse_SecondWind()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3046,6 +3279,7 @@ EndFunc
 
 ; Skill ID: 1094 - $GC_I_SKILL_ID_BREATH_OF_FIRE
 Func CanUse_BreathOfFire()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3059,6 +3293,7 @@ EndFunc
 
 ; Skill ID: 1095 - $GC_I_SKILL_ID_STAR_BURST
 Func CanUse_StarBurst()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3072,6 +3307,7 @@ EndFunc
 
 ; Skill ID: 1099 - $GC_I_SKILL_ID_TEINAIS_CRYSTALS
 Func CanUse_TeinaisCrystals()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3081,6 +3317,7 @@ EndFunc
 
 ; Skill ID: 1106 - $GC_I_SKILL_ID_SHIELD_OF_SAINT_VIKTOR
 Func CanUse_ShieldOfSaintViktor()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3094,6 +3331,7 @@ EndFunc
 
 ; Skill ID: 1107 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_1
 Func CanUse_UrnOfSaintViktorLevel1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3103,6 +3341,7 @@ EndFunc
 
 ; Skill ID: 1108 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_2
 Func CanUse_UrnOfSaintViktorLevel2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3112,6 +3351,7 @@ EndFunc
 
 ; Skill ID: 1109 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_3
 Func CanUse_UrnOfSaintViktorLevel3()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3121,6 +3361,7 @@ EndFunc
 
 ; Skill ID: 1110 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_4
 Func CanUse_UrnOfSaintViktorLevel4()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3130,6 +3371,7 @@ EndFunc
 
 ; Skill ID: 1111 - $GC_I_SKILL_ID_URN_OF_SAINT_VIKTOR_LEVEL_5
 Func CanUse_UrnOfSaintViktorLevel5()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3139,6 +3381,7 @@ EndFunc
 
 ; Skill ID: 1113 - $GC_I_SKILL_ID_KIRINS_WRATH
 Func CanUse_KirinsWrath()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3148,6 +3391,7 @@ EndFunc
 
 ; Skill ID: 1117 - $GC_I_SKILL_ID_HEAVENS_DELIGHT
 Func CanUse_HeavensDelight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3161,6 +3405,7 @@ EndFunc
 
 ; Skill ID: 1118 - $GC_I_SKILL_ID_HEALING_BURST
 Func CanUse_HealingBurst()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3174,6 +3419,7 @@ EndFunc
 
 ; Skill ID: 1119 - $GC_I_SKILL_ID_KAREIS_HEALING_CIRCLE
 Func CanUse_KareisHealingCircle()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3183,6 +3429,7 @@ EndFunc
 
 ; Skill ID: 1120 - $GC_I_SKILL_ID_JAMEIS_GAZE
 Func CanUse_JameisGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3192,6 +3439,7 @@ EndFunc
 
 ; Skill ID: 1121 - $GC_I_SKILL_ID_GIFT_OF_HEALTH
 Func CanUse_GiftOfHealth()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3205,6 +3453,7 @@ EndFunc
 
 ; Skill ID: 1126 - $GC_I_SKILL_ID_EMPATHIC_REMOVAL
 Func CanUse_EmpathicRemoval()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3218,6 +3467,7 @@ EndFunc
 
 ; Skill ID: 1128 - $GC_I_SKILL_ID_RESURRECTION_CHANT
 Func CanUse_ResurrectionChant()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -3232,6 +3482,7 @@ EndFunc
 
 ; Skill ID: 1129 - $GC_I_SKILL_ID_WORD_OF_CENSURE
 Func CanUse_WordOfCensure()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3245,6 +3496,7 @@ EndFunc
 
 ; Skill ID: 1130 - $GC_I_SKILL_ID_SPEAR_OF_LIGHT
 Func CanUse_SpearOfLight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3258,6 +3510,7 @@ EndFunc
 
 ; Skill ID: 1174 - $GC_I_SKILL_ID_CATHEDRAL_COLLAPSE2
 Func CanUse_CathedralCollapse2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3267,6 +3520,7 @@ EndFunc
 
 ; Skill ID: 1175 - $GC_I_SKILL_ID_BLOOD_OF_ZU_HELTZER
 Func CanUse_BloodOfZuHeltzer()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3280,6 +3534,7 @@ EndFunc
 
 ; Skill ID: 1183 - $GC_I_SKILL_ID_CORRUPTED_DRAGON_SPORES
 Func CanUse_CorruptedDragonSpores()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3293,6 +3548,7 @@ EndFunc
 
 ; Skill ID: 1184 - $GC_I_SKILL_ID_CORRUPTED_DRAGON_SCALES
 Func CanUse_CorruptedDragonScales()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3306,6 +3562,7 @@ EndFunc
 
 ; Skill ID: 1189 - $GC_I_SKILL_ID_OF_ROYAL_BLOOD
 Func CanUse_OfRoyalBlood()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3319,6 +3576,7 @@ EndFunc
 
 ; Skill ID: 1190 - $GC_I_SKILL_ID_PASSAGE_TO_TAHNNAKAI
 Func CanUse_PassageToTahnnakai()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3328,6 +3586,7 @@ EndFunc
 
 ; Skill ID: 1215 - $GC_I_SKILL_ID_CLAMOR_OF_SOULS
 Func CanUse_ClamorOfSouls()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3342,6 +3601,7 @@ EndFunc
 ; Skill ID: 1216 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 1224 - $GC_I_SKILL_ID_DRAW_SPIRIT
 Func CanUse_DrawSpirit()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3355,6 +3615,7 @@ EndFunc
 
 ; Skill ID: 1225 - $GC_I_SKILL_ID_CHANNELED_STRIKE
 Func CanUse_ChanneledStrike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3368,6 +3629,7 @@ EndFunc
 
 ; Skill ID: 1226 - $GC_I_SKILL_ID_SPIRIT_BOON_STRIKE
 Func CanUse_SpiritBoonStrike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3381,6 +3643,7 @@ EndFunc
 
 ; Skill ID: 1227 - $GC_I_SKILL_ID_ESSENCE_STRIKE
 Func CanUse_EssenceStrike()
+	If Anti_Spell() Then Return False
 	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 20 Then Return False
 	Return True
 EndFunc
@@ -3395,6 +3658,7 @@ EndFunc
 
 ; Skill ID: 1228 - $GC_I_SKILL_ID_SPIRIT_SIPHON
 Func CanUse_SpiritSiphon()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3408,6 +3672,7 @@ EndFunc
 
 ; Skill ID: 1233 - $GC_I_SKILL_ID_SOOTHING_MEMORIES
 Func CanUse_SoothingMemories()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3421,6 +3686,7 @@ EndFunc
 
 ; Skill ID: 1234 - $GC_I_SKILL_ID_MEND_BODY_AND_SOUL
 Func CanUse_MendBodyAndSoul()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3434,6 +3700,7 @@ EndFunc
 
 ; Skill ID: 1242 - $GC_I_SKILL_ID_ARCHEMORUS_STRIKE_CELESTIAL_SUMMONING
 Func CanUse_ArchemorusStrikeCelestialSummoning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3443,6 +3710,7 @@ EndFunc
 
 ; Skill ID: 1243 - $GC_I_SKILL_ID_SHIELD_OF_SAINT_VIKTOR_CELESTIAL_SUMMONING
 Func CanUse_ShieldOfSaintViktorCelestialSummoning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3452,6 +3720,7 @@ EndFunc
 
 ; Skill ID: 1245 - $GC_I_SKILL_ID_GAZE_FROM_BEYOND
 Func CanUse_GazeFromBeyond()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3461,6 +3730,7 @@ EndFunc
 
 ; Skill ID: 1262 - $GC_I_SKILL_ID_HEALING_RING
 Func CanUse_HealingRing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3474,6 +3744,7 @@ EndFunc
 
 ; Skill ID: 1263 - $GC_I_SKILL_ID_RENEW_LIFE
 Func CanUse_RenewLife()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -3488,6 +3759,7 @@ EndFunc
 
 ; Skill ID: 1264 - $GC_I_SKILL_ID_DOOM
 Func CanUse_Doom()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3501,6 +3773,7 @@ EndFunc
 
 ; Skill ID: 1265 - $GC_I_SKILL_ID_WIELDERS_BOON
 Func CanUse_WieldersBoon()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3510,6 +3783,7 @@ EndFunc
 
 ; Skill ID: 1277 - $GC_I_SKILL_ID_BATTLE_CRY2
 Func CanUse_BattleCry2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3519,6 +3793,7 @@ EndFunc
 
 ; Skill ID: 1278 - $GC_I_SKILL_ID_ELEMENTAL_DEFENSE_ZONE
 Func CanUse_ElementalDefenseZone()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3532,6 +3807,7 @@ EndFunc
 
 ; Skill ID: 1279 - $GC_I_SKILL_ID_MELEE_DEFENSE_ZONE
 Func CanUse_MeleeDefenseZone()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3545,6 +3821,7 @@ EndFunc
 
 ; Skill ID: 1283 - $GC_I_SKILL_ID_TURRET_ARROW
 Func CanUse_TurretArrow()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3558,6 +3835,7 @@ EndFunc
 
 ; Skill ID: 1284 - $GC_I_SKILL_ID_BLOOD_FLOWER_SKILL
 Func CanUse_BloodFlowerSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3567,6 +3845,7 @@ EndFunc
 
 ; Skill ID: 1285 - $GC_I_SKILL_ID_FIRE_FLOWER_SKILL
 Func CanUse_FireFlowerSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3576,6 +3855,7 @@ EndFunc
 
 ; Skill ID: 1286 - $GC_I_SKILL_ID_POISON_ARROW_FLOWER
 Func CanUse_PoisonArrowFlower()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3585,6 +3865,7 @@ EndFunc
 
 ; Skill ID: 1305 - $GC_I_SKILL_ID_SHIELDING_URN_SKILL
 Func CanUse_ShieldingUrnSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3594,6 +3875,7 @@ EndFunc
 
 ; Skill ID: 1318 - $GC_I_SKILL_ID_FIREBALL_OBELISK
 Func CanUse_FireballObelisk()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3603,6 +3885,7 @@ EndFunc
 
 ; Skill ID: 1333 - $GC_I_SKILL_ID_EXTEND_CONDITIONS
 Func CanUse_ExtendConditions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3616,6 +3899,7 @@ EndFunc
 
 ; Skill ID: 1334 - $GC_I_SKILL_ID_HYPOCHONDRIA
 Func CanUse_Hypochondria()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3629,6 +3913,7 @@ EndFunc
 
 ; Skill ID: 1336 - $GC_I_SKILL_ID_SPIRITUAL_PAIN
 Func CanUse_SpiritualPain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3642,6 +3927,7 @@ EndFunc
 
 ; Skill ID: 1337 - $GC_I_SKILL_ID_DRAIN_DELUSIONS
 Func CanUse_DrainDelusions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3655,6 +3941,7 @@ EndFunc
 
 ; Skill ID: 1342 - $GC_I_SKILL_ID_TEASE
 Func CanUse_Tease()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3668,6 +3955,7 @@ EndFunc
 
 ; Skill ID: 1347 - $GC_I_SKILL_ID_DISCHARGE_ENCHANTMENT
 Func CanUse_DischargeEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3681,6 +3969,7 @@ EndFunc
 
 ; Skill ID: 1348 - $GC_I_SKILL_ID_HEX_EATER_VORTEX
 Func CanUse_HexEaterVortex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3694,6 +3983,7 @@ EndFunc
 
 ; Skill ID: 1349 - $GC_I_SKILL_ID_MIRROR_OF_DISENCHANTMENT
 Func CanUse_MirrorOfDisenchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3707,6 +3997,7 @@ EndFunc
 
 ; Skill ID: 1350 - $GC_I_SKILL_ID_SIMPLE_THIEVERY
 Func CanUse_SimpleThievery()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3720,6 +4011,7 @@ EndFunc
 
 ; Skill ID: 1351 - $GC_I_SKILL_ID_ANIMATE_SHAMBLING_HORROR
 Func CanUse_AnimateShamblingHorror()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3733,6 +4025,7 @@ EndFunc
 
 ; Skill ID: 1352 - $GC_I_SKILL_ID_ORDER_OF_UNDEATH
 Func CanUse_OrderOfUndeath()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3746,6 +4039,7 @@ EndFunc
 
 ; Skill ID: 1353 - $GC_I_SKILL_ID_PUTRID_FLESH
 Func CanUse_PutridFlesh()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3759,6 +4053,7 @@ EndFunc
 
 ; Skill ID: 1354 - $GC_I_SKILL_ID_FEAST_FOR_THE_DEAD
 Func CanUse_FeastForTheDead()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3768,6 +4063,7 @@ EndFunc
 
 ; Skill ID: 1359 - $GC_I_SKILL_ID_PAIN_OF_DISENCHANTMENT
 Func CanUse_PainOfDisenchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3781,6 +4077,7 @@ EndFunc
 
 ; Skill ID: 1367 - $GC_I_SKILL_ID_BLINDING_SURGE
 Func CanUse_BlindingSurge()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3794,6 +4091,7 @@ EndFunc
 
 ; Skill ID: 1369 - $GC_I_SKILL_ID_LIGHTNING_BOLT
 Func CanUse_LightningBolt()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3807,6 +4105,7 @@ EndFunc
 
 ; Skill ID: 1372 - $GC_I_SKILL_ID_SANDSTORM
 Func CanUse_Sandstorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3820,6 +4119,7 @@ EndFunc
 
 ; Skill ID: 1374 - $GC_I_SKILL_ID_EBON_HAWK
 Func CanUse_EbonHawk()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3833,6 +4133,7 @@ EndFunc
 
 ; Skill ID: 1379 - $GC_I_SKILL_ID_GLOWING_GAZE1
 Func CanUse_GlowingGaze1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3842,6 +4143,7 @@ EndFunc
 
 ; Skill ID: 1380 - $GC_I_SKILL_ID_SAVANNAH_HEAT
 Func CanUse_SavannahHeat()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3855,6 +4157,7 @@ EndFunc
 
 ; Skill ID: 1396 - $GC_I_SKILL_ID_WORDS_OF_COMFORT
 Func CanUse_WordsOfComfort()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3868,6 +4171,7 @@ EndFunc
 
 ; Skill ID: 1397 - $GC_I_SKILL_ID_LIGHT_OF_DELIVERANCE
 Func CanUse_LightOfDeliverance()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3881,6 +4185,7 @@ EndFunc
 
 ; Skill ID: 1401 - $GC_I_SKILL_ID_MENDING_TOUCH
 Func CanUse_MendingTouch()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3894,6 +4199,7 @@ EndFunc
 
 ; Skill ID: 1424 - $GC_I_SKILL_ID_STOP_PUMP
 Func CanUse_StopPump()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3907,6 +4213,7 @@ EndFunc
 
 ; Skill ID: 1430 - $GC_I_SKILL_ID_WAVE_OF_TORMENT
 Func CanUse_WaveOfTorment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3920,6 +4227,7 @@ EndFunc
 
 ; Skill ID: 1434 - $GC_I_SKILL_ID_CORRUPTED_HEALING
 Func CanUse_CorruptedHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3933,6 +4241,7 @@ EndFunc
 
 ; Skill ID: 1444 - $GC_I_SKILL_ID_SUMMON_TORMENT
 Func CanUse_SummonTorment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3946,6 +4255,7 @@ EndFunc
 
 ; Skill ID: 1479 - $GC_I_SKILL_ID_OFFERING_OF_SPIRIT
 Func CanUse_OfferingOfSpirit()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3959,6 +4269,7 @@ EndFunc
 
 ; Skill ID: 1482 - $GC_I_SKILL_ID_RECLAIM_ESSENCE
 Func CanUse_ReclaimEssence()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3972,6 +4283,7 @@ EndFunc
 
 ; Skill ID: 1491 - $GC_I_SKILL_ID_MYSTIC_TWISTER
 Func CanUse_MysticTwister()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3985,6 +4297,7 @@ EndFunc
 
 ; Skill ID: 1525 - $GC_I_SKILL_ID_NATURAL_HEALING
 Func CanUse_NaturalHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -3998,6 +4311,7 @@ EndFunc
 
 ; Skill ID: 1526 - $GC_I_SKILL_ID_IMBUE_HEALTH
 Func CanUse_ImbueHealth()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4011,6 +4325,7 @@ EndFunc
 
 ; Skill ID: 1527 - $GC_I_SKILL_ID_MYSTIC_HEALING
 Func CanUse_MysticHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4024,6 +4339,7 @@ EndFunc
 
 ; Skill ID: 1528 - $GC_I_SKILL_ID_DWAYNAS_TOUCH
 Func CanUse_DwaynasTouch()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4033,6 +4349,7 @@ EndFunc
 
 ; Skill ID: 1529 - $GC_I_SKILL_ID_PIOUS_RESTORATION
 Func CanUse_PiousRestoration()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4046,6 +4363,7 @@ EndFunc
 
 ; Skill ID: 1532 - $GC_I_SKILL_ID_MYSTIC_SANDSTORM
 Func CanUse_MysticSandstorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4059,6 +4377,7 @@ EndFunc
 
 ; Skill ID: 1533 - $GC_I_SKILL_ID_WINDS_OF_DISENCHANTMENT
 Func CanUse_WindsOfDisenchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4072,6 +4391,7 @@ EndFunc
 
 ; Skill ID: 1534 - $GC_I_SKILL_ID_RENDING_TOUCH
 Func CanUse_RendingTouch()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4085,6 +4405,7 @@ EndFunc
 
 ; Skill ID: 1545 - $GC_I_SKILL_ID_TEST_OF_FAITH
 Func CanUse_TestOfFaith()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4098,6 +4419,7 @@ EndFunc
 
 ; Skill ID: 1610 - $GC_I_SKILL_ID_SUMMONING_OF_THE_SCEPTER
 Func CanUse_SummoningOfTheScepter()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4111,6 +4433,7 @@ EndFunc
 
 ; Skill ID: 1611 - $GC_I_SKILL_ID_RISE_FROM_YOUR_GRAVE
 Func CanUse_RiseFromYourGrave()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4120,6 +4443,7 @@ EndFunc
 
 ; Skill ID: 1651 - $GC_I_SKILL_ID_DEATHS_RETREAT
 Func CanUse_DeathsRetreat()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4129,6 +4453,7 @@ EndFunc
 
 ; Skill ID: 1653 - $GC_I_SKILL_ID_SWAP
 Func CanUse_Swap()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4142,6 +4467,7 @@ EndFunc
 
 ; Skill ID: 1659 - $GC_I_SKILL_ID_TOXIC_CHILL
 Func CanUse_ToxicChill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4155,6 +4481,7 @@ EndFunc
 
 ; Skill ID: 1661 - $GC_I_SKILL_ID_GLOWSTONE
 Func CanUse_Glowstone()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4168,6 +4495,7 @@ EndFunc
 
 ; Skill ID: 1662 - $GC_I_SKILL_ID_MIND_BLAST
 Func CanUse_MindBlast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4181,6 +4509,7 @@ EndFunc
 
 ; Skill ID: 1664 - $GC_I_SKILL_ID_INVOKE_LIGHTNING
 Func CanUse_InvokeLightning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4194,6 +4523,7 @@ EndFunc
 
 ; Skill ID: 1665 - $GC_I_SKILL_ID_BATTLE_CRY1
 Func CanUse_BattleCry1()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4203,6 +4533,7 @@ EndFunc
 
 ; Skill ID: 1666 - $GC_I_SKILL_ID_MENDING_SHRINE_BONUS
 Func CanUse_MendingShrineBonus()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4216,6 +4547,7 @@ EndFunc
 
 ; Skill ID: 1667 - $GC_I_SKILL_ID_ENERGY_SHRINE_BONUS
 Func CanUse_EnergyShrineBonus()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4229,6 +4561,7 @@ EndFunc
 
 ; Skill ID: 1668 - $GC_I_SKILL_ID_NORTHERN_HEALTH_SHRINE_BONUS
 Func CanUse_NorthernHealthShrineBonus()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4242,6 +4575,7 @@ EndFunc
 
 ; Skill ID: 1669 - $GC_I_SKILL_ID_SOUTHERN_HEALTH_SHRINE_BONUS
 Func CanUse_SouthernHealthShrineBonus()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4255,6 +4589,7 @@ EndFunc
 
 ; Skill ID: 1672 - $GC_I_SKILL_ID_TO_THE_PAIN_HERO_BATTLES
 Func CanUse_ToThePainHeroBattles()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4264,6 +4599,7 @@ EndFunc
 
 ; Skill ID: 1686 - $GC_I_SKILL_ID_GLIMMER_OF_LIGHT
 Func CanUse_GlimmerOfLight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4277,6 +4613,7 @@ EndFunc
 
 ; Skill ID: 1687 - $GC_I_SKILL_ID_ZEALOUS_BENEDICTION
 Func CanUse_ZealousBenediction()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4290,6 +4627,7 @@ EndFunc
 
 ; Skill ID: 1691 - $GC_I_SKILL_ID_DISMISS_CONDITION
 Func CanUse_DismissCondition()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4303,6 +4641,7 @@ EndFunc
 
 ; Skill ID: 1692 - $GC_I_SKILL_ID_DIVERT_HEXES
 Func CanUse_DivertHexes()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4316,6 +4655,7 @@ EndFunc
 
 ; Skill ID: 1717 - $GC_I_SKILL_ID_SUNSPEAR_SIEGE
 Func CanUse_SunspearSiege()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4329,6 +4669,7 @@ EndFunc
 
 ; Skill ID: 1733 - $GC_I_SKILL_ID_WIELDERS_STRIKE
 Func CanUse_WieldersStrike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4338,6 +4679,7 @@ EndFunc
 
 ; Skill ID: 1741 - $GC_I_SKILL_ID_GHOSTMIRROR_LIGHT
 Func CanUse_GhostmirrorLight()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4351,6 +4693,7 @@ EndFunc
 
 ; Skill ID: 1744 - $GC_I_SKILL_ID_CARETAKERS_CHARGE
 Func CanUse_CaretakersCharge()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4360,6 +4703,7 @@ EndFunc
 
 ; Skill ID: 1859 - $GC_I_SKILL_ID_ALTAR_BUFF
 Func CanUse_AltarBuff()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4373,6 +4717,7 @@ EndFunc
 
 ; Skill ID: 1866 - $GC_I_SKILL_ID_CAPTURE_POINT
 Func CanUse_CapturePoint()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4386,6 +4731,7 @@ EndFunc
 
 ; Skill ID: 1885 - $GC_I_SKILL_ID_BANISH_ENCHANTMENT
 Func CanUse_BanishEnchantment()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4399,6 +4745,7 @@ EndFunc
 
 ; Skill ID: 1896 - $GC_I_SKILL_ID_UNYIELDING_ANGUISH
 Func CanUse_UnyieldingAnguish()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4412,6 +4759,7 @@ EndFunc
 
 ; Skill ID: 1938 - $GC_I_SKILL_ID_PUTRID_FLAMES
 Func CanUse_PutridFlames()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4425,6 +4773,7 @@ EndFunc
 
 ; Skill ID: 1983 - $GC_I_SKILL_ID_FIRE_DART
 Func CanUse_FireDart()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4438,6 +4787,7 @@ EndFunc
 
 ; Skill ID: 1984 - $GC_I_SKILL_ID_ICE_DART
 Func CanUse_IceDart()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4451,6 +4801,7 @@ EndFunc
 
 ; Skill ID: 1985 - $GC_I_SKILL_ID_POISON_DART
 Func CanUse_PoisonDart()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4464,6 +4815,7 @@ EndFunc
 
 ; Skill ID: 1994 - $GC_I_SKILL_ID_POWER_LOCK
 Func CanUse_PowerLock()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4477,6 +4829,7 @@ EndFunc
 
 ; Skill ID: 1995 - $GC_I_SKILL_ID_WASTE_NOT_WANT_NOT
 Func CanUse_WasteNotWantNot()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4486,6 +4839,7 @@ EndFunc
 
 ; Skill ID: 2003 - $GC_I_SKILL_ID_CURE_HEX
 Func CanUse_CureHex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4499,6 +4853,7 @@ EndFunc
 
 ; Skill ID: 2004 - $GC_I_SKILL_ID_SMITE_CONDITION
 Func CanUse_SmiteCondition()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4512,6 +4867,7 @@ EndFunc
 
 ; Skill ID: 2019 - $GC_I_SKILL_ID_BURNING_GROUND
 Func CanUse_BurningGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4525,6 +4881,7 @@ EndFunc
 
 ; Skill ID: 2020 - $GC_I_SKILL_ID_FREEZING_GROUND
 Func CanUse_FreezingGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4538,6 +4895,7 @@ EndFunc
 
 ; Skill ID: 2021 - $GC_I_SKILL_ID_POISON_GROUND
 Func CanUse_PoisonGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4551,6 +4909,7 @@ EndFunc
 
 ; Skill ID: 2022 - $GC_I_SKILL_ID_FIRE_JET
 Func CanUse_FireJet()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4564,6 +4923,7 @@ EndFunc
 
 ; Skill ID: 2024 - $GC_I_SKILL_ID_POISON_JET
 Func CanUse_PoisonJet()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4577,6 +4937,7 @@ EndFunc
 
 ; Skill ID: 2027 - $GC_I_SKILL_ID_FIRE_SPOUT
 Func CanUse_FireSpout()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4590,6 +4951,7 @@ EndFunc
 
 ; Skill ID: 2029 - $GC_I_SKILL_ID_POISON_SPOUT
 Func CanUse_PoisonSpout()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4603,6 +4965,7 @@ EndFunc
 
 ; Skill ID: 2045 - $GC_I_SKILL_ID_SARCOPHAGUS_SPORES
 Func CanUse_SarcophagusSpores()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4612,6 +4975,7 @@ EndFunc
 
 ; Skill ID: 2046 - $GC_I_SKILL_ID_EXPLODING_BARREL
 Func CanUse_ExplodingBarrel()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4621,6 +4985,7 @@ EndFunc
 
 ; Skill ID: 2051 - $GC_I_SKILL_ID_SUMMON_SPIRITS_LUXON
 Func CanUse_SummonSpiritsLuxon()
+	If Anti_Spell() Then Return False
 	Local $lSpiritsAt5000 = UAI_CountAgents(-2, 5000, "UAI_Filter_IsControlledSpirit")
 	If $lSpiritsAt5000 = 0 Then Return False
 
@@ -4641,6 +5006,7 @@ EndFunc
 
 ; Skill ID: 2055 - $GC_I_SKILL_ID_ANEURYSM
 Func CanUse_Aneurysm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4654,6 +5020,7 @@ EndFunc
 
 ; Skill ID: 2057 - $GC_I_SKILL_ID_FOUL_FEAST
 Func CanUse_FoulFeast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4667,6 +5034,7 @@ EndFunc
 
 ; Skill ID: 2059 - $GC_I_SKILL_ID_SHELL_SHOCK
 Func CanUse_ShellShock()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4680,6 +5048,7 @@ EndFunc
 
 ; Skill ID: 2062 - $GC_I_SKILL_ID_HEALING_RIBBON
 Func CanUse_HealingRibbon()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4693,6 +5062,7 @@ EndFunc
 
 ; Skill ID: 2076 - $GC_I_SKILL_ID_DRAIN_MINION
 Func CanUse_DrainMinion()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4706,6 +5076,7 @@ EndFunc
 
 ; Skill ID: 2079 - $GC_I_SKILL_ID_FLESHREAVERS_ESCAPE
 Func CanUse_FleshreaversEscape()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4715,6 +5086,7 @@ EndFunc
 
 ; Skill ID: 2083 - $GC_I_SKILL_ID_MANDRAGORS_CHARGE
 Func CanUse_MandragorsCharge()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4724,6 +5096,7 @@ EndFunc
 
 ; Skill ID: 2084 - $GC_I_SKILL_ID_ROCK_SLIDE
 Func CanUse_RockSlide()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4737,6 +5110,7 @@ EndFunc
 
 ; Skill ID: 2085 - $GC_I_SKILL_ID_AVALANCHE_EFFECT
 Func CanUse_AvalancheEffect()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4746,6 +5120,7 @@ EndFunc
 
 ; Skill ID: 2087 - $GC_I_SKILL_ID_CEILING_COLLAPSE
 Func CanUse_CeilingCollapse()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4759,6 +5134,7 @@ EndFunc
 
 ; Skill ID: 2100 - $GC_I_SKILL_ID_SUMMON_SPIRITS_KURZICK
 Func CanUse_SummonSpiritsKurzick()
+	If Anti_Spell() Then Return False
 	Local $lSpiritsAt5000 = UAI_CountAgents(-2, 5000, "UAI_Filter_IsControlledSpirit")
 	If $lSpiritsAt5000 = 0 Then Return False
 
@@ -4779,6 +5155,7 @@ EndFunc
 
 ; Skill ID: 2102 - $GC_I_SKILL_ID_CRY_OF_PAIN
 Func CanUse_CryOfPain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4792,6 +5169,7 @@ EndFunc
 
 ; Skill ID: 2161 - $GC_I_SKILL_ID_GOLEM_FIRE_SHIELD
 Func CanUse_GolemFireShield()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4805,6 +5183,7 @@ EndFunc
 
 ; Skill ID: 2165 - $GC_I_SKILL_ID_DIAMONDSHARD_GRAVE
 Func CanUse_DiamondshardGrave()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4818,6 +5197,7 @@ EndFunc
 
 ; Skill ID: 2167 - $GC_I_SKILL_ID_DIAMONDSHARD_MIST
 Func CanUse_DiamondshardMist()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4831,6 +5211,7 @@ EndFunc
 
 ; Skill ID: 2172 - $GC_I_SKILL_ID_RAVEN_SWOOP_A_GATE_TOO_FAR
 Func CanUse_RavenSwoopAGateTooFar()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4840,6 +5221,7 @@ EndFunc
 
 ; Skill ID: 2189 - $GC_I_SKILL_ID_ANGORODONS_GAZE
 Func CanUse_AngorodonsGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4849,6 +5231,7 @@ EndFunc
 
 ; Skill ID: 2191 - $GC_I_SKILL_ID_SLIPPERY_GROUND
 Func CanUse_SlipperyGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4862,6 +5245,7 @@ EndFunc
 
 ; Skill ID: 2192 - $GC_I_SKILL_ID_GLOWING_ICE
 Func CanUse_GlowingIce()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4875,6 +5259,7 @@ EndFunc
 
 ; Skill ID: 2193 - $GC_I_SKILL_ID_ENERGY_BLAST
 Func CanUse_EnergyBlast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4888,6 +5273,7 @@ EndFunc
 
 ; Skill ID: 2202 - $GC_I_SKILL_ID_MENDING_GRIP
 Func CanUse_MendingGrip()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4901,6 +5287,7 @@ EndFunc
 
 ; Skill ID: 2211 - $GC_I_SKILL_ID_ALKARS_ALCHEMICAL_ACID
 Func CanUse_AlkarsAlchemicalAcid()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4910,6 +5297,7 @@ EndFunc
 
 ; Skill ID: 2212 - $GC_I_SKILL_ID_LIGHT_OF_DELDRIMOR
 Func CanUse_LightOfDeldrimor()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4923,6 +5311,7 @@ EndFunc
 
 ; Skill ID: 2221 - $GC_I_SKILL_ID_BREATH_OF_THE_GREAT_DWARF
 Func CanUse_BreathOfTheGreatDwarf()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4936,6 +5325,7 @@ EndFunc
 
 ; Skill ID: 2222 - $GC_I_SKILL_ID_SNOW_STORM
 Func CanUse_SnowStorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -4949,6 +5339,7 @@ EndFunc
 
 ; Skill ID: 2224 - $GC_I_SKILL_ID_SUMMON_MURSAAT
 Func CanUse_SummonMursaat()
+	If Anti_Spell() Then Return False
 	Local $lSpirit = UAI_FindAgentByPlayerNumber(5847, -2, 2500, "UAI_Filter_IsLivingAlly")
 
 	If $lSpirit <> 0 Then
@@ -4969,6 +5360,7 @@ EndFunc
 
 ; Skill ID: 2225 - $GC_I_SKILL_ID_SUMMON_RUBY_DJINN
 Func CanUse_SummonRubyDjinn()
+	If Anti_Spell() Then Return False
 	Local $lSpirit = UAI_FindAgentByPlayerNumber(5848, -2, 2500, "UAI_Filter_IsLivingAlly")
 
 	If $lSpirit <> 0 Then
@@ -4989,6 +5381,7 @@ EndFunc
 
 ; Skill ID: 2226 - $GC_I_SKILL_ID_SUMMON_ICE_IMP
 Func CanUse_SummonIceImp()
+	If Anti_Spell() Then Return False
 	Local $lSpirit = UAI_FindAgentByPlayerNumber(5849, -2, 2500, "UAI_Filter_IsLivingAlly")
 
 	If $lSpirit <> 0 Then
@@ -5009,6 +5402,7 @@ EndFunc
 
 ; Skill ID: 2227 - $GC_I_SKILL_ID_SUMMON_NAGA_SHAMAN
 Func CanUse_SummonNagaShaman()
+	If Anti_Spell() Then Return False
 	Local $lSpirit = UAI_FindAgentByPlayerNumber(5850, -2, 2500, "UAI_Filter_IsLivingAlly")
 
 	If $lSpirit <> 0 Then
@@ -5029,6 +5423,7 @@ EndFunc
 
 ; Skill ID: 2234 - $GC_I_SKILL_ID_EBON_VANGUARD_SNIPER_SUPPORT
 Func CanUse_EbonVanguardSniperSupport()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5042,6 +5437,7 @@ EndFunc
 
 ; Skill ID: 2235 - $GC_I_SKILL_ID_EBON_VANGUARD_ASSASSIN_SUPPORT
 Func CanUse_EbonVanguardAssassinSupport()
+	If Anti_Spell() Then Return False
 	;5852
 	Return True
 EndFunc
@@ -5056,6 +5452,7 @@ EndFunc
 
 ; Skill ID: 2248 - $GC_I_SKILL_ID_POLYMOCK_POWER_DRAIN
 Func CanUse_PolymockPowerDrain()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5069,6 +5466,7 @@ EndFunc
 
 ; Skill ID: 2253 - $GC_I_SKILL_ID_POLYMOCK_OVERLOAD
 Func CanUse_PolymockOverload()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5082,6 +5480,7 @@ EndFunc
 
 ; Skill ID: 2256 - $GC_I_SKILL_ID_ORDER_OF_UNHOLY_VIGOR
 Func CanUse_OrderOfUnholyVigor()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5095,6 +5494,7 @@ EndFunc
 
 ; Skill ID: 2257 - $GC_I_SKILL_ID_ORDER_OF_THE_LICH
 Func CanUse_OrderOfTheLich()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5108,6 +5508,7 @@ EndFunc
 
 ; Skill ID: 2258 - $GC_I_SKILL_ID_MASTER_OF_NECROMANCY
 Func CanUse_MasterOfNecromancy()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5121,6 +5522,7 @@ EndFunc
 
 ; Skill ID: 2259 - $GC_I_SKILL_ID_ANIMATE_UNDEAD
 Func CanUse_AnimateUndead()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5134,6 +5536,7 @@ EndFunc
 
 ; Skill ID: 2260 - $GC_I_SKILL_ID_POLYMOCK_DEATHLY_CHILL
 Func CanUse_PolymockDeathlyChill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5147,6 +5550,7 @@ EndFunc
 
 ; Skill ID: 2262 - $GC_I_SKILL_ID_POLYMOCK_ROTTING_FLESH
 Func CanUse_PolymockRottingFlesh()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5160,6 +5564,7 @@ EndFunc
 
 ; Skill ID: 2263 - $GC_I_SKILL_ID_POLYMOCK_LIGHTNING_STRIKE
 Func CanUse_PolymockLightningStrike()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5173,6 +5578,7 @@ EndFunc
 
 ; Skill ID: 2264 - $GC_I_SKILL_ID_POLYMOCK_LIGHTNING_ORB
 Func CanUse_PolymockLightningOrb()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5186,6 +5592,7 @@ EndFunc
 
 ; Skill ID: 2266 - $GC_I_SKILL_ID_POLYMOCK_FLARE
 Func CanUse_PolymockFlare()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5199,6 +5606,7 @@ EndFunc
 
 ; Skill ID: 2267 - $GC_I_SKILL_ID_POLYMOCK_IMMOLATE
 Func CanUse_PolymockImmolate()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5212,6 +5620,7 @@ EndFunc
 
 ; Skill ID: 2268 - $GC_I_SKILL_ID_POLYMOCK_METEOR
 Func CanUse_PolymockMeteor()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5225,6 +5634,7 @@ EndFunc
 
 ; Skill ID: 2269 - $GC_I_SKILL_ID_POLYMOCK_ICE_SPEAR
 Func CanUse_PolymockIceSpear()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5238,6 +5648,7 @@ EndFunc
 
 ; Skill ID: 2270 - $GC_I_SKILL_ID_POLYMOCK_ICY_PRISON
 Func CanUse_PolymockIcyPrison()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5251,6 +5662,7 @@ EndFunc
 
 ; Skill ID: 2271 - $GC_I_SKILL_ID_POLYMOCK_MIND_FREEZE
 Func CanUse_PolymockMindFreeze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5264,6 +5676,7 @@ EndFunc
 
 ; Skill ID: 2272 - $GC_I_SKILL_ID_POLYMOCK_ICE_SHARD_STORM
 Func CanUse_PolymockIceShardStorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5277,6 +5690,7 @@ EndFunc
 
 ; Skill ID: 2273 - $GC_I_SKILL_ID_POLYMOCK_FROZEN_TRIDENT
 Func CanUse_PolymockFrozenTrident()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5290,6 +5704,7 @@ EndFunc
 
 ; Skill ID: 2274 - $GC_I_SKILL_ID_POLYMOCK_SMITE
 Func CanUse_PolymockSmite()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5303,6 +5718,7 @@ EndFunc
 
 ; Skill ID: 2275 - $GC_I_SKILL_ID_POLYMOCK_SMITE_HEX
 Func CanUse_PolymockSmiteHex()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5316,6 +5732,7 @@ EndFunc
 
 ; Skill ID: 2277 - $GC_I_SKILL_ID_POLYMOCK_STONE_DAGGERS
 Func CanUse_PolymockStoneDaggers()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5329,6 +5746,7 @@ EndFunc
 
 ; Skill ID: 2278 - $GC_I_SKILL_ID_POLYMOCK_OBSIDIAN_FLAME
 Func CanUse_PolymockObsidianFlame()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5342,6 +5760,7 @@ EndFunc
 
 ; Skill ID: 2279 - $GC_I_SKILL_ID_POLYMOCK_EARTHQUAKE
 Func CanUse_PolymockEarthquake()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5355,6 +5774,7 @@ EndFunc
 
 ; Skill ID: 2282 - $GC_I_SKILL_ID_POLYMOCK_FIREBALL
 Func CanUse_PolymockFireball()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5368,6 +5788,7 @@ EndFunc
 
 ; Skill ID: 2283 - $GC_I_SKILL_ID_POLYMOCK_RODGORTS_INVOCATION
 Func CanUse_PolymockRodgortsInvocation()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5377,6 +5798,7 @@ EndFunc
 
 ; Skill ID: 2288 - $GC_I_SKILL_ID_POLYMOCK_LAMENTATION
 Func CanUse_PolymockLamentation()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5390,6 +5812,7 @@ EndFunc
 
 ; Skill ID: 2289 - $GC_I_SKILL_ID_POLYMOCK_SPIRIT_RIFT
 Func CanUse_PolymockSpiritRift()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5403,6 +5826,7 @@ EndFunc
 
 ; Skill ID: 2293 - $GC_I_SKILL_ID_POLYMOCK_GLOWING_GAZE
 Func CanUse_PolymockGlowingGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5416,6 +5840,7 @@ EndFunc
 
 ; Skill ID: 2294 - $GC_I_SKILL_ID_POLYMOCK_SEARING_FLAMES
 Func CanUse_PolymockSearingFlames()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5429,6 +5854,7 @@ EndFunc
 
 ; Skill ID: 2297 - $GC_I_SKILL_ID_POLYMOCK_STONING
 Func CanUse_PolymockStoning()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5442,6 +5868,7 @@ EndFunc
 
 ; Skill ID: 2298 - $GC_I_SKILL_ID_POLYMOCK_ERUPTION
 Func CanUse_PolymockEruption()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5455,6 +5882,7 @@ EndFunc
 
 ; Skill ID: 2299 - $GC_I_SKILL_ID_POLYMOCK_SHOCK_ARROW
 Func CanUse_PolymockShockArrow()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5468,6 +5896,7 @@ EndFunc
 
 ; Skill ID: 2300 - $GC_I_SKILL_ID_POLYMOCK_MIND_SHOCK
 Func CanUse_PolymockMindShock()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5481,6 +5910,7 @@ EndFunc
 
 ; Skill ID: 2301 - $GC_I_SKILL_ID_POLYMOCK_PIERCING_LIGHT_SPEAR
 Func CanUse_PolymockPiercingLightSpear()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5494,6 +5924,7 @@ EndFunc
 
 ; Skill ID: 2302 - $GC_I_SKILL_ID_POLYMOCK_MIND_BLAST
 Func CanUse_PolymockMindBlast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5507,6 +5938,7 @@ EndFunc
 
 ; Skill ID: 2303 - $GC_I_SKILL_ID_POLYMOCK_SAVANNAH_HEAT
 Func CanUse_PolymockSavannahHeat()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5520,6 +5952,7 @@ EndFunc
 
 ; Skill ID: 2305 - $GC_I_SKILL_ID_POLYMOCK_LIGHTNING_BLAST
 Func CanUse_PolymockLightningBlast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5533,6 +5966,7 @@ EndFunc
 
 ; Skill ID: 2306 - $GC_I_SKILL_ID_POLYMOCK_POISONED_GROUND
 Func CanUse_PolymockPoisonedGround()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5546,6 +5980,7 @@ EndFunc
 
 ; Skill ID: 2308 - $GC_I_SKILL_ID_POLYMOCK_SANDSTORM
 Func CanUse_PolymockSandstorm()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5559,6 +5994,7 @@ EndFunc
 
 ; Skill ID: 2309 - $GC_I_SKILL_ID_POLYMOCK_BANISH
 Func CanUse_PolymockBanish()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5572,6 +6008,7 @@ EndFunc
 
 ; Skill ID: 2368 - $GC_I_SKILL_ID_MURAKAIS_CONSUMPTION
 Func CanUse_MurakaisConsumption()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5581,6 +6018,7 @@ EndFunc
 
 ; Skill ID: 2369 - $GC_I_SKILL_ID_MURAKAIS_CENSURE
 Func CanUse_MurakaisCensure()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5590,6 +6028,7 @@ EndFunc
 
 ; Skill ID: 2370 - $GC_I_SKILL_ID_MURAKAIS_CALAMITY
 Func CanUse_MurakaisCalamity()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5599,6 +6038,7 @@ EndFunc
 
 ; Skill ID: 2371 - $GC_I_SKILL_ID_MURAKAIS_STORM_OF_SOULS
 Func CanUse_MurakaisStormOfSouls()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5608,6 +6048,7 @@ EndFunc
 
 ; Skill ID: 2386 - $GC_I_SKILL_ID_RAVEN_SWOOP
 Func CanUse_RavenSwoop()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5621,6 +6062,7 @@ EndFunc
 
 ; Skill ID: 2390 - $GC_I_SKILL_ID_FILTHY_EXPLOSION
 Func CanUse_FilthyExplosion()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5634,6 +6076,7 @@ EndFunc
 
 ; Skill ID: 2391 - $GC_I_SKILL_ID_MURAKAIS_CALL
 Func CanUse_MurakaisCall()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5643,6 +6086,7 @@ EndFunc
 
 ; Skill ID: 2398 - $GC_I_SKILL_ID_CONSUME_FLAMES
 Func CanUse_ConsumeFlames()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5656,6 +6100,7 @@ EndFunc
 
 ; Skill ID: 2412 - $GC_I_SKILL_ID_SMOOTH_CRIMINAL
 Func CanUse_SmoothCriminal()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5669,6 +6114,7 @@ EndFunc
 
 ; Skill ID: 2413 - $GC_I_SKILL_ID_TECHNOBABBLE
 Func CanUse_Technobabble()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5682,6 +6128,7 @@ EndFunc
 
 ; Skill ID: 2420 - $GC_I_SKILL_ID_EBON_ESCAPE
 Func CanUse_EbonEscape()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5695,6 +6142,7 @@ EndFunc
 
 ; Skill ID: 2487 - $GC_I_SKILL_ID_DRYDERS_FEAST
 Func CanUse_DrydersFeast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5704,6 +6152,7 @@ EndFunc
 
 ; Skill ID: 2517 - $GC_I_SKILL_ID_REVERSE_POLARITY_FIRE_SHIELD
 Func CanUse_ReversePolarityFireShield()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5717,6 +6166,7 @@ EndFunc
 
 ; Skill ID: 2538 - $GC_I_SKILL_ID_ANIMATE_UNDEAD_PALAWA_JOKO
 Func CanUse_AnimateUndeadPalawaJoko()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5726,6 +6176,7 @@ EndFunc
 
 ; Skill ID: 2539 - $GC_I_SKILL_ID_ORDER_OF_UNHOLY_VIGOR_PALAWA_JOKO
 Func CanUse_OrderOfUnholyVigorPalawaJoko()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5735,6 +6186,7 @@ EndFunc
 
 ; Skill ID: 2540 - $GC_I_SKILL_ID_ORDER_OF_THE_LICH_PALAWA_JOKO
 Func CanUse_OrderOfTheLichPalawaJoko()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5744,6 +6196,7 @@ EndFunc
 
 ; Skill ID: 2543 - $GC_I_SKILL_ID_WURM_SIEGE_EYE_OF_THE_NORTH
 Func CanUse_WurmSiegeEyeOfTheNorth()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5754,6 +6207,7 @@ EndFunc
 ; Skill ID: 2626 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2628 - $GC_I_SKILL_ID_ENFEEBLE2
 Func CanUse_Enfeeble2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5764,6 +6218,7 @@ EndFunc
 ; Skill ID: 2629 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2632 - $GC_I_SKILL_ID_SEARING_FLAMES2
 Func CanUse_SearingFlames2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5773,6 +6228,7 @@ EndFunc
 
 ; Skill ID: 2633 - $GC_I_SKILL_ID_GLOWING_GAZE2
 Func CanUse_GlowingGaze2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5782,6 +6238,7 @@ EndFunc
 
 ; Skill ID: 2634 - $GC_I_SKILL_ID_STEAM2
 Func CanUse_Steam2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5791,6 +6248,7 @@ EndFunc
 
 ; Skill ID: 2636 - $GC_I_SKILL_ID_LIQUID_FLAM2
 Func CanUse_LiquidFlam2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5801,6 +6259,7 @@ EndFunc
 ; Skill ID: 2637 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2639 - $GC_I_SKILL_ID_SMITE_CONDITION2
 Func CanUse_SmiteCondition2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5810,6 +6269,7 @@ EndFunc
 
 ; Skill ID: 2664 - $GC_I_SKILL_ID_SPIKE_TRAP_SPELL
 Func CanUse_SpikeTrapSpell()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5819,6 +6279,7 @@ EndFunc
 
 ; Skill ID: 2666 - $GC_I_SKILL_ID_FIRE_AND_BRIMSTONE
 Func CanUse_FireAndBrimstone()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5832,6 +6293,7 @@ EndFunc
 
 ; Skill ID: 2686 - $GC_I_SKILL_ID_ESSENCE_STRIKE_TOGO
 Func CanUse_EssenceStrikeTogo()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5841,6 +6303,7 @@ EndFunc
 
 ; Skill ID: 2687 - $GC_I_SKILL_ID_SPIRIT_BURN_TOGO
 Func CanUse_SpiritBurnTogo()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5850,6 +6313,7 @@ EndFunc
 
 ; Skill ID: 2688 - $GC_I_SKILL_ID_SPIRIT_RIFT_TOGO
 Func CanUse_SpiritRiftTogo()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5859,6 +6323,7 @@ EndFunc
 
 ; Skill ID: 2689 - $GC_I_SKILL_ID_MEND_BODY_AND_SOUL_TOGO
 Func CanUse_MendBodyAndSoulTogo()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5868,6 +6333,7 @@ EndFunc
 
 ; Skill ID: 2690 - $GC_I_SKILL_ID_OFFERING_OF_SPIRIT_TOGO
 Func CanUse_OfferingOfSpiritTogo()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5877,6 +6343,7 @@ EndFunc
 
 ; Skill ID: 2722 - $GC_I_SKILL_ID_REDEMPTION_OF_PURITY
 Func CanUse_RedemptionOfPurity()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5890,6 +6357,7 @@ EndFunc
 
 ; Skill ID: 2723 - $GC_I_SKILL_ID_PURIFY_ENERGY
 Func CanUse_PurifyEnergy()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5903,6 +6371,7 @@ EndFunc
 
 ; Skill ID: 2724 - $GC_I_SKILL_ID_PURIFYING_FLAME
 Func CanUse_PurifyingFlame()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5916,6 +6385,7 @@ EndFunc
 
 ; Skill ID: 2725 - $GC_I_SKILL_ID_PURIFYING_PRAYER
 Func CanUse_PurifyingPrayer()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5929,6 +6399,7 @@ EndFunc
 
 ; Skill ID: 2729 - $GC_I_SKILL_ID_PURIFY_SOUL
 Func CanUse_PurifySoul()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5942,6 +6413,7 @@ EndFunc
 
 ; Skill ID: 2755 - $GC_I_SKILL_ID_JADE_BROTHERHOOD_BOMB
 Func CanUse_JadeBrotherhoodBomb()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5955,6 +6427,7 @@ EndFunc
 
 ; Skill ID: 2759 - $GC_I_SKILL_ID_ROCKET_PROPELLED_GOBSTOPPER
 Func CanUse_RocketPropelledGobstopper()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5964,6 +6437,7 @@ EndFunc
 
 ; Skill ID: 2760 - $GC_I_SKILL_ID_RAIN_OF_TERROR_SPELL
 Func CanUse_RainOfTerrorSpell()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5973,6 +6447,7 @@ EndFunc
 
 ; Skill ID: 2762 - $GC_I_SKILL_ID_SUGAR_INFUSION
 Func CanUse_SugarInfusion()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5986,6 +6461,7 @@ EndFunc
 
 ; Skill ID: 2763 - $GC_I_SKILL_ID_FEAST_OF_VENGEANCE
 Func CanUse_FeastOfVengeance()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -5999,6 +6475,7 @@ EndFunc
 
 ; Skill ID: 2764 - $GC_I_SKILL_ID_ANIMATE_CANDY_MINIONS
 Func CanUse_AnimateCandyMinions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6012,6 +6489,7 @@ EndFunc
 
 ; Skill ID: 2765 - $GC_I_SKILL_ID_TASTE_OF_UNDEATH
 Func CanUse_TasteOfUndeath()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6025,6 +6503,7 @@ EndFunc
 
 ; Skill ID: 2766 - $GC_I_SKILL_ID_SCOURGE_OF_CANDY
 Func CanUse_ScourgeOfCandy()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6038,6 +6517,7 @@ EndFunc
 
 ; Skill ID: 2768 - $GC_I_SKILL_ID_MAD_KING_PONY_SUPPORT
 Func CanUse_MadKingPonySupport()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6056,6 +6536,7 @@ EndFunc
 ; Skill ID: 2799 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2804 - $GC_I_SKILL_ID_MIND_SHOCK_PVP
 Func CanUse_MindShockPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6065,6 +6546,7 @@ EndFunc
 
 ; Skill ID: 2807 - $GC_I_SKILL_ID_RIDE_THE_LIGHTNING_PVP
 Func CanUse_RideTheLightningPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6074,6 +6556,7 @@ EndFunc
 
 ; Skill ID: 2809 - $GC_I_SKILL_ID_OBSIDIAN_FLAME_PVP
 Func CanUse_ObsidianFlamePvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6086,6 +6569,7 @@ EndFunc
 ; Skill ID: 2836 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2852 - $GC_I_SKILL_ID_ENERGY_DRAIN_PVP
 Func CanUse_EnergyDrainPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6095,6 +6579,7 @@ EndFunc
 
 ; Skill ID: 2853 - $GC_I_SKILL_ID_ENERGY_TAP_PVP
 Func CanUse_EnergyTapPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6104,6 +6589,7 @@ EndFunc
 
 ; Skill ID: 2856 - $GC_I_SKILL_ID_LIGHTNING_ORB_PVP
 Func CanUse_LightningOrbPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6113,6 +6599,7 @@ EndFunc
 
 ; Skill ID: 2859 - $GC_I_SKILL_ID_ENFEEBLE_PVP
 Func CanUse_EnfeeblePvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6122,6 +6609,7 @@ EndFunc
 
 ; Skill ID: 2863 - $GC_I_SKILL_ID_DISCORD_PVP
 Func CanUse_DiscordPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6131,6 +6619,7 @@ EndFunc
 
 ; Skill ID: 2866 - $GC_I_SKILL_ID_FLESH_OF_MY_FLESH_PVP
 Func CanUse_FleshOfMyFleshPvp()
+	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -6141,6 +6630,7 @@ EndFunc
 
 ; Skill ID: 2870 - $GC_I_SKILL_ID_BLINDING_SURGE_PVP
 Func CanUse_BlindingSurgePvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6150,6 +6640,7 @@ EndFunc
 
 ; Skill ID: 2871 - $GC_I_SKILL_ID_LIGHT_OF_DELIVERANCE_PVP
 Func CanUse_LightOfDeliverancePvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6160,6 +6651,7 @@ EndFunc
 ; Skill ID: 2881 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2885 - $GC_I_SKILL_ID_ENFEEBLING_BLOOD_PVP
 Func CanUse_EnfeeblingBloodPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6169,6 +6661,7 @@ EndFunc
 
 ; Skill ID: 2902 - $GC_I_SKILL_ID_REACTOR_BLAST
 Func CanUse_ReactorBlast()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6182,6 +6675,7 @@ EndFunc
 
 ; Skill ID: 2907 - $GC_I_SKILL_ID_NOX_BEAM
 Func CanUse_NoxBeam()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6191,6 +6685,7 @@ EndFunc
 
 ; Skill ID: 2909 - $GC_I_SKILL_ID_NOXION_BUSTER
 Func CanUse_NoxionBuster()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6200,6 +6695,7 @@ EndFunc
 
 ; Skill ID: 2911 - $GC_I_SKILL_ID_BIT_GOLEM_BREAKER
 Func CanUse_BitGolemBreaker()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6213,6 +6709,7 @@ EndFunc
 
 ; Skill ID: 2913 - $GC_I_SKILL_ID_BIT_GOLEM_CRASH
 Func CanUse_BitGolemCrash()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6226,6 +6723,7 @@ EndFunc
 
 ; Skill ID: 2914 - $GC_I_SKILL_ID_BIT_GOLEM_FORCE
 Func CanUse_BitGolemForce()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6239,6 +6737,7 @@ EndFunc
 
 ; Skill ID: 2917 - $GC_I_SKILL_ID_NOX_THUNDER
 Func CanUse_NoxThunder()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6248,6 +6747,7 @@ EndFunc
 
 ; Skill ID: 2920 - $GC_I_SKILL_ID_NOX_FIRE
 Func CanUse_NoxFire()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6257,6 +6757,7 @@ EndFunc
 
 ; Skill ID: 2921 - $GC_I_SKILL_ID_NOX_KNUCKLE
 Func CanUse_NoxKnuckle()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6266,6 +6767,7 @@ EndFunc
 
 ; Skill ID: 2922 - $GC_I_SKILL_ID_NOX_DIVIDER_DRIVE
 Func CanUse_NoxDividerDrive()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6275,6 +6777,7 @@ EndFunc
 
 ; Skill ID: 2927 - $GC_I_SKILL_ID_SHRINE_BACKLASH
 Func CanUse_ShrineBacklash()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6295,6 +6798,7 @@ EndFunc
 ; Skill ID: 2952 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2957 - $GC_I_SKILL_ID_WESTERN_HEALTH_SHRINE_BONUS
 Func CanUse_WesternHealthShrineBonus()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6308,6 +6812,7 @@ EndFunc
 
 ; Skill ID: 2958 - $GC_I_SKILL_ID_EASTERN_HEALTH_SHRINE_BONUS
 Func CanUse_EasternHealthShrineBonus()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6321,6 +6826,7 @@ EndFunc
 
 ; Skill ID: 2964 - $GC_I_SKILL_ID_SNOWBALL2
 Func CanUse_Snowball2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6330,6 +6836,7 @@ EndFunc
 
 ; Skill ID: 3021 - $GC_I_SKILL_ID_SAVANNAH_HEAT_PVP
 Func CanUse_SavannahHeatPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6339,6 +6846,7 @@ EndFunc
 
 ; Skill ID: 3044 - $GC_I_SKILL_ID_SPIRIT_SIPHON_MASTER_RIYO
 Func CanUse_SpiritSiphonMasterRiyo()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6348,6 +6856,7 @@ EndFunc
 
 ; Skill ID: 3058 - $GC_I_SKILL_ID_UNHOLY_FEAST_PVP
 Func CanUse_UnholyFeastPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6357,6 +6866,7 @@ EndFunc
 
 ; Skill ID: 3076 - $GC_I_SKILL_ID_EVERLASTING_MOBSTOPPER_SKILL
 Func CanUse_EverlastingMobstopperSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6366,6 +6876,7 @@ EndFunc
 
 ; Skill ID: 3078 - $GC_I_SKILL_ID_CURSE_OF_DHUUM
 Func CanUse_CurseOfDhuum()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6379,6 +6890,7 @@ EndFunc
 
 ; Skill ID: 3079 - $GC_I_SKILL_ID_DHUUMS_REST_REAPER_SKILL
 Func CanUse_DhuumsRestReaperSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6388,6 +6900,7 @@ EndFunc
 
 ; Skill ID: 3081 - $GC_I_SKILL_ID_SUMMON_CHAMPION
 Func CanUse_SummonChampion()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6401,6 +6914,7 @@ EndFunc
 
 ; Skill ID: 3082 - $GC_I_SKILL_ID_SUMMON_MINIONS
 Func CanUse_SummonMinions()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6414,6 +6928,7 @@ EndFunc
 
 ; Skill ID: 3085 - $GC_I_SKILL_ID_JUDGMENT_OF_DHUUM
 Func CanUse_JudgmentOfDhuum()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6427,6 +6942,7 @@ EndFunc
 
 ; Skill ID: 3087 - $GC_I_SKILL_ID_DHUUMS_REST
 Func CanUse_DhuumsRest()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6436,6 +6952,7 @@ EndFunc
 
 ; Skill ID: 3088 - $GC_I_SKILL_ID_SPIRITUAL_HEALING
 Func CanUse_SpiritualHealing()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6449,6 +6966,7 @@ EndFunc
 
 ; Skill ID: 3089 - $GC_I_SKILL_ID_ENCASE_SKELETAL
 Func CanUse_EncaseSkeletal()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6462,6 +6980,7 @@ EndFunc
 
 ; Skill ID: 3090 - $GC_I_SKILL_ID_REVERSAL_OF_DEATH
 Func CanUse_ReversalOfDeath()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6475,6 +6994,7 @@ EndFunc
 
 ; Skill ID: 3091 - $GC_I_SKILL_ID_GHOSTLY_FURY
 Func CanUse_GhostlyFury()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6488,6 +7008,7 @@ EndFunc
 
 ; Skill ID: 3135 - $GC_I_SKILL_ID_SPIRITUAL_HEALING_REAPER_SKILL
 Func CanUse_SpiritualHealingReaperSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6497,6 +7018,7 @@ EndFunc
 
 ; Skill ID: 3136 - $GC_I_SKILL_ID_GHOSTLY_FURY_REAPER_SKILL
 Func CanUse_GhostlyFuryReaperSkill()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6506,6 +7028,7 @@ EndFunc
 
 ; Skill ID: 3165 - $GC_I_SKILL_ID_GOLEM_PILEBUNKER
 Func CanUse_GolemPilebunker()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6522,6 +7045,7 @@ EndFunc
 ; Skill ID: 3169 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 3170 - $GC_I_SKILL_ID_KOROS_GAZE
 Func CanUse_KorosGaze()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6531,6 +7055,7 @@ EndFunc
 
 ; Skill ID: 3171 - $GC_I_SKILL_ID_EBON_VANGUARD_ASSASSIN_SUPPORT_NPC
 Func CanUse_EbonVanguardAssassinSupportNpc()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6540,6 +7065,7 @@ EndFunc
 
 ; Skill ID: 3180 - $GC_I_SKILL_ID_SHATTER_DELUSIONS_PVP
 Func CanUse_ShatterDelusionsPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6549,6 +7075,7 @@ EndFunc
 
 ; Skill ID: 3184 - $GC_I_SKILL_ID_ACCUMULATED_PAIN_PVP
 Func CanUse_AccumulatedPainPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6558,6 +7085,7 @@ EndFunc
 
 ; Skill ID: 3185 - $GC_I_SKILL_ID_PSYCHIC_INSTABILITY_PVP
 Func CanUse_PsychicInstabilityPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6567,6 +7095,7 @@ EndFunc
 
 ; Skill ID: 3189 - $GC_I_SKILL_ID_SPIRITUAL_PAIN_PVP
 Func CanUse_SpiritualPainPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6576,6 +7105,7 @@ EndFunc
 
 ; Skill ID: 3194 - $GC_I_SKILL_ID_MIRROR_OF_DISENCHANTMENT_PVP
 Func CanUse_MirrorOfDisenchantmentPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6585,6 +7115,7 @@ EndFunc
 
 ; Skill ID: 3197 - $GC_I_SKILL_ID_ADORATION
 Func CanUse_Adoration()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6598,6 +7129,7 @@ EndFunc
 
 ; Skill ID: 3232 - $GC_I_SKILL_ID_HEAL_PARTY_PVP
 Func CanUse_HealPartyPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6607,6 +7139,7 @@ EndFunc
 
 ; Skill ID: 3242 - $GC_I_SKILL_ID_COMING_OF_SPRING
 Func CanUse_ComingOfSpring()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6616,6 +7149,7 @@ EndFunc
 
 ; Skill ID: 3245 - $GC_I_SKILL_ID_DEATHS_EMBRACE
 Func CanUse_DeathsEmbrace()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6625,6 +7159,7 @@ EndFunc
 
 ; Skill ID: 3253 - $GC_I_SKILL_ID_ULTRA_SNOWBALL
 Func CanUse_UltraSnowball()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6638,6 +7173,7 @@ EndFunc
 
 ; Skill ID: 3254 - $GC_I_SKILL_ID_BLIZZARD
 Func CanUse_Blizzard()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6651,6 +7187,7 @@ EndFunc
 
 ; Skill ID: 3259 - $GC_I_SKILL_ID_ULTRA_SNOWBALL2
 Func CanUse_UltraSnowball2()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6660,6 +7197,7 @@ EndFunc
 
 ; Skill ID: 3260 - $GC_I_SKILL_ID_ULTRA_SNOWBALL3
 Func CanUse_UltraSnowball3()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6669,6 +7207,7 @@ EndFunc
 
 ; Skill ID: 3261 - $GC_I_SKILL_ID_ULTRA_SNOWBALL4
 Func CanUse_UltraSnowball4()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6678,6 +7217,7 @@ EndFunc
 
 ; Skill ID: 3262 - $GC_I_SKILL_ID_ULTRA_SNOWBALL5
 Func CanUse_UltraSnowball5()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6687,6 +7227,7 @@ EndFunc
 
 ; Skill ID: 3272 - $GC_I_SKILL_ID_MYSTIC_HEALING_PVP
 Func CanUse_MysticHealingPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6696,6 +7237,7 @@ EndFunc
 
 ; Skill ID: 3290 - $GC_I_SKILL_ID_STUN_GRENADE
 Func CanUse_StunGrenade()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6709,6 +7251,7 @@ EndFunc
 
 ; Skill ID: 3291 - $GC_I_SKILL_ID_FRAGMENTATION_GRENADE
 Func CanUse_FragmentationGrenade()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6722,6 +7265,7 @@ EndFunc
 
 ; Skill ID: 3292 - $GC_I_SKILL_ID_TEAR_GAS
 Func CanUse_TearGas()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6735,6 +7279,7 @@ EndFunc
 
 ; Skill ID: 3299 - $GC_I_SKILL_ID_PHASED_PLASMA_BURST
 Func CanUse_PhasedPlasmaBurst()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6748,6 +7293,7 @@ EndFunc
 
 ; Skill ID: 3300 - $GC_I_SKILL_ID_PLASMA_SHOT
 Func CanUse_PlasmaShot()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6761,6 +7307,7 @@ EndFunc
 
 ; Skill ID: 3371 - $GC_I_SKILL_ID_MIRROR_SHATTER
 Func CanUse_MirrorShatter()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6770,6 +7317,7 @@ EndFunc
 
 ; Skill ID: 3378 - $GC_I_SKILL_ID_PHASE_SHIELD
 Func CanUse_PhaseShield()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6783,6 +7331,7 @@ EndFunc
 
 ; Skill ID: 3379 - $GC_I_SKILL_ID_REACTOR_BURST
 Func CanUse_ReactorBurst()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6796,6 +7345,7 @@ EndFunc
 
 ; Skill ID: 3382 - $GC_I_SKILL_ID_ANNIHILATOR_BEAM
 Func CanUse_AnnihilatorBeam()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6809,6 +7359,7 @@ EndFunc
 
 ; Skill ID: 3396 - $GC_I_SKILL_ID_LIGHTNING_HAMMER_PVP
 Func CanUse_LightningHammerPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 
@@ -6818,6 +7369,7 @@ EndFunc
 
 ; Skill ID: 3398 - $GC_I_SKILL_ID_SLIPPERY_GROUND_PVP
 Func CanUse_SlipperyGroundPvp()
+	If Anti_Spell() Then Return False
 	Return True
 EndFunc
 

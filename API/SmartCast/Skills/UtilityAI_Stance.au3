@@ -6,6 +6,7 @@ EndFunc
 
 ; Skill ID: 6 - $GC_I_SKILL_ID_MANTRA_OF_EARTH
 Func CanUse_MantraOfEarth()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -19,6 +20,7 @@ EndFunc
 
 ; Skill ID: 7 - $GC_I_SKILL_ID_MANTRA_OF_FLAME
 Func CanUse_MantraOfFlame()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -32,6 +34,7 @@ EndFunc
 
 ; Skill ID: 8 - $GC_I_SKILL_ID_MANTRA_OF_FROST
 Func CanUse_MantraOfFrost()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -45,6 +48,7 @@ EndFunc
 
 ; Skill ID: 9 - $GC_I_SKILL_ID_MANTRA_OF_LIGHTNING
 Func CanUse_MantraOfLightning()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -58,6 +62,7 @@ EndFunc
 
 ; Skill ID: 10 - $GC_I_SKILL_ID_HEX_BREAKER
 Func CanUse_HexBreaker()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -71,6 +76,7 @@ EndFunc
 
 ; Skill ID: 11 - $GC_I_SKILL_ID_DISTORTION
 Func CanUse_Distortion()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -84,6 +90,7 @@ EndFunc
 
 ; Skill ID: 12 - $GC_I_SKILL_ID_MANTRA_OF_CELERITY
 Func CanUse_MantraOfCelerity()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -97,6 +104,7 @@ EndFunc
 
 ; Skill ID: 13 - $GC_I_SKILL_ID_MANTRA_OF_RECOVERY
 Func CanUse_MantraOfRecovery()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -110,6 +118,7 @@ EndFunc
 
 ; Skill ID: 14 - $GC_I_SKILL_ID_MANTRA_OF_PERSISTENCE
 Func CanUse_MantraOfPersistence()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -123,6 +132,7 @@ EndFunc
 
 ; Skill ID: 15 - $GC_I_SKILL_ID_MANTRA_OF_INSCRIPTIONS
 Func CanUse_MantraOfInscriptions()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -136,6 +146,7 @@ EndFunc
 
 ; Skill ID: 16 - $GC_I_SKILL_ID_MANTRA_OF_CONCENTRATION
 Func CanUse_MantraOfConcentration()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -149,6 +160,7 @@ EndFunc
 
 ; Skill ID: 17 - $GC_I_SKILL_ID_MANTRA_OF_RESOLVE
 Func CanUse_MantraOfResolve()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -162,6 +174,7 @@ EndFunc
 
 ; Skill ID: 18 - $GC_I_SKILL_ID_MANTRA_OF_SIGNETS
 Func CanUse_MantraOfSignets()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -175,6 +188,7 @@ EndFunc
 
 ; Skill ID: 72 - $GC_I_SKILL_ID_ELEMENTAL_RESISTANCE
 Func CanUse_ElementalResistance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -188,6 +202,7 @@ EndFunc
 
 ; Skill ID: 73 - $GC_I_SKILL_ID_PHYSICAL_RESISTANCE
 Func CanUse_PhysicalResistance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -201,6 +216,7 @@ EndFunc
 
 ; Skill ID: 317 - $GC_I_SKILL_ID_BATTLE_RAGE
 Func CanUse_BattleRage()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -214,6 +230,7 @@ EndFunc
 
 ; Skill ID: 319 - $GC_I_SKILL_ID_RUSH
 Func CanUse_Rush()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -227,6 +244,7 @@ EndFunc
 
 ; Skill ID: 344 - $GC_I_SKILL_ID_FLURRY
 Func CanUse_Flurry()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -240,6 +258,7 @@ EndFunc
 
 ; Skill ID: 345 - $GC_I_SKILL_ID_DEFENSIVE_STANCE
 Func CanUse_DefensiveStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -253,6 +272,7 @@ EndFunc
 
 ; Skill ID: 346 - $GC_I_SKILL_ID_FRENZY
 Func CanUse_Frenzy()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -266,6 +286,7 @@ EndFunc
 
 ; Skill ID: 349 - $GC_I_SKILL_ID_SPRINT
 Func CanUse_Sprint()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -279,6 +300,7 @@ EndFunc
 
 ; Skill ID: 370 - $GC_I_SKILL_ID_BERSERKER_STANCE
 Func CanUse_BerserkerStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -292,6 +314,7 @@ EndFunc
 
 ; Skill ID: 371 - $GC_I_SKILL_ID_BALANCED_STANCE
 Func CanUse_BalancedStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -305,6 +328,7 @@ EndFunc
 
 ; Skill ID: 372 - $GC_I_SKILL_ID_GLADIATORS_DEFENSE
 Func CanUse_GladiatorsDefense()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -314,6 +338,7 @@ EndFunc
 
 ; Skill ID: 373 - $GC_I_SKILL_ID_DEFLECT_ARROWS
 Func CanUse_DeflectArrows()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -327,6 +352,7 @@ EndFunc
 
 ; Skill ID: 375 - $GC_I_SKILL_ID_DWARVEN_BATTLE_STANCE
 Func CanUse_DwarvenBattleStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -340,6 +366,7 @@ EndFunc
 
 ; Skill ID: 376 - $GC_I_SKILL_ID_DISCIPLINED_STANCE
 Func CanUse_DisciplinedStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -353,6 +380,7 @@ EndFunc
 
 ; Skill ID: 377 - $GC_I_SKILL_ID_WARY_STANCE
 Func CanUse_WaryStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -366,6 +394,7 @@ EndFunc
 
 ; Skill ID: 378 - $GC_I_SKILL_ID_SHIELD_STANCE
 Func CanUse_ShieldStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -379,6 +408,7 @@ EndFunc
 
 ; Skill ID: 379 - $GC_I_SKILL_ID_BULLS_CHARGE
 Func CanUse_BullsCharge()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -392,6 +422,7 @@ EndFunc
 
 ; Skill ID: 380 - $GC_I_SKILL_ID_BONETTIS_DEFENSE
 Func CanUse_BonettisDefense()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -401,6 +432,7 @@ EndFunc
 
 ; Skill ID: 425 - $GC_I_SKILL_ID_DODGE
 Func CanUse_Dodge()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -414,6 +446,7 @@ EndFunc
 
 ; Skill ID: 448 - $GC_I_SKILL_ID_ESCAPE
 Func CanUse_Escape()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -427,6 +460,7 @@ EndFunc
 
 ; Skill ID: 449 - $GC_I_SKILL_ID_PRACTICED_STANCE
 Func CanUse_PracticedStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -440,6 +474,7 @@ EndFunc
 
 ; Skill ID: 450 - $GC_I_SKILL_ID_WHIRLING_DEFENSE
 Func CanUse_WhirlingDefense()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -453,6 +488,7 @@ EndFunc
 
 ; Skill ID: 451 - $GC_I_SKILL_ID_MELANDRUS_RESILIENCE
 Func CanUse_MelandrusResilience()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -462,6 +498,7 @@ EndFunc
 
 ; Skill ID: 452 - $GC_I_SKILL_ID_DRYDERS_DEFENSES
 Func CanUse_DrydersDefenses()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -471,6 +508,7 @@ EndFunc
 
 ; Skill ID: 453 - $GC_I_SKILL_ID_LIGHTNING_REFLEXES
 Func CanUse_LightningReflexes()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -484,6 +522,7 @@ EndFunc
 
 ; Skill ID: 454 - $GC_I_SKILL_ID_TIGERS_FURY
 Func CanUse_TigersFury()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -493,6 +532,7 @@ EndFunc
 
 ; Skill ID: 455 - $GC_I_SKILL_ID_STORM_CHASER
 Func CanUse_StormChaser()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -506,6 +546,7 @@ EndFunc
 
 ; Skill ID: 456 - $GC_I_SKILL_ID_SERPENTS_QUICKNESS
 Func CanUse_SerpentsQuickness()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -515,6 +556,7 @@ EndFunc
 
 ; Skill ID: 535 - $GC_I_SKILL_ID_JAGGED_CRYSTAL_SKIN
 Func CanUse_JaggedCrystalSkin()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -528,6 +570,7 @@ EndFunc
 
 ; Skill ID: 540 - $GC_I_SKILL_ID_EMBRACE_THE_PAIN
 Func CanUse_EmbraceThePain()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -541,6 +584,7 @@ EndFunc
 
 ; Skill ID: 572 - $GC_I_SKILL_ID_DEADLY_PARADOX
 Func CanUse_DeadlyParadox()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -554,6 +598,7 @@ EndFunc
 
 ; Skill ID: 811 - $GC_I_SKILL_ID_RUN_AS_ONE
 Func CanUse_RunAsOne()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -563,6 +608,7 @@ EndFunc
 
 ; Skill ID: 831 - $GC_I_SKILL_ID_PRIMAL_RAGE
 Func CanUse_PrimalRage()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -576,6 +622,7 @@ EndFunc
 
 ; Skill ID: 929 - $GC_I_SKILL_ID_SHADOW_OF_HASTE
 Func CanUse_ShadowOfHaste()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -589,6 +636,7 @@ EndFunc
 
 ; Skill ID: 995 - $GC_I_SKILL_ID_TIGER_STANCE
 Func CanUse_TigerStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -602,6 +650,7 @@ EndFunc
 
 ; Skill ID: 1005 - $GC_I_SKILL_ID_ICE_SKATES
 Func CanUse_IceSkates()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -615,6 +664,7 @@ EndFunc
 
 ; Skill ID: 1037 - $GC_I_SKILL_ID_DARK_ESCAPE
 Func CanUse_DarkEscape()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -628,6 +678,7 @@ EndFunc
 
 ; Skill ID: 1041 - $GC_I_SKILL_ID_UNSEEN_FURY
 Func CanUse_UnseenFury()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -641,6 +692,7 @@ EndFunc
 
 ; Skill ID: 1042 - $GC_I_SKILL_ID_FLASHING_BLADES
 Func CanUse_FlashingBlades()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -654,6 +706,7 @@ EndFunc
 
 ; Skill ID: 1043 - $GC_I_SKILL_ID_DASH
 Func CanUse_Dash()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -667,6 +720,7 @@ EndFunc
 
 ; Skill ID: 1142 - $GC_I_SKILL_ID_AUSPICIOUS_PARRY
 Func CanUse_AuspiciousParry()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -680,6 +734,7 @@ EndFunc
 
 ; Skill ID: 1172 - $GC_I_SKILL_ID_TURTLE_SHELL
 Func CanUse_TurtleShell()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -693,6 +748,7 @@ EndFunc
 
 ; Skill ID: 1182 - $GC_I_SKILL_ID_RENEWING_CORRUPTION
 Func CanUse_RenewingCorruption()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -706,6 +762,7 @@ EndFunc
 
 ; Skill ID: 1196 - $GC_I_SKILL_ID_ZOJUNS_HASTE
 Func CanUse_ZojunsHaste()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -715,6 +772,7 @@ EndFunc
 
 ; Skill ID: 1209 - $GC_I_SKILL_ID_BESTIAL_FURY
 Func CanUse_BestialFury()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -728,6 +786,7 @@ EndFunc
 
 ; Skill ID: 1270 - $GC_I_SKILL_ID_FINGERS_OF_CHAOS
 Func CanUse_FingersOfChaos()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -741,6 +800,7 @@ EndFunc
 
 ; Skill ID: 1274 - $GC_I_SKILL_ID_BATTLE_SCARS
 Func CanUse_BattleScars()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -754,6 +814,7 @@ EndFunc
 
 ; Skill ID: 1275 - $GC_I_SKILL_ID_RIPOSTING_SHADOWS
 Func CanUse_RipostingShadows()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -767,6 +828,7 @@ EndFunc
 
 ; Skill ID: 1404 - $GC_I_SKILL_ID_FLAIL
 Func CanUse_Flail()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -780,6 +842,7 @@ EndFunc
 
 ; Skill ID: 1405 - $GC_I_SKILL_ID_CHARGING_STRIKE
 Func CanUse_ChargingStrike()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -793,6 +856,7 @@ EndFunc
 
 ; Skill ID: 1413 - $GC_I_SKILL_ID_BURST_OF_AGGRESSION
 Func CanUse_BurstOfAggression()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -806,6 +870,7 @@ EndFunc
 
 ; Skill ID: 1414 - $GC_I_SKILL_ID_ENRAGING_CHARGE
 Func CanUse_EnragingCharge()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -819,6 +884,7 @@ EndFunc
 
 ; Skill ID: 1436 - $GC_I_SKILL_ID_CORRUPTED_STRENGTH
 Func CanUse_CorruptedStrength()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -832,6 +898,7 @@ EndFunc
 
 ; Skill ID: 1442 - $GC_I_SKILL_ID_JUNUNDU_TUNNEL
 Func CanUse_JununduTunnel()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -845,6 +912,7 @@ EndFunc
 
 ; Skill ID: 1474 - $GC_I_SKILL_ID_STORMS_EMBRACE
 Func CanUse_StormsEmbrace()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -854,6 +922,7 @@ EndFunc
 
 ; Skill ID: 1475 - $GC_I_SKILL_ID_TRAPPERS_SPEED
 Func CanUse_TrappersSpeed()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -863,6 +932,7 @@ EndFunc
 
 ; Skill ID: 1542 - $GC_I_SKILL_ID_PIOUS_CONCENTRATION
 Func CanUse_PiousConcentration()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -876,6 +946,7 @@ EndFunc
 
 ; Skill ID: 1543 - $GC_I_SKILL_ID_PIOUS_HASTE
 Func CanUse_PiousHaste()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -889,6 +960,7 @@ EndFunc
 
 ; Skill ID: 1582 - $GC_I_SKILL_ID_REMOVE_LEADERSHIP_SKILL
 Func CanUse_RemoveLeadershipSkill()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -898,6 +970,7 @@ EndFunc
 
 ; Skill ID: 1615 - $GC_I_SKILL_ID_REMOVE_QUEEN_ARMOR
 Func CanUse_RemoveQueenArmor()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -907,6 +980,7 @@ EndFunc
 
 ; Skill ID: 1618 - $GC_I_SKILL_ID_QUEEN_ARMOR
 Func CanUse_QueenArmor()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -918,14 +992,9 @@ Func BestTarget_QueenArmor($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 1622 - $GC_I_SKILL_ID_JUNUNDU_TUNNEL_MONSTER_SKILL
-; Note: CanUse function not found for this skill
-Func BestTarget_JununduTunnelMonsterSkill($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 1649 - $GC_I_SKILL_ID_WAY_OF_THE_ASSASSIN
 Func CanUse_WayOfTheAssassin()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -939,6 +1008,7 @@ EndFunc
 
 ; Skill ID: 1650 - $GC_I_SKILL_ID_SHADOW_WALK
 Func CanUse_ShadowWalk()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -952,6 +1022,7 @@ EndFunc
 
 ; Skill ID: 1658 - $GC_I_SKILL_ID_SYMBOLIC_POSTURE
 Func CanUse_SymbolicPosture()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -965,6 +1036,7 @@ EndFunc
 
 ; Skill ID: 1698 - $GC_I_SKILL_ID_SOLDIERS_STANCE
 Func CanUse_SoldiersStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -974,6 +1046,7 @@ EndFunc
 
 ; Skill ID: 1699 - $GC_I_SKILL_ID_SOLDIERS_DEFENSE
 Func CanUse_SoldiersDefense()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -983,6 +1056,7 @@ EndFunc
 
 ; Skill ID: 1700 - $GC_I_SKILL_ID_FRENZIED_DEFENSE
 Func CanUse_FrenziedDefense()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -996,6 +1070,7 @@ EndFunc
 
 ; Skill ID: 1701 - $GC_I_SKILL_ID_STEADY_STANCE
 Func CanUse_SteadyStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1009,6 +1084,7 @@ EndFunc
 
 ; Skill ID: 1724 - $GC_I_SKILL_ID_EXPERTS_DEXTERITY
 Func CanUse_ExpertsDexterity()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1018,6 +1094,7 @@ EndFunc
 
 ; Skill ID: 1727 - $GC_I_SKILL_ID_NATURAL_STRIDE
 Func CanUse_NaturalStride()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1031,6 +1108,7 @@ EndFunc
 
 ; Skill ID: 1728 - $GC_I_SKILL_ID_HEKETS_RAMPAGE
 Func CanUse_HeketsRampage()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1040,6 +1118,7 @@ EndFunc
 
 ; Skill ID: 1762 - $GC_I_SKILL_ID_HEART_OF_FURY
 Func CanUse_HeartOfFury()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1053,6 +1132,7 @@ EndFunc
 
 ; Skill ID: 1785 - $GC_I_SKILL_ID_NATURES_SPEED
 Func CanUse_NaturesSpeed()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1062,6 +1142,7 @@ EndFunc
 
 ; Skill ID: 1937 - $GC_I_SKILL_ID_INFERNAL_RAGE
 Func CanUse_InfernalRage()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1075,6 +1156,7 @@ EndFunc
 
 ; Skill ID: 2126 - $GC_I_SKILL_ID_SPIRIT_SENSES
 Func CanUse_SpiritSenses()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1088,6 +1170,7 @@ EndFunc
 
 ; Skill ID: 2132 - $GC_I_SKILL_ID_VOLFEN_AGILITY_CURSE_OF_THE_NORNBEAR
 Func CanUse_VolfenAgilityCurseOfTheNornbear()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1097,6 +1180,7 @@ EndFunc
 
 ; Skill ID: 2134 - $GC_I_SKILL_ID_CHARGING_SPIRIT
 Func CanUse_ChargingSpirit()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1110,6 +1194,7 @@ EndFunc
 
 ; Skill ID: 2136 - $GC_I_SKILL_ID_SMOKE_POWDER_DEFENSE
 Func CanUse_SmokePowderDefense()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1123,6 +1208,7 @@ EndFunc
 
 ; Skill ID: 2146 - $GC_I_SKILL_ID_PIOUS_FURY
 Func CanUse_PiousFury()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1136,6 +1222,7 @@ EndFunc
 
 ; Skill ID: 2170 - $GC_I_SKILL_ID_RAVEN_FLIGHT_A_GATE_TOO_FAR
 Func CanUse_RavenFlightAGateTooFar()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1145,6 +1232,7 @@ EndFunc
 
 ; Skill ID: 2177 - $GC_I_SKILL_ID_RAGE_OF_THE_JOTUN
 Func CanUse_RageOfTheJotun()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1154,6 +1242,7 @@ EndFunc
 
 ; Skill ID: 2196 - $GC_I_SKILL_ID_SOLDIERS_SPEED
 Func CanUse_SoldiersSpeed()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1163,6 +1252,7 @@ EndFunc
 
 ; Skill ID: 2218 - $GC_I_SKILL_ID_DRUNKEN_MASTER
 Func CanUse_DrunkenMaster()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1176,6 +1266,7 @@ EndFunc
 
 ; Skill ID: 2334 - $GC_I_SKILL_ID_BRAWLING_BLOCK
 Func CanUse_BrawlingBlock()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1189,6 +1280,7 @@ EndFunc
 
 ; Skill ID: 2381 - $GC_I_SKILL_ID_VOLFEN_POUNCE
 Func CanUse_VolfenPounce()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1202,6 +1294,7 @@ EndFunc
 
 ; Skill ID: 2388 - $GC_I_SKILL_ID_RAVEN_FLIGHT
 Func CanUse_RavenFlight()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1215,6 +1308,7 @@ EndFunc
 
 ; Skill ID: 2396 - $GC_I_SKILL_ID_URSAN_FORCE_BLOOD_WASHES_BLOOD
 Func CanUse_UrsanForceBloodWashesBlood()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1224,6 +1318,7 @@ EndFunc
 
 ; Skill ID: 2509 - $GC_I_SKILL_ID_HYAHHHHH1
 Func CanUse_Hyahhhhh1()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1233,6 +1328,7 @@ EndFunc
 
 ; Skill ID: 2510 - $GC_I_SKILL_ID_HYAHHHHH2
 Func CanUse_Hyahhhhh2()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1242,6 +1338,7 @@ EndFunc
 
 ; Skill ID: 2511 - $GC_I_SKILL_ID_HYAHHHHH3
 Func CanUse_Hyahhhhh3()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1251,6 +1348,7 @@ EndFunc
 
 ; Skill ID: 2512 - $GC_I_SKILL_ID_HYAHHHHH4
 Func CanUse_Hyahhhhh4()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1260,6 +1358,7 @@ EndFunc
 
 ; Skill ID: 2541 - $GC_I_SKILL_ID_GOLEM_BOOSTERS
 Func CanUse_GolemBoosters()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1273,6 +1372,7 @@ EndFunc
 
 ; Skill ID: 2660 - $GC_I_SKILL_ID_FLEE
 Func CanUse_Flee()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1286,6 +1386,7 @@ EndFunc
 
 ; Skill ID: 2680 - $GC_I_SKILL_ID_DISTORTION_GWEN
 Func CanUse_DistortionGwen()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1295,6 +1396,7 @@ EndFunc
 
 ; Skill ID: 2726 - $GC_I_SKILL_ID_STRENGTH_OF_PURITY
 Func CanUse_StrengthOfPurity()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1308,6 +1410,7 @@ EndFunc
 
 ; Skill ID: 2728 - $GC_I_SKILL_ID_WAY_OF_THE_PURE
 Func CanUse_WayOfThePure()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1321,6 +1424,7 @@ EndFunc
 
 ; Skill ID: 2882 - $GC_I_SKILL_ID_MANTRA_OF_INSCRIPTIONS_PvP
 Func CanUse_MantraOfInscriptionsPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1330,6 +1434,7 @@ EndFunc
 
 ; Skill ID: 2908 - $GC_I_SKILL_ID_NOX_FIELD_DASH
 Func CanUse_NoxFieldDash()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1339,6 +1444,7 @@ EndFunc
 
 ; Skill ID: 2959 - $GC_I_SKILL_ID_EXPERTS_DEXTERITY_PvP
 Func CanUse_ExpertsDexterityPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1348,6 +1454,7 @@ EndFunc
 
 ; Skill ID: 3002 - $GC_I_SKILL_ID_WARRIORS_ENDURANCE_PvP
 Func CanUse_WarriorsEndurancePvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1357,6 +1464,7 @@ EndFunc
 
 ; Skill ID: 3049 - $GC_I_SKILL_ID_UNSEEN_FURY_PvP
 Func CanUse_UnseenFuryPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1366,6 +1474,7 @@ EndFunc
 
 ; Skill ID: 3052 - $GC_I_SKILL_ID_CONVICTION_PvP
 Func CanUse_ConvictionPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1375,6 +1484,7 @@ EndFunc
 
 ; Skill ID: 3060 - $GC_I_SKILL_ID_ESCAPE_PvP
 Func CanUse_EscapePvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1384,6 +1494,7 @@ EndFunc
 
 ; Skill ID: 3063 - $GC_I_SKILL_ID_MANTRA_OF_RESOLVE_PvP
 Func CanUse_MantraOfResolvePvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1393,6 +1504,7 @@ EndFunc
 
 ; Skill ID: 3070 - $GC_I_SKILL_ID_SUGAR_RUSH_AGENT_OF_THE_MAD_KING
 Func CanUse_SugarRushAgentOfTheMadKing()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1402,6 +1514,7 @@ EndFunc
 
 ; Skill ID: 3141 - $GC_I_SKILL_ID_LIGHTNING_REFLEXES_PvP
 Func CanUse_LightningReflexesPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1411,6 +1524,7 @@ EndFunc
 
 ; Skill ID: 3156 - $GC_I_SKILL_ID_SOLDIERS_STANCE_PvP
 Func CanUse_SoldiersStancePvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1420,6 +1534,7 @@ EndFunc
 
 ; Skill ID: 3166 - $GC_I_SKILL_ID_DRUNKEN_STUMBLING
 Func CanUse_DrunkenStumbling()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1433,6 +1548,7 @@ EndFunc
 
 ; Skill ID: 3179 - $GC_I_SKILL_ID_MANTRA_OF_SIGNETS_PvP
 Func CanUse_MantraOfSignetsPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1442,6 +1558,7 @@ EndFunc
 
 ; Skill ID: 3201 - $GC_I_SKILL_ID_TORIIMOS_BURNING_FURY
 Func CanUse_ToriimosBurningFury()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1451,6 +1568,7 @@ EndFunc
 
 ; Skill ID: 3204 - $GC_I_SKILL_ID_DEFY_PAIN_PvP
 Func CanUse_DefyPainPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1460,6 +1578,7 @@ EndFunc
 
 ; Skill ID: 3239 - $GC_I_SKILL_ID_NATURES_BLESSING
 Func CanUse_NaturesBlessing()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1469,6 +1588,7 @@ EndFunc
 
 ; Skill ID: 3247 - $GC_I_SKILL_ID_SURVIVORS_WILL
 Func CanUse_SurvivorsWill()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1478,6 +1598,7 @@ EndFunc
 
 ; Skill ID: 3294 - $GC_I_SKILL_ID_RIOT_SHIELD
 Func CanUse_RiotShield()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1491,6 +1612,7 @@ EndFunc
 
 ; Skill ID: 3366 - $GC_I_SKILL_ID_HEART_OF_FURY_PvP
 Func CanUse_HeartOfFuryPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1500,6 +1622,7 @@ EndFunc
 
 ; Skill ID: 3368 - $GC_I_SKILL_ID_PIOUS_FURY_PvP
 Func CanUse_PiousFuryPvP()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 
@@ -1509,6 +1632,7 @@ EndFunc
 
 ; Skill ID: 3426 - $GC_I_SKILL_ID_SEVEN_WEAPONS_STANCE
 Func CanUse_SevenWeaponsStance()
+	If Anti_Stance() Then Return False
 	Return True
 EndFunc
 

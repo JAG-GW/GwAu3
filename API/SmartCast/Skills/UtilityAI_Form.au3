@@ -1,11 +1,12 @@
 #include-once
 
 Func Anti_Form()
-
+	Return False
 EndFunc
 
 ; Skill ID: 1518 - $GC_I_SKILL_ID_AVATAR_OF_BALTHAZAR
 Func CanUse_AvatarOfBalthazar()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -19,6 +20,7 @@ EndFunc
 
 ; Skill ID: 1519 - $GC_I_SKILL_ID_AVATAR_OF_DWAYNA
 Func CanUse_AvatarOfDwayna()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -32,6 +34,7 @@ EndFunc
 
 ; Skill ID: 1520 - $GC_I_SKILL_ID_AVATAR_OF_GRENTH
 Func CanUse_AvatarOfGrenth()
+	If Anti_Form() Then Return False
 ;~ 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_AVATAR_OF_GRENTH) And UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH, $GC_UAI_EFFECT_Duration) > 5000 Then Return False
 	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH, $GC_UAI_EFFECT_Duration) > 5000 Then Return False
 	Return True
@@ -47,6 +50,7 @@ EndFunc
 
 ; Skill ID: 1521 - $GC_I_SKILL_ID_AVATAR_OF_LYSSA
 Func CanUse_AvatarOfLyssa()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -60,6 +64,7 @@ EndFunc
 
 ; Skill ID: 1522 - $GC_I_SKILL_ID_AVATAR_OF_MELANDRU
 Func CanUse_AvatarOfMelandru()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -73,6 +78,7 @@ EndFunc
 
 ; Skill ID: 1902 - $GC_I_SKILL_ID_AVATAR_OF_GRENTH_SNOW_FIGHTING_SKILL
 Func CanUse_AvatarOfGrenthSnowFightingSkill()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -86,6 +92,7 @@ EndFunc
 
 ; Skill ID: 1903 - $GC_I_SKILL_ID_AVATAR_OF_DWAYNA_SNOW_FIGHTING_SKILL
 Func CanUse_AvatarOfDwaynaSnowFightingSkill()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -99,6 +106,7 @@ EndFunc
 
 ; Skill ID: 2374 - $GC_I_SKILL_ID_URSAN_BLESSING
 Func CanUse_UrsanBlessing()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -112,6 +120,7 @@ EndFunc
 
 ; Skill ID: 2379 - $GC_I_SKILL_ID_VOLFEN_BLESSING
 Func CanUse_VolfenBlessing()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -125,6 +134,7 @@ EndFunc
 
 ; Skill ID: 2384 - $GC_I_SKILL_ID_RAVEN_BLESSING
 Func CanUse_RavenBlessing()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -138,6 +148,7 @@ EndFunc
 
 ; Skill ID: 2486 - $GC_I_SKILL_ID_ELEMENTAL_SHIFT
 Func CanUse_ElementalShift()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -151,6 +162,7 @@ EndFunc
 
 ; Skill ID: 2494 - $GC_I_SKILL_ID_BEAR_FORM
 Func CanUse_BearForm()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -164,6 +176,7 @@ EndFunc
 
 ; Skill ID: 2504 - $GC_I_SKILL_ID_SIEGE_DEVOURER
 Func CanUse_SiegeDevourer()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -177,6 +190,7 @@ EndFunc
 
 ; Skill ID: 2658 - $GC_I_SKILL_ID_HIDE
 Func CanUse_Hide()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -190,6 +204,7 @@ EndFunc
 
 ; Skill ID: 2659 - $GC_I_SKILL_ID_FEIGN_DEATH
 Func CanUse_FeignDeath()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -203,6 +218,7 @@ EndFunc
 
 ; Skill ID: 2967 - $GC_I_SKILL_ID_AVATAR_OF_GRENTH_PvP
 Func CanUse_AvatarOfGrenthPvP()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -216,6 +232,7 @@ EndFunc
 
 ; Skill ID: 3270 - $GC_I_SKILL_ID_AVATAR_OF_DWAYNA_PvP
 Func CanUse_AvatarOfDwaynaPvP()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -229,6 +246,7 @@ EndFunc
 
 ; Skill ID: 3271 - $GC_I_SKILL_ID_AVATAR_OF_MELANDRU_PvP
 Func CanUse_AvatarOfMelandruPvP()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 
@@ -242,6 +260,7 @@ EndFunc
 
 ; Skill ID: 3376 - $GC_I_SKILL_ID_SHAPESHIFT
 Func CanUse_Shapeshift()
+	If Anti_Form() Then Return False
 	Return True
 EndFunc
 

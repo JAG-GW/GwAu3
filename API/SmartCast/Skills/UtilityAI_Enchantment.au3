@@ -37,6 +37,8 @@ Func Anti_Enchantment()
 		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
 	EndIf
 
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
+
 	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 
 	Return False
@@ -44,6 +46,7 @@ EndFunc
 
 ; Skill ID: 32 - $GC_I_SKILL_ID_ILLUSION_OF_WEAKNESS
 Func CanUse_IllusionOfWeakness()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -57,6 +60,7 @@ EndFunc
 
 ; Skill ID: 33 - $GC_I_SKILL_ID_ILLUSIONARY_WEAPONRY
 Func CanUse_IllusionaryWeaponry()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -70,6 +74,7 @@ EndFunc
 
 ; Skill ID: 34 - $GC_I_SKILL_ID_SYMPATHETIC_VISAGE
 Func CanUse_SympatheticVisage()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -83,6 +88,7 @@ EndFunc
 
 ; Skill ID: 37 - $GC_I_SKILL_ID_ILLUSION_OF_HASTE
 Func CanUse_IllusionOfHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -96,6 +102,7 @@ EndFunc
 
 ; Skill ID: 38 - $GC_I_SKILL_ID_CHANNELING
 Func CanUse_Channeling()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -109,6 +116,7 @@ EndFunc
 
 ; Skill ID: 74 - $GC_I_SKILL_ID_ECHO
 Func CanUse_Echo()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -122,6 +130,7 @@ EndFunc
 
 ; Skill ID: 75 - $GC_I_SKILL_ID_ARCANE_ECHO
 Func CanUse_ArcaneEcho()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -135,6 +144,7 @@ EndFunc
 
 ; Skill ID: 82 - $GC_I_SKILL_ID_MANTRA_OF_RECALL
 Func CanUse_MantraOfRecall()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -148,6 +158,7 @@ EndFunc
 
 ; Skill ID: 88 - $GC_I_SKILL_ID_VERATAS_AURA
 Func CanUse_VeratasAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -157,6 +168,7 @@ EndFunc
 
 ; Skill ID: 104 - $GC_I_SKILL_ID_DEATH_NOVA
 Func CanUse_DeathNova()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -170,6 +182,7 @@ EndFunc
 
 ; Skill ID: 111 - $GC_I_SKILL_ID_AWAKEN_THE_BLOOD
 Func CanUse_AwakenTheBlood()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -183,6 +196,7 @@ EndFunc
 
 ; Skill ID: 113 - $GC_I_SKILL_ID_TAINTED_FLESH
 Func CanUse_TaintedFlesh()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -196,6 +210,7 @@ EndFunc
 
 ; Skill ID: 114 - $GC_I_SKILL_ID_AURA_OF_THE_LICH
 Func CanUse_AuraOfTheLich()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -209,6 +224,7 @@ EndFunc
 
 ; Skill ID: 115 - $GC_I_SKILL_ID_BLOOD_RENEWAL
 Func CanUse_BloodRenewal()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -222,6 +238,7 @@ EndFunc
 
 ; Skill ID: 116 - $GC_I_SKILL_ID_DARK_AURA
 Func CanUse_DarkAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -235,6 +252,7 @@ EndFunc
 
 ; Skill ID: 119 - $GC_I_SKILL_ID_BLOOD_IS_POWER
 Func CanUse_BloodIsPower()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -248,6 +266,7 @@ EndFunc
 
 ; Skill ID: 130 - $GC_I_SKILL_ID_DEMONIC_FLESH
 Func CanUse_DemonicFlesh()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -261,6 +280,7 @@ EndFunc
 
 ; Skill ID: 134 - $GC_I_SKILL_ID_ORDER_OF_PAIN
 Func CanUse_OrderOfPain()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -274,6 +294,7 @@ EndFunc
 
 ; Skill ID: 138 - $GC_I_SKILL_ID_DARK_BOND
 Func CanUse_DarkBond()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -287,6 +308,7 @@ EndFunc
 
 ; Skill ID: 139 - $GC_I_SKILL_ID_INFUSE_CONDITION
 Func CanUse_InfuseCondition()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -300,6 +322,7 @@ EndFunc
 
 ; Skill ID: 147 - $GC_I_SKILL_ID_DARK_FURY
 Func CanUse_DarkFury()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -313,6 +336,7 @@ EndFunc
 
 ; Skill ID: 148 - $GC_I_SKILL_ID_ORDER_OF_THE_VAMPIRE
 Func CanUse_OrderOfTheVampire()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -326,6 +350,7 @@ EndFunc
 
 ; Skill ID: 157 - $GC_I_SKILL_ID_BLOOD_RITUAL
 Func CanUse_BloodRitual()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -339,6 +364,7 @@ EndFunc
 
 ; Skill ID: 160 - $GC_I_SKILL_ID_WINDBORNE_SPEED
 Func CanUse_WindborneSpeed()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -352,6 +378,7 @@ EndFunc
 
 ; Skill ID: 164 - $GC_I_SKILL_ID_ELEMENTAL_ATTUNEMENT
 Func CanUse_ElementalAttunement()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -365,6 +392,7 @@ EndFunc
 
 ; Skill ID: 165 - $GC_I_SKILL_ID_ARMOR_OF_EARTH
 Func CanUse_ArmorOfEarth()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -378,6 +406,7 @@ EndFunc
 
 ; Skill ID: 166 - $GC_I_SKILL_ID_KINETIC_ARMOR
 Func CanUse_KineticArmor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -391,6 +420,7 @@ EndFunc
 
 ; Skill ID: 168 - $GC_I_SKILL_ID_MAGNETIC_AURA
 Func CanUse_MagneticAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -404,6 +434,7 @@ EndFunc
 
 ; Skill ID: 169 - $GC_I_SKILL_ID_EARTH_ATTUNEMENT
 Func CanUse_EarthAttunement()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -417,6 +448,7 @@ EndFunc
 
 ; Skill ID: 178 - $GC_I_SKILL_ID_ETHER_PRODIGY
 Func CanUse_EtherProdigy()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -430,6 +462,7 @@ EndFunc
 
 ; Skill ID: 180 - $GC_I_SKILL_ID_AURA_OF_RESTORATION
 Func CanUse_AuraOfRestoration()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -443,6 +476,7 @@ EndFunc
 
 ; Skill ID: 181 - $GC_I_SKILL_ID_ETHER_RENEWAL
 Func CanUse_EtherRenewal()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -456,6 +490,7 @@ EndFunc
 
 ; Skill ID: 182 - $GC_I_SKILL_ID_CONJURE_FLAME
 Func CanUse_ConjureFlame()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -469,6 +504,7 @@ EndFunc
 
 ; Skill ID: 184 - $GC_I_SKILL_ID_FIRE_ATTUNEMENT
 Func CanUse_FireAttunement()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -482,6 +518,7 @@ EndFunc
 
 ; Skill ID: 206 - $GC_I_SKILL_ID_ARMOR_OF_FROST
 Func CanUse_ArmorOfFrost()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -495,6 +532,7 @@ EndFunc
 
 ; Skill ID: 207 - $GC_I_SKILL_ID_CONJURE_FROST
 Func CanUse_ConjureFrost()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -508,6 +546,7 @@ EndFunc
 
 ; Skill ID: 208 - $GC_I_SKILL_ID_WATER_ATTUNEMENT
 Func CanUse_WaterAttunement()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -521,6 +560,7 @@ EndFunc
 
 ; Skill ID: 214 - $GC_I_SKILL_ID_ICE_SPEAR
 Func CanUse_IceSpear()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -534,6 +574,7 @@ EndFunc
 
 ; Skill ID: 216 - $GC_I_SKILL_ID_IRON_MIST
 Func CanUse_IronMist()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -547,6 +588,7 @@ EndFunc
 
 ; Skill ID: 218 - $GC_I_SKILL_ID_OBSIDIAN_FLESH
 Func CanUse_ObsidianFlesh()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -560,6 +602,7 @@ EndFunc
 
 ; Skill ID: 221 - $GC_I_SKILL_ID_CONJURE_LIGHTNING
 Func CanUse_ConjureLightning()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -573,6 +616,7 @@ EndFunc
 
 ; Skill ID: 225 - $GC_I_SKILL_ID_AIR_ATTUNEMENT
 Func CanUse_AirAttunement()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -586,6 +630,7 @@ EndFunc
 
 ; Skill ID: 233 - $GC_I_SKILL_ID_SWIRLING_AURA
 Func CanUse_SwirlingAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -599,6 +644,7 @@ EndFunc
 
 ; Skill ID: 236 - $GC_I_SKILL_ID_MIST_FORM
 Func CanUse_MistForm()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -612,6 +658,7 @@ EndFunc
 
 ; Skill ID: 238 - $GC_I_SKILL_ID_ARMOR_OF_MIST
 Func CanUse_ArmorOfMist()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -625,6 +672,7 @@ EndFunc
 
 ; Skill ID: 241 - $GC_I_SKILL_ID_LIFE_BOND
 Func CanUse_LifeBond()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -638,6 +686,7 @@ EndFunc
 
 ; Skill ID: 242 - $GC_I_SKILL_ID_BALTHAZARS_SPIRIT
 Func CanUse_BalthazarsSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -651,6 +700,7 @@ EndFunc
 
 ; Skill ID: 243 - $GC_I_SKILL_ID_STRENGTH_OF_HONOR
 Func CanUse_StrengthOfHonor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -664,6 +714,7 @@ EndFunc
 
 ; Skill ID: 244 - $GC_I_SKILL_ID_LIFE_ATTUNEMENT
 Func CanUse_LifeAttunement()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -677,6 +728,7 @@ EndFunc
 
 ; Skill ID: 245 - $GC_I_SKILL_ID_PROTECTIVE_SPIRIT
 Func CanUse_ProtectiveSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -690,6 +742,7 @@ EndFunc
 
 ; Skill ID: 246 - $GC_I_SKILL_ID_DIVINE_INTERVENTION
 Func CanUse_DivineIntervention()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -703,6 +756,7 @@ EndFunc
 
 ; Skill ID: 248 - $GC_I_SKILL_ID_RETRIBUTION
 Func CanUse_Retribution()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -716,6 +770,7 @@ EndFunc
 
 ; Skill ID: 249 - $GC_I_SKILL_ID_HOLY_WRATH
 Func CanUse_HolyWrath()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -729,6 +784,7 @@ EndFunc
 
 ; Skill ID: 250 - $GC_I_SKILL_ID_ESSENCE_BOND
 Func CanUse_EssenceBond()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -742,6 +798,7 @@ EndFunc
 
 ; Skill ID: 254 - $GC_I_SKILL_ID_VIGOROUS_SPIRIT
 Func CanUse_VigorousSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -755,6 +812,7 @@ EndFunc
 
 ; Skill ID: 255 - $GC_I_SKILL_ID_WATCHFUL_SPIRIT
 Func CanUse_WatchfulSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -768,6 +826,7 @@ EndFunc
 
 ; Skill ID: 256 - $GC_I_SKILL_ID_BLESSED_AURA
 Func CanUse_BlessedAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -781,6 +840,7 @@ EndFunc
 
 ; Skill ID: 257 - $GC_I_SKILL_ID_AEGIS
 Func CanUse_Aegis()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -794,6 +854,7 @@ EndFunc
 
 ; Skill ID: 258 - $GC_I_SKILL_ID_GUARDIAN
 Func CanUse_Guardian()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -807,6 +868,7 @@ EndFunc
 
 ; Skill ID: 259 - $GC_I_SKILL_ID_SHIELD_OF_DEFLECTION
 Func CanUse_ShieldOfDeflection()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -820,6 +882,7 @@ EndFunc
 
 ; Skill ID: 260 - $GC_I_SKILL_ID_AURA_OF_FAITH
 Func CanUse_AuraOfFaith()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -833,6 +896,7 @@ EndFunc
 
 ; Skill ID: 261 - $GC_I_SKILL_ID_SHIELD_OF_REGENERATION
 Func CanUse_ShieldOfRegeneration()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -846,6 +910,7 @@ EndFunc
 
 ; Skill ID: 262 - $GC_I_SKILL_ID_SHIELD_OF_JUDGMENT
 Func CanUse_ShieldOfJudgment()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -859,6 +924,7 @@ EndFunc
 
 ; Skill ID: 263 - $GC_I_SKILL_ID_PROTECTIVE_BOND
 Func CanUse_ProtectiveBond()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -872,6 +938,7 @@ EndFunc
 
 ; Skill ID: 266 - $GC_I_SKILL_ID_PEACE_AND_HARMONY
 Func CanUse_PeaceAndHarmony()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -885,6 +952,7 @@ EndFunc
 
 ; Skill ID: 267 - $GC_I_SKILL_ID_JUDGES_INSIGHT
 Func CanUse_JudgesInsight()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -894,6 +962,7 @@ EndFunc
 
 ; Skill ID: 268 - $GC_I_SKILL_ID_UNYIELDING_AURA
 Func CanUse_UnyieldingAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -907,6 +976,7 @@ EndFunc
 
 ; Skill ID: 269 - $GC_I_SKILL_ID_MARK_OF_PROTECTION
 Func CanUse_MarkOfProtection()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -920,6 +990,7 @@ EndFunc
 
 ; Skill ID: 270 - $GC_I_SKILL_ID_LIFE_BARRIER
 Func CanUse_LifeBarrier()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -933,6 +1004,7 @@ EndFunc
 
 ; Skill ID: 271 - $GC_I_SKILL_ID_ZEALOTS_FIRE
 Func CanUse_ZealotsFire()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -946,6 +1018,7 @@ EndFunc
 
 ; Skill ID: 272 - $GC_I_SKILL_ID_BALTHAZARS_AURA
 Func CanUse_BalthazarsAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -955,6 +1028,7 @@ EndFunc
 
 ; Skill ID: 273 - $GC_I_SKILL_ID_SPELL_BREAKER
 Func CanUse_SpellBreaker()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -968,6 +1042,7 @@ EndFunc
 
 ; Skill ID: 274 - $GC_I_SKILL_ID_HEALING_SEED
 Func CanUse_HealingSeed()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -981,6 +1056,7 @@ EndFunc
 
 ; Skill ID: 284 - $GC_I_SKILL_ID_DIVINE_BOON
 Func CanUse_DivineBoon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -994,6 +1070,7 @@ EndFunc
 
 ; Skill ID: 285 - $GC_I_SKILL_ID_HEALING_HANDS
 Func CanUse_HealingHands()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1007,6 +1084,7 @@ EndFunc
 
 ; Skill ID: 288 - $GC_I_SKILL_ID_HEALING_BREEZE
 Func CanUse_HealingBreeze()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1020,6 +1098,7 @@ EndFunc
 
 ; Skill ID: 289 - $GC_I_SKILL_ID_VITAL_BLESSING
 Func CanUse_VitalBlessing()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1033,6 +1112,7 @@ EndFunc
 
 ; Skill ID: 290 - $GC_I_SKILL_ID_MENDING
 Func CanUse_Mending()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1046,6 +1126,7 @@ EndFunc
 
 ; Skill ID: 291 - $GC_I_SKILL_ID_LIVE_VICARIOUSLY
 Func CanUse_LiveVicariously()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1059,6 +1140,7 @@ EndFunc
 
 ; Skill ID: 299 - $GC_I_SKILL_ID_SHIELDING_HANDS
 Func CanUse_ShieldingHands()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1072,6 +1154,7 @@ EndFunc
 
 ; Skill ID: 307 - $GC_I_SKILL_ID_REVERSAL_OF_FORTUNE
 Func CanUse_ReversalOfFortune()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1085,6 +1168,7 @@ EndFunc
 
 ; Skill ID: 308 - $GC_I_SKILL_ID_SUCCOR
 Func CanUse_Succor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1098,6 +1182,7 @@ EndFunc
 
 ; Skill ID: 309 - $GC_I_SKILL_ID_HOLY_VEIL
 Func CanUse_HolyVeil()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1111,6 +1196,7 @@ EndFunc
 
 ; Skill ID: 310 - $GC_I_SKILL_ID_DIVINE_SPIRIT
 Func CanUse_DivineSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1124,6 +1210,7 @@ EndFunc
 
 ; Skill ID: 315 - $GC_I_SKILL_ID_VENGEANCE
 Func CanUse_Vengeance()
+	If Anti_Enchantment() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -1136,13 +1223,9 @@ Func BestTarget_Vengeance($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 490 - $GC_I_SKILL_ID_VITAL_BLESSING_MONSTER_SKILL
-Func BestTarget_VitalBlessingMonsterSkill($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 515 - $GC_I_SKILL_ID_CHARR_BUFF
 Func CanUse_CharrBuff()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1156,6 +1239,7 @@ EndFunc
 
 ; Skill ID: 532 - $GC_I_SKILL_ID_HEALING_BREEZE_AGNARS_RAGE
 Func CanUse_HealingBreezeAgnarsRage()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1165,6 +1249,7 @@ EndFunc
 
 ; Skill ID: 584 - $GC_I_SKILL_ID_DIVINE_FIRE
 Func CanUse_DivineFire()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1178,6 +1263,7 @@ EndFunc
 
 ; Skill ID: 596 - $GC_I_SKILL_ID_CHIMERA_OF_INTENSITY
 Func CanUse_ChimeraOfIntensity()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1191,6 +1277,7 @@ EndFunc
 
 ; Skill ID: 763 - $GC_I_SKILL_ID_JAUNDICED_GAZE
 Func CanUse_JaundicedGaze()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1204,6 +1291,7 @@ EndFunc
 
 ; Skill ID: 771 - $GC_I_SKILL_ID_AURA_OF_DISPLACEMENT
 Func CanUse_AuraOfDisplacement()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1217,6 +1305,7 @@ EndFunc
 
 ; Skill ID: 806 - $GC_I_SKILL_ID_CULTISTS_FERVOR
 Func CanUse_CultistsFervor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1227,6 +1316,7 @@ EndFunc
 ; Skill ID: 807 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 813 - $GC_I_SKILL_ID_LYSSAS_AURA
 Func CanUse_LyssasAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1236,6 +1326,7 @@ EndFunc
 
 ; Skill ID: 814 - $GC_I_SKILL_ID_SHADOW_REFUGE
 Func CanUse_ShadowRefuge()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1249,6 +1340,7 @@ EndFunc
 
 ; Skill ID: 819 - $GC_I_SKILL_ID_VAMPIRIC_SPIRIT
 Func CanUse_VampiricSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1262,6 +1354,7 @@ EndFunc
 
 ; Skill ID: 823 - $GC_I_SKILL_ID_BURNING_SPEED
 Func CanUse_BurningSpeed()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1275,6 +1368,7 @@ EndFunc
 
 ; Skill ID: 826 - $GC_I_SKILL_ID_SHADOW_FORM
 Func CanUse_ShadowForm()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1288,6 +1382,7 @@ EndFunc
 
 ; Skill ID: 829 - $GC_I_SKILL_ID_VERATAS_PROMISE
 Func CanUse_VeratasPromise()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1297,6 +1392,7 @@ EndFunc
 
 ; Skill ID: 833 - $GC_I_SKILL_ID_BORROWED_ENERGY
 Func CanUse_BorrowedEnergy()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1310,6 +1406,7 @@ EndFunc
 
 ; Skill ID: 837 - $GC_I_SKILL_ID_ENERGY_BOON
 Func CanUse_EnergyBoon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1323,6 +1420,7 @@ EndFunc
 
 ; Skill ID: 838 - $GC_I_SKILL_ID_DWAYNAS_SORROW
 Func CanUse_DwaynasSorrow()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1332,6 +1430,7 @@ EndFunc
 
 ; Skill ID: 843 - $GC_I_SKILL_ID_GUST
 Func CanUse_Gust()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1345,6 +1444,7 @@ EndFunc
 
 ; Skill ID: 848 - $GC_I_SKILL_ID_REVERSE_HEX
 Func CanUse_ReverseHex()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1358,6 +1458,7 @@ EndFunc
 
 ; Skill ID: 863 - $GC_I_SKILL_ID_ORDER_OF_APOSTASY
 Func CanUse_OrderOfApostasy()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1371,6 +1472,7 @@ EndFunc
 
 ; Skill ID: 885 - $GC_I_SKILL_ID_SHIELD_GUARDIAN
 Func CanUse_ShieldGuardian()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1384,6 +1486,7 @@ EndFunc
 
 ; Skill ID: 886 - $GC_I_SKILL_ID_RESTFUL_BREEZE
 Func CanUse_RestfulBreeze()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1397,6 +1500,7 @@ EndFunc
 
 ; Skill ID: 925 - $GC_I_SKILL_ID_RECALL
 Func CanUse_Recall()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1410,6 +1514,7 @@ EndFunc
 
 ; Skill ID: 926 - $GC_I_SKILL_ID_SHARPEN_DAGGERS
 Func CanUse_SharpenDaggers()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1423,6 +1528,7 @@ EndFunc
 
 ; Skill ID: 930 - $GC_I_SKILL_ID_AUSPICIOUS_INCANTATION
 Func CanUse_AuspiciousIncantation()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1436,6 +1542,7 @@ EndFunc
 
 ; Skill ID: 949 - $GC_I_SKILL_ID_WAY_OF_THE_FOX
 Func CanUse_WayOfTheFox()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1449,6 +1556,7 @@ EndFunc
 
 ; Skill ID: 956 - $GC_I_SKILL_ID_ENERGY_FONT
 Func CanUse_EnergyFont()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1462,6 +1570,7 @@ EndFunc
 
 ; Skill ID: 957 - $GC_I_SKILL_ID_SPELL_SHIELD
 Func CanUse_SpellShield()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1475,6 +1584,7 @@ EndFunc
 
 ; Skill ID: 977 - $GC_I_SKILL_ID_WAY_OF_THE_LOTUS
 Func CanUse_WayOfTheLotus()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1488,6 +1598,7 @@ EndFunc
 
 ; Skill ID: 984 - $GC_I_SKILL_ID_TORCH_ENCHANTMENT
 Func CanUse_TorchEnchantment()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1501,6 +1612,7 @@ EndFunc
 
 ; Skill ID: 987 - $GC_I_SKILL_ID_WAY_OF_THE_EMPTY_PALM
 Func CanUse_WayOfTheEmptyPalm()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1514,6 +1626,7 @@ EndFunc
 
 ; Skill ID: 1006 - $GC_I_SKILL_ID_ICE_FORT
 Func CanUse_IceFort()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1527,6 +1640,7 @@ EndFunc
 
 ; Skill ID: 1013 - $GC_I_SKILL_ID_ICE_BREAKER
 Func CanUse_IceBreaker()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1540,6 +1654,7 @@ EndFunc
 
 ; Skill ID: 1027 - $GC_I_SKILL_ID_CRITICAL_DEFENSES
 Func CanUse_CriticalDefenses()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1553,6 +1668,7 @@ EndFunc
 
 ; Skill ID: 1028 - $GC_I_SKILL_ID_WAY_OF_PERFECTION
 Func CanUse_WayOfPerfection()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1566,6 +1682,7 @@ EndFunc
 
 ; Skill ID: 1029 - $GC_I_SKILL_ID_DARK_APOSTASY
 Func CanUse_DarkApostasy()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1579,6 +1696,7 @@ EndFunc
 
 ; Skill ID: 1030 - $GC_I_SKILL_ID_LOCUSTS_FURY
 Func CanUse_LocustsFury()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1588,6 +1706,7 @@ EndFunc
 
 ; Skill ID: 1031 - $GC_I_SKILL_ID_SHROUD_OF_DISTRESS
 Func CanUse_ShroudOfDistress()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1601,6 +1720,7 @@ EndFunc
 
 ; Skill ID: 1054 - $GC_I_SKILL_ID_ANCESTORS_VISAGE
 Func CanUse_AncestorsVisage()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1610,6 +1730,7 @@ EndFunc
 
 ; Skill ID: 1084 - $GC_I_SKILL_ID_SLIVER_ARMOR
 Func CanUse_SliverArmor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1623,6 +1744,7 @@ EndFunc
 
 ; Skill ID: 1091 - $GC_I_SKILL_ID_DOUBLE_DRAGON
 Func CanUse_DoubleDragon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1636,6 +1758,7 @@ EndFunc
 
 ; Skill ID: 1114 - $GC_I_SKILL_ID_SPIRIT_BOND
 Func CanUse_SpiritBond()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1649,6 +1772,7 @@ EndFunc
 
 ; Skill ID: 1115 - $GC_I_SKILL_ID_AIR_OF_ENCHANTMENT
 Func CanUse_AirOfEnchantment()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1662,6 +1786,7 @@ EndFunc
 
 ; Skill ID: 1123 - $GC_I_SKILL_ID_LIFE_SHEATH
 Func CanUse_LifeSheath()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1675,6 +1800,7 @@ EndFunc
 
 ; Skill ID: 1152 - $GC_I_SKILL_ID_DEMONIC_AGILITY
 Func CanUse_DemonicAgility()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1688,6 +1814,7 @@ EndFunc
 
 ; Skill ID: 1153 - $GC_I_SKILL_ID_BLESSING_OF_THE_KIRIN
 Func CanUse_BlessingOfTheKirin()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1701,6 +1828,7 @@ EndFunc
 
 ; Skill ID: 1229 - $GC_I_SKILL_ID_EXPLOSIVE_GROWTH
 Func CanUse_ExplosiveGrowth()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1714,6 +1842,7 @@ EndFunc
 
 ; Skill ID: 1230 - $GC_I_SKILL_ID_BOON_OF_CREATION
 Func CanUse_BoonOfCreation()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1727,6 +1856,7 @@ EndFunc
 
 ; Skill ID: 1231 - $GC_I_SKILL_ID_SPIRIT_CHANNELING
 Func CanUse_SpiritChanneling()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1740,6 +1870,7 @@ EndFunc
 
 ; Skill ID: 1244 - $GC_I_SKILL_ID_GHOSTLY_HASTE
 Func CanUse_GhostlyHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1753,6 +1884,7 @@ EndFunc
 
 ; Skill ID: 1261 - $GC_I_SKILL_ID_FRIGID_ARMOR
 Func CanUse_FrigidArmor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1766,6 +1898,7 @@ EndFunc
 
 ; Skill ID: 1311 - $GC_I_SKILL_ID_NIGHTMARE_REFUGE
 Func CanUse_NightmareRefuge()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1779,6 +1912,7 @@ EndFunc
 
 ; Skill ID: 1323 - $GC_I_SKILL_ID_SUGAR_RUSH_MEDIUM
 Func CanUse_SugarRushMedium()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1788,6 +1922,7 @@ EndFunc
 
 ; Skill ID: 1338 - $GC_I_SKILL_ID_PERSISTENCE_OF_MEMORY
 Func CanUse_PersistenceOfMemory()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1801,6 +1936,7 @@ EndFunc
 
 ; Skill ID: 1340 - $GC_I_SKILL_ID_SYMBOLIC_CELERITY
 Func CanUse_SymbolicCelerity()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1814,6 +1950,7 @@ EndFunc
 
 ; Skill ID: 1355 - $GC_I_SKILL_ID_JAGGED_BONES
 Func CanUse_JaggedBones()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1827,6 +1964,7 @@ EndFunc
 
 ; Skill ID: 1356 - $GC_I_SKILL_ID_CONTAGION
 Func CanUse_Contagion()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1840,6 +1978,7 @@ EndFunc
 
 ; Skill ID: 1357 - $GC_I_SKILL_ID_BLOODLETTING
 Func CanUse_Bloodletting()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1853,6 +1992,7 @@ EndFunc
 
 ; Skill ID: 1370 - $GC_I_SKILL_ID_STORM_DJINNS_HASTE
 Func CanUse_StormDjinnsHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1862,6 +2002,7 @@ EndFunc
 
 ; Skill ID: 1371 - $GC_I_SKILL_ID_STONE_STRIKER
 Func CanUse_StoneStriker()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1875,6 +2016,7 @@ EndFunc
 
 ; Skill ID: 1373 - $GC_I_SKILL_ID_STONE_SHEATH
 Func CanUse_StoneSheath()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1888,6 +2030,7 @@ EndFunc
 
 ; Skill ID: 1375 - $GC_I_SKILL_ID_STONEFLESH_AURA
 Func CanUse_StonefleshAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1901,6 +2044,7 @@ EndFunc
 
 ; Skill ID: 1378 - $GC_I_SKILL_ID_MASTER_OF_MAGIC
 Func CanUse_MasterOfMagic()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1914,6 +2058,7 @@ EndFunc
 
 ; Skill ID: 1381 - $GC_I_SKILL_ID_FLAME_DJINNS_HASTE1
 Func CanUse_FlameDjinnsHaste1()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1923,6 +2068,7 @@ EndFunc
 
 ; Skill ID: 1390 - $GC_I_SKILL_ID_JUDGES_INTERVENTION
 Func CanUse_JudgesIntervention()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1936,6 +2082,7 @@ EndFunc
 
 ; Skill ID: 1391 - $GC_I_SKILL_ID_SUPPORTIVE_SPIRIT
 Func CanUse_SupportiveSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1949,6 +2096,7 @@ EndFunc
 
 ; Skill ID: 1392 - $GC_I_SKILL_ID_WATCHFUL_HEALING
 Func CanUse_WatchfulHealing()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1962,6 +2110,7 @@ EndFunc
 
 ; Skill ID: 1393 - $GC_I_SKILL_ID_HEALERS_BOON
 Func CanUse_HealersBoon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1975,6 +2124,7 @@ EndFunc
 
 ; Skill ID: 1394 - $GC_I_SKILL_ID_HEALERS_COVENANT
 Func CanUse_HealersCovenant()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1984,6 +2134,7 @@ EndFunc
 
 ; Skill ID: 1395 - $GC_I_SKILL_ID_BALTHAZARS_PENDULUM
 Func CanUse_BalthazarsPendulum()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -1993,6 +2144,7 @@ EndFunc
 
 ; Skill ID: 1399 - $GC_I_SKILL_ID_SHIELD_OF_ABSORPTION
 Func CanUse_ShieldOfAbsorption()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2006,6 +2158,7 @@ EndFunc
 
 ; Skill ID: 1400 - $GC_I_SKILL_ID_REVERSAL_OF_DAMAGE
 Func CanUse_ReversalOfDamage()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2019,6 +2172,7 @@ EndFunc
 
 ; Skill ID: 1450 - $GC_I_SKILL_ID_ABADDONS_CONSPIRACY
 Func CanUse_AbaddonsConspiracy()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2028,6 +2182,7 @@ EndFunc
 
 ; Skill ID: 1457 - $GC_I_SKILL_ID_ABADDONS_CHOSEN
 Func CanUse_AbaddonsChosen()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2037,6 +2192,7 @@ EndFunc
 
 ; Skill ID: 1480 - $GC_I_SKILL_ID_SPIRITS_GIFT
 Func CanUse_SpiritsGift()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2046,6 +2202,7 @@ EndFunc
 
 ; Skill ID: 1492 - $GC_I_SKILL_ID_REMOVE_WIND_PRAYERS_SKILL
 Func CanUse_RemoveWindPrayersSkill()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2055,6 +2212,7 @@ EndFunc
 
 ; Skill ID: 1493 - $GC_I_SKILL_ID_GRENTHS_FINGERS
 Func CanUse_GrenthsFingers()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2064,6 +2222,7 @@ EndFunc
 
 ; Skill ID: 1494 - $GC_I_SKILL_ID_REMOVE_BOON_OF_THE_GODS
 Func CanUse_RemoveBoonOfTheGods()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2073,6 +2232,7 @@ EndFunc
 
 ; Skill ID: 1495 - $GC_I_SKILL_ID_AURA_OF_THORNS
 Func CanUse_AuraOfThorns()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2086,6 +2246,7 @@ EndFunc
 
 ; Skill ID: 1496 - $GC_I_SKILL_ID_BALTHAZARS_RAGE
 Func CanUse_BalthazarsRage()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2095,6 +2256,7 @@ EndFunc
 
 ; Skill ID: 1497 - $GC_I_SKILL_ID_DUST_CLOAK
 Func CanUse_DustCloak()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2108,6 +2270,7 @@ EndFunc
 
 ; Skill ID: 1498 - $GC_I_SKILL_ID_STAGGERING_FORCE
 Func CanUse_StaggeringForce()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2121,6 +2284,7 @@ EndFunc
 
 ; Skill ID: 1499 - $GC_I_SKILL_ID_PIOUS_RENEWAL
 Func CanUse_PiousRenewal()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2134,6 +2298,7 @@ EndFunc
 
 ; Skill ID: 1500 - $GC_I_SKILL_ID_MIRAGE_CLOAK
 Func CanUse_MirageCloak()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2147,6 +2312,7 @@ EndFunc
 
 ; Skill ID: 1501 - $GC_I_SKILL_ID_REMOVE_BALTHAZARS_RAGE
 Func CanUse_RemoveBalthazarsRage()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2156,6 +2322,7 @@ EndFunc
 
 ; Skill ID: 1502 - $GC_I_SKILL_ID_ARCANE_ZEAL
 Func CanUse_ArcaneZeal()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2169,6 +2336,7 @@ EndFunc
 
 ; Skill ID: 1503 - $GC_I_SKILL_ID_MYSTIC_VIGOR
 Func CanUse_MysticVigor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2182,6 +2350,7 @@ EndFunc
 
 ; Skill ID: 1504 - $GC_I_SKILL_ID_WATCHFUL_INTERVENTION
 Func CanUse_WatchfulIntervention()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2195,6 +2364,7 @@ EndFunc
 
 ; Skill ID: 1505 - $GC_I_SKILL_ID_VOW_OF_PIETY
 Func CanUse_VowOfPiety()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2208,6 +2378,7 @@ EndFunc
 
 ; Skill ID: 1506 - $GC_I_SKILL_ID_VITAL_BOON
 Func CanUse_VitalBoon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2221,6 +2392,7 @@ EndFunc
 
 ; Skill ID: 1507 - $GC_I_SKILL_ID_HEART_OF_HOLY_FLAME
 Func CanUse_HeartOfHolyFlame()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2234,6 +2406,7 @@ EndFunc
 
 ; Skill ID: 1509 - $GC_I_SKILL_ID_FAITHFUL_INTERVENTION
 Func CanUse_FaithfulIntervention()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2247,6 +2420,7 @@ EndFunc
 
 ; Skill ID: 1510 - $GC_I_SKILL_ID_SAND_SHARDS
 Func CanUse_SandShards()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2260,6 +2434,7 @@ EndFunc
 
 ; Skill ID: 1511 - $GC_I_SKILL_ID_INTIMIDATING_AURA_BETA_VERSION
 Func CanUse_IntimidatingAuraBetaVersion()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2269,6 +2444,7 @@ EndFunc
 
 ; Skill ID: 1512 - $GC_I_SKILL_ID_LYSSAS_HASTE
 Func CanUse_LyssasHaste()
+	If Anti_Enchantment() Then Return False
 	Local $l_i_NearestEnemy = UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 	If UAI_GetAgentInfo($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
 	Return True
@@ -2284,6 +2460,7 @@ EndFunc
 
 ; Skill ID: 1513 - $GC_I_SKILL_ID_GUIDING_HANDS
 Func CanUse_GuidingHands()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2297,6 +2474,7 @@ EndFunc
 
 ; Skill ID: 1514 - $GC_I_SKILL_ID_FLEETING_STABILITY
 Func CanUse_FleetingStability()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2310,6 +2488,7 @@ EndFunc
 
 ; Skill ID: 1515 - $GC_I_SKILL_ID_ARMOR_OF_SANCTITY
 Func CanUse_ArmorOfSanctity()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2323,6 +2502,7 @@ EndFunc
 
 ; Skill ID: 1516 - $GC_I_SKILL_ID_MYSTIC_REGENERATION
 Func CanUse_MysticRegeneration()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2336,6 +2516,7 @@ EndFunc
 
 ; Skill ID: 1517 - $GC_I_SKILL_ID_VOW_OF_SILENCE
 Func CanUse_VowOfSilence()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2349,6 +2530,7 @@ EndFunc
 
 ; Skill ID: 1523 - $GC_I_SKILL_ID_MEDITATION
 Func CanUse_Meditation()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2362,6 +2544,7 @@ EndFunc
 
 ; Skill ID: 1524 - $GC_I_SKILL_ID_EREMITES_ZEAL
 Func CanUse_EremitesZeal()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2371,6 +2554,7 @@ EndFunc
 
 ; Skill ID: 1531 - $GC_I_SKILL_ID_INTIMIDATING_AURA
 Func CanUse_IntimidatingAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2384,6 +2568,7 @@ EndFunc
 
 ; Skill ID: 1540 - $GC_I_SKILL_ID_CONVICTION
 Func CanUse_Conviction()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2397,6 +2582,7 @@ EndFunc
 
 ; Skill ID: 1541 - $GC_I_SKILL_ID_ENCHANTED_HASTE
 Func CanUse_EnchantedHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2410,6 +2596,7 @@ EndFunc
 
 ; Skill ID: 1544 - $GC_I_SKILL_ID_WHIRLING_CHARGE
 Func CanUse_WhirlingCharge()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2423,6 +2610,7 @@ EndFunc
 
 ; Skill ID: 1612 - $GC_I_SKILL_ID_SUGAR_RUSH_LONG
 Func CanUse_SugarRushLong()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2432,6 +2620,7 @@ EndFunc
 
 ; Skill ID: 1638 - $GC_I_SKILL_ID_DEADLY_HASTE
 Func CanUse_DeadlyHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2445,6 +2634,7 @@ EndFunc
 
 ; Skill ID: 1639 - $GC_I_SKILL_ID_ASSASSINS_REMEDY
 Func CanUse_AssassinsRemedy()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2454,6 +2644,7 @@ EndFunc
 
 ; Skill ID: 1640 - $GC_I_SKILL_ID_FOXS_PROMISE
 Func CanUse_FoxsPromise()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2463,6 +2654,7 @@ EndFunc
 
 ; Skill ID: 1641 - $GC_I_SKILL_ID_FEIGNED_NEUTRALITY
 Func CanUse_FeignedNeutrality()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2476,6 +2668,7 @@ EndFunc
 
 ; Skill ID: 1654 - $GC_I_SKILL_ID_SHADOW_MELD
 Func CanUse_ShadowMeld()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2489,6 +2682,7 @@ EndFunc
 
 ; Skill ID: 1663 - $GC_I_SKILL_ID_ELEMENTAL_FLAME
 Func CanUse_ElementalFlame()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2502,6 +2696,7 @@ EndFunc
 
 ; Skill ID: 1683 - $GC_I_SKILL_ID_PENSIVE_GUARDIAN
 Func CanUse_PensiveGuardian()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2515,6 +2710,7 @@ EndFunc
 
 ; Skill ID: 1684 - $GC_I_SKILL_ID_SCRIBES_INSIGHT
 Func CanUse_ScribesInsight()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2524,6 +2720,7 @@ EndFunc
 
 ; Skill ID: 1685 - $GC_I_SKILL_ID_HOLY_HASTE
 Func CanUse_HolyHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2537,6 +2734,7 @@ EndFunc
 
 ; Skill ID: 1736 - $GC_I_SKILL_ID_SPIRITS_STRENGTH
 Func CanUse_SpiritsStrength()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2546,6 +2744,7 @@ EndFunc
 
 ; Skill ID: 1737 - $GC_I_SKILL_ID_WIELDERS_ZEAL
 Func CanUse_WieldersZeal()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2555,6 +2754,7 @@ EndFunc
 
 ; Skill ID: 1738 - $GC_I_SKILL_ID_SIGHT_BEYOND_SIGHT
 Func CanUse_SightBeyondSight()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2568,6 +2768,7 @@ EndFunc
 
 ; Skill ID: 1739 - $GC_I_SKILL_ID_RENEWING_MEMORIES
 Func CanUse_RenewingMemories()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2581,6 +2782,7 @@ EndFunc
 
 ; Skill ID: 1740 - $GC_I_SKILL_ID_WIELDERS_REMEDY
 Func CanUse_WieldersRemedy()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2590,6 +2792,7 @@ EndFunc
 
 ; Skill ID: 1754 - $GC_I_SKILL_ID_ONSLAUGHT
 Func CanUse_Onslaught()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2603,6 +2806,7 @@ EndFunc
 
 ; Skill ID: 1755 - $GC_I_SKILL_ID_MYSTIC_CORRUPTION
 Func CanUse_MysticCorruption()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2616,6 +2820,7 @@ EndFunc
 
 ; Skill ID: 1756 - $GC_I_SKILL_ID_GRENTHS_GRASP
 Func CanUse_GrenthsGrasp()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2625,6 +2830,7 @@ EndFunc
 
 ; Skill ID: 1757 - $GC_I_SKILL_ID_VEIL_OF_THORNS
 Func CanUse_VeilOfThorns()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2638,6 +2844,7 @@ EndFunc
 
 ; Skill ID: 1758 - $GC_I_SKILL_ID_HARRIERS_GRASP
 Func CanUse_HarriersGrasp()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2647,6 +2854,7 @@ EndFunc
 
 ; Skill ID: 1759 - $GC_I_SKILL_ID_VOW_OF_STRENGTH
 Func CanUse_VowOfStrength()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2660,6 +2868,7 @@ EndFunc
 
 ; Skill ID: 1760 - $GC_I_SKILL_ID_EBON_DUST_AURA
 Func CanUse_EbonDustAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2673,6 +2882,7 @@ EndFunc
 
 ; Skill ID: 1761 - $GC_I_SKILL_ID_ZEALOUS_VOW
 Func CanUse_ZealousVow()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2686,6 +2896,7 @@ EndFunc
 
 ; Skill ID: 1763 - $GC_I_SKILL_ID_ZEALOUS_RENEWAL
 Func CanUse_ZealousRenewal()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2699,6 +2910,7 @@ EndFunc
 
 ; Skill ID: 1764 - $GC_I_SKILL_ID_ATTACKERS_INSIGHT
 Func CanUse_AttackersInsight()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2708,6 +2920,7 @@ EndFunc
 
 ; Skill ID: 1765 - $GC_I_SKILL_ID_RENDING_AURA
 Func CanUse_RendingAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2721,6 +2934,7 @@ EndFunc
 
 ; Skill ID: 1766 - $GC_I_SKILL_ID_FEATHERFOOT_GRACE
 Func CanUse_FeatherfootGrace()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2734,6 +2948,7 @@ EndFunc
 
 ; Skill ID: 1768 - $GC_I_SKILL_ID_HARRIERS_HASTE
 Func CanUse_HarriersHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2743,6 +2958,7 @@ EndFunc
 
 ; Skill ID: 1787 - $GC_I_SKILL_ID_ACCELERATED_GROWTH
 Func CanUse_AcceleratedGrowth()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2756,6 +2972,7 @@ EndFunc
 
 ; Skill ID: 1820 - $GC_I_SKILL_ID_SPIRIT_FORM_REMAINS_OF_SAHLAHJA
 Func CanUse_SpiritFormRemainsOfSahlahja()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2765,6 +2982,7 @@ EndFunc
 
 ; Skill ID: 1821 - $GC_I_SKILL_ID_GODS_BLESSING
 Func CanUse_GodsBlessing()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2774,6 +2992,7 @@ EndFunc
 
 ; Skill ID: 1860 - $GC_I_SKILL_ID_SUGAR_RUSH_SHORT
 Func CanUse_SugarRushShort()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2783,6 +3002,7 @@ EndFunc
 
 ; Skill ID: 1916 - $GC_I_SKILL_ID_SUGAR_JOLT_SHORT
 Func CanUse_SugarJoltShort()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2792,6 +3012,7 @@ EndFunc
 
 ; Skill ID: 1933 - $GC_I_SKILL_ID_SUGAR_JOLT_LONG
 Func CanUse_SugarJoltLong()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2801,6 +3022,7 @@ EndFunc
 
 ; Skill ID: 1948 - $GC_I_SKILL_ID_SHADOW_SANCTUARY_LUXON2
 Func CanUse_ShadowSanctuaryLuxon2()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2810,6 +3032,7 @@ EndFunc
 
 ; Skill ID: 1951 - $GC_I_SKILL_ID_ELEMENTAL_LORD_LUXON
 Func CanUse_ElementalLordLuxon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2819,6 +3042,7 @@ EndFunc
 
 ; Skill ID: 1952 - $GC_I_SKILL_ID_SELFLESS_SPIRIT_LUXON
 Func CanUse_SelflessSpiritLuxon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2828,6 +3052,7 @@ EndFunc
 
 ; Skill ID: 1955 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_LUXON
 Func CanUse_AuraOfHolyMightLuxon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2837,6 +3062,7 @@ EndFunc
 
 ; Skill ID: 1989 - $GC_I_SKILL_ID_WAY_OF_THE_MANTIS
 Func CanUse_WayOfTheMantis()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2850,6 +3076,7 @@ EndFunc
 
 ; Skill ID: 1997 - $GC_I_SKILL_ID_WITHERING_AURA
 Func CanUse_WitheringAura()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2863,6 +3090,7 @@ EndFunc
 
 ; Skill ID: 2005 - $GC_I_SKILL_ID_SMITERS_BOON
 Func CanUse_SmitersBoon()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2872,6 +3100,7 @@ EndFunc
 
 ; Skill ID: 2007 - $GC_I_SKILL_ID_PURIFYING_VEIL
 Func CanUse_PurifyingVeil()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2885,6 +3114,7 @@ EndFunc
 
 ; Skill ID: 2013 - $GC_I_SKILL_ID_GRENTHS_AURA
 Func CanUse_GrenthsAura()
+	If Anti_Enchantment() Then Return False
 	Local $l_i_NearestEnemy = UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 	If UAI_GetAgentInfo($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
 	Return True
@@ -2896,6 +3126,7 @@ EndFunc
 
 ; Skill ID: 2061 - $GC_I_SKILL_ID_PATIENT_SPIRIT
 Func CanUse_PatientSpirit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2909,6 +3140,7 @@ EndFunc
 
 ; Skill ID: 2063 - $GC_I_SKILL_ID_AURA_OF_STABILITY
 Func CanUse_AuraOfStability()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2922,6 +3154,7 @@ EndFunc
 
 ; Skill ID: 2064 - $GC_I_SKILL_ID_SPOTLESS_MIND
 Func CanUse_SpotlessMind()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2935,6 +3168,7 @@ EndFunc
 
 ; Skill ID: 2065 - $GC_I_SKILL_ID_SPOTLESS_SOUL
 Func CanUse_SpotlessSoul()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2948,6 +3182,7 @@ EndFunc
 
 ; Skill ID: 2091 - $GC_I_SKILL_ID_SHADOW_SANCTUARY_KURZICK
 Func CanUse_ShadowSanctuaryKurzick()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2957,6 +3192,7 @@ EndFunc
 
 ; Skill ID: 2094 - $GC_I_SKILL_ID_ELEMENTAL_LORD_KURZICK
 Func CanUse_ElementalLordKurzick()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2966,6 +3202,7 @@ EndFunc
 
 ; Skill ID: 2095 - $GC_I_SKILL_ID_SELFLESS_SPIRIT_KURZICK
 Func CanUse_SelflessSpiritKurzick()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2975,6 +3212,7 @@ EndFunc
 
 ; Skill ID: 2098 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_KURZICK
 Func CanUse_AuraOfHolyMightKurzick()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2984,6 +3222,7 @@ EndFunc
 
 ; Skill ID: 2101 - $GC_I_SKILL_ID_CRITICAL_AGILITY
 Func CanUse_CriticalAgility()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -2997,6 +3236,7 @@ EndFunc
 
 ; Skill ID: 2105 - $GC_I_SKILL_ID_SEED_OF_LIFE
 Func CanUse_SeedOfLife()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3010,6 +3250,7 @@ EndFunc
 
 ; Skill ID: 2109 - $GC_I_SKILL_ID_ETERNAL_AURA
 Func CanUse_EternalAura()
+	If Anti_Enchantment() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CURSE_OF_DHUUM) Or UAI_PlayerHasEffect($GC_I_SKILL_ID_FROZEN_SOIL) Then Return False
 	Return True
 EndFunc
@@ -3024,6 +3265,7 @@ EndFunc
 
 ; Skill ID: 2128 - $GC_I_SKILL_ID_VOLFEN_POUNCE_CURSE_OF_THE_NORNBEAR
 Func CanUse_VolfenPounceCurseOfTheNornbear()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3033,6 +3275,7 @@ EndFunc
 
 ; Skill ID: 2138 - $GC_I_SKILL_ID_HEXERS_VIGOR
 Func CanUse_HexersVigor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3042,6 +3285,7 @@ EndFunc
 
 ; Skill ID: 2139 - $GC_I_SKILL_ID_MASOCHISM
 Func CanUse_Masochism()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3055,6 +3299,7 @@ EndFunc
 
 ; Skill ID: 2187 - $GC_I_SKILL_ID_WAY_OF_THE_MASTER
 Func CanUse_WayOfTheMaster()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3068,6 +3313,7 @@ EndFunc
 
 ; Skill ID: 2190 - $GC_I_SKILL_ID_MAGNETIC_SURGE
 Func CanUse_MagneticSurge()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3081,6 +3327,7 @@ EndFunc
 
 ; Skill ID: 2201 - $GC_I_SKILL_ID_SHIELD_OF_FORCE
 Func CanUse_ShieldOfForce()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3094,6 +3341,7 @@ EndFunc
 
 ; Skill ID: 2220 - $GC_I_SKILL_ID_GREAT_DWARF_ARMOR
 Func CanUse_GreatDwarfArmor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3107,6 +3355,7 @@ EndFunc
 
 ; Skill ID: 2249 - $GC_I_SKILL_ID_POLYMOCK_BLOCK
 Func CanUse_PolymockBlock()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3120,6 +3369,7 @@ EndFunc
 
 ; Skill ID: 2265 - $GC_I_SKILL_ID_POLYMOCK_LIGHTNING_DJINNS_HASTE
 Func CanUse_PolymockLightningDjinnsHaste()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3129,6 +3379,7 @@ EndFunc
 
 ; Skill ID: 2280 - $GC_I_SKILL_ID_POLYMOCK_FROZEN_ARMOR
 Func CanUse_PolymockFrozenArmor()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3142,6 +3393,7 @@ EndFunc
 
 ; Skill ID: 2328 - $GC_I_SKILL_ID_CRYSTAL_SHIELD
 Func CanUse_CrystalShield()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3155,6 +3407,7 @@ EndFunc
 
 ; Skill ID: 2383 - $GC_I_SKILL_ID_VOLFEN_AGILITY
 Func CanUse_VolfenAgility()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3168,6 +3421,7 @@ EndFunc
 
 ; Skill ID: 2411 - $GC_I_SKILL_ID_MINDBENDER
 Func CanUse_Mindbender()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3181,6 +3435,7 @@ EndFunc
 
 ; Skill ID: 2417 - $GC_I_SKILL_ID_MENTAL_BLOCK
 Func CanUse_MentalBlock()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3194,6 +3449,7 @@ EndFunc
 
 ; Skill ID: 2423 - $GC_I_SKILL_ID_DWARVEN_STABILITY
 Func CanUse_DwarvenStability()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3207,6 +3463,7 @@ EndFunc
 
 ; Skill ID: 2635 - $GC_I_SKILL_ID_FLAME_DJINNS_HASTE2
 Func CanUse_FlameDjinnsHaste2()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3217,6 +3474,7 @@ EndFunc
 ; Skill ID: 2638 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2655 - $GC_I_SKILL_ID_DRAGON_EMPIRE_RAGE
 Func CanUse_DragonEmpireRage()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3230,6 +3488,7 @@ EndFunc
 
 ; Skill ID: 2730 - $GC_I_SKILL_ID_AURA_OF_PURITY
 Func CanUse_AuraOfPurity()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3245,6 +3504,7 @@ EndFunc
 ; Skill ID: 2797 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2805 - $GC_I_SKILL_ID_MIST_FORM_PvP
 Func CanUse_MistFormPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3254,6 +3514,7 @@ EndFunc
 
 ; Skill ID: 2857 - $GC_I_SKILL_ID_AEGIS_PvP
 Func CanUse_AegisPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3263,6 +3524,7 @@ EndFunc
 
 ; Skill ID: 2860 - $GC_I_SKILL_ID_ETHER_RENEWAL_PvP
 Func CanUse_EtherRenewalPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3272,6 +3534,7 @@ EndFunc
 
 ; Skill ID: 2862 - $GC_I_SKILL_ID_SHADOW_FORM_PvP
 Func CanUse_ShadowFormPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3281,6 +3544,7 @@ EndFunc
 
 ; Skill ID: 2869 - $GC_I_SKILL_ID_ASSASSINS_REMEDY_PvP
 Func CanUse_AssassinsRemedyPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3290,6 +3554,7 @@ EndFunc
 
 ; Skill ID: 2884 - $GC_I_SKILL_ID_MYSTIC_REGENERATION_PvP
 Func CanUse_MysticRegenerationPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3299,6 +3564,7 @@ EndFunc
 
 ; Skill ID: 2891 - $GC_I_SKILL_ID_UNYIELDING_AURA_PvP
 Func CanUse_UnyieldingAuraPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3308,6 +3574,7 @@ EndFunc
 
 ; Skill ID: 2892 - $GC_I_SKILL_ID_SPIRIT_BOND_PvP
 Func CanUse_SpiritBondPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3317,6 +3584,7 @@ EndFunc
 
 ; Skill ID: 2895 - $GC_I_SKILL_ID_SMITERS_BOON_PvP
 Func CanUse_SmitersBoonPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3326,6 +3594,7 @@ EndFunc
 
 ; Skill ID: 2912 - $GC_I_SKILL_ID_BIT_GOLEM_RECTIFIER
 Func CanUse_BitGolemRectifier()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3343,6 +3612,7 @@ EndFunc
 ; Skill ID: 2956 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2999 - $GC_I_SKILL_ID_STRENGTH_OF_HONOR_PvP
 Func CanUse_StrengthOfHonorPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3352,6 +3622,7 @@ EndFunc
 
 ; Skill ID: 3003 - $GC_I_SKILL_ID_ARMOR_OF_UNFEELING_PvP
 Func CanUse_ArmorOfUnfeelingPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3361,6 +3632,7 @@ EndFunc
 
 ; Skill ID: 3048 - $GC_I_SKILL_ID_SHROUD_OF_DISTRESS_PvP
 Func CanUse_ShroudOfDistressPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3370,6 +3642,7 @@ EndFunc
 
 ; Skill ID: 3054 - $GC_I_SKILL_ID_MASOCHISM_PvP
 Func CanUse_MasochismPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3379,6 +3652,7 @@ EndFunc
 
 ; Skill ID: 3181 - $GC_I_SKILL_ID_ILLUSIONARY_WEAPONRY_PvP
 Func CanUse_IllusionaryWeaponryPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3388,6 +3662,7 @@ EndFunc
 
 ; Skill ID: 3267 - $GC_I_SKILL_ID_EBON_DUST_AURA_PvP
 Func CanUse_EbonDustAuraPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3397,6 +3672,7 @@ EndFunc
 
 ; Skill ID: 3268 - $GC_I_SKILL_ID_HEART_OF_HOLY_FLAME_PvP
 Func CanUse_HeartOfHolyFlamePvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3406,6 +3682,7 @@ EndFunc
 
 ; Skill ID: 3269 - $GC_I_SKILL_ID_GUIDING_HANDS_PvP
 Func CanUse_GuidingHandsPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3415,6 +3692,7 @@ EndFunc
 
 ; Skill ID: 3346 - $GC_I_SKILL_ID_AURA_OF_THORNS_PvP
 Func CanUse_AuraOfThornsPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3424,6 +3702,7 @@ EndFunc
 
 ; Skill ID: 3347 - $GC_I_SKILL_ID_DUST_CLOAK_PvP
 Func CanUse_DustCloakPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3433,6 +3712,7 @@ EndFunc
 
 ; Skill ID: 3348 - $GC_I_SKILL_ID_LYSSAS_HASTE_PvP
 Func CanUse_LyssasHastePvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3442,6 +3722,7 @@ EndFunc
 
 ; Skill ID: 3365 - $GC_I_SKILL_ID_ONSLAUGHT_PvP
 Func CanUse_OnslaughtPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3451,6 +3732,7 @@ EndFunc
 
 ; Skill ID: 3373 - $GC_I_SKILL_ID_ILLUSION_OF_HASTE_PvP
 Func CanUse_IllusionOfHastePvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3460,6 +3742,7 @@ EndFunc
 
 ; Skill ID: 3375 - $GC_I_SKILL_ID_AURA_OF_RESTORATION_PvP
 Func CanUse_AuraOfRestorationPvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3469,6 +3752,7 @@ EndFunc
 
 ; Skill ID: 3397 - $GC_I_SKILL_ID_ELEMENTAL_FLAME_PvP
 Func CanUse_ElementalFlamePvP()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3478,6 +3762,7 @@ EndFunc
 
 ; Skill ID: 3423 - $GC_I_SKILL_ID_SOUL_TAKER
 Func CanUse_SoulTaker()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3491,6 +3776,7 @@ EndFunc
 
 ; Skill ID: 3424 - $GC_I_SKILL_ID_OVER_THE_LIMIT
 Func CanUse_OverTheLimit()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 
@@ -3504,6 +3790,7 @@ EndFunc
 
 ; Skill ID: 3430 - $GC_I_SKILL_ID_VOW_OF_REVOLUTION
 Func CanUse_VowOfRevolution()
+	If Anti_Enchantment() Then Return False
 	Return True
 EndFunc
 

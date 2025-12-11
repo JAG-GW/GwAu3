@@ -30,6 +30,8 @@ Func Anti_Ward()
 
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
 
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
+
 	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 
 	Return False
@@ -37,6 +39,7 @@ EndFunc
 
 ; Skill ID: 175 - $GC_I_SKILL_ID_WARD_AGAINST_ELEMENTS
 Func CanUse_WardAgainstElements()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -50,6 +53,7 @@ EndFunc
 
 ; Skill ID: 176 - $GC_I_SKILL_ID_WARD_AGAINST_MELEE
 Func CanUse_WardAgainstMelee()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -63,6 +67,7 @@ EndFunc
 
 ; Skill ID: 177 - $GC_I_SKILL_ID_WARD_AGAINST_FOES
 Func CanUse_WardAgainstFoes()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -76,6 +81,7 @@ EndFunc
 
 ; Skill ID: 239 - $GC_I_SKILL_ID_WARD_AGAINST_HARM
 Func CanUse_WardAgainstHarm()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -89,6 +95,7 @@ EndFunc
 
 ; Skill ID: 938 - $GC_I_SKILL_ID_WARD_OF_STABILITY
 Func CanUse_WardOfStability()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -102,6 +109,7 @@ EndFunc
 
 ; Skill ID: 1093 - $GC_I_SKILL_ID_TEINAIS_HEAT
 Func CanUse_TeinaisHeat()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -115,6 +123,7 @@ EndFunc
 
 ; Skill ID: 2001 - $GC_I_SKILL_ID_WARD_OF_WEAKNESS
 Func CanUse_WardOfWeakness()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -128,6 +137,7 @@ EndFunc
 
 ; Skill ID: 2231 - $GC_I_SKILL_ID_EBON_BATTLE_STANDARD_OF_COURAGE
 Func CanUse_EbonBattleStandardOfCourage()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -141,6 +151,7 @@ EndFunc
 
 ; Skill ID: 2232 - $GC_I_SKILL_ID_EBON_BATTLE_STANDARD_OF_WISDOM
 Func CanUse_EbonBattleStandardOfWisdom()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -154,6 +165,7 @@ EndFunc
 
 ; Skill ID: 2233 - $GC_I_SKILL_ID_EBON_BATTLE_STANDARD_OF_HONOR
 Func CanUse_EbonBattleStandardOfHonor()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -167,6 +179,7 @@ EndFunc
 
 ; Skill ID: 2414 - $GC_I_SKILL_ID_RADIATION_FIELD
 Func CanUse_RadiationField()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -180,6 +193,7 @@ EndFunc
 
 ; Skill ID: 2674 - $GC_I_SKILL_ID_BANNER_OF_THE_UNSEEN
 Func CanUse_BannerOfTheUnseen()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -193,6 +207,7 @@ EndFunc
 
 ; Skill ID: 2806 - $GC_I_SKILL_ID_WARD_AGAINST_HARM_PvP
 Func CanUse_WardAgainstHarmPvP()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -206,6 +221,7 @@ EndFunc
 
 ; Skill ID: 2855 - $GC_I_SKILL_ID_WARD_AGAINST_MELEE_PvP
 Func CanUse_WardAgainstMeleePvP()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -219,6 +235,7 @@ EndFunc
 
 ; Skill ID: 3172 - $GC_I_SKILL_ID_EBON_VANGUARD_BATTLE_STANDARD_OF_POWER
 Func CanUse_EbonVanguardBattleStandardOfPower()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 
@@ -232,6 +249,7 @@ EndFunc
 
 ; Skill ID: 3422 - $GC_I_SKILL_ID_TIME_WARD
 Func CanUse_TimeWard()
+	If Anti_Ward() Then Return False
 	Return True
 EndFunc
 

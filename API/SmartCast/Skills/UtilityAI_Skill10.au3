@@ -1,7 +1,7 @@
 #include-once
 
 Func Anti_Skill10()
-
+	Return False
 EndFunc
 
 ; Skill ID: 29 - $GC_I_SKILL_ID_BLACKOUT
@@ -1048,7 +1048,7 @@ EndFunc
 
 ; Skill ID: 1443 - $GC_I_SKILL_ID_LEAVE_JUNUNDU
 Func CanUse_LeaveJunundu()
-	Return True
+	Return False
 EndFunc
 
 Func BestTarget_LeaveJunundu($a_f_AggroRange)
@@ -1056,7 +1056,7 @@ Func BestTarget_LeaveJunundu($a_f_AggroRange)
 	; Skill. The junundu releases you from its jaws.
 	; Concise description
 	; Skill. The junundu releases you from its jaws.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return 0
 EndFunc
 
 ; Skill ID: 1445 - $GC_I_SKILL_ID_SIGNAL_FLARE

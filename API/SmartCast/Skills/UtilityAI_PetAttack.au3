@@ -1,11 +1,12 @@
 #include-once
 
 Func Anti_PetAttack()
-
+	Return False
 EndFunc
 
 ; Skill ID: 437 - $GC_I_SKILL_ID_BESTIAL_POUNCE
 Func CanUse_BestialPounce()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -19,6 +20,7 @@ EndFunc
 
 ; Skill ID: 438 - $GC_I_SKILL_ID_MAIMING_STRIKE
 Func CanUse_MaimingStrike()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -32,6 +34,7 @@ EndFunc
 
 ; Skill ID: 439 - $GC_I_SKILL_ID_FERAL_LUNGE
 Func CanUse_FeralLunge()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -45,6 +48,7 @@ EndFunc
 
 ; Skill ID: 440 - $GC_I_SKILL_ID_SCAVENGER_STRIKE
 Func CanUse_ScavengerStrike()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -58,6 +62,7 @@ EndFunc
 
 ; Skill ID: 441 - $GC_I_SKILL_ID_MELANDRUS_ASSAULT
 Func CanUse_MelandrusAssault()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -67,6 +72,7 @@ EndFunc
 
 ; Skill ID: 442 - $GC_I_SKILL_ID_FEROCIOUS_STRIKE
 Func CanUse_FerociousStrike()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -80,6 +86,7 @@ EndFunc
 
 ; Skill ID: 443 - $GC_I_SKILL_ID_PREDATORS_POUNCE
 Func CanUse_PredatorsPounce()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -89,6 +96,7 @@ EndFunc
 
 ; Skill ID: 444 - $GC_I_SKILL_ID_BRUTAL_STRIKE
 Func CanUse_BrutalStrike()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -102,6 +110,7 @@ EndFunc
 
 ; Skill ID: 445 - $GC_I_SKILL_ID_DISRUPTING_LUNGE
 Func CanUse_DisruptingLunge()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -115,6 +124,7 @@ EndFunc
 
 ; Skill ID: 1201 - $GC_I_SKILL_ID_SAVAGE_POUNCE
 Func CanUse_SavagePounce()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -128,6 +138,7 @@ EndFunc
 
 ; Skill ID: 1202 - $GC_I_SKILL_ID_ENRAGED_LUNGE
 Func CanUse_EnragedLunge()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -141,6 +152,7 @@ EndFunc
 
 ; Skill ID: 1203 - $GC_I_SKILL_ID_BESTIAL_MAULING
 Func CanUse_BestialMauling()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -154,6 +166,7 @@ EndFunc
 
 ; Skill ID: 1205 - $GC_I_SKILL_ID_POISONOUS_BITE
 Func CanUse_PoisonousBite()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -167,6 +180,7 @@ EndFunc
 
 ; Skill ID: 1206 - $GC_I_SKILL_ID_POUNCE
 Func CanUse_Pounce()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -180,6 +194,7 @@ EndFunc
 
 ; Skill ID: 3047 - $GC_I_SKILL_ID_MELANDRUS_ASSAULT_PvP
 Func CanUse_MelandrusAssaultPvP()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 
@@ -189,6 +204,7 @@ EndFunc
 
 ; Skill ID: 3051 - $GC_I_SKILL_ID_ENRAGED_LUNGE_PvP
 Func CanUse_EnragedLungePvP()
+	If Anti_PetAttack() Then Return False
 	Return True
 EndFunc
 

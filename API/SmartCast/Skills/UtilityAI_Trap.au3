@@ -1,11 +1,12 @@
 #include-once
 
 Func Anti_Trap()
-
+	Return False
 EndFunc
 
 ; Skill ID: 457 - $GC_I_SKILL_ID_DUST_TRAP
 Func CanUse_DustTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -19,6 +20,7 @@ EndFunc
 
 ; Skill ID: 458 - $GC_I_SKILL_ID_BARBED_TRAP
 Func CanUse_BarbedTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -32,6 +34,7 @@ EndFunc
 
 ; Skill ID: 459 - $GC_I_SKILL_ID_FLAME_TRAP
 Func CanUse_FlameTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -45,6 +48,7 @@ EndFunc
 
 ; Skill ID: 460 - $GC_I_SKILL_ID_HEALING_SPRING
 Func CanUse_HealingSpring()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -58,6 +62,7 @@ EndFunc
 
 ; Skill ID: 461 - $GC_I_SKILL_ID_SPIKE_TRAP
 Func CanUse_SpikeTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -71,6 +76,7 @@ EndFunc
 
 ; Skill ID: 854 - $GC_I_SKILL_ID_SNARE
 Func CanUse_Snare()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -84,6 +90,7 @@ EndFunc
 
 ; Skill ID: 1211 - $GC_I_SKILL_ID_VIPERS_NEST
 Func CanUse_VipersNest()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -97,6 +104,7 @@ EndFunc
 
 ; Skill ID: 1330 - $GC_I_SKILL_ID_TWISTED_SPIKES
 Func CanUse_TwistedSpikes()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -110,6 +118,7 @@ EndFunc
 
 ; Skill ID: 1331 - $GC_I_SKILL_ID_MARBLE_TRAP
 Func CanUse_MarbleTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -123,6 +132,7 @@ EndFunc
 
 ; Skill ID: 1332 - $GC_I_SKILL_ID_SHADOW_TRIPWIRE
 Func CanUse_ShadowTripwire()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -136,6 +146,7 @@ EndFunc
 
 ; Skill ID: 1476 - $GC_I_SKILL_ID_TRIPWIRE
 Func CanUse_Tripwire()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -149,6 +160,7 @@ EndFunc
 
 ; Skill ID: 1729 - $GC_I_SKILL_ID_SMOKE_TRAP
 Func CanUse_SmokeTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -162,6 +174,7 @@ EndFunc
 
 ; Skill ID: 2140 - $GC_I_SKILL_ID_PIERCING_TRAP
 Func CanUse_PiercingTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -175,6 +188,7 @@ EndFunc
 
 ; Skill ID: 2223 - $GC_I_SKILL_ID_BLACK_POWDER_MINE
 Func CanUse_BlackPowderMine()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -188,6 +202,7 @@ EndFunc
 
 ; Skill ID: 2421 - $GC_I_SKILL_ID_WEAKNESS_TRAP
 Func CanUse_WeaknessTrap()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -201,6 +216,7 @@ EndFunc
 
 ; Skill ID: 2727 - $GC_I_SKILL_ID_SPRING_OF_PURITY
 Func CanUse_SpringOfPurity()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 
@@ -215,6 +231,7 @@ EndFunc
 ; Skill ID: 2834 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 3293 - $GC_I_SKILL_ID_LAND_MINE
 Func CanUse_LandMine()
+	If Anti_Trap() Then Return False
 	Return True
 EndFunc
 

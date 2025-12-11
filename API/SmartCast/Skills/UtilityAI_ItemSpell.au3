@@ -30,6 +30,8 @@ Func Anti_ItemSpell()
 
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
 
+	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
+
 	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 
 	Return False
@@ -37,6 +39,7 @@ EndFunc
 
 ; Skill ID: 772 - $GC_I_SKILL_ID_GENEROUS_WAS_TSUNGRAI
 Func CanUse_GenerousWasTsungrai()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -50,6 +53,7 @@ EndFunc
 
 ; Skill ID: 773 - $GC_I_SKILL_ID_MIGHTY_WAS_VORIZUN
 Func CanUse_MightyWasVorizun()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -63,6 +67,7 @@ EndFunc
 
 ; Skill ID: 788 - $GC_I_SKILL_ID_BLIND_WAS_MINGSON
 Func CanUse_BlindWasMingson()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -76,6 +81,7 @@ EndFunc
 
 ; Skill ID: 789 - $GC_I_SKILL_ID_GRASPING_WAS_KUURONG
 Func CanUse_GraspingWasKuurong()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -89,6 +95,7 @@ EndFunc
 
 ; Skill ID: 790 - $GC_I_SKILL_ID_VENGEFUL_WAS_KHANHEI
 Func CanUse_VengefulWasKhanhei()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -102,6 +109,7 @@ EndFunc
 
 ; Skill ID: 812 - $GC_I_SKILL_ID_DEFIANT_WAS_XINRAE
 Func CanUse_DefiantWasXinrae()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -115,6 +123,7 @@ EndFunc
 
 ; Skill ID: 913 - $GC_I_SKILL_ID_TRANQUIL_WAS_TANASEN
 Func CanUse_TranquilWasTanasen()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -128,6 +137,7 @@ EndFunc
 
 ; Skill ID: 1218 - $GC_I_SKILL_ID_CRUEL_WAS_DAOSHEN
 Func CanUse_CruelWasDaoshen()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -141,6 +151,7 @@ EndFunc
 
 ; Skill ID: 1219 - $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI
 Func CanUse_ProtectiveWasKaolai()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -154,6 +165,7 @@ EndFunc
 
 ; Skill ID: 1220 - $GC_I_SKILL_ID_ATTUNED_WAS_SONGKAI
 Func CanUse_AttunedWasSongkai()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -167,6 +179,7 @@ EndFunc
 
 ; Skill ID: 1221 - $GC_I_SKILL_ID_RESILIENT_WAS_XIKO
 Func CanUse_ResilientWasXiko()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -180,6 +193,7 @@ EndFunc
 
 ; Skill ID: 1222 - $GC_I_SKILL_ID_LIVELY_WAS_NAOMEI
 Func CanUse_LivelyWasNaomei()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -193,6 +207,7 @@ EndFunc
 
 ; Skill ID: 1223 - $GC_I_SKILL_ID_ANGUISHED_WAS_LINGWAH
 Func CanUse_AnguishedWasLingwah()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -206,6 +221,7 @@ EndFunc
 
 ; Skill ID: 1731 - $GC_I_SKILL_ID_VOCAL_WAS_SOGOLON
 Func CanUse_VocalWasSogolon()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -219,6 +235,7 @@ EndFunc
 
 ; Skill ID: 1732 - $GC_I_SKILL_ID_DESTRUCTIVE_WAS_GLAIVE
 Func CanUse_DestructiveWasGlaive()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -232,6 +249,7 @@ EndFunc
 
 ; Skill ID: 2016 - $GC_I_SKILL_ID_ENERGETIC_WAS_LEE_SA
 Func CanUse_EnergeticWasLeeSa()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -245,6 +263,7 @@ EndFunc
 
 ; Skill ID: 2072 - $GC_I_SKILL_ID_PURE_WAS_LI_MING
 Func CanUse_PureWasLiMing()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -258,6 +277,7 @@ EndFunc
 
 ; Skill ID: 2537 - $GC_I_SKILL_ID_COURAGEOUS_WAS_SAIDRA
 Func CanUse_CourageousWasSaidra()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -271,6 +291,7 @@ EndFunc
 
 ; Skill ID: 3146 - $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI_PvP
 Func CanUse_ProtectiveWasKaolaiPvP()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
@@ -280,6 +301,7 @@ EndFunc
 
 ; Skill ID: 3157 - $GC_I_SKILL_ID_DESTRUCTIVE_WAS_GLAIVE_PvP
 Func CanUse_DestructiveWasGlaivePvP()
+	If Anti_ItemSpell() Then Return False
 	Return True
 EndFunc
 
