@@ -1755,6 +1755,10 @@ Func BestTarget_Necrosis($a_f_AggroRange)
 	; Skill. If target foe is suffering from a condition or hex, that foe suffers 60...90 damage.
 	; Concise description
 	; Skill. Deals 60...90 damage if target foe has a condition or hex.
+	Local $l_i_Conditionned = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsConditioned")
+	Local $l_i_Hexed = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHexed")
+	If $l_i_Conditionned <> 0 Then Return $l_i_Conditionned
+	If $l_i_Hexed <> 0 Then Return $l_i_Hexed
 	Return 0
 EndFunc
 

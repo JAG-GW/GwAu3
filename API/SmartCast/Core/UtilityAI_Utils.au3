@@ -42,6 +42,7 @@ EndFunc
 ; Get all party members as array
 Func Party_GetMembersArray()
 	Local $l_i_PartySize = Party_GetSize()
+	If $l_i_PartySize < 1 Then $l_i_PartySize = 1
 	Local $l_i_HeroCount = Party_GetHeroCount()
 	Local $l_ai_ReturnArray[$l_i_PartySize + 1]
 	$l_ai_ReturnArray[0] = $l_i_PartySize

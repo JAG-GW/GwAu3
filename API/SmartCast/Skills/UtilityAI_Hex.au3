@@ -2602,7 +2602,7 @@ Func CanUse_PainInverter()
 EndFunc
 
 Func BestTarget_PainInverter($a_f_AggroRange)
-	Return 0
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2501 - $GC_I_SKILL_ID_TONGUE_LASH

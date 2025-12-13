@@ -7,7 +7,7 @@ Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 35
 	Do
 		UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange, $a_f_MaxDistanceToXY)
 		Sleep(32)
-	Until UAI_CountAgents(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy") = 0 Or UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Or Party_IsWiped() Or Map_GetMapID() <> $l_i_MyOldMap Or Map_GetInstanceInfo("Type") <> $l_i_MapLoadingOld
+	Until UAI_CountAgents(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy") = 0 Or Agent_GetAgentInfo(-2, "IsDead") Or Party_IsWiped() Or Map_GetMapID() <> $l_i_MyOldMap Or Map_GetInstanceInfo("Type") <> $l_i_MapLoadingOld
 EndFunc   ;==>UAI_Fight
 
 ;~ Use this function to cast all of your skills or skills of a certain type.
@@ -22,7 +22,6 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 
 ;~ 	CHECK PARTY
 		If UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Or Party_IsWiped() = 1 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or UAI_GetPlayerInfo($GC_UAI_AGENT_IsKnockedDown) Then Return
-		If UAI_CountAgents(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy") = 0 Then Return
 
 		If $g_b_SkillChanged = True Then
 			If Cache_EndFormChangeBuild($l_i_i) Then
@@ -30,20 +29,18 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 			EndIf
 		EndIf
 
+;~ 	AUTO ATTACK
+		If UAI_CanAutoAttack() Then
+			Agent_Attack(UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy"), False)
+		Else
+			If UAI_GetPlayerInfo($GC_UAI_AGENT_IsAttacking) Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
+		EndIf
+
 ;~ 	PRIORITY SKILLS
 		UAI_PrioritySkills($a_f_AggroRange)
 
 ;~ 	BUNDLE TO DROP
-		UAI_DropBundle()
-
-;~ 	AUTO ATTACK
-		If UAI_CanAutoAttack() Then
-			If $g_i_BestTarget <> Agent_GetMyID() And $g_i_BestTarget <> $g_i_LastCalledTarget Then Agent_CallTarget($g_i_BestTarget)
-			Agent_Attack(UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy"), False)
-			$g_i_LastCalledTarget = $g_i_BestTarget
-		Else
-			If UAI_GetPlayerInfo($GC_UAI_AGENT_IsAttacking) Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
-		EndIf
+		UAI_DropBundle($a_f_AggroRange)
 
 ;~ 	USESKILL
 		If UAI_CanCast($l_i_i) Then
@@ -62,9 +59,8 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 
 ;~ 	MOVE IF TOO FARHEST
 		If $a_f_x <> 0 Or $a_f_y <> 0 Then
-			If Agent_GetDistanceToXY($a_f_x, $a_f_y) > $a_f_MaxDistanceToXY Then Return
+			If Agent_GetDistanceToXY($a_f_x, $a_f_y) > $a_f_MaxDistanceToXY Then ExitLoop
 		EndIf
-		Sleep(32)
 	Next
 	Return True
 EndFunc   ;==>UAI_UseSkills
@@ -76,6 +72,10 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 
 	Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)
 	Sleep(128)
+	If $a_i_AgentID <> Agent_GetMyID() And $a_i_AgentID <> $g_i_LastCalledTarget Then
+		Agent_CallTarget($a_i_AgentID)
+		$g_i_LastCalledTarget = $a_i_AgentID
+	EndIf
 
 	;If it's melee attack wait until target is in nearby range
 	Local $l_i_Skilltype = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillType)
@@ -83,24 +83,18 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 	If $l_i_Skilltype = $GC_I_SKILL_TYPE_ATTACK Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL2 Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL Or $l_i_Special = $GC_I_SKILL_SPECIAL_FLAG_TOUCH Then
 		Local $l_h_WaitStart = TimerInit()
 		Do
-			Sleep(32)
 			If TimerDiff($l_h_WaitStart) > 5000 Then ExitLoop
-		Until Agent_GetDistance($a_i_AgentID) <= 240 Or UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not UAI_CanCast($a_i_SkillSlot)
-
-	;ElseIf it's spell wait until target is in aggro range
-	ElseIf Agent_GetDistance($a_i_AgentID) > 1320 Then
-		Local $l_h_WaitStart = TimerInit()
-		Do
+			If $l_i_Special <> $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION And Agent_GetAgentInfo($g_i_BestTarget, "IsDead") Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
 			Sleep(32)
-			If TimerDiff($l_h_WaitStart) > 5000 Then ExitLoop
-		Until Agent_GetDistance($a_i_AgentID) <= 1320 Or UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not UAI_CanCast($a_i_SkillSlot)
+		Until Agent_GetDistance($a_i_AgentID) <= 240 Or Agent_GetAgentInfo(-2, "IsDead") Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not UAI_CanCast($a_i_SkillSlot)
 	EndIf
 
 	Local $l_h_CastStart = TimerInit()
 	Do
-		Sleep(32)
 		If TimerDiff($l_h_CastStart) > 5000 Then ExitLoop
-	Until UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Or Agent_GetDistance($a_i_AgentID) > 1320 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or (Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsCasting) And Not UAI_GetPlayerInfo($GC_UAI_AGENT_Skill) And Not Skill_GetSkillbarInfo($a_i_SkillSlot, "Casting"))
+		If $l_i_Special <> $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION And Agent_GetAgentInfo($g_i_BestTarget, "IsDead") Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
+		Sleep(32)
+	Until Agent_GetAgentInfo(-2, "IsDead") Or Agent_GetDistance($a_i_AgentID) > 1320 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or (Not Agent_GetAgentInfo(-2, "IsCasting") And Not Agent_GetAgentInfo(-2, "Skill") And Not Skill_GetSkillbarInfo($a_i_SkillSlot, "Casting"))
 EndFunc   ;==>UAI_UseSkillEX
 
 ;Priority skills, check at each loop if can cast
@@ -165,7 +159,7 @@ Func UAI_CastPrioritySkill($a_i_Slot, $a_f_AggroRange = 1320)
 EndFunc
 
 ; Drop bundle if player has Item Spell buff and can cast (skill is recharged)
-Func UAI_DropBundle()
+Func UAI_DropBundle($a_f_AggroRange = 1320)
 	For $l_i_Slot = 1 To 8
 		; Check if skill is an Item Spell
 		Local $l_i_Type = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillType)

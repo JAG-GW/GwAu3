@@ -47,7 +47,7 @@ Func BestTarget_WellOfPower($a_f_AggroRange)
 	; Elite Well Spell. Exploit nearest corpse to create a Well of Power at that location. For 8...18...20 seconds, allies within the area of Well of Power gain +1...5...6 Health regeneration and +2 Energy regeneration.
 	; Concise description
 	; Elite Well Spell. (8...18...20 seconds.) Allies in this well have +1...5...6 Health regeneration and +2 Energy regeneration. Exploits a fresh corpse.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return UAI_GetBestCorpseForAllySupport($a_f_AggroRange)
 EndFunc
 
 ; Skill ID: 92 - $GC_I_SKILL_ID_WELL_OF_BLOOD
@@ -61,7 +61,7 @@ Func BestTarget_WellOfBlood($a_f_AggroRange)
 	; Well Spell. Exploit nearest corpse to create a Well of Blood at its location. For 8...18...20 seconds, allies in that area receive +1...5...6 Health regeneration.
 	; Concise description
 	; Well Spell. (8...18...20 seconds.) Allies in this well have +1...5...6 Health regeneration. Exploits a fresh corpse.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return UAI_GetBestCorpseForAllySupport($a_f_AggroRange)
 EndFunc
 
 ; Skill ID: 93 - $GC_I_SKILL_ID_WELL_OF_SUFFERING
@@ -117,7 +117,7 @@ Func BestTarget_WellOfDarkness($a_f_AggroRange)
 	; Well Spell. Exploit nearest corpse to create a Well of Darkness for 5...41...50 seconds. Hexed foes within the Well of Darkness miss 50% of the time.
 	; Concise description
 	; Well Spell. (5...41...50 seconds.) Hexed foes in this well have 50% chance to miss. Exploits a fresh corpse.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return UAI_GetBestCorpseForEnemyPressure($a_f_AggroRange)
 EndFunc
 
 ; Skill ID: 1660 - $GC_I_SKILL_ID_WELL_OF_SILENCE
