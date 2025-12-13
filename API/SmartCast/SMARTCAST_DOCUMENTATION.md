@@ -8,6 +8,7 @@
 
 ## TABLE OF CONTENTS
 
+0. [Getting Started](#0-getting-started)
 1. [Overview](#1-overview)
 2. [System Architecture](#2-system-architecture)
 3. [Execution Flow](#3-execution-flow)
@@ -19,6 +20,90 @@
 9. [Advanced Customization](#9-advanced-customization)
 10. [Practical Examples](#10-practical-examples)
 11. [Optimization and Best Practices](#11-optimization-and-best-practices)
+
+---
+
+## 0. GETTING STARTED
+
+### Quick Start
+
+**1. Include the SmartCast module in your script:**
+
+```autoit
+#include "API/SmartCast/_UtilityAI.au3"
+```
+
+**2. Initialize the skillbar cache when entering an explorable area:**
+
+```autoit
+UAI_CacheSkillBar()
+```
+
+**3. Start combat using one of these methods:**
+
+```autoit
+; Method 1: Full combat loop (recommended)
+; Fights until all enemies are dead or player dies
+UAI_Fight($x, $y, $aggroRange, $maxDistance, $fightMode)
+
+; Method 2: Single skill cycle
+; Use in your own loop for more control
+UAI_UseSkills($x, $y, $aggroRange, $maxDistance)
+```
+
+### UAI_Fight() Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `$a_f_X` | required | X coordinate of combat center |
+| `$a_f_Y` | required | Y coordinate of combat center |
+| `$a_f_AggroRange` | 1320 | Maximum distance to engage enemies |
+| `$a_f_MaxDistanceToXY` | 3500 | Max distance before exiting combat |
+| `$a_i_FightMode` | `$g_i_FinisherMode` | Combat mode (see below) |
+
+### Combat Modes
+
+```autoit
+$g_i_FinisherMode = 0  ; Target low HP enemies to secure kills
+$g_i_PressureMode = 1  ; Target high HP enemies to spread damage
+```
+
+### Minimal Example Script
+
+```autoit
+#include "API/SmartCast/_UtilityAI.au3"
+
+; Wait for map load
+While Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE
+    Sleep(100)
+WEnd
+
+; Initialize skillbar cache
+UAI_CacheSkillBar()
+
+; Main loop
+While True
+    ; Get current position
+    Local $x = Agent_GetAgentInfo(-2, "X")
+    Local $y = Agent_GetAgentInfo(-2, "Y")
+
+    UAI_Fight($x, $y, 1320, 3500, $g_i_FinisherMode)
+
+    Sleep(100)
+WEnd
+```
+
+### Skill Bar Recommendation
+
+Place skills in order of priority (slot 1 = highest priority):
+
+| Priority | Slots | Skill Types |
+|----------|-------|-------------|
+| High | 1-3 | Interrupts, key debuffs, finishers |
+| Medium | 4-6 | Damage skills, conditions |
+| Low | 7-8 | Self-buffs, situational, resurrection |
+
+The system processes slots 1→8 sequentially. The first usable skill that meets its conditions will be cast.
 
 ---
 
@@ -201,69 +286,82 @@ Func UAI_Fight($a_f_X, $a_f_Y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 35
 Func UAI_UseSkills($a_f_X, $a_f_Y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500)
 ```
 
-**Execution sequence (for each skill slot 1-8):**
+**Execution sequence:**
 
 ```
 ┌─────────────────────────────────────┐
-│ 1. Update UAI Caches                │
-│    - UAI_UpdateAgentCache()         │
-│    - UAI_UpdateDynamicSkillbarCache()│
-│    - UAI_UpdateEffectsCache()       │
+│ FOR EACH SKILL SLOT (1-8):          │
+│                                     │
+│ 1. Skip empty slots                 │
+│    - If SkillID = 0, continue       │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 2. Safety checks                    │
+│ 2. Update UAI Caches (once per slot)│
+│    - UAI_UpdateCache($a_f_AggroRange)│
+│    - Check enemies exist            │
+│    - Check weapon set switching     │
+└─────────────────────────────────────┘
+            ↓
+┌─────────────────────────────────────┐
+│ 3. Safety checks                    │
 │    - Player dead?                   │
 │    - Party wiped?                   │
-│    - Out of combat?                 │
+│    - Not in explorable?             │
 │    - Knocked down?                  │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 3. Form change?                     │
-│    - Ursan/Raven/Volfen?            │
-│    - Re-cache skillbar              │
-└─────────────────────────────────────┘
-            ↓
-┌─────────────────────────────────────┐
-│ 4. Priority skills                  │
-│    - Assassin's Promise             │
-│    - Infuse Health                  │
-│    - Panic                          │
-│    - etc...                         │
+│ 4. Form change check                │
+│    - Ursan/Raven/Volfen active?     │
+│    - Re-cache skillbar if needed    │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
 │ 5. Intelligent auto-attack          │
 │    - Check CanAutoAttack()          │
-│    - Attack if allowed              │
-│    - Cancel if forbidden            │
+│    - Attack nearest enemy if allowed│
+│    - Cancel attack if forbidden     │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 6. Cast skill                       │
+│ 6. Priority skills                  │
+│    - UAI_PrioritySkills()           │
+│    - Resurrection, emergency heals  │
+│    - Critical interrupts            │
+└─────────────────────────────────────┘
+            ↓
+┌─────────────────────────────────────┐
+│ 7. Bundle drop                      │
+│    - UAI_DropBundle()               │
+│    - Drop held items if in combat   │
+└─────────────────────────────────────┘
+            ↓
+┌─────────────────────────────────────┐
+│ 8. Cast skill                       │
 │    ├─ UAI_CanCast($l_i_i)          │
 │    │   └─ Check recharge,           │
 │    │      adrenaline, resources     │
 │    │                                │
-│    ├─ $g_i_BestTarget = Call($g_as_BestTargetCache[$l_i_i])
-│    │   └─ Call the function         │
-│    │      BestTarget_XXX()          │
+│    ├─ $g_i_BestTarget = Call(BestTarget_XXX)
+│    │   └─ Get optimal target        │
 │    │                                │
-│    ├─ $g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_i])
-│    │   └─ Call the function         │
-│    │      CanUse_XXX()              │
+│    ├─ $g_b_CanUseSkill = Call(CanUse_XXX)
+│    │   └─ Check skill conditions    │
 │    │                                │
 │    └─ UAI_UseSkillEX($l_i_i, $g_i_BestTarget)
 │        └─ Cast the skill            │
+│        └─ Apply form change if any  │
 └─────────────────────────────────────┘
             ↓
 ┌─────────────────────────────────────┐
-│ 7. Distance check                   │
+│ 9. Distance check                   │
 │    - Too far from $a_f_X,$a_f_Y?    │
-│    - Exit if > $a_f_MaxDistanceToXY │
+│    - ExitLoop if > MaxDistance      │
 └─────────────────────────────────────┘
 ```
+
+**Note:** The loop processes each slot sequentially. When a skill is successfully cast, the loop continues to the next slot. If the player moves too far from the reference point, the loop exits early.
 
 ### 3.3 UAI_UseSkillEX() Function - Cast a Skill
 
@@ -272,16 +370,20 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 ```
 
 **Sequence:**
-1. **Change target** if necessary
-2. **Use skill** via `Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)`
-3. **Intelligent waiting** based on type:
-   - **Melee/Touch/Attack** : Wait until target is at 240 range
-   - **Long range spell** : Wait until target is at 1320 range
-4. **Wait for cast end** : Until:
+1. **Change target** if necessary (if target ≠ self)
+2. **Switch weapon set** if enabled and beneficial
+3. **Use skill** via `Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)`
+4. **Short delay** (128ms) to allow skill activation
+5. **Call target** for heroes/henchmen (if target ≠ self and not already called)
+6. **Intelligent waiting** based on skill type:
+   - **Melee/Touch/Attack skills** : Wait until target is at 240 range (max 5s)
+   - **Cancel if target dies** (except resurrection skills)
+7. **Wait for cast end** : Until:
    - Player dead
    - Target out of range (>1320)
    - Instance change
    - No longer casting
+   - **Cancel if target dies during cast** (except resurrection skills)
 
 ---
 
@@ -571,13 +673,44 @@ Local $l_f_Duration = UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_SHADOW_FORM, $GC_UA
 Local $l_i_EffectCount = UAI_GetPlayerEffectCount()
 ```
 
-### 4.5 Complete Cache Update Pattern
+### 4.5 UAI_UpdateCache() - Unified Cache Update
+
+The `UAI_UpdateCache()` function is a **convenience wrapper** that updates all dynamic caches in one call:
 
 ```autoit
-; At the start of each combat loop iteration:
+Func UAI_UpdateCache($a_f_AggroRange)
+    UAI_UpdateAgentCache($a_f_AggroRange + 100)  ; Agent data (with margin)
+    UAI_CacheAgentEffects()                       ; Effects cache
+    UAI_CacheAgentBuffs()                         ; Buffs cache
+    UAI_CacheAgentVisibleEffects()                ; Visible effects cache
+    UAI_UpdateDynamicSkillbarCache()              ; Skill recharge/adrenaline
+EndFunc
+```
+
+**Usage:** Call this once per combat loop iteration, before processing skills:
+
+```autoit
+Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange, $a_f_MaxDistanceToXY)
+    For $l_i_i = 1 To 8
+        UAI_UpdateCache($a_f_AggroRange)  ; Update all caches
+        If UAI_CountAgents(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy") = 0 Then ExitLoop
+        ; ... process skills ...
+    Next
+EndFunc
+```
+
+### 4.6 Complete Cache Update Pattern
+
+```autoit
+; At the start of each combat loop iteration (recommended):
+UAI_UpdateCache($a_f_AggroRange)  ; Updates all dynamic caches at once
+
+; Or manually update individual caches:
 UAI_UpdateAgentCache()           ; Update all agent data
 UAI_UpdateDynamicSkillbarCache() ; Update dynamic skill data
-UAI_UpdateEffectsCache()         ; Update effects, buffs, visible effects
+UAI_CacheAgentEffects()          ; Update effects
+UAI_CacheAgentBuffs()            ; Update buffs
+UAI_CacheAgentVisibleEffects()   ; Update visible effects
 
 ; On map load or form change:
 UAI_CacheSkillBar()              ; Update static skill data
@@ -681,7 +814,40 @@ EndFunc
 - Ward placement
 - Well placement
 
-### 5.4 Targeting Utility Functions
+### 5.4 Combat Modes
+
+The SmartCast system supports two combat modes that affect target selection:
+
+```autoit
+Global $g_i_FinisherMode = 0  ; Target low HP enemies to secure kills
+Global $g_i_PressureMode = 1  ; Target high HP enemies to spread damage
+```
+
+**UAI_GetBestSingleTarget()** automatically selects targets based on the active combat mode:
+
+```autoit
+Func UAI_GetBestSingleTarget($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
+    ; Finisher Mode → UAI_GetAgentLowest() (finish weak enemies)
+    ; Pressure Mode → UAI_GetAgentHighest() (spread damage on strong enemies)
+EndFunc
+```
+
+**Usage example:**
+
+```autoit
+Func BestTarget_Necrosis($a_f_AggroRange)
+    ; Target conditioned or hexed enemy based on combat mode
+    Local $l_i_Conditioned = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsConditioned")
+    Local $l_i_Hexed = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHexed")
+    If $l_i_Conditioned <> 0 Then Return $l_i_Conditioned
+    If $l_i_Hexed <> 0 Then Return $l_i_Hexed
+    Return 0
+EndFunc
+```
+
+**Note:** If no target matches the filters, `UAI_GetBestSingleTarget()` returns 0. You can implement fallback logic in your `BestTarget_` function.
+
+### 5.5 Targeting Utility Functions
 
 The file `Targeting/UtilityAI_GetAgent.au3` provides these helpers:
 
@@ -694,7 +860,10 @@ UAI_GetFarthestAgent($a_i_BaseAgentID, $a_f_Range, $a_s_FilterFunc)
 UAI_GetAgentLowest($a_i_BaseAgentID, $a_f_Range, $a_i_Property, $a_s_FilterFunc)
 UAI_GetAgentHighest($a_i_BaseAgentID, $a_f_Range, $a_i_Property, $a_s_FilterFunc)
 
-; AOE targeting (prioritizes count, then average HP)
+; Combat mode-aware targeting (recommended for damage skills)
+UAI_GetBestSingleTarget($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
+
+; AOE targeting (prioritizes count, then average HP based on combat mode)
 UAI_GetBestAOETarget($a_i_AgentID, $a_f_Range, $a_f_AOERange, $a_s_CustomFilter)
 
 ; Counting

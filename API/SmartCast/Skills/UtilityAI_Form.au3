@@ -36,7 +36,7 @@ EndFunc
 Func CanUse_AvatarOfGrenth()
 	If Anti_Form() Then Return False
 ;~ 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_AVATAR_OF_GRENTH) And UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH, $GC_UAI_EFFECT_Duration) > 5000 Then Return False
-	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH, $GC_UAI_EFFECT_Duration) > 5000 Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
 

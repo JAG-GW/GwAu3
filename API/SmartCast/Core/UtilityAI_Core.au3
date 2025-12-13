@@ -84,7 +84,10 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 		Local $l_h_WaitStart = TimerInit()
 		Do
 			If TimerDiff($l_h_WaitStart) > 5000 Then ExitLoop
-			If $l_i_Special <> $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION And Agent_GetAgentInfo($g_i_BestTarget, "IsDead") Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
+			If $l_i_Special <> $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION And Agent_GetAgentInfo($g_i_BestTarget, "IsDead") Then
+				Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
+				ExitLoop
+			EndIf
 			Sleep(32)
 		Until Agent_GetDistance($a_i_AgentID) <= 240 Or Agent_GetAgentInfo(-2, "IsDead") Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not UAI_CanCast($a_i_SkillSlot)
 	EndIf
@@ -92,7 +95,10 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 	Local $l_h_CastStart = TimerInit()
 	Do
 		If TimerDiff($l_h_CastStart) > 5000 Then ExitLoop
-		If $l_i_Special <> $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION And Agent_GetAgentInfo($g_i_BestTarget, "IsDead") Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
+		If $l_i_Special <> $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION And Agent_GetAgentInfo($g_i_BestTarget, "IsDead") Then
+			Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
+			ExitLoop
+		EndIf
 		Sleep(32)
 	Until Agent_GetAgentInfo(-2, "IsDead") Or Agent_GetDistance($a_i_AgentID) > 1320 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or (Not Agent_GetAgentInfo(-2, "IsCasting") And Not Agent_GetAgentInfo(-2, "Skill") And Not Skill_GetSkillbarInfo($a_i_SkillSlot, "Casting"))
 EndFunc   ;==>UAI_UseSkillEX
@@ -101,7 +107,7 @@ EndFunc   ;==>UAI_UseSkillEX
 ;Uses Special flags and Effect2 flags to identify priority skills
 Func UAI_PrioritySkills($a_f_AggroRange = 1320)
 	; Priority Special flags (from $GC_UAI_STATIC_SKILL_Special)
-	Local $l_ai_PrioritySpecialFlags[] = [$GC_I_SKILL_SPECIAL_FLAG_RESURRECTION, $GC_I_SKILL_SPECIAL_FLAG_ELITE]
+	Local $l_ai_PrioritySpecialFlags[] = [$GC_I_SKILL_SPECIAL_FLAG_RESURRECTION, $GC_I_SKILL_SPECIAL_FLAG_ELITE, $GC_I_SKILL_SPECIAL_FLAG_PVE]
 
 	; Priority Effect2 flags (from $GC_UAI_STATIC_SKILL_Effect2)
 	Local $l_ai_PriorityEffect2Flags[] = [$GC_I_SKILL_EFFECT2_ENERGY_STEAL, $GC_I_SKILL_EFFECT2_ENERGY_GAIN, _

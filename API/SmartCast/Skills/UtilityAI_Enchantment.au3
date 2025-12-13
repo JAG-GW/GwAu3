@@ -3286,6 +3286,7 @@ EndFunc
 ; Skill ID: 2139 - $GC_I_SKILL_ID_MASOCHISM
 Func CanUse_Masochism()
 	If Anti_Enchantment() Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_MASOCHISM, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
 
