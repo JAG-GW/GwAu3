@@ -199,8 +199,9 @@ Func UAI_GetAgentHighest($a_i_AgentID = -2, $a_f_Range = 1320, $a_i_Property = $
 EndFunc
 
 Func UAI_GetBestSingleTarget($a_i_AgentID = -2, $a_f_Range = 1320, $a_i_Property = $GC_UAI_AGENT_HP, $a_s_CustomFilter = "")
-	If $g_i_FightMode = $g_i_FinisherMode Then UAI_GetAgentHighest($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
-	If $g_i_FightMode = $g_i_PressureMode Then UAI_GetAgentLowest($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
+	If $g_i_FightMode = $g_i_FinisherMode Then Return UAI_GetAgentLowest($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
+	If $g_i_FightMode = $g_i_PressureMode Then Return UAI_GetAgentHighest($a_i_AgentID, $a_f_Range, $a_i_Property, $a_s_CustomFilter)
+	Return 0
 EndFunc
 
 ; Get best AOE target based on group size first, then average HP as tiebreaker
