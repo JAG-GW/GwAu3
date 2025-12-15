@@ -980,8 +980,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_Tar"
 		Case $GC_I_SKILL_ID_SIEGE_ATTACK4
 			Return "BestTarget_SiegeAttack4"
-		Case $GC_I_SKILL_ID_RESURRECT_PARTY
-			Return "BestTarget_ResurrectParty"
 		Case $GC_I_SKILL_ID_SCEPTER_OF_ORRS_AURA
 			Return "BestTarget_ScepterOfOrrsAura"
 		Case $GC_I_SKILL_ID_SCEPTER_OF_ORRS_POWER
@@ -1002,8 +1000,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_BrutalMauling"
 		Case $GC_I_SKILL_ID_CRIPPLING_ATTACK
 			Return "BestTarget_CripplingAttack"
-		Case $GC_I_SKILL_ID_BREAKING_CHARM
-			Return "BestTarget_BreakingCharm"
 		Case $GC_I_SKILL_ID_CHARR_BUFF
 			Return "BestTarget_CharrBuff"
 		Case $GC_I_SKILL_ID_CLAIM_RESOURCE1
@@ -3786,8 +3782,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_Metamorphosis"
 		Case $GC_I_SKILL_ID_INNER_FIRE
 			Return "BestTarget_InnerFire"
-		Case $GC_I_SKILL_ID_ELEMENTAL_SHIFT
-			Return "BestTarget_ElementalShift"
 		Case $GC_I_SKILL_ID_DRYDERS_FEAST
 			Return "BestTarget_DrydersFeast"
 		Case $GC_I_SKILL_ID_FUNGAL_EXPLOSION
@@ -4396,8 +4390,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_HealAsOnePvp"
 		Case $GC_I_SKILL_ID_GLASS_ARROWS_PVP
 			Return "BestTarget_GlassArrowsPvp"
-		Case $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI_PVP
-			Return "BestTarget_ProtectiveWasKaolaiPvp"
 		Case $GC_I_SKILL_ID_KEEN_ARROW_PVP
 			Return "BestTarget_KeenArrowPvp"
 		Case $GC_I_SKILL_ID_ANTHEM_OF_ENVY_PVP
@@ -4626,8 +4618,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_IllusionOfPainPvp"
 		Case $GC_I_SKILL_ID_AURA_OF_RESTORATION_PVP
 			Return "BestTarget_AuraOfRestorationPvp"
-		Case $GC_I_SKILL_ID_SHAPESHIFT
-			Return "BestTarget_Shapeshift"
 		Case $GC_I_SKILL_ID_PHASE_SHIELD
 			Return "BestTarget_PhaseShield"
 		Case $GC_I_SKILL_ID_REACTOR_BURST

@@ -979,8 +979,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_Tar"
 		Case $GC_I_SKILL_ID_SIEGE_ATTACK4
 			Return "CanUse_SiegeAttack4"
-		Case $GC_I_SKILL_ID_RESURRECT_PARTY
-			Return "CanUse_ResurrectParty"
 		Case $GC_I_SKILL_ID_SCEPTER_OF_ORRS_AURA
 			Return "CanUse_ScepterOfOrrsAura"
 		Case $GC_I_SKILL_ID_SCEPTER_OF_ORRS_POWER
@@ -1001,8 +999,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_BrutalMauling"
 		Case $GC_I_SKILL_ID_CRIPPLING_ATTACK
 			Return "CanUse_CripplingAttack"
-		Case $GC_I_SKILL_ID_BREAKING_CHARM
-			Return "CanUse_BreakingCharm"
 		Case $GC_I_SKILL_ID_CHARR_BUFF
 			Return "CanUse_CharrBuff"
 		Case $GC_I_SKILL_ID_CLAIM_RESOURCE1
@@ -3777,8 +3773,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_Metamorphosis"
 		Case $GC_I_SKILL_ID_INNER_FIRE
 			Return "CanUse_InnerFire"
-		Case $GC_I_SKILL_ID_ELEMENTAL_SHIFT
-			Return "CanUse_ElementalShift"
 		Case $GC_I_SKILL_ID_DRYDERS_FEAST
 			Return "CanUse_DrydersFeast"
 		Case $GC_I_SKILL_ID_FUNGAL_EXPLOSION
@@ -4383,8 +4377,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_HealAsOnePvP"
 		Case $GC_I_SKILL_ID_GLASS_ARROWS_PVP
 			Return "CanUse_GlassArrowsPvP"
-		Case $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI_PVP
-			Return "CanUse_ProtectiveWasKaolaiPvP"
 		Case $GC_I_SKILL_ID_KEEN_ARROW_PVP
 			Return "CanUse_KeenArrowPvP"
 		Case $GC_I_SKILL_ID_ANTHEM_OF_ENVY_PVP
@@ -4613,8 +4605,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_IllusionOfPainPvP"
 		Case $GC_I_SKILL_ID_AURA_OF_RESTORATION_PVP
 			Return "CanUse_AuraOfRestorationPvP"
-		Case $GC_I_SKILL_ID_SHAPESHIFT
-			Return "CanUse_Shapeshift"
 		Case $GC_I_SKILL_ID_PHASE_SHIELD
 			Return "CanUse_PhaseShield"
 		Case $GC_I_SKILL_ID_REACTOR_BURST

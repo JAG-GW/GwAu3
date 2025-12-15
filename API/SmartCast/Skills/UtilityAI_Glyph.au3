@@ -190,6 +190,3 @@ Func BestTarget_PolymockGlyphOfPower($a_f_AggroRange)
 	; Glyph. Your next spell that targets a foe deals +200 damage if you are below 50% Health. If you are below 25% Health, your next 2 spells are affected.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
-
-; Skill ID: 2948 - ;  $GC_I_SKILL_ID_UNKNOWN
-; Skill ID: 2949 - ;  $GC_I_SKILL_ID_UNKNOWN

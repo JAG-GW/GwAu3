@@ -1,9 +1,14 @@
 #include-once
 
-Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500, $a_i_FightMode = $g_i_FinisherMode)
+Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500, $a_i_FightMode = $g_i_FinisherMode, $a_b_UseSwitchSet = False)
 	$g_i_BestTarget = 0
 	$g_i_FightMode = $a_i_FightMode
+	$a_b_UseSwitchSet = $g_b_CacheWeaponSet
+
 	Local $l_i_MyOldMap = Map_GetMapID(), $l_i_MapLoadingOld = Map_GetInstanceInfo("Type")
+
+	If $g_b_CacheWeaponSet Then UAI_DeterminateWeaponSets()
+
 	Do
 		UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange, $a_f_MaxDistanceToXY)
 		Sleep(32)

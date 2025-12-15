@@ -7,6 +7,7 @@ EndFunc
 ; Skill ID: 1518 - $GC_I_SKILL_ID_AVATAR_OF_BALTHAZAR
 Func CanUse_AvatarOfBalthazar()
 	If Anti_Form() Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_BALTHAZAR, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
 
@@ -21,6 +22,7 @@ EndFunc
 ; Skill ID: 1519 - $GC_I_SKILL_ID_AVATAR_OF_DWAYNA
 Func CanUse_AvatarOfDwayna()
 	If Anti_Form() Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_DWAYNA, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
 
@@ -35,7 +37,6 @@ EndFunc
 ; Skill ID: 1520 - $GC_I_SKILL_ID_AVATAR_OF_GRENTH
 Func CanUse_AvatarOfGrenth()
 	If Anti_Form() Then Return False
-;~ 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_AVATAR_OF_GRENTH) And UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH, $GC_UAI_EFFECT_Duration) > 5000 Then Return False
 	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
@@ -51,6 +52,7 @@ EndFunc
 ; Skill ID: 1521 - $GC_I_SKILL_ID_AVATAR_OF_LYSSA
 Func CanUse_AvatarOfLyssa()
 	If Anti_Form() Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_LYSSA, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
 
@@ -65,6 +67,7 @@ EndFunc
 ; Skill ID: 1522 - $GC_I_SKILL_ID_AVATAR_OF_MELANDRU
 Func CanUse_AvatarOfMelandru()
 	If Anti_Form() Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_MELANDRU, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
 
@@ -78,6 +81,7 @@ EndFunc
 
 ; Skill ID: 1902 - $GC_I_SKILL_ID_AVATAR_OF_GRENTH_SNOW_FIGHTING_SKILL
 Func CanUse_AvatarOfGrenthSnowFightingSkill()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH_SNOW_FIGHTING_SKILL, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -92,6 +96,7 @@ EndFunc
 
 ; Skill ID: 1903 - $GC_I_SKILL_ID_AVATAR_OF_DWAYNA_SNOW_FIGHTING_SKILL
 Func CanUse_AvatarOfDwaynaSnowFightingSkill()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_DWAYNA_SNOW_FIGHTING_SKILL, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -106,6 +111,7 @@ EndFunc
 
 ; Skill ID: 2374 - $GC_I_SKILL_ID_URSAN_BLESSING
 Func CanUse_UrsanBlessing()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_URSAN_BLESSING, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -120,6 +126,7 @@ EndFunc
 
 ; Skill ID: 2379 - $GC_I_SKILL_ID_VOLFEN_BLESSING
 Func CanUse_VolfenBlessing()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_VOLFEN_BLESSING, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -134,6 +141,7 @@ EndFunc
 
 ; Skill ID: 2384 - $GC_I_SKILL_ID_RAVEN_BLESSING
 Func CanUse_RavenBlessing()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_RAVEN_BLESSING, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -146,22 +154,9 @@ Func BestTarget_RavenBlessing($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 2486 - $GC_I_SKILL_ID_ELEMENTAL_SHIFT
-Func CanUse_ElementalShift()
-	If Anti_Form() Then Return False
-	Return True
-EndFunc
-
-Func BestTarget_ElementalShift($a_f_AggroRange)
-	; Description
-	; Form. Creature becomes attuned to a different element.
-	; Concise description
-	; Form. Creature becomes attuned to a different element.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 2494 - $GC_I_SKILL_ID_BEAR_FORM
 Func CanUse_BearForm()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_BEAR_FORM, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -176,6 +171,7 @@ EndFunc
 
 ; Skill ID: 2504 - $GC_I_SKILL_ID_SIEGE_DEVOURER
 Func CanUse_SiegeDevourer()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_SIEGE_DEVOURER, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -190,6 +186,7 @@ EndFunc
 
 ; Skill ID: 2658 - $GC_I_SKILL_ID_HIDE
 Func CanUse_Hide()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_HIDE, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -204,6 +201,7 @@ EndFunc
 
 ; Skill ID: 2659 - $GC_I_SKILL_ID_FEIGN_DEATH
 Func CanUse_FeignDeath()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_FEIGN_DEATH, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -218,6 +216,7 @@ EndFunc
 
 ; Skill ID: 2967 - $GC_I_SKILL_ID_AVATAR_OF_GRENTH_PvP
 Func CanUse_AvatarOfGrenthPvP()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_GRENTH_PvP, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -232,6 +231,7 @@ EndFunc
 
 ; Skill ID: 3270 - $GC_I_SKILL_ID_AVATAR_OF_DWAYNA_PvP
 Func CanUse_AvatarOfDwaynaPvP()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_DWAYNA_PvP, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -246,6 +246,7 @@ EndFunc
 
 ; Skill ID: 3271 - $GC_I_SKILL_ID_AVATAR_OF_MELANDRU_PvP
 Func CanUse_AvatarOfMelandruPvP()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AVATAR_OF_MELANDRU_PvP, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	If Anti_Form() Then Return False
 	Return True
 EndFunc
@@ -255,19 +256,5 @@ Func BestTarget_AvatarOfMelandruPvP($a_f_AggroRange)
 	; Elite Form. For 10...74...90 seconds, you have +150 Health, +30 elemental armor, and your attacks deal earth damage. Whenever you lose a Dervish enchantment, all party members in earshot lose 1 condition. This skill is disabled for 45 seconds.
 	; Concise description
 	; Elite Form. (10...74...90 seconds.) You have +150 maximum Health, +30 elemental armor, and your attacks deal earth damage. Cure 1 condition from all party members in earshot whenever you lose a Dervish enchantment. This skill is disabled for 45 seconds.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 3376 - $GC_I_SKILL_ID_SHAPESHIFT
-Func CanUse_Shapeshift()
-	If Anti_Form() Then Return False
-	Return True
-EndFunc
-
-Func BestTarget_Shapeshift($a_f_AggroRange)
-	; Description
-	; Form. Change forms.
-	; Concise description
-	; Form. Change forms.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc

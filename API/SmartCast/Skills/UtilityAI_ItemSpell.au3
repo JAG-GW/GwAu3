@@ -289,16 +289,6 @@ Func BestTarget_CourageousWasSaidra($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 3146 - $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI_PvP
-Func CanUse_ProtectiveWasKaolaiPvP()
-	If Anti_ItemSpell() Then Return False
-	Return True
-EndFunc
-
-Func BestTarget_ProtectiveWasKaolaiPvP($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 3157 - $GC_I_SKILL_ID_DESTRUCTIVE_WAS_GLAIVE_PvP
 Func CanUse_DestructiveWasGlaivePvP()
 	If Anti_ItemSpell() Then Return False
@@ -306,6 +296,10 @@ Func CanUse_DestructiveWasGlaivePvP()
 EndFunc
 
 Func BestTarget_DestructiveWasGlaivePvP($a_f_AggroRange)
+	; Description
+	; Elite Item Spell. Hold Glaive's ashes for up to 30...54...60 seconds. While you hold her ashes, all Ritualist skills have 10% armor penetration. When you drop her ashes, all foes in the area are struck for 15...71...85 lightning damage.
+	; Concise description
+	; Elite Item Spell. (30...54...60 seconds.) Your Ritualist skills have 10% armor penetration. Drop effect: deals 15...71...85 lightning damage to all foes in the area.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 

@@ -472,4 +472,18 @@ EndFunc
 Func UAI_Filter_IsRanged($a_i_AgentID)
 	Return UAI_IsRanged($a_i_AgentID)
 EndFunc
+
+; Negative filters (for pet attacks and other conditional skills)
+Func UAI_Filter_IsNotPoisoned($a_i_AgentID)
+	Return Not UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsPoisoned)
+EndFunc
+
+Func UAI_Filter_IsNotDeepWounded($a_i_AgentID)
+	Return Not UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsDeepWounded)
+EndFunc
+
+Func UAI_Filter_IsUsingSkill($a_i_AgentID)
+	; True if casting OR attacking (using any skill)
+	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsCasting) Or UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsAttacking)
+EndFunc
 #EndRegion

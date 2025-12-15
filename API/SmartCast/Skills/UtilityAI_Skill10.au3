@@ -141,9 +141,9 @@ EndFunc
 
 Func BestTarget_CharmAnimal($a_f_AggroRange)
 	; Description
-	; This article is about Charm Animal. For other uses, see Charm Animal (disambiguation).
+	; Skill. Charm target animal. Once charmed, your animal companion will travel with you whenever you have Charm Animal equipped. You cannot charm an animal that is more than 4 levels above you.
 	; Concise description
-	; #808080;">You cannot charm an animal that is more than 4 levels above you.
+	; Skill. Charm target animal. Once charmed, your animal companion will travel with you whenever you have Charm Animal equipped. You cannot charm an animal that is more than 4 levels above you.
 	Return 0
 EndFunc
 
@@ -199,19 +199,6 @@ Func BestTarget_TrollUnguent($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 502 - $GC_I_SKILL_ID_RESURRECT_PARTY
-Func CanUse_ResurrectParty()
-	Return True
-EndFunc
-
-Func BestTarget_ResurrectParty($a_f_AggroRange)
-	; Description
-	; Core
-	; Concise description
-	; Notes">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 510 - $GC_I_SKILL_ID_DEAFENING_ROAR
 Func CanUse_DeafeningRoar()
 	Return True
@@ -222,20 +209,6 @@ Func BestTarget_DeafeningRoar($a_f_AggroRange)
 	; Skill. All nearby foes become Dazed for 20 seconds.
 	; Concise description
 	; Skill. Inflicts Dazed condition (20 seconds) to nearby foes.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 513 - $GC_I_SKILL_ID_CHARM_ANIMAL_MONSTER_SKILL
-; Skill ID: 514 - $GC_I_SKILL_ID_BREAKING_CHARM
-Func CanUse_BreakingCharm()
-	Return True
-EndFunc
-
-Func BestTarget_BreakingCharm($a_f_AggroRange)
-	; Description
-	; Skill. Allows any non-pet animal to break a charm attempt
-	; Concise description
-	; Skill. Allows any non-pet animal to break a charm attempt
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
