@@ -1034,10 +1034,20 @@ EndFunc
 
 Func BestTarget_UnnaturalSignet($a_f_AggroRange)
 	; Description
-	; This article is about the Factions skill. For the temporarily available Bonus Mission Pack skill, see Unnatural Signet (Saul D'Alessio).
+	; Signet. Target foe takes 15...63...75 damage. If that foe is under the effects of a hex or enchantment, foes adjacent to your target take 5...41...50 damage.
 	; Concise description
-	; green; font-weight: bold;">15...63...75
-	Return 0
+	; Signet. Deals 15...63...75 damage. Deals 5...41...50 damage to other adjacent foes if the target is hexed or enchanted.
+
+	; Priority 1: Hexed/Enchanted enemy with most adjacent enemies (AOE bonus)
+	Local $l_i_Target = UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHexedOrEnchanted")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Priority 2: Any hexed/enchanted enemy (triggers AOE even if alone)
+	$l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHexedOrEnchanted")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Fallback: Any enemy (no AOE bonus but still does damage)
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 Func CanUse_UnnaturalSignetPvp()

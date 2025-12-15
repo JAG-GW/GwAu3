@@ -158,7 +158,41 @@ Func BestTarget_EnergySurge($a_f_AggroRange)
 	; Elite Spell. Target foe loses 1...8...10 Energy. For each point of Energy lost, that foe and all nearby foes take 9 damage.
 	; Concise description
 	; Elite Spell. Causes 1...8...10 Energy loss. Deals 9 damage to target and nearby foes for each point of Energy lost.
-	Return 0
+
+	; Priority 1: Most enemies in nearby range (AOE)
+	; Priority 2: Most casters in the group (for energy drain effectiveness)
+	Local $l_i_BestAgent = 0
+	Local $l_i_BestCount = 0
+	Local $l_i_BestCasterCount = 0
+
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		; Check range
+		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
+
+		; Must be living enemy
+		If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
+
+		; Count enemies in nearby range
+		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
+		; Count casters in nearby range
+		Local $l_i_CasterCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
+
+		; Priority 1: More enemies wins
+		; Priority 2: More casters wins (better energy drain targets)
+		If $l_i_EnemyCount > $l_i_BestCount Then
+			$l_i_BestCount = $l_i_EnemyCount
+			$l_i_BestCasterCount = $l_i_CasterCount
+			$l_i_BestAgent = $l_i_AgentID
+		ElseIf $l_i_EnemyCount = $l_i_BestCount And $l_i_CasterCount > $l_i_BestCasterCount Then
+			$l_i_BestCasterCount = $l_i_CasterCount
+			$l_i_BestAgent = $l_i_AgentID
+		EndIf
+	Next
+
+	Return $l_i_BestAgent
 EndFunc
 
 ; Skill ID: 40 - $GC_I_SKILL_ID_ETHER_FEAST
@@ -3922,7 +3956,37 @@ Func BestTarget_SpiritualPain($a_f_AggroRange)
 	; Spell. Target foe takes 15...63...75 damage. All hostile summoned creatures in the area of that foe take 25...105...125 damage.
 	; Concise description
 	; Spell. Deals 15...63...75 damage. Deals 25...105...125 damage to hostile summoned creatures in the area of your target foe.
-	Return 0
+
+	; Priority: Target with most summoned creatures (spirits/minions) in area
+	Local $l_i_BestAgent = 0
+	Local $l_i_BestSummonCount = 0
+
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		; Check range
+		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
+
+		; Must be living enemy
+		If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
+
+		; Count enemy spirits and minions in area range
+		Local $l_i_SpiritCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsSpirit")
+		Local $l_i_MinionCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMinion")
+		Local $l_i_SummonCount = $l_i_SpiritCount + $l_i_MinionCount
+
+		If $l_i_SummonCount > $l_i_BestSummonCount Then
+			$l_i_BestSummonCount = $l_i_SummonCount
+			$l_i_BestAgent = $l_i_AgentID
+		EndIf
+	Next
+
+	; Found a target near summoned creatures
+	If $l_i_BestAgent <> 0 Then Return $l_i_BestAgent
+
+	; Fallback: Any enemy
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1337 - $GC_I_SKILL_ID_DRAIN_DELUSIONS
@@ -5447,7 +5511,17 @@ Func BestTarget_EbonVanguardAssassinSupport($a_f_AggroRange)
 	; This article is about the Ebon Vanguard rank skill. For the skill used by Nola Sheppard, see Ebon Vanguard Assassin Support (NPC).
 	; Concise description
 	; green; font-weight: bold;">14...20
-	Return 0
+
+	; Priority 1: Monks
+	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMonk")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Priority 2: Casters
+	$l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Fallback: Best single target
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2248 - $GC_I_SKILL_ID_POLYMOCK_POWER_DRAIN

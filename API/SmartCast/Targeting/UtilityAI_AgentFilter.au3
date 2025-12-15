@@ -91,6 +91,10 @@ Func UAI_Filter_IsHexed($a_i_AgentID)
 	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsHexed)
 EndFunc
 
+Func UAI_Filter_IsHexedOrEnchanted($a_i_AgentID)
+	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsHexed) Or UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsEnchanted)
+EndFunc
+
 Func UAI_Filter_IsWeaponSpelled($a_i_AgentID)
 	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled)
 EndFunc

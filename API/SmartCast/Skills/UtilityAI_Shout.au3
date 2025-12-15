@@ -891,7 +891,21 @@ Func BestTarget_YouMoveLikeADwarf($a_f_AggroRange)
 	; Shout. Target foe is knocked down and takes 44...80 damage. That foe is also Crippled for 8...15 seconds.
 	; Concise description
 	; Shout. Deals 44...80 damage, causes knock-down, and inflicts Crippled condition (8...15 seconds).
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+
+	; Priority 1: Monks (interrupt healers)
+	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMonk")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Priority 2: Casters (interrupt spellcasters)
+	$l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Priority 3: Melee (War, Sin, Derv)
+	$l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMelee")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Fallback: Any enemy
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 Func CanUse_YouAreAllWeaklings()

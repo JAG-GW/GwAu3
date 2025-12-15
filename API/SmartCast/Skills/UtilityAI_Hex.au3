@@ -1352,7 +1352,9 @@ Func BestTarget_Overload($a_f_AggroRange)
 	; Hex Spell. (5 seconds.) Causes -1...3...3 Health degeneration. If target foe is using a skill, that foe and all adjacent foes take 15...63...75 damage.
 	; Concise description
 	; Spell. (5 seconds.) Causes -1...3...3 Health degeneration. If target foe is using a skill, that foe and all adjacent foes take 15...63...75 damage.
-	Return 0
+
+	; Enemy with most adjacent (degen only, but positioned for AOE if they cast)
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 899 - $GC_I_SKILL_ID_IMAGES_OF_REMORSE
@@ -1841,7 +1843,9 @@ Func BestTarget_WastrelsDemise($a_f_AggroRange)
 	; Hex Spell. (5 seconds.) Each second while hexed, target foe and all foes adjacent to that foe take 1...8...10 damage. Foes take +1...8...10 damage each second this hex is in effect. Ends early if target foe uses a skill.
 	; Concise description
 	; Spell. (5 seconds.) Each second while hexed, target foe and all foes adjacent to that foe take 1...8...10 damage. Foes take +1...8...10 damage each second this hex is in effect. Ends early if target foe uses a skill.
-	Return 0
+
+	; Target enemy with most adjacent enemies (AOE damage)
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1341 - $GC_I_SKILL_ID_FRUSTRATION

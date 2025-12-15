@@ -2436,6 +2436,7 @@ EndFunc
 
 ; Skill ID: 2416 - $GC_I_SKILL_ID_AIR_OF_SUPERIORITY
 Func CanUse_AirOfSuperiority()
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AIR_OF_SUPERIORITY, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
 	Return True
 EndFunc
 

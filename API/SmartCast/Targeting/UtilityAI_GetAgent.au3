@@ -490,6 +490,192 @@ Func _GetArmorScore($a_i_AgentID, $a_f_HP, $a_s_DamageType)
 EndFunc
 #EndRegion
 
+#Region Ward
+; Find the best position to cast a Ward to cover the most allies
+; Returns an array [X, Y, Count] with the optimal position and number of allies covered
+; Uses centroid calculation of all allies to find the center of the group
+Func UAI_GetBestWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
+	Local $l_av_Result[3] = [0, 0, 0] ; [X, Y, Count]
+
+	; Collect all living allies positions
+	Local $l_af_AlliesX[$g_i_AgentCacheCount + 1]
+	Local $l_af_AlliesY[$g_i_AgentCacheCount + 1]
+	Local $l_i_AllyCount = 0
+
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
+
+		$l_af_AlliesX[$l_i_AllyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
+		$l_af_AlliesY[$l_i_AllyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		$l_i_AllyCount += 1
+	Next
+
+	If $l_i_AllyCount = 0 Then Return $l_av_Result
+
+	; Calculate centroid (center of mass) of all allies
+	Local $l_f_CentroidX = 0, $l_f_CentroidY = 0
+	For $l_i_i = 0 To $l_i_AllyCount - 1
+		$l_f_CentroidX += $l_af_AlliesX[$l_i_i]
+		$l_f_CentroidY += $l_af_AlliesY[$l_i_i]
+	Next
+	$l_f_CentroidX /= $l_i_AllyCount
+	$l_f_CentroidY /= $l_i_AllyCount
+
+	; Count how many allies would be in ward range from centroid
+	Local $l_i_CoveredCount = 0
+	Local $l_f_RangeSquared = $a_f_WardRange * $a_f_WardRange
+
+	For $l_i_i = 0 To $l_i_AllyCount - 1
+		Local $l_f_DX = $l_af_AlliesX[$l_i_i] - $l_f_CentroidX
+		Local $l_f_DY = $l_af_AlliesY[$l_i_i] - $l_f_CentroidY
+		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
+
+		If $l_f_DistSquared <= $l_f_RangeSquared Then
+			$l_i_CoveredCount += 1
+		EndIf
+	Next
+
+	$l_av_Result[0] = $l_f_CentroidX
+	$l_av_Result[1] = $l_f_CentroidY
+	$l_av_Result[2] = $l_i_CoveredCount
+
+	Return $l_av_Result
+EndFunc
+
+; Move to best ward position and return True when ready to cast
+; Returns True if player is in position (can cast ward), False if no allies
+Func UAI_MoveToWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
+	Local $l_av_BestPos = UAI_GetBestWardPosition($a_f_WardRange)
+
+	; No allies found
+	If $l_av_BestPos[2] = 0 Then Return False
+
+	Local $l_f_TargetX = $l_av_BestPos[0]
+	Local $l_f_TargetY = $l_av_BestPos[1]
+
+	; Wait until we reach destination or timeout
+	Local $l_i_Timeout = 0
+	Local Const $l_f_ArrivalDist = 80 ; Consider arrived when within 80 units
+	Local Const $l_i_MaxTimeout = 5000 ; Max 5 seconds
+
+	Do
+		Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+		Sleep(32)
+		$l_i_Timeout += 32
+
+		; Update current position
+		Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+		Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+
+		; Check distance to target position
+		Local $l_f_DiffX = $l_f_TargetX - $l_f_CurX
+		Local $l_f_DiffY = $l_f_TargetY - $l_f_CurY
+		Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
+
+		If $l_f_DistToTarget < $l_f_ArrivalDist Then Return True
+
+	Until $l_i_Timeout >= $l_i_MaxTimeout
+
+	Return True
+EndFunc
+
+; Count allies that would be covered by a ward at player's current position
+Func UAI_CountAlliesInWardRange($a_f_WardRange = $GC_I_RANGE_AREA)
+	Return UAI_CountAgents(-2, $a_f_WardRange, "UAI_Filter_IsLivingAlly")
+EndFunc
+
+; Find the best position to cast an offensive Ward to affect the most enemies
+; Returns an array [X, Y, Count] with the optimal position and number of enemies covered
+Func UAI_GetBestOffensiveWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
+	Local $l_av_Result[3] = [0, 0, 0] ; [X, Y, Count]
+
+	; Collect all living enemies positions
+	Local $l_af_EnemiesX[$g_i_AgentCacheCount + 1]
+	Local $l_af_EnemiesY[$g_i_AgentCacheCount + 1]
+	Local $l_i_EnemyCount = 0
+
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
+
+		$l_af_EnemiesX[$l_i_EnemyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
+		$l_af_EnemiesY[$l_i_EnemyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		$l_i_EnemyCount += 1
+	Next
+
+	If $l_i_EnemyCount = 0 Then Return $l_av_Result
+
+	; Calculate centroid (center of mass) of all enemies
+	Local $l_f_CentroidX = 0, $l_f_CentroidY = 0
+	For $l_i_i = 0 To $l_i_EnemyCount - 1
+		$l_f_CentroidX += $l_af_EnemiesX[$l_i_i]
+		$l_f_CentroidY += $l_af_EnemiesY[$l_i_i]
+	Next
+	$l_f_CentroidX /= $l_i_EnemyCount
+	$l_f_CentroidY /= $l_i_EnemyCount
+
+	; Count how many enemies would be in ward range from centroid
+	Local $l_i_CoveredCount = 0
+	Local $l_f_RangeSquared = $a_f_WardRange * $a_f_WardRange
+
+	For $l_i_i = 0 To $l_i_EnemyCount - 1
+		Local $l_f_DX = $l_af_EnemiesX[$l_i_i] - $l_f_CentroidX
+		Local $l_f_DY = $l_af_EnemiesY[$l_i_i] - $l_f_CentroidY
+		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
+
+		If $l_f_DistSquared <= $l_f_RangeSquared Then
+			$l_i_CoveredCount += 1
+		EndIf
+	Next
+
+	$l_av_Result[0] = $l_f_CentroidX
+	$l_av_Result[1] = $l_f_CentroidY
+	$l_av_Result[2] = $l_i_CoveredCount
+
+	Return $l_av_Result
+EndFunc
+
+; Move to best offensive ward position and return True when ready to cast
+; Returns True if player is in position (can cast ward), False if no enemies
+Func UAI_MoveToOffensiveWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
+	Local $l_av_BestPos = UAI_GetBestOffensiveWardPosition($a_f_WardRange)
+
+	; No enemies found
+	If $l_av_BestPos[2] = 0 Then Return False
+
+	Local $l_f_TargetX = $l_av_BestPos[0]
+	Local $l_f_TargetY = $l_av_BestPos[1]
+
+	; Wait until we reach destination or timeout
+	Local $l_i_Timeout = 0
+	Local Const $l_f_ArrivalDist = 80 ; Consider arrived when within 80 units
+	Local Const $l_i_MaxTimeout = 5000 ; Max 5 seconds
+
+	Do
+		Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+		Sleep(32)
+		$l_i_Timeout += 32
+
+		; Update current position
+		Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+		Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+
+		; Check distance to target position
+		Local $l_f_DiffX = $l_f_TargetX - $l_f_CurX
+		Local $l_f_DiffY = $l_f_TargetY - $l_f_CurY
+		Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
+
+		If $l_f_DistToTarget < $l_f_ArrivalDist Then Return True
+
+	Until $l_i_Timeout >= $l_i_MaxTimeout
+
+	Return True
+EndFunc
+#EndRegion
+
 #Region Helper
 ; Helper: Check if player has another Mesmer hex besides the specified one
 Func UAI_PlayerHasOtherMesmerHex($a_i_ExcludeSkillID)
