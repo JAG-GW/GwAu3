@@ -179,8 +179,8 @@ Func BestTarget_DisruptingLunge($a_f_AggroRange)
 	; Concise description
 	; Pet Attack. Deals +1...10...12 damage. Interrupts a skill. Interruption effect: interrupted skill is disabled for +20 seconds.
 
-	; Priority: Enemy using a skill (interrupt trigger)
-	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsUsingSkill")
+	; Priority: Enemy Caster (Try to rupt)
+	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
 	If $l_i_Target <> 0 Then Return $l_i_Target
 
 	; Fallback: Any enemy

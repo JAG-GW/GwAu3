@@ -226,6 +226,10 @@ Func CanUse_XinraesWeapon()
 EndFunc
 
 Func BestTarget_XinraesWeapon($a_f_AggroRange)
+	; Description
+	; Elite Weapon Spell. For 8 seconds, the next time target ally takes damage from a foe that damage is limited to 5% of that ally's max Health and that ally steals up to 20...68...80 Health from that foe.
+	; Concise description
+	; Elite Weapon Spell. (8 seconds). The next time target ally takes damage from a foe, that damage is limited to 5% of target ally's max Health and that ally steals 20...68...80 Health from that foe.
 	Return 0
 EndFunc
 
@@ -236,6 +240,10 @@ Func CanUse_WarmongersWeapon()
 EndFunc
 
 Func BestTarget_WarmongersWeapon($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 3...11...13 seconds, if target ally attacks a foe who is not attacking, that foe is interrupted.
+	; Concise description
+	; Weapon Spell. (3...11...13 seconds.) Attacks interrupt an action. Does not interrupt attacking foes.
 	Return 0
 EndFunc
 
@@ -344,6 +352,10 @@ Func CanUse_SplinterWeaponPvP()
 EndFunc
 
 Func BestTarget_SplinterWeaponPvP($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 20 seconds, target ally has a Splinter Weapon. Target ally's next 1...4...5 attack[s] deal 5...25...30 damage to up to 4 adjacent foes.
+	; Concise description
+	; Weapon Spell. (20 seconds.) Attacks deal 5...25...30 damage to 3 [sic] adjacent foes. Ends after 1...4...5 attack[s].
 	Return 0
 EndFunc
 
@@ -354,6 +366,10 @@ Func CanUse_WeaponOfWardingPvP()
 EndFunc
 
 Func BestTarget_WeaponOfWardingPvP($a_f_AggroRange)
+	; Description
+	; Weapon Spell. For 3...7...8 seconds, target ally has a Weapon of Warding that grants target ally +2...4...4 Health regeneration and a 50% chance to block.
+	; Concise description
+	; Weapon Spell. (3...7...8 seconds.) +2...4...4 Health regeneration. 50% chance to block.
 	Return 0
 EndFunc
 

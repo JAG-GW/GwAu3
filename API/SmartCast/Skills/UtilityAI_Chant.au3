@@ -310,19 +310,6 @@ Func BestTarget_AnthemOfDisruption($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-Func CanUse_DesperateHowl()
-	If Anti_Chant() Then Return False
-	Return True
-EndFunc
-
-Func BestTarget_DesperateHowl($a_f_AggroRange)
-	; Description
-	; Monster skill
-	; Concise description
-	; "en","wgPageContentModel":"wikitext","wgRelevantPageName":"Desperate_Howl","wgRelevantArticleId":230869,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgMFDisplayWikibaseDescriptions":{"search":false,"nearby":false,"watchlist":false,"tagline":false},"wgPopupsFlags":4,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true}; RLSTATE={"site.styles":"ready","user.styles":"ready","user":"ready","user.options":"loading","skins.monobook.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.ready","skins.monobook.scripts","mmv.head","mmv.bootstrap.autostart","ext.popups"];
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 Func CanUse_AnthemOfPurity()
 	If Anti_Chant() Then Return False
 	Return True

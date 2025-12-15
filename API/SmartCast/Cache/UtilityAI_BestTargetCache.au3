@@ -3774,8 +3774,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_AsuranFlameStaff"
 		Case $GC_I_SKILL_ID_HAUNTED_GROUND
 			Return "BestTarget_HauntedGround"
-		Case $GC_I_SKILL_ID_DESPERATE_HOWL
-			Return "BestTarget_DesperateHowl"
 		Case $GC_I_SKILL_ID_GLOAT
 			Return "BestTarget_Gloat"
 		Case $GC_I_SKILL_ID_METAMORPHOSIS

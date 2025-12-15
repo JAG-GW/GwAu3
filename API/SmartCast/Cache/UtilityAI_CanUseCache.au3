@@ -3765,8 +3765,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_AsuranFlameStaff"
 		Case $GC_I_SKILL_ID_HAUNTED_GROUND
 			Return "CanUse_HauntedGround"
-		Case $GC_I_SKILL_ID_DESPERATE_HOWL
-			Return "CanUse_DesperateHowl"
 		Case $GC_I_SKILL_ID_GLOAT
 			Return "CanUse_Gloat"
 		Case $GC_I_SKILL_ID_METAMORPHOSIS
