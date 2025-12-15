@@ -31,10 +31,10 @@ Func Anti_Enchantment()
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPITEFUL_SPIRIT) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPITEFUL_SPIRIT, "Scale")
 
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPOIL_VICTOR) Then
-		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
+		If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
 	EndIf
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_SPOIL_VICTOR_PVP) Then
-		If UAI_GetAgentInfo($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
+		If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) < UAI_GetPlayerInfo($GC_UAI_AGENT_HP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_SPOIL_VICTOR, "Scale")
 	EndIf
 
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_MASOCHISM) Then $l_i_CommingDamage += UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP) * Effect_GetEffectArg($GC_I_SKILL_ID_MASOCHISM, "Scale") / 100
@@ -2446,7 +2446,7 @@ EndFunc
 Func CanUse_LyssasHaste()
 	If Anti_Enchantment() Then Return False
 	Local $l_i_NearestEnemy = UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
-	If UAI_GetAgentInfo($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
+	If UAI_GetAgentInfoByID($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
 	Return True
 EndFunc
 
@@ -3116,7 +3116,7 @@ EndFunc
 Func CanUse_GrenthsAura()
 	If Anti_Enchantment() Then Return False
 	Local $l_i_NearestEnemy = UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
-	If UAI_GetAgentInfo($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
+	If UAI_GetAgentInfoByID($l_i_NearestEnemy, $GC_UAI_AGENT_Distance) > $GC_I_RANGE_ADJACENT Then Return False
 	Return True
 EndFunc
 
