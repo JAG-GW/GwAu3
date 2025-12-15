@@ -832,7 +832,7 @@ Func Scanner_ScanAllPatterns()
     Local $l_p_FixedHeader = $l_p_GwBase + 0x9E8000
     Local $l_s_HeaderBytes = Memory_Read($l_p_FixedHeader, "byte[8]")
 
-    If $l_s_HeaderBytes = BinaryToString($GC_S_GWAU3_HEADER_STR) Then
+    If $l_s_HeaderBytes = StringToBinary($GC_S_GWAU3_HEADER_STR) Then
         $g_p_GwAu3Header = $l_p_FixedHeader
 
     ElseIf $l_s_HeaderBytes = 0 Then
