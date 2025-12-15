@@ -652,7 +652,7 @@ Func BestTarget_WeaponOfRenewal($a_f_AggroRange)
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
-		Local $l_f_Energy = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Energy)
+		Local $l_f_Energy = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_CurrentEnergy)
 		If $l_f_Energy < $l_f_LowestEnergy Then
 			$l_f_LowestEnergy = $l_f_Energy
 			$l_i_BestAlly = $l_i_AgentID

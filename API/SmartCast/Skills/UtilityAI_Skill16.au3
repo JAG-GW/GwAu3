@@ -6,6 +6,8 @@ EndFunc
 
 ; Skill ID: 318 - $GC_I_SKILL_ID_DEFY_PAIN
 Func CanUse_DefyPain()
+	; Use when HP is below 80% - defensive skill
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.8 Then Return False
 	Return True
 EndFunc
 
@@ -19,28 +21,39 @@ EndFunc
 
 ; Skill ID: 347 - $GC_I_SKILL_ID_ENDURE_PAIN
 Func CanUse_EndurePain()
+	; Emergency survival skill - use when HP is critical (below 50%)
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.5 Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_EndurePain($a_f_AggroRange)
 	; Description
-	; This article is about the Core skill. For the temporarily available Bonus Mission Pack skill, see Endure Pain (Turai Ossa).
+	; Skill. For 7...16...18 seconds you have an additional 90...258...300 Health.
 	; Concise description
-	; green; font-weight: bold;">7...16...18
+	; Skill. (7...16...18 seconds.) You have +90...258...300 maximum Health.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 362 - $GC_I_SKILL_ID_WARRIORS_CUNNING
 Func CanUse_WarriorsCunning()
+	; Only useful when actively attacking
+	If Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsAttacking) Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_WarriorsCunning($a_f_AggroRange)
+	; Description
+	; Skill. For 5...10...11 seconds, your melee attacks cannot be blocked.
+	; Concise description
+	; Skill. (5...10...11 seconds.) Your melee attacks are unblockable.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 363 - $GC_I_SKILL_ID_SHIELD_BASH
 Func CanUse_ShieldBash()
+	; Block skill - use when adjacent enemies are present
+	Local $l_i_EnemyCount = UAI_CountAgents(UAI_GetPlayerInfo($GC_UAI_AGENT_ID), $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
+	If $l_i_EnemyCount < 1 Then Return False
 	Return True
 EndFunc
 
@@ -54,15 +67,25 @@ EndFunc
 
 ; Skill ID: 374 - $GC_I_SKILL_ID_WARRIORS_ENDURANCE
 Func CanUse_WarriorsEndurance()
+	; Energy management skill - use when attacking and energy is low
+	If Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsAttacking) Then Return False
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 10 Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_WarriorsEndurance($a_f_AggroRange)
+	; Description
+	; Elite Skill. For 5...29...35 seconds, you gain 3 Energy each time you hit with a melee attack. Warrior's Endurance cannot raise your Energy above 10...22...25.
+	; Concise description
+	; Elite Skill. (5...29...35 seconds.) You gain 3 Energy each time you hit with a melee attack. No Energy gain if you have more than 10...22...25 Energy.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 381 - $GC_I_SKILL_ID_HUNDRED_BLADES
 Func CanUse_HundredBlades()
+	; AoE skill - only worth using with multiple adjacent enemies
+	Local $l_i_EnemyCount = UAI_CountAgents(UAI_GetPlayerInfo($GC_UAI_AGENT_ID), $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
+	If $l_i_EnemyCount < 2 Then Return False
 	Return True
 EndFunc
 
@@ -76,6 +99,9 @@ EndFunc
 
 ; Skill ID: 387 - $GC_I_SKILL_ID_RIPOSTE
 Func CanUse_Riposte()
+	; Block skill - use when adjacent enemies are present
+	Local $l_i_EnemyCount = UAI_CountAgents(UAI_GetPlayerInfo($GC_UAI_AGENT_ID), $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
+	If $l_i_EnemyCount < 1 Then Return False
 	Return True
 EndFunc
 
@@ -89,6 +115,9 @@ EndFunc
 
 ; Skill ID: 388 - $GC_I_SKILL_ID_DEADLY_RIPOSTE
 Func CanUse_DeadlyRiposte()
+	; Block skill - use when adjacent enemies are present
+	Local $l_i_EnemyCount = UAI_CountAgents(UAI_GetPlayerInfo($GC_UAI_AGENT_ID), $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
+	If $l_i_EnemyCount < 1 Then Return False
 	Return True
 EndFunc
 
@@ -100,17 +129,10 @@ Func BestTarget_DeadlyRiposte($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 569 - $GC_I_SKILL_ID_VICTORY_OR_DEATH
-Func CanUse_VictoryOrDeath()
-	Return True
-EndFunc
-
-Func BestTarget_VictoryOrDeath($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 1018 - $GC_I_SKILL_ID_CRITICAL_EYE
 Func CanUse_CriticalEye()
+	; Critical hit buff - only useful when attacking
+	If Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsAttacking) Then Return False
 	Return True
 EndFunc
 
@@ -155,14 +177,16 @@ EndFunc
 
 Func BestTarget_SoulTwisting($a_f_AggroRange)
 	; Description
-	; ST redirects here. For other uses, see ST (disambiguation).
+	; Elite Skill. For 5...37...45 seconds, your Binding Rituals cost 15 less Energy (minimum 10) and recharge instantly. Soul Twisting ends after 1...3...3 Binding Ritual[s].
 	; Concise description
-	; green; font-weight: bold;">5...37...45
+	; Elite Skill. (5...37...45 seconds.) Your Binding Rituals cost 15 less Energy (minimum 10) and recharge instantly. Ends after 1...3...3 Binding Ritual[s].
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 1377 - $GC_I_SKILL_ID_ETHER_PRISM
 Func CanUse_EtherPrism()
+	; Damage reduction + energy gain - use when HP is low
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.5 Then Return False
 	Return True
 EndFunc
 
@@ -187,32 +211,6 @@ Func BestTarget_RageOfTheNtouka($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 1463 - $GC_I_SKILL_ID_ROUGH_CURRENT
-Func CanUse_RoughCurrent()
-	Return True
-EndFunc
-
-Func BestTarget_RoughCurrent($a_f_AggroRange)
-	; Description
-	; Monster skill
-	; Concise description
-	; Related skills">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 1464 - $GC_I_SKILL_ID_TURBULENT_FLOW
-Func CanUse_TurbulentFlow()
-	Return True
-EndFunc
-
-Func BestTarget_TurbulentFlow($a_f_AggroRange)
-	; Description
-	; Monster skill
-	; Concise description
-	; green; font-weight: bold;">1...5
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 1508 - $GC_I_SKILL_ID_EXTEND_ENCHANTMENTS
 Func CanUse_ExtendEnchantments()
 	Return True
@@ -233,9 +231,9 @@ EndFunc
 
 Func BestTarget_CurseOfTheStaffOfTheMists($a_f_AggroRange)
 	; Description
-	; Nightfall
+	; Skill. The Staff of the Mists does 30 damage to all foes within range every 4 seconds.
 	; Concise description
-	; Related skills">edit
+	; Skill. The Staff of the Mists does 30 damage to all foes within range every 4 seconds.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
@@ -265,56 +263,10 @@ Func BestTarget_PowerOfTheStaffOfTheMists($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 1680 - $GC_I_SKILL_ID_DRAKE_SKIN
-Func CanUse_DrakeSkin()
-	Return True
-EndFunc
-
-Func BestTarget_DrakeSkin($a_f_AggroRange)
-	; Description
-	; Nightfall
-	; Concise description
-	; Related skills">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 1681 - $GC_I_SKILL_ID_SKALE_VIGOR
-Func CanUse_SkaleVigor()
-	Return True
-EndFunc
-
-Func BestTarget_SkaleVigor($a_f_AggroRange)
-	; Description
-	; Nightfall
-	; Concise description
-	; Related skills">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 1682 - $GC_I_SKILL_ID_PAHNAI_SALAD_ITEM_EFFECT
-Func CanUse_PahnaiSaladItemEffect()
-	Return True
-EndFunc
-
-Func BestTarget_PahnaiSaladItemEffect($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 1704 - $GC_I_SKILL_ID_UNTOUCHABLE
-Func CanUse_Untouchable()
-	Return True
-EndFunc
-
-Func BestTarget_Untouchable($a_f_AggroRange)
-	; Description
-	; Skill. You are invulnerable for 5 seconds after being resurrected by the Resurrection Shrine.
-	; Concise description
-	; Skill. (5 seconds.) You are invulnerable after being resurrected by the Resurrection Shrine.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 1721 - $GC_I_SKILL_ID_RAMPAGE_AS_ONE
 Func CanUse_RampageAsOne()
+	; Requires pet to be alive
+	If Not UAI_IsPetAlive() Then Return False
 	Return True
 EndFunc
 
@@ -341,6 +293,8 @@ EndFunc
 
 ; Skill ID: 1770 - $GC_I_SKILL_ID_NATURAL_TEMPER
 Func CanUse_NaturalTemper()
+	; Only works when NOT enchanted
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_IsEnchanted) Then Return False
 	Return True
 EndFunc
 
@@ -469,25 +423,6 @@ Func BestTarget_SpitRocks($a_f_AggroRange)
 	Return 0
 EndFunc
 
-; Skill ID: 1932 - ;  $GC_I_SKILL_ID_UNKNOWN
-; Skill ID: 1934 - $GC_I_SKILL_ID_GOLDEN_EGG_SKILL
-Func CanUse_GoldenEggSkill()
-	Return True
-EndFunc
-
-Func BestTarget_GoldenEggSkill($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 1945 - $GC_I_SKILL_ID_BIRTHDAY_CUPCAKE_SKILL
-Func CanUse_BirthdayCupcakeSkill()
-	Return True
-EndFunc
-
-Func BestTarget_BirthdayCupcakeSkill($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 2104 - $GC_I_SKILL_ID_INTENSITY
 Func CanUse_Intensity()
 	Return True
@@ -503,6 +438,8 @@ EndFunc
 
 ; Skill ID: 2108 - $GC_I_SKILL_ID_NEVER_RAMPAGE_ALONE
 Func CanUse_NeverRampageAlone()
+	; Requires pet to be alive
+	If Not UAI_IsPetAlive() Then Return False
 	Return True
 EndFunc
 
@@ -516,6 +453,9 @@ EndFunc
 
 ; Skill ID: 2208 - $GC_I_SKILL_ID_BURNING_SHIELD
 Func CanUse_BurningShield()
+	; Block skill - use when adjacent enemies are present
+	Local $l_i_EnemyCount = UAI_CountAgents(UAI_GetPlayerInfo($GC_UAI_AGENT_ID), $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
+	If $l_i_EnemyCount < 1 Then Return False
 	Return True
 EndFunc
 
@@ -553,46 +493,6 @@ Func BestTarget_UrsanForce($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 2604 - $GC_I_SKILL_ID_CANDY_CORN_SKILL
-Func CanUse_CandyCornSkill()
-	Return True
-EndFunc
-
-Func BestTarget_CandyCornSkill($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2605 - $GC_I_SKILL_ID_CANDY_APPLE_SKILL
-Func CanUse_CandyAppleSkill()
-	Return True
-EndFunc
-
-Func BestTarget_CandyAppleSkill($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2649 - $GC_I_SKILL_ID_PIE_INDUCED_ECSTASY
-Func CanUse_PieInducedEcstasy()
-	Return True
-EndFunc
-
-Func BestTarget_PieInducedEcstasy($a_f_AggroRange)
-	; Description
-	; Core
-	; Concise description
-	; Acquisition">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2713 - $GC_I_SKILL_ID_VICTORY_IS_OURS
-Func CanUse_VictoryIsOurs()
-	Return True
-EndFunc
-
-Func BestTarget_VictoryIsOurs($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
 ; Skill ID: 2733 - $GC_I_SKILL_ID_FALKEN_QUICK
 Func CanUse_FalkenQuick()
 	Return True
@@ -600,13 +500,12 @@ EndFunc
 
 Func BestTarget_FalkenQuick($a_f_AggroRange)
 	; Description
-	; Factions
+	; Skill. A good courier doesn't need luck; a good courier just needs to be FAST! You move 50% faster.
 	; Concise description
-	; Notes">edit
+	; Skill. You move 50% faster.
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
-; Skill ID: 2802 - ;  $GC_I_SKILL_ID_UNKNOWN
 ; Skill ID: 2865 - $GC_I_SKILL_ID_RITUAL_LORD_PvP
 Func CanUse_RitualLordPvP()
 	Return True
@@ -615,173 +514,3 @@ EndFunc
 Func BestTarget_RitualLordPvP($a_f_AggroRange)
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
-
-; Skill ID: 2886 - $GC_I_SKILL_ID_SUMMONING_SICKNESS
-Func CanUse_SummoningSickness()
-	Return True
-EndFunc
-
-Func BestTarget_SummoningSickness($a_f_AggroRange)
-	; Description
-	; Skill. For 10 minutes, you are unable to use summoning stones.
-	; Concise description
-	; Skill. (10 minutes.) You are unable to use summoning stones.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2889 - ;  $GC_I_SKILL_ID_UNKNOWN
-; Skill ID: 2923 - $GC_I_SKILL_ID_YO_HO_HO_AND_A_BOTTLE_OF_GROG
-Func CanUse_YoHoHoAndABottleOfGrog()
-	Return True
-EndFunc
-
-Func BestTarget_YoHoHoAndABottleOfGrog($a_f_AggroRange)
-	; Description
-	; Core
-	; Concise description
-	; Drinking pirate grog can cause you to spontaneously spout piratical non sequiturs. Do not attempt to wield weapons or ride siege devourers while under the influence of grog as drinking and adventuring can be hazardous to your health.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2924 - $GC_I_SKILL_ID_OATH_OF_PROTECTION
-Func CanUse_OathOfProtection()
-	Return True
-EndFunc
-
-Func BestTarget_OathOfProtection($a_f_AggroRange)
-	; Description
-	; Monster skill
-	; Concise description
-	; Notes">edit
-	Return 0
-EndFunc
-
-; Skill ID: 2928 - $GC_I_SKILL_ID_AMULET_OF_PROTECTION2
-Func CanUse_AmuletOfProtection2()
-	Return True
-EndFunc
-
-Func BestTarget_AmuletOfProtection2($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2968 - $GC_I_SKILL_ID_OVERSIZED_TONIC_WARNING
-Func CanUse_OversizedTonicWarning()
-	Return True
-EndFunc
-
-Func BestTarget_OversizedTonicWarning($a_f_AggroRange)
-	; Description
-	; Skill
-	; Concise description
-	; Abominable, Automatonic, Phantasmal, and Sinister Automatonic.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2971 - $GC_I_SKILL_ID_BLUE_ROCK_CANDY_RUSH
-Func CanUse_BlueRockCandyRush()
-	Return True
-EndFunc
-
-Func BestTarget_BlueRockCandyRush($a_f_AggroRange)
-	; Description
-	; Core
-	; Concise description
-	; Notes">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2972 - $GC_I_SKILL_ID_GREEN_ROCK_CANDY_RUSH
-Func CanUse_GreenRockCandyRush()
-	Return True
-EndFunc
-
-Func BestTarget_GreenRockCandyRush($a_f_AggroRange)
-	; Description
-	; Core
-	; Concise description
-	; Notes">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 2973 - $GC_I_SKILL_ID_RED_ROCK_CANDY_RUSH
-Func CanUse_RedRockCandyRush()
-	Return True
-EndFunc
-
-Func BestTarget_RedRockCandyRush($a_f_AggroRange)
-	; Description
-	; Core
-	; Concise description
-	; Notes">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 3077 - $GC_I_SKILL_ID_WEAKENED_BY_DHUUM
-Func CanUse_WeakenedByDhuum()
-	Return True
-EndFunc
-
-Func BestTarget_WeakenedByDhuum($a_f_AggroRange)
-	; Description
-	; Skill. You are overcome by the energy coming off the Everlasting Mobstopper holding your newly captured Skeleton of Dhuum. You couldn't possibly handle capturing another while in this state.
-	; Concise description
-	; Skill. You are overcome by the energy coming off the Everlasting Mobstopper holding your newly captured Skeleton of Dhuum. You couldn't possibly handle capturing another while in this state.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 3080 - $GC_I_SKILL_ID_DHUUM_SKILL
-Func CanUse_DhuumSkill()
-	Return True
-EndFunc
-
-Func BestTarget_DhuumSkill($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 3132 - ;  $GC_I_SKILL_ID_UNKNOWN
-; Skill ID: 3174 - $GC_I_SKILL_ID_WELL_SUPPLIED
-Func CanUse_WellSupplied()
-	Return True
-EndFunc
-
-Func BestTarget_WellSupplied($a_f_AggroRange)
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 3198 - $GC_I_SKILL_ID_IMPENDING_DHUUM
-Func CanUse_ImpendingDhuum()
-	Return True
-EndFunc
-
-Func BestTarget_ImpendingDhuum($a_f_AggroRange)
-	; Description
-	; Skill. No resurrection spell can save you now. Your account has been banned.
-	; Concise description
-	; Skill. No resurrection spell can save you now. Your account has been banned.
-	Return 0
-EndFunc
-
-; Skill ID: 3202 - $GC_I_SKILL_ID_OATH_OF_PROTECTION2
-Func CanUse_OathOfProtection2()
-	Return True
-EndFunc
-
-Func BestTarget_OathOfProtection2($a_f_AggroRange)
-	Return 0
-EndFunc
-
-; Skill ID: 3206 - $GC_I_SKILL_ID_SPECTRAL_INFUSION
-Func CanUse_SpectralInfusion()
-	Return True
-EndFunc
-
-Func BestTarget_SpectralInfusion($a_f_AggroRange)
-	; Description
-	; Skill. For an undetermined time, you are protected from most of the effects of the Mursaat's vilest magic, reflecting some of its damage back on any Mursaat or Jade Construct within range.
-	; Concise description
-	; Skill. For an undetermined time, you are protected from most of the effects of the Mursaat's vilest magic, reflecting some of its damage back on any Mursaat or Jade Construct within range.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
-EndFunc
-
-; Skill ID: 3407 - ;  $GC_I_SKILL_ID_UNKNOWN

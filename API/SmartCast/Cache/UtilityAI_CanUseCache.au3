@@ -1069,8 +1069,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_SpontaneousCombustion"
 		Case $GC_I_SKILL_ID_VANISH
 			Return "CanUse_Vanish"
-		Case $GC_I_SKILL_ID_VICTORY_OR_DEATH
-			Return "CanUse_VictoryOrDeath"
 		Case $GC_I_SKILL_ID_MARK_OF_INSECURITY
 			Return "CanUse_MarkOfInsecurity"
 		Case $GC_I_SKILL_ID_DISRUPTING_DAGGER
@@ -2287,10 +2285,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_EarthVortex"
 		Case $GC_I_SKILL_ID_FROST_VORTEX
 			Return "CanUse_FrostVortex"
-		Case $GC_I_SKILL_ID_ROUGH_CURRENT
-			Return "CanUse_RoughCurrent"
-		Case $GC_I_SKILL_ID_TURBULENT_FLOW
-			Return "CanUse_TurbulentFlow"
 		Case $GC_I_SKILL_ID_PREPARED_SHOT
 			Return "CanUse_PreparedShot"
 		Case $GC_I_SKILL_ID_BURNING_ARROW
@@ -2679,12 +2673,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_SiegeAttackBombardment"
 		Case $GC_I_SKILL_ID_TO_THE_PAIN_HERO_BATTLES
 			Return "CanUse_ToThePainHeroBattles"
-		Case $GC_I_SKILL_ID_DRAKE_SKIN
-			Return "CanUse_DrakeSkin"
-		Case $GC_I_SKILL_ID_SKALE_VIGOR
-			Return "CanUse_SkaleVigor"
-		Case $GC_I_SKILL_ID_PAHNAI_SALAD_ITEM_EFFECT
-			Return "CanUse_PahnaiSaladItemEffect"
 		Case $GC_I_SKILL_ID_PENSIVE_GUARDIAN
 			Return "CanUse_PensiveGuardian"
 		Case $GC_I_SKILL_ID_SCRIBES_INSIGHT
@@ -2725,8 +2713,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_SteadyStance"
 		Case $GC_I_SKILL_ID_STEELFANG_SLASH
 			Return "CanUse_SteelfangSlash"
-		Case $GC_I_SKILL_ID_UNTOUCHABLE
-			Return "CanUse_Untouchable"
 		Case $GC_I_SKILL_ID_EARTH_SHATTERING_BLOW
 			Return "CanUse_EarthShatteringBlow"
 		Case $GC_I_SKILL_ID_CORRUPT_POWER
@@ -2987,8 +2973,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_Water"
 		Case $GC_I_SKILL_ID_SUGAR_JOLT_LONG
 			Return "CanUse_SugarJoltLong"
-		Case $GC_I_SKILL_ID_GOLDEN_EGG_SKILL
-			Return "CanUse_GoldenEggSkill"
 		Case $GC_I_SKILL_ID_TORTUROUS_EMBERS
 			Return "CanUse_TorturousEmbers"
 		Case $GC_I_SKILL_ID_INFERNAL_RAGE
@@ -3007,8 +2991,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_CharrSiegeAttackWhatMustBeDone"
 		Case $GC_I_SKILL_ID_CHARR_SIEGE_ATTACK_AGAINST_THE_CHARR
 			Return "CanUse_CharrSiegeAttackAgainstTheCharr"
-		Case $GC_I_SKILL_ID_BIRTHDAY_CUPCAKE_SKILL
-			Return "CanUse_BirthdayCupcakeSkill"
 		Case $GC_I_SKILL_ID_SHADOW_SANCTUARY_LUXON2
 			Return "CanUse_ShadowSanctuaryLuxon2"
 		Case $GC_I_SKILL_ID_ETHER_NIGHTMARE_LUXON
@@ -3857,12 +3839,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_TongueWhip"
 		Case $GC_I_SKILL_ID_LIT_TORCH
 			Return "CanUse_LitTorch"
-		Case $GC_I_SKILL_ID_DISHONORABLE
-			Return "CanUse_Dishonorable"
-		Case $GC_I_SKILL_ID_CANDY_CORN_SKILL
-			Return "CanUse_CandyCornSkill"
-		Case $GC_I_SKILL_ID_CANDY_APPLE_SKILL
-			Return "CanUse_CandyAppleSkill"
 		Case $GC_I_SKILL_ID_REAPERS_MARK2
 			Return "CanUse_ReapersMark2"
 		Case $GC_I_SKILL_ID_ENFEEBLE2
@@ -3879,8 +3855,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_LiquidFlam2"
 		Case $GC_I_SKILL_ID_SMITE_CONDITION2
 			Return "CanUse_SmiteCondition2"
-		Case $GC_I_SKILL_ID_PIE_INDUCED_ECSTASY
-			Return "CanUse_PieInducedEcstasy"
 		Case $GC_I_SKILL_ID_CHARM_ANIMAL_CHARR_DEMOLISHER
 			Return "CanUse_CharmAnimalCharrDemolisher"
 		Case $GC_I_SKILL_ID_DRAGON_EMPIRE_RAGE
@@ -3959,8 +3933,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_DisenchantmentTogo"
 		Case $GC_I_SKILL_ID_FIRE_DART2
 			Return "CanUse_FireDart2"
-		Case $GC_I_SKILL_ID_VICTORY_IS_OURS
-			Return "CanUse_VictoryIsOurs"
 		Case $GC_I_SKILL_ID_REDEMPTION_OF_PURITY
 			Return "CanUse_RedemptionOfPurity"
 		Case $GC_I_SKILL_ID_PURIFY_ENERGY
@@ -4095,8 +4067,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_MysticRegenerationPvP"
 		Case $GC_I_SKILL_ID_ENFEEBLING_BLOOD_PVP
 			Return "CanUse_EnfeeblingBloodPvP"
-		Case $GC_I_SKILL_ID_SUMMONING_SICKNESS
-			Return "CanUse_SummoningSickness"
 		Case $GC_I_SKILL_ID_SIGNET_OF_JUDGMENT_PVP
 			Return "CanUse_SignetOfJudgmentPvP"
 		Case $GC_I_SKILL_ID_CHILLING_VICTORY_PVP
@@ -4145,16 +4115,10 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_NoxKnuckle"
 		Case $GC_I_SKILL_ID_NOX_DIVIDER_DRIVE
 			Return "CanUse_NoxDividerDrive"
-		Case $GC_I_SKILL_ID_YO_HO_HO_AND_A_BOTTLE_OF_GROG
-			Return "CanUse_YoHoHoAndABottleOfGrog"
-		Case $GC_I_SKILL_ID_OATH_OF_PROTECTION
-			Return "CanUse_OathOfProtection"
 		Case $GC_I_SKILL_ID_SLOTH_HUNTERS_SHOT_PVP
 			Return "CanUse_SlothHuntersShotPvP"
 		Case $GC_I_SKILL_ID_SHRINE_BACKLASH
 			Return "CanUse_ShrineBacklash"
-		Case $GC_I_SKILL_ID_AMULET_OF_PROTECTION2
-			Return "CanUse_AmuletOfProtection2"
 		Case $GC_I_SKILL_ID_WESTERN_HEALTH_SHRINE_BONUS
 			Return "CanUse_WesternHealthShrineBonus"
 		Case $GC_I_SKILL_ID_EASTERN_HEALTH_SHRINE_BONUS
@@ -4171,16 +4135,8 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_SignetOfGhostlyMightPvP"
 		Case $GC_I_SKILL_ID_AVATAR_OF_GRENTH_PVP
 			Return "CanUse_AvatarOfGrenthPvP"
-		Case $GC_I_SKILL_ID_OVERSIZED_TONIC_WARNING
-			Return "CanUse_OversizedTonicWarning"
 		Case $GC_I_SKILL_ID_READ_THE_WIND_PVP
 			Return "CanUse_ReadTheWindPvP"
-		Case $GC_I_SKILL_ID_BLUE_ROCK_CANDY_RUSH
-			Return "CanUse_BlueRockCandyRush"
-		Case $GC_I_SKILL_ID_GREEN_ROCK_CANDY_RUSH
-			Return "CanUse_GreenRockCandyRush"
-		Case $GC_I_SKILL_ID_RED_ROCK_CANDY_RUSH
-			Return "CanUse_RedRockCandyRush"
 		Case $GC_I_SKILL_ID_SEED_OF_RESURRECTION2
 			Return "CanUse_SeedOfResurrection2"
 		Case $GC_I_SKILL_ID_FRAGILITY_PVP
@@ -4327,14 +4283,10 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_FlurryOfSplinters"
 		Case $GC_I_SKILL_ID_EVERLASTING_MOBSTOPPER_SKILL
 			Return "CanUse_EverlastingMobstopperSkill"
-		Case $GC_I_SKILL_ID_WEAKENED_BY_DHUUM
-			Return "CanUse_WeakenedByDhuum"
 		Case $GC_I_SKILL_ID_CURSE_OF_DHUUM
 			Return "CanUse_CurseOfDhuum"
 		Case $GC_I_SKILL_ID_DHUUMS_REST_REAPER_SKILL
 			Return "CanUse_DhuumsRestReaperSkill"
-		Case $GC_I_SKILL_ID_DHUUM_SKILL
-			Return "CanUse_DhuumSkill"
 		Case $GC_I_SKILL_ID_SUMMON_CHAMPION
 			Return "CanUse_SummonChampion"
 		Case $GC_I_SKILL_ID_SUMMON_MINIONS
@@ -4413,8 +4365,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_EbonVanguardAssassinSupportNpc"
 		Case $GC_I_SKILL_ID_EBON_VANGUARD_BATTLE_STANDARD_OF_POWER
 			Return "CanUse_EbonVanguardBattleStandardOfPower"
-		Case $GC_I_SKILL_ID_WELL_SUPPLIED
-			Return "CanUse_WellSupplied"
 		Case $GC_I_SKILL_ID_GUILD_MONUMENT_PROTECTED
 			Return "CanUse_GuildMonumentProtected"
 		Case $GC_I_SKILL_ID_MANTRA_OF_SIGNETS_PVP
@@ -4455,22 +4405,16 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_CalculatedRiskPvP"
 		Case $GC_I_SKILL_ID_ADORATION
 			Return "CanUse_Adoration"
-		Case $GC_I_SKILL_ID_IMPENDING_DHUUM
-			Return "CanUse_ImpendingDhuum"
 		Case $GC_I_SKILL_ID_SACRIFICE_PAWN
 			Return "CanUse_SacrificePawn"
 		Case $GC_I_SKILL_ID_ISAIAHS_BALANCE
 			Return "CanUse_IsaiahsBalance"
 		Case $GC_I_SKILL_ID_TORIIMOS_BURNING_FURY
 			Return "CanUse_ToriimosBurningFury"
-		Case $GC_I_SKILL_ID_OATH_OF_PROTECTION2
-			Return "CanUse_OathOfProtection2"
 		Case $GC_I_SKILL_ID_DEFY_PAIN_PVP
 			Return "CanUse_DefyPainPvP"
 		Case $GC_I_SKILL_ID_ENTOURAGE
 			Return "CanUse_Entourage"
-		Case $GC_I_SKILL_ID_SPECTRAL_INFUSION
-			Return "CanUse_SpectralInfusion"
 		Case $GC_I_SKILL_ID_ENTOURAGE_BUFFER
 			Return "CanUse_EntourageBuffer"
 		Case $GC_I_SKILL_ID_WASTRELS_DEMISE_PVP
