@@ -397,6 +397,15 @@ Global Const $GC_S_MOD_CASTER_ENERGY_ALWAYS15 					= "0F00D822"	; Energy +15
 Global Const $GC_S_MOD_CASTER_ENERGY_REGEN 						= "0100C820"	; Energy regeneration -1
 Global Const $GC_S_MOD_CASTER_PLUS30 							= "001E4823"	; +30HP
 ; Mes mods
+Global Const $GC_S_MOD_CASTER_FAST_CASTING19_CASTING 			= "00131822"	; 19% fast casting
+Global Const $GC_S_MOD_CASTER_FAST_CASTING19_RECHARGE 			= "00139823"	; 19% fast casting recharge
+Global Const $GC_S_MOD_CASTER_ILLUSION19_CASTING 				= "01131822"	; 19% illusion
+Global Const $GC_S_MOD_CASTER_ILLUSION19_RECHARGE 				= "01139823"	; 19% illusion recharge
+Global Const $GC_S_MOD_CASTER_DOMINATION19_CASTING 				= "02131822"	; 19% domination
+Global Const $GC_S_MOD_CASTER_DOMINATION19_RECHARGE 			= "02139823"	; 19% domination recharge
+Global Const $GC_S_MOD_CASTER_INSPIRATION19_CASTING 			= "03131822"	; 19% inspiration
+Global Const $GC_S_MOD_CASTER_INSPIRATION19_RECHARGE 			= "03139823"	; 19% inspiration recharge
+
 Global Const $GC_S_MOD_CASTER_FAST_CASTING20_CASTING 			= "00141822"	; 20% fast casting
 Global Const $GC_S_MOD_CASTER_FAST_CASTING20_RECHARGE 			= "00149823"	; 20% fast casting recharge
 Global Const $GC_S_MOD_CASTER_ILLUSION20_CASTING 				= "01141822"	; 20% illusion
