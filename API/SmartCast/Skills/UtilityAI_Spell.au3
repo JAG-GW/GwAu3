@@ -2646,7 +2646,7 @@ Func BestTarget_DeathsCharge($a_f_AggroRange)
 	; Spell. Shadow Step to target foe. If that foe has more Health than you, you are healed for 65...173...200.
 	; Concise description
 	; Spell. You Shadow Step to target foe. You are healed for 65...173...200 if this foe has more Health than you.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_ADJACENT, "UAI_Filter_AgentHasMoreHpThanMe")
 EndFunc
 
 ; Skill ID: 954 - $GC_I_SKILL_ID_EXPEL_HEXES

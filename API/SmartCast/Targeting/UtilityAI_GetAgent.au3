@@ -304,6 +304,190 @@ Func _GetGroupStats($a_i_AgentID, $a_f_Range, $a_s_Filter)
 
 	Return $l_av_Result
 EndFunc
+
+; Get best single target considering armor for damage type
+; $a_s_DamageType: "elemental" or "physical"
+; Calculates effective damage (HP / DamageMultiplier) and prioritizes targets where damage is most effective
+; Finisher mode: target with lowest effective HP (easiest to kill with this damage type)
+; Pressure mode: target with highest effective HP (most HP to pressure with efficient damage)
+Func UAI_GetBestTargetByDamageType($a_i_AgentID = -2, $a_f_Range = 1320, $a_s_DamageType = "Elemental", $a_s_CustomFilter = "")
+	Local $l_i_BestAgent = 0
+	; Initialize based on fight mode
+	Local $l_f_BestScore = ($g_i_FightMode = $g_i_FinisherMode) ? 999999 : 0
+
+	; Get reference ID
+	Local $l_i_RefID = UAI_ConvertAgentID($a_i_AgentID)
+
+	If $g_i_AgentCacheCount = 0 Then Return 0
+
+	; Process each agent from cache
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		; Ignore reference agent
+		If $l_i_AgentID = $l_i_RefID Then ContinueLoop
+
+		; Check range (already calculated in cache)
+		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		If $l_f_Distance > $a_f_Range Then ContinueLoop
+
+		; Apply custom filters
+		If $a_s_CustomFilter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_CustomFilter) Then ContinueLoop
+
+		; Get HP from cache
+		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+
+		; Calculate armor on-the-fly based on damage type
+		Local $l_i_Armor
+		Switch $a_s_DamageType
+			Case "Elemental", "Fire", "Cold", "Lightning", "Earth"
+				$l_i_Armor = UAI_GetElementalArmor($l_i_AgentID)
+			Case "Physical", "Blunt", "Piercing", "Slashing"
+				$l_i_Armor = UAI_GetPhysicalArmor($l_i_AgentID)
+			Case Else
+				$l_i_Armor = UAI_GetBaseArmor($l_i_AgentID)
+		EndSwitch
+
+		; Calculate damage multiplier (higher = more damage taken)
+		Local $l_f_DamageMult = UAI_GetDamageMultiplier($l_i_Armor)
+
+		; Calculate effective HP score
+		; Lower armor = higher damage multiplier = lower effective HP = easier to kill
+		; Score = HP / DamageMultiplier (lower score = better target for finisher)
+		Local $l_f_Score = $l_f_HP / $l_f_DamageMult
+
+		; Finisher mode: prefer lowest score (easiest to kill)
+		; Pressure mode: prefer highest score (most efficient damage on high HP target)
+		If $g_i_FightMode = $g_i_FinisherMode Then
+			If $l_f_Score < $l_f_BestScore Then
+				$l_f_BestScore = $l_f_Score
+				$l_i_BestAgent = $l_i_AgentID
+			EndIf
+		Else ; Pressure mode
+			If $l_f_Score > $l_f_BestScore Then
+				$l_f_BestScore = $l_f_Score
+				$l_i_BestAgent = $l_i_AgentID
+			EndIf
+		EndIf
+	Next
+
+	Return $l_i_BestAgent
+EndFunc
+
+; Get best AOE target considering armor for damage type
+; $a_s_DamageType: "elemental" or "physical"
+; Priority: 1) Most enemies in AOE range, 2) Average effective HP score based on armor
+; Returns the agent at the center of the best group for this damage type
+Func UAI_GetBestAOETargetByDamageType($a_i_AgentID = -2, $a_f_Range = 1320, $a_f_AOERange = $GC_I_RANGE_ADJACENT, $a_s_DamageType = "Elemental", $a_s_CustomFilter = "")
+	Local $l_i_BestAgent = 0
+	Local $l_i_BestCount = 0
+	Local $l_f_BestAvgScore = ($g_i_FightMode = $g_i_FinisherMode) ? 999999 : 0
+
+	; Get reference ID
+	Local $l_i_RefID = UAI_ConvertAgentID($a_i_AgentID)
+
+	If $g_i_AgentCacheCount = 0 Then Return 0
+
+	; Process each agent from cache
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		; Ignore reference agent
+		If $l_i_AgentID = $l_i_RefID Then ContinueLoop
+
+		; Check range (already calculated in cache)
+		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		If $l_f_Distance > $a_f_Range Then ContinueLoop
+
+		; Apply custom filters
+		If $a_s_CustomFilter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_CustomFilter) Then ContinueLoop
+
+		; Get group stats with armor consideration
+		Local $l_av_GroupStats = _GetGroupStatsByDamageType($l_i_AgentID, $a_f_AOERange, $a_s_DamageType, $a_s_CustomFilter)
+		Local $l_i_Count = $l_av_GroupStats[0]
+		Local $l_f_AvgScore = $l_av_GroupStats[1]
+
+		; Priority 1: More enemies wins
+		; Priority 2: Score comparison based on fight mode
+		If $l_i_Count > $l_i_BestCount Then
+			$l_i_BestCount = $l_i_Count
+			$l_f_BestAvgScore = $l_f_AvgScore
+			$l_i_BestAgent = $l_i_AgentID
+		ElseIf $l_i_Count = $l_i_BestCount Then
+			Local $l_b_BetterScore = ($g_i_FightMode = $g_i_FinisherMode) ? ($l_f_AvgScore < $l_f_BestAvgScore) : ($l_f_AvgScore > $l_f_BestAvgScore)
+			If $l_b_BetterScore Then
+				$l_f_BestAvgScore = $l_f_AvgScore
+				$l_i_BestAgent = $l_i_AgentID
+			EndIf
+		EndIf
+	Next
+
+	Return $l_i_BestAgent
+EndFunc
+
+; Internal: Get group statistics with armor consideration
+Func _GetGroupStatsByDamageType($a_i_AgentID, $a_f_Range, $a_s_DamageType, $a_s_Filter)
+	Local $l_av_Result[2] = [0, 999999] ; [count, avgScore]
+	Local $l_f_TotalScore = 0
+	Local $l_i_Count = 0
+
+	; Get reference position
+	Local $l_f_RefX = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_X)
+	Local $l_f_RefY = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_Y)
+	Local $l_f_RangeSquared = $a_f_Range * $a_f_Range
+
+	; Include the center agent itself
+	Local $l_f_CenterHP = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_HP)
+	Local $l_f_CenterScore = _GetArmorScore($a_i_AgentID, $l_f_CenterHP, $a_s_DamageType)
+	$l_f_TotalScore += $l_f_CenterScore
+	$l_i_Count += 1
+
+	; Check all agents in cache
+	For $l_i_i = 1 To $g_i_AgentCacheCount
+		Local $l_i_CheckID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+
+		; Skip center agent (already counted)
+		If $l_i_CheckID = $a_i_AgentID Then ContinueLoop
+
+		; Apply filter
+		If $a_s_Filter <> "" And Not _ApplyFilters($l_i_CheckID, $a_s_Filter) Then ContinueLoop
+
+		; Calculate distance from center agent
+		Local $l_f_CheckX = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
+		Local $l_f_CheckY = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		Local $l_f_DX = $l_f_CheckX - $l_f_RefX
+		Local $l_f_DY = $l_f_CheckY - $l_f_RefY
+		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
+
+		If $l_f_DistSquared > $l_f_RangeSquared Then ContinueLoop
+
+		; Calculate score with armor
+		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		$l_f_TotalScore += _GetArmorScore($l_i_CheckID, $l_f_HP, $a_s_DamageType)
+		$l_i_Count += 1
+	Next
+
+	$l_av_Result[0] = $l_i_Count
+	If $l_i_Count > 0 Then $l_av_Result[1] = $l_f_TotalScore / $l_i_Count
+
+	Return $l_av_Result
+EndFunc
+
+; Internal: Calculate armor-adjusted score for an agent
+Func _GetArmorScore($a_i_AgentID, $a_f_HP, $a_s_DamageType)
+	Local $l_i_Armor
+	Switch $a_s_DamageType
+		Case "Elemental", "Fire", "Cold", "Lightning", "Earth"
+			$l_i_Armor = UAI_GetElementalArmor($a_i_AgentID)
+		Case "Physical", "Blunt", "Piercing", "Slashing"
+			$l_i_Armor = UAI_GetPhysicalArmor($a_i_AgentID)
+		Case Else
+			$l_i_Armor = UAI_GetBaseArmor($a_i_AgentID)
+	EndSwitch
+
+	Local $l_f_DamageMult = UAI_GetDamageMultiplier($l_i_Armor)
+	Return $a_f_HP / $l_f_DamageMult
+EndFunc
 #EndRegion
 
 #Region Helper

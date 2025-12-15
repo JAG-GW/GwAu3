@@ -453,6 +453,10 @@ Func UAI_Filter_IsAbove50HP($a_i_AgentID)
 	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_HP) > 0.5
 EndFunc
 
+Func UAI_Filter_AgentHasMoreHpThanMe($a_i_AgentID)
+	Return UAI_GetEstimatedCurrentHP($g_i_BestTarget) > UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP)
+EndFunc
+
 Func UAI_Filter_IsMelee($a_i_AgentID)
 	Return UAI_IsMelee($a_i_AgentID)
 EndFunc
