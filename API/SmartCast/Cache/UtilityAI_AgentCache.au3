@@ -368,3 +368,73 @@ EndFunc
 Func UAI_GetPlayerY()
     Return $g_f_PlayerCacheY
 EndFunc
+
+; Get obstacles for pathfinding from agent cache
+; $a_f_Radius = Radius for each obstacle (default 100)
+; $a_f_DetectionRange = Range to detect agents (updates cache)
+; $a_s_CustomFilter = Filter function name(s) separated by | (e.g. "UAI_Filter_IsLivingEnemy|UAI_Filter_IsNPC")
+;                     If empty, returns all NPCs and gadgets (living, non-player)
+; Returns: 2D array [[X, Y, Radius], ...]
+Func UAI_GetObstacles($a_f_Radius = 100, $a_f_DetectionRange = 4000, $a_s_CustomFilter = "")
+	UAI_UpdateAgentCache($a_f_DetectionRange, 0)
+    Local $l_i_Count = $g_i_AgentCacheCount
+    If $l_i_Count = 0 Then
+        Local $l_a_Empty[0][3]
+        Return $l_a_Empty
+    EndIf
+
+    ; First pass: count valid agents
+    Local $l_i_ValidCount = 0
+    For $l_i_i = 1 To $l_i_Count
+        ; Skip player
+        If $l_i_i = $g_i_PlayerCacheIndex Then ContinueLoop
+
+        Local $l_i_AgentID = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+
+        ; Apply custom filters if provided
+        If $a_s_CustomFilter <> "" Then
+            If Not _ApplyFilters($l_i_AgentID, $a_s_CustomFilter) Then ContinueLoop
+        Else
+            ; Default behavior: living NPCs and gadgets
+            Local $l_b_IsNPC = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsLivingType] And $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsNPC]
+            Local $l_b_IsGadget = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsGadgetType]
+            If Not ($l_b_IsNPC Or $l_b_IsGadget) Then ContinueLoop
+            If $l_b_IsNPC And $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsDead] Then ContinueLoop
+        EndIf
+
+        $l_i_ValidCount += 1
+    Next
+
+    If $l_i_ValidCount = 0 Then
+        Local $l_a_Empty[0][3]
+        Return $l_a_Empty
+    EndIf
+
+    ; Second pass: build array
+    Local $l_a_Obstacles[$l_i_ValidCount][3]
+    Local $l_i_Idx = 0
+
+    For $l_i_i = 1 To $l_i_Count
+        If $l_i_i = $g_i_PlayerCacheIndex Then ContinueLoop
+
+        Local $l_i_AgentID = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+
+        ; Apply custom filters if provided
+        If $a_s_CustomFilter <> "" Then
+            If Not _ApplyFilters($l_i_AgentID, $a_s_CustomFilter) Then ContinueLoop
+        Else
+            ; Default behavior: living NPCs and gadgets
+            Local $l_b_IsNPC = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsLivingType] And $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsNPC]
+            Local $l_b_IsGadget = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsGadgetType]
+            If Not ($l_b_IsNPC Or $l_b_IsGadget) Then ContinueLoop
+            If $l_b_IsNPC And $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsDead] Then ContinueLoop
+        EndIf
+
+        $l_a_Obstacles[$l_i_Idx][0] = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_X]
+        $l_a_Obstacles[$l_i_Idx][1] = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_Y]
+        $l_a_Obstacles[$l_i_Idx][2] = $a_f_Radius
+        $l_i_Idx += 1
+    Next
+
+    Return $l_a_Obstacles
+EndFunc

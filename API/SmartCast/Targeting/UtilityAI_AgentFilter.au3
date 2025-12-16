@@ -481,4 +481,12 @@ EndFunc
 Func UAI_Filter_IsNotDeepWounded($a_i_AgentID)
 	Return Not UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsDeepWounded)
 EndFunc
+
+Func UAI_Filter_IsLivingNPCOrGadget($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsGadgetType) Then Return True
+	If Not UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsLivingType) Then Return False
+	If Not UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsNPC) Then Return False
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsDead) Then Return False
+	Return True
+EndFunc
 #EndRegion

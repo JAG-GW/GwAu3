@@ -1,6 +1,6 @@
 #RequireAdmin
 #include "../../API/_GwAu3.au3"
-#include "../../API/Pathfinding/Pathfinder.au3"
+#include "../../API/Pathfinding/_Pathfinder.au3"
 
 Global Const $GC_B_LOAD_LOGGED_CHARS = True
 Opt("GUIOnEventMode", True)
