@@ -137,7 +137,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
         ; Fight if needed
         If $aAggroRange > 0 Then
-            UAI_Fight($aDestX, $aDestY, $aAggroRange, $aFightRangeOut, $aFinisherMode)
+            UAI_Fight($lMyX, $lMyY, $aAggroRange, $aFightRangeOut, $aFinisherMode)
         EndIf
 
         Sleep(32)

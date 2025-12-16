@@ -332,7 +332,7 @@ Func BestTarget_ChaosStorm($a_f_AggroRange)
 	; Spell. Create a Chaos Storm at target foe's location that lasts for 10 seconds. Each second, foes adjacent to this location take 5...21...25 damage and lose 0...2...2 Energy.
 	; Concise description
 	; Spell. Deals 5...21...25 damage and causes 0...2...2 Energy loss each second (10 seconds). Hits foes adjacent to target's initial location.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 78 - $GC_I_SKILL_ID_EPIDEMIC
