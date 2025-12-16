@@ -589,7 +589,7 @@ EndFunc
 ; Skill ID: 2073 - $GC_I_SKILL_ID_WEAPON_OF_AGGRESSION
 Func CanUse_WeaponOfAggression()
 	If Anti_WeaponSpell() Then Return False
-	If UAI_GetPlayerInfo($GC_UAI_AGENT_IsWeaponSpelled) Then False
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_IsWeaponSpelled) Then Return False
 	Return True
 EndFunc
 
