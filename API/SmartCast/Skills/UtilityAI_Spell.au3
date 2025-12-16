@@ -5512,6 +5512,14 @@ Func BestTarget_EbonVanguardAssassinSupport($a_f_AggroRange)
 	; Concise description
 	; green; font-weight: bold;">14...20
 
+	; Priority 1: Monks hexed or conditioned
+	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMonk|UAI_Filter_IsHexedOrConditioned")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Priority 2: Casters hexed or conditioned
+	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster|UAI_Filter_IsHexedOrConditioned")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
 	; Priority 1: Monks
 	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMonk")
 	If $l_i_Target <> 0 Then Return $l_i_Target
