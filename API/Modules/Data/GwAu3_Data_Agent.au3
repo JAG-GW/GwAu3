@@ -833,7 +833,7 @@ Func Agent_GetPlayerInfo($a_i_AgentID = 0, $a_s_Info = "")
         Case "Secondary"
             Return Memory_Read($l_p_AgentPtr + 0x1C, "dword")
         Case "Name"
-            Local $l_p_Name = Memory_Read($l_p_AgentPtr + 0x24, "ptr")
+            Local $l_p_Name = Memory_Read($l_p_AgentPtr + 0x28, "ptr")
             Return Memory_Read($l_p_Name, "wchar[20]")
         Case "PartyLeaderPlayerNumber"
             Return Memory_Read($l_p_AgentPtr + 0x2C, "dword")
