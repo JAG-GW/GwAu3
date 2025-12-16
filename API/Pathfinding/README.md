@@ -139,7 +139,7 @@ PathResult* FindPathWithObstacles(
 ## Usage Example
 
 ```autoit
-#include "API/Pathfinding/_Pathfinder.au3"
+#include "../../API/Pathfinding/_Pathfinder.au3"
 #include "../../API/SmartCast/_UtilityAI.au3"
 $DLL_PATH = "..\..\API\Pathfinding\GWPathfinder.dll"
 
@@ -149,3 +149,7 @@ $obstacles = UAI_GetObstacles(85, 4000, "UAI_Filter_IsLivingNPCOrGadget")
 ; Move to destination, avoiding obstacles, fighting enemies in 1320 range
 Pathfinder_MoveTo(6364, -2729, $obstacles, 1320, 3500, 0)
 ```
+
+## Acknowledgements
+
+Special thanks to **[QuarkyUp](https://github.com/QuarkyUp)** for the inspiration and help with this project.
