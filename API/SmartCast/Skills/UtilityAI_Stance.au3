@@ -899,14 +899,15 @@ EndFunc
 ; Skill ID: 1442 - $GC_I_SKILL_ID_JUNUNDU_TUNNEL
 Func CanUse_JununduTunnel()
 	If Anti_Stance() Then Return False
-	Return True
+	; Stance for movement speed and knockdown on adjacent foes when emerging
+	; Best used when there are adjacent enemies to knockdown
+	If UAI_CountAgents(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy") > 0 Then Return True
+	Return False
 EndFunc
 
 Func BestTarget_JununduTunnel($a_f_AggroRange)
-	; Description
-	; This article is about the player version of Junundu Tunnel. For the monster skill, see Junundu Tunnel (monster skill).
-	; Concise description
-	; knocks-down adjacent foes (3 seconds).
+	; Stance. Invulnerable while tunneling. Knocks-down adjacent foes (3 seconds) when emerging.
+	; Self-target stance
 	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
