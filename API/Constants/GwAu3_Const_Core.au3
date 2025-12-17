@@ -108,7 +108,7 @@ Global $g_i_LastTargetID = 0
 Global $g_p_InstanceInfo     ; Pointer to instance information
 Global $g_p_WorldConst       ; Pointer to world constants
 Global $g_p_Region
-Global $g_d_Move = DllStructCreate('ptr;float;float;float')
+Global $g_d_Move = DllStructCreate('ptr;float;float;dword')
 Global $g_p_Move = DllStructGetPtr($g_d_Move)
 Global $g_f_LastMoveX = 0
 Global $g_f_LastMoveY = 0
@@ -146,7 +146,7 @@ Global $g_d_SetDifficulty = DllStructCreate('ptr;dword')
 Global $g_p_SetDifficulty = DllStructGetPtr($g_d_SetDifficulty)
 Global $g_d_EnterMission = DllStructCreate('ptr;dword')
 Global $g_p_EnterMission = DllStructGetPtr($g_d_EnterMission)
-Global $g_d_FlagHero = DllStructCreate('ptr;dword;dword;dword;dword') 
+Global $g_d_FlagHero = DllStructCreate('ptr;dword;dword;dword;dword')
 Global $g_p_FlagHero = DllStructGetPtr($g_d_FlagHero)
 Global $g_d_FlagAll = DllStructCreate('ptr;dword;dword;dword')
 Global $g_p_FlagAll = DllStructGetPtr($g_d_FlagAll)

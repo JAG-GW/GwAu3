@@ -3,7 +3,7 @@
 #include "Pathfinder_Core.au3"
 
 ; Movement state
-Global $g_aPathfinder_CurrentPath[0][2]
+Global $g_aPathfinder_CurrentPath[0][3]  ; x, y, layer
 Global $g_iPathfinder_CurrentPathIndex = 0
 Global $g_fPathfinder_LastPathUpdateX = 0
 Global $g_fPathfinder_LastPathUpdateY = 0
@@ -120,19 +120,23 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         Else
             Local $lWaypointX = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][0]
             Local $lWaypointY = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][1]
+            Local $lWaypointLayer = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][2]
 
             If _Pathfinder_Distance($lMyX, $lMyY, $lWaypointX, $lWaypointY) < $g_iPathfinder_WaypointReachedDistance Then
                 $g_iPathfinder_CurrentPathIndex += 1
                 If $g_iPathfinder_CurrentPathIndex < UBound($g_aPathfinder_CurrentPath) Then
                     $lWaypointX = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][0]
                     $lWaypointY = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][1]
+                    $lWaypointLayer = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][2]
                 Else
                     $lWaypointX = $aDestX
                     $lWaypointY = $aDestY
+                    $lWaypointLayer = 0
                 EndIf
             EndIf
 
-            Map_Move($lWaypointX, $lWaypointY, 0)
+            ; Use Map_MoveLayer to move to the correct layer (important for bridges)
+            Map_MoveLayer($lWaypointX, $lWaypointY, $lWaypointLayer)
         EndIf
 
         ; Fight if needed
@@ -167,15 +171,15 @@ Func _Pathfinder_GetPath($aStartX, $aStartY, $aDestX, $aDestY, $aObstacles)
     EndIf
 EndFunc
 
-; Smart path simplification that preserves waypoints near obstacles
-; $aPath = 2D array of waypoints [[x, y], ...]
+; Smart path simplification that preserves waypoints near obstacles and layer changes
+; $aPath = 2D array of waypoints [[x, y, layer], ...]
 ; $aObstacles = 2D array of obstacles [[x, y, radius], ...]
 ; $aSimplifyRange = distance threshold for simplification
 Func _Pathfinder_SmartSimplify($aPath, $aObstacles, $aSimplifyRange)
     Local $lPointCount = UBound($aPath)
     If $lPointCount <= 2 Then Return $aPath
 
-    ; Mark which points are critical (near obstacles)
+    ; Mark which points are critical (near obstacles or layer changes)
     Local $lCritical[$lPointCount]
     $lCritical[0] = True ; First point always critical
     $lCritical[$lPointCount - 1] = True ; Last point always critical
@@ -187,6 +191,19 @@ Func _Pathfinder_SmartSimplify($aPath, $aObstacles, $aSimplifyRange)
         $lCritical[$i] = False
         Local $lWpX = $aPath[$i][0]
         Local $lWpY = $aPath[$i][1]
+        Local $lWpLayer = $aPath[$i][2]
+
+        ; Check if layer changes from previous point (critical for bridges!)
+        If $lWpLayer <> $aPath[$i - 1][2] Then
+            $lCritical[$i] = True
+            ContinueLoop
+        EndIf
+
+        ; Check if layer changes to next point (critical for bridges!)
+        If $lWpLayer <> $aPath[$i + 1][2] Then
+            $lCritical[$i] = True
+            ContinueLoop
+        EndIf
 
         ; Check if this waypoint is near any obstacle
         For $j = 0 To UBound($aObstacles) - 1
@@ -217,13 +234,14 @@ Func _Pathfinder_SmartSimplify($aPath, $aObstacles, $aSimplifyRange)
     Next
 
     ; Now simplify non-critical points based on distance
-    Local $lSimplified[$lPointCount][2]
+    Local $lSimplified[$lPointCount][3]  ; x, y, layer
     Local $lSimplifiedCount = 0
     Local $lLastKeptIdx = 0
 
     ; Always keep first point
     $lSimplified[$lSimplifiedCount][0] = $aPath[0][0]
     $lSimplified[$lSimplifiedCount][1] = $aPath[0][1]
+    $lSimplified[$lSimplifiedCount][2] = $aPath[0][2]
     $lSimplifiedCount += 1
 
     For $i = 1 To $lPointCount - 2
@@ -233,6 +251,7 @@ Func _Pathfinder_SmartSimplify($aPath, $aObstacles, $aSimplifyRange)
         If $lCritical[$i] Or $lDistFromLast >= $aSimplifyRange Then
             $lSimplified[$lSimplifiedCount][0] = $aPath[$i][0]
             $lSimplified[$lSimplifiedCount][1] = $aPath[$i][1]
+            $lSimplified[$lSimplifiedCount][2] = $aPath[$i][2]
             $lSimplifiedCount += 1
             $lLastKeptIdx = $i
         EndIf
@@ -241,10 +260,11 @@ Func _Pathfinder_SmartSimplify($aPath, $aObstacles, $aSimplifyRange)
     ; Always keep last point
     $lSimplified[$lSimplifiedCount][0] = $aPath[$lPointCount - 1][0]
     $lSimplified[$lSimplifiedCount][1] = $aPath[$lPointCount - 1][1]
+    $lSimplified[$lSimplifiedCount][2] = $aPath[$lPointCount - 1][2]
     $lSimplifiedCount += 1
 
     ; Resize array to actual count
-    ReDim $lSimplified[$lSimplifiedCount][2]
+    ReDim $lSimplified[$lSimplifiedCount][3]
 
     Return $lSimplified
 EndFunc

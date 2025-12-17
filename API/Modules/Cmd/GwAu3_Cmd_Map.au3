@@ -21,6 +21,17 @@ Func Map_Move($a_f_X, $a_f_Y, $a_f_Randomize = 50)
     Return True
 EndFunc
 
+Func Map_MoveLayer($a_f_X, $a_f_Y, $a_f_Layer = 0)
+    ; Set move data
+    DllStructSetData($g_d_Move, 2, $a_f_X)
+    DllStructSetData($g_d_Move, 3, $a_f_Y)
+    DllStructSetData($g_d_Move, 4, $a_f_Layer)  ; layer number
+
+    Core_Enqueue($g_p_Move, 16)
+
+    Return True
+EndFunc
+
 ;~ Description: Internal use for map travel.
 Func Map_MoveMap($a_i_MapID, $a_i_Region, $a_i_District, $a_i_Language)
     Return Core_SendPacket(0x18, $GC_I_HEADER_PARTY_TRAVEL, $a_i_MapID, $a_i_Region, $a_i_District, $a_i_Language, False)

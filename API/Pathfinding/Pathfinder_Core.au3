@@ -2,7 +2,7 @@
 
 Global $DLL_PATH = ""
 
-Global Const $tagPathPoint = "float x;float y"
+Global Const $tagPathPoint = "float x;float y;int layer"
 Global Const $tagPathResult = "ptr points;int point_count;float total_cost;int error_code;char error_message[256]"
 Global Const $tagMapStats = "int trapezoid_count;int point_count;int teleport_count;int travel_portal_count;int npc_travel_count;int enter_travel_count;int error_code;char error_message[256]"
 Global Const $tagObstacleZone = "float x;float y;float radius"
@@ -58,11 +58,12 @@ Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRa
     Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
     Local $l_p_Points = DllStructGetData($l_t_Result, "points")
 
-    Local $a_Path[$l_i_PointCount][2]
+    Local $a_Path[$l_i_PointCount][3]  ; x, y, layer
     For $i = 0 To $l_i_PointCount - 1
-        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 8))
+        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 12))  ; 12 bytes: float x (4) + float y (4) + int layer (4)
         $a_Path[$i][0] = DllStructGetData($l_t_Point, "x")
         $a_Path[$i][1] = DllStructGetData($l_t_Point, "y")
+        $a_Path[$i][2] = DllStructGetData($l_t_Point, "layer")
     Next
 
     Pathfinder_FreePathResult($l_p_Result)
@@ -138,11 +139,12 @@ Func Pathfinder_FindPathGWWithObstacle($mapID, $startX, $startY, $destX, $destY,
     Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
     Local $l_p_Points = DllStructGetData($l_t_Result, "points")
 
-    Local $a_Path[$l_i_PointCount][2]
+    Local $a_Path[$l_i_PointCount][3]  ; x, y, layer
     For $i = 0 To $l_i_PointCount - 1
-        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 8))
+        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 12))  ; 12 bytes: float x (4) + float y (4) + int layer (4)
         $a_Path[$i][0] = DllStructGetData($l_t_Point, "x")
         $a_Path[$i][1] = DllStructGetData($l_t_Point, "y")
+        $a_Path[$i][2] = DllStructGetData($l_t_Point, "layer")
     Next
 
     Pathfinder_FreePathResult($l_p_Result)
