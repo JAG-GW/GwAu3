@@ -3,17 +3,17 @@
 #Region === Skill Functions ===
 
 ; Get skill slot by skill ID
-Func Skill_GetSlotByID($a_i_SkillID)
+Func Skill_GetSlotByID($a_i_SkillID, $a_i_HeroNumber = 0)
 	For $l_i_i = 1 To 8
-		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($l_i_i, "SkillID")
+		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($l_i_i, "SkillID", $a_i_HeroNumber)
 		If $l_i_SlotSkillID = $a_i_SkillID Then Return $l_i_i
 	Next
 	Return 0
 EndFunc
 
-Func Skill_CheckSlotByID($a_i_SkillID)
+Func Skill_CheckSlotByID($a_i_SkillID, $a_i_HeroNumber = 0)
 	For $l_i_i = 1 To 8
-		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($l_i_i, "SkillID")
+		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($l_i_i, "SkillID", $a_i_HeroNumber)
 		If $l_i_SlotSkillID = $a_i_SkillID Then Return True
 	Next
 	Return False
@@ -98,13 +98,28 @@ Func Party_IsWiped()
 		EndIf
 	Next
 
-	If GetAvailableRezz() = 0 Or $l_i_DeadHeroes >= UBound(Party_GetMembersArray()) - 2 Or Party_GetAverageHealth() < 0.15 Then
+	If Party_GetAvailableRezz() = 0 Or $l_i_DeadHeroes >= UBound(Party_GetMembersArray()) - 2 Or Party_GetAverageHealth() < 0.15 Then
 		Return True
 	EndIf
 
 	Return False
 EndFunc
 
+; returns the number of available rezz skills excluding dead party members, use to force move, aggro and death when no more rezz is available
+Func Party_GetAvailableRezz()
+	Local $l_i_HeroRezzSkills = 0
+	Local $l_i_HeroCount = Party_GetHeroCount()
+	For $aHeroNumber = 1 To $l_i_HeroCount
+		$aHeroPtr = GetHeroPtr($aHeroNumber)
+		For $aSkillSlot = 1 To 8
+			$aSkill = Skill_GetSlotByID($aSkillSlot, $aHeroNumber)
+			If Skill_HasSpecialFlag($aSkill, $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION) Then
+				$l_i_HeroRezzSkills += 1
+			EndIf
+		Next
+	Next
+	Return $l_i_HeroRezzSkills
+EndFunc   ;==>GetAvailableRezz
 #EndRegion === Party Functions ===
 
 #Region === Agent Estimation Functions ===
