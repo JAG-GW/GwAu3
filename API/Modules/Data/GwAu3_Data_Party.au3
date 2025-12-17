@@ -27,6 +27,12 @@ Func Party_GetPartyContextInfo($a_s_Info = "")
             Local $l_i_Flags = Memory_Read($l_p_Ptr + 0x14, "long")
             Return BitAND($l_i_Flags, 0x8) <> 0
 
+        Case "InvitationRequestsCount"
+            Return Memory_Read($l_p_Ptr + 0x28, "long")
+
+        Case "InvitationSendingCount"
+            Return Memory_Read($l_p_Ptr + 0x38, "long")
+
         Case "MyPartyPtr"
             Return Memory_Read($l_p_Ptr + 0x54, "ptr")
 
