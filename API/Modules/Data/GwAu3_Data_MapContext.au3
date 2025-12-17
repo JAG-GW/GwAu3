@@ -163,7 +163,6 @@ Func Map_GetPropArray()
         $l_a_Result[$i + 1] = Memory_Read($l_p_ArrayPtr + ($i * 4), "ptr")
     Next
 
-    Log_Info("Loaded " & $l_i_ArraySize & " map props", "PathFinding", $g_h_EditText)
     Return $l_a_Result
 EndFunc
 
@@ -248,25 +247,102 @@ EndFunc
 Func Map_GetPropModelFileId($a_p_PropPtr)
     If $a_p_PropPtr = 0 Then Return 0
 
-    ; Get h0034[4] pointer
-    Local $l_p_ModelInfo = Memory_Read($a_p_PropPtr + 0x34 + (4 * 4), "ptr")
-    If $l_p_ModelInfo = 0 Then Return 0
+    ; h0034[4] est à offset 0x54
+    Local $l_p_SubDeets = Memory_Read($a_p_PropPtr + 0x54, "ptr")
+    If $l_p_SubDeets = 0 Then Return 0
 
-    ; Get sub_deets[1] which should contain the file hash
-    Local $l_p_FileHash = Memory_Read($l_p_ModelInfo + 0x4, "ptr")
+    ; sub_deets[1] contient le file hash
+    Local $l_p_FileHash = Memory_Read($l_p_SubDeets + 0x4, "ptr")
     If $l_p_FileHash = 0 Then Return 0
 
-    ; Convert file hash to file ID (implementation of FileHashToFileId)
-    Local $l_s_Hash1 = Memory_Read($l_p_FileHash, "wchar")
-    Local $l_s_Hash2 = Memory_Read($l_p_FileHash + 0x2, "wchar")
-    Local $l_s_Hash3 = Memory_Read($l_p_FileHash + 0x4, "wchar")
-    Local $l_s_Hash4 = Memory_Read($l_p_FileHash + 0x6, "wchar")
+    ; Lire les hash values
+    Local $l_i_Hash1 = Memory_Read($l_p_FileHash, "word")
+    Local $l_i_Hash2 = Memory_Read($l_p_FileHash + 0x2, "word")
+    Local $l_i_Hash3 = Memory_Read($l_p_FileHash + 0x4, "word")
+    Local $l_i_Hash4 = Memory_Read($l_p_FileHash + 0x6, "word")
 
-    If $l_s_Hash1 > 0xFF And $l_s_Hash2 > 0xFF And ($l_s_Hash3 = 0 Or ($l_s_Hash3 > 0xFF And $l_s_Hash4 = 0)) Then
-        Return ($l_s_Hash1 - 0xFF00FF) + $l_s_Hash2 * 0xFF00
+    If $l_i_Hash1 > 0xFF And $l_i_Hash2 > 0xFF Then
+        If $l_i_Hash3 = 0 Or ($l_i_Hash3 > 0xFF And $l_i_Hash4 = 0) Then
+            ; Formule exacte: h1 + h2 * 0xFF00 - 0xFF00FF
+            Local $l_i_Result = $l_i_Hash1 + $l_i_Hash2 * 0xFF00 - 0xFF00FF
+            Return $l_i_Result
+        EndIf
     EndIf
 
     Return 0
+EndFunc
+
+Func Map_GetNearestTravelPortal($a_f_X, $a_f_Y)
+    ; Get all map props
+    Local $l_a_Props = Map_GetPropArray()
+    If Not IsArray($l_a_Props) Or $l_a_Props[0] = 0 Then Return 0
+
+    Local $l_f_NearestDist = 999999999
+    Local $l_a_NearestPortal[4] = [0, 0, 0, -1] ; X, Y, Z, Layer
+    Local $l_b_FoundPortal = False
+
+    ; Iterate through all props
+    For $i = 1 To $l_a_Props[0]
+        Local $l_p_Prop = $l_a_Props[$i]
+        If $l_p_Prop = 0 Then ContinueLoop
+
+        ; Check if this prop is a travel portal
+        If Not Map_IsTravelPortal($l_p_Prop) Then ContinueLoop
+
+        ; Get portal position (MapProp structure: position is at offset 0x20)
+        Local $l_f_PropX = Memory_Read($l_p_Prop + 0x20, "float")
+        Local $l_f_PropY = Memory_Read($l_p_Prop + 0x24, "float")
+        Local $l_f_PropZ = Memory_Read($l_p_Prop + 0x28, "float")
+
+        ; Calculate distance
+        Local $l_f_DX = $l_f_PropX - $a_f_X
+        Local $l_f_DY = $l_f_PropY - $a_f_Y
+        Local $l_f_Dist = Sqrt($l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY)
+
+        ; Check if this is the nearest portal
+        If $l_f_Dist < $l_f_NearestDist Then
+            $l_f_NearestDist = $l_f_Dist
+            $l_a_NearestPortal[0] = $l_f_PropX
+            $l_a_NearestPortal[1] = $l_f_PropY
+            $l_b_FoundPortal = True
+        EndIf
+    Next
+
+    If Not $l_b_FoundPortal Then Return 0
+
+    Return $l_a_NearestPortal
+EndFunc
+
+Func Map_PointInPathingMap($aX, $aY, $aTrapezoidPtr, $aTrapezoidCount)
+    For $i = 0 To $aTrapezoidCount - 1
+        Local $lTrapPtr = Map_GetTrapezoid($aTrapezoidPtr, $i)
+
+        Local $lYT = Map_GetTrapezoidInfo($lTrapPtr, "YT")
+        Local $lYB = Map_GetTrapezoidInfo($lTrapPtr, "YB")
+
+        ; Test rapide sur Y
+        If $aY < $lYB Or $aY > $lYT Then ContinueLoop
+
+        Local $lXTL = Map_GetTrapezoidInfo($lTrapPtr, "XTL")
+        Local $lXTR = Map_GetTrapezoidInfo($lTrapPtr, "XTR")
+        Local $lXBL = Map_GetTrapezoidInfo($lTrapPtr, "XBL")
+        Local $lXBR = Map_GetTrapezoidInfo($lTrapPtr, "XBR")
+
+        ; Interpolation pour trouver les bornes X à cette position Y
+        Local $lT = 0
+        If $lYT <> $lYB Then
+            $lT = ($aY - $lYB) / ($lYT - $lYB)
+        EndIf
+
+        Local $lXLeft = $lXBL + $lT * ($lXTL - $lXBL)
+        Local $lXRight = $lXBR + $lT * ($lXTR - $lXBR)
+
+        If $aX >= $lXLeft And $aX <= $lXRight Then
+            Return True
+        EndIf
+    Next
+
+    Return False
 EndFunc
 
 Func Map_IsTravelPortal($a_p_PropPtr)
@@ -275,11 +351,16 @@ Func Map_IsTravelPortal($a_p_PropPtr)
     Local $l_i_ModelFileId = Map_GetPropModelFileId($a_p_PropPtr)
 
     Switch $l_i_ModelFileId
-        Case 0x4e6b2 ; Eotn asura gate
-            Return True
-        Case 0x3c5ac ; Eotn, Nightfall
-            Return True
-        Case 0xa825  ; Prophecies, Factions
+        Case 0x4e6b2, _ ; Eotn asura gate
+             0x3c5ac, _ ; Eotn, Nightfall
+             0xa825,  _ ; Prophecies, Factions
+             0x4e6f2, _
+             0xE723,  _
+             0x4714e, _
+             0x4610A, _
+             0x4f2a4, _
+             0x4f35a, _
+             0x858b
             Return True
         Case Else
             Return False

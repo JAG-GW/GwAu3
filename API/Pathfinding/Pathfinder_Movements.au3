@@ -30,7 +30,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     Local $lMyOldMap = Map_GetMapID()
     Local $lMapLoadingOld = Map_GetInstanceInfo("Type")
 
-;~     If Agent_GetAgentInfo(-2, "IsDead") Then Return False
+    If Party_GetPartyContextInfo("IsDefeated") Then Return False
 
     ; Determine obstacle mode
     Local $lIsDynamicObstacles = IsString($aObstacles) And $aObstacles <> "" And $aObstacles <> "0"
@@ -69,7 +69,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         ; Check for map change or death
         If Map_GetMapID() <> $lMyOldMap Then Return False
         If Map_GetInstanceInfo("Type") <> $lMapLoadingOld Then Return False
-;~         If Agent_GetAgentInfo(-2, "IsDead") Then Return False
+        If Party_GetPartyContextInfo("IsDefeated") Then Return False
 
         $lMyX = Agent_GetAgentInfo(-2, "X")
         $lMyY = Agent_GetAgentInfo(-2, "Y")

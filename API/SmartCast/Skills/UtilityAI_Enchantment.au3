@@ -239,6 +239,7 @@ EndFunc
 ; Skill ID: 116 - $GC_I_SKILL_ID_DARK_AURA
 Func CanUse_DarkAura()
 	If Anti_Enchantment() Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_DARK_AURA, $GC_UAI_EFFECT_TimeRemaining) > 5000 Then Return False
 	Return True
 EndFunc
 
@@ -247,7 +248,7 @@ Func BestTarget_DarkAura($a_f_AggroRange)
 	; This article is about the skill.&#32;&#32;For the blessing from an avatar, see Dark Aura (blessing).&#32;&#32;For the blessing during Deactivating R.O.X., see Dark Aura (Deactivating R.O.X.).
 	; Concise description
 	; green; font-weight: bold;">5...41...50
-	Return 0
+	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 119 - $GC_I_SKILL_ID_BLOOD_IS_POWER
@@ -3286,7 +3287,7 @@ EndFunc
 ; Skill ID: 2139 - $GC_I_SKILL_ID_MASOCHISM
 Func CanUse_Masochism()
 	If Anti_Enchantment() Then Return False
-	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_MASOCHISM, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_MASOCHISM, $GC_UAI_EFFECT_TimeRemaining) > 5000 Then Return False
 	Return True
 EndFunc
 
@@ -3764,6 +3765,7 @@ EndFunc
 ; Skill ID: 3423 - $GC_I_SKILL_ID_SOUL_TAKER
 Func CanUse_SoulTaker()
 	If Anti_Enchantment() Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_SOUL_TAKER, $GC_UAI_EFFECT_TimeRemaining) > 5000 Then Return False
 	Return True
 EndFunc
 

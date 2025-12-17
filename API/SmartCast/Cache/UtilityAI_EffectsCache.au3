@@ -7,6 +7,8 @@ Global Enum $GC_UAI_EFFECT_SkillID, _
 	$GC_UAI_EFFECT_CasterID, _
 	$GC_UAI_EFFECT_Duration, _
 	$GC_UAI_EFFECT_Timestamp, _
+	$GC_UAI_EFFECT_TimeElapsed, _
+	$GC_UAI_EFFECT_TimeRemaining, _
 	$GC_UAI_EFFECT_COUNT
 
 ; ========== Buff Structure Properties ==========
@@ -229,7 +231,17 @@ Func UAI_GetAgentEffectInfo($a_i_AgentID, $a_i_SkillID, $a_i_Property)
 	Local $l_i_Count = $g_ai_EffectsCount[$l_i_Index]
 	For $l_i_i = 0 To $l_i_Count - 1
 		If $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$GC_UAI_EFFECT_SkillID] = $a_i_SkillID Then
-			Return $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$a_i_Property]
+			; Handle dynamic properties (calculated, not cached)
+			If $a_i_Property = $GC_UAI_EFFECT_TimeElapsed Then
+				Local $l_i_Timestamp = $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$GC_UAI_EFFECT_Timestamp]
+				Return BitAND(Skill_GetSkillTimer() - $l_i_Timestamp, 0xFFFFFFFF)
+			ElseIf $a_i_Property = $GC_UAI_EFFECT_TimeRemaining Then
+				Local $l_i_Timestamp = $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$GC_UAI_EFFECT_Timestamp]
+				Local $l_f_Duration = $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$GC_UAI_EFFECT_Duration]
+				Return $l_f_Duration * 1000 - BitAND(Skill_GetSkillTimer() - $l_i_Timestamp, 0xFFFFFFFF)
+			Else
+				Return $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$a_i_Property]
+			EndIf
 		EndIf
 	Next
 
@@ -244,7 +256,17 @@ Func UAI_GetPlayerEffectInfo($a_i_SkillID, $a_i_Property)
 	Local $l_i_Count = $g_ai_EffectsCount[$g_i_PlayerCacheIndex]
 	For $l_i_i = 0 To $l_i_Count - 1
 		If $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_SkillID] = $a_i_SkillID Then
-			Return $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$a_i_Property]
+			; Handle dynamic properties (calculated, not cached)
+			If $a_i_Property = $GC_UAI_EFFECT_TimeElapsed Then
+				Local $l_i_Timestamp = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_Timestamp]
+				Return BitAND(Skill_GetSkillTimer() - $l_i_Timestamp, 0xFFFFFFFF)
+			ElseIf $a_i_Property = $GC_UAI_EFFECT_TimeRemaining Then
+				Local $l_i_Timestamp = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_Timestamp]
+				Local $l_f_Duration = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_Duration]
+				Return $l_f_Duration * 1000 - BitAND(Skill_GetSkillTimer() - $l_i_Timestamp, 0xFFFFFFFF)
+			Else
+				Return $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$a_i_Property]
+			EndIf
 		EndIf
 	Next
 

@@ -285,7 +285,7 @@ EndFunc
 ; Skill ID: 1773 - $GC_I_SKILL_ID_SOLDIERS_FURY
 Func CanUse_SoldiersFury()
 	If Anti_EchoRefrain() Then Return False
-	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_SOLDIERS_FURY, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_SOLDIERS_FURY, $GC_UAI_EFFECT_TimeRemaining) > 5000 Then Return False
 	Return True
 EndFunc
 
@@ -300,7 +300,7 @@ EndFunc
 ; Skill ID: 1774 - $GC_I_SKILL_ID_AGGRESSIVE_REFRAIN
 Func CanUse_AggressiveRefrain()
 	If Anti_EchoRefrain() Then Return False
-	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AGGRESSIVE_REFRAIN, $GC_UAI_EFFECT_Timestamp) > 5000 Then Return False
+	If UAI_GetPlayerEffectInfo($GC_I_SKILL_ID_AGGRESSIVE_REFRAIN, $GC_UAI_EFFECT_TimeRemaining) > 5000 Then Return False
 	Return True
 EndFunc
 
