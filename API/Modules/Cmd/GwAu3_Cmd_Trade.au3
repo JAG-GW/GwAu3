@@ -47,7 +47,7 @@ EndFunc
 
 ;~ Description: Initiates a trade with a player based on AgentID
 Func Trade_InitiateTrade($a_v_Agent)
-    DllStructSetData($g_d_TradeInitiate, 2, 0x100001A0)
+    DllStructSetData($g_d_TradeInitiate, 2, 0x100001A3)
     DllStructSetData($g_d_TradeInitiate, 3, Agent_ConvertID($a_v_Agent))
     Core_Enqueue($g_p_TradeInitiate, 12)
 EndFunc   ;==>Trade_InitiateTrade
