@@ -28,7 +28,7 @@ Func UAI_CanCast($a_i_SkillSlot)
 
 	;~ ADRENALINE
 	If UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Adrenaline) <> 0 Then
-		If UAI_GetDynamicSkillInfo($a_i_SkillSlot, $GC_UAI_DYNAMIC_SKILL_Adrenaline) < UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Adrenaline) Then Return False
+		If UAI_GetDynamicSkillInfo($a_i_SkillSlot, $GC_UAI_DYNAMIC_SKILL_Adrenaline) >= UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Adrenaline) Then Return True
 	EndIf
 
 	;~ HEALTH COST (Sacrifice spells + Masochism effect on ALL spells)

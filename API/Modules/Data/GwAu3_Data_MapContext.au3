@@ -280,6 +280,7 @@ Func Map_GetNearestTravelPortal($a_f_X, $a_f_Y, $a_f_OffsetDistance = 50)
     Local $l_f_NearestDist = 999999999
     Local $l_a_NearestPortal[6] = [0, 0, 0, 0, 0, 0] ; X, Y, Z, RotationAngle, RotationCos, RotationSin
     Local $l_b_FoundPortal = False
+    Local $l_f_PlayerToPortalX = 0, $l_f_PlayerToPortalY = 0
 
     ; Iterate through all props
     For $i = 1 To $l_a_Props[0]
@@ -308,17 +309,34 @@ Func Map_GetNearestTravelPortal($a_f_X, $a_f_Y, $a_f_OffsetDistance = 50)
             $l_a_NearestPortal[3] = Memory_Read($l_p_Prop + 0x38, "float") ; rotation_angle
             $l_a_NearestPortal[4] = Memory_Read($l_p_Prop + 0x3C, "float") ; rotation_cos
             $l_a_NearestPortal[5] = Memory_Read($l_p_Prop + 0x40, "float") ; rotation_sin
+            $l_f_PlayerToPortalX = $l_f_DX
+            $l_f_PlayerToPortalY = $l_f_DY
             $l_b_FoundPortal = True
         EndIf
     Next
 
     If Not $l_b_FoundPortal Then Return 0
 
-    ; Calculate a point beyond the portal center using the rotation
-    ; The portal "faces" a direction based on its rotation
-    ; We offset the position in that direction to ensure we cross through
-    Local $l_f_TargetX = $l_a_NearestPortal[0] + $l_a_NearestPortal[4] * $a_f_OffsetDistance ; X + cos * offset
-    Local $l_f_TargetY = $l_a_NearestPortal[1] + $l_a_NearestPortal[5] * $a_f_OffsetDistance ; Y + sin * offset
+    ; Auto-detect offset direction using dot product
+    ; Compare portal facing direction (cos, sin) with player-to-portal direction
+    ; Dot product: if positive, portal faces same direction as player approach, go forward
+    ; If negative, portal faces toward player, we need to go through (also forward relative to portal)
+    Local $l_f_PortalCos = $l_a_NearestPortal[4]
+    Local $l_f_PortalSin = $l_a_NearestPortal[5]
+
+    ; Dot product between portal direction and player-to-portal vector
+    Local $l_f_DotProduct = $l_f_PortalCos * $l_f_PlayerToPortalX + $l_f_PortalSin * $l_f_PlayerToPortalY
+
+    ; If dot product is positive, portal faces away from player, offset in portal direction
+    ; If negative, portal faces toward player, offset in opposite direction (to go through)
+    Local $l_f_SignedOffset = $a_f_OffsetDistance
+    If $l_f_DotProduct < 0 Then
+        $l_f_SignedOffset = -$a_f_OffsetDistance
+    EndIf
+
+    ; Calculate target point beyond the portal center
+    Local $l_f_TargetX = $l_a_NearestPortal[0] + $l_f_PortalCos * $l_f_SignedOffset
+    Local $l_f_TargetY = $l_a_NearestPortal[1] + $l_f_PortalSin * $l_f_SignedOffset
 
     Local $l_a_Result[4] = [$l_f_TargetX, $l_f_TargetY, $l_a_NearestPortal[2], 0]
     Return $l_a_Result

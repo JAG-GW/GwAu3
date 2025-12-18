@@ -620,6 +620,71 @@ EndFunc
 ;~     Local $l_a_AgentArray = Memory_ReadArray($mAgentBase, 0x8)
 ;~     Return $l_a_AgentArray
 ;~ EndFunc
+
+; Returns an array of obstacles (agents matching filter) formatted for Pathfinder_FindPathGWWithObstacle
+; $a_f_Range = Range from reference agent to search for agents
+; $a_f_Radius = Radius of each obstacle zone (default 150)
+; $a_s_Filter = Filter function name(s) separated by | (e.g. "Agent_Filter_IsLivingEnemy")
+; $a_i_RefAgentID = Reference agent for distance calculation (default -2 = player)
+; Returns: 2D array [[x, y, radius], [x, y, radius], ...] or empty array if no matches
+Func Agent_GetAgentsAsObstacles($a_f_Range = 2500, $a_f_Radius = 150, $a_s_Filter = "", $a_i_RefAgentID = -2)
+    Local $l_f_RefX = Agent_GetAgentInfo($a_i_RefAgentID, "X")
+    Local $l_f_RefY = Agent_GetAgentInfo($a_i_RefAgentID, "Y")
+    Local $l_f_RangeSquared = $a_f_Range * $a_f_Range
+
+    Local $l_a_AgentArray = Agent_GetAgentArray(0xDB) ; 0xDB = Living type
+    If Not IsArray($l_a_AgentArray) Or $l_a_AgentArray[0] = 0 Then
+        Local $l_a_Empty[0][3]
+        Return $l_a_Empty
+    EndIf
+
+    ; First pass: count valid agents
+    Local $l_i_Count = 0
+    Local $l_a_TempObstacles[$l_a_AgentArray[0] + 1][3]
+
+    For $i = 1 To $l_a_AgentArray[0]
+        Local $l_p_AgentPtr = $l_a_AgentArray[$i]
+        If $l_p_AgentPtr = 0 Then ContinueLoop
+
+        ; Get agent ID for filter
+        Local $l_i_AgentID = Agent_GetAgentInfo($l_p_AgentPtr, "ID")
+
+        ; Apply filter(s)
+        If $a_s_Filter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_Filter) Then ContinueLoop
+
+        ; Get position
+        Local $l_f_X = Agent_GetAgentInfo($l_p_AgentPtr, "X")
+        Local $l_f_Y = Agent_GetAgentInfo($l_p_AgentPtr, "Y")
+
+        ; Check distance
+        Local $l_f_DX = $l_f_X - $l_f_RefX
+        Local $l_f_DY = $l_f_Y - $l_f_RefY
+        Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
+        If $l_f_DistSquared > $l_f_RangeSquared Then ContinueLoop
+
+        ; Add to obstacles
+        $l_a_TempObstacles[$l_i_Count][0] = $l_f_X
+        $l_a_TempObstacles[$l_i_Count][1] = $l_f_Y
+        $l_a_TempObstacles[$l_i_Count][2] = $a_f_Radius
+        $l_i_Count += 1
+    Next
+
+    ; Resize to actual count
+    If $l_i_Count = 0 Then
+        Local $l_a_Empty[0][3]
+        Return $l_a_Empty
+    EndIf
+
+    Local $l_a_Result[$l_i_Count][3]
+    For $i = 0 To $l_i_Count - 1
+        $l_a_Result[$i][0] = $l_a_TempObstacles[$i][0]
+        $l_a_Result[$i][1] = $l_a_TempObstacles[$i][1]
+        $l_a_Result[$i][2] = $l_a_TempObstacles[$i][2]
+    Next
+
+    Return $l_a_Result
+EndFunc
+
 #EndRegion Agent Related
 
 Func Agent_GetDistance($a_i_Agent1ID, $a_i_Agent2ID = 0)
