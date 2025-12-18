@@ -5,14 +5,13 @@
 ; Movement state
 Global $g_aPathfinder_CurrentPath[0][3]  ; x, y, layer
 Global $g_iPathfinder_CurrentPathIndex = 0
-Global $g_fPathfinder_LastPathUpdateX = 0
-Global $g_fPathfinder_LastPathUpdateY = 0
+Global $g_hPathfinder_LastPathUpdateTime = 0
 
 ; Configuration
-Global $g_iPathfinder_PathUpdateDistance = 500      ; Distance before recalculating path
+Global $g_iPathfinder_PathUpdateInterval = 500      ; Interval before recalculating path (ms)
 Global $g_iPathfinder_WaypointReachedDistance = 100 ; Distance to consider waypoint reached
-Global $g_iPathfinder_SimplifyRange = 1250          ; Path simplification range
-Global $g_iPathfinder_ObstacleUpdateInterval = 500  ; Interval for dynamic obstacle updates (ms)
+Global $g_iPathfinder_SimplifyRange = 400           ; Path simplification range
+Global $g_iPathfinder_ObstacleUpdateInterval = 250  ; Interval for dynamic obstacle updates (ms)
 Global $g_iPathfinder_StuckCheckInterval = 1000     ; Interval to check if stuck (ms)
 Global $g_iPathfinder_StuckDistance = 50            ; If moved less than this, consider stuck
 
@@ -27,10 +26,36 @@ Global $g_iPathfinder_StuckDistance = 50            ; If moved less than this, c
 ; $aFinisherMode = Finisher mode for UAI_Fight
 ; Returns: True if destination reached, False if interrupted
 Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $aFightRangeOut = 3500, $aFinisherMode = 0)
+    ; Initialize DLL if not already loaded
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then
+        If Not Pathfinder_Initialize() Then
+            ; Fallback to direct movement if DLL fails
+            Map_Move($aDestX, $aDestY, 0)
+            Return False
+        EndIf
+    EndIf
+
     Local $lMyOldMap = Map_GetMapID()
     Local $lMapLoadingOld = Map_GetInstanceInfo("Type")
+    Local $lMyX = Agent_GetAgentInfo(-2, "X")
+    Local $lMyY = Agent_GetAgentInfo(-2, "Y")
 
-    If Party_GetPartyContextInfo("IsDefeated") Then Return False
+	; Map was not full loaded
+	If $lMyX = 0 Or $lMyY = 0 Or $lMyOldMap = 0 Or $lMapLoadingOld = $GC_I_MAP_TYPE_LOADING Then
+		Do
+			Sleep(16)
+		Until Map_GetMapID() <> 0 And (Agent_GetAgentInfo(-2, "X") <> 0 Or Agent_GetAgentInfo(-2, "Y") <> 0)
+
+		$lMyX = Agent_GetAgentInfo(-2, "X")
+		$lMyY = Agent_GetAgentInfo(-2, "Y")
+		$lMyOldMap = Map_GetMapID()
+		$lMapLoadingOld = Map_GetInstanceInfo("Type")
+	EndIf
+
+    If Party_GetPartyContextInfo("IsDefeated") Then
+        Pathfinder_Shutdown()
+        Return False
+    EndIf
 
     ; Determine obstacle mode
     Local $lIsDynamicObstacles = IsString($aObstacles) And $aObstacles <> "" And $aObstacles <> "0"
@@ -42,21 +67,16 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         $lCurrentObstacles = $aObstacles
     EndIf
 
-    ; Get current position and calculate initial path
-    Local $lMyX = Agent_GetAgentInfo(-2, "X")
-    Local $lMyY = Agent_GetAgentInfo(-2, "Y")
-
     Local $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $aDestX, $aDestY, $lCurrentObstacles)
     If Not IsArray($lPath) Or UBound($lPath) = 0 Then
         Map_Move($aDestX, $aDestY, 0)
-        Return False
+;~         Return
     EndIf
 
     ; Initialize path tracking
     $g_aPathfinder_CurrentPath = $lPath
     $g_iPathfinder_CurrentPathIndex = 0
-    $g_fPathfinder_LastPathUpdateX = $lMyX
-    $g_fPathfinder_LastPathUpdateY = $lMyY
+    $g_hPathfinder_LastPathUpdateTime = TimerInit()
 
     Local $lLastObstacleUpdate = TimerInit()
     Local $lLastStuckCheckTime = TimerInit()
@@ -67,9 +87,18 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     ; Main movement loop
     Do
         ; Check for map change or death
-        If Map_GetMapID() <> $lMyOldMap Then Return False
-        If Map_GetInstanceInfo("Type") <> $lMapLoadingOld Then Return False
-        If Party_GetPartyContextInfo("IsDefeated") Then Return False
+        If Map_GetMapID() <> $lMyOldMap Then
+            Pathfinder_Shutdown()
+            Return False
+        EndIf
+        If Map_GetInstanceInfo("Type") <> $lMapLoadingOld Then
+            Pathfinder_Shutdown()
+            Return False
+        EndIf
+        If Party_GetPartyContextInfo("IsDefeated") Then
+            Pathfinder_Shutdown()
+            Return False
+        EndIf
 
         $lMyX = Agent_GetAgentInfo(-2, "X")
         $lMyY = Agent_GetAgentInfo(-2, "Y")
@@ -102,15 +131,13 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
             $lLastStuckCheckTime = TimerInit()
         EndIf
 
-        ; Recalculate path if needed
-        Local $lDistFromLastUpdate = _Pathfinder_Distance($lMyX, $lMyY, $g_fPathfinder_LastPathUpdateX, $g_fPathfinder_LastPathUpdateY)
-        If $lDistFromLastUpdate > $g_iPathfinder_PathUpdateDistance Or $lNeedPathUpdate Then
+        ; Recalculate path if needed (based on time interval)
+        If TimerDiff($g_hPathfinder_LastPathUpdateTime) > $g_iPathfinder_PathUpdateInterval Or $lNeedPathUpdate Then
             $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $aDestX, $aDestY, $lCurrentObstacles)
             If IsArray($lPath) And UBound($lPath) > 0 Then
                 $g_aPathfinder_CurrentPath = $lPath
                 $g_iPathfinder_CurrentPathIndex = 0
-                $g_fPathfinder_LastPathUpdateX = $lMyX
-                $g_fPathfinder_LastPathUpdateY = $lMyY
+                $g_hPathfinder_LastPathUpdateTime = TimerInit()
             EndIf
         EndIf
 
@@ -140,13 +167,14 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         EndIf
 
         ; Fight if needed
-        If $aAggroRange > 0 Then
-            UAI_Fight($lMyX, $lMyY, $aAggroRange, $aFightRangeOut, $aFinisherMode)
-        EndIf
+        If Map_GetInstanceInfo("Type") = $GC_I_MAP_TYPE_EXPLORABLE Then UAI_Fight($lMyX, $lMyY, $aAggroRange, $aFightRangeOut, $aFinisherMode)
 
         Sleep(32)
 
     Until Agent_GetDistanceToXY($aDestX, $aDestY) < 150
+
+    ; Shutdown DLL and free memory
+    Pathfinder_Shutdown()
 
     Return True
 EndFunc
@@ -157,7 +185,7 @@ Func _Pathfinder_GetPath($aStartX, $aStartY, $aDestX, $aDestY, $aObstacles)
 
     If IsArray($aObstacles) And UBound($aObstacles) > 0 Then
         ; Get raw path with minimal simplification from DLL
-        Local $lPath = Pathfinder_FindPathGWWithObstacle($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, $aObstacles, 50)
+        Local $lPath = Pathfinder_FindPathGWWithObstacle($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, $aObstacles, 100)
         If @error Then Return 0
 
         ; Apply smart simplification that preserves obstacle-avoidance waypoints
@@ -326,9 +354,9 @@ Func Pathfinder_GetCurrentWaypointIndex()
     Return $g_iPathfinder_CurrentPathIndex
 EndFunc
 
-; Set path update distance threshold
-Func Pathfinder_SetPathUpdateDistance($aDistance)
-    $g_iPathfinder_PathUpdateDistance = $aDistance
+; Set path update interval (in ms)
+Func Pathfinder_SetPathUpdateInterval($aInterval)
+    $g_iPathfinder_PathUpdateInterval = $aInterval
 EndFunc
 
 ; Set waypoint reached distance threshold

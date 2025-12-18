@@ -272,13 +272,13 @@ Func Map_GetPropModelFileId($a_p_PropPtr)
     Return 0
 EndFunc
 
-Func Map_GetNearestTravelPortal($a_f_X, $a_f_Y)
+Func Map_GetNearestTravelPortal($a_f_X, $a_f_Y, $a_f_OffsetDistance = 50)
     ; Get all map props
     Local $l_a_Props = Map_GetPropArray()
     If Not IsArray($l_a_Props) Or $l_a_Props[0] = 0 Then Return 0
 
     Local $l_f_NearestDist = 999999999
-    Local $l_a_NearestPortal[4] = [0, 0, 0, -1] ; X, Y, Z, Layer
+    Local $l_a_NearestPortal[6] = [0, 0, 0, 0, 0, 0] ; X, Y, Z, RotationAngle, RotationCos, RotationSin
     Local $l_b_FoundPortal = False
 
     ; Iterate through all props
@@ -304,13 +304,24 @@ Func Map_GetNearestTravelPortal($a_f_X, $a_f_Y)
             $l_f_NearestDist = $l_f_Dist
             $l_a_NearestPortal[0] = $l_f_PropX
             $l_a_NearestPortal[1] = $l_f_PropY
+            $l_a_NearestPortal[2] = $l_f_PropZ
+            $l_a_NearestPortal[3] = Memory_Read($l_p_Prop + 0x38, "float") ; rotation_angle
+            $l_a_NearestPortal[4] = Memory_Read($l_p_Prop + 0x3C, "float") ; rotation_cos
+            $l_a_NearestPortal[5] = Memory_Read($l_p_Prop + 0x40, "float") ; rotation_sin
             $l_b_FoundPortal = True
         EndIf
     Next
 
     If Not $l_b_FoundPortal Then Return 0
 
-    Return $l_a_NearestPortal
+    ; Calculate a point beyond the portal center using the rotation
+    ; The portal "faces" a direction based on its rotation
+    ; We offset the position in that direction to ensure we cross through
+    Local $l_f_TargetX = $l_a_NearestPortal[0] + $l_a_NearestPortal[4] * $a_f_OffsetDistance ; X + cos * offset
+    Local $l_f_TargetY = $l_a_NearestPortal[1] + $l_a_NearestPortal[5] * $a_f_OffsetDistance ; Y + sin * offset
+
+    Local $l_a_Result[4] = [$l_f_TargetX, $l_f_TargetY, $l_a_NearestPortal[2], 0]
+    Return $l_a_Result
 EndFunc
 
 Func Map_PointInPathingMap($aX, $aY, $aTrapezoidPtr, $aTrapezoidCount)

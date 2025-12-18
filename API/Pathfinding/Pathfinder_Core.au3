@@ -1,6 +1,7 @@
 #include-once
 
 Global $DLL_PATH = ""
+Global $g_hPathfinderDLL = 0  ; Handle to loaded DLL
 
 Global Const $tagPathPoint = "float x;float y;int layer"
 Global Const $tagPathResult = "ptr points;int point_count;float total_cost;int error_code;char error_message[256]"
@@ -9,7 +10,15 @@ Global Const $tagObstacleZone = "float x;float y;float radius"
 
 
 Func Pathfinder_Initialize()
-    Local $result = DllCall($DLL_PATH, "int:cdecl", "Initialize")
+    ; Load DLL if not already loaded
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then
+        $g_hPathfinderDLL = DllOpen($DLL_PATH)
+        If $g_hPathfinderDLL = -1 Then
+            Return False
+        EndIf
+    EndIf
+
+    Local $result = DllCall($g_hPathfinderDLL, "int:cdecl", "Initialize")
     If @error Then
         Return False
     EndIf
@@ -20,11 +29,15 @@ Func Pathfinder_Initialize()
 EndFunc
 
 Func Pathfinder_Shutdown()
-    DllCall($DLL_PATH, "none:cdecl", "Shutdown")
+    If $g_hPathfinderDLL <> 0 And $g_hPathfinderDLL <> -1 Then
+        DllCall($g_hPathfinderDLL, "none:cdecl", "Shutdown")
+        DllClose($g_hPathfinderDLL)
+        $g_hPathfinderDLL = 0
+    EndIf
 EndFunc
 
 Func Pathfinder_FindPathGWRaw($mapID, $startX, $startY, $destX, $destY, $simplifyRange = 1250)
-    Local $result = DllCall($DLL_PATH, "ptr:cdecl", "FindPath", _
+    Local $result = DllCall($g_hPathfinderDLL, "ptr:cdecl", "FindPath", _
         "int", $mapID, _
         "float", $startX, _
         "float", $startY, _
@@ -72,7 +85,7 @@ Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRa
 EndFunc
 
 Func Pathfinder_FreePathResult($pResult)
-    DllCall($DLL_PATH, "none:cdecl", "FreePathResult", "ptr", $pResult)
+    DllCall($g_hPathfinderDLL, "none:cdecl", "FreePathResult", "ptr", $pResult)
 EndFunc
 
 ; Find a path with obstacle avoidance (Raw version - returns pointer)
@@ -101,7 +114,7 @@ Func Pathfinder_FindPathGWWithObstacleRaw($mapID, $startX, $startY, $destX, $des
     EndIf
 
     ; Call FindPathWithObstacles
-    Local $result = DllCall($DLL_PATH, "ptr:cdecl", "FindPathWithObstacles", _
+    Local $result = DllCall($g_hPathfinderDLL, "ptr:cdecl", "FindPathWithObstacles", _
         "int", $mapID, _
         "float", $startX, _
         "float", $startY, _
@@ -153,14 +166,14 @@ Func Pathfinder_FindPathGWWithObstacle($mapID, $startX, $startY, $destX, $destY,
 EndFunc
 
 Func Pathfinder_IsMapAvailable($mapID)
-    Local $result = DllCall($DLL_PATH, "int:cdecl", "IsMapAvailable", "int", $mapID)
+    Local $result = DllCall($g_hPathfinderDLL, "int:cdecl", "IsMapAvailable", "int", $mapID)
     If @error Then Return False
     Return $result[0] = 1
 EndFunc
 
 Func Pathfinder_GetAvailableMaps()
     Local $count = 0
-    Local $result = DllCall($DLL_PATH, "ptr:cdecl", "GetAvailableMaps", "int*", $count)
+    Local $result = DllCall($g_hPathfinderDLL, "ptr:cdecl", "GetAvailableMaps", "int*", $count)
     If @error Or $result[0] = 0 Then
         Return SetError(1, 0, 0)
     EndIf
@@ -173,13 +186,13 @@ Func Pathfinder_GetAvailableMaps()
         $mapIds[$i] = DllStructGetData(DllStructCreate("int", $pMapList + $i * 4), 1)
     Next
 
-    DllCall($DLL_PATH, "none:cdecl", "FreeMapList", "ptr", $pMapList)
+    DllCall($g_hPathfinderDLL, "none:cdecl", "FreeMapList", "ptr", $pMapList)
 
     Return $mapIds
 EndFunc
 
 Func Pathfinder_GetMapStats($mapID)
-    Local $result = DllCall($DLL_PATH, "ptr:cdecl", "GetMapStats", "int", $mapID)
+    Local $result = DllCall($g_hPathfinderDLL, "ptr:cdecl", "GetMapStats", "int", $mapID)
     If @error Or $result[0] = 0 Then
         Return SetError(1, 0, 0)
     EndIf
@@ -196,7 +209,7 @@ Func Pathfinder_GetMapStats($mapID)
     $statsArray[5] = DllStructGetData($stats, "enter_travel_count")
     $statsArray[6] = DllStructGetData($stats, "error_code")
 
-    DllCall($DLL_PATH, "none:cdecl", "FreeMapStats", "ptr", $pStats)
+    DllCall($g_hPathfinderDLL, "none:cdecl", "FreeMapStats", "ptr", $pStats)
 
     Return $statsArray
 EndFunc
