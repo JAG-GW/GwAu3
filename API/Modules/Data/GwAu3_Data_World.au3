@@ -183,7 +183,7 @@ Func World_GetWorldInfo($a_s_Info = "")
         Case "TitleArray"
             Return Memory_Read($l_p_Ptr + 0x81C, "ptr")
         Case "TitleArraySize"
-            Return Memory_Read($l_p_Ptr + 0x81C, "ptr")
+            Return Memory_Read($l_p_Ptr + 0x81C + 0x8, "long")
 
         ;Special array
         Case "VanquishedAreasArray" ;--> To check
