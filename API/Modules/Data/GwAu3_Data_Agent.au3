@@ -877,7 +877,7 @@ Func Agent_GetPlayerInfo($a_i_AgentID = 0, $a_s_Info = "")
     Local $l_p_AgentPtr = 0
 
     For $i = 1 To $l_i_Size - 1
-        Local $l_p_AgentEffects = $l_p_Pointer + ($i * 0x4C)
+        Local $l_p_AgentEffects = $l_p_Pointer + ($i * 0x50)
         If Memory_Read($l_p_AgentEffects, "dword") = Agent_ConvertID($a_i_AgentID) Then
             $l_p_AgentPtr = $l_p_AgentEffects
             ExitLoop
@@ -904,10 +904,12 @@ Func Agent_GetPlayerInfo($a_i_AgentID = 0, $a_s_Info = "")
             Return Memory_Read($l_p_AgentPtr + 0x2C, "dword")
         Case "ActiveTitle"
             Return Memory_Read($l_p_AgentPtr + 0x30, "dword")
-        Case "PlayerNumber"
+        Case "ActiveChallenge"
             Return Memory_Read($l_p_AgentPtr + 0x34, "dword")
-        Case "PartySize"
+        Case "PlayerNumber"
             Return Memory_Read($l_p_AgentPtr + 0x38, "dword")
+        Case "PartySize"
+            Return Memory_Read($l_p_AgentPtr + 0x3C, "dword")
         Case Else
             Return 0
     EndSwitch

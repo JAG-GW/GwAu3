@@ -829,7 +829,7 @@ Func Scanner_ScanAllPatterns()
     Assembler_CreateScanProcedure($l_p_GwBase)
 
     Local $l_b_NewHeader = False
-    Local $l_p_FixedHeader = $l_p_GwBase + 0x9E8000
+    Local $l_p_FixedHeader = $l_p_GwBase + 0x9E4000
     Local $l_s_HeaderBytes = Memory_Read($l_p_FixedHeader, "byte[8]")
 
     If $l_s_HeaderBytes = StringToBinary($GC_S_GWAU3_HEADER_STR) Then
