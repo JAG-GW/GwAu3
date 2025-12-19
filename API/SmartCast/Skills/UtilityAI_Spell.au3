@@ -1010,7 +1010,7 @@ Func BestTarget_MeteorShower($a_f_AggroRange)
 	; Spell. Create a Meteor Shower at target foe's location. For 9 seconds, foes adjacent to that location are struck for 7...91...112 fire damage and knocked down every 3 seconds.
 	; Concise description
 	; Spell. Deals 7...91...112 fire damage and causes knock-down every 3 seconds (9 seconds). Hits foes adjacent to target's initial location.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 193 - $GC_I_SKILL_ID_PHOENIX
@@ -1066,7 +1066,7 @@ Func BestTarget_SearingHeat($a_f_AggroRange)
 	; Spell. Cause Searing Heat at target foe's location. For 5 seconds, foes near this location are struck for 10...34...40 fire damage each second. When Searing Heat ends, foes in the area of effect are set on fire for 3 seconds.
 	; Concise description
 	; Spell. Deals 10...34...40 fire damage each second (5 seconds). Hits foes near target's initial location. End effect: inflicts Burning condition (3 seconds).
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 197 - $GC_I_SKILL_ID_FIRE_STORM
@@ -1077,10 +1077,10 @@ EndFunc
 
 Func BestTarget_FireStorm($a_f_AggroRange)
 	; Description
-	; This article is about the elementalist skill. For the environment effect encountered in the Dragon's Lair, see Fire Storm (environment).
+	; Spell. Create a Fire Storm at target foe's location. For 10 seconds, foes adjacent to that location are struck for 5...29...35 fire damage each second.
 	; Concise description
-	; green; font-weight: bold;">5...29...35
-	Return 0
+	; Spell. Deals 5...29...35 fire damage each second (10 seconds). Hits foes adjacent to target's initial location.
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 215 - $GC_I_SKILL_ID_MAELSTROM
@@ -1091,10 +1091,12 @@ EndFunc
 
 Func BestTarget_Maelstrom($a_f_AggroRange)
 	; Description
-	; This article is about the elementalist skill. For the environment effect encountered in the Dragon's Lair, see Maelstrom (environment).
+	; Spell. Create a Maelstrom at target foe's location. For 10 seconds, foes adjacent to that area are struck for 10...22...25 cold damage each second. Maelstrom interrupts spell-casting when it hits.
 	; Concise description
-	; green; font-weight: bold;">10...22...25
-	Return 0
+	; Spell. Deals 10...22...25 cold damage and interrupts spells each second (10 seconds). Hits foes adjacent to target's initial location.
+	Local $l_i_Target = UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 217 - $GC_I_SKILL_ID_CRYSTAL_WAVE
@@ -2190,7 +2192,7 @@ Func BestTarget_RayOfJudgment($a_f_AggroRange)
 	; Elite Spell. Invoke a Ray of Judgment at target foe's location. For 5 seconds, target foe and all foes adjacent to this location take 5...37...45 holy damage each second and begin Burning for 1...3...3 second[s].
 	; Concise description
 	; Elite Spell. Deals 5...37...45 holy damage and inflicts Burning (1...3...3 second[s]) every second (5 seconds). Hits foes adjacent to target's initial location.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 832 - $GC_I_SKILL_ID_ANIMATE_FLESH_GOLEM
@@ -3320,7 +3322,7 @@ Func BestTarget_BreathOfFire($a_f_AggroRange)
 	; Spell. Create Breath of Fire at target foe's current location. For 5 seconds, foes adjacent to that location are struck for 10...34...40 fire damage each second.
 	; Concise description
 	; Spell. Deals 10...34...40 fire damage each second (5 seconds). Hits foes adjacent to target's initial location.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1095 - $GC_I_SKILL_ID_STAR_BURST
@@ -4214,7 +4216,7 @@ Func BestTarget_SavannahHeat($a_f_AggroRange)
 	; Elite Spell. You create Savannah Heat at target foe's location. For 5 seconds, all nearby foes take 5...17...20 fire damage for each second this spell has been in effect.
 	; Concise description
 	; Elite Spell. Deals 5...17...20 fire damage for each second since casting this spell (5 seconds). Hits foes near target's initial location.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1396 - $GC_I_SKILL_ID_WORDS_OF_COMFORT
@@ -5396,7 +5398,7 @@ Func BestTarget_SnowStorm($a_f_AggroRange)
 	; Spell. Create a Snow Storm at target foe's location. For 5 seconds, foes adjacent to that location are struck for 30...40 cold damage each second.
 	; Concise description
 	; Spell. Deals 30...40 cold damage each second (5 seconds). Hits foes adjacent to target foe's initial location.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_SPELLCASTING, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2224 - $GC_I_SKILL_ID_SUMMON_MURSAAT
