@@ -53,7 +53,7 @@ Func Friend_AddFriend($a_s_CharacterName, $a_s_Alias = "", $a_i_FriendType = $GC
         Return False
     EndIf
 
-    Local $l_p_ExistingFriend = Friend_GetFriendInfo($a_s_CharacterName, "Ptr")
+    Local $l_p_ExistingFriend = Friend_IsFriend($a_s_CharacterName)
     If $l_p_ExistingFriend <> 0 Then
         Log_Warning("Friend already exists: " & $a_s_CharacterName, "FriendMod", $g_h_EditText)
         Return False

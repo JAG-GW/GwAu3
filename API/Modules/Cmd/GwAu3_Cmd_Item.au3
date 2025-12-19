@@ -156,7 +156,7 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
     Core_Enqueue($g_p_Salvage, 16)
 
     ; Wait for salvage window to open
-    Other_PingSleep(32)
+    Other_PingSleep(248)
 
     ; Perform the salvage type requested
     Switch $a_s_SalvageType
