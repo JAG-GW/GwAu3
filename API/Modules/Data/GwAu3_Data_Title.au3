@@ -16,31 +16,24 @@ Func Title_GetTitleInfo($a_i_Title = 0, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr, "dword")
         Case "CurrentPoints"
             Return Memory_Read($l_p_Ptr + 0x4, "dword")
-        Case "CurrentTitleTierIndex"
+        Case "CurrentTitleTierIndex", "CurrentTitleTier"
             Return Memory_Read($l_p_Ptr + 0x8, "dword")
         Case "PointsNeededCurrentRank"
             Return Memory_Read($l_p_Ptr + 0xC, "dword")
-        Case "Unknown10"
+        Case "Unknown10" ; dhuum/reforged
             Return Memory_Read($l_p_Ptr + 0x10, "dword")
-        Case "NextTitleTierIndex"
+        Case "NextTitleTierIndex", "NextTitleTier"
             Return Memory_Read($l_p_Ptr + 0x14, "dword")
         Case "PointsNeededNextRank"
             Return Memory_Read($l_p_Ptr + 0x18, "dword")
         Case "MaxTitleRank"
             Return Memory_Read($l_p_Ptr + 0x1C, "dword")
-        Case "MaxTitleTierIndex"
+        Case "MaxTitleTierIndex", "MaxTitleTier"
             Return Memory_Read($l_p_Ptr + 0x20, "dword")
         Case "TitleNamePtr1"
             Return Memory_Read($l_p_Ptr + 0x24, "ptr")
         Case "TitleNamePtr2"
             Return Memory_Read($l_p_Ptr + 0x28, "ptr")
-        ; Legacy aliases for compatibility
-        Case "CurrentTitleTier"
-            Return Memory_Read($l_p_Ptr + 0x8, "dword")
-        Case "NextTitleTier"
-            Return Memory_Read($l_p_Ptr + 0x14, "dword")
-        Case "MaxTitleTier"
-            Return Memory_Read($l_p_Ptr + 0x20, "dword")
     EndSwitch
 
     Return 0
