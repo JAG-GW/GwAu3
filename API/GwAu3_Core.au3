@@ -63,7 +63,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	; Skill patterns
 	Scanner_AddPattern('SkillBase', '69C6A40000005E', 0x9, 'Ptr') ;/ Scanner_AddPattern('SkillBase', "P:\Code\Gw\Const\ConstSkill.cpp", "index < arrsize(s_skill)", 'Ptr', 0x16) ;or 0x15
     Scanner_AddPattern('SkillTimer', 'FFD68B4DF08BD88B4708', -0x3, 'Ptr')
-    Scanner_AddPattern('UseSkill', '85F6745B83FE1174', -0x125, 'Func')
+    Scanner_AddPattern('UseSkill', '85F6745B83FE1174', -0x127, 'Func')
     Scanner_AddPattern('UseHeroSkill', 'BA02000000B954080000', -0x59, 'Func')
 	; Friend patterns
 	Scanner_AddPattern('FriendList', "P:\Code\Gw\Friend\FriendApi.cpp", "friendName && *friendName", 'Ptr')

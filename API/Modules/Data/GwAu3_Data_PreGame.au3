@@ -1,29 +1,21 @@
 #include-once
 
 Func PreGame_Ptr()
-	Return Memory_Read($g_p_PreGame, 'PTR')
+	Return Memory_Read($g_p_PreGame, 'ptr')
 EndFunc
 
 Func PreGame_FrameID()
-	Return Memory_Read(PreGame_Ptr(), 'DWORD')
+	Return Memory_Read(PreGame_Ptr(), 'dword')
 EndFunc
 
-Func PreGame_ChosenCharacterIndex()
-	Return Memory_Read(PreGame_Ptr() + 0x0124, 'DWORD')
-EndFunc
-
-Func PreGame_ChosenCharacter() ;Index1
-	Return Memory_Read(PreGame_Ptr() + 0x0140, 'DWORD')
-EndFunc
-
-Func PreGame_Index2()
-	Return Memory_Read(PreGame_Ptr() + 0x0144, 'DWORD')
+Func PreGame_ChosenCharacter()
+	Return Memory_Read(PreGame_Ptr() + 0xD4, 'dword')
 EndFunc
 
 Func PreGame_LoginCharacterArray()
-	Return Memory_Read(PreGame_Ptr() + 0x0148, 'PTR')
+	Return Memory_Read(PreGame_Ptr() + 0xDC, 'ptr')
 EndFunc
 
-Func PreGame_CharName($aNumber) ;from 0 to max character
-	Return Memory_Read(PreGame_LoginCharacterArray() + 0x004 + (0x002C * $aNumber), 'WCHAR[20]')
+Func PreGame_CharName($a_i_Index) ;from 0 to max character
+	Return Memory_Read(PreGame_LoginCharacterArray() + 0x4C + (0x74 * $a_i_Index), 'WCHAR[20]')
 EndFunc
