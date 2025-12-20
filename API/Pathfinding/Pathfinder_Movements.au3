@@ -138,6 +138,10 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
                 $g_aPathfinder_CurrentPath = $lPath
                 $g_iPathfinder_CurrentPathIndex = 0
                 $g_hPathfinder_LastPathUpdateTime = TimerInit()
+            Else
+                ; Path update failed, but we still have an old path - just update the timer
+                ; to avoid spamming failed path requests
+                $g_hPathfinder_LastPathUpdateTime = TimerInit()
             EndIf
         EndIf
 
@@ -185,17 +189,12 @@ Func _Pathfinder_GetPath($aStartX, $aStartY, $aDestX, $aDestY, $aObstacles)
 
     If IsArray($aObstacles) And UBound($aObstacles) > 0 Then
         ; Get raw path with minimal simplification from DLL
-        Local $lPath = Pathfinder_FindPathGWWithObstacle($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, $aObstacles, 100)
+        Local $lPath = Pathfinder_FindPathGWWithObstacle($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, $aObstacles, 500)
         If @error Then Return 0
-
-        ; Apply smart simplification that preserves obstacle-avoidance waypoints
-        If IsArray($lPath) And UBound($lPath) > 2 Then
-            $lPath = _Pathfinder_SmartSimplify($lPath, $aObstacles, $g_iPathfinder_SimplifyRange)
-        EndIf
 
         Return $lPath
     Else
-        Return Pathfinder_FindPathGW($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, $g_iPathfinder_SimplifyRange)
+        Return Pathfinder_FindPathGW($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, 500)
     EndIf
 EndFunc
 
