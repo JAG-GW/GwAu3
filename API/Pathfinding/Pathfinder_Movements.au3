@@ -26,15 +26,6 @@ Global $g_iPathfinder_StuckDistance = 50            ; If moved less than this, c
 ; $aFinisherMode = Finisher mode for UAI_Fight
 ; Returns: True if destination reached, False if interrupted
 Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $aFightRangeOut = 3500, $aFinisherMode = 0)
-    ; Initialize DLL if not already loaded
-    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then
-        If Not Pathfinder_Initialize() Then
-            ; Fallback to direct movement if DLL fails
-            Map_Move($aDestX, $aDestY, 0)
-            Return False
-        EndIf
-    EndIf
-
     Local $lMyOldMap = Map_GetMapID()
     Local $lMapLoadingOld = Map_GetInstanceInfo("Type")
     Local $lMyX = Agent_GetAgentInfo(-2, "X")
@@ -51,6 +42,15 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 		$lMyOldMap = Map_GetMapID()
 		$lMapLoadingOld = Map_GetInstanceInfo("Type")
 	EndIf
+
+	; Initialize DLL if not already loaded
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then
+        If Not Pathfinder_Initialize() Then
+            ; Fallback to direct movement if DLL fails
+            Map_Move($aDestX, $aDestY, 0)
+            Return False
+        EndIf
+    EndIf
 
     If Party_GetPartyContextInfo("IsDefeated") Then
         Pathfinder_Shutdown()

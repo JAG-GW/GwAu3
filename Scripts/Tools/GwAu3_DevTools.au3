@@ -476,17 +476,14 @@ Func _GUI_Tab_QueueCommands()
         _ImGui_Text("Friend_AddFriend / RemoveFriend")
         _ImGui_PushItemWidth(120)
         _ImGui_InputText("Name##qfriend", $g_sInput_FriendName)
-        _ImGui_SameLine()
-        _ImGui_InputText("Alias##qfriend", $g_sInput_FriendAlias)
         _ImGui_PopItemWidth()
         If _ImGui_Button("Add Friend##q") Then
-            Friend_AddFriend($g_sInput_FriendName, $g_sInput_FriendAlias, 1)
-            Log_Message("Friend_AddFriend('" & $g_sInput_FriendName & "', '" & $g_sInput_FriendAlias & "', 1)", $c_UTILS_Msg_Type_Info, "DevTools")
+            Friend_AddFriend($g_sInput_FriendName, "", 1)
+            Log_Message("Friend_AddFriend('" & $g_sInput_FriendName & "', '" & "', 1)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Ignore##qfriend") Then
-            Friend_AddFriend($g_sInput_FriendName, $g_sInput_FriendAlias, 2)
-            Log_Message("Friend_AddFriend('" & $g_sInput_FriendName & "', '" & $g_sInput_FriendAlias & "', 2)", $c_UTILS_Msg_Type_Info, "DevTools")
+            Log_Message("Friend_AddFriend('" & $g_sInput_FriendName & "', '" & "', 2)", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Remove##qfriend") Then
@@ -525,21 +522,23 @@ Func _GUI_Tab_QueueCommands()
         _ImGui_Text("Item_SalvageItem")
         If _ImGui_IsItemHovered() Then _ImGui_SetTooltip("Kit types: Standard, Superior, Expert, Perfect, Charr" & @CRLF & "Salvage types: Materials, Prefix, Suffix, Inscription")
         _ImGui_PushItemWidth(80)
-        _ImGui_InputText("Item##qsalv", $g_sInput_ItemID)
+        _ImGui_InputInt("Bag##qsalv", $g_sInput_BagNumber)
+		_ImGui_SameLine()
+		_ImGui_InputInt("Slot##qsalv", $g_sInput_SlotNumber)
         _ImGui_PopItemWidth()
         If _ImGui_Button("Salvage Mats##q") Then
-            Item_SalvageItem(Number($g_sInput_ItemID), "Expert", "Materials")
-            Log_Message("Item_SalvageItem(" & $g_sInput_ItemID & ", 'Expert', 'Materials')", $c_UTILS_Msg_Type_Info, "DevTools")
+            Item_SalvageItem(Item_GetItemBySlot($g_sInput_BagNumber, $g_sInput_SlotNumber), "Expert", "Materials")
+            Log_Message("Item_SalvageItem(Item_GetItemBySlot(" & $g_sInput_BagNumber & ", " & $g_sInput_SlotNumber & ", 'Expert', 'Materials')", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Salvage Prefix##q") Then
-            Item_SalvageItem(Number($g_sInput_ItemID), "Expert", "Prefix")
-            Log_Message("Item_SalvageItem(" & $g_sInput_ItemID & ", 'Expert', 'Prefix')", $c_UTILS_Msg_Type_Info, "DevTools")
+            Item_SalvageItem(Item_GetItemBySlot($g_sInput_BagNumber, $g_sInput_SlotNumber), "Expert", "Prefix")
+            Log_Message("Item_SalvageItem(Item_GetItemBySlot(" & $g_sInput_BagNumber & ", " & $g_sInput_SlotNumber & ", 'Expert', 'Prefix')", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
         _ImGui_SameLine()
         If _ImGui_Button("Salvage Suffix##q") Then
-            Item_SalvageItem(Number($g_sInput_ItemID), "Expert", "Suffix")
-            Log_Message("Item_SalvageItem(" & $g_sInput_ItemID & ", 'Expert', 'Suffix')", $c_UTILS_Msg_Type_Info, "DevTools")
+            Item_SalvageItem(Item_GetItemBySlot($g_sInput_BagNumber, $g_sInput_SlotNumber), "Expert", "Suffix")
+            Log_Message("Item_SalvageItem(Item_GetItemBySlot(" & $g_sInput_BagNumber & ", " & $g_sInput_SlotNumber & ", 'Suffix')", $c_UTILS_Msg_Type_Info, "DevTools")
         EndIf
 		_ImGui_Separator()
     EndIf
@@ -2939,7 +2938,8 @@ Func _GUI_Tab_DataFunctions()
             Next
         EndIf
 
-        _ImGui_SameLine()
+		_ImGui_NewLine()
+        _ImGui_InputText("SkillID##aery", $g_sInput_SkillID)
         If _ImGui_Button("Is Skill Learnt##skill") Then
             Local $skillID = Number($g_sInput_SkillID)
             Log_Message("Skill " & $skillID & " learnt: " & World_IsSkillLearnt($skillID), $c_UTILS_Msg_Type_Info, "DevTools")

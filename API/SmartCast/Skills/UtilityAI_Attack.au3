@@ -2000,7 +2000,7 @@ Func BestTarget_ReapImpurities($a_f_AggroRange)
 	; Melee Attack. If this attack hits, you deal +3...13...15 damage. Each foe you hit loses 1 condition. For each foe who loses a condition, all foes adjacent to that target foe take 10...34...40 holy damage.
 	; Concise description
 	; Melee Attack. Deals +3...13...15 damage. Struck foes lose 1 condition. Removal Effect: all foes adjacent to those struck take 10...34...40 holy damage.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1487 - $GC_I_SKILL_ID_TWIN_MOON_SWEEP
