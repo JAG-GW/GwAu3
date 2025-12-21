@@ -7,6 +7,21 @@ Func UAI_Filter_IsGadget($a_i_AgentID)
 	Return True
 EndFunc
 
+Func UAI_Filter_IsLastStrikeIsLead($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LastStrike) <> 1 Then Return False
+	Return True
+EndFunc
+
+Func UAI_Filter_IsLastStrikeIsOffHand($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LastStrike) <> 2 Then Return False
+	Return True
+EndFunc
+
+Func UAI_Filter_IsLastStrikeIsDual($a_i_AgentID)
+	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LastStrike) <> 3 Then Return False
+	Return True
+EndFunc
+
 Func UAI_Filter_IsGadgetOrLiving($a_i_AgentID)
 	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsItemType) Then Return False
 	Return True

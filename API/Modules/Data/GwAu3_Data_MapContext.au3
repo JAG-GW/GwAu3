@@ -528,7 +528,7 @@ Func Map_GetTrapezoidInfo($a_p_TrapezoidPtr, $a_s_Info = "")
 EndFunc
 #EndRegion Pathing Structures
 
-Func GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
+Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 	Switch $a_i_FromMapID
 		Case $GC_I_MAP_ID_BLOODSTONE_FEN_OUTPOST
 			Local $l_ai_Coords[2] = [26456, -7057]
@@ -1209,427 +1209,431 @@ Func GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-5246, 9724]
 				Case $GC_I_MAP_ID_MOURNING_VEIL_FALLS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [13249, -10009]
 				Case $GC_I_MAP_ID_VASBURG_ARMORY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [18513, 2379]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LUTGARDIS_CONSERVATORY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_FERNDALE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-13835, 1806]
 				Case $GC_I_MAP_ID_MELANDRUS_HOPE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-7466, 1997]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VASBURG_ARMORY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_MOROSTAV_TRAIL
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [23970, 7278]
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [18444, 1988]
 			EndSwitch
 		Case $GC_I_MAP_ID_SERENITY_TEMPLE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-6202, 22292]
 
 		Case $GC_I_MAP_ID_ICE_TOOTH_CAVE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-12357, 11803]
 
 		Case $GC_I_MAP_ID_BEACONS_PERCH
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_DELDRIMOR_BOWL
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-10883, 35722]
 				Case $GC_I_MAP_ID_LORNARS_PASS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-8399, 33266]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_YAKS_BEND
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_SHIVERPEAK_ARENA_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TRAVELERS_VALE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [9222, 4029]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_FRONTIER_GATE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-13687, 4413]
 
 		Case $GC_I_MAP_ID_BEETLETUN
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_NEBO_TERRACE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [22408, -11478]
 				Case $GC_I_MAP_ID_WATCHTOWER_COAST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17302, -9293]
 			EndSwitch
 		Case $GC_I_MAP_ID_FISHERMENS_HAVEN
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [1890, 11538]
 
 		Case $GC_I_MAP_ID_TEMPLE_OF_THE_AGES
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_THE_BLACK_CURTAIN
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-5242, 16001]
 				Case $GC_I_MAP_ID_FISSURE_OF_WOE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-2759, 18616]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-2759, 18616]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VENTARIS_REFUGE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-15190, 464]
 
 		Case $GC_I_MAP_ID_DRUIDS_OVERLOOK
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [2982, -9266]
 
 		Case $GC_I_MAP_ID_MAGUUMA_STADE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [502, -9731]
 
 		Case $GC_I_MAP_ID_QUARREL_FALLS
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [2040, -2021]
 
 		Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [4453, 26331]
 				Case $GC_I_MAP_ID_LEVIATHAN_PITS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [8796, -19945]
 				Case $GC_I_MAP_ID_RHEAS_CRATER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [13801, -11473]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_CATACOMBS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PRESEARING_ASHFORD_ABBEY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [15229, 2225]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [5806, -22750]
 				Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-10629, 16036]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LAKESIDE_COUNTY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ASCALON_CITY_OUTPOST, $GC_I_MAP_ID_ASCALON_CITY_WINTERSDAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [7755, 5939]
 				Case $GC_I_MAP_ID_PRESEARING_ASHFORD_ABBEY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-11517, -6203]
 				Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14898, 10092]
 				Case $GC_I_MAP_ID_PRESEARING_REGENT_VALLEY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [4896, -19584]
 				Case $GC_I_MAP_ID_THE_NORTHLANDS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-5531, 14305]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14291, -19972]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_NORTHLANDS
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-11693, -18762]
 
 		Case $GC_I_MAP_ID_ASCALON_CITY_OUTPOST, $GC_I_MAP_ID_ASCALON_CITY_WINTERSDAY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ASCALON_ACADEMY_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [6650, 4906]
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [11718, 3705]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_HEROES_AUDIENCE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-14886, -14335]
 
 		Case $GC_I_MAP_ID_SEEKERS_PASSAGE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-16383, 8072]
 
 		Case $GC_I_MAP_ID_DESTINYS_GORGE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-17370, 22689]
 				Case $GC_I_MAP_ID_THE_SCAR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-13344, 17572]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CAMP_RANKOR
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SNAKE_DANCE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [5873, -41002]
 				Case $GC_I_MAP_ID_TALUS_CHUTE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [7762, -44768]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_GRANITE_CITADEL
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-11570, 15423]
 				Case $GC_I_MAP_ID_TASCAS_DEMISE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-9381, 19732]
 			EndSwitch
 		Case $GC_I_MAP_ID_MARHANS_GROTTO
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [5588, -11428]
 
 		Case $GC_I_MAP_ID_PORT_SLEDGE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-7306, -2278]
 
 		Case $GC_I_MAP_ID_COPPERHAMMER_MINES
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_FROZEN_FOREST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-17971, 9397]
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-23189, 13855]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [22562, 13291]
 				Case $GC_I_MAP_ID_PRESEARING_THE_BARRADIN_ESTATE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-6937, 1525]
 				Case $GC_I_MAP_ID_THE_CATACOMBS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-2913, 9458]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-6870, -17130]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WIZARDS_FOLLY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PRESEARING_FOIBLES_FAIR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [156, 8706]
 				Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-19038, 20865]
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [11164, 20167]
 				Case $GC_I_MAP_ID_PRESEARING_REGENT_VALLEY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [20779, -9631]
 				Case $GC_I_MAP_ID_THE_CATACOMBS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-5108, 19511]
 			EndSwitch
 		Case $GC_I_MAP_ID_PRESEARING_REGENT_VALLEY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PRESEARING_FORT_RANIK
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [22538, 7989]
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-17258, 17088]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-26292, -13186]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PRESEARING_THE_BARRADIN_ESTATE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-7608, 1548]
 
 		Case $GC_I_MAP_ID_PRESEARING_ASHFORD_ABBEY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-11021, -5986]
 				Case $GC_I_MAP_ID_THE_CATACOMBS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14551, -6785]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PRESEARING_FOIBLES_FAIR
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [543, 7417]
 
 		Case $GC_I_MAP_ID_PRESEARING_FORT_RANIK
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [22601, 7040]
 
 		Case $GC_I_MAP_ID_SORROWS_FURNACE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-14758, 18327]
 
 		Case $GC_I_MAP_ID_GRENTHS_FOOTPRINT
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_DELDRIMOR_WAR_CAMP
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-2942, -4593]
 				Case $GC_I_MAP_ID_SNAKE_DANCE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-19650, -8866]
 				Case $GC_I_MAP_ID_SORROWS_FURNACE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-13304, 7952]
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [22448, 3822]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CAVALON
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [6789, -7429]
 				Case $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [4824, 3108]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_KAINENG_CENTER, $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BEJUNKAN_PIER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-2221, 1485]
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [3258, -4838]
 				Case $GC_I_MAP_ID_RAISU_PAVILLION
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [7955, -1403]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DRAZACH_THICKET
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BRAUER_ACADEMY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [13866, 1940]
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-3116, -16431]
 				Case $GC_I_MAP_ID_SAINT_ANJEKAS_SHRINE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-11310, 20455]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JAYA_BLUFF
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_HAIJU_LAGOON
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [23655, 1767]
 				Case $GC_I_MAP_ID_SEITUNG_HARBOR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [11079, -13130]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SHENZUN_TUNNELS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_MAATU_KEEP
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [10468, -19960]
 				Case $GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14176, -18445]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17773, -7073]
 				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [16650, 18985]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14656, 15005]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ARCHIPELAGOS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BREAKER_HOLLOW
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-20068, 10691]
 				Case $GC_I_MAP_ID_CAVALON
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [3271, 11710]
 				Case $GC_I_MAP_ID_JADE_FLATS_LUXON
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-5723, -10329]
 				Case $GC_I_MAP_ID_MAISHANG_HILLS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [16468, 11073]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MAISHANG_HILLS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-21127, -10959]
 				Case $GC_I_MAP_ID_BAI_PAASU_REACH
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-16691, 13941]
 				Case $GC_I_MAP_ID_EREDON_TERRACE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [18176, 11988]
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [13212, -11090]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MOUNT_QINKAI
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ASPENWOOD_GATE_LUXON
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-8373, -10928]
 				Case $GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [20607, 11310]
 				Case $GC_I_MAP_ID_BREAKER_HOLLOW
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17237, -2160]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MELANDRUS_HOPE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BRAUER_ACADEMY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-13777, -16018]
 				Case $GC_I_MAP_ID_JADE_FLATS_KURZICK
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17142, 23821]
 				Case $GC_I_MAP_ID_LUTGARDIS_CONSERVATORY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-7946, 1832]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RHEAS_CRATER
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14140, 19748]
 				Case $GC_I_MAP_ID_SEAFARERS_REST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-11344, -18478]
 				Case $GC_I_MAP_ID_THE_AURIOS_MINES_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [15389, -2284]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SILENT_SURF
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_LEVIATHAN_PITS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [8869, 26181]
 				Case $GC_I_MAP_ID_SEAFARERS_REST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [14156, 2082]
 				Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-10845, -13957]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MOROSTAV_TRAIL
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [7612, -10680]
 				Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [23157, 13987]
 				Case $GC_I_MAP_ID_VASBURG_ARMORY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-22740, 7193]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DELDRIMOR_WAR_CAMP
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-2763, -4177]
 
 		Case $GC_I_MAP_ID_MOURNING_VEIL_FALLS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_AMATZ_BASIN_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-16734, -7744]
 				Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [27795, 6140]
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-8248, 12180]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_FERNDALE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ASPENWOOD_GATE_KURZICK
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17060, 22489]
 				Case $GC_I_MAP_ID_HOUSE_ZU_HELTZER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14497, 14495]
 				Case $GC_I_MAP_ID_LUTGARDIS_CONSERVATORY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17598, -22700]
 				Case $GC_I_MAP_ID_SAINT_ANJEKAS_SHRINE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-9617, -21311]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PONGMEI_VALLEY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BOREAS_SEABED_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [23183, -511]
 				Case $GC_I_MAP_ID_MAATU_KEEP
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-13373, 11713]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [15797, 17424]
 				Case $GC_I_MAP_ID_TANGLEWOOD_COPSE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-17982, -9642]
 			EndSwitch
 		Case $GC_I_MAP_ID_MONASTERY_OVERLOOK
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-6949, 6116]
 
 		Case $GC_I_MAP_ID_ZEN_DAIJUN_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [19354, 14378]
 
 		Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [6756, -11401]
 
 		Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-21684, 14219]
 
 		Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-11884, -14846]
+
 		Case $GC_I_MAP_ID_ARBORSTONE_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-1236, 10382]
 
 		Case $GC_I_MAP_ID_BOREAS_SEABED_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-26217, 3236]
 
 		Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-13350, -4015]
 
 		Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Switch $a_i_ToMapID
+				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
+					Local $l_ai_Coords[2] = [-5594, 9641]
+				Case $GC_I_MAP_ID_DRAZACH_THICKET
+					Local $l_ai_Coords[2] = [-6715, 14595]
+			EndSwitch
 
 		Case $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST
 			Local $l_ai_Coords[2] = [0, 0]

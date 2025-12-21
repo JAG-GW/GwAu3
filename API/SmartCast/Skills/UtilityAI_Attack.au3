@@ -949,7 +949,7 @@ Func BestTarget_DeathBlossom($a_f_AggroRange)
 	; Dual Attack. Must follow an off-hand attack. If it hits, Death Blossom strikes target foe for +20...40...45 damage and all adjacent foes take 20...40...45 damage.
 	; Concise description
 	; Dual Attack. Deals +20...40...45 damage. Also affects foes adjacent to target foe. Must follow an off-hand attack.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsLastStrikeIsOffHand")
 EndFunc
 
 ; Skill ID: 776 - $GC_I_SKILL_ID_TWISTING_FANGS
@@ -1019,7 +1019,7 @@ Func BestTarget_FoxFangs($a_f_AggroRange)
 	; Off-Hand Attack. Must follow a lead attack. Fox Fangs cannot be blocked and strikes for +10...30...35 damage if it hits.
 	; Concise description
 	; Off-Hand Attack. Deals +10...30...35 damage. Unblockable. Must follow a lead attack.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsLastStrikeIsLead")
 EndFunc
 
 ; Skill ID: 781 - $GC_I_SKILL_ID_MOEBIUS_STRIKE
@@ -1047,7 +1047,7 @@ Func BestTarget_JaggedStrike($a_f_AggroRange)
 	; Lead Attack. If Jagged Strike hits, your target suffers from Bleeding for 5...17...20 seconds.
 	; Concise description
 	; Lead Attack. Inflicts Bleeding condition (5...17...20 seconds).
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 783 - $GC_I_SKILL_ID_UNSUSPECTING_STRIKE
