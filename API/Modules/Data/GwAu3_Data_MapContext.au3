@@ -531,2517 +531,2516 @@ EndFunc
 Func GetExitPortalsCoords($FromMapID, $ToMapID)
 	Switch $FromMapID
 		Case $GC_I_MAP_ID_BLOODSTONE_FEN_OUTPOST
-			Return [26456, -7057]
+			Local $aCoords[2] = [26456, -7057]
 
 		Case $GC_I_MAP_ID_THE_WILDS_OUTPOST
-			Return [26400, -11328]
+			Local $aCoords[2] = [26400, -11328]
 
 		Case $GC_I_MAP_ID_AURORA_GLADE_OUTPOST
-			Return [-16444, -2656]
+			Local $aCoords[2] = [-16444, -2656]
 
 		Case $GC_I_MAP_ID_DIESSA_LOWLANDS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ASCALON_FOOTHILLS
-					Return [-23344, 18046]
+					Local $aCoords[2] = [-23344, 18046]
 				Case $GC_I_MAP_ID_GRENDICH_COURTHOUSE
-					Return [1500, 13846]
+					Local $aCoords[2] = [1500, 13846]
 				Case $GC_I_MAP_ID_FLAME_TEMPLE_CORRIDOR
-					Return [21236, 17646]
+					Local $aCoords[2] = [21236, 17646]
 				Case $GC_I_MAP_ID_NOLANI_ACADEMY_OUTPOST
-					Return [-23044, -16954]
+					Local $aCoords[2] = [-23044, -16954]
 				Case $GC_I_MAP_ID_THE_BREACH
-					Return [23940, -15154]
+					Local $aCoords[2] = [23940, -15154]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATES_OF_KRYTA_OUTPOST
-			Return [-4622, 27192]
+			Local $aCoords[2] = [-4622, 27192]
 
 		Case $GC_I_MAP_ID_DALESSIO_SEABOARD_OUTPOST
-			Return [16039, 17824]
+			Local $aCoords[2] = [16039, 17824]
 
 		Case $GC_I_MAP_ID_DIVINITY_COAST_OUTPOST
-			Return [15424, -10640]
+			Local $aCoords[2] = [15424, -10640]
 
 		Case $GC_I_MAP_ID_TALMARK_WILDERNESS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MAJESTYS_REST
-					Return [-20339, 3824]
+					Local $aCoords[2] = [-20339, 3824]
 				Case $GC_I_MAP_ID_TEARS_OF_THE_FALLEN
-					Return [-1995, -19976]
+					Local $aCoords[2] = [-1995, -19976]
 				Case $GC_I_MAP_ID_THE_BLACK_CURTAIN
-					Return [19752, 2324]
+					Local $aCoords[2] = [19752, 2324]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_BLACK_CURTAIN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_TALMARK_WILDERNESS
-					Return [-20304, 1824]
+					Local $aCoords[2] = [-20304, 1824]
 				Case $GC_I_MAP_ID_KESSEX_PEAK
-					Return [6144, -18076]
+					Local $aCoords[2] = [6144, -18076]
 				Case $GC_I_MAP_ID_CURSED_LANDS
-					Return [20332, 5324]
+					Local $aCoords[2] = [20332, 5324]
 				Case $GC_I_MAP_ID_TEMPLE_OF_THE_AGES
-					Return [-5144, 16324]
+					Local $aCoords[2] = [-5144, 16324]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SANCTUM_CAY_OUTPOST
-			Return [-23158, 7576]
+			Local $aCoords[2] = [-23158, 7576]
 
-		Case $GC_I_MAP_ID_DROKNARS_FORGE
+		Case $GC_I_MAP_ID_DROKNARS_FORGE, $GC_I_MAP_ID_DROKNARS_FORGE_HALLOWEEN, $GC_I_MAP_ID_DROKNARS_FORGE_WINTERSDAY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_TALUS_CHUTE
-					Return [-300, 10935]
+					Local $aCoords[2] = [-300, 10935]
 				Case $GC_I_MAP_ID_WITMANS_FOLLY
-					Return [6144, 995]
+					Local $aCoords[2] = [6144, 995]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_FROST_GATE_OUTPOST
-			Return [6440, 31349]
+			Local $aCoords[2] = [6440, 31349]
 
 		Case $GC_I_MAP_ID_ICE_CAVES_OF_SORROW_OUTPOST
-			Return [-23285, -5644]
+			Local $aCoords[2] = [-23285, -5644]
 
 		Case $GC_I_MAP_ID_THUNDERHEAD_KEEP_OUTPOST
-			Return [-12166, -23419]
+			Local $aCoords[2] = [-12166, -23419]
 
 		Case $GC_I_MAP_ID_IRON_MINES_OF_MOLADUNE_OUTPOST
-			Return [-7600, -31664]
+			Local $aCoords[2] = [-7600, -31664]
 
 		Case $GC_I_MAP_ID_BORLIS_PASS_OUTPOST
-			Return [26033, -2260]
+			Local $aCoords[2] = [26033, -2260]
 
 		Case $GC_I_MAP_ID_TALUS_CHUTE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CAMP_RANKOR
-					Return [-23040, 16422]
-				Case $GC_I_MAP_ID_DROKNARS_FORGE
-					Return [9118, -16878]
+					Local $aCoords[2] = [-23040, 16422]
+				Case $GC_I_MAP_ID_DROKNARS_FORGE, $GC_I_MAP_ID_DROKNARS_FORGE_HALLOWEEN, $GC_I_MAP_ID_DROKNARS_FORGE_WINTERSDAY
+					Local $aCoords[2] = [9118, -16878]
 				Case $GC_I_MAP_ID_ICE_CAVES_OF_SORROW_OUTPOST
-					Return [23196, -11478]
+					Local $aCoords[2] = [23196, -11478]
 				Case $GC_I_MAP_ID_ICEDOME
-					Return [24080, 16822]
+					Local $aCoords[2] = [24080, 16822]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GRIFFONS_MOUTH
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SCOUNDRELS_RISE
-					Return [-7692, -7788]
+					Local $aCoords[2] = [-7692, -7788]
 				Case $GC_I_MAP_ID_DELDRIMOR_BOWL
-					Return [7768, 8012]
+					Local $aCoords[2] = [7768, 8012]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_GREAT_NORTHERN_WALL_OUTPOST
-			Return [8534, -11088]
+			Local $aCoords[2] = [8534, -11088]
 
 		Case $GC_I_MAP_ID_FORT_RANIK_OUTPOST
-			Return [7172, -33005]
+			Local $aCoords[2] = [7172, -33005]
 
 		Case $GC_I_MAP_ID_RUINS_OF_SURMIA_OUTPOST
-			Return [-1166, -13600]
+			Local $aCoords[2] = [-1166, -13600]
 
 		Case $GC_I_MAP_ID_XAQUANG_SKYWAY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Return [-8201, 16473]
+					Local $aCoords[2] = [-8201, 16473]
 				Case $GC_I_MAP_ID_SENJIS_CORNER
-					Return [6395, -13127]
+					Local $aCoords[2] = [6395, -13127]
 				Case $GC_I_MAP_ID_SHENZUN_TUNNELS
-					Return [19991, -327]
+					Local $aCoords[2] = [19991, -327]
 				Case $GC_I_MAP_ID_WAIJUN_BAZAAR
-					Return [-16387, 8323]
+					Local $aCoords[2] = [-16387, 8323]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_NOLANI_ACADEMY_OUTPOST
-			Return [-1052, 20279]
+			Local $aCoords[2] = [-1052, 20279]
 
 		Case $GC_I_MAP_ID_OLD_ASCALON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ASCALON_CITY
-					Return [18180, 11046]
+					Local $aCoords[2] = [18180, 11046]
 				Case $GC_I_MAP_ID_REGENT_VALLEY
-					Return [10629, -13704]
+					Local $aCoords[2] = [10629, -13704]
 				Case $GC_I_MAP_ID_SARDELAC_SANITARIUM
-					Return [-5303, -4]
+					Local $aCoords[2] = [-5303, -4]
 				Case $GC_I_MAP_ID_THE_BREACH
-					Return [-19636, 20396]
+					Local $aCoords[2] = [-19636, 20396]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_EMBER_LIGHT_CAMP
-			Return [3779, -8233]
+			Local $aCoords[2] = [3779, -8233]
 
 		Case $GC_I_MAP_ID_GRENDICH_COURTHOUSE
-			Return [2304, 13396]
+			Local $aCoords[2] = [2304, 13396]
 
 		Case $GC_I_MAP_ID_AUGURY_ROCK_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PROPHETS_PATH
-					Return [-20775, -403]
+					Local $aCoords[2] = [-20775, -403]
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Return [-15184, 2624]
+					Local $aCoords[2] = [-15184, 2624]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SARDELAC_SANITARIUM
-			Return [-4824, -70]
+			Local $aCoords[2] = [-4824, -70]
 
 		Case $GC_I_MAP_ID_PIKEN_SQUARE
-			Return [20214, 7272]
+			Local $aCoords[2] = [20214, 7272]
 
 		Case $GC_I_MAP_ID_SAGE_LANDS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DRUIDS_OVERLOOK
-					Return [0, 0]
+					Local $aCoords[2] = [3336, -9507]
 				Case $GC_I_MAP_ID_MAJESTYS_REST
-					Return [0, 0]
+					Local $aCoords[2] = [28828, 11893]
 				Case $GC_I_MAP_ID_MAMNOON_LAGOON
-					Return [0, 0]
+					Local $aCoords[2] = [-26388, -4407]
 				Case $GC_I_MAP_ID_THE_WILDS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-16824, 9893]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MAMNOON_LAGOON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SAGE_LANDS
-					Return [0, 0]
+					Local $aCoords[2] = [7868, 4512]
 				Case $GC_I_MAP_ID_SILVERWOOD
-					Return [0, 0]
+					Local $aCoords[2] = [-7355, -5206]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SILVERWOOD
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BLOODSTONE_FEN_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-14060, 17169]
 				Case $GC_I_MAP_ID_ETTINS_BACK
-					Return [0, 0]
+					Local $aCoords[2] = [-9530, -20195]
 				Case $GC_I_MAP_ID_MAMNOON_LAGOON
-					Return [0, 0]
+					Local $aCoords[2] = [17984, 13297]
 				Case $GC_I_MAP_ID_QUARREL_FALLS
-					Return [0, 0]
+					Local $aCoords[2] = [1575, -2652]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ETTINS_BACK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_AURORA_GLADE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [22820, 12907]
 				Case $GC_I_MAP_ID_DRY_TOP
-					Return [0, 0]
+					Local $aCoords[2] = [17281, -7221]
 				Case $GC_I_MAP_ID_REED_BOG
-					Return [0, 0]
+					Local $aCoords[2] = [-23146, -11382]
 				Case $GC_I_MAP_ID_SILVERWOOD
-					Return [0, 0]
+					Local $aCoords[2] = [-14764, 761]
 				Case $GC_I_MAP_ID_VENTARIS_REFUGE
-					Return [0, 0]
+					Local $aCoords[2] = [-19082, 14092]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_REED_BOG
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ETTINS_BACK
-					Return [0, 0]
+					Local $aCoords[2] = [8207, 7080]
 				Case $GC_I_MAP_ID_THE_FALLS
-					Return [0, 0]
+					Local $aCoords[2] = [-6480, -8113]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_FALLS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_REED_BOG
-					Return [0, 0]
+					Local $aCoords[2] = [18182, 4973]
 				Case $GC_I_MAP_ID_SECRET_UNDERGROUND_LAIR
-					Return [0, 0]
+					Local $aCoords[2] = [-16044, 2053]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DRY_TOP
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ETTINS_BACK
-					Return [0, 0]
+					Local $aCoords[2] = [-8020, 7845]
 				Case $GC_I_MAP_ID_TANGLE_ROOT
-					Return [0, 0]
+					Local $aCoords[2] = [5291, -7896]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TANGLE_ROOT
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DRY_TOP
-					Return [0, 0]
+					Local $aCoords[2] = [-19568, 5178]
 				Case $GC_I_MAP_ID_HENGE_OF_DENRAVI
-					Return [0, 0]
+					Local $aCoords[2] = [12828, 14344]
 				Case $GC_I_MAP_ID_MAGUUMA_STADE
-					Return [0, 0]
+					Local $aCoords[2] = [929, -10479]
 				Case $GC_I_MAP_ID_RIVERSIDE_PROVINCE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [18267, -12079]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_HENGE_OF_DENRAVI
-			Return [0, 0]
+			Local $aCoords[2] = [6089, -10936]
 
 		Case $GC_I_MAP_ID_SENJIS_CORNER
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [5893, -12650]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [7399, -18860]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TEARS_OF_THE_FALLEN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_STINGRAY_STRAND
-					Return [0, 0]
+					Local $aCoords[2] = [5727, -6682]
 				Case $GC_I_MAP_ID_TALMARK_WILDERNESS
-					Return [0, 0]
+					Local $aCoords[2] = [7784, 8173]
 				Case $GC_I_MAP_ID_TWIN_SERPENT_LAKES
-					Return [0, 0]
+					Local $aCoords[2] = [-3169, -8172]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SCOUNDRELS_RISE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATES_OF_KRYTA_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-1051, -7278]
 				Case $GC_I_MAP_ID_GRIFFONS_MOUTH
-					Return [0, 0]
+					Local $aCoords[2] = [7663, 8129]
 				Case $GC_I_MAP_ID_NORTH_KRYTA_PROVINCE
-					Return [0, 0]
+					Local $aCoords[2] = [-7715, 7981]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_LIONS_ARCH
+		Case $GC_I_MAP_ID_LIONS_ARCH, $GC_I_MAP_ID_LIONS_ARCH_HALLOWEEN, $GC_I_MAP_ID_LIONS_ARCH_WINTERSDAY, $GC_I_MAP_ID_LIONS_ARCH_CANTHAN_NEW_YEAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_NORTH_KRYTA_PROVINCE
-					Return [0, 0]
+					Local $aCoords[2] = [225, 12401]
 				Case $GC_I_MAP_ID_LIONS_GATE
-					Return [0, 0]
+					Local $aCoords[2] = [10295, 1587]
 				Case $GC_I_MAP_ID_LIONS_ARCH_KEEP
-					Return [0, 0]
+					Local $aCoords[2] = [7603, 10626]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CURSED_LANDS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_NEBO_TERRACE
-					Return [0, 0]
+					Local $aCoords[2] = [-3651, -11715]
 				Case $GC_I_MAP_ID_THE_BLACK_CURTAIN
-					Return [0, 0]
+					Local $aCoords[2] = [-20109, -4634]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BERGEN_HOT_SPRINGS
-			Return [0, 0]
+			Local $aCoords[2] = [15430, -14700]
 
 		Case $GC_I_MAP_ID_NORTH_KRYTA_PROVINCE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BENEATH_LIONS_ARCH
-					Return [0, 0]
+					Local $aCoords[2] = [8655, -10080]
 				Case $GC_I_MAP_ID_DALESSIO_SEABOARD_OUTPOST
-					Return [0, 0]
-				Case $GC_I_MAP_ID_LIONS_ARCH
-					Return [0, 0]
+					Local $aCoords[2] = [-11612, -19809]
+				Case $GC_I_MAP_ID_LIONS_ARCH, $GC_I_MAP_ID_LIONS_ARCH_HALLOWEEN, $GC_I_MAP_ID_LIONS_ARCH_WINTERSDAY, $GC_I_MAP_ID_LIONS_ARCH_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [6556, -18531]
 				Case $GC_I_MAP_ID_NEBO_TERRACE
-					Return [0, 0]
+					Local $aCoords[2] = [-19598, 16046]
 				Case $GC_I_MAP_ID_SCOUNDRELS_RISE
-					Return [0, 0]
+					Local $aCoords[2] = [20332, 11431]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_NEBO_TERRACE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BEETLETUN
-					Return [0, 0]
+					Local $aCoords[2] = [-14809, 19019]
 				Case $GC_I_MAP_ID_BERGEN_HOT_SPRINGS
-					Return [0, 0]
+					Local $aCoords[2] = [15542, -15496]
 				Case $GC_I_MAP_ID_CURSED_LANDS
-					Return [0, 0]
+					Local $aCoords[2] = [-4368, -11550]
 				Case $GC_I_MAP_ID_NORTH_KRYTA_PROVINCE
-					Return [0, 0]
+					Local $aCoords[2] = [20433, 3277]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MAJESTYS_REST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SAGE_LANDS
-					Return [0, 0]
+					Local $aCoords[2] = [-23585, -811]
 				Case $GC_I_MAP_ID_TALMARK_WILDERNESS
-					Return [0, 0]
+					Local $aCoords[2] = [23501, -5657]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TWIN_SERPENT_LAKES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_RIVERSIDE_PROVINCE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-7589, -20171]
 				Case $GC_I_MAP_ID_TEARS_OF_THE_FALLEN
-					Return [0, 0]
+					Local $aCoords[2] = [6626, 22910]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WATCHTOWER_COAST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BEETLETUN
-					Return [0, 0]
+					Local $aCoords[2] = [17404, -10096]
 				Case $GC_I_MAP_ID_DIVINITY_COAST_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-22149, -10486]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_STINGRAY_STRAND
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FISHERMENS_HAVEN
-					Return [0, 0]
+					Local $aCoords[2] = [2046, 11083]
 				Case $GC_I_MAP_ID_SANCTUM_CAY_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [8233, -14689]
 				Case $GC_I_MAP_ID_TEARS_OF_THE_FALLEN
-					Return [0, 0]
+					Local $aCoords[2] = [-13273, 20876]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_KESSEX_PEAK
-			Return [0, 0]
+			Local $aCoords[2] = [9817, 21777]
 
 		Case $GC_I_MAP_ID_RIVERSIDE_PROVINCE_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [-16203, 14114]
 
 		Case $GC_I_MAP_ID_HOUSE_ZU_HELTZER
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ALTRUMM_RUINS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [5936, 6113]
 				Case $GC_I_MAP_ID_FERNDALE
-					Return [0, 0]
+					Local $aCoords[2] = [10928, -1076]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ASCALON_CITY
 			Switch $ToMapID
-				Case $GC_I_MAP_ID_ASCALON_ARENA
-					Return [0, 0]
 				Case $GC_I_MAP_ID_OLD_ASCALON
-					Return [0, 0]
+					Local $aCoords[2] = [-647, 1821]
 				Case $GC_I_MAP_ID_THE_GREAT_NORTHERN_WALL_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [13118, 13938]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_TOMB_OF_THE_PRIMEVAL_KINGS
+		Case $GC_I_MAP_ID_TOMB_OF_THE_PRIMEVAL_KINGS, $GC_I_MAP_ID_TOMB_OF_THE_PRIMEVAL_KINGS_HALLOWEEN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_DRAGONS_LAIR_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-1927, -4521]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [2313, 4518]
 			EndSwitch
+
 		Case $GC_I_MAP_ID_ICEDOME
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FROZEN_FOREST
-					Return [0, 0]
+					Local $aCoords[2] = [8838, -5009]
 				Case $GC_I_MAP_ID_TALUS_CHUTE
-					Return [0, 0]
+					Local $aCoords[2] = [-7190, -7944]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_IRON_HORSE_MINE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ANVIL_ROCK
-					Return [0, 0]
+					Local $aCoords[2] = [-25876, 1666]
 				Case $GC_I_MAP_ID_TRAVELERS_VALE
-					Return [0, 0]
+					Local $aCoords[2] = [26061, -7845]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ANVIL_ROCK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DELDRIMOR_BOWL
-					Return [0, 0]
+					Local $aCoords[2] = [-17776, -17015]
 				Case $GC_I_MAP_ID_ICE_TOOTH_CAVE
-					Return [0, 0]
+					Local $aCoords[2] = [-11677, 11663]
 				Case $GC_I_MAP_ID_IRON_HORSE_MINE
-					Return [0, 0]
+					Local $aCoords[2] = [20479, 20548]
 				Case $GC_I_MAP_ID_THE_FROST_GATE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [19148, -18048]
 			EndSwitch
 		Case $GC_I_MAP_ID_LORNARS_PASS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BEACONS_PERCH
-					Return [0, 0]
+					Local $aCoords[2] = [-8531, 33442]
 				Case $GC_I_MAP_ID_DREADNOUGHTS_DRIFT
-					Return [0, 0]
+					Local $aCoords[2] = [-8410, -35267]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [6341, -28768]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SNAKE_DANCE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CAMP_RANKOR
-					Return [0, 0]
+					Local $aCoords[2] = [6308, -41462]
 				Case $GC_I_MAP_ID_DREADNOUGHTS_DRIFT
-					Return [0, 0]
+					Local $aCoords[2] = [-7418, 45039]
 				Case $GC_I_MAP_ID_GRENTHS_FOOTPRINT
-					Return [0, 0]
+					Local $aCoords[2] = [8651, -3634]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TASCAS_DEMISE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MINERAL_SPRINGS
-					Return [0, 0]
+					Local $aCoords[2] = [8318, 29896]
 				Case $GC_I_MAP_ID_THE_GRANITE_CITADEL
-					Return [0, 0]
+					Local $aCoords[2] = [-10211, 18666]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SPEARHEAD_PEAK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_COPPERHAMMER_MINES
-					Return [0, 0]
+					Local $aCoords[2] = [8147, -26829]
 				Case $GC_I_MAP_ID_GRENTHS_FOOTPRINT
-					Return [0, 0]
+					Local $aCoords[2] = [-14707, 10]
 				Case $GC_I_MAP_ID_THE_GRANITE_CITADEL
-					Return [0, 0]
+					Local $aCoords[2] = [-11495, 15736]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ICE_FLOE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FROZEN_FOREST
-					Return [0, 0]
+					Local $aCoords[2] = [-11069, 16830]
 				Case $GC_I_MAP_ID_MARHANS_GROTTO
-					Return [0, 0]
+					Local $aCoords[2] = [5365, -11965]
 				Case $GC_I_MAP_ID_THUNDERHEAD_KEEP_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [21820, 13787]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WITMANS_FOLLY
 			Switch $ToMapID
-				Case $GC_I_MAP_ID_DROKNARS_FORGE
-					Return [0, 0]
+				Case $GC_I_MAP_ID_DROKNARS_FORGE, $GC_I_MAP_ID_DROKNARS_FORGE_HALLOWEEN, $GC_I_MAP_ID_DROKNARS_FORGE_WINTERSDAY
+					Local $aCoords[2] = [-18878, 7584]
 				Case $GC_I_MAP_ID_PORT_SLEDGE
-					Return [0, 0]
+					Local $aCoords[2] = [-7499, -3309]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MINERAL_SPRINGS
-			Return [0, 0]
+			Local $aCoords[2] = [-23063, -10524]
 
 		Case $GC_I_MAP_ID_DREADNOUGHTS_DRIFT
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_LORNARS_PASS
-					Return [0, 0]
+					Local $aCoords[2] = [-5518, 8346]
 				Case $GC_I_MAP_ID_SNAKE_DANCE
-					Return [0, 0]
+					Local $aCoords[2] = [-7221, -7805]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_FROZEN_FOREST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_COPPERHAMMER_MINES
-					Return [0, 0]
+					Local $aCoords[2] = [-17881, 9740]
 				Case $GC_I_MAP_ID_ICE_FLOE
-					Return [0, 0]
+					Local $aCoords[2] = [23276, -14128]
 				Case $GC_I_MAP_ID_ICEDOME
-					Return [0, 0]
+					Local $aCoords[2] = [-24993, -10537]
 				Case $GC_I_MAP_ID_IRON_MINES_OF_MOLADUNE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [20316, 11192]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TRAVELERS_VALE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ASCALON_FOOTHILLS
-					Return [0, 0]
+					Local $aCoords[2] = [11345, -17157]
 				Case $GC_I_MAP_ID_BORLIS_PASS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-11250, -8455]
 				Case $GC_I_MAP_ID_IRON_HORSE_MINE
-					Return [0, 0]
+					Local $aCoords[2] = [-11061, 14398]
 				Case $GC_I_MAP_ID_YAKS_BEND
-					Return [0, 0]
+					Local $aCoords[2] = [9301, 4246]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DELDRIMOR_BOWL
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ANVIL_ROCK
-					Return [0, 0]
+					Local $aCoords[2] = [13526, 26142]
 				Case $GC_I_MAP_ID_BEACONS_PERCH
-					Return [0, 0]
+					Local $aCoords[2] = [14135, -23402]
 				Case $GC_I_MAP_ID_GRIFFONS_MOUTH
-					Return [0, 0]
+					Local $aCoords[2] = [-13899, -23382]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_REGENT_VALLEY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FORT_RANIK_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [22535, 7584]
 				Case $GC_I_MAP_ID_OLD_ASCALON
-					Return [0, 0]
+					Local $aCoords[2] = [-17197, 17034]
 				Case $GC_I_MAP_ID_POCKMARK_FLATS
-					Return [0, 0]
+					Local $aCoords[2] = [24367, -4312]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_BREACH
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DIESSA_LOWLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [-19605, 3206]
 				Case $GC_I_MAP_ID_OLD_ASCALON
-					Return [0, 0]
+					Local $aCoords[2] = [1891, -11181]
 				Case $GC_I_MAP_ID_PIKEN_SQUARE
-					Return [0, 0]
+					Local $aCoords[2] = [20249, 7869]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ASCALON_FOOTHILLS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DIESSA_LOWLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [7402, -7244]
 				Case $GC_I_MAP_ID_TRAVELERS_VALE
-					Return [0, 0]
+					Local $aCoords[2] = [-7734, 7406]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_POCKMARK_FLATS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_EASTERN_FRONTIER
-					Return [0, 0]
+					Local $aCoords[2] = [9660, 26445]
 				Case $GC_I_MAP_ID_REGENT_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [-13095, -20202]
 				Case $GC_I_MAP_ID_SERENITY_TEMPLE
-					Return [0, 0]
+					Local $aCoords[2] = [-6196, 22720]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DRAGONS_GULLET
-			Return [0, 0]
+			Local $aCoords[2] = [-4819, -1215]
 
 		Case $GC_I_MAP_ID_FLAME_TEMPLE_CORRIDOR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DIESSA_LOWLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [-18414, -13661]
 				Case $GC_I_MAP_ID_DRAGONS_GULLET
-					Return [0, 0]
+					Local $aCoords[2] = [-4449, -846]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_EASTERN_FRONTIER
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FRONTIER_GATE
-					Return [0, 0]
+					Local $aCoords[2] = [-14310, 4317]
 				Case $GC_I_MAP_ID_POCKMARK_FLATS
-					Return [0, 0]
+					Local $aCoords[2] = [15740, -20305]
 				Case $GC_I_MAP_ID_RUINS_OF_SURMIA_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-20444, 10805]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_SCAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DESTINYS_GORGE
-					Return [0, 0]
+					Local $aCoords[2] = [-13950, 17253]
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [-19102, -15635]
 				Case $GC_I_MAP_ID_THIRSTY_RIVER_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [15898, -23618]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_AMNOON_OASIS
-			Return [0, 0]
+			Local $aCoords[2] = [6122, -5425]
 
 		Case $GC_I_MAP_ID_DIVINERS_ASCENT
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ELONA_REACH_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-7940, 3682]
 				Case $GC_I_MAP_ID_SALT_FLATS
-					Return [0, 0]
+					Local $aCoords[2] = [-19674, 16216]
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [6122, -5425]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VULTURE_DRIFTS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DUNES_OF_DESPAIR_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-4570, -12082]
 				Case $GC_I_MAP_ID_PROPHETS_PATH
-					Return [0, 0]
+					Local $aCoords[2] = [-7905, 20627]
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [19590, 20735]
 				Case $GC_I_MAP_ID_THE_ARID_SEA
-					Return [0, 0]
+					Local $aCoords[2] = [19704, -17234]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_ARID_SEA
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CRYSTAL_OVERLOOK
-					Return [0, 0]
+					Local $aCoords[2] = [-1139, -20132]
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [-2177, 20966]
 				Case $GC_I_MAP_ID_VULTURE_DRIFTS
-					Return [0, 0]
+					Local $aCoords[2] = [-19754, 6044]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PROPHETS_PATH
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_AUGURY_ROCK_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [20343, -371]
 				Case $GC_I_MAP_ID_HEROES_AUDIENCE
-					Return [0, 0]
+					Local $aCoords[2] = [-15319, -14653]
 				Case $GC_I_MAP_ID_SALT_FLATS
-					Return [0, 0]
+					Local $aCoords[2] = [7555, 19856]
 				Case $GC_I_MAP_ID_THE_AMNOON_OASIS
-					Return [0, 0]
+					Local $aCoords[2] = [-18916, 19469]
 				Case $GC_I_MAP_ID_VULTURE_DRIFTS
-					Return [0, 0]
+					Local $aCoords[2] = [1279, -20012]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SALT_FLATS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DIVINERS_ASCENT
-					Return [0, 0]
+					Local $aCoords[2] = [20895, 16122]
 				Case $GC_I_MAP_ID_SEEKERS_PASSAGE
-					Return [0, 0]
+					Local $aCoords[2] = [-16768, 8481]
 				Case $GC_I_MAP_ID_PROPHETS_PATH
-					Return [0, 0]
+					Local $aCoords[2] = [-3969, -20194]
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [20311, -19727]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SKYWARD_REACH
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_AUGURY_ROCK_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [-15226, 1880]
 				Case $GC_I_MAP_ID_DESTINYS_GORGE
-					Return [0, 0]
+					Local $aCoords[2] = [20047, 19400]
 				Case $GC_I_MAP_ID_DIVINERS_ASCENT
-					Return [0, 0]
+					Local $aCoords[2] = [8573, 19329]
 				Case $GC_I_MAP_ID_SALT_FLATS
-					Return [0, 0]
+					Local $aCoords[2] = [-7442, 20673]
 				Case $GC_I_MAP_ID_THE_ARID_SEA
-					Return [0, 0]
+					Local $aCoords[2] = [7135, -19571]
 				Case $GC_I_MAP_ID_THE_SCAR
-					Return [0, 0]
+					Local $aCoords[2] = [18335, -18521]
 				Case $GC_I_MAP_ID_VULTURE_DRIFTS
-					Return [0, 0]
+					Local $aCoords[2] = [-10510, -20067]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DUNES_OF_DESPAIR_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_THIRSTY_RIVER_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_ELONA_REACH_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_THE_DRAGONS_LAIR_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_PERDITION_ROCK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_EMBER_LIGHT_CAMP
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RING_OF_FIRE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MOURNING_VEIL_FALLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VASBURG_ARMORY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LUTGARDIS_CONSERVATORY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FERNDALE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MELANDRUS_HOPE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VASBURG_ARMORY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MOROSTAV_TRAIL
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_SERENITY_TEMPLE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_ICE_TOOTH_CAVE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_BEACONS_PERCH
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DELDRIMOR_BOWL
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LORNARS_PASS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_YAKS_BEND
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SHIVERPEAK_ARENA_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TRAVELERS_VALE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_FRONTIER_GATE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_BEETLETUN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_NEBO_TERRACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WATCHTOWER_COAST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_FISHERMENS_HAVEN
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_TEMPLE_OF_THE_AGES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_BLACK_CURTAIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_FISSURE_OF_WOE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VENTARIS_REFUGE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_DRUIDS_OVERLOOK
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_MAGUUMA_STADE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_QUARREL_FALLS
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LEVIATHAN_PITS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RHEAS_CRATER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_CATACOMBS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PRESEARING_ASHFORD_ABBEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LAKESIDE_COUNTY
 			Switch $ToMapID
-				Case $GC_I_MAP_ID_ASCALON_CITY_OUTPOST
-					Return [0, 0]
+				Case $GC_I_MAP_ID_ASCALON_CITY_OUTPOST, $GC_I_MAP_ID_ASCALON_CITY_WINTERSDAY
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_PRESEARING_ASHFORD_ABBEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_PRESEARING_REGENT_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_NORTHLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_NORTHLANDS
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
-		Case $GC_I_MAP_ID_ASCALON_CITY_OUTPOST
+		Case $GC_I_MAP_ID_ASCALON_CITY_OUTPOST, $GC_I_MAP_ID_ASCALON_CITY_WINTERSDAY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ASCALON_ACADEMY_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_HEROES_AUDIENCE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_SEEKERS_PASSAGE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_DESTINYS_GORGE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SKYWARD_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_SCAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CAMP_RANKOR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SNAKE_DANCE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TALUS_CHUTE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_GRANITE_CITADEL
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TASCAS_DEMISE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_MARHANS_GROTTO
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_PORT_SLEDGE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_COPPERHAMMER_MINES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FROZEN_FOREST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_PRESEARING_THE_BARRADIN_ESTATE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_CATACOMBS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WIZARDS_FOLLY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PRESEARING_FOIBLES_FAIR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GREEN_HILLS_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_PRESEARING_REGENT_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_CATACOMBS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_PRESEARING_REGENT_VALLEY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PRESEARING_FORT_RANIK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WIZARDS_FOLLY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PRESEARING_THE_BARRADIN_ESTATE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_PRESEARING_ASHFORD_ABBEY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_LAKESIDE_COUNTY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_CATACOMBS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PRESEARING_FOIBLES_FAIR
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_PRESEARING_FORT_RANIK
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_SORROWS_FURNACE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_GRENTHS_FOOTPRINT
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DELDRIMOR_WAR_CAMP
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SNAKE_DANCE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SORROWS_FURNACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CAVALON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_KAINENG_CENTER
+		Case $GC_I_MAP_ID_KAINENG_CENTER, $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BEJUNKAN_PIER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RAISU_PAVILLION
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DRAZACH_THICKET
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BRAUER_ACADEMY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SAINT_ANJEKAS_SHRINE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JAYA_BLUFF
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_HAIJU_LAGOON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SEITUNG_HARBOR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SHENZUN_TUNNELS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MAATU_KEEP
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ARCHIPELAGOS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BREAKER_HOLLOW
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CAVALON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JADE_FLATS_LUXON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MAISHANG_HILLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MAISHANG_HILLS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BAI_PAASU_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_EREDON_TERRACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MOUNT_QINKAI
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ASPENWOOD_GATE_LUXON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BREAKER_HOLLOW
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MELANDRUS_HOPE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BRAUER_ACADEMY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JADE_FLATS_KURZICK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LUTGARDIS_CONSERVATORY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RHEAS_CRATER
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SEAFARERS_REST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_AURIOS_MINES_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SILENT_SURF
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_LEVIATHAN_PITS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SEAFARERS_REST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MOROSTAV_TRAIL
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VASBURG_ARMORY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DELDRIMOR_WAR_CAMP
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_MOURNING_VEIL_FALLS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_AMATZ_BASIN_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_FERNDALE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ASPENWOOD_GATE_KURZICK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_HOUSE_ZU_HELTZER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LUTGARDIS_CONSERVATORY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SAINT_ANJEKAS_SHRINE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PONGMEI_VALLEY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BOREAS_SEABED_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MAATU_KEEP
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TANGLEWOOD_COPSE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_MONASTERY_OVERLOOK
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_ZEN_DAIJUN_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_ARBORSTONE_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_BOREAS_SEABED_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_RAISU_PALACE_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_AMATZ_BASIN_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_SHADOWS_PASSAGE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DRAGONS_THROAT_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RAISU_PALACE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_AURIOS_MINES_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_PANJIANG_PENINSULA
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_KINYA_PROVINCE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TSUMEI_VILLAGE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_KINYA_PROVINCE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PANJIANG_PENINSULA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RAN_MUSU_GARDENS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNQUA_VALE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_HAIJU_LAGOON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_JAYA_BLUFF
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZEN_DAIJUN_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUNQUA_VALE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_KINYA_PROVINCE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST
-					Return [0, 0]
-				Case $GC_I_MAP_ID_SHING_JEA_MONASTERY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
+				Case $GC_I_MAP_ID_SHING_JEA_MONASTERY, $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TSUMEI_VILLAGE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WAIJUN_BAZAAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MARKETPLACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_UNDERCITY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BUKDEK_BYWAY
 			Switch $ToMapID
-				Case $GC_I_MAP_ID_KAINENG_CENTER
-					Return [0, 0]
+				Case $GC_I_MAP_ID_KAINENG_CENTER, $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SHADOWS_PASSAGE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MARKETPLACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_UNDERCITY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VIZUNAH_SQUARE_FOREIGN_QUARTER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_UNDERCITY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VIZUNAH_SQUARE_LOCAL_QUARTER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WAIJUN_BAZAAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
-		Case $GC_I_MAP_ID_SHING_JEA_MONASTERY
+		Case $GC_I_MAP_ID_SHING_JEA_MONASTERY, $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_LINNOK_COURTYARD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SHING_JEA_ARENA_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNQUA_VALE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ARBORSTONE_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ALTRUMM_RUINS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ARBORSTONE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TANGLEWOOD_COPSE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RAN_MUSU_GARDENS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ZEN_DAIJUN_EXPLORABLE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BOREAS_SEABED_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MOUNT_QINKAI
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GREAT_TEMPLE_OF_BALTHAZAR
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_TSUMEI_VILLAGE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PANJIANG_PENINSULA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNQUA_VALE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SEITUNG_HARBOR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_JAYA_BLUFF
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_KAINENG_DOCKS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SAOSHANG_TRAIL
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZEN_DAIJUN_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RAN_MUSU_GARDENS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_KINYA_PROVINCE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LINNOK_COURTYARD
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SAOSHANG_TRAIL
-					Return [0, 0]
-				Case $GC_I_MAP_ID_SHING_JEA_MONASTERY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
+				Case $GC_I_MAP_ID_SHING_JEA_MONASTERY, $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PONGMEI_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SENJIS_CORNER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SHENZUN_TUNNELS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ALTRUMM_RUINS_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARBORSTONE_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_HOUSE_ZU_HELTZER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CAVALON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DRAGONS_THROAT_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_HARVEST_TEMPLE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_BREAKER_HOLLOW
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MOUNT_QINKAI
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LEVIATHAN_PITS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SILENT_SURF
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MAATU_KEEP
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PONGMEI_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SHENZUN_TUNNELS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FISSURE_OF_WOE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MONASTERY_OVERLOOK_2
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_BRAUER_ACADEMY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DRAZACH_THICKET
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MELANDRUS_HOPE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MOROSTAV_TRAIL
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MOURNING_VEIL_FALLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BAI_PAASU_REACH
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_SEAFARERS_REST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_RHEAS_CRATER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SILENT_SURF
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BEJUNKAN_PIER
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_VIZUNAH_SQUARE_LOCAL_QUARTER
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_VIZUNAH_SQUARE_FOREIGN_QUARTER
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_FORT_ASPENWOOD_LUXON
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_FORT_ASPENWOOD_KURZICK
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_THE_JADE_QUARRY_LUXON
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_THE_JADE_QUARRY_KURZICK
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 		Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_RAISU_PAVILLION
 			Switch $ToMapID
-				Case $GC_I_MAP_ID_KAINENG_CENTER
-					Return [0, 0]
+				Case $GC_I_MAP_ID_KAINENG_CENTER, $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_KAINENG_DOCKS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_MARKETPLACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SEITUNG_HARBOR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_MARKETPLACE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_KAINENG_DOCKS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WAIJUN_BAZAAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SAOSHANG_TRAIL
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_LINNOK_COURTYARD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SEITUNG_HARBOR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JAHAI_BLUFFS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARKJOK_WARD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_COMMAND_POST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_KODONUR_CROSSROADS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_FLOODPLAIN_OF_MAHNKELON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TURAIS_PROCESSION
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MARGA_COAST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARKJOK_WARD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DAJKAH_INLET
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_NUNDU_BAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNSPEAR_SANCTUARY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_YOHLON_HAVEN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUNWARD_MARCHES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_COMMAND_POST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DAJKAH_INLET
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VENTA_CEMETERY_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BARBAROUS_SHORE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_CAMP_HOJANU
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BARBAROUS_SHORE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DEJARIN_ESTATE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BAHDOK_CAVERNS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MODDOK_CREVICE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WEHHAN_TERRACES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WEHHAN_TERRACES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BAHDOK_CAVERNS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_YATENDI_CANYONS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DEJARIN_ESTATE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CAMP_HOJANU
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_KODONUR_CROSSROADS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_POGAHN_PASSAGE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ARKJOK_WARD
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_COMMAND_POST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JAHAI_BLUFFS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MARGA_COAST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_POGAHN_PASSAGE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_YOHLON_HAVEN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_YOHLON_HAVEN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARKJOK_WARD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MARGA_COAST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GANDARA_THE_MOON_FORTRESS
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_THE_FLOODPLAIN_OF_MAHNKELON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_JAHAI_BLUFFS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_KODONUR_CROSSROADS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MODDOK_CREVICE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RILOHN_REFUGE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TURAIS_PROCESSION
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_COMMAND_POST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GATE_OF_DESOLATION
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JAHAI_BLUFFS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VENTA_CEMETERY_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUNSPEAR_SANCTUARY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_COMMAND_POST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MARGA_COAST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ASPENWOOD_GATE_KURZICK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FORT_ASPENWOOD_KURZICK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_FERNDALE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ASPENWOOD_GATE_LUXON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FORT_ASPENWOOD_LUXON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MOUNT_QINKAI
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JADE_FLATS_KURZICK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MELANDRUS_HOPE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_JADE_QUARRY_KURZICK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JADE_FLATS_LUXON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_JADE_QUARRY_LUXON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_YATENDI_CANYONS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CHANTRY_OF_SECRETS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VEHTENDI_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WEHHAN_TERRACES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CHANTRY_OF_SECRETS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_ANGUISH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_FISSURE_OF_WOE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_YATENDI_CANYONS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GARDEN_OF_SEBORHIN
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_HOLDINGSOFCHOKHIN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MIHANU_TOWNSHIP
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VEHJIN_MINES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MIHANU_TOWNSHIP
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_HOLDINGSOFCHOKHIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MIRROR_OF_LYSS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VEHJIN_MINES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BASALT_GROTTO
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_HOLDINGSOFCHOKHIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JENNURS_HORDE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BASALT_GROTTO
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_JOKOS_DOMAIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VEHJIN_MINES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_FORUM_HIGHLANDS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GARDEN_OF_SEBORHIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JENNURS_HORDE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_NIGHTFALLEN_GARDEN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_KODASH_BAZAAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TIHARK_ORCHARD_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VEHTENDI_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RESPLENDENT_MAKUUN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BOKKA_AMPHITHEATRE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_HONUR_HILL
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WILDERNESS_OF_BAHDZA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_YAHNUR_MARKET
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_HONUR_HILL
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_RESPLENDENT_MAKUUN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MIRROR_OF_LYSS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WILDERNESS_OF_BAHDZA
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DZAGONUR_BASTION_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RESPLENDENT_MAKUUN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VEHTENDI_VALLEY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FORUM_HIGHLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_KODASH_BAZAAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_YAHNUR_MARKET
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_YATENDI_CANYONS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_YAHNUR_MARKET
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_RESPLENDENT_MAKUUN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VEHTENDI_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_HIDDEN_CITY_OF_AHDASHIM
-			Return [0, 0] ; Exit to Dasha Vestibule (outpost)
+			Local $aCoords[2] = [0, 0] ; Exit to Dasha Vestibule (outpost)
 
 		Case $GC_I_MAP_ID_THE_KODASH_BAZAAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FORUM_HIGHLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MIRROR_OF_LYSS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VEHTENDI_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LIONS_GATE
-			Return [0, 0] ; Exit to Lion's Arch
+			Local $aCoords[2] = [0, 0] ; Exit to Lion's Arch
 
 		Case $GC_I_MAP_ID_THE_MIRROR_OF_LYSS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DASHA_VESTIBULE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DZAGONUR_BASTION_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GRAND_COURT_OF_SEBELKEH_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_HONUR_HILL
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MIHANU_TOWNSHIP
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_KODASH_BAZAAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VENTA_CEMETERY_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SUNWARD_MARCHES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TURAIS_PROCESSION
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_KODONUR_CROSSROADS_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DEJARIN_ESTATE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JAHAI_BLUFFS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_FLOODPLAIN_OF_MAHNKELON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RILOHN_REFUGE_OUTPOST
-			Return [0, 0] ; Exit to The Floodplain of Mahnkelon
+			Local $aCoords[2] = [0, 0] ; Exit to The Floodplain of Mahnkelon
 
 		Case $GC_I_MAP_ID_POGAHN_PASSAGE_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARKJOK_WARD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DEJARIN_ESTATE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GANDARA_THE_MOON_FORTRESS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MODDOK_CREVICE_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BAHDOK_CAVERNS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_FLOODPLAIN_OF_MAHNKELON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_TIHARK_ORCHARD_OUTPOST
-			Return [0, 0] ; Exit to Forum Highlands
+			Local $aCoords[2] = [0, 0] ; Exit to Forum Highlands
 
 		Case $GC_I_MAP_ID_CONSULATE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CONSULATE_DOCKS_OUTPOST
-					Return [0, 0]
-				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
+				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_PLAINS_OF_JARIN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CAVERNS_BELOW_KAMADAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CHAMPIONS_DAWN
-					Return [0, 0]
-				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
+				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNSPEAR_GREAT_HALL
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ASTRALARIUM
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUNSPEAR_GREAT_HALL
-			Return [0, 0] ; Exit to Plains of Jarin
+			Local $aCoords[2] = [0, 0] ; Exit to Plains of Jarin
 
 		Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BEKNUR_HARBOR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BLACKTIDE_DEN_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CHAMPIONS_DAWN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JOKANUR_DIGGINGS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZEHLON_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DZAGONUR_BASTION_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_MIRROR_OF_LYSS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_WILDERNESS_OF_BAHDZA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DASHA_VESTIBULE_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_HIDDEN_CITY_OF_AHDASHIM
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MIRROR_OF_LYSS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GRAND_COURT_OF_SEBELKEH_OUTPOST
-			Return [0, 0] ; Exit to The Mirror of Lyss
+			Local $aCoords[2] = [0, 0] ; Exit to The Mirror of Lyss
 
 		Case $GC_I_MAP_ID_COMMAND_POST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARKJOK_WARD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JAHAI_BLUFFS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNSPEAR_SANCTUARY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNWARD_MARCHES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TURAIS_PROCESSION
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JOKOS_DOMAIN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BASALT_GROTTO
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BONE_PALACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BONE_PALACE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_JOKOS_DOMAIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ALKALI_PAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_RUPTURED_HEART
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CRYSTAL_OVERLOOK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_POISONED_OUTCROPS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RUINS_OF_MORAH_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ALKALI_PAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MOUTH_OF_TORMENT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_THE_MOUTH_OF_TORMENT
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_TORMENT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_JOKOS_DOMAIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LAIR_OF_THE_FORGOTTEN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ALKALI_PAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LAIR_OF_THE_FORGOTTEN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_POISONED_OUTCROPS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_POISONED_OUTCROPS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_LAIR_OF_THE_FORGOTTEN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_THE_SULFUROUS_WASTES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_DESOLATION_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_ALKALI_PAN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BONE_PALACE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CRYSTAL_OVERLOOK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RUINS_OF_MORAH_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CRYSTAL_OVERLOOK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_ALKALI_PAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ARID_SEA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN
+		Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CHUURHIR_FIELDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CONSULATE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DAJKAH_INLET_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_PLAINS_OF_JARIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUN_DOCKS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNSPEAR_ARENA_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_TORMENT
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_NIGHTFALLEN_JAHAI
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_SHADOW_NEXUS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_MOUTH_OF_TORMENT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_NIGHTFALLEN_GARDEN
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_CHUURHIR_FIELDS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CHAHBEK_VILLAGE_OUTPOST
-					Return [0, 0]
-				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
+				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BEKNUR_HARBOR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ISSNUR_ISLES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_HEART_OF_ABADDON
-			Return [0, 0] ; Exit to Abaddon's Gate (outpost)
+			Local $aCoords[2] = [0, 0] ; Exit to Abaddon's Gate (outpost)
 
 		Case $GC_I_MAP_ID_NIGHTFALLEN_JAHAI
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_PAIN_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GATE_OF_THE_NIGHTFALLEN_LANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GATE_OF_TORMENT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DEPTHS_OF_MADNESS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ABADDONS_GATE_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DOMAIN_OF_FEAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_FEAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GATE_OF_SECRETS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_FEAR
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DOMAIN_OF_FEAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DOMAIN_OF_PAIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DOMAIN_OF_PAIN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_PAIN_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GATE_OF_FEAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DOMAIN_OF_SECRETS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GATE_OF_SECRETS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_SECRETS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DOMAIN_OF_FEAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DOMAIN_OF_SECRETS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JENNURS_HORDE_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_FORUM_HIGHLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VEHJIN_MINES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_NUNDU_BAY_OUTPOST
-			Return [0, 0] ; Exit to Marga Coast
+			Local $aCoords[2] = [0, 0] ; Exit to Marga Coast
 
 		Case $GC_I_MAP_ID_GATE_OF_DESOLATION_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_SULFUROUS_WASTES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TURAIS_PROCESSION
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CHAMPIONS_DAWN
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_PLAINS_OF_JARIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RUINS_OF_MORAH_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_THE_ALKALI_PAN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_FAHRANUR_THE_FIRST_CITY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BLACKTIDE_DEN_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JOKANUR_DIGGINGS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BJORA_MARCHES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DARKRIME_DELVES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JAGA_MORAINE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LONGEYES_LEDGE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_NORRHART_DOMAINS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ZEHLON_REACH
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JOKANUR_DIGGINGS_OUTPOST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_ASTRALARIUM
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LAHTEDA_BOG
-			Return [0, 0] ; Exit to Blacktide Den (outpost)
+			Local $aCoords[2] = [0, 0] ; Exit to Blacktide Den (outpost)
 
 		Case $GC_I_MAP_ID_ARBOR_BAY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ALCAZIA_TANGLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RIVEN_EARTH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SHARDS_OF_ORR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VLOXS_FALLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ISSNUR_ISLES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BEKNUR_HARBOR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_KODLONU_HAMLET
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MEHTANI_KEYS
-			Return [0, 0] ; Exit to Kodlonu Hamlet
+			Local $aCoords[2] = [0, 0] ; Exit to Kodlonu Hamlet
 
 		Case $GC_I_MAP_ID_KODLONU_HAMLET
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ISSNUR_ISLES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MEHTANI_KEYS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ISLAND_OF_SHEHKAH
-			Return [0, 0] ; Exit to Chahbek Village
+			Local $aCoords[2] = [0, 0] ; Exit to Chahbek Village
 
 		Case $GC_I_MAP_ID_JOKANUR_DIGGINGS_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_FAHRANUR_THE_FIRST_CITY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZEHLON_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BLACKTIDE_DEN_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_FAHRANUR_THE_FIRST_CITY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LAHTEDA_BOG
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_CONSULATE_DOCKS_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BEJUNKAN_PIER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CONSULATE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LIONS_GATE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_PAIN_OUTPOST
-			Return [0, 0] ; Exit to Nightfallen Jahai
+			Local $aCoords[2] = [0, 0] ; Exit to Nightfallen Jahai
 
 		Case $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST
-			Return [0, 0] ; Exit to Domain of Secrets
+			Local $aCoords[2] = [0, 0] ; Exit to Domain of Secrets
 
 		Case $GC_I_MAP_ID_ABADDONS_GATE_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_HEART_OF_ABADDON
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DEPTHS_OF_MADNESS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BOREAL_STATION
-					Return [0, 0]
-				Case $GC_I_MAP_ID_EYE_OF_THE_NORTH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
+				Case $GC_I_MAP_ID_EYE_OF_THE_NORTH, $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST_WINTERSDAY
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_NORRHART_DOMAINS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BATTLEDEPTHS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BOKKA_AMPHITHEATRE
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_RIVEN_EARTH
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ALCAZIA_TANGLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ARBOR_BAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RATA_SUM
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_ASTRALARIUM
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_PLAINS_OF_JARIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ZEHLON_REACH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THRONE_OF_SECRETS
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_DRAKKAR_LAKE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_NORRHART_DOMAINS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SEPULCHRE_OF_DRAGRIMMAR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SIFHALLA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VARAJAR_FELLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUN_DOCKS
-			Return [0, 0] ; Exit to Kamadan, Jewel of Istan
+			Local $aCoords[2] = [0, 0] ; Exit to Kamadan, Jewel of Istan
 
 		Case $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_JOKOS_DOMAIN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_THE_SULFUROUS_WASTES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_JAGA_MORAINE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BJORA_MARCHES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_FROSTMAWS_BURROWS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SIFHALLA
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_NORRHART_DOMAINS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BJORA_MARCHES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DRAKKAR_LAKE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GUNNARS_HOLD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VARAJAR_FELLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VARAJAR_FELLS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BATTLEDEPTHS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DRAKKAR_LAKE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RAVENS_POINT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_OLAFSTEAD
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_NORRHART_DOMAINS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VERDANT_CASCADES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DAJKAH_INLET_OUTPOST
 			Switch $ToMapID
-				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN
-					Return [0, 0]
+				Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MARGA_COAST
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SUNWARD_MARCHES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_SHADOW_NEXUS_OUTPOST
-			Return [0, 0]
+			Local $aCoords[2] = [0, 0]
 
 		Case $GC_I_MAP_ID_SPARKFLY_SWAMP
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GADDS_ENCAMPMENT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BLOODSTONE_CAVES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_BOGROOT_GROWTHS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_GATE_OF_THE_NIGHTFALLEN_LANDS
-			Return [0, 0] ; Exit to Nightfallen Jahai
+			Local $aCoords[2] = [0, 0] ; Exit to Nightfallen Jahai
 
 		Case $GC_I_MAP_ID_VERDANT_CASCADES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SLAVERS_EXILE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_UMBRAL_GROTTO
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VARAJAR_FELLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MAGUS_STONES
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ALCAZIA_TANGLE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ARACHNIS_HAUNT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_OOLAS_LAB
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RATA_SUM
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ALCAZIA_TANGLE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARBOR_BAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RIVEN_EARTH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_MAGUS_STONES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_TARNISHED_HAVEN
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_VLOXS_FALLS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARBOR_BAY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BATTLEDEPTHS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_HEART_OF_THE_SHIVERPEAKS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VARAJAR_FELLS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CENTRAL_TRANSFER_CHAMBER
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GADDS_ENCAMPMENT
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SPARKFLY_SWAMP
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SHARDS_OF_ORR
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_UMBRAL_GROTTO
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_VERDANT_CASCADES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RATA_SUM
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MAGUS_STONES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RIVEN_EARTH
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TARNISHED_HAVEN
-			Return [0, 0] ; Exit to Alcazia Tangle
+			Local $aCoords[2] = [0, 0] ; Exit to Alcazia Tangle
 
-		Case $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST
+		Case $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST, $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST_WINTERSDAY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_HALL_OF_MONUMENTS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SIFHALLA
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DRAKKAR_LAKE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_JAGA_MORAINE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GUNNARS_HOLD
-			Return [0, 0] ; Exit to Norrhart Domains
+			Local $aCoords[2] = [0, 0] ; Exit to Norrhart Domains
 
 		Case $GC_I_MAP_ID_OLAFSTEAD
-			Return [0, 0] ; Exit to Varajar Fells
+			Local $aCoords[2] = [0, 0] ; Exit to Varajar Fells
 
 		Case $GC_I_MAP_ID_HALL_OF_MONUMENTS
-			Return [0, 0] ;Exit to Eye of the North
+			Local $aCoords[2] = [0, 0] ;Exit to Eye of the North
 
 		Case $GC_I_MAP_ID_DALADA_UPLANDS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DOOMLORE_SHRINE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GROTHMAR_WARDOWNS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SACNOTH_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_DOOMLORE_SHRINE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DALADA_UPLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CATHEDRAL_OF_FLAMES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GROTHMAR_WARDOWNS
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_DALADA_UPLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_LONGEYES_LEDGE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_OOZE_PIT
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_SACNOTH_VALLEY
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LONGEYES_LEDGE
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_BJORA_MARCHES
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_GROTHMAR_WARDOWNS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SACNOTH_VALLEY
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_GROTHMAR_WARDOWNS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_DALADA_UPLANDS
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_CATACOMBS_OF_KATHANDRAX
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 				Case $GC_I_MAP_ID_RRAGARS_MENAGERIE
-					Return [0, 0]
+					Local $aCoords[2] = [0, 0]
 			EndSwitch
 		Case $GC_I_MAP_ID_CENTRAL_TRANSFER_CHAMBER
-			Return [0, 0] ; Exit to Battledepths
+			Local $aCoords[2] = [0, 0] ; Exit to Battledepths
 
 		Case $GC_I_MAP_ID_BOREAL_STATION
-			Return [0, 0] ; Exit to Ice Cliff Chasms
+			Local $aCoords[2] = [0, 0] ; Exit to Ice Cliff Chasms
 
 		;Case $GC_I_MAP_ID_BENEATH_LIONS_ARCH = 691 ; Special
 		;Case $GC_I_MAP_ID_TUNNELS_BELOW_CANTHA = 692 ; Special
@@ -3049,7 +3048,11 @@ Func GetExitPortalsCoords($FromMapID, $ToMapID)
 		;Case $GC_I_MAP_ID_WAR_IN_KRYTA_TALMARK_WILDERNESS = 837 ; War in Kryta
 		;Case $GC_I_MAP_ID_TRIAL_OF_ZINN = 838 ; Special
 		;Case $GC_I_MAP_ID_DIVINITY_COAST_EXPLORABLE = 839 ; War in Kryta
-		;Case $GC_I_MAP_ID_LIONS_ARCH_KEEP = 840 ; War in Kryta
+		Case $GC_I_MAP_ID_LIONS_ARCH_KEEP = 840 ; War in Kryta
+			Switch $ToMapID
+				Case $GC_I_MAP_ID_LIONS_ARCH_HALLOWEEN, $GC_I_MAP_ID_LIONS_ARCH_WINTERSDAY, $GC_I_MAP_ID_LIONS_ARCH_CANTHAN_NEW_YEAR
+					Local $aCoords[2] = [0, 0]
+			EndSwitch
 		;Case $GC_I_MAP_ID_DALESSIO_SEABOARD_EXPLORABLE = 841 ; War in Kryta
 		;Case $GC_I_MAP_ID_THE_BATTLE_FOR_LIONS_ARCH_EXPLORABLE = 842 ; War in Kryta
 		;Case $GC_I_MAP_ID_RIVERSIDE_PROVINCE_EXPLORABLE = 843 ; War in Kryta
@@ -3086,4 +3089,6 @@ Func GetExitPortalsCoords($FromMapID, $ToMapID)
 			Out($g_a2D_MapArray[$FromMapID][1] & " to " & $g_a2D_MapArray[$ToMapID][1])
 			Return False
 	EndSwitch
+
+	Return $aCoords
 EndFunc   ;==>GetPortalsCoords
