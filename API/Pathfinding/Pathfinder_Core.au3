@@ -2,7 +2,7 @@
 
 Global $DLL_PATH = ""
 Global $g_hPathfinderDLL = 0  ; Handle to loaded DLL
-Global $g_bPathfinder_Debug = True  ; Debug logging (can be enabled from Pathfinder_Movements.au3)
+Global $g_bPathfinder_Debug = False  ; Debug logging (can be enabled from Pathfinder_Movements.au3)
 
 Global Const $tagPathPoint = "float x;float y;int layer"
 Global Const $tagPathResult = "ptr points;int point_count;float total_cost;int error_code;char error_message[256]"
