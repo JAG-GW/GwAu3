@@ -2,6 +2,7 @@
 
 Global $DLL_PATH = ""
 Global $g_hPathfinderDLL = 0  ; Handle to loaded DLL
+Global $g_bPathfinder_Debug = False  ; Debug logging (can be enabled from Pathfinder_Movements.au3)
 
 Global Const $tagPathPoint = "float x;float y;int layer"
 Global Const $tagPathResult = "ptr points;int point_count;float total_cost;int error_code;char error_message[256]"
@@ -56,6 +57,7 @@ Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRa
     Local $l_p_Result = Pathfinder_FindPathGWRaw($mapID, $startX, $startY, $destX, $destY, $simplifyRange)
 
     If $l_p_Result = 0 Then
+        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR: DllCall returned null pointer" & @CRLF)
         Return SetError(1, 0, 0)
     EndIf
 
@@ -64,12 +66,15 @@ Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRa
 
     If $l_i_ErrorCode <> 0 Then
         Local $l_s_ErrorMsg = DllStructGetData($l_t_Result, "error_message")
+        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR code=" & $l_i_ErrorCode & " msg=" & $l_s_ErrorMsg & @CRLF)
         Pathfinder_FreePathResult($l_p_Result)
         Return SetError(2, $l_i_ErrorCode, 0)
     EndIf
 
     Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
     Local $l_p_Points = DllStructGetData($l_t_Result, "points")
+
+    If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] OK: point_count=" & $l_i_PointCount & @CRLF)
 
     Local $a_Path[$l_i_PointCount][3]  ; x, y, layer
     For $i = 0 To $l_i_PointCount - 1
@@ -137,6 +142,7 @@ Func Pathfinder_FindPathGWWithObstacle($mapID, $startX, $startY, $destX, $destY,
     Local $l_p_Result = Pathfinder_FindPathGWWithObstacleRaw($mapID, $startX, $startY, $destX, $destY, $aObstacles, $simplifyRange)
 
     If $l_p_Result = 0 Then
+        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR: DllCall returned null pointer" & @CRLF)
         Return SetError(1, 0, 0)
     EndIf
 
@@ -145,12 +151,15 @@ Func Pathfinder_FindPathGWWithObstacle($mapID, $startX, $startY, $destX, $destY,
 
     If $l_i_ErrorCode <> 0 Then
         Local $l_s_ErrorMsg = DllStructGetData($l_t_Result, "error_message")
+        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR code=" & $l_i_ErrorCode & " msg=" & $l_s_ErrorMsg & @CRLF)
         Pathfinder_FreePathResult($l_p_Result)
         Return SetError(2, $l_i_ErrorCode, 0)
     EndIf
 
     Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
     Local $l_p_Points = DllStructGetData($l_t_Result, "points")
+
+    If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] OK: point_count=" & $l_i_PointCount & @CRLF)
 
     Local $a_Path[$l_i_PointCount][3]  ; x, y, layer
     For $i = 0 To $l_i_PointCount - 1
