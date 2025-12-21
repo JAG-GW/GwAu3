@@ -2,7 +2,7 @@
 
 Global $DLL_PATH = ""
 Global $g_hPathfinderDLL = 0  ; Handle to loaded DLL
-Global $g_bPathfinder_Debug = False  ; Debug logging (can be enabled from Pathfinder_Movements.au3)
+Global $g_bPathfinder_Debug = True  ; Debug logging (can be enabled from Pathfinder_Movements.au3)
 
 Global Const $tagPathPoint = "float x;float y;int layer"
 Global Const $tagPathResult = "ptr points;int point_count;float total_cost;int error_code;char error_message[256]"
@@ -83,6 +83,11 @@ Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRa
         $a_Path[$i][1] = DllStructGetData($l_t_Point, "y")
         $a_Path[$i][2] = DllStructGetData($l_t_Point, "layer")
     Next
+
+    ; Debug: show first and last points
+    If $g_bPathfinder_Debug And $l_i_PointCount > 0 Then
+        Out("[Pathfinder DLL] First: (" & Round($a_Path[0][0], 2) & ", " & Round($a_Path[0][1], 2) & ") Last: (" & Round($a_Path[$l_i_PointCount-1][0], 2) & ", " & Round($a_Path[$l_i_PointCount-1][1], 2) & ")" & @CRLF)
+    EndIf
 
     Pathfinder_FreePathResult($l_p_Result)
 

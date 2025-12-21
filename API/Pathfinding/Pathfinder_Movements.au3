@@ -53,10 +53,18 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         EndIf
     EndIf
 
+	; Return false if party is defeated
     If Party_GetPartyContextInfo("IsDefeated") Then
         Pathfinder_Shutdown()
         Return False
     EndIf
+
+	; logic to wait heroes and henchman if they are out of range
+	If _Pathfinder_ShouldWaitForParty(2000, 1400) Then
+		Do
+			Sleep(250)
+		Until _Pathfinder_PartyWithinRange(1400)
+	EndIf
 
     ; Determine obstacle mode
     Local $lIsDynamicObstacles = IsString($aObstacles) And $aObstacles <> "" And $aObstacles <> "0"
@@ -146,7 +154,8 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
                 $g_iPathfinder_CurrentPathIndex = 0
             Else
                 ; Path calculation failed - clear path so we use direct movement
-                ReDim $g_aPathfinder_CurrentPath[0][3]
+                Local $lEmptyPath[0][3]
+                $g_aPathfinder_CurrentPath = $lEmptyPath
                 $g_iPathfinder_CurrentPathIndex = 0
             EndIf
             $g_hPathfinder_LastPathUpdateTime = TimerInit()
@@ -455,4 +464,76 @@ Func _Pathfinder_Log($sMessage)
     If $g_bPathfinder_Debug Then
         Out("[Pathfinder] " & $sMessage)
     EndIf
+EndFunc
+
+; =============================================================================
+; Helper function to check if party members are too far and need to wait
+; Returns True if we should wait, False if we can continue moving
+; =============================================================================
+Func _Pathfinder_ShouldWaitForParty($fMaxDistance = 2000, $fResumeDistance = 1400)
+    ; Only check if we are the party leader
+    If Not Party_GetPartyContextInfo("IsPartyLeader") Then Return False
+
+    ; Get the "Flag All" position (if set, heroes following flag are excluded)
+    Local $aFlagAll = World_GetWorldInfo("FlagAll")
+    If IsArray($aFlagAll) And ($aFlagAll[0] <> 0 Or $aFlagAll[1] <> 0) Then Return False
+
+    ; Check heroes
+    Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
+    If $iHeroCount > 0 Then
+        For $i = 1 To $iHeroCount
+            ; Skip if hero is individually flagged
+            Local $fFlagX = Party_GetHeroFlagInfo($i, "FlagX")
+            Local $fFlagY = Party_GetHeroFlagInfo($i, "FlagY")
+            If $fFlagX <> 0 Or $fFlagY <> 0 Then ContinueLoop
+
+            ; Get hero agent position
+            Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+            If $iHeroAgentID = 0 Then ContinueLoop
+
+            ; Calculate distance
+            Local $fDist = Agent_GetDistance($iHeroAgentID, Agent_GetMyID())
+
+            ; If too far, we need to wait
+            If $fDist > $fMaxDistance Then Return True
+        Next
+    EndIf
+
+    Return False
+EndFunc
+
+; =============================================================================
+; Check if all party members are close enough to resume movement
+; Returns True if all are within resume distance, False otherwise
+; =============================================================================
+Func _Pathfinder_PartyWithinRange($fResumeDistance = 1400)
+    ; Only check if we are the party leader
+    If Not Party_GetPartyContextInfo("IsPartyLeader") Then Return True
+
+    ; Get the "Flag All" position (if set, heroes following flag are excluded)
+    Local $aFlagAll = World_GetWorldInfo("FlagAll")
+    If IsArray($aFlagAll) And ($aFlagAll[0] <> 0 Or $aFlagAll[1] <> 0) Then Return True
+
+    ; Check heroes
+    Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
+    If $iHeroCount > 0 Then
+        For $i = 1 To $iHeroCount
+            ; Skip if hero is individually flagged
+            Local $fFlagX = Party_GetHeroFlagInfo($i, "FlagX")
+            Local $fFlagY = Party_GetHeroFlagInfo($i, "FlagY")
+            If $fFlagX <> 0 Or $fFlagY <> 0 Then ContinueLoop
+
+            ; Get hero agent position
+            Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+            If $iHeroAgentID = 0 Then ContinueLoop
+
+            ; Calculate distance
+            Local $fDist = Agent_GetDistance($iHeroAgentID, Agent_GetMyID())
+
+            ; If still too far, not ready to resume
+            If $fDist > $fResumeDistance Then Return False
+        Next
+    EndIf
+
+    Return True
 EndFunc
