@@ -2124,7 +2124,7 @@ Func GetExitPortalsCoords($FromMapID, $ToMapID)
 					Return [0, 0]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_JADE_FLATS_KURZICK = 390
+		Case $GC_I_MAP_ID_JADE_FLATS_KURZICK
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_MELANDRUS_HOPE
 					Return [0, 0]
@@ -2132,7 +2132,7 @@ Func GetExitPortalsCoords($FromMapID, $ToMapID)
 					Return [0, 0]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_JADE_FLATS_LUXON = 391
+		Case $GC_I_MAP_ID_JADE_FLATS_LUXON
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
 					Return [0, 0]
@@ -2294,7 +2294,7 @@ Func GetExitPortalsCoords($FromMapID, $ToMapID)
 					Return [0, 0]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_VENTA_CEMETERY_OUTPOST = 421
+		Case $GC_I_MAP_ID_VENTA_CEMETERY_OUTPOST
 			Switch $ToMapID
 				Case $GC_I_MAP_ID_SUNWARD_MARCHES
 					Return [0, 0]
@@ -2535,7 +2535,7 @@ Func GetExitPortalsCoords($FromMapID, $ToMapID)
 					Return [0, 0]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_NIGHTFALLEN_GARDEN = 455 ; Realm of Torment
+		Case $GC_I_MAP_ID_NIGHTFALLEN_GARDEN
 			Return [0, 0]
 
 		Case $GC_I_MAP_ID_CHUURHIR_FIELDS
