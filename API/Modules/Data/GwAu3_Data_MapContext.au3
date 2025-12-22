@@ -1636,264 +1636,269 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [4438, 26311]
 
 		Case $GC_I_MAP_ID_RAISU_PALACE_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-21788, -4489]
 
 		Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-9611, 3113]
+
 		Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-13964, -7765]
 
 		Case $GC_I_MAP_ID_AMATZ_BASIN_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-4556, 4753]
 
 		Case $GC_I_MAP_ID_SHADOWS_PASSAGE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14598, 15858]
 				Case $GC_I_MAP_ID_DRAGONS_THROAT_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [3140, 11461]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-21762, -4523]
 				Case $GC_I_MAP_ID_RAISU_PALACE_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [24185, -476]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_AURIOS_MINES_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-6616, 7385]
 
 		Case $GC_I_MAP_ID_PANJIANG_PENINSULA
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_KINYA_PROVINCE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-22270, 17107]
 				Case $GC_I_MAP_ID_TSUMEI_VILLAGE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [10238, 17359]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_KINYA_PROVINCE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PANJIANG_PENINSULA
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-6892, -23276]
 				Case $GC_I_MAP_ID_RAN_MUSU_GARDENS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [15028, 15803]
 				Case $GC_I_MAP_ID_SUNQUA_VALE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17185, 1452]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_HAIJU_LAGOON
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_JAYA_BLUFF
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-13680, -7569]
 				Case $GC_I_MAP_ID_ZEN_DAIJUN_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [15973, -22787]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUNQUA_VALE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_KINYA_PROVINCE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-20407, 7442]
 				Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [6975, 16535]
 				Case $GC_I_MAP_ID_SHING_JEA_MONASTERY, $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [22339, -10253]
 				Case $GC_I_MAP_ID_TSUMEI_VILLAGE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-4854, -13322]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_WAIJUN_BAZAAR
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [9049, -19979]
 				Case $GC_I_MAP_ID_THE_MARKETPLACE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [11758, 15629]
 				Case $GC_I_MAP_ID_THE_UNDERCITY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17532, -9887]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17537, 5466]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BUKDEK_BYWAY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_KAINENG_CENTER, $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-6720, 20504]
 				Case $GC_I_MAP_ID_SHADOWS_PASSAGE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [13198, 15801]
 				Case $GC_I_MAP_ID_THE_MARKETPLACE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14133, -14264]
 				Case $GC_I_MAP_ID_THE_UNDERCITY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [4271, -16786]
 				Case $GC_I_MAP_ID_VIZUNAH_SQUARE_FOREIGN_QUARTER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [14100, 5275]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-5069, -20356]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_UNDERCITY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [1190, 18178]
 				Case $GC_I_MAP_ID_VIZUNAH_SQUARE_LOCAL_QUARTER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [19807, 17152]
 				Case $GC_I_MAP_ID_WAIJUN_BAZAAR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-16876, -6821]
 			EndSwitch
 		Case $GC_I_MAP_ID_SHING_JEA_MONASTERY, $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_LINNOK_COURTYARD
-					Local $l_ai_Coords[2] = [0, 0]
-				Case $GC_I_MAP_ID_SHING_JEA_ARENA_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-3484, 9500]
 				Case $GC_I_MAP_ID_SUNQUA_VALE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-15271, 11962]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ARBORSTONE_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ALTRUMM_RUINS_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [8840, -20182]
 				Case $GC_I_MAP_ID_ARBORSTONE_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-2726, 8396]
 				Case $GC_I_MAP_ID_TANGLEWOOD_COPSE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [12068, 13539]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [7684, -6887]
 				Case $GC_I_MAP_ID_RAN_MUSU_GARDENS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-20185, -1671]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ZEN_DAIJUN_EXPLORABLE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-19311, 6016]
+			;[19257, 14162] zen daijun oupost ?
 
 		Case $GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BOREAS_SEABED_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-21543, 933]
 				Case $GC_I_MAP_ID_MOUNT_QINKAI
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-7425, -10344]
 				Case $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [12692, -11173]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GREAT_TEMPLE_OF_BALTHAZAR
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-6100, -2941]
+
 		Case $GC_I_MAP_ID_TSUMEI_VILLAGE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PANJIANG_PENINSULA
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-11694, -16968]
 				Case $GC_I_MAP_ID_SUNQUA_VALE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-4645, -12829]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SEITUNG_HARBOR
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_JAYA_BLUFF
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [16669, 17695]
 				Case $GC_I_MAP_ID_KAINENG_DOCKS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17598, 9443]
 				Case $GC_I_MAP_ID_SAOSHANG_TRAIL
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [16157, 13734]
 				Case $GC_I_MAP_ID_ZEN_DAIJUN_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [20390, 9591]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_RAN_MUSU_GARDENS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17103, 19990]
 				Case $GC_I_MAP_ID_KINYA_PROVINCE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [14677, 15275]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LINNOK_COURTYARD
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SAOSHANG_TRAIL
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [483, 10181]
 				Case $GC_I_MAP_ID_SHING_JEA_MONASTERY, $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-3923, 9604]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PONGMEI_VALLEY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [12853, -16734]
 				Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [8648, 17631]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SENJIS_CORNER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [10424, 14463]
 				Case $GC_I_MAP_ID_SHENZUN_TUNNELS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [23542, -2849]
 			EndSwitch
+
+		;Tahnnakai temple
 
 		Case $GC_I_MAP_ID_ALTRUMM_RUINS_OUTPOST
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ARBORSTONE_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [6502, 8254]
 				Case $GC_I_MAP_ID_HOUSE_ZU_HELTZER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [6578, 6126]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [3522, 7712]
 				Case $GC_I_MAP_ID_CAVALON
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [3559, 4461]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DRAGONS_THROAT_OUTPOST
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-12191, 9164]
 
 		Case $GC_I_MAP_ID_HARVEST_TEMPLE
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [3250, 2215]
 
 		Case $GC_I_MAP_ID_BREAKER_HOLLOW
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ARCHIPELAGOS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [20766, -4997]
 				Case $GC_I_MAP_ID_MOUNT_QINKAI
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [16568, -1653]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_LEVIATHAN_PITS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [8373, -19462]
 				Case $GC_I_MAP_ID_SILENT_SURF
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [9240, -26239]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MAATU_KEEP
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PONGMEI_VALLEY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-13339, 11007]
 				Case $GC_I_MAP_ID_SHENZUN_TUNNELS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-18035, 16757]
 			EndSwitch
+
+		;isle of the nameless
 
 		Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_FISSURE_OF_WOE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-1262, -16243]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [11733, -19838]
 				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [2772, -15163]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-2588, -15183]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_MONASTERY_OVERLOOK_2
@@ -1902,82 +1907,105 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_BRAUER_ACADEMY
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_DRAZACH_THICKET
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [15393, 7011]
 				Case $GC_I_MAP_ID_MELANDRUS_HOPE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [17597, 1178]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_MOROSTAV_TRAIL
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [32836, 11108]
 				Case $GC_I_MAP_ID_MOURNING_VEIL_FALLS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [26952, 5318]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BAI_PAASU_REACH
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-16124, 13701]
 
 		Case $GC_I_MAP_ID_SEAFARERS_REST
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_RHEAS_CRATER
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-10900, -17724]
 				Case $GC_I_MAP_ID_SILENT_SURF
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-14157, -20103]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BEJUNKAN_PIER
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-1922, 1171]
+
 		Case $GC_I_MAP_ID_VIZUNAH_SQUARE_LOCAL_QUARTER
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-5279, -20042]
 
 		Case $GC_I_MAP_ID_VIZUNAH_SQUARE_FOREIGN_QUARTER
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-14014, 5407]
 
 		Case $GC_I_MAP_ID_FORT_ASPENWOOD_LUXON
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-1972, 9447]
 		Case $GC_I_MAP_ID_FORT_ASPENWOOD_KURZICK
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-7025, -1417]
 		Case $GC_I_MAP_ID_THE_JADE_QUARRY_LUXON
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [6380, 13757]
 		Case $GC_I_MAP_ID_THE_JADE_QUARRY_KURZICK
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-7193, -10646]
 		Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK
-			Local $l_ai_Coords[2] = [0, 0]
+			Local $l_ai_Coords[2] = [-13298, -7228]
 
 		Case $GC_I_MAP_ID_RAISU_PAVILLION
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_KAINENG_CENTER, $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-26584, -4451]
 				Case $GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-20985, -4471]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_KAINENG_DOCKS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_THE_MARKETPLACE
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [12122, 18778]
 				Case $GC_I_MAP_ID_SEITUNG_HARBOR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [7063, 20189]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_MARKETPLACE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BUKDEK_BYWAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [16684, 20196]
 				Case $GC_I_MAP_ID_KAINENG_DOCKS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [11643, 19336]
 				Case $GC_I_MAP_ID_WAIJUN_BAZAAR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [11264, 15447]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SAOSHANG_TRAIL
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_LINNOK_COURTYARD
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [311, 10174]
 				Case $GC_I_MAP_ID_SEITUNG_HARBOR
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [16663, 13283]
 			EndSwitch
+
+		Case $GC_I_MAP_ID_TANGLEWOOD_COPSE
+			Switch $a_i_ToMapID
+				Case $GC_I_MAP_ID_ARBORSTONE_EXPLORABLE
+					Local $l_ai_Coords[2] = [-20254, -13650]
+				Case $GC_I_MAP_ID_PONGMEI_VALLEY
+					Local $l_ai_Coords[2] = [-17726, -8557]
+			EndSwitch
+
+		Case $GC_I_MAP_ID_SAINT_ANJEKAS_SHRINE
+			Switch $a_i_ToMapID
+				Case $GC_I_MAP_ID_DRAZACH_THICKET
+					Local $l_ai_Coords[2] = [-11107, -23507]
+				Case $GC_I_MAP_ID_FERNDALE
+					Local $l_ai_Coords[2] = [-8635, -21523]
+			EndSwitch
+
+		Case $GC_I_MAP_ID_EREDON_TERRACE
+			Local $l_ai_Coords[2] = [18503, 11273]
+
+		Case $GC_I_MAP_ID_DIVINE_PATH
+			Local $l_ai_Coords[2] = [-26646, -4642]
 
 		Case $GC_I_MAP_ID_JAHAI_BLUFFS
 			Switch $a_i_ToMapID
