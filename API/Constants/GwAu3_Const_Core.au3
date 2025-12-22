@@ -163,6 +163,18 @@ Global $g_p_ToggleHeroSkillState = DllStructGetPtr($g_d_ToggleHeroSkillState)
 Global $g_d_MoveMap = DllStructCreate('ptr;dword;dword;dword;dword;dword')
 Global $g_p_MoveMap = DllStructGetPtr($g_d_MoveMap)
 
+;Party
+Global $g_d_AddPlayer = DllStructCreate('ptr;dword')
+Global $g_p_AddPlayer = DllStructGetPtr($g_d_AddPlayer)
+Global $g_d_KickPlayer = DllStructCreate('ptr;dword')
+Global $g_p_KickPlayer = DllStructGetPtr($g_d_KickPlayer)
+Global $g_d_KickInvitedPlayer = DllStructCreate('ptr;dword')
+Global $g_p_KickInvitedPlayer = DllStructGetPtr($g_d_KickInvitedPlayer)
+Global $g_d_RejectInvitation = DllStructCreate('ptr;dword')
+Global $g_p_RejectInvitation = DllStructGetPtr($g_d_RejectInvitation)
+Global $g_d_AcceptInvitation = DllStructCreate('ptr;dword')
+Global $g_p_AcceptInvitation = DllStructGetPtr($g_d_AcceptInvitation)
+
 ;Bot related
 Global $g_bAutoStart = False  ; Flag for auto-start
 Global $g_s_MainCharName  = ""

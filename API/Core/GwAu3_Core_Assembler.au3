@@ -1810,6 +1810,7 @@ Func Assembler_ModifyMemory()
 	Assembler_CreateMapCommands()
 	Assembler_CreateTradeCommands()
 	Assembler_CreateUICommands()
+	Assembler_CreatePartyCommands()
 	If IsDeclared("g_b_Assembler") Then Extend_Assembler()
 
 	Local $l_b_AllocCmd = False
@@ -2512,5 +2513,37 @@ Func Assembler_CreateUICommands()
 	_('push dword[eax+4]')
 	_('call ToggleHeroSkillState')
 	_('add esp,8')
+	_('ljmp CommandReturn')
+EndFunc
+
+Func Assembler_CreatePartyCommands()
+	_('CommandAddPlayer:')
+	_('push dword[eax+4]')
+	_('call AddPlayer')
+	_('add esp,4')
+	_('ljmp CommandReturn')
+
+	_('CommandKickPlayer:')
+	_('push dword[eax+4]')
+	_('call KickPlayer')
+	_('add esp,4')
+	_('ljmp CommandReturn')
+
+	_('CommandKickInvitedPlayer:')
+	_('push dword[eax+4]')
+	_('call KickInvitedPlayer')
+	_('add esp,4')
+	_('ljmp CommandReturn')
+
+	_('CommandRejectInvitation:')
+	_('push dword[eax+4]')
+	_('call RejectInvitation')
+	_('add esp,4')
+	_('ljmp CommandReturn')
+
+	_('CommandAcceptInvitation:')
+	_('push dword[eax+4]')
+	_('call AcceptInvitation')
+	_('add esp,4')
 	_('ljmp CommandReturn')
 EndFunc

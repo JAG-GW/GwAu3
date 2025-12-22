@@ -87,3 +87,33 @@ Func Party_LeaveGroup($a_b_KickHeroes = True)
     If $a_b_KickHeroes Then Party_KickAllHeroes()
     Return Core_SendPacket(0x4, $GC_I_HEADER_PARTY_LEAVE_GROUP)
 EndFunc   ;==>Party_LeaveGroup
+
+;~ Description: Add player via the Party Formation window.
+Func Party_AddPlayer($a_i_PlayerNumber)
+    DllStructSetData($g_d_AddPlayer, 2, $a_i_PlayerNumber)
+    Core_Enqueue($g_p_AddPlayer, 8)
+EndFunc   ;==>Party_AddPlayer
+
+;~ Description: Kick player via the Party Formation window.
+Func Party_KickPlayer($a_i_PlayerNumber)
+    DllStructSetData($g_d_KickPlayer, 2, $a_i_PlayerNumber)
+    Core_Enqueue($g_p_KickPlayer, 8)
+EndFunc   ;==>Party_KickPlayer
+
+;~ Description: Kick invited player via the Party Formation window.
+Func Party_KickInvitedPlayer($a_i_PartyID)
+    DllStructSetData($g_d_KickInvitedPlayer, 2, $a_i_PartyID)
+    Core_Enqueue($g_p_KickInvitedPlayer, 8)
+EndFunc   ;==>Party_KickInvitedPlayer
+
+;~ Description: Reject party invitation via the Party Formation window.
+Func Party_RejectInvitation($a_i_PartyID)
+    DllStructSetData($g_d_RejectInvitation, 2, $a_i_PartyID)
+    Core_Enqueue($g_p_RejectInvitation, 8)
+EndFunc   ;==>Party_RejectInvitation
+
+;~ Description: Accept party invitation via the Party Formation window.
+Func Party_AcceptInvitation($a_i_PartyID)
+    DllStructSetData($g_d_AcceptInvitation, 2, $a_i_PartyID)
+    Core_Enqueue($g_p_AcceptInvitation, 8)
+EndFunc   ;==>Party_AcceptInvitation
