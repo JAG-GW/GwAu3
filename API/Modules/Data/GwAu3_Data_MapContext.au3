@@ -1268,7 +1268,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_THE_BLACK_CURTAIN
 					Local $l_ai_Coords[2] = [-5242, 16001]
-				Case $GC_I_MAP_ID_FISSURE_OF_WOE
+				Case $GC_I_MAP_ID_THE_FISSURE_OF_WOE
 					Local $l_ai_Coords[2] = [-2759, 18616]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
 					Local $l_ai_Coords[2] = [-2759, 18616]
@@ -1891,7 +1891,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_FISSURE_OF_WOE
+				Case $GC_I_MAP_ID_THE_FISSURE_OF_WOE
 					Local $l_ai_Coords[2] = [-1262, -16243]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
 					Local $l_ai_Coords[2] = [11733, -19838]
@@ -2025,9 +2025,9 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ARKJOK_WARD
 					Local $l_ai_Coords[2] = [22692, -1108]
-				Case $GC_I_MAP_ID_DAJKAH_INLET
+				Case $GC_I_MAP_ID_DAJKAH_INLET_OUTPOST
 					Local $l_ai_Coords[2] = [-23034, 17254]
-				Case $GC_I_MAP_ID_NUNDU_BAY
+				Case $GC_I_MAP_ID_NUNDU_BAY_OUTPOST
 					Local $l_ai_Coords[2] = [-15438, -4546]
 				Case $GC_I_MAP_ID_SUNSPEAR_SANCTUARY
 					Local $l_ai_Coords[2] = [13204, 14918]
@@ -2039,7 +2039,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_COMMAND_POST
 					Local $l_ai_Coords[2] = [18499, -8566]
-				Case $GC_I_MAP_ID_DAJKAH_INLET
+				Case $GC_I_MAP_ID_DAJKAH_INLET_OUTPOST
 					Local $l_ai_Coords[2] = [-19922, -14506]
 				Case $GC_I_MAP_ID_VENTA_CEMETERY_OUTPOST
 					Local $l_ai_Coords[2] = [23471, 14379]
@@ -2123,7 +2123,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_COMMAND_POST
 					Local $l_ai_Coords[2] = [-701, -26240]
-				Case $GC_I_MAP_ID_GATE_OF_DESOLATION
+				Case $GC_I_MAP_ID_GATE_OF_DESOLATION_OUTPOST
 					Local $l_ai_Coords[2] = [-14379, 26053]
 				Case $GC_I_MAP_ID_JAHAI_BLUFFS
 					Local $l_ai_Coords[2] = [17238, -26265]
@@ -2183,9 +2183,9 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_CHANTRY_OF_SECRETS
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_GATE_OF_ANGUISH
+				Case $GC_I_MAP_ID_DOMAIN_OF_ANGUISH
 					Local $l_ai_Coords[2] = [-12981, -259]
-				Case $GC_I_MAP_ID_FISSURE_OF_WOE
+				Case $GC_I_MAP_ID_THE_FISSURE_OF_WOE
 					Local $l_ai_Coords[2] = [-10058, 1106]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
 					Local $l_ai_Coords[2] = [-9205, 3901]
@@ -2218,7 +2218,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [-20469, 13716]
 				Case $GC_I_MAP_ID_HOLDINGSOFCHOKHIN
 					Local $l_ai_Coords[2] = [16219, 8112]
-				Case $GC_I_MAP_ID_JENNURS_HORDE
+				Case $GC_I_MAP_ID_JENNURS_HORDE_OUTPOST
 					Local $l_ai_Coords[2] = [18117, -17245]
 			EndSwitch
 
@@ -2234,7 +2234,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GARDEN_OF_SEBORHIN
 					Local $l_ai_Coords[2] = [-4717, 16616]
-				Case $GC_I_MAP_ID_JENNURS_HORDE
+				Case $GC_I_MAP_ID_JENNURS_HORDE_OUTPOST
 					Local $l_ai_Coords[2] = [-23269, 17149]
 				Case $GC_I_MAP_ID_NIGHTFALLEN_GARDEN
 					Local $l_ai_Coords[2] = [-4717, 16616]
@@ -2393,7 +2393,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_BEKNUR_HARBOR
+				Case $GC_I_MAP_ID_BEKNUR_HARBOR_2
 					Local $l_ai_Coords[2] = [15068, -11202]
 				Case $GC_I_MAP_ID_BLACKTIDE_DEN_OUTPOST
 					Local $l_ai_Coords[2] = [-26546, -10889]
@@ -2446,7 +2446,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [-14545, 4045]
 				Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
 					Local $l_ai_Coords[2] = [-4510, 21041]
-				Case $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA
+				Case $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA_OUTPOST
 					Local $l_ai_Coords[2] = [-5101, -20152]
 			EndSwitch
 
@@ -2513,7 +2513,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GATE_OF_DESOLATION_OUTPOST
 					Local $l_ai_Coords[2] = [25950, -14012]
-				Case $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA
+				Case $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA_OUTPOST
 					Local $l_ai_Coords[2] = [-4630, 17290]
 			EndSwitch
 
@@ -2576,7 +2576,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [-7218, 5805]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_BEKNUR_HARBOR
+		Case $GC_I_MAP_ID_BEKNUR_HARBOR_2
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
 					Local $l_ai_Coords[2] = [-19304, 14559]
@@ -2689,7 +2689,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_BJORA_MARCHES
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_DARKRIME_DELVES
+				Case $GC_I_MAP_ID_DARKRIME_DELVES_LVL1
 					Local $l_ai_Coords[2] = [-5983, 20195]
 				Case $GC_I_MAP_ID_JAGA_MORAINE
 					Local $l_ai_Coords[2] = [-20966, 5407]
@@ -2718,7 +2718,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [-20656, -20081]
 				Case $GC_I_MAP_ID_RIVEN_EARTH
 					Local $l_ai_Coords[2] = [-20709, 9896]
-				Case $GC_I_MAP_ID_SHARDS_OF_ORR
+				Case $GC_I_MAP_ID_SHARDS_OF_ORR_LVL1
 					Local $l_ai_Coords[2] = [8873, -20635]
 				Case $GC_I_MAP_ID_VLOXS_FALLS
 					Local $l_ai_Coords[2] = [15807, 13350]
@@ -2726,7 +2726,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_ISSNUR_ISLES
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_BEKNUR_HARBOR
+				Case $GC_I_MAP_ID_BEKNUR_HARBOR_2
 					Local $l_ai_Coords[2] = [-16228, 11334]
 				Case $GC_I_MAP_ID_KODLONU_HAMLET
 					Local $l_ai_Coords[2] = [29496, 6900]
@@ -2793,13 +2793,13 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BOREAL_STATION
-					Local $l_ai_Coords[2] = [0, 0]
-				Case $GC_I_MAP_ID_EYE_OF_THE_NORTH, $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST_WINTERSDAY
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [5456, -27830]
+				Case $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST, $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST_WINTERSDAY
+					Local $l_ai_Coords[2] = [478, 1293]
 				Case $GC_I_MAP_ID_NORRHART_DOMAINS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-3950, 28261]
 				Case $GC_I_MAP_ID_BATTLEDEPTHS
-					Local $l_ai_Coords[2] = [0, 0]
+					Local $l_ai_Coords[2] = [-10551, -3947]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BOKKA_AMPHITHEATRE
@@ -2830,11 +2830,11 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_NORRHART_DOMAINS
 					Local $l_ai_Coords[2] = [17885, -16610]
-				Case $GC_I_MAP_ID_SEPULCHRE_OF_DRAGRIMMAR
+				Case $GC_I_MAP_ID_SEPULCHRE_OF_DRAGRIMMAR_LVL1
 					Local $l_ai_Coords[2] = [-11999, 26657]
 				Case $GC_I_MAP_ID_SIFHALLA
 					Local $l_ai_Coords[2] = [13547, 19779]
-				Case $GC_I_MAP_ID_VARAJAR_FELLS
+				Case $GC_I_MAP_ID_VARAJAR_FELLS_1
 					Local $l_ai_Coords[2] = [-10920, -26639]
 			EndSwitch
 
@@ -2853,7 +2853,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BJORA_MARCHES
 					Local $l_ai_Coords[2] = [16242, -20629]
-				Case $GC_I_MAP_ID_FROSTMAWS_BURROWS
+				Case $GC_I_MAP_ID_FROSTMAWS_BURROWS_LVL1
 					Local $l_ai_Coords[2] = [1666, 26826]
 				Case $GC_I_MAP_ID_SIFHALLA
 					Local $l_ai_Coords[2] = [-13506, -24262]
@@ -2869,17 +2869,17 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [15583, -6507]
 				Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
 					Local $l_ai_Coords[2] = [11140, -14202]
-				Case $GC_I_MAP_ID_VARAJAR_FELLS
+				Case $GC_I_MAP_ID_VARAJAR_FELLS_1
 					Local $l_ai_Coords[2] = [-26334, -14031]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_VARAJAR_FELLS
+		Case $GC_I_MAP_ID_VARAJAR_FELLS_1
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_BATTLEDEPTHS
 					Local $l_ai_Coords[2] = [26914, -9268]
 				Case $GC_I_MAP_ID_DRAKKAR_LAKE
 					Local $l_ai_Coords[2] = [-1580, 17454]
-				Case $GC_I_MAP_ID_RAVENS_POINT
+				Case $GC_I_MAP_ID_RAVENS_POINT_LVL1
 					Local $l_ai_Coords[2] = [-26531, 16736]
 				Case $GC_I_MAP_ID_OLAFSTEAD
 					Local $l_ai_Coords[2] = [-192, 1220]
@@ -2896,7 +2896,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_MARGA_COAST
 					Local $l_ai_Coords[2] = [552, -3962]
 				Case $GC_I_MAP_ID_SUNWARD_MARCHES
-					Local $l_ai_Coords[2] = [-3966, 1559]
+					Local $l_ai_Coords[2] = [-4014, 4535]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_SHADOW_NEXUS_OUTPOST
@@ -2906,9 +2906,9 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GADDS_ENCAMPMENT
 					Local $l_ai_Coords[2] = [-9642, -20805]
-				Case $GC_I_MAP_ID_BLOODSTONE_CAVES
+				Case $GC_I_MAP_ID_BLOODSTONE_CAVES_LVL1
 					Local $l_ai_Coords[2] = [12355, -26161]
-				Case $GC_I_MAP_ID_BOGROOT_GROWTHS
+				Case $GC_I_MAP_ID_BOGROOT_GROWTHS_LVL1
 					Local $l_ai_Coords[2] = [13186, 26596]
 			EndSwitch
 
@@ -2921,7 +2921,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [25667, -9043]
 				Case $GC_I_MAP_ID_UMBRAL_GROTTO
 					Local $l_ai_Coords[2] = [-23107, 6992]
-				Case $GC_I_MAP_ID_VARAJAR_FELLS
+				Case $GC_I_MAP_ID_VARAJAR_FELLS_1
 					Local $l_ai_Coords[2] = [26658, 12648]
 			EndSwitch
 
@@ -2929,9 +2929,9 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ALCAZIA_TANGLE
 					Local $l_ai_Coords[2] = [20832, -7311]
-				Case $GC_I_MAP_ID_ARACHNIS_HAUNT
+				Case $GC_I_MAP_ID_ARACHNIS_HAUNT_LVL1
 					Local $l_ai_Coords[2] = [-11477, -19244]
-				Case $GC_I_MAP_ID_OOLAS_LAB
+				Case $GC_I_MAP_ID_OOLAS_LAB_LVL1
 					Local $l_ai_Coords[2] = [-20435, 8063]
 				Case $GC_I_MAP_ID_RATA_SUM
 					Local $l_ai_Coords[2] = [16414, 14111]
@@ -2953,17 +2953,17 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_ARBOR_BAY
 					Local $l_ai_Coords[2] = [15391, 12320]
-				Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS
+				Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS_LVL1
 					Local $l_ai_Coords[2] = [19915, 19690]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_BATTLEDEPTHS
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_HEART_OF_THE_SHIVERPEAKS
+				Case $GC_I_MAP_ID_HEART_OF_THE_SHIVERPEAKS_LVL1
 					Local $l_ai_Coords[2] = [5941, 7929]
 				Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
 					Local $l_ai_Coords[2] = [21367, 15167]
-				Case $GC_I_MAP_ID_VARAJAR_FELLS
+				Case $GC_I_MAP_ID_VARAJAR_FELLS_1
 					Local $l_ai_Coords[2] = [-6701, 19891]
 				Case $GC_I_MAP_ID_CENTRAL_TRANSFER_CHAMBER
 					Local $l_ai_Coords[2] = [-2921, 11612]
@@ -2973,7 +2973,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SPARKFLY_SWAMP
 					Local $l_ai_Coords[2] = [-9545, -20058]
-				Case $GC_I_MAP_ID_SHARDS_OF_ORR
+				Case $GC_I_MAP_ID_SHARDS_OF_ORR_LVL1
 					Local $l_ai_Coords[2] = [-12819, -24885]
 			EndSwitch
 
@@ -2981,7 +2981,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_VERDANT_CASCADES
 					Local $l_ai_Coords[2] = [-22872, 6410]
-				Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS
+				Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS_LVL1
 					Local $l_ai_Coords[2] = [-26174, 10549]
 			EndSwitch
 
@@ -3067,7 +3067,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [12733, 18648]
 				Case $GC_I_MAP_ID_CATACOMBS_OF_KATHANDRAX
 					Local $l_ai_Coords[2] = [19275, -16228]
-				Case $GC_I_MAP_ID_RRAGARS_MENAGERIE
+				Case $GC_I_MAP_ID_RRAGARS_MENAGERIE_LVL1
 					Local $l_ai_Coords[2] = [-19460, -15952]
 			EndSwitch
 
