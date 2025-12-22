@@ -191,7 +191,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
         Sleep(32)
 
-    Until Agent_GetDistanceToXY($aDestX, $aDestY) < 150
+    Until Agent_GetDistanceToXY($aDestX, $aDestY) < 250
 
     ; Shutdown DLL and free memory
     Pathfinder_Shutdown()
@@ -223,7 +223,7 @@ Func _Pathfinder_GetPath($aStartX, $aStartY, $aDestX, $aDestY, $aObstacles)
             Return 0
         EndIf
 
-		$lPath = _Pathfinder_SmartSimplify($lPath, $aObstacles, $g_iPathfinder_SimplifyRange)
+;~ 		$lPath = _Pathfinder_SmartSimplify($lPath, $aObstacles, $g_iPathfinder_SimplifyRange)
 
         _Pathfinder_Log("SUCCESS: Path found with " & UBound($lPath) & " points")
         Return $lPath
@@ -472,7 +472,7 @@ EndFunc
 ; =============================================================================
 Func _Pathfinder_ShouldWaitForParty($fMaxDistance = 2000, $fResumeDistance = 1400)
     ; Only check if we are the party leader
-    If Not Party_GetPartyContextInfo("IsPartyLeader") Then Return False
+    If Agent_GetPlayerInfo(-2, "PartyLeaderPlayerNumber") <> Agent_GetPlayerInfo(-2, "PlayerNumber") Then Return False
 
     ; Get the "Flag All" position (if set, heroes following flag are excluded)
     Local $aFlagAll = World_GetWorldInfo("FlagAll")
@@ -508,7 +508,7 @@ EndFunc
 ; =============================================================================
 Func _Pathfinder_PartyWithinRange($fResumeDistance = 1400)
     ; Only check if we are the party leader
-    If Not Party_GetPartyContextInfo("IsPartyLeader") Then Return True
+    If Agent_GetPlayerInfo(-2, "PartyLeaderPlayerNumber") <> Agent_GetPlayerInfo(-2, "PlayerNumber") Then Return False
 
     ; Get the "Flag All" position (if set, heroes following flag are excluded)
     Local $aFlagAll = World_GetWorldInfo("FlagAll")
