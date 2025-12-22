@@ -1359,7 +1359,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
 					Local $l_ai_Coords[2] = [-11570, 15423]
-				Case $GC_I_MAP_ID_TASCAS_DEMISE
+				Case $GC_I_MAP_ID_TASCAS_DEMISE, $GC_I_MAP_ID_MINERAL_SPRINGS
 					Local $l_ai_Coords[2] = [-9381, 19732]
 			EndSwitch
 		Case $GC_I_MAP_ID_MARHANS_GROTTO
