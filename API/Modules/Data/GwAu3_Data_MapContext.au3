@@ -2393,7 +2393,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_BEKNUR_HARBOR
+				Case $GC_I_MAP_ID_BEKNUR_HARBOR_2
 					Local $l_ai_Coords[2] = [15068, -11202]
 				Case $GC_I_MAP_ID_BLACKTIDE_DEN_OUTPOST
 					Local $l_ai_Coords[2] = [-26546, -10889]
@@ -2576,7 +2576,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [-7218, 5805]
 			EndSwitch
 
-		Case $GC_I_MAP_ID_BEKNUR_HARBOR
+		Case $GC_I_MAP_ID_BEKNUR_HARBOR_2
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_CLIFFS_OF_DOHJOK
 					Local $l_ai_Coords[2] = [-19304, 14559]
@@ -2726,7 +2726,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_ISSNUR_ISLES
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_BEKNUR_HARBOR
+				Case $GC_I_MAP_ID_BEKNUR_HARBOR_2
 					Local $l_ai_Coords[2] = [-16228, 11334]
 				Case $GC_I_MAP_ID_KODLONU_HAMLET
 					Local $l_ai_Coords[2] = [29496, 6900]
