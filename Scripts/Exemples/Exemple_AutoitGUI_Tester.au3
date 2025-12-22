@@ -1,7 +1,8 @@
 #RequireAdmin
 #include "../../API/_GwAu3.au3"
-#include "../../API/Pathfinding/Pathfinder.au3"
+#include "../../API/Pathfinding/_Pathfinder.au3"
 #include "../../API/SmartCast/_UtilityAI.au3"
+$DLL_PATH = "..\..\API\Pathfinding\GWPathfinder.dll"
 
 Global Const $doLoadLoggedChars = True
 Opt("GUIOnEventMode", True)
