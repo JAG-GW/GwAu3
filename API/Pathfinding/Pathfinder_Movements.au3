@@ -8,10 +8,10 @@ Global $g_iPathfinder_CurrentPathIndex = 0
 Global $g_hPathfinder_LastPathUpdateTime = 0
 
 ; Configuration
-Global $g_iPathfinder_PathUpdateInterval = 500      ; Interval before recalculating path (ms)
-Global $g_iPathfinder_WaypointReachedDistance = 150 ; Distance to consider waypoint reached
+Global $g_iPathfinder_PathUpdateInterval = 1000      ; Interval before recalculating path (ms)
+Global $g_iPathfinder_WaypointReachedDistance = 250 ; Distance to consider waypoint reached
 Global $g_iPathfinder_SimplifyRange = 1250           ; Path simplification range
-Global $g_iPathfinder_ObstacleUpdateInterval = 500  ; Interval for dynamic obstacle updates (ms)
+Global $g_iPathfinder_ObstacleUpdateInterval = 1000  ; Interval for dynamic obstacle updates (ms)
 Global $g_iPathfinder_StuckCheckInterval = 1000     ; Interval to check if stuck (ms)
 Global $g_iPathfinder_StuckDistance = 50            ; If moved less than this, consider stuck
 
@@ -223,7 +223,7 @@ Func _Pathfinder_GetPath($aStartX, $aStartY, $aDestX, $aDestY, $aObstacles)
             Return 0
         EndIf
 
-;~ 		$lPath = _Pathfinder_SmartSimplify($lPath, $aObstacles, $g_iPathfinder_SimplifyRange)
+		$lPath = _Pathfinder_SmartSimplify($lPath, $aObstacles, $g_iPathfinder_SimplifyRange)
 
         _Pathfinder_Log("SUCCESS: Path found with " & UBound($lPath) & " points")
         Return $lPath

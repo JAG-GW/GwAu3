@@ -359,3 +359,37 @@ Func Map_IsMapUnlocked($a_i_MapID)
 
     Return BitAND($l_i_Value, $l_i_Flag) <> 0
 EndFunc
+
+; =============================================================================
+; Map_IsOutpost - Checks if a map is a valid outpost that can be traveled to
+; @param $a_i_MapID: The map ID to check
+; @return: True if valid outpost, False otherwise
+; =============================================================================
+Func Map_IsOutpost($a_i_MapID)
+	; Get map info using Map_GetAreaInfo
+	Local $l_i_ThumbnailID = Map_GetAreaInfo($a_i_MapID, "ThumbnailID")
+	Local $l_i_NameID = Map_GetAreaInfo($a_i_MapID, "NameID")
+	Local $l_i_X = Map_GetAreaInfo($a_i_MapID, "X")
+	Local $l_i_Y = Map_GetAreaInfo($a_i_MapID, "Y")
+	Local $l_i_Flags = Map_GetAreaInfo($a_i_MapID, "Flags")
+	Local $l_i_RegionType = Map_GetAreaInfo($a_i_MapID, "RegionType")
+
+	; Check if basic info exists
+	If Not $l_i_ThumbnailID Or Not $l_i_NameID Then Return False
+	If Not ($l_i_X Or $l_i_Y) Then Return False
+
+	; Check flags - invalid if both 0x5000000 bits are set
+	If BitAND($l_i_Flags, 0x5000000) = 0x5000000 Then Return False
+	; Check flags - invalid if 0x80000000 bit is set
+	If BitAND($l_i_Flags, 0x80000000) = 0x80000000 Then Return False
+
+	; Check RegionType - must be one of the valid outpost types
+	; 5 = Mission Outpost, 6 = Cooperative Mission, 7 = Competitive Mission
+	; 8 = Elite Mission, 9 = Challenge, 10 = Outpost, 13 = City
+	Switch $l_i_RegionType
+		Case 5, 6, 7, 8, 9, 10, 13, 19
+			Return True
+		Case Else
+			Return False
+	EndSwitch
+EndFunc   ;==>Map_IsOutpost
