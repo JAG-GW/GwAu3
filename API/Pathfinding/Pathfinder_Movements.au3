@@ -59,13 +59,6 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         Return False
     EndIf
 
-	; logic to wait heroes and henchman if they are out of range
-	If _Pathfinder_ShouldWaitForParty(2000, 1400) Then
-		Do
-			Sleep(250)
-		Until _Pathfinder_PartyWithinRange(1400)
-	EndIf
-
     ; Determine obstacle mode
     Local $lIsDynamicObstacles = IsString($aObstacles) And $aObstacles <> "" And $aObstacles <> "0"
     Local $lCurrentObstacles = 0
@@ -187,7 +180,25 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         EndIf
 
         ; Fight if needed
-        If Map_GetInstanceInfo("Type") = $GC_I_MAP_TYPE_EXPLORABLE Then UAI_Fight($lMyX, $lMyY, $aAggroRange, $aFightRangeOut, $aFinisherMode)
+        If Map_GetInstanceInfo("Type") = $GC_I_MAP_TYPE_EXPLORABLE Then
+			UAI_Fight($lMyX, $lMyY, $aAggroRange, $aFightRangeOut, $aFinisherMode)
+
+			; Wait heroes if they are too far
+			If _Pathfinder_ShouldWaitForParty(2000, 1400) Then
+				Out("Waiting for party to catch up")
+				Local $lWaitTimer = TimerInit()
+				Do
+					Agent_CancelAction()
+					Sleep(250)
+				Until _Pathfinder_PartyWithinRange(1400) Or TimerDiff($lWaitTimer) > 30000
+			EndIf
+
+			; Wait for resurrection if needed
+            If _Pathfinder_ShouldWaitForResurrection() Then
+                _Pathfinder_WaitForResurrection()
+            EndIf
+		EndIf
+
 
         Sleep(32)
 
@@ -470,36 +481,42 @@ EndFunc
 ; Helper function to check if party members are too far and need to wait
 ; Returns True if we should wait, False if we can continue moving
 ; =============================================================================
-Func _Pathfinder_ShouldWaitForParty($fMaxDistance = 2000, $fResumeDistance = 1400)
-    ; Only check if we are the party leader
-    If Agent_GetPlayerInfo(-2, "PartyLeaderPlayerNumber") <> Agent_GetPlayerInfo(-2, "PlayerNumber") Then Return False
+Func _Pathfinder_ShouldWaitForParty($fMaxDistance = 1800, $fResumeDistance = 1400)
+    ; Don't wait if there are enemies nearby
+    Local $iEnemyCount = GetAgents(-2, 1250, $GC_I_AGENT_TYPE_LIVING, 0, "_Pathfinder_FilterIsEnemy")
+
+    If $iEnemyCount > 0 Then Return False
 
     ; Get the "Flag All" position (if set, heroes following flag are excluded)
     Local $aFlagAll = World_GetWorldInfo("FlagAll")
-    If IsArray($aFlagAll) And ($aFlagAll[0] <> 0 Or $aFlagAll[1] <> 0) Then Return False
+	Local $fX = $aFlagAll[0]
+	Local $fY = $aFlagAll[1]
+	; Check if values are finite and not zero (meaning flag is actually placed)
+	If _IsFinite($fX) And _IsFinite($fY) Then Return False
 
-    ; Check heroes
-    Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
-    If $iHeroCount > 0 Then
-        For $i = 1 To $iHeroCount
-            ; Skip if hero is individually flagged
-            Local $fFlagX = Party_GetHeroFlagInfo($i, "FlagX")
-            Local $fFlagY = Party_GetHeroFlagInfo($i, "FlagY")
-            If $fFlagX <> 0 Or $fFlagY <> 0 Then ContinueLoop
+    ; Get party size (players + heroes + henchmen)
+    Local $iPartySize = Party_GetPartyContextInfo("TotalPartySize")
 
-            ; Get hero agent position
-            Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
-            If $iHeroAgentID = 0 Then ContinueLoop
+    ; Count party members within resume distance
+    Local $iNearbyCount = _Pathfinder_CountPartyMembersInRange($fResumeDistance)
+    ; If all party members are nearby, no need to wait
+    If $iNearbyCount >= $iPartySize - 1 Then Return False ; -1 for self
 
-            ; Calculate distance
-            Local $fDist = Agent_GetDistance($iHeroAgentID, Agent_GetMyID())
+    ; Count party members within max distance (5000)
+    Local $iTotalCount = _Pathfinder_CountPartyMembersInRange(5000)
+    ; If not all party members are even in 5000 range, someone is lost - don't wait forever
+    If $iTotalCount < $iPartySize - 1 Then Return False
 
-            ; If too far, we need to wait
-            If $fDist > $fMaxDistance Then Return True
-        Next
-    EndIf
+    ; Get farthest party member and check if they are moving
+    Local $iFarthestID = _Pathfinder_GetFarthestPartyMember()
+    If $iFarthestID = 0 Then Return False
 
-    Return False
+    Return True
+EndFunc
+
+Func _IsFinite($fValue)
+    ; inf and NaN comparisons: inf > any number, NaN <> NaN
+    Return ($fValue > -1e30 And $fValue < 1e30)
 EndFunc
 
 ; =============================================================================
@@ -507,33 +524,281 @@ EndFunc
 ; Returns True if all are within resume distance, False otherwise
 ; =============================================================================
 Func _Pathfinder_PartyWithinRange($fResumeDistance = 1400)
-    ; Only check if we are the party leader
-    If Agent_GetPlayerInfo(-2, "PartyLeaderPlayerNumber") <> Agent_GetPlayerInfo(-2, "PlayerNumber") Then Return False
+    ; If enemies appeared, resume movement immediately
+    Local $iEnemyCount = GetAgents(-2, 1200, $GC_I_AGENT_TYPE_LIVING, 0, "_Pathfinder_FilterIsEnemy")
+    If $iEnemyCount > 0 Then Return True
 
-    ; Get the "Flag All" position (if set, heroes following flag are excluded)
+    ; Get the "Flag All" position
     Local $aFlagAll = World_GetWorldInfo("FlagAll")
-    If IsArray($aFlagAll) And ($aFlagAll[0] <> 0 Or $aFlagAll[1] <> 0) Then Return True
+	Local $fX = $aFlagAll[0]
+	Local $fY = $aFlagAll[1]
+	; Check if values are finite and not zero (meaning flag is actually placed)
+	If _IsFinite($fX) And _IsFinite($fY) Then Return True
+
+    ; Get party size and count nearby members
+    Local $iPartySize = Party_GetPartyContextInfo("TotalPartySize")
+    Local $iNearbyCount = _Pathfinder_CountPartyMembersInRange($fResumeDistance)
+
+    Return ($iNearbyCount >= $iPartySize - 1) ; -1 for self
+EndFunc
+
+; =============================================================================
+; Count party members (heroes + henchmen) within range
+; =============================================================================
+Func _Pathfinder_CountPartyMembersInRange($fRange)
+    Local $iCount = 0
+    Local $iMyID = Agent_GetMyID()
+
+    ; Count heroes in range
+    Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
+    For $i = 1 To $iHeroCount
+        Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+        If $iHeroAgentID = 0 Then ContinueLoop
+        If Agent_GetAgentInfo($iHeroAgentID, "IsDead") Then ContinueLoop
+
+        Local $fDist = Agent_GetDistance($iHeroAgentID, $iMyID)
+        If $fDist <= $fRange Then $iCount += 1
+    Next
+
+    ; Count henchmen in range
+    Local $iHenchCount = Party_GetPartyContextInfo("HenchmanCount")
+    For $i = 1 To $iHenchCount
+        Local $iHenchAgentID = Party_GetMyPartyHenchmanInfo($i, "AgentID")
+        If $iHenchAgentID = 0 Then ContinueLoop
+        If Agent_GetAgentInfo($iHenchAgentID, "IsDead") Then ContinueLoop
+
+        Local $fDist = Agent_GetDistance($iHenchAgentID, $iMyID)
+        If $fDist <= $fRange Then $iCount += 1
+    Next
+
+    Return $iCount
+EndFunc
+
+; =============================================================================
+; Get the farthest party member (hero or henchman)
+; =============================================================================
+Func _Pathfinder_GetFarthestPartyMember()
+    Local $iFarthestID = 0
+    Local $fFarthestDist = 0
+    Local $iMyID = Agent_GetMyID()
 
     ; Check heroes
     Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
-    If $iHeroCount > 0 Then
-        For $i = 1 To $iHeroCount
-            ; Skip if hero is individually flagged
-            Local $fFlagX = Party_GetHeroFlagInfo($i, "FlagX")
-            Local $fFlagY = Party_GetHeroFlagInfo($i, "FlagY")
-            If $fFlagX <> 0 Or $fFlagY <> 0 Then ContinueLoop
+    For $i = 1 To $iHeroCount
+        ; Skip if hero is flagged
+        Local $fFlagX = Party_GetHeroFlagInfo($i, "FlagX")
+        Local $fFlagY = Party_GetHeroFlagInfo($i, "FlagY")
+        If $fFlagX <> 0 Or $fFlagY <> 0 Then ContinueLoop
 
-            ; Get hero agent position
-            Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
-            If $iHeroAgentID = 0 Then ContinueLoop
+        Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+        If $iHeroAgentID = 0 Then ContinueLoop
+        If Agent_GetAgentInfo($iHeroAgentID, "IsDead") Then ContinueLoop
 
-            ; Calculate distance
-            Local $fDist = Agent_GetDistance($iHeroAgentID, Agent_GetMyID())
+        Local $fDist = Agent_GetDistance($iHeroAgentID, $iMyID)
+        If $fDist > $fFarthestDist Then
+            $fFarthestDist = $fDist
+            $iFarthestID = $iHeroAgentID
+        EndIf
+    Next
 
-            ; If still too far, not ready to resume
-            If $fDist > $fResumeDistance Then Return False
+    ; Check henchmen
+    Local $iHenchCount = Party_GetPartyContextInfo("HenchmanCount")
+    For $i = 1 To $iHenchCount
+        Local $iHenchAgentID = Party_GetMyPartyHenchmanInfo($i, "AgentID")
+        If $iHenchAgentID = 0 Then ContinueLoop
+        If Agent_GetAgentInfo($iHenchAgentID, "IsDead") Then ContinueLoop
+
+        Local $fDist = Agent_GetDistance($iHenchAgentID, $iMyID)
+        If $fDist > $fFarthestDist Then
+            $fFarthestDist = $fDist
+            $iFarthestID = $iHenchAgentID
+        EndIf
+    Next
+
+    Return $iFarthestID
+EndFunc
+
+; =============================================================================
+; Check if there are dead party members that can be resurrected
+; Returns True if we should wait for resurrection, False otherwise
+; =============================================================================
+Func _Pathfinder_ShouldWaitForResurrection()
+    ; Don't wait if there are enemies nearby
+    Local $iEnemyCount = GetAgents(-2, 1200, $GC_I_AGENT_TYPE_LIVING, 0, "_Pathfinder_FilterIsEnemy")
+    If $iEnemyCount > 0 Then Return False
+
+    ; Count dead party members
+    Local $iDeadCount = _Pathfinder_CountDeadPartyMembers()
+    If $iDeadCount = 0 Then Return False
+
+    ; Check if we have resurrection skills available
+    Local $iRezCount = _Pathfinder_CountAvailableResurrections()
+    If $iRezCount = 0 Then Return False
+
+    Return True
+EndFunc
+
+; =============================================================================
+; Count dead party members (heroes + henchmen)
+; =============================================================================
+Func _Pathfinder_CountDeadPartyMembers()
+    Local $iCount = 0
+
+    ; Count dead heroes
+    Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
+    For $i = 1 To $iHeroCount
+        Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+        If $iHeroAgentID = 0 Then ContinueLoop
+        If Agent_GetAgentInfo($iHeroAgentID, "IsDead") Then $iCount += 1
+    Next
+
+    ; Count dead henchmen
+    Local $iHenchCount = Party_GetPartyContextInfo("HenchmanCount")
+    For $i = 1 To $iHenchCount
+        Local $iHenchAgentID = Party_GetMyPartyHenchmanInfo($i, "AgentID")
+        If $iHenchAgentID = 0 Then ContinueLoop
+        If Agent_GetAgentInfo($iHenchAgentID, "IsDead") Then $iCount += 1
+    Next
+
+    Return $iCount
+EndFunc
+
+; =============================================================================
+; Count available resurrection skills on living heroes (not on cooldown)
+; =============================================================================
+Func _Pathfinder_CountAvailableResurrections()
+    Local $iCount = 0
+    Local $iMyID = Agent_GetMyID()
+
+    ; Check player's skillbar
+;~     If Not Agent_GetAgentInfo(-2, "IsDead") Then
+;~         For $iSlot = 1 To 8
+;~             Local $iSkillID = Skill_GetSkillbarInfo($iSlot, "SkillID", 0)
+;~             If $iSkillID = 0 Then ContinueLoop
+;~             If Skill_IsAnyResurrection($iSkillID) Or Skill_IsResurrectionSpecial($iSkillID) Then
+;~                 If Skill_GetSkillbarInfo($iSlot, "IsRecharged", 0) Then
+;~                     $iCount += 1
+;~                 EndIf
+;~             EndIf
+;~         Next
+;~     EndIf
+
+    ; Check heroes' skillbars
+    Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
+    For $iHero = 1 To $iHeroCount
+        Local $iHeroAgentID = Party_GetMyPartyHeroInfo($iHero, "AgentID")
+        If $iHeroAgentID = 0 Then ContinueLoop
+        If Agent_GetAgentInfo($iHeroAgentID, "IsDead") Then ContinueLoop
+        If Agent_GetDistance($iHeroAgentID, $iMyID) > 5000 Then ContinueLoop
+
+        For $iSlot = 1 To 8
+            Local $iSkillID = Skill_GetSkillbarInfo($iSlot, "SkillID", $iHero)
+            If $iSkillID = 0 Then ContinueLoop
+            If Skill_IsAnyResurrection($iSkillID) Or Skill_IsResurrectionSpecial($iSkillID) Then
+                If Skill_GetSkillbarInfo($iSlot, "IsRecharged", $iHero) Then
+                    $iCount += 1
+                EndIf
+            EndIf
         Next
+    Next
+
+    Return $iCount
+EndFunc
+
+; =============================================================================
+; Get nearest dead party member
+; Returns AgentID or 0 if none
+; =============================================================================
+Func _Pathfinder_GetNearestDeadPartyMember()
+    Local $iNearestID = 0
+    Local $fNearestDist = 999999
+    Local $iMyID = Agent_GetMyID()
+
+    ; Check dead heroes
+    Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
+    For $i = 1 To $iHeroCount
+        Local $iHeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+        If $iHeroAgentID = 0 Then ContinueLoop
+        If Not Agent_GetAgentInfo($iHeroAgentID, "IsDead") Then ContinueLoop
+
+        Local $fDist = Agent_GetDistance($iHeroAgentID, $iMyID)
+        If $fDist < $fNearestDist Then
+            $fNearestDist = $fDist
+            $iNearestID = $iHeroAgentID
+        EndIf
+    Next
+
+    ; Check dead henchmen
+    Local $iHenchCount = Party_GetPartyContextInfo("HenchmanCount")
+    For $i = 1 To $iHenchCount
+        Local $iHenchAgentID = Party_GetMyPartyHenchmanInfo($i, "AgentID")
+        If $iHenchAgentID = 0 Then ContinueLoop
+        If Not Agent_GetAgentInfo($iHenchAgentID, "IsDead") Then ContinueLoop
+
+        Local $fDist = Agent_GetDistance($iHenchAgentID, $iMyID)
+        If $fDist < $fNearestDist Then
+            $fNearestDist = $fDist
+            $iNearestID = $iHenchAgentID
+        EndIf
+    Next
+
+    Return $iNearestID
+EndFunc
+
+; =============================================================================
+; Wait for dead party member to be resurrected
+; Moves player towards the dead ally so heroes can res
+; =============================================================================
+Func _Pathfinder_WaitForResurrection()
+    Local $iDeadAllyID = _Pathfinder_GetNearestDeadPartyMember()
+    If $iDeadAllyID = 0 Then Return
+
+    Out("Waiting for dead ally to be resurrected")
+
+    ; Move towards dead ally (within earshot range so heroes can res)
+    Local $fDeadX = Agent_GetAgentInfo($iDeadAllyID, "X")
+    Local $fDeadY = Agent_GetAgentInfo($iDeadAllyID, "Y")
+    Local $fDist = Agent_GetDistanceToXY($fDeadX, $fDeadY)
+
+    ; If we're too far, move closer
+    If $fDist > 1000 Then
+        Map_Move($fDeadX, $fDeadY, 0)
+    Else
+        Agent_CancelAction()
     EndIf
 
+    ; Wait for resurrection
+    Local $lRezTimer = TimerInit()
+    Do
+        Sleep(250)
+
+        ; Check if enemies appeared
+        Local $iEnemyCount = GetAgents(-2, 1200, $GC_I_AGENT_TYPE_LIVING, 0, "_Pathfinder_FilterIsEnemy")
+        If $iEnemyCount > 0 Then
+            Out("Enemies appeared, stopping res wait")
+            Return
+        EndIf
+
+        ; Update dead ally (might have been rezzed, check for another)
+        If Not Agent_GetAgentInfo($iDeadAllyID, "IsDead") Then
+            $iDeadAllyID = _Pathfinder_GetNearestDeadPartyMember()
+            If $iDeadAllyID = 0 Then
+                Out("All allies resurrected")
+                Return
+            EndIf
+        EndIf
+
+    Until _Pathfinder_CountAvailableResurrections() = 0 Or _Pathfinder_CountDeadPartyMembers() = 0 Or TimerDiff($lRezTimer) > 30000
+
+    Out("Res wait ended")
+EndFunc
+
+; =============================================================================
+; Filter: Is living enemy
+; =============================================================================
+Func _Pathfinder_FilterIsEnemy($aAgentPtr)
+    If Agent_GetAgentInfo($aAgentPtr, "Allegiance") <> $GC_I_ALLEGIANCE_ENEMY Then Return False
+    If Agent_GetAgentInfo($aAgentPtr, "HP") <= 0 Then Return False
+    If Agent_GetAgentInfo($aAgentPtr, "IsDead") Then Return False
     Return True
 EndFunc
