@@ -667,7 +667,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			EndSwitch
 
 		Case $GC_I_MAP_ID_EMBER_LIGHT_CAMP
-			Local $l_ai_Coords[2] = [3779, -8233]
+			Local $l_ai_Coords[2] = [3782, -8372]
 
 		Case $GC_I_MAP_ID_GRENDICH_COURTHOUSE
 			Local $l_ai_Coords[2] = [2304, 13396]
