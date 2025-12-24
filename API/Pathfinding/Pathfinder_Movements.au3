@@ -31,6 +31,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     Local $lMapLoadingOld = Map_GetInstanceInfo("Type")
     Local $lMyX = Agent_GetAgentInfo(-2, "X")
     Local $lMyY = Agent_GetAgentInfo(-2, "Y")
+	Local $lLayer = 0
 
 	; Map was not full loaded
 	If $lMyX = 0 Or $lMyY = 0 Or $lMyOldMap = 0 Or $lMapLoadingOld = $GC_I_MAP_TYPE_LOADING Then
@@ -48,7 +49,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then
         If Not Pathfinder_Initialize() Then
             ; Fallback to direct movement if DLL fails
-            Map_Move($aDestX, $aDestY, 0)
+            Map_Move($aDestX, $aDestY, $lLayer)
             Return False
         EndIf
     EndIf
@@ -71,7 +72,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
     Local $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $aDestX, $aDestY, $lCurrentObstacles)
     If Not IsArray($lPath) Or UBound($lPath) = 0 Then
-        Map_Move($aDestX, $aDestY, 0)
+        Map_MoveLayer($aDestX, $aDestY, $lLayer)
 ;~         Return
     EndIf
 
@@ -156,27 +157,27 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
         ; Move to current waypoint
         If $g_iPathfinder_CurrentPathIndex >= UBound($g_aPathfinder_CurrentPath) Then
-            Map_Move($aDestX, $aDestY, 0)
+            Map_MoveLayer($aDestX, $aDestY, $lLayer)
         Else
             Local $lWaypointX = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][0]
             Local $lWaypointY = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][1]
-            Local $lWaypointLayer = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][2]
+            $lLayer = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][2]
 
             If _Pathfinder_Distance($lMyX, $lMyY, $lWaypointX, $lWaypointY) < $g_iPathfinder_WaypointReachedDistance Then
                 $g_iPathfinder_CurrentPathIndex += 1
                 If $g_iPathfinder_CurrentPathIndex < UBound($g_aPathfinder_CurrentPath) Then
                     $lWaypointX = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][0]
                     $lWaypointY = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][1]
-                    $lWaypointLayer = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][2]
+                    $lLayer = $g_aPathfinder_CurrentPath[$g_iPathfinder_CurrentPathIndex][2]
                 Else
                     $lWaypointX = $aDestX
                     $lWaypointY = $aDestY
-                    $lWaypointLayer = 0
+                    $lLayer = 0
                 EndIf
             EndIf
 
             ; Use Map_MoveLayer to move to the correct layer (important for bridges)
-            Map_MoveLayer($lWaypointX, $lWaypointY, $lWaypointLayer)
+            Map_MoveLayer($lWaypointX, $lWaypointY, $lLayer)
         EndIf
 
         ; Fight if needed
@@ -200,7 +201,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 		EndIf
 
 
-        Sleep(32)
+        Sleep(64)
 
     Until Agent_GetDistanceToXY($aDestX, $aDestY) < 250
 
