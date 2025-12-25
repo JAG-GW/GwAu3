@@ -774,9 +774,9 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_SENJIS_CORNER
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-					Local $l_ai_Coords[2] = [5893, -12650]
-				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
 					Local $l_ai_Coords[2] = [7399, -18860]
+				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
+					Local $l_ai_Coords[2] = [5893, -12650]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TEARS_OF_THE_FALLEN
