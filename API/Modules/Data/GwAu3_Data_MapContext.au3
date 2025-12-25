@@ -1894,7 +1894,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_THE_FISSURE_OF_WOE
 					Local $l_ai_Coords[2] = [-1262, -16243]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
-					Local $l_ai_Coords[2] = [11733, -19838]
+					Local $l_ai_Coords[2] = [11753, -20000]
 				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE
 					Local $l_ai_Coords[2] = [2772, -15163]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
