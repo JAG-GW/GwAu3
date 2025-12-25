@@ -2913,7 +2913,10 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_THE_NIGHTFALLEN_LANDS
-			Local $l_ai_Coords[2] = [0, 0] ; Exit to Nightfallen Jahai
+			Switch $a_i_ToMapID
+				Case $GC_I_MAP_ID_NIGHTFALLEN_JAHAI
+					Local $l_ai_Coords[2] = [-16100.17, 18562.15]
+			EndSwitch
 
 		Case $GC_I_MAP_ID_VERDANT_CASCADES
 			Switch $a_i_ToMapID
@@ -3717,6 +3720,8 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_THE_ALKALI_PAN, $GC_I_MAP_ID_THE_RUPTURED_HEART]
 		Case $GC_I_MAP_ID_GATE_OF_PAIN_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_NIGHTFALLEN_JAHAI, $GC_I_MAP_ID_DOMAIN_OF_PAIN]
+		Case $GC_I_MAP_ID_GATE_OF_THE_NIGHTFALLEN_LANDS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_NIGHTFALLEN_JAHAI]
 		Case $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_DEPTHS_OF_MADNESS, $GC_I_MAP_ID_DOMAIN_OF_SECRETS]
 
