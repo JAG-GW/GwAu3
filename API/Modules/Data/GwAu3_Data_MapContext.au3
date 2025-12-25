@@ -774,9 +774,9 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_SENJIS_CORNER
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-					Local $l_ai_Coords[2] = [5893, -12650]
-				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
 					Local $l_ai_Coords[2] = [7399, -18860]
+				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
+					Local $l_ai_Coords[2] = [5893, -12650]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TEARS_OF_THE_FALLEN
@@ -1553,7 +1553,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [8869, 26181]
 				Case $GC_I_MAP_ID_SEAFARERS_REST
 					Local $l_ai_Coords[2] = [14156, 2082]
-				Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON
+				Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON_MISSION_OUTPOST
 					Local $l_ai_Coords[2] = [-10845, -13957]
 			EndSwitch
 
@@ -1561,7 +1561,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
 					Local $l_ai_Coords[2] = [7612, -10680]
-				Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK
+				Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK_MISSION_OUTPOST
 					Local $l_ai_Coords[2] = [23157, 13987]
 				Case $GC_I_MAP_ID_VASBURG_ARMORY
 					Local $l_ai_Coords[2] = [-22740, 7193]
@@ -1644,7 +1644,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
 			Local $l_ai_Coords[2] = [-9611, 3113]
 
-		Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON
+		Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON_MISSION_OUTPOST
 			Local $l_ai_Coords[2] = [-13964, -7765]
 
 		Case $GC_I_MAP_ID_AMATZ_BASIN_OUTPOST
@@ -1861,7 +1861,10 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Local $l_ai_Coords[2] = [-12191, 9164]
 
 		Case $GC_I_MAP_ID_HARVEST_TEMPLE
-			Local $l_ai_Coords[2] = [3250, 2215]
+			Switch $a_i_ToMapID
+				Case $GC_I_MAP_ID_UNWAKING_WATERS_EXPLORABLE
+					Local $l_ai_Coords[2] = [3250, 2215]
+			EndSwitch
 
 		Case $GC_I_MAP_ID_BREAKER_HOLLOW
 			Switch $a_i_ToMapID
@@ -1894,7 +1897,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_THE_FISSURE_OF_WOE
 					Local $l_ai_Coords[2] = [-1262, -16243]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
-					Local $l_ai_Coords[2] = [11733, -19838]
+					Local $l_ai_Coords[2] = [11753, -20000]
 				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE
 					Local $l_ai_Coords[2] = [2772, -15163]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
@@ -1948,7 +1951,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Local $l_ai_Coords[2] = [6380, 13757]
 		Case $GC_I_MAP_ID_THE_JADE_QUARRY_KURZICK
 			Local $l_ai_Coords[2] = [-7193, -10646]
-		Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK
+		Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK_MISSION_OUTPOST
 			Local $l_ai_Coords[2] = [-13298, -7228]
 
 		Case $GC_I_MAP_ID_RAISU_PAVILLION
@@ -2913,7 +2916,10 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_THE_NIGHTFALLEN_LANDS
-			Local $l_ai_Coords[2] = [0, 0] ; Exit to Nightfallen Jahai
+			Switch $a_i_ToMapID
+				Case $GC_I_MAP_ID_NIGHTFALLEN_JAHAI
+					Local $l_ai_Coords[2] = [-16100.17, 18562.15]
+			EndSwitch
 
 		Case $GC_I_MAP_ID_VERDANT_CASCADES
 			Switch $a_i_ToMapID
@@ -3458,7 +3464,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_VASBURG_ARMORY
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MOROSTAV_TRAIL, $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE]
 		Case $GC_I_MAP_ID_MOROSTAV_TRAIL
-			Local $l_a_Connected[] = [$GC_I_MAP_ID_DURHEIM_ARCHIVES, $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK, $GC_I_MAP_ID_VASBURG_ARMORY]
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_DURHEIM_ARCHIVES, $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK_MISSION_OUTPOST, $GC_I_MAP_ID_VASBURG_ARMORY]
 		Case $GC_I_MAP_ID_DURHEIM_ARCHIVES
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MOROSTAV_TRAIL, $GC_I_MAP_ID_MOURNING_VEIL_FALLS]
 		Case $GC_I_MAP_ID_ARBORSTONE_EXPLORABLE
@@ -3488,7 +3494,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_RHEAS_CRATER
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE, $GC_I_MAP_ID_SEAFARERS_REST, $GC_I_MAP_ID_THE_AURIOS_MINES_OUTPOST]
 		Case $GC_I_MAP_ID_SILENT_SURF
-			Local $l_a_Connected[] = [$GC_I_MAP_ID_LEVIATHAN_PITS, $GC_I_MAP_ID_SEAFARERS_REST, $GC_I_MAP_ID_UNWAKING_WATERS_LUXON]
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_LEVIATHAN_PITS, $GC_I_MAP_ID_SEAFARERS_REST, $GC_I_MAP_ID_UNWAKING_WATERS_LUXON_MISSION_OUTPOST]
 		Case $GC_I_MAP_ID_LEVIATHAN_PITS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE, $GC_I_MAP_ID_SILENT_SURF]
 		Case $GC_I_MAP_ID_SEAFARERS_REST
@@ -3521,9 +3527,9 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE]
 		Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE]
-		Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON
+		Case $GC_I_MAP_ID_UNWAKING_WATERS_LUXON_MISSION_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_SILENT_SURF]
-		Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK
+		Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK_MISSION_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MOROSTAV_TRAIL]
 		Case $GC_I_MAP_ID_AMATZ_BASIN_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MOURNING_VEIL_FALLS]
@@ -3717,6 +3723,8 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_THE_ALKALI_PAN, $GC_I_MAP_ID_THE_RUPTURED_HEART]
 		Case $GC_I_MAP_ID_GATE_OF_PAIN_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_NIGHTFALLEN_JAHAI, $GC_I_MAP_ID_DOMAIN_OF_PAIN]
+		Case $GC_I_MAP_ID_GATE_OF_THE_NIGHTFALLEN_LANDS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_NIGHTFALLEN_JAHAI]
 		Case $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_DEPTHS_OF_MADNESS, $GC_I_MAP_ID_DOMAIN_OF_SECRETS]
 

@@ -284,7 +284,7 @@ Global Const $GC_I_MAP_ID_MOUNT_QINKAI = 200
 Global Const $GC_I_MAP_ID_MELANDRUS_HOPE = 201
 Global Const $GC_I_MAP_ID_RHEAS_CRATER = 202
 Global Const $GC_I_MAP_ID_SILENT_SURF = 203
-Global Const $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK_MISSION = 204
+Global Const $GC_I_MAP_ID_UNWAKING_WATERS_MISSION = 204
 Global Const $GC_I_MAP_ID_MOROSTAV_TRAIL = 205
 Global Const $GC_I_MAP_ID_DELDRIMOR_WAR_CAMP = 206
 Global Const $GC_I_MAP_ID_DRAGONS_THIEVES = 207
@@ -308,7 +308,7 @@ Global Const $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST = 224
 Global Const $GC_I_MAP_ID_RAISU_PALACE_OUTPOST = 225
 Global Const $GC_I_MAP_ID_RAISU_PALACE_MISSION = 225
 Global Const $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST = 226
-Global Const $GC_I_MAP_ID_UNWAKING_WATERS_LUXON = 227
+Global Const $GC_I_MAP_ID_UNWAKING_WATERS_EXPLORABLE = 227
 Global Const $GC_I_MAP_ID_GRENZ_FRONTIER = 228
 Global Const $GC_I_MAP_ID_AMATZ_BASIN_EXPLORABLE = 230
 Global Const $GC_I_MAP_ID_AMATZ_BASIN_OUTPOST = 230
@@ -377,8 +377,8 @@ Global Const $GC_I_MAP_ID_FORT_ASPENWOOD_LUXON = 293
 Global Const $GC_I_MAP_ID_FORT_ASPENWOOD_KURZICK = 294
 Global Const $GC_I_MAP_ID_THE_JADE_QUARRY_LUXON = 295
 Global Const $GC_I_MAP_ID_THE_JADE_QUARRY_KURZICK = 296
-Global Const $GC_I_MAP_ID_UNWAKING_WATERS_LUXON_MISSION = 297
-Global Const $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK = 298
+Global Const $GC_I_MAP_ID_UNWAKING_WATERS_LUXON_MISSION_OUTPOST = 297
+Global Const $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK_MISSION_OUTPOST = 298
 ;~ Global Const $GC_I_MAP_ID_
 Global Const $GC_I_MAP_ID_ETNARAN_KEYS = 300
 Global Const $GC_I_MAP_ID_RAISU_PAVILLION = 301
@@ -1152,7 +1152,7 @@ $g_as_MapLabels[200] = "Mount Qinkai"
 $g_as_MapLabels[201] = "Melandru's Hope"
 $g_as_MapLabels[202] = "Rhea's Crater"
 $g_as_MapLabels[203] = "Silent Surf"
-$g_as_MapLabels[204] = "Unwaking Waters - Kurzick"
+$g_as_MapLabels[204] = "Unwaking Waters - Mission"
 $g_as_MapLabels[205] = "Morostav Trail"
 $g_as_MapLabels[206] = "Deldrimor War Camp"
 $g_as_MapLabels[208] = "Heroes' Crypt"
@@ -1174,7 +1174,7 @@ $g_as_MapLabels[223] = "The Jade Quarry"
 $g_as_MapLabels[224] = "Gyala Hatchery outpost"
 $g_as_MapLabels[225] = "Raisu Palace outpost"
 $g_as_MapLabels[226] = "Imperial Sanctum outpost"
-$g_as_MapLabels[227] = "Unwaking Waters Luxon"
+$g_as_MapLabels[227] = "Unwaking Waters Explorable"
 $g_as_MapLabels[228] = "Grenz Frontier"
 $g_as_MapLabels[230] = "Amatz Basin Explorable"
 $g_as_MapLabels[230] = "Amatz Basin outpost"
@@ -1227,8 +1227,8 @@ $g_as_MapLabels[293] = "Fort Aspenwood - Luxon"
 $g_as_MapLabels[294] = "Fort Aspenwood - Kurzick"
 $g_as_MapLabels[295] = "The Jade Quarry - Luxon"
 $g_as_MapLabels[296] = "The Jade Quarry - Kurzick"
-$g_as_MapLabels[297] = "Unwaking Waters Luxon"
-$g_as_MapLabels[298] = "Unwaking Waters Kurzick"
+$g_as_MapLabels[297] = "Unwaking Waters Luxon Outpost"
+$g_as_MapLabels[298] = "Unwaking Waters Kurzick Outpost"
 $g_as_MapLabels[300] = "Etnaran Keys"
 $g_as_MapLabels[301] = "Raisu Pavillion"
 $g_as_MapLabels[302] = "Kaineng Docks"
@@ -1832,7 +1832,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[201, "Melandrus Hope", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 2, "Explorable Zone"], _
 	[202, "Rheas Crater", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 2, "Explorable Zone"], _
 	[203, "Silent Surf", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 2, "Explorable Zone"], _
-	[204, "Unwaking Waters Kurzick", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 6, "Cooperative Mission"], _
+	[204, "Unwaking Waters Mission", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 6, "Cooperative Mission"], _
 	[205, "Morostav Trail", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 2, "Explorable Zone"], _
 	[206, "Deldrimor War Camp", 1, "Prophecies", 0, "Kryta", 3, "Northern Shiverpeaks", 10, "Outpost"], _
 	[207, "Dragons Thieves", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 2, "Explorable Zone"], _
@@ -1855,7 +1855,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[224, "Gyala Hatchery", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 5, "Mission Outpost"], _
 	[225, "Raisu Palace", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 5, "Mission Outpost"], _
 	[226, "Imperial Sanctum", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 5, "Mission Outpost"], _
-	[227, "Unwaking Waters Luxon", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 2, "Explorable Zone"], _
+	[227, "Unwaking Waters", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 2, "Explorable Zone"], _
 	[228, "Grenz Frontier", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 0, "Alliance Battle"], _
 	[229, "The Ancestral Lands", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 0, "Alliance Battle"], _
 	[230, "Amatz Basin", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 9, "Challenge"], _
@@ -1925,8 +1925,8 @@ Global $g_a2D_MapArray[876][10] = [ _
 	[294, "Fort Aspenwood Kurzick", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 7, "Competitive Mission"], _
 	[295, "The Jade Quarry Luxon", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 7, "Competitive Mission"], _
 	[296, "The Jade Quarry Kurzick", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 7, "Competitive Mission"], _
-	[297, "Unwaking Waters Luxon", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 6, "Cooperative Mission"], _
-	[298, "Unwaking Waters Kurzick", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 6, "Cooperative Mission"], _
+	[297, "Unwaking Waters Luxon Outpost", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 6, "Cooperative Mission"], _
+	[298, "Unwaking Waters Kurzick Outpost", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 6, "Cooperative Mission"], _
 	[299, "Saltspray Beach", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 0, "Alliance Battle"], _
 	[300, "Etnaran Keys", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 0, "Alliance Battle"], _
 	[301, "Raisu Pavillion", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
