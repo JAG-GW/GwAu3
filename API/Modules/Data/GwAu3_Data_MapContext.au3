@@ -2788,9 +2788,9 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_ABADDONS_GATE_OUTPOST
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_HEART_OF_ABADDON
-					Local $l_ai_Coords[2] = [15640, 20030]
+					Local $l_ai_Coords[2] = [18708.00, -1915.00]
 				Case $GC_I_MAP_ID_DEPTHS_OF_MADNESS
-					Local $l_ai_Coords[2] = [7806, 18637]
+					Local $l_ai_Coords[2] = [19317.65, -7106.73]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
@@ -3557,6 +3557,8 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MOUNT_QINKAI]
 		Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE]
+		Case $GC_I_MAP_ID_HARVEST_TEMPLE
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_UNWAKING_WATERS_EXPLORABLE]
 
 		; === Nightfall - Istan ===
 		Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
@@ -3667,6 +3669,8 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_DOMAIN_OF_FEAR, $GC_I_MAP_ID_DOMAIN_OF_SECRETS]
 		Case $GC_I_MAP_ID_DEPTHS_OF_MADNESS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ABADDONS_GATE_OUTPOST, $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST]
+		Case $GC_I_MAP_ID_ABADDONS_GATE_OUTPOST
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_DEPTHS_OF_MADNESS, $GC_I_MAP_ID_HEART_OF_ABADDON]
 
 		; === Nightfall - Outposts ===
 		Case $GC_I_MAP_ID_SUNSPEAR_GREAT_HALL
