@@ -773,10 +773,10 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 
 		Case $GC_I_MAP_ID_SENJIS_CORNER
 			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST
-					Local $l_ai_Coords[2] = [7399, -18860]
+				Case $GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE
+					Local $l_ai_Coords[2] = [7278, -17944]
 				Case $GC_I_MAP_ID_XAQUANG_SKYWAY
-					Local $l_ai_Coords[2] = [5893, -12650]
+					Local $l_ai_Coords[2] = [5905, -12685]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_TEARS_OF_THE_FALLEN
@@ -1352,7 +1352,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_SNAKE_DANCE
 					Local $l_ai_Coords[2] = [5873, -41002]
 				Case $GC_I_MAP_ID_TALUS_CHUTE
-					Local $l_ai_Coords[2] = [7762, -44768]
+					Local $l_ai_Coords[2] = [7722, -45014]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_GRANITE_CITADEL
@@ -1861,10 +1861,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Local $l_ai_Coords[2] = [-12191, 9164]
 
 		Case $GC_I_MAP_ID_HARVEST_TEMPLE
-			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_UNWAKING_WATERS_EXPLORABLE
-					Local $l_ai_Coords[2] = [3250, 2215]
-			EndSwitch
+			Local $l_ai_Coords[2] = [3250, 2215]
 
 		Case $GC_I_MAP_ID_BREAKER_HOLLOW
 			Switch $a_i_ToMapID
@@ -1897,7 +1894,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_THE_FISSURE_OF_WOE
 					Local $l_ai_Coords[2] = [-1262, -16243]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
-					Local $l_ai_Coords[2] = [11753, -20000]
+					Local $l_ai_Coords[2] = [11756, -20256]
 				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE
 					Local $l_ai_Coords[2] = [2772, -15163]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
@@ -1952,7 +1949,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_THE_JADE_QUARRY_KURZICK
 			Local $l_ai_Coords[2] = [-7193, -10646]
 		Case $GC_I_MAP_ID_UNWAKING_WATERS_KURZICK_MISSION_OUTPOST
-			Local $l_ai_Coords[2] = [-13298, -7228]
+			Local $l_ai_Coords[2] = [-14072, -7940]
 
 		Case $GC_I_MAP_ID_RAISU_PAVILLION
 			Switch $a_i_ToMapID
@@ -2147,7 +2144,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_FORT_ASPENWOOD_KURZICK
 					Local $l_ai_Coords[2] = [-6126, -1066]
 				Case $GC_I_MAP_ID_FERNDALE
-					Local $l_ai_Coords[2] = [-8126, -8907]
+					Local $l_ai_Coords[2] = [-8052, -8827]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ASPENWOOD_GATE_LUXON
@@ -2481,7 +2478,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_GATE_OF_TORMENT
 					Local $l_ai_Coords[2] = [-1547, -4776]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Local $l_ai_Coords[2] = [2242, -1563]
+					Local $l_ai_Coords[2] = [2172, -1461]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
@@ -2780,17 +2777,17 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_PAIN_OUTPOST
-			Local $l_ai_Coords[2] = [-17250, 5367] ; Exit to Nightfallen Jahai
+			Local $l_ai_Coords[2] = [-17250, 5367]
 
 		Case $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST
-			Local $l_ai_Coords[2] = [-16811, -13684] ; Exit to Domain of Secrets
+			Local $l_ai_Coords[2] = [-16811, -13684]
 
 		Case $GC_I_MAP_ID_ABADDONS_GATE_OUTPOST
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_HEART_OF_ABADDON
-					Local $l_ai_Coords[2] = [15640, 20030]
+					Local $l_ai_Coords[2] = [18708, -1915]
 				Case $GC_I_MAP_ID_DEPTHS_OF_MADNESS
-					Local $l_ai_Coords[2] = [7806, 18637]
+					Local $l_ai_Coords[2] = [19498, -7235]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
@@ -2916,10 +2913,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GATE_OF_THE_NIGHTFALLEN_LANDS
-			Switch $a_i_ToMapID
-				Case $GC_I_MAP_ID_NIGHTFALLEN_JAHAI
-					Local $l_ai_Coords[2] = [-16100.17, 18562.15]
-			EndSwitch
+			Local $l_ai_Coords[2] = [-16100, 18562]
 
 		Case $GC_I_MAP_ID_VERDANT_CASCADES
 			Switch $a_i_ToMapID
@@ -3007,7 +3001,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_HALL_OF_MONUMENTS
 					Local $l_ai_Coords[2] = [-4919, 5341]
 				Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
-					Local $l_ai_Coords[2] = [1148, 814]
+					Local $l_ai_Coords[2] = [1054, 874]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SIFHALLA
@@ -3015,17 +3009,17 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_DRAKKAR_LAKE
 					Local $l_ai_Coords[2] = [13551, 18970]
 				Case $GC_I_MAP_ID_JAGA_MORAINE
-					Local $l_ai_Coords[2] = [16713, 22875]
+					Local $l_ai_Coords[2] = [16727, 22872]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_GUNNARS_HOLD
-			Local $l_ai_Coords[2] = [14979, -6325] ; Exit to Norrhart Domains
+			Local $l_ai_Coords[2] = [14979, -6325]
 
 		Case $GC_I_MAP_ID_OLAFSTEAD
-			Local $l_ai_Coords[2] = [-1578, 1232] ; Exit to Varajar Fells
+			Local $l_ai_Coords[2] = [-1578, 1232]
 
 		Case $GC_I_MAP_ID_HALL_OF_MONUMENTS
-			Local $l_ai_Coords[2] = [-4416, 4935] ;Exit to Eye of the North
+			Local $l_ai_Coords[2] = [-4416, 4935]
 
 		Case $GC_I_MAP_ID_DALADA_UPLANDS
 			Switch $a_i_ToMapID
@@ -3164,7 +3158,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_FLAME_TEMPLE_CORRIDOR
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_DIESSA_LOWLANDS, $GC_I_MAP_ID_DRAGONS_GULLET]
 
-		; === Prophecies - Northern Shiverpeaks ===
+			; === Prophecies - Northern Shiverpeaks ===
 		Case $GC_I_MAP_ID_TRAVELERS_VALE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ASCALON_FOOTHILLS, $GC_I_MAP_ID_BORLIS_PASS_OUTPOST, $GC_I_MAP_ID_IRON_HORSE_MINE, $GC_I_MAP_ID_YAKS_BEND]
 		Case $GC_I_MAP_ID_IRON_HORSE_MINE
@@ -3182,7 +3176,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_DREADNOUGHTS_DRIFT
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_LORNARS_PASS, $GC_I_MAP_ID_SNAKE_DANCE]
 
-		; === Prophecies - Kryta ===
+			; === Prophecies - Kryta ===
 		Case $GC_I_MAP_ID_SCOUNDRELS_RISE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_GATES_OF_KRYTA_OUTPOST, $GC_I_MAP_ID_GRIFFONS_MOUTH, $GC_I_MAP_ID_NORTH_KRYTA_PROVINCE]
 		Case $GC_I_MAP_ID_NORTH_KRYTA_PROVINCE
@@ -3212,7 +3206,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_TEMPLE_OF_THE_AGES
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_THE_BLACK_CURTAIN]
 
-		; === Prophecies - Maguuma Jungle ===
+			; === Prophecies - Maguuma Jungle ===
 		Case $GC_I_MAP_ID_SAGE_LANDS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_DRUIDS_OVERLOOK, $GC_I_MAP_ID_MAJESTYS_REST, $GC_I_MAP_ID_MAMNOON_LAGOON, $GC_I_MAP_ID_THE_WILDS_OUTPOST]
 		Case $GC_I_MAP_ID_MAMNOON_LAGOON
@@ -3230,7 +3224,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_TANGLE_ROOT
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_DRY_TOP, $GC_I_MAP_ID_HENGE_OF_DENRAVI, $GC_I_MAP_ID_MAGUUMA_STADE, $GC_I_MAP_ID_RIVERSIDE_PROVINCE_OUTPOST]
 
-		; === Prophecies - Crystal Desert ===
+			; === Prophecies - Crystal Desert ===
 		Case $GC_I_MAP_ID_AUGURY_ROCK_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_PROPHETS_PATH, $GC_I_MAP_ID_SKYWARD_REACH]
 		Case $GC_I_MAP_ID_PROPHETS_PATH
@@ -3252,7 +3246,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_CRYSTAL_OVERLOOK
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_THE_ALKALI_PAN, $GC_I_MAP_ID_THE_ARID_SEA, $GC_I_MAP_ID_THE_RUPTURED_HEART]
 
-		; === Prophecies - Southern Shiverpeaks ===
+			; === Prophecies - Southern Shiverpeaks ===
 		Case $GC_I_MAP_ID_SNAKE_DANCE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_CAMP_RANKOR, $GC_I_MAP_ID_DREADNOUGHTS_DRIFT, $GC_I_MAP_ID_GRENTHS_FOOTPRINT]
 		Case $GC_I_MAP_ID_CAMP_RANKOR
@@ -3280,11 +3274,11 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_TASCAS_DEMISE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MINERAL_SPRINGS, $GC_I_MAP_ID_THE_GRANITE_CITADEL]
 
-		; === Prophecies - Ring of Fire ===
+			; === Prophecies - Ring of Fire ===
 		Case $GC_I_MAP_ID_PERDITION_ROCK
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_EMBER_LIGHT_CAMP, $GC_I_MAP_ID_RING_OF_FIRE_OUTPOST]
 
-		; === Prophecies - Outposts with single exits ===
+			; === Prophecies - Outposts with single exits ===
 		Case $GC_I_MAP_ID_BLOODSTONE_FEN_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_SILVERWOOD]
 		Case $GC_I_MAP_ID_THE_WILDS_OUTPOST
@@ -3384,7 +3378,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_LIONS_GATE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_LIONS_ARCH]
 
-		; === Factions - Shing Jea Island ===
+			; === Factions - Shing Jea Island ===
 		Case $GC_I_MAP_ID_SHING_JEA_MONASTERY, $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_LINNOK_COURTYARD, $GC_I_MAP_ID_SUNQUA_VALE]
 		Case $GC_I_MAP_ID_SUNQUA_VALE
@@ -3410,7 +3404,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_EXPLORABLE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST, $GC_I_MAP_ID_RAN_MUSU_GARDENS]
 
-		; === Factions - Kaineng City ===
+			; === Factions - Kaineng City ===
 		Case $GC_I_MAP_ID_KAINENG_CENTER, $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_BEJUNKAN_PIER, $GC_I_MAP_ID_BUKDEK_BYWAY, $GC_I_MAP_ID_RAISU_PAVILLION]
 		Case $GC_I_MAP_ID_BUKDEK_BYWAY
@@ -3426,7 +3420,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_SHENZUN_TUNNELS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MAATU_KEEP, $GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE, $GC_I_MAP_ID_SUNJIANG_DISTRICT_OUTPOST, $GC_I_MAP_ID_TAHNNAKAI_TEMPLE_OUTPOST, $GC_I_MAP_ID_XAQUANG_SKYWAY]
 		Case $GC_I_MAP_ID_SENJIS_CORNER
-			Local $l_a_Connected[] = [$GC_I_MAP_ID_NAHPUI_QUARTER_OUTPOST, $GC_I_MAP_ID_XAQUANG_SKYWAY]
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE, $GC_I_MAP_ID_XAQUANG_SKYWAY]
 		Case $GC_I_MAP_ID_NAHPUI_QUARTER_EXPLORABLE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_SENJIS_CORNER, $GC_I_MAP_ID_SHENZUN_TUNNELS]
 		Case $GC_I_MAP_ID_PONGMEI_VALLEY
@@ -3444,7 +3438,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_MAATU_KEEP
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_PONGMEI_VALLEY, $GC_I_MAP_ID_SHENZUN_TUNNELS]
 
-		; === Factions - Echovald Forest ===
+			; === Factions - Echovald Forest ===
 		Case $GC_I_MAP_ID_HOUSE_ZU_HELTZER
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ALTRUMM_RUINS_OUTPOST, $GC_I_MAP_ID_FERNDALE]
 		Case $GC_I_MAP_ID_FERNDALE
@@ -3478,7 +3472,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_ALTRUMM_RUINS_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ARBORSTONE_EXPLORABLE, $GC_I_MAP_ID_HOUSE_ZU_HELTZER]
 
-		; === Factions - Jade Sea ===
+			; === Factions - Jade Sea ===
 		Case $GC_I_MAP_ID_CAVALON
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ARCHIPELAGOS, $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST]
 		Case $GC_I_MAP_ID_ARCHIPELAGOS
@@ -3504,7 +3498,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_ZOS_SHIVROS_CHANNEL_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_BOREAS_SEABED_EXPLORABLE, $GC_I_MAP_ID_CAVALON]
 
-		; === Factions - Outposts ===
+			; === Factions - Outposts ===
 		Case $GC_I_MAP_ID_ZEN_DAIJUN_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_HAIJU_LAGOON]
 		Case $GC_I_MAP_ID_MINISTER_CHOS_ESTATE_OUTPOST
@@ -3557,8 +3551,9 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MOUNT_QINKAI]
 		Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE]
-
-		; === Nightfall - Istan ===
+		Case $GC_I_MAP_ID_HARVEST_TEMPLE
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_UNWAKING_WATERS_EXPLORABLE]
+			; === Nightfall - Istan ===
 		Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_CHUURHIR_FIELDS, $GC_I_MAP_ID_CONSULATE, $GC_I_MAP_ID_DAJKAH_INLET_OUTPOST, $GC_I_MAP_ID_PLAINS_OF_JARIN, $GC_I_MAP_ID_SUN_DOCKS]
 		Case $GC_I_MAP_ID_PLAINS_OF_JARIN
@@ -3578,7 +3573,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_CHAMPIONS_DAWN
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_CLIFFS_OF_DOHJOK, $GC_I_MAP_ID_PLAINS_OF_JARIN]
 
-		; === Nightfall - Kourna ===
+			; === Nightfall - Kourna ===
 		Case $GC_I_MAP_ID_SUNSPEAR_SANCTUARY
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_COMMAND_POST, $GC_I_MAP_ID_MARGA_COAST]
 		Case $GC_I_MAP_ID_COMMAND_POST
@@ -3604,7 +3599,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_TURAIS_PROCESSION
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_COMMAND_POST, $GC_I_MAP_ID_GATE_OF_DESOLATION_OUTPOST, $GC_I_MAP_ID_JAHAI_BLUFFS, $GC_I_MAP_ID_VENTA_CEMETERY_OUTPOST]
 
-		; === Nightfall - Vabbi ===
+			; === Nightfall - Vabbi ===
 		Case $GC_I_MAP_ID_YATENDI_CANYONS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_CHANTRY_OF_SECRETS, $GC_I_MAP_ID_VEHTENDI_VALLEY, $GC_I_MAP_ID_WEHHAN_TERRACES]
 		Case $GC_I_MAP_ID_VEHTENDI_VALLEY
@@ -3630,7 +3625,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_BASALT_GROTTO
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_JOKOS_DOMAIN, $GC_I_MAP_ID_VEHJIN_MINES]
 
-		; === Nightfall - The Desolation ===
+			; === Nightfall - The Desolation ===
 		Case $GC_I_MAP_ID_JOKOS_DOMAIN
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_BASALT_GROTTO, $GC_I_MAP_ID_BONE_PALACE, $GC_I_MAP_ID_THE_SHATTERED_RAVINES, $GC_I_MAP_ID_REMAINS_OF_SAHLAHJA_OUTPOST]
 		Case $GC_I_MAP_ID_BONE_PALACE
@@ -3650,7 +3645,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_THE_MOUTH_OF_TORMENT
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_GATE_OF_TORMENT, $GC_I_MAP_ID_THE_RUPTURED_HEART]
 
-		; === Nightfall - Realm of Torment ===
+			; === Nightfall - Realm of Torment ===
 		Case $GC_I_MAP_ID_GATE_OF_TORMENT
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_NIGHTFALLEN_JAHAI, $GC_I_MAP_ID_THE_SHADOW_NEXUS_OUTPOST, $GC_I_MAP_ID_THE_MOUTH_OF_TORMENT]
 		Case $GC_I_MAP_ID_NIGHTFALLEN_JAHAI
@@ -3668,7 +3663,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_DEPTHS_OF_MADNESS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ABADDONS_GATE_OUTPOST, $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST]
 
-		; === Nightfall - Outposts ===
+			; === Nightfall - Outposts ===
 		Case $GC_I_MAP_ID_SUNSPEAR_GREAT_HALL
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_PLAINS_OF_JARIN]
 		Case $GC_I_MAP_ID_THE_ASTRALARIUM
@@ -3727,13 +3722,70 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_NIGHTFALLEN_JAHAI]
 		Case $GC_I_MAP_ID_GATE_OF_MADNESS_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_DEPTHS_OF_MADNESS, $GC_I_MAP_ID_DOMAIN_OF_SECRETS]
+		Case $GC_I_MAP_ID_ABADDONS_GATE_OUTPOST
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_DEPTHS_OF_MADNESS, $GC_I_MAP_ID_HEART_OF_ABADDON]
 
-		; === Eye of the North ===
+			; === Eye of the North ===
 		Case $GC_I_MAP_ID_BJORA_MARCHES
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_JAGA_MORAINE, $GC_I_MAP_ID_LONGEYES_LEDGE, $GC_I_MAP_ID_NORRHART_DOMAINS]
 		Case $GC_I_MAP_ID_ARBOR_BAY
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ALCAZIA_TANGLE, $GC_I_MAP_ID_RIVEN_EARTH, $GC_I_MAP_ID_VLOXS_FALLS]
-
+		Case $GC_I_MAP_ID_ICE_CLIFF_CHASMS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_BATTLEDEPTHS, $GC_I_MAP_ID_BOREAL_STATION, $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST, $GC_I_MAP_ID_NORRHART_DOMAINS]
+		Case $GC_I_MAP_ID_RIVEN_EARTH
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_ALCAZIA_TANGLE, $GC_I_MAP_ID_ARBOR_BAY, $GC_I_MAP_ID_RATA_SUM]
+		Case $GC_I_MAP_ID_DRAKKAR_LAKE
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_NORRHART_DOMAINS, $GC_I_MAP_ID_SEPULCHRE_OF_DRAGRIMMAR_LVL1, $GC_I_MAP_ID_SIFHALLA, $GC_I_MAP_ID_VARAJAR_FELLS_1]
+		Case $GC_I_MAP_ID_JAGA_MORAINE
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_BJORA_MARCHES, $GC_I_MAP_ID_FROSTMAWS_BURROWS_LVL1, $GC_I_MAP_ID_SIFHALLA]
+		Case $GC_I_MAP_ID_NORRHART_DOMAINS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_BJORA_MARCHES, $GC_I_MAP_ID_DRAKKAR_LAKE, $GC_I_MAP_ID_GUNNARS_HOLD, $GC_I_MAP_ID_ICE_CLIFF_CHASMS, $GC_I_MAP_ID_VARAJAR_FELLS_1]
+		Case $GC_I_MAP_ID_VARAJAR_FELLS_1
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_BATTLEDEPTHS, $GC_I_MAP_ID_DRAKKAR_LAKE, $GC_I_MAP_ID_RAVENS_POINT_LVL1, $GC_I_MAP_ID_OLAFSTEAD, $GC_I_MAP_ID_NORRHART_DOMAINS, $GC_I_MAP_ID_VERDANT_CASCADES]
+		Case $GC_I_MAP_ID_SPARKFLY_SWAMP
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_GADDS_ENCAMPMENT, $GC_I_MAP_ID_BLOODSTONE_CAVES_LVL1, $GC_I_MAP_ID_BOGROOT_GROWTHS_LVL1]
+		Case $GC_I_MAP_ID_VERDANT_CASCADES
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_SLAVERS_EXILE_LVL1, $GC_I_MAP_ID_UMBRAL_GROTTO, $GC_I_MAP_ID_VARAJAR_FELLS_1]
+		Case $GC_I_MAP_ID_MAGUS_STONES
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_ALCAZIA_TANGLE, $GC_I_MAP_ID_ARACHNIS_HAUNT_LVL1, $GC_I_MAP_ID_OOLAS_LAB_LVL1, $GC_I_MAP_ID_RATA_SUM]
+		Case $GC_I_MAP_ID_ALCAZIA_TANGLE
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_ARBOR_BAY, $GC_I_MAP_ID_RIVEN_EARTH, $GC_I_MAP_ID_MAGUS_STONES, $GC_I_MAP_ID_TARNISHED_HAVEN]
+		Case $GC_I_MAP_ID_VLOXS_FALLS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_ARBOR_BAY, $GC_I_MAP_ID_VLOXEN_EXCAVATIONS_LVL1]
+		Case $GC_I_MAP_ID_BATTLEDEPTHS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_HEART_OF_THE_SHIVERPEAKS_LVL1, $GC_I_MAP_ID_ICE_CLIFF_CHASMS, $GC_I_MAP_ID_VARAJAR_FELLS_1, $GC_I_MAP_ID_CENTRAL_TRANSFER_CHAMBER]
+		Case $GC_I_MAP_ID_GADDS_ENCAMPMENT
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_SPARKFLY_SWAMP, $GC_I_MAP_ID_SHARDS_OF_ORR_LVL1]
+		Case $GC_I_MAP_ID_UMBRAL_GROTTO
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_VERDANT_CASCADES, $GC_I_MAP_ID_VLOXEN_EXCAVATIONS_LVL1]
+		Case $GC_I_MAP_ID_RATA_SUM
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_MAGUS_STONES, $GC_I_MAP_ID_RIVEN_EARTH]
+		Case $GC_I_MAP_ID_TARNISHED_HAVEN
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_ALCAZIA_TANGLE]
+		Case $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST, $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST_WINTERSDAY
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_HALL_OF_MONUMENTS, $GC_I_MAP_ID_ICE_CLIFF_CHASMS]
+		Case $GC_I_MAP_ID_SIFHALLA
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_DRAKKAR_LAKE, $GC_I_MAP_ID_JAGA_MORAINE]
+		Case $GC_I_MAP_ID_GUNNARS_HOLD
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_NORRHART_DOMAINS]
+		Case $GC_I_MAP_ID_OLAFSTEAD
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_VARAJAR_FELLS_1]
+		Case $GC_I_MAP_ID_HALL_OF_MONUMENTS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST, $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST_WINTERSDAY]
+		Case $GC_I_MAP_ID_DALADA_UPLANDS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_DOOMLORE_SHRINE, $GC_I_MAP_ID_GROTHMAR_WARDOWNS, $GC_I_MAP_ID_SACNOTH_VALLEY]
+		Case $GC_I_MAP_ID_DOOMLORE_SHRINE
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_DALADA_UPLANDS, $GC_I_MAP_ID_CATHEDRAL_OF_FLAMES_LVL1]
+		Case $GC_I_MAP_ID_GROTHMAR_WARDOWNS
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_DALADA_UPLANDS, $GC_I_MAP_ID_LONGEYES_LEDGE, $GC_I_MAP_ID_OOZE_PIT, $GC_I_MAP_ID_SACNOTH_VALLEY]
+		Case $GC_I_MAP_ID_LONGEYES_LEDGE
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_BJORA_MARCHES, $GC_I_MAP_ID_GROTHMAR_WARDOWNS]
+		Case $GC_I_MAP_ID_SACNOTH_VALLEY
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_GROTHMAR_WARDOWNS, $GC_I_MAP_ID_DALADA_UPLANDS, $GC_I_MAP_ID_CATACOMBS_OF_KATHANDRAX_LVL1, $GC_I_MAP_ID_RRAGARS_MENAGERIE_LVL1]
+		Case $GC_I_MAP_ID_CENTRAL_TRANSFER_CHAMBER
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_BATTLEDEPTHS]
+		Case $GC_I_MAP_ID_BOREAL_STATION
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_ICE_CLIFF_CHASMS]
 		Case Else
 			; Map has no known connections
 	EndSwitch
@@ -4017,31 +4069,31 @@ EndFunc   ;==>Map_GetPathWithPortalCoords
 ;          OutpostID = 0 if no path found, or = CityID if already unlocked
 ; =============================================================================
 Func Map_GetPathToUnlockCity($a_i_CityID)
-    Local $l_a_Result[2]
-    $l_a_Result[0] = 0
-    Local $l_a_Empty[0][5]
-    $l_a_Result[1] = $l_a_Empty
+	Local $l_a_Result[2]
+	$l_a_Result[0] = 0
+	Local $l_a_Empty[0][5]
+	$l_a_Result[1] = $l_a_Empty
 
-    ; Si déjà débloqué, retourner directement
-    If Map_IsMapUnlocked($a_i_CityID) And Map_IsValidOutpost($a_i_CityID) Then
-        $l_a_Result[0] = $a_i_CityID
-        Return $l_a_Result
-    EndIf
+	; Si déjà débloqué, retourner directement
+	If Map_IsMapUnlocked($a_i_CityID) And Map_IsValidOutpost($a_i_CityID) Then
+		$l_a_Result[0] = $a_i_CityID
+		Return $l_a_Result
+	EndIf
 
-    ; Trouver l'outpost débloqué le plus proche de cityID
-    Local $l_i_NearestOutpost = Map_FindNearestUnlockedOutpost($a_i_CityID, 0)
+	; Trouver l'outpost débloqué le plus proche de cityID
+	Local $l_i_NearestOutpost = Map_FindNearestUnlockedOutpost($a_i_CityID, 0)
 
-    If $l_i_NearestOutpost = 0 Then Return $l_a_Result
+	If $l_i_NearestOutpost = 0 Then Return $l_a_Result
 
-    ; Obtenir le chemin avec coordonnées
-    Local $l_a_Path = Map_GetPathWithPortalCoords($l_i_NearestOutpost, $a_i_CityID, False)
+	; Obtenir le chemin avec coordonnées
+	Local $l_a_Path = Map_GetPathWithPortalCoords($l_i_NearestOutpost, $a_i_CityID, False)
 
-    If UBound($l_a_Path) = 0 Then Return $l_a_Result
+	If UBound($l_a_Path) = 0 Then Return $l_a_Result
 
-    $l_a_Result[0] = $l_i_NearestOutpost
-    $l_a_Result[1] = $l_a_Path
+	$l_a_Result[0] = $l_i_NearestOutpost
+	$l_a_Result[1] = $l_a_Path
 
-    Return $l_a_Result
+	Return $l_a_Result
 EndFunc   ;==>Map_GetPathToUnlockCity
 
 ; =============================================================================
