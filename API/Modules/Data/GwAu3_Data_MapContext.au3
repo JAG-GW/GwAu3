@@ -1358,7 +1358,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_THE_GRANITE_CITADEL
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_SPEARHEAD_PEAK
-					Local $l_ai_Coords[2] = [-11570, 15423]
+					Local $l_ai_Coords[2] = [-11560, 15230]
 				Case $GC_I_MAP_ID_TASCAS_DEMISE
 					Local $l_ai_Coords[2] = [-9381, 19732]
 			EndSwitch
@@ -1938,7 +1938,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 			Local $l_ai_Coords[2] = [-5279, -20042]
 
 		Case $GC_I_MAP_ID_VIZUNAH_SQUARE_FOREIGN_QUARTER
-			Local $l_ai_Coords[2] = [-14014, 5407]
+			Local $l_ai_Coords[2] = [-13865, 5143]
 
 		Case $GC_I_MAP_ID_FORT_ASPENWOOD_LUXON
 			Local $l_ai_Coords[2] = [-1972, 9447]
@@ -2233,11 +2233,11 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_FORUM_HIGHLANDS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GARDEN_OF_SEBORHIN
-					Local $l_ai_Coords[2] = [-4717, 16616]
+					Local $l_ai_Coords[2] = [-4552, 15863]
 				Case $GC_I_MAP_ID_JENNURS_HORDE_OUTPOST
 					Local $l_ai_Coords[2] = [-23269, 17149]
 				Case $GC_I_MAP_ID_NIGHTFALLEN_GARDEN
-					Local $l_ai_Coords[2] = [-4717, 16616]
+					Local $l_ai_Coords[2] = [-4552, 15863]
 				Case $GC_I_MAP_ID_THE_KODASH_BAZAAR
 					Local $l_ai_Coords[2] = [22886, 16725]
 				Case $GC_I_MAP_ID_TIHARK_ORCHARD_OUTPOST
