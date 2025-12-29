@@ -2144,7 +2144,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_FORT_ASPENWOOD_KURZICK
 					Local $l_ai_Coords[2] = [-6126, -1066]
 				Case $GC_I_MAP_ID_FERNDALE
-					Local $l_ai_Coords[2] = [-8052, -8827]
+					Local $l_ai_Coords[2] = [-8072, -8851]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_ASPENWOOD_GATE_LUXON
