@@ -12,7 +12,7 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
     ; Find the optimal salvage kit
     Local $l_ptr_SalvageKit = 0
     Local $l_a_Kits[5][3] ; [ModelID, ItemPtr, Uses]
-    $l_a_Kits[0][0] = 0 ; Charr Salvage Kit (ModelID 170)
+    $l_a_Kits[0][0] = 0 ; Charr Salvage Kit (ModelID 18721)
     $l_a_Kits[1][0] = 0 ; Salvage Kit (ModelID 2992)
     $l_a_Kits[2][0] = 0 ; Expert Salvage Kit (ModelID 2991)
     $l_a_Kits[3][0] = 0 ; Superior Salvage Kit (ModelID 5900)
@@ -26,31 +26,31 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
             Local $l_i_Value = Item_GetItemInfoByPtr($l_ptr_Item, 'Value')
 
             Switch $l_i_ModelID
-                Case 170 ; Charr Salvage Kit
+                Case $GC_I_MODELID_CHARR_SALVAGE_KIT ; Charr Salvage Kit
                     Local $l_i_Uses = $l_i_Value / 1
                     If $l_a_Kits[0][0] = 0 Or $l_i_Uses < $l_a_Kits[0][2] Then
-                        $l_a_Kits[0][0] = 170
+                        $l_a_Kits[0][0] = $GC_I_MODELID_CHARR_SALVAGE_KIT
                         $l_a_Kits[0][1] = $l_ptr_Item
                         $l_a_Kits[0][2] = $l_i_Uses
                     EndIf
 
-                Case 2992 ; Salvage Kit (standard)
+                Case $GC_I_MODELID_SALVAGE_KIT ; Salvage Kit (standard)
                     Local $l_i_Uses = $l_i_Value / 2
                     If $l_a_Kits[1][0] = 0 Or $l_i_Uses < $l_a_Kits[1][2] Then
-                        $l_a_Kits[1][0] = 2992
+                        $l_a_Kits[1][0] = $GC_I_MODELID_SALVAGE_KIT
                         $l_a_Kits[1][1] = $l_ptr_Item
                         $l_a_Kits[1][2] = $l_i_Uses
                     EndIf
 
-                Case 2991 ; Expert Salvage Kit
+                Case $GC_I_MODELID_EXPERT_SALVAGE_KIT ; Expert Salvage Kit
                     Local $l_i_Uses = $l_i_Value / 8
                     If $l_a_Kits[2][0] = 0 Or $l_i_Uses < $l_a_Kits[2][2] Then
-                        $l_a_Kits[2][0] = 2991
+                        $l_a_Kits[2][0] = $GC_I_MODELID_EXPERT_SALVAGE_KIT
                         $l_a_Kits[2][1] = $l_ptr_Item
                         $l_a_Kits[2][2] = $l_i_Uses
                     EndIf
 
-                Case 5900 ; Superior Salvage Kit
+                Case $GC_I_MODELID_SUPERIOR_SALVAGE_KIT ; Superior Salvage Kit
                     Local $l_i_Uses = $l_i_Value / 10
                     If $l_a_Kits[3][0] = 0 Or $l_i_Uses < $l_a_Kits[3][2] Then
                         $l_a_Kits[3][0] = 5900
@@ -58,10 +58,10 @@ Func Item_SalvageItem($a_v_Item, $a_s_KitType = "Standard", $a_s_SalvageType = "
                         $l_a_Kits[3][2] = $l_i_Uses
                     EndIf
 
-                Case 25881 ; Perfect Salvage Kit
+                Case $GC_I_MODELID_PERFECT_SALVAGE_KIT ; Perfect Salvage Kit
                     Local $l_i_Uses = $l_i_Value / 10
                     If $l_a_Kits[4][0] = 0 Or $l_i_Uses < $l_a_Kits[4][2] Then
-                        $l_a_Kits[4][0] = 25881
+                        $l_a_Kits[4][0] = $GC_I_MODELID_PERFECT_SALVAGE_KIT
                         $l_a_Kits[4][1] = $l_ptr_Item
                         $l_a_Kits[4][2] = $l_i_Uses
                     EndIf
