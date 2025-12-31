@@ -1884,7 +1884,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_PONGMEI_VALLEY
 					Local $l_ai_Coords[2] = [-13339, 11007]
 				Case $GC_I_MAP_ID_SHENZUN_TUNNELS
-					Local $l_ai_Coords[2] = [-18035, 16757]
+					Local $l_ai_Coords[2] = [-17805, 16616]
 			EndSwitch
 
 			;isle of the nameless
@@ -1895,8 +1895,8 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [-1262, -16243]
 				Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE
 					Local $l_ai_Coords[2] = [11756, -20256]
-				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE
-					Local $l_ai_Coords[2] = [2772, -15163]
+				Case $GC_I_MAP_ID_TAHNNAKAI_TEMPLE_EXPLORABLE
+					Local $l_ai_Coords[2] = [2740, -15706]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
 					Local $l_ai_Coords[2] = [-2588, -15183]
 			EndSwitch
@@ -2416,7 +2416,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_DASHA_VESTIBULE_OUTPOST
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_THE_HIDDEN_CITY_OF_AHDASHIM
-					Local $l_ai_Coords[2] = [1342, -20476]
+					Local $l_ai_Coords[2] = [1341, -20346]
 				Case $GC_I_MAP_ID_THE_MIRROR_OF_LYSS
 					Local $l_ai_Coords[2] = [1122, -23773]
 			EndSwitch
@@ -2478,7 +2478,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_GATE_OF_TORMENT
 					Local $l_ai_Coords[2] = [-1547, -4776]
 				Case $GC_I_MAP_ID_THE_RUPTURED_HEART
-					Local $l_ai_Coords[2] = [2172, -1461]
+					Local $l_ai_Coords[2] = [-5161, -6900]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_THE_SHATTERED_RAVINES
@@ -3550,7 +3550,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_ASPENWOOD_GATE_LUXON
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_MOUNT_QINKAI]
 		Case $GC_I_MAP_ID_ZIN_KU_CORRIDOR
-			Local $l_a_Connected[] = [$GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE]
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_TAHNNAKAI_TEMPLE_EXPLORABLE, $GC_I_MAP_ID_SUNJIANG_DISTRICT_EXPLORABLE]
 		Case $GC_I_MAP_ID_HARVEST_TEMPLE
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_UNWAKING_WATERS_EXPLORABLE]
 			; === Nightfall - Istan ===
