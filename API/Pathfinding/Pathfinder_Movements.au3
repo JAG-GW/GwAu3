@@ -531,10 +531,12 @@ Func _Pathfinder_PartyWithinRange($fResumeDistance = 1400)
 
     ; Get the "Flag All" position
     Local $aFlagAll = World_GetWorldInfo("FlagAll")
+If IsArray($aFlagAll) Then
 	Local $fX = $aFlagAll[0]
 	Local $fY = $aFlagAll[1]
 	; Check if values are finite and not zero (meaning flag is actually placed)
 	If _IsFinite($fX) And _IsFinite($fY) Then Return True
+EndIf
 
     ; Get party size and count nearby members
     Local $iPartySize = Party_GetPartyContextInfo("TotalPartySize")
