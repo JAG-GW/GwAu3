@@ -589,9 +589,10 @@ EndFunc
 
 Func Agent_GetAgentArray($a_i_Type = 0)
     Local $l_i_MaxAgents = Agent_GetMaxAgents()
-    If $l_i_MaxAgents <= 0 Then Return
+    Local $l_a_AgentArray[] = [0]
+    If $l_i_MaxAgents <= 0 Then Return $l_a_AgentArray
 
-	Local $l_a_AgentArray[$l_i_MaxAgents + 1]
+	ReDim $l_a_AgentArray[$l_i_MaxAgents + 1]
     Local $l_p_Pointer, $l_i_Count = 0
     Local $l_p_AgentBase = Memory_Read($g_p_AgentBase)
     Local $l_p_AgentPtrBuffer = DllStructCreate("ptr[" & $l_i_MaxAgents & "]")

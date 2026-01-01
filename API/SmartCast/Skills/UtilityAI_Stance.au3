@@ -707,6 +707,7 @@ EndFunc
 ; Skill ID: 1043 - $GC_I_SKILL_ID_DASH
 Func CanUse_Dash()
 	If Anti_Stance() Then Return False
+	If Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsMoving) Then Return False
 	Return True
 EndFunc
 
@@ -1210,6 +1211,7 @@ EndFunc
 ; Skill ID: 2146 - $GC_I_SKILL_ID_PIOUS_FURY
 Func CanUse_PiousFury()
 	If Anti_Stance() Then Return False
+	If Not UAI_GetFeederEnchOnTop() Then Return False
 	Return True
 EndFunc
 

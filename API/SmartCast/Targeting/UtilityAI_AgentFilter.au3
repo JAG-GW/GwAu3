@@ -22,6 +22,12 @@ Func UAI_Filter_IsLastStrikeIsDual($a_i_AgentID)
 	Return True
 EndFunc
 
+Func UAI_Filter_IsLastStrikeLeadOrOffHand($a_i_AgentID)
+	Local $l_i_LastStrike = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_LastStrike)
+	If $l_i_LastStrike <> 1 And $l_i_LastStrike <> 2 Then Return False
+	Return True
+EndFunc
+
 Func UAI_Filter_IsGadgetOrLiving($a_i_AgentID)
 	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsItemType) Then Return False
 	Return True

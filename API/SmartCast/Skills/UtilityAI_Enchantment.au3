@@ -2270,6 +2270,7 @@ EndFunc
 ; Skill ID: 1498 - $GC_I_SKILL_ID_STAGGERING_FORCE
 Func CanUse_StaggeringForce()
 	If Anti_Enchantment() Then Return False
+	If UAI_CountAgents(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy") <= 1 Then Return False
 	Return True
 EndFunc
 
@@ -2420,6 +2421,7 @@ EndFunc
 ; Skill ID: 1510 - $GC_I_SKILL_ID_SAND_SHARDS
 Func CanUse_SandShards()
 	If Anti_Enchantment() Then Return False
+	If UAI_CountAgents(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy") <= 1 Then Return False
 	Return True
 EndFunc
 
@@ -2502,6 +2504,7 @@ EndFunc
 ; Skill ID: 1516 - $GC_I_SKILL_ID_MYSTIC_REGENERATION
 Func CanUse_MysticRegeneration()
 	If Anti_Enchantment() Then Return False
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) >= 0.95 Then Return False
 	Return True
 EndFunc
 
@@ -3052,6 +3055,7 @@ EndFunc
 ; Skill ID: 1955 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_LUXON
 Func CanUse_AuraOfHolyMightLuxon()
 	If Anti_Enchantment() Then Return False
+	If UAI_AgentHasBuff(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
 	Return True
 EndFunc
 
@@ -3212,6 +3216,7 @@ EndFunc
 ; Skill ID: 2098 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_KURZICK
 Func CanUse_AuraOfHolyMightKurzick()
 	If Anti_Enchantment() Then Return False
+	If UAI_AgentHasBuff(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
 	Return True
 EndFunc
 

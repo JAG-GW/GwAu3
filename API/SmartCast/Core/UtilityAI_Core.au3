@@ -78,7 +78,7 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 	Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)
 	Sleep(128)
 	If $a_i_AgentID <> Agent_GetMyID() And $a_i_AgentID <> $g_i_LastCalledTarget Then
-		Agent_CallTarget($a_i_AgentID)
+		If $g_b_CallTarget Then Agent_CallTarget($a_i_AgentID)
 		$g_i_LastCalledTarget = $a_i_AgentID
 	EndIf
 

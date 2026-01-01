@@ -425,3 +425,34 @@ Func UAI_GetPlayerVisibleEffectCount()
 	If $g_i_PlayerCacheIndex < 1 Then Return 0
 	Return $g_ai_VisEffectsCount[$g_i_PlayerCacheIndex]
 EndFunc
+
+Func UAI_GetFeederEnchOnTop()
+	Local $l_i_MyID = Agent_GetMyID()
+    If $l_i_MyID = 0 Then Return SetError(1, 0, False)
+    Local $l_i_EffectCount = UAI_GetPlayerEffectCount()
+    
+    If $l_i_EffectCount = 0 Then Return False
+
+	Local $l_i_Index = UAI_GetIndexByID($l_i_MyID)
+
+    Local $l_i_Timestamp = 0
+    Local $l_i_SkillID = 0
+
+    For $l_i_i = 0 To $l_i_EffectCount - 1
+        Local $l_i_CurrentSkillID = $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$GC_UAI_BUFF_SkillID]
+		If $GC_AMX2_SKILL_DATA[$l_i_CurrentSkillID][$GC_I_SKILL_PROFESSION] <> $GC_I_PROFESSION_DERVISH Then ContinueLoop
+        If $GC_AMX2_SKILL_DATA[$l_i_CurrentSkillID][$GC_I_SKILL_TYPE] <> $GC_I_SKILL_TYPE_ENCHANTMENT Then ContinueLoop
+		Local $l_i_CurrentTimeStamp = $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$GC_UAI_EFFECT_Timestamp]
+        If $l_i_CurrentTimeStamp > $l_i_Timestamp Then 
+            $l_i_Timestamp = $l_i_CurrentTimeStamp
+            $l_i_SkillID = $l_i_CurrentSkillID
+        EndIf
+    Next
+
+    Local $l_ai_FeederEnchantmens[8] = [$GC_I_SKILL_ID_GRENTHS_FINGERS, $GC_I_SKILL_ID_AURA_OF_THORNS, _
+        $GC_I_SKILL_ID_BALTHAZARS_RAGE, $GC_I_SKILL_ID_DUST_CLOAK, $GC_I_SKILL_ID_STAGGERING_FORCE, _
+        $GC_I_SKILL_ID_PIOUS_RENEWAL, $GC_I_SKILL_ID_EREMITES_ZEAL, $GC_I_SKILL_ID_ZEALOUS_RENEWAL]
+
+    If $l_i_SkillID <> 0 And (_ArrayBinarySearch($l_ai_FeederEnchantmens, $l_i_SkillID)) >= 0 Then Return True
+    Return False
+EndFunc

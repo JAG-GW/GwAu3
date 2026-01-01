@@ -24,6 +24,9 @@ EndFunc
 
 ; Check if I have resource to use the skill
 Func UAI_CanCast($a_i_SkillSlot)
+	;~ EARLY CHECK IF CAST IS SENSIBLE AT ALL
+	If UAI_IsCastSensible($a_i_SkillSlot) = False Then Return False
+
 	;~ ADRENALINE
 	If UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Adrenaline) <> 0 Then
 		If UAI_GetDynamicSkillInfo($a_i_SkillSlot, $GC_UAI_DYNAMIC_SKILL_Adrenaline) < UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Adrenaline) Then Return False
@@ -173,4 +176,30 @@ Func UAI_CanDrop($a_i_SkillSlot)
 		Case
 	EndSwitch
 	Return False
+EndFunc
+
+Func UAI_IsCastSensible($a_i_SkillSlot)
+    Local $l_i_TargetType = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Target)
+    If $l_i_TargetType <> $GC_I_SKILL_TARGET_SELF Then Return True
+
+    Local $l_i_SkillType = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillType)
+    Local $l_i_SkillID   = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillID)
+
+    Switch $l_i_SkillType
+        Case _
+            $GC_I_SKILL_TYPE_STANCE, _
+            $GC_I_SKILL_TYPE_ENCHANTMENT, _
+            $GC_I_SKILL_TYPE_WARD, _
+            $GC_I_SKILL_TYPE_GLYPH, _
+            $GC_I_SKILL_TYPE_SHOUT, _
+            $GC_I_SKILL_TYPE_PREPARATION, _
+            $GC_I_SKILL_TYPE_RITUAL, _
+            $GC_I_SKILL_TYPE_FORM, _
+            $GC_I_SKILL_TYPE_ECHO_REFRAIN
+
+			Return UAI_GetPlayerEffectInfo($l_i_SkillID, $GC_UAI_EFFECT_TimeRemaining) < _
+				(UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Activation) + 1000)
+    EndSwitch
+
+    Return True
 EndFunc
