@@ -1039,6 +1039,8 @@ EndFunc
 ; Skill ID: 782 - $GC_I_SKILL_ID_JAGGED_STRIKE
 Func CanUse_JaggedStrike()
 	If Anti_Attack() Then Return False
+	Local $l_i_CurrentTarget = Agent_GetCurrentTarget()
+	If $l_i_CurrentTarget <> 0 Then Return Not UAI_Filter_IsLastStrikeLeadOrOffHand($l_i_CurrentTarget)
 	Return True
 EndFunc
 
@@ -1982,11 +1984,14 @@ EndFunc
 ; Skill ID: 1485 - $GC_I_SKILL_ID_EREMITES_ATTACK
 Func CanUse_EremitesAttack()
 	If Anti_Attack() Then Return False
+	If Not UAI_GetFeederEnchOnTop() Then Return False
+	If UAI_CountAgents(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy") <= 1 Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_EremitesAttack($a_f_AggroRange)
-	Return 0
+
+	Return UAI_GetBestAOETarget(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1486 - $GC_I_SKILL_ID_REAP_IMPURITIES
@@ -2006,6 +2011,7 @@ EndFunc
 ; Skill ID: 1487 - $GC_I_SKILL_ID_TWIN_MOON_SWEEP
 Func CanUse_TwinMoonSweep()
 	If Anti_Attack() Then Return False
+	If Not UAI_GetFeederEnchOnTop() Then Return False
 	Return True
 EndFunc
 
@@ -2014,7 +2020,7 @@ Func BestTarget_TwinMoonSweep($a_f_AggroRange)
 	; Melee Attack. You lose 1 Dervish enchantment and gain 10...42...50 Health. If an enchantment is lost in this way, you cannot be blocked, you strike twice, and you gain an additional 10...58...70 Health.
 	; Concise description
 	; Melee Attack. Remove 1 of your Dervish enchantments. Gain 10...42...50 Health. Removal effect: unblockable, attack twice, and gain 10...58...70 more Health.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1488 - $GC_I_SKILL_ID_VICTORIOUS_SWEEP
@@ -2034,6 +2040,7 @@ EndFunc
 ; Skill ID: 1489 - $GC_I_SKILL_ID_IRRESISTIBLE_SWEEP
 Func CanUse_IrresistibleSweep()
 	If Anti_Attack() Then Return False
+	If Not UAI_GetFeederEnchOnTop() Then Return False
 	Return True
 EndFunc
 
@@ -2042,12 +2049,13 @@ Func BestTarget_IrresistibleSweep($a_f_AggroRange)
 	; Scythe Attack. Deal +3...13...15 damage and lose 1 Dervish enchantment. If you lose an enchantment in this way, Irresistible Sweep cannot be blocked, removes a stance, and deals +3...13...15 additional damage.
 	; Concise description
 	; Scythe Attack. Deals +3...13...15 damage. Remove 1 of your Dervish enchantments. Removal effect: unblockable, removes a stance, deals +3...13...15 additional damage.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1490 - $GC_I_SKILL_ID_PIOUS_ASSAULT
 Func CanUse_PiousAssault()
 	If Anti_Attack() Then Return False
+	If Not UAI_GetFeederEnchOnTop() Then Return False
 	Return True
 EndFunc
 
@@ -2056,7 +2064,7 @@ Func BestTarget_PiousAssault($a_f_AggroRange)
 	; Melee Attack. If it hits, this attack deals +10...18...20 damage and removes 1 Dervish enchantment. If a Dervish enchantment was removed, this skill recharges 75% faster and adjacent foes take 10...26...30 damage.
 	; Concise description
 	; Melee Attack. Deals +10...18...20 damage. Removes 1 of your Dervish enchantments. Removal Effect: this skill recharges 75% faster and adjacent foes take 10...26...30 damage.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1535 - $GC_I_SKILL_ID_CRIPPLING_SWEEP
@@ -2090,6 +2098,7 @@ EndFunc
 ; Skill ID: 1537 - $GC_I_SKILL_ID_WEARYING_STRIKE
 Func CanUse_WearyingStrike()
 	If Anti_Attack() Then Return False
+	If Not UAI_GetFeederEnchOnTop() Then Return False
 	Return True
 EndFunc
 
@@ -2098,7 +2107,7 @@ Func BestTarget_WearyingStrike($a_f_AggroRange)
 	; Scythe Attack. You remove 1 Dervish enchantment. If an enchantment was removed, you inflict a Deep Wound for 3...9...10 seconds. You suffer from Weakness for 10 seconds if an enchantment is not removed.
 	; Concise description
 	; Scythe Attack. Remove 1 Dervish Enchantment. Removal Effect: Inflicts Deep Wound condition (3...9...10 seconds). You are Weakened (10 seconds) if an enchantment is not lost.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1538 - $GC_I_SKILL_ID_LYSSAS_ASSAULT
@@ -2552,6 +2561,7 @@ EndFunc
 ; Skill ID: 1753 - $GC_I_SKILL_ID_RENDING_SWEEP
 Func CanUse_RendingSweep()
 	If Anti_Attack() Then Return False
+	If Not UAI_GetFeederEnchOnTop() Then Return False
 	Return True
 EndFunc
 
@@ -2560,7 +2570,7 @@ Func BestTarget_RendingSweep($a_f_AggroRange)
 	; Scythe Attack. You deal +5...17...20 and lose 1 Dervish enchantment. If an enchantment was lost, you remove an enchantment from each foe you hit.
 	; Concise description
 	; Scythe Attack. Deals +5...17...20 damage. You lose 1 Dervish enchantment. Removal effect: struck foes lose an enchantment.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1767 - $GC_I_SKILL_ID_REAPERS_SWEEP
