@@ -182,7 +182,7 @@ Func UAI_GetEstimatedMaxHP($a_i_AgentID)
 	Local $l_i_BaseHP = $l_i_Level * 20 + 80
 
 	; Hard Mode bonus: +20 HP per level above 20
-	If Party_GetPartyContextInfo("IsHardMode")() And $l_i_Level > 20 Then
+	If Party_GetPartyContextInfo("IsHardMode") And $l_i_Level > 20 Then
 		$l_i_BaseHP += ($l_i_Level - 20) * 20
 	EndIf
 
