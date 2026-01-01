@@ -2957,6 +2957,12 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 					Local $l_ai_Coords[2] = [19915, 19690]
 			EndSwitch
 
+		Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS_LVL1
+			Switch $a_i_ToMapID
+				Case $GC_I_MAP_ID_VLOXS_FALLS
+					Local $l_ai_Coords[2] = [-20122, -11955]
+			EndSwitch
+
 		Case $GC_I_MAP_ID_BATTLEDEPTHS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_HEART_OF_THE_SHIVERPEAKS_LVL1
@@ -3752,6 +3758,8 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ARBOR_BAY, $GC_I_MAP_ID_RIVEN_EARTH, $GC_I_MAP_ID_MAGUS_STONES, $GC_I_MAP_ID_TARNISHED_HAVEN]
 		Case $GC_I_MAP_ID_VLOXS_FALLS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_ARBOR_BAY, $GC_I_MAP_ID_VLOXEN_EXCAVATIONS_LVL1]
+		Case $GC_I_MAP_ID_VLOXEN_EXCAVATIONS_LVL1
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_VLOXS_FALLS]
 		Case $GC_I_MAP_ID_BATTLEDEPTHS
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_HEART_OF_THE_SHIVERPEAKS_LVL1, $GC_I_MAP_ID_ICE_CLIFF_CHASMS, $GC_I_MAP_ID_VARAJAR_FELLS_1, $GC_I_MAP_ID_CENTRAL_TRANSFER_CHAMBER]
 		Case $GC_I_MAP_ID_GADDS_ENCAMPMENT
