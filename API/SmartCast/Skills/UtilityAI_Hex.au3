@@ -1610,7 +1610,7 @@ Func BestTarget_AssassinsPromise($a_f_AggroRange)
 	; Elite Hex Spell. (5...13...15 seconds.) You gain 5...17...20 Energy and all your skills recharge if target foe dies.
 	; Concise description
 	; Hex Spell. (5...13...15 seconds.) You gain 5...17...20 Energy and all your skills recharge if target foe dies.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1044 - $GC_I_SKILL_ID_DARK_PRISON
