@@ -17,8 +17,17 @@ EndFunc   ;==>UAI_Fight
 
 ;~ Use this function to cast all of your skills or skills of a certain type.
 Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500)
-	For $l_i_i = 1 To 8
-		If UAI_GetStaticSkillInfo($l_i_i, $GC_UAI_STATIC_SKILL_SkillID) = 0 Then ContinueLoop
+	Local Static $ls_i_LowPrioSkill = 6
+	For $l_i_i = 1 To 6
+		Local $l_i_Slot = $l_i_i
+
+		if $l_i_Slot = 6 Then 
+			$l_i_Slot = $ls_i_LowPrioSkill
+			$ls_i_LowPrioSkill += 1
+			If $ls_i_LowPrioSkill > 8 Then $ls_i_LowPrioSkill = 6
+		EndIf
+
+		If UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillID) = 0 Then ContinueLoop
 
 ;~ 	UPDATE CACHE FIRST
 		UAI_UpdateCache($a_f_AggroRange)
@@ -29,7 +38,7 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 		If UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Or Party_IsWiped() = 1 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or UAI_GetPlayerInfo($GC_UAI_AGENT_IsKnockedDown) Then Return
 
 		If $g_b_SkillChanged = True Then
-			If Cache_EndFormChangeBuild($l_i_i) Then
+			If Cache_EndFormChangeBuild($l_i_Slot) Then
 				$g_b_SkillChanged = False
 			EndIf
 		EndIf
@@ -48,15 +57,15 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 		UAI_DropBundle($a_f_AggroRange)
 
 ;~ 	USESKILL
-		If UAI_CanCast($l_i_i) Then
-			$g_i_BestTarget = Call($g_as_BestTargetCache[$l_i_i], $a_f_AggroRange)
+		If UAI_CanCast($l_i_Slot) Then
+			$g_i_BestTarget = Call($g_as_BestTargetCache[$l_i_Slot], $a_f_AggroRange)
 			If $g_i_BestTarget = 0 Then ContinueLoop
 
-			$g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_i])
+			$g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_Slot])
 
 			If $g_b_CanUseSkill = True And Agent_GetDistance($g_i_BestTarget) < $a_f_AggroRange Then
-				UAI_UseSkillEX($l_i_i, $g_i_BestTarget)
-				If Cache_FormChangeBuild($l_i_i) Then $g_b_SkillChanged = True
+				UAI_UseSkillEX($l_i_Slot, $g_i_BestTarget)
+				If Cache_FormChangeBuild($l_i_Slot) Then $g_b_SkillChanged = True
 			Else
 				ContinueLoop
 			EndIf
