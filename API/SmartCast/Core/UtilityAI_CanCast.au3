@@ -187,19 +187,33 @@ Func UAI_IsCastSensible($a_i_SkillSlot)
 
     Switch $l_i_SkillType
         Case _
-            $GC_I_SKILL_TYPE_STANCE, _
             $GC_I_SKILL_TYPE_ENCHANTMENT, _
             $GC_I_SKILL_TYPE_WARD, _
-            $GC_I_SKILL_TYPE_GLYPH, _
             $GC_I_SKILL_TYPE_SHOUT, _
-            $GC_I_SKILL_TYPE_PREPARATION, _
             $GC_I_SKILL_TYPE_RITUAL, _
             $GC_I_SKILL_TYPE_FORM, _
             $GC_I_SKILL_TYPE_ECHO_REFRAIN
 
-			Return UAI_GetPlayerEffectInfo($l_i_SkillID, $GC_UAI_EFFECT_TimeRemaining) < _
-				(UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Activation) + 1000)
+			Return _UAI_EffectEndingSoon($l_i_SkillID, $a_i_SkillSlot)
+
+		Case $GC_I_SKILL_TYPE_STANCE
+			If Not UAI_PlayerHasEffectType("HasStance") Then Return True
+			If @extended <> $l_i_SkillID Then Return False
+			Return _UAI_EffectEndingSoon($l_i_SkillID, $a_i_SkillSlot)
+		Case $GC_I_SKILL_TYPE_GLYPH
+			If Not UAI_PlayerHasEffectType("HasGlyph") Then Return True
+			If @extended <> $l_i_SkillID Then Return False
+			Return _UAI_EffectEndingSoon($l_i_SkillID, $a_i_SkillSlot)
+		Case  $GC_I_SKILL_TYPE_PREPARATION
+			If Not UAI_PlayerHasEffectType("HasPreparation") Then Return True
+			If @extended <> $l_i_SkillID Then Return False
+			Return _UAI_EffectEndingSoon($l_i_SkillID, $a_i_SkillSlot)
     EndSwitch
 
     Return True
+EndFunc
+
+Func _UAI_EffectEndingSoon($a_i_SkillID, $a_i_SkillSlot)
+	Return UAI_GetPlayerEffectInfo($a_i_SkillID, $GC_UAI_EFFECT_TimeRemaining) < _
+		(UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Activation)*1000 + 1000)
 EndFunc
