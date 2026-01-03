@@ -871,7 +871,7 @@ EndFunc
 Func CanUse_IAmUnstoppable()
 	If Anti_Shout() Then Return False
 	If UAI_GetPlayerInfo($GC_UAI_AGENT_IsCrippled) Or UAI_GetPlayerInfo($GC_UAI_AGENT_IsKnockedDown) Then Return True
-	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) <= 0.95 Then Return False
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) >= 0.95 Then Return False
 	Return True
 EndFunc
 
