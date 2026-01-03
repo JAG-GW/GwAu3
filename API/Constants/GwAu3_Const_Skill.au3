@@ -3770,6 +3770,8 @@ Global Const $GC_I_SKILL_ID_HEROIC_REFRAIN = 3431
 ;~     4 = EotN
 
 ;~ 5: Type
+;~     1 = Blessing
+;~     2 = PartyBonus
 ;~     3 = Stance
 ;~     4 = Hex
 ;~     5 = Spell
@@ -3780,11 +3782,17 @@ Global Const $GC_I_SKILL_ID_HEROIC_REFRAIN = 3431
 ;~     10 = Skill
 ;~     11 = Ward
 ;~     12 = Glyph
+;~     13 = PVE Title Bonus (e.g. Lightbringer)
 ;~     14 = Attack
 ;~     15 = Shout
+;~     16 = MonsterSkill
+;~     17 = MonsterPassiveSkill
+;~     18 = Game Mode (Hard Mode)
 ;~     19 = Preparation
+;~     20 = PetAttack
 ;~     21 = Trap
 ;~     22 = Ritual
+;~     23 = EnviromentEffect
 ;~     24 = Item Spell
 ;~     25 = Weapon Spell
 ;~     26 = Form

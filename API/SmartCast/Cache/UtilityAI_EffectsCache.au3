@@ -429,8 +429,8 @@ EndFunc
 Func UAI_GetFeederEnchOnTop()
 	Local $l_i_MyID = Agent_GetMyID()
     If $l_i_MyID = 0 Then Return SetError(1, 0, False)
+
     Local $l_i_EffectCount = UAI_GetPlayerEffectCount()
-    
     If $l_i_EffectCount = 0 Then Return False
 
 	Local $l_i_Index = UAI_GetIndexByID($l_i_MyID)
@@ -454,5 +454,37 @@ Func UAI_GetFeederEnchOnTop()
         $GC_I_SKILL_ID_PIOUS_RENEWAL, $GC_I_SKILL_ID_EREMITES_ZEAL, $GC_I_SKILL_ID_ZEALOUS_RENEWAL]
 
     If $l_i_SkillID <> 0 And (_ArrayBinarySearch($l_ai_FeederEnchantmens, $l_i_SkillID)) >= 0 Then Return True
+    Return False
+EndFunc
+
+Func UAI_PlayerHasEffectType($a_s_EffectType = "")
+	Local $l_i_MyID = Agent_GetMyID()
+    If $l_i_MyID = 0 Then Return SetError(1, 0, False)
+
+    Local $l_i_EffectCount = UAI_GetPlayerEffectCount()
+    If $l_i_EffectCount = 0 Then Return False
+
+	Local $l_i_Index = UAI_GetIndexByID($l_i_MyID)
+
+	Local $l_i_EffectType = ""
+	Switch $a_s_EffectType
+		Case "HasStance"
+			$l_i_EffectType = $GC_I_SKILL_TYPE_STANCE
+		Case "HasGlyph"
+			$l_i_EffectType = $GC_I_SKILL_TYPE_GLYPH
+		Case "HasPreparation"
+			$l_i_EffectType = $GC_I_SKILL_TYPE_PREPARATION
+		Case Else
+			Return SetError(2, 0, False)
+	EndSwitch
+
+    For $l_i_i = ($l_i_EffectCount - 1) To 0 Step -1
+		Local $l_i_CurrentSkillID = $g_amx3_EffectsCache[$l_i_Index][$l_i_i][$GC_UAI_BUFF_SkillID]
+		Local $l_i_SkillType = $GC_AMX2_SKILL_DATA[$l_i_CurrentSkillID][$GC_I_SKILL_TYPE]
+		If $l_i_SkillType = $l_i_EffectType Then
+			SetExtended($l_i_CurrentSkillID)
+			Return True
+		EndIf
+    Next
     Return False
 EndFunc
