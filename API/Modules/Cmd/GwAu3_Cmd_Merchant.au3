@@ -43,8 +43,8 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
         Local $l_p_Item, $l_i_ItemID, $l_i_ItemModelID
         Local $l_b_FoundItem = False
 
-        For $l_i_Idx = 1 To $l_i_ItemArraySize
-            $l_p_Item = Item_GetItemPtr($l_i_Idx)
+        For $i = 1 To $l_i_ItemArraySize
+            $l_p_Item = Item_GetItemPtr($i)
             If Not $l_p_Item Then ContinueLoop
 
             If Memory_Read($l_p_Item + 0x2C, 'dword') <> $a_i_ModelID Then ContinueLoop
@@ -108,8 +108,8 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
 
     Else
         ; Standard merchant buy - search by ModelID
-        Local $l_p_Merchant_ItemBase = Merchant_GetMerchantItemsBase()
-        If Not $l_p_Merchant_ItemBase Then Return False
+        Local $l_p_MerchantItemBase = Merchant_GetMerchantItemsBase()
+        If Not $l_p_MerchantItemBase Then Return False
 
         Local $l_i_MerchantItemCount = Merchant_GetMerchantItemsSize()
         Local $l_p_Item, $l_i_ItemID, $l_i_ItemModelID, $l_i_ItemValue
@@ -117,7 +117,7 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
 
         ; Search for ModelID in merchant's items
         For $i = 0 To $l_i_MerchantItemCount - 1
-            $l_i_ItemID = Memory_Read($l_p_Merchant_ItemBase + 4 * $i)
+            $l_i_ItemID = Memory_Read($l_p_MerchantItemBase + 4 * $i)
             $l_p_Item = Item_GetItemPtr($l_i_ItemID)
             If Not $l_p_Item Then ContinueLoop
 
@@ -241,61 +241,61 @@ Func Merchant_SellItem($a_p_Item, $a_i_Quantity = 0, $a_b_Trader = False)
     Return True
 EndFunc ;==>Merchant_SellItem
 
-;~ Description: $a_ai2_Materials expects a 2D array with [[Material1, Count1],...,[MaterialN, CountN]]; materials need to be in the order shown in the recipe
-Func Merchant_CraftItem($a_i_CraftedItem_ModelID, $a_i_Price, $a_ai2_Materials, $a_i_Quantity = 1)
+;~ Description: $a_ai2_ReqMaterials expects a 2D array with [[Material1, Count1],...,[MaterialN, CountN]]; materials need to be in the order shown in the recipe
+Func Merchant_CraftItem($a_i_CraftedItemModelID, $a_i_Price, $a_ai2_ReqMaterials, $a_i_Quantity = 1)
     Local Const $LC_AI_BAG_LIST[4] = [$GC_I_INVENTORY_BACKPACK, $GC_I_INVENTORY_BELT_POUCH, $GC_I_INVENTORY_BAG1, $GC_I_INVENTORY_BAG2]
     Local Const $LC_I_MAX_BAG_SLOTS = 60
     Local Const $LC_I_OFFSET_ITEMID = 0x0
     Local Const $LC_I_OFFSET_MODELID = 0x2C
     Local Const $LC_I_OFFSET_QUANTITY = 0x4C
 
-    If $a_i_CraftedItem_ModelID <= 0 Then Return False
+    If $a_i_CraftedItemModelID <= 0 Then Return False
     If $a_i_Quantity <= 0 Or $a_i_Quantity > $GC_I_MERCHANT_MAX_ITEM_STACK Then Return False
 
     Local $l_i_Price_Total = $a_i_Price * $a_i_Quantity
     If $l_i_Price_Total > Item_GetInventoryInfo("GoldCharacter") Then Return False
 
-    Static $s_i_LastCount_Material_ItemIDs = 0
-    Static $s_d_CraftItem, $s_p_CraftItemPtr
+    Static $s_i_LastMaterialItemIDCount = 0
+    Static $s_d_CraftItemStruct, $s_p_CraftItemStructPtr
 
-    Local $l_i_Count_Materials = UBound($a_ai2_Materials)
-    If $l_i_Count_Materials <= 0 Then Return False
+    Local $l_i_ReqMaterialCount = UBound($a_ai2_ReqMaterials)
+    If $l_i_ReqMaterialCount <= 0 Then Return False
 
-    Static $s_d_Struct_Item = DllStructCreate( _
+    Static $s_d_ItemStruct = DllStructCreate( _
         "dword ItemID;" & _
         "byte[" & ($LC_I_OFFSET_MODELID - ($LC_I_OFFSET_ITEMID + 4)) & "];" & _
         "dword ModelID;" & _
         "byte[" & ($LC_I_OFFSET_QUANTITY - ($LC_I_OFFSET_MODELID + 4)) & "];" & _
         "short Quantity" _
     )
-    Static $s_i_StructSize_Item = DllStructGetSize($s_d_Struct_Item)
+    Static $s_i_ItemStructSize = DllStructGetSize($s_d_ItemStruct)
 
-    Local $l_amx2_Inventory[$LC_I_MAX_BAG_SLOTS][4]
-    Local $l_i_Inventory_Idx = 0
+    Local $l_av2_Inventory[$LC_I_MAX_BAG_SLOTS][4]
+    Local $l_i_InventoryIdx = 0
 
-    For $l_i_Idx = 0 To UBound($LC_AI_BAG_LIST) - 1
-        Local $l_p_BagPtr = Item_GetBagPtr($LC_AI_BAG_LIST[$l_i_Idx])
+    For $bag In $LC_AI_BAG_LIST
+        Local $l_p_BagPtr = Item_GetBagPtr($bag)
         If $l_p_BagPtr = 0 Then ContinueLoop
 
-        Local $l_ap_ItemArray = Item_GetBagItemArray($LC_AI_BAG_LIST[$l_i_Idx])
+        Local $l_ap_ItemArray = Item_GetBagItemArray($bag)
         Local $l_i_ItemCount = $l_ap_ItemArray[0]
 
-        For $l_i_Jdx = 1 To $l_i_ItemCount
-            Local $l_p_Cache_ItemPtr = $l_ap_ItemArray[$l_i_Jdx]
-            If $l_p_Cache_ItemPtr = 0 Then ContinueLoop
+        For $item = 1 To $l_i_ItemCount
+            Local $l_p_ItemPtr = $l_ap_ItemArray[$item]
+            If $l_p_ItemPtr = 0 Then ContinueLoop
 
             DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
                 "handle", $g_h_GWProcess, _
-                "ptr", $l_p_Cache_ItemPtr, _
-                "struct*", $s_d_Struct_Item, _
-                "ulong_ptr", $s_i_StructSize_Item, _
+                "ptr", $l_p_ItemPtr, _
+                "struct*", $s_d_ItemStruct, _
+                "ulong_ptr", $s_i_ItemStructSize, _
                 "ulong_ptr*", 0 _
             )
 
             Local $l_b_IsReqMaterial = False
-            Local $l_i_Cache_ModelID = DllStructGetData($s_d_Struct_Item, "ModelID")
-            For $l_i_Kdx = 0 To $l_i_Count_Materials - 1
-                If $a_ai2_Materials[$l_i_Kdx][0] = $l_i_Cache_ModelID Then
+            Local $l_i_ModelID = DllStructGetData($s_d_ItemStruct, "ModelID")
+            For $reqMaterial = 0 To $l_i_ReqMaterialCount - 1
+                If $a_ai2_ReqMaterials[$reqMaterial][0] = $l_i_ModelID Then
                     $l_b_IsReqMaterial = True
                     ExitLoop
                 EndIf
@@ -303,177 +303,177 @@ Func Merchant_CraftItem($a_i_CraftedItem_ModelID, $a_i_Price, $a_ai2_Materials, 
 
             If Not $l_b_IsReqMaterial Then ContinueLoop
 
-            $l_amx2_Inventory[$l_i_Inventory_Idx][0] = $l_p_Cache_ItemPtr
-            $l_amx2_Inventory[$l_i_Inventory_Idx][1] = DllStructGetData($s_d_Struct_Item, "ItemID")
-            $l_amx2_Inventory[$l_i_Inventory_Idx][2] = $l_i_Cache_ModelID
-            $l_amx2_Inventory[$l_i_Inventory_Idx][3] = DllStructGetData($s_d_Struct_Item, "Quantity")
-            $l_i_Inventory_Idx += 1
+            $l_av2_Inventory[$l_i_InventoryIdx][0] = $l_p_ItemPtr
+            $l_av2_Inventory[$l_i_InventoryIdx][1] = DllStructGetData($s_d_ItemStruct, "ItemID")
+            $l_av2_Inventory[$l_i_InventoryIdx][2] = $l_i_ModelID
+            $l_av2_Inventory[$l_i_InventoryIdx][3] = DllStructGetData($s_d_ItemStruct, "Quantity")
+            $l_i_InventoryIdx += 1
         Next
     Next
 
-    ReDim $l_amx2_Inventory[$l_i_Inventory_Idx][4]
+    ReDim $l_av2_Inventory[$l_i_InventoryIdx][4]
 
-    Local $l_i_Count_Inventory = UBound($l_amx2_Inventory)
-    Local $l_ai_Material_ItemIDs[$l_i_Count_Inventory]
-    Local $l_i_Material_Idx = 0
+    Local $l_i_InvMaterialCount = UBound($l_av2_Inventory)
+    Local $l_ai_InvMaterialItemIDs[$l_i_InvMaterialCount]
+    Local $l_i_MaterialIdx = 0
 
-    For $l_i_Idx = 0 To $l_i_Count_Materials - 1
-        Local $l_i_Material_ModelID = $a_ai2_Materials[$l_i_Idx][0]
-        Local $l_i_Material_QuantityReq = $a_ai2_Materials[$l_i_Idx][1] * $a_i_Quantity
-        Local $l_i_Material_RemainingQuantityReq = $l_i_Material_QuantityReq
+    For $reqMaterial = 0 To $l_i_ReqMaterialCount - 1
+        Local $l_i_MaterialModelID = $a_ai2_ReqMaterials[$reqMaterial][0]
+        Local $l_i_MaterialQuantityReq = $a_ai2_ReqMaterials[$reqMaterial][1] * $a_i_Quantity
+        Local $l_i_RemainingMaterialQuantityReq = $l_i_MaterialQuantityReq
 
-        For $l_i_Jdx = 0 To $l_i_Count_Inventory - 1
-            If $l_amx2_Inventory[$l_i_Jdx][0] = 0 Then ContinueLoop
-            If $l_amx2_Inventory[$l_i_Jdx][2] <> $l_i_Material_ModelID Then ContinueLoop
+        For $invMaterial = 0 To $l_i_InvMaterialCount - 1
+            If $l_av2_Inventory[$invMaterial][0] = 0 Then ContinueLoop
+            If $l_av2_Inventory[$invMaterial][2] <> $l_i_MaterialModelID Then ContinueLoop
 
             Local $l_i_Item_UseQuantity
-            If $l_amx2_Inventory[$l_i_Jdx][3] < $l_i_Material_RemainingQuantityReq Then
-                $l_i_Item_UseQuantity = $l_amx2_Inventory[$l_i_Jdx][3]
+            If $l_av2_Inventory[$invMaterial][3] < $l_i_RemainingMaterialQuantityReq Then
+                $l_i_Item_UseQuantity = $l_av2_Inventory[$invMaterial][3]
             Else
-                $l_i_Item_UseQuantity = $l_i_Material_RemainingQuantityReq
+                $l_i_Item_UseQuantity = $l_i_RemainingMaterialQuantityReq
             EndIf
 
-            $l_ai_Material_ItemIDs[$l_i_Material_Idx] = $l_amx2_Inventory[$l_i_Jdx][1]
-            $l_i_Material_Idx += 1
+            $l_ai_InvMaterialItemIDs[$l_i_MaterialIdx] = $l_av2_Inventory[$invMaterial][1]
+            $l_i_MaterialIdx += 1
 
-            $l_i_Material_RemainingQuantityReq -= $l_i_Item_UseQuantity
-            If $l_i_Material_RemainingQuantityReq <= 0 Then ExitLoop
+            $l_i_RemainingMaterialQuantityReq -= $l_i_Item_UseQuantity
+            If $l_i_RemainingMaterialQuantityReq <= 0 Then ExitLoop
         Next
 
-        If $l_i_Material_RemainingQuantityReq > 0 Then Return False
+        If $l_i_RemainingMaterialQuantityReq > 0 Then Return False
     Next
 
-    ReDim $l_ai_Material_ItemIDs[$l_i_Material_Idx]
+    ReDim $l_ai_InvMaterialItemIDs[$l_i_MaterialIdx]
 
-    If $s_i_LastCount_Material_ItemIDs <> $l_i_Material_Idx Then
-        $s_d_CraftItem = DllStructCreate('ptr;dword;dword;dword;dword;dword[' & $l_i_Material_Idx & ']')
-        $s_p_CraftItemPtr = DllStructGetPtr($s_d_CraftItem)
-        DllStructSetData($s_d_CraftItem, 1, Memory_GetValue('CommandCraftItem'))
-        $s_i_LastCount_Material_ItemIDs = $l_i_Material_Idx
+    If $s_i_LastMaterialItemIDCount <> $l_i_MaterialIdx Then
+        $s_d_CraftItemStruct = DllStructCreate('ptr;dword;dword;dword;dword;dword[' & $l_i_MaterialIdx & ']')
+        $s_p_CraftItemStructPtr = DllStructGetPtr($s_d_CraftItemStruct)
+        DllStructSetData($s_d_CraftItemStruct, 1, Memory_GetValue('CommandCraftItem'))
+        $s_i_LastMaterialItemIDCount = $l_i_MaterialIdx
     EndIf
 
-    Local $l_i_Merchant_ItemID = Memory_Read(Merchant_GetMerchantItemPtr($a_i_CraftedItem_ModelID))
-    If Not $l_i_Merchant_ItemID Then Return False
+    Local $l_i_MerchantItemID = Memory_Read(Merchant_GetMerchantItemPtr($a_i_CraftedItemModelID))
+    If Not $l_i_MerchantItemID Then Return False
 
-    DllStructSetData($s_d_CraftItem, 2, $a_i_Quantity)
-    DllStructSetData($s_d_CraftItem, 3, $l_i_Merchant_ItemID)
-    DllStructSetData($s_d_CraftItem, 4, $a_i_Price * $a_i_Quantity)
-    DllStructSetData($s_d_CraftItem, 5, $l_i_Material_Idx)
+    DllStructSetData($s_d_CraftItemStruct, 2, $a_i_Quantity)
+    DllStructSetData($s_d_CraftItemStruct, 3, $l_i_MerchantItemID)
+    DllStructSetData($s_d_CraftItemStruct, 4, $a_i_Price * $a_i_Quantity)
+    DllStructSetData($s_d_CraftItemStruct, 5, $l_i_MaterialIdx)
 
-    For $l_i_Idx = 1 To $l_i_Material_Idx
-        DllStructSetData($s_d_CraftItem, 6, $l_ai_Material_ItemIDs[$l_i_Idx - 1], $l_i_Idx)
+    For $dllArrayPos = 1 To $l_i_MaterialIdx
+        DllStructSetData($s_d_CraftItemStruct, 6, $l_ai_InvMaterialItemIDs[$dllArrayPos - 1], $dllArrayPos)
     Next
 
-    Core_Enqueue($s_p_CraftItemPtr, 20 + 4 * $l_i_Material_Idx)
+    Core_Enqueue($s_p_CraftItemStructPtr, 20 + 4 * $l_i_MaterialIdx)
     Return True
 EndFunc   ;==>Merchant_CraftItem
 
-Func Merchant_CollectorExchange($a_i_ModelID_ItemRecv, $a_i_ExchangeReq, $a_i_ModelID_ItemGive)
+Func Merchant_CollectorExchange($a_i_ItemRecvModelID, $a_i_ExchangeReq, $a_i_ItemGiveModelID)
     Local Const $LC_AI_BAG_LIST[4] = [$GC_I_INVENTORY_BACKPACK, $GC_I_INVENTORY_BELT_POUCH, $GC_I_INVENTORY_BAG1, $GC_I_INVENTORY_BAG2]
     Local Const $LC_I_MAX_BAG_SLOTS = 60
     Local Const $LC_I_OFFSET_ITEMID = 0x0
     Local Const $LC_I_OFFSET_MODELID = 0x2C
     Local Const $LC_I_OFFSET_QUANTITY = 0x4C
 
-    If $a_i_ModelID_ItemRecv <= 0 Or $a_i_ModelID_ItemGive <= 0 Then Return SetError(1, 0, False)
+    If $a_i_ItemRecvModelID <= 0 Or $a_i_ItemGiveModelID <= 0 Then Return SetError(1, 0, False)
     If $a_i_ExchangeReq <= 0 Or $a_i_ExchangeReq > $GC_I_MERCHANT_MAX_ITEM_STACK Then Return SetError(2, 0, False)
 
-    Static $s_i_LastCount_UsedItemIDs = 0
-    Static $s_d_CollectorExchange, $s_p_CollectorExchangePtr
+    Static $s_i_LastUsedItemIDCount = 0
+    Static $s_d_CollectorExchangeStruct, $s_p_CollectorExchangeStructPtr
 
-    Static $s_d_Struct_Item = DllStructCreate( _
+    Static $s_d_ItemStruct = DllStructCreate( _
         "dword ItemID;" & _
         "byte[" & ($LC_I_OFFSET_MODELID - ($LC_I_OFFSET_ITEMID + 4)) & "];" & _
         "dword ModelID;" & _
         "byte[" & ($LC_I_OFFSET_QUANTITY - ($LC_I_OFFSET_MODELID + 4)) & "];" & _
         "short Quantity" _
     )
-    Static $s_i_StructSize_Item = DllStructGetSize($s_d_Struct_Item)
+    Static $s_i_ItemStructSize = DllStructGetSize($s_d_ItemStruct)
 
-    Local $l_amx2_Inventory[$LC_I_MAX_BAG_SLOTS][4]
-    Local $l_i_Inventory_Idx = 0
+    Local $l_av2_Inventory[$LC_I_MAX_BAG_SLOTS][4]
+    Local $l_i_InventoryIdx = 0
 
-     For $l_i_Idx = 0 To UBound($LC_AI_BAG_LIST) - 1
-        Local $l_p_BagPtr = Item_GetBagPtr($LC_AI_BAG_LIST[$l_i_Idx])
+    For $bag In $LC_AI_BAG_LIST
+        Local $l_p_BagPtr = Item_GetBagPtr($bag)
         If $l_p_BagPtr = 0 Then ContinueLoop
 
-        Local $l_ap_ItemArray = Item_GetBagItemArray($LC_AI_BAG_LIST[$l_i_Idx])
+        Local $l_ap_ItemArray = Item_GetBagItemArray($bag)
         Local $l_i_ItemCount = $l_ap_ItemArray[0]
 
-        For $l_i_Jdx = 1 To $l_i_ItemCount
-            Local $l_p_Cache_ItemPtr = $l_ap_ItemArray[$l_i_Jdx]
-            If $l_p_Cache_ItemPtr = 0 Then ContinueLoop
+        For $item = 1 To $l_i_ItemCount
+            Local $l_p_ItemPtr = $l_ap_ItemArray[$item]
+            If $l_p_ItemPtr = 0 Then ContinueLoop
 
             DllCall($g_h_Kernel32, "bool", "ReadProcessMemory", _
                 "handle", $g_h_GWProcess, _
-                "ptr", $l_p_Cache_ItemPtr, _
-                "struct*", $s_d_Struct_Item, _
-                "ulong_ptr", $s_i_StructSize_Item, _
+                "ptr", $l_p_ItemPtr, _
+                "struct*", $s_d_ItemStruct, _
+                "ulong_ptr", $s_i_ItemStructSize, _
                 "ulong_ptr*", 0 _
             )
 
-            Local $l_i_Cache_ModelID = DllStructGetData($s_d_Struct_Item, "ModelID")
-            If $a_i_ModelID_ItemGive <> $l_i_Cache_ModelID Then ContinueLoop
+            Local $l_i_ModelID = DllStructGetData($s_d_ItemStruct, "ModelID")
+            If $a_i_ItemGiveModelID <> $l_i_ModelID Then ContinueLoop
 
-            $l_amx2_Inventory[$l_i_Inventory_Idx][0] = $l_p_Cache_ItemPtr
-            $l_amx2_Inventory[$l_i_Inventory_Idx][1] = DllStructGetData($s_d_Struct_Item, "ItemID")
-            $l_amx2_Inventory[$l_i_Inventory_Idx][2] = $l_i_Cache_ModelID
-            $l_amx2_Inventory[$l_i_Inventory_Idx][3] = DllStructGetData($s_d_Struct_Item, "Quantity")
-            $l_i_Inventory_Idx += 1
+            $l_av2_Inventory[$l_i_InventoryIdx][0] = $l_p_ItemPtr
+            $l_av2_Inventory[$l_i_InventoryIdx][1] = DllStructGetData($s_d_ItemStruct, "ItemID")
+            $l_av2_Inventory[$l_i_InventoryIdx][2] = $l_i_ModelID
+            $l_av2_Inventory[$l_i_InventoryIdx][3] = DllStructGetData($s_d_ItemStruct, "Quantity")
+            $l_i_InventoryIdx += 1
         Next
     Next
 
-    ReDim $l_amx2_Inventory[$l_i_Inventory_Idx][4]
+    ReDim $l_av2_Inventory[$l_i_InventoryIdx][4]
 
-    Local $l_i_Count_Inventory = UBound($l_amx2_Inventory)
-    Local $l_ai_Exchange_Quantities[$a_i_ExchangeReq]
-    Local $l_ai_Exchange_ItemIDs[$a_i_ExchangeReq]
-    Local $l_i_Exchange_RemainingExchangeReq = $a_i_ExchangeReq
-    Local $l_i_Exchange_Idx = 0
+    Local $l_i_InvExchangeCount = UBound($l_av2_Inventory)
+    Local $l_ai_ExchangeQuantities[$a_i_ExchangeReq]
+    Local $l_ai_ExchangeItemIDs[$a_i_ExchangeReq]
+    Local $l_i_RemainingExchangeReq = $a_i_ExchangeReq
+    Local $l_i_ExchangeIdx = 0
 
-    For $l_i_Idx = 0 To $l_i_Count_Inventory - 1
-        If $l_amx2_Inventory[$l_i_Idx][0] = 0 Then ContinueLoop
+    For $l_i_Idx = 0 To $l_i_InvExchangeCount - 1
+        If $l_av2_Inventory[$l_i_Idx][0] = 0 Then ContinueLoop
 
-        Local $l_i_Item_Quantity
-        If $l_amx2_Inventory[$l_i_Idx][3] < $l_i_Exchange_RemainingExchangeReq Then
-            $l_i_Item_Quantity = $l_amx2_Inventory[$l_i_Idx][3]
+        Local $l_i_ItemQuantity
+        If $l_av2_Inventory[$l_i_Idx][3] < $l_i_RemainingExchangeReq Then
+            $l_i_ItemQuantity = $l_av2_Inventory[$l_i_Idx][3]
         Else
-            $l_i_Item_Quantity = $l_i_Exchange_RemainingExchangeReq
+            $l_i_ItemQuantity = $l_i_RemainingExchangeReq
         EndIf
 
-        $l_ai_Exchange_Quantities[$l_i_Exchange_Idx] = $l_i_Item_Quantity
-        $l_ai_Exchange_ItemIDs[$l_i_Exchange_Idx] = $l_amx2_Inventory[$l_i_Idx][1]
-        $l_i_Exchange_Idx += 1
+        $l_ai_ExchangeQuantities[$l_i_ExchangeIdx] = $l_i_ItemQuantity
+        $l_ai_ExchangeItemIDs[$l_i_ExchangeIdx] = $l_av2_Inventory[$l_i_Idx][1]
+        $l_i_ExchangeIdx += 1
 
-        $l_i_Exchange_RemainingExchangeReq -= $l_i_Item_Quantity
-        If $l_i_Exchange_RemainingExchangeReq <= 0 Then ExitLoop
+        $l_i_RemainingExchangeReq -= $l_i_ItemQuantity
+        If $l_i_RemainingExchangeReq <= 0 Then ExitLoop
     Next
 
-    If $l_i_Exchange_RemainingExchangeReq > 0 Then Return SetError(3, 0, False)
+    If $l_i_RemainingExchangeReq > 0 Then Return SetError(3, 0, False)
 
-    ReDim $l_ai_Exchange_Quantities[$l_i_Exchange_Idx]
-    ReDim $l_ai_Exchange_ItemIDs[$l_i_Exchange_Idx]
+    ReDim $l_ai_ExchangeQuantities[$l_i_ExchangeIdx]
+    ReDim $l_ai_ExchangeItemIDs[$l_i_ExchangeIdx]
 
-    If $s_i_LastCount_UsedItemIDs <> $l_i_Exchange_Idx Then
-        $s_d_CollectorExchange = DllStructCreate("ptr;dword;dword;dword[" & $l_i_Exchange_Idx & "];dword[" & $l_i_Exchange_Idx & "]")
-        $s_p_CollectorExchangePtr = DllStructGetPtr($s_d_CollectorExchange)
-        DllStructSetData($s_d_CollectorExchange, 1, Memory_GetValue('CommandCollectorExchange'))
-        $s_i_LastCount_UsedItemIDs = $l_i_Exchange_Idx
+    If $s_i_LastUsedItemIDCount <> $l_i_ExchangeIdx Then
+        $s_d_CollectorExchangeStruct = DllStructCreate("ptr;dword;dword;dword[" & $l_i_ExchangeIdx & "];dword[" & $l_i_ExchangeIdx & "]")
+        $s_p_CollectorExchangeStructPtr = DllStructGetPtr($s_d_CollectorExchangeStruct)
+        DllStructSetData($s_d_CollectorExchangeStruct, 1, Memory_GetValue('CommandCollectorExchange'))
+        $s_i_LastUsedItemIDCount = $l_i_ExchangeIdx
     EndIf
 
-    Local $l_i_ItemID_ItemRecv = Memory_Read(Merchant_GetMerchantItemPtr($a_i_ModelID_ItemRecv))
-    If $l_i_ItemID_ItemRecv = 0 Then Return SetError(4, 0, False)
+    Local $l_i_ItemRecvItemID = Memory_Read(Merchant_GetMerchantItemPtr($a_i_ItemRecvModelID))
+    If $l_i_ItemRecvItemID = 0 Then Return SetError(4, 0, False)
 
-    DllStructSetData($s_d_CollectorExchange, 2, $l_i_ItemID_ItemRecv)
-    DllStructSetData($s_d_CollectorExchange, 3, $l_i_Exchange_Idx)
+    DllStructSetData($s_d_CollectorExchangeStruct, 2, $l_i_ItemRecvItemID)
+    DllStructSetData($s_d_CollectorExchangeStruct, 3, $l_i_ExchangeIdx)
 
-    For $l_i_Idx = 1 To $l_i_Exchange_Idx
-        DllStructSetData($s_d_CollectorExchange, 4, $l_ai_Exchange_Quantities[$l_i_Idx - 1], $l_i_Idx)
+    For $dllArrayPos = 1 To $l_i_ExchangeIdx
+        DllStructSetData($s_d_CollectorExchangeStruct, 4, $l_ai_ExchangeQuantities[$dllArrayPos - 1], $dllArrayPos)
     Next
-    For $l_i_Idx = 1 To $l_i_Exchange_Idx
-        DllStructSetData($s_d_CollectorExchange, 5, $l_ai_Exchange_ItemIDs[$l_i_Idx - 1], $l_i_Idx)
+    For $dllArrayPos = 1 To $l_i_ExchangeIdx
+        DllStructSetData($s_d_CollectorExchangeStruct, 5, $l_ai_ExchangeItemIDs[$dllArrayPos - 1], $dllArrayPos)
     Next
 
-    Core_Enqueue($s_p_CollectorExchangePtr, 12 + 8 * $l_i_Exchange_Idx)
+    Core_Enqueue($s_p_CollectorExchangeStructPtr, 12 + 8 * $l_i_ExchangeIdx)
     Return True
 EndFunc
