@@ -434,8 +434,8 @@ Func UAI_Filter_IsControlledSpirit($a_i_AgentID)
 
 	Local $l_i_AgentID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_ID)
 
-	For $l_i_i = 0 To $l_i_OthersSize - 1
-		Local $l_i_ControlledID = Memory_Read($l_p_OthersPtr + ($l_i_i * 0x4), "dword")
+	For $i = 0 To $l_i_OthersSize - 1
+		Local $l_i_ControlledID = Memory_Read($l_p_OthersPtr + ($i * 0x4), "dword")
 		If $l_i_ControlledID = $l_i_AgentID Then Return True
 	Next
 
@@ -477,8 +477,8 @@ Func UAI_Filter_IsControlledMinion($a_i_AgentID)
 
 	Local $l_i_AgentID = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_ID)
 
-	For $l_i_i = 0 To $l_i_OthersSize - 1
-		Local $l_i_ControlledID = Memory_Read($l_p_OthersPtr + ($l_i_i * 0x4), "dword")
+	For $i = 0 To $l_i_OthersSize - 1
+		Local $l_i_ControlledID = Memory_Read($l_p_OthersPtr + ($i * 0x4), "dword")
 		If $l_i_ControlledID = $l_i_AgentID Then Return True
 	Next
 

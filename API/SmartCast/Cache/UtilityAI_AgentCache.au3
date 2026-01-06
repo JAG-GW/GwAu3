@@ -170,8 +170,8 @@ Func UAI_UpdateAgentCache($a_f_Range = 1320, $a_i_Type = 0xDB)
     ReDim $g_amx2_AgentCache[$l_i_TotalAgents + 1][$GC_UAI_AGENT_COUNT]
 
     Local $l_i_CacheIndex = 0
-    For $l_i_i = 1 To $l_i_TotalAgents
-        Local $l_p_AgentPtr = $l_ap_AgentArray[$l_i_i]
+    For $i = 1 To $l_i_TotalAgents
+        Local $l_p_AgentPtr = $l_ap_AgentArray[$i]
         If $l_p_AgentPtr = 0 Then ContinueLoop
 
         Local $l_av_Data = Memory_ReadStruct($l_p_AgentPtr, $ss_AgentStruct)
@@ -313,20 +313,20 @@ Func UAI_BuildAgentIDMap()
     Local $l_i_MaxID = 0
     Local $l_i_Count = $g_amx2_AgentCache[0][0]
 
-    For $l_i_i = 1 To $l_i_Count
-        If $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_ID] > $l_i_MaxID Then
-            $l_i_MaxID = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+    For $i = 1 To $l_i_Count
+        If $g_amx2_AgentCache[$i][$GC_UAI_AGENT_ID] > $l_i_MaxID Then
+            $l_i_MaxID = $g_amx2_AgentCache[$i][$GC_UAI_AGENT_ID]
         EndIf
     Next
 
     ReDim $g_ai_AgentIDToIndex[$l_i_MaxID + 1]
-    For $l_i_i = 0 To $l_i_MaxID
-        $g_ai_AgentIDToIndex[$l_i_i] = 0
+    For $i = 0 To $l_i_MaxID
+        $g_ai_AgentIDToIndex[$i] = 0
     Next
 
-    For $l_i_i = 1 To $l_i_Count
-        Local $l_i_ID = $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
-        $g_ai_AgentIDToIndex[$l_i_ID] = $l_i_i
+    For $i = 1 To $l_i_Count
+        Local $l_i_ID = $g_amx2_AgentCache[$i][$GC_UAI_AGENT_ID]
+        $g_ai_AgentIDToIndex[$l_i_ID] = $i
     Next
 EndFunc
 

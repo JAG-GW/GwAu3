@@ -17,9 +17,9 @@ EndFunc   ;==>UAI_Fight
 
 ;~ Use this function to cast all of your skills or skills of a certain type.
 Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500)
-	Local Static $ls_i_LowPrioSkill = 6
-	For $l_i_i = 1 To 6
-		Local $l_i_Slot = $l_i_i
+	Static $ls_i_LowPrioSkill = 6
+	For $i = 1 To 6
+		Local $l_i_Slot = $i
 
 		if $l_i_Slot = 6 Then 
 			$l_i_Slot = $ls_i_LowPrioSkill
@@ -178,19 +178,19 @@ Func UAI_CastPrioritySkill($a_i_Slot, $a_f_AggroRange = 1320)
 	EndIf
 EndFunc
 
-; Drop bundle if player has Item Spell buff and can cast (skill is recharged)
+; Drop bundle if player has Item Spell effect and can cast (skill is recharged)
 Func UAI_DropBundle($a_f_AggroRange = 1320)
 	For $l_i_Slot = 1 To 8
 		; Check if skill is an Item Spell
 		Local $l_i_Type = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillType)
 		If $l_i_Type <> $GC_I_SKILL_TYPE_ITEM_SPELL Then ContinueLoop
 
-		; Get skill ID to check if player has the buff
+		; Get skill ID to check if player has the effect
 		Local $l_i_SkillID = UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillID)
 		If $l_i_SkillID = 0 Then ContinueLoop
 
-		; Check if player has the Item Spell buff (holding the ashes)
-		If Not UAI_PlayerHasBuff($l_i_SkillID) Then ContinueLoop
+		; Check if player has the Item Spell effect (holding the ashes)
+		If Not UAI_PlayerHasEffect($l_i_SkillID) Then ContinueLoop
 
 		; Check if skill is recharged (can drop bundle)
 		If UAI_CanCast($l_i_Slot) Then

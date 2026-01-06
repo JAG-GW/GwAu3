@@ -50,30 +50,30 @@ Func UAI_UpdateDynamicSkillbarCache()
 
     Local $l_i_SkillTimer = Skill_GetSkillTimer()
 
-    For $l_i_i = 1 To 8
-        Local $l_i_Idx = $l_i_i - 1
+    For $i = 1 To 8
+        Local $l_i_Idx = $i - 1
 
-        $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_Adrenaline] = $l_amx2_AllSkills[$l_i_Idx][0]
-        $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_AdrenalineB] = $l_amx2_AllSkills[$l_i_Idx][1]
-        $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_SkillID] = $l_amx2_AllSkills[$l_i_Idx][3]
-        $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_Event] = $l_amx2_AllSkills[$l_i_Idx][4]
+        $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_Adrenaline] = $l_amx2_AllSkills[$l_i_Idx][0]
+        $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_AdrenalineB] = $l_amx2_AllSkills[$l_i_Idx][1]
+        $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_SkillID] = $l_amx2_AllSkills[$l_i_Idx][3]
+        $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_Event] = $l_amx2_AllSkills[$l_i_Idx][4]
 
         Local $l_i_RechargeTimestamp = $l_amx2_AllSkills[$l_i_Idx][2]
 
         If $l_i_RechargeTimestamp = 0 Then
-            $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_IsRecharged] = True
-            $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_RechargeTime] = 0
+            $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_IsRecharged] = True
+            $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_RechargeTime] = 0
         Else
             Local $l_i_RechargeTimestampSigned = Utils_MakeInt32($l_i_RechargeTimestamp)
             Local $l_i_SkillTimerSigned = Utils_MakeInt32($l_i_SkillTimer)
             Local $l_i_TimeRemaining = $l_i_RechargeTimestampSigned - $l_i_SkillTimerSigned
 
             If $l_i_TimeRemaining <= 0 Then
-                $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_IsRecharged] = True
-                $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_RechargeTime] = 0
+                $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_IsRecharged] = True
+                $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_RechargeTime] = 0
             Else
-                $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_IsRecharged] = False
-                $g_amx2_DynamicSkillCache[$l_i_i][$GC_UAI_DYNAMIC_SKILL_RechargeTime] = $l_i_TimeRemaining
+                $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_IsRecharged] = False
+                $g_amx2_DynamicSkillCache[$i][$GC_UAI_DYNAMIC_SKILL_RechargeTime] = $l_i_TimeRemaining
             EndIf
         EndIf
     Next

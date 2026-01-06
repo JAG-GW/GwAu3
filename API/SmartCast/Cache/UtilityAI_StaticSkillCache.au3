@@ -106,12 +106,12 @@ Func UAI_CacheSkillBar()
 	$g_amx2_StaticSkillCache = 0			; resets the array if we cache a different skill bar
 	Global $g_amx2_StaticSkillCache[9][43]
 
-    For $l_i_i = 1 To 8
-        Local $l_i_SkillID = Skill_GetSkillbarInfo($l_i_i, "SkillID")
+    For $i = 1 To 8
+        Local $l_i_SkillID = Skill_GetSkillbarInfo($i, "SkillID")
 
         If $l_i_SkillID = 0 Then
-            For $l_i_j = 0 To 42
-                $g_amx2_StaticSkillCache[$l_i_i][$l_i_j] = 0
+            For $j = 0 To 42
+                $g_amx2_StaticSkillCache[$i][$j] = 0
             Next
             ContinueLoop
         EndIf
@@ -122,32 +122,32 @@ Func UAI_CacheSkillBar()
         Local $l_i_Max = UBound($l_av_SkillData) - 1
         If $l_i_Max > 42 Then $l_i_Max = 42
 
-        For $l_i_j = 0 To $l_i_Max
-            $g_amx2_StaticSkillCache[$l_i_i][$l_i_j] = $l_av_SkillData[$l_i_j]
+        For $j = 0 To $l_i_Max
+            $g_amx2_StaticSkillCache[$i][$j] = $l_av_SkillData[$j]
         Next
 
-        Local $l_i_Overcast = $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_Overcast]
+        Local $l_i_Overcast = $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_Overcast]
         Switch $l_i_Overcast
 			Case 5
-				$g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_Overcast] = 5
+				$g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_Overcast] = 5
 			Case 10
-                $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_Overcast] = 10
+                $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_Overcast] = 10
             Case Else
-                $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_Overcast] = 0
+                $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_Overcast] = 0
         EndSwitch
 
         ; Traitement spécial pour EnergyCost
-        Local $l_i_EnergyCost = $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_EnergyCost]
+        Local $l_i_EnergyCost = $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_EnergyCost]
         Switch $l_i_EnergyCost
             Case 11
-                $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_EnergyCost] = 15
+                $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_EnergyCost] = 15
             Case 12
-                $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_EnergyCost] = 25
+                $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_EnergyCost] = 25
         EndSwitch
 
         ; Traitement spécial pour Aftercast (conversion en ms)
-        $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_Aftercast] = _
-            $g_amx2_StaticSkillCache[$l_i_i][$GC_UAI_STATIC_SKILL_Aftercast] * 750
+        $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_Aftercast] = _
+            $g_amx2_StaticSkillCache[$i][$GC_UAI_STATIC_SKILL_Aftercast] * 750
     Next
 EndFunc
 

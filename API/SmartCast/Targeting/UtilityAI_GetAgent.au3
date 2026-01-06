@@ -13,14 +13,14 @@ Func UAI_FindAgentByPlayerNumber($a_i_PlayerNumber, $a_i_AgentID = -2, $a_i_Rang
     Local $l_f_RefX = UAI_GetPlayerX()
     Local $l_f_RefY = UAI_GetPlayerY()
 
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
         If $l_i_AgentID = $l_i_RefID Then ContinueLoop
-        If UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_PlayerNumber) <> $a_i_PlayerNumber Then ContinueLoop
+        If UAI_GetAgentInfo($i, $GC_UAI_AGENT_PlayerNumber) <> $a_i_PlayerNumber Then ContinueLoop
         If $a_s_Filter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_Filter) Then ContinueLoop
 
-        Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+        Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 
         If $l_f_Distance <= $a_i_Range Then Return $l_i_AgentID
     Next
@@ -50,14 +50,14 @@ Func UAI_CountAgents($a_i_AgentID = -2, $a_f_Range = 1320, $a_s_Filter = "")
 
     Local $l_f_RangeSquared = $a_f_Range * $a_f_Range
 
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
         If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
         ; Calculate distance from reference agent
-        Local $l_f_AgentX = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
-        Local $l_f_AgentY = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+        Local $l_f_AgentX = UAI_GetAgentInfo($i, $GC_UAI_AGENT_X)
+        Local $l_f_AgentY = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Y)
         Local $l_f_DX = $l_f_AgentX - $l_f_RefX
         Local $l_f_DY = $l_f_AgentY - $l_f_RefY
         Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
@@ -78,12 +78,12 @@ Func UAI_GetNearestAgent($a_i_AgentID = -2, $a_f_Range = 1320, $a_s_Filter = "")
     Local $l_f_NearestDist = 999999
     Local $l_i_RefID = UAI_ConvertAgentID($a_i_AgentID)
 
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
         If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
-        Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+        Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
         If $l_f_Distance > $a_f_Range Then ContinueLoop
 
         If $a_s_Filter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_Filter) Then ContinueLoop
@@ -103,12 +103,12 @@ Func UAI_GetFarthestAgent($a_i_AgentID = -2, $a_f_Range = 1320, $a_s_Filter = ""
     Local $l_f_FarthestDist = 0
     Local $l_i_RefID = UAI_ConvertAgentID($a_i_AgentID)
 
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
         If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
-        Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+        Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
         If $l_f_Distance > $a_f_Range Then ContinueLoop
 
         If $a_s_Filter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_Filter) Then ContinueLoop
@@ -135,21 +135,21 @@ Func UAI_GetAgentLowest($a_i_AgentID = -2, $a_f_Range = 1320, $a_i_Property = $G
 	If $g_i_AgentCacheCount = 0 Then Return 0
 
 	; Process each agent from cache
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Ignore reference agent
 		If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
 		; Check range (already calculated in cache)
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_Range Then ContinueLoop
 
 		; Apply custom filters (supports multiple filters separated by |)
 		If Not _ApplyFilters($l_i_AgentID, $a_s_CustomFilter) Then ContinueLoop
 
 		; Get property value
-		Local $l_v_Value = UAI_GetAgentInfo($l_i_i, $a_i_Property)
+		Local $l_v_Value = UAI_GetAgentInfo($i, $a_i_Property)
 
 		; Update lowest
 		If $l_v_Value < $l_f_LowestValue Then
@@ -172,21 +172,21 @@ Func UAI_GetAgentHighest($a_i_AgentID = -2, $a_f_Range = 1320, $a_i_Property = $
 	If $g_i_AgentCacheCount = 0 Then Return 0
 
 	; Process each agent from cache
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Ignore reference agent
 		If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
 		; Check range (already calculated in cache)
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_Range Then ContinueLoop
 
 		; Apply custom filters (supports multiple filters separated by |)
 		If Not _ApplyFilters($l_i_AgentID, $a_s_CustomFilter) Then ContinueLoop
 
 		; Get property value
-		Local $l_v_Value = UAI_GetAgentInfo($l_i_i, $a_i_Property)
+		Local $l_v_Value = UAI_GetAgentInfo($i, $a_i_Property)
 
 		; Update highest
 		If $l_v_Value > $l_f_HighestValue Then
@@ -221,14 +221,14 @@ Func UAI_GetBestAOETarget($a_i_AgentID = -2, $a_f_Range = 1320, $a_f_AOERange = 
 	If $g_i_AgentCacheCount = 0 Then Return 0
 
 	; Process each agent from cache
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Ignore reference agent
 		If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
 		; Check range (already calculated in cache)
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_Range Then ContinueLoop
 
 		; Apply custom filters
@@ -276,8 +276,8 @@ Func _GetGroupStats($a_i_AgentID, $a_f_Range, $a_s_Filter)
 	$l_i_Count += 1
 
 	; Check all agents in cache
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_CheckID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_CheckID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Skip center agent (already counted)
 		If $l_i_CheckID = $a_i_AgentID Then ContinueLoop
@@ -286,8 +286,8 @@ Func _GetGroupStats($a_i_AgentID, $a_f_Range, $a_s_Filter)
 		If $a_s_Filter <> "" And Not _ApplyFilters($l_i_CheckID, $a_s_Filter) Then ContinueLoop
 
 		; Calculate distance from center agent
-		Local $l_f_CheckX = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
-		Local $l_f_CheckY = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		Local $l_f_CheckX = UAI_GetAgentInfo($i, $GC_UAI_AGENT_X)
+		Local $l_f_CheckY = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Y)
 		Local $l_f_DX = $l_f_CheckX - $l_f_RefX
 		Local $l_f_DY = $l_f_CheckY - $l_f_RefY
 		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
@@ -295,7 +295,7 @@ Func _GetGroupStats($a_i_AgentID, $a_f_Range, $a_s_Filter)
 		If $l_f_DistSquared > $l_f_RangeSquared Then ContinueLoop
 
 		; Add to total
-		$l_f_TotalHP += UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		$l_f_TotalHP += UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		$l_i_Count += 1
 	Next
 
@@ -321,21 +321,21 @@ Func UAI_GetBestTargetByDamageType($a_i_AgentID = -2, $a_f_Range = 1320, $a_s_Da
 	If $g_i_AgentCacheCount = 0 Then Return 0
 
 	; Process each agent from cache
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Ignore reference agent
 		If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
 		; Check range (already calculated in cache)
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_Range Then ContinueLoop
 
 		; Apply custom filters
 		If $a_s_CustomFilter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_CustomFilter) Then ContinueLoop
 
 		; Get HP from cache
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 
 		; Calculate armor on-the-fly based on damage type
 		Local $l_i_Armor
@@ -389,14 +389,14 @@ Func UAI_GetBestAOETargetByDamageType($a_i_AgentID = -2, $a_f_Range = 1320, $a_f
 	If $g_i_AgentCacheCount = 0 Then Return 0
 
 	; Process each agent from cache
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Ignore reference agent
 		If $l_i_AgentID = $l_i_RefID Then ContinueLoop
 
 		; Check range (already calculated in cache)
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_Range Then ContinueLoop
 
 		; Apply custom filters
@@ -443,8 +443,8 @@ Func _GetGroupStatsByDamageType($a_i_AgentID, $a_f_Range, $a_s_DamageType, $a_s_
 	$l_i_Count += 1
 
 	; Check all agents in cache
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_CheckID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_CheckID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Skip center agent (already counted)
 		If $l_i_CheckID = $a_i_AgentID Then ContinueLoop
@@ -453,8 +453,8 @@ Func _GetGroupStatsByDamageType($a_i_AgentID, $a_f_Range, $a_s_DamageType, $a_s_
 		If $a_s_Filter <> "" And Not _ApplyFilters($l_i_CheckID, $a_s_Filter) Then ContinueLoop
 
 		; Calculate distance from center agent
-		Local $l_f_CheckX = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
-		Local $l_f_CheckY = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		Local $l_f_CheckX = UAI_GetAgentInfo($i, $GC_UAI_AGENT_X)
+		Local $l_f_CheckY = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Y)
 		Local $l_f_DX = $l_f_CheckX - $l_f_RefX
 		Local $l_f_DY = $l_f_CheckY - $l_f_RefY
 		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
@@ -462,7 +462,7 @@ Func _GetGroupStatsByDamageType($a_i_AgentID, $a_f_Range, $a_s_DamageType, $a_s_
 		If $l_f_DistSquared > $l_f_RangeSquared Then ContinueLoop
 
 		; Calculate score with armor
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		$l_f_TotalScore += _GetArmorScore($l_i_CheckID, $l_f_HP, $a_s_DamageType)
 		$l_i_Count += 1
 	Next
@@ -502,13 +502,13 @@ Func UAI_GetBestWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
 	Local $l_af_AlliesY[$g_i_AgentCacheCount + 1]
 	Local $l_i_AllyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
 
-		$l_af_AlliesX[$l_i_AllyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
-		$l_af_AlliesY[$l_i_AllyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		$l_af_AlliesX[$l_i_AllyCount] = UAI_GetAgentInfo($i, $GC_UAI_AGENT_X)
+		$l_af_AlliesY[$l_i_AllyCount] = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Y)
 		$l_i_AllyCount += 1
 	Next
 
@@ -516,9 +516,9 @@ Func UAI_GetBestWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
 
 	; Calculate centroid (center of mass) of all allies
 	Local $l_f_CentroidX = 0, $l_f_CentroidY = 0
-	For $l_i_i = 0 To $l_i_AllyCount - 1
-		$l_f_CentroidX += $l_af_AlliesX[$l_i_i]
-		$l_f_CentroidY += $l_af_AlliesY[$l_i_i]
+	For $i = 0 To $l_i_AllyCount - 1
+		$l_f_CentroidX += $l_af_AlliesX[$i]
+		$l_f_CentroidY += $l_af_AlliesY[$i]
 	Next
 	$l_f_CentroidX /= $l_i_AllyCount
 	$l_f_CentroidY /= $l_i_AllyCount
@@ -527,9 +527,9 @@ Func UAI_GetBestWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
 	Local $l_i_CoveredCount = 0
 	Local $l_f_RangeSquared = $a_f_WardRange * $a_f_WardRange
 
-	For $l_i_i = 0 To $l_i_AllyCount - 1
-		Local $l_f_DX = $l_af_AlliesX[$l_i_i] - $l_f_CentroidX
-		Local $l_f_DY = $l_af_AlliesY[$l_i_i] - $l_f_CentroidY
+	For $i = 0 To $l_i_AllyCount - 1
+		Local $l_f_DX = $l_af_AlliesX[$i] - $l_f_CentroidX
+		Local $l_f_DY = $l_af_AlliesY[$i] - $l_f_CentroidY
 		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
 
 		If $l_f_DistSquared <= $l_f_RangeSquared Then
@@ -596,13 +596,13 @@ Func UAI_GetBestOffensiveWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
 	Local $l_af_EnemiesY[$g_i_AgentCacheCount + 1]
 	Local $l_i_EnemyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
 
-		$l_af_EnemiesX[$l_i_EnemyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
-		$l_af_EnemiesY[$l_i_EnemyCount] = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		$l_af_EnemiesX[$l_i_EnemyCount] = UAI_GetAgentInfo($i, $GC_UAI_AGENT_X)
+		$l_af_EnemiesY[$l_i_EnemyCount] = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Y)
 		$l_i_EnemyCount += 1
 	Next
 
@@ -610,9 +610,9 @@ Func UAI_GetBestOffensiveWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
 
 	; Calculate centroid (center of mass) of all enemies
 	Local $l_f_CentroidX = 0, $l_f_CentroidY = 0
-	For $l_i_i = 0 To $l_i_EnemyCount - 1
-		$l_f_CentroidX += $l_af_EnemiesX[$l_i_i]
-		$l_f_CentroidY += $l_af_EnemiesY[$l_i_i]
+	For $i = 0 To $l_i_EnemyCount - 1
+		$l_f_CentroidX += $l_af_EnemiesX[$i]
+		$l_f_CentroidY += $l_af_EnemiesY[$i]
 	Next
 	$l_f_CentroidX /= $l_i_EnemyCount
 	$l_f_CentroidY /= $l_i_EnemyCount
@@ -621,9 +621,9 @@ Func UAI_GetBestOffensiveWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
 	Local $l_i_CoveredCount = 0
 	Local $l_f_RangeSquared = $a_f_WardRange * $a_f_WardRange
 
-	For $l_i_i = 0 To $l_i_EnemyCount - 1
-		Local $l_f_DX = $l_af_EnemiesX[$l_i_i] - $l_f_CentroidX
-		Local $l_f_DY = $l_af_EnemiesY[$l_i_i] - $l_f_CentroidY
+	For $i = 0 To $l_i_EnemyCount - 1
+		Local $l_f_DX = $l_af_EnemiesX[$i] - $l_f_CentroidX
+		Local $l_f_DY = $l_af_EnemiesY[$i] - $l_f_CentroidY
 		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
 
 		If $l_f_DistSquared <= $l_f_RangeSquared Then
@@ -682,8 +682,8 @@ Func UAI_PlayerHasOtherMesmerHex($a_i_ExcludeSkillID)
 	If $g_i_PlayerCacheIndex < 1 Then Return False
 
 	Local $l_i_Count = $g_ai_EffectsCount[$g_i_PlayerCacheIndex]
-	For $l_i_i = 0 To $l_i_Count - 1
-		Local $l_i_SkillID = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$l_i_i][$GC_UAI_EFFECT_SkillID]
+	For $i = 0 To $l_i_Count - 1
+		Local $l_i_SkillID = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$i][$GC_UAI_EFFECT_SkillID]
 		If $l_i_SkillID = $a_i_ExcludeSkillID Then ContinueLoop
 
 		; Check if this skill is a Mesmer hex
@@ -704,12 +704,12 @@ Func UAI_GetBestCorpseForAllySupport($a_f_Range)
 	Local $l_i_NearestCorpse = 0
 	Local $l_f_NearestDist = 999999
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		If Not UAI_Filter_IsDeadEnemy($l_i_AgentID) Then ContinueLoop
 
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_Range Then ContinueLoop
 
 		; Track nearest corpse
@@ -745,12 +745,12 @@ Func UAI_GetBestCorpseForEnemyPressure($a_f_Range)
 	Local $l_i_NearestCorpse = 0
 	Local $l_f_NearestDist = 999999
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		If Not UAI_Filter_IsDeadEnemy($l_i_AgentID) Then ContinueLoop
 
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_Range Then ContinueLoop
 
 		; Track nearest corpse
@@ -822,13 +822,13 @@ Func UAI_IsCorpseNearest($a_i_TargetCorpseID, $a_f_X, $a_f_Y)
 	Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
 
 	; Check all other corpses
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsDeadEnemy($l_i_AgentID) Then ContinueLoop
 		If $l_i_AgentID = $a_i_TargetCorpseID Then ContinueLoop
 
-		Local $l_f_OtherX = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_X)
-		Local $l_f_OtherY = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Y)
+		Local $l_f_OtherX = UAI_GetAgentInfo($i, $GC_UAI_AGENT_X)
+		Local $l_f_OtherY = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Y)
 		Local $l_f_OtherDiffX = $l_f_OtherX - $a_f_X
 		Local $l_f_OtherDiffY = $l_f_OtherY - $a_f_Y
 		Local $l_f_DistToOther = Sqrt($l_f_OtherDiffX * $l_f_OtherDiffX + $l_f_OtherDiffY * $l_f_OtherDiffY)

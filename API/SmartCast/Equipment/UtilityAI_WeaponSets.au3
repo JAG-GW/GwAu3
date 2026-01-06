@@ -522,18 +522,18 @@ EndFunc
 ;Helper function to search mods in an upgrade array
 Func UAI_SearchModsInArray(ByRef $a_as2_UpgradeArray, ByRef $a_s_ModStruct, ByRef $a_s_NewModStruct, ByRef $a_i_Finding, $a_i_Set, $a_i_Weapon)
 	Local $l_i_Index = $a_i_Set - 1
-	For $l_i_i = 0 To UBound($a_as2_UpgradeArray) - 1
+	For $i = 0 To UBound($a_as2_UpgradeArray) - 1
 		Local $l_s_SearchIn = ($a_i_Finding = 0) ? $a_s_ModStruct : $a_s_NewModStruct
-		If StringInStr($l_s_SearchIn, $a_as2_UpgradeArray[$l_i_i][2]) > 0 Then
-			$g_as3_Weapon_Mods[$a_i_Set - 1][$a_i_Weapon - 1][$a_i_Finding] = $a_as2_UpgradeArray[$l_i_i][0]
+		If StringInStr($l_s_SearchIn, $a_as2_UpgradeArray[$i][2]) > 0 Then
+			$g_as3_Weapon_Mods[$a_i_Set - 1][$a_i_Weapon - 1][$a_i_Finding] = $a_as2_UpgradeArray[$i][0]
 			If $a_i_Finding = 0 Then
-				$a_s_NewModStruct = StringReplace($a_s_ModStruct, $a_as2_UpgradeArray[$l_i_i][2], "")
+				$a_s_NewModStruct = StringReplace($a_s_ModStruct, $a_as2_UpgradeArray[$i][2], "")
 			Else
-				$a_s_NewModStruct = StringReplace($a_s_NewModStruct, $a_as2_UpgradeArray[$l_i_i][2], "")
+				$a_s_NewModStruct = StringReplace($a_s_NewModStruct, $a_as2_UpgradeArray[$i][2], "")
 			EndIf
 
-			Local $l_s_ModName = $a_as2_UpgradeArray[$l_i_i][0]
-			Local $l_s_Effect = $a_as2_UpgradeArray[$l_i_i][1]
+			Local $l_s_ModName = $a_as2_UpgradeArray[$i][0]
+			Local $l_s_Effect = $a_as2_UpgradeArray[$i][1]
 			Out("[DEBUG]     [MOD #" & $a_i_Finding & "] " & $l_s_ModName & " => " & $l_s_Effect)
 
 			;Extract HP and Energy bonuses

@@ -166,7 +166,7 @@ API/SmartCast/
 │   ├── UtilityAI_AgentCache.au3       # Agent data cache
 │   ├── UtilityAI_StaticSkillCache.au3 # Static skill data cache
 │   ├── UtilityAI_DynamicSkillCache.au3# Dynamic skill data cache
-│   ├── UtilityAI_EffectsCache.au3     # Effects, Buffs, Visible Effects cache
+│   ├── UtilityAI_EffectsCache.au3     # Effects, Bonds, Visible Effects cache
 │   ├── UtilityAI_BestTargetCache.au3  # BestTarget dispatcher: UAI_GetBestTargetFunc()
 │   └── UtilityAI_CanUseCache.au3      # CanUse dispatcher: UAI_GetCanUseFunc()
 │
@@ -252,7 +252,7 @@ Global $g_a2D_DynamicSkillCache[9][6]     ; Dynamic skill data per slot
 
 ; Effects Cache
 Global $g_a_EffectsCache[1][1][1]         ; 3D array [AgentIndex][EffectIndex][Property]
-Global $g_a_BuffsCache[1][1][1]           ; 3D array [AgentIndex][BuffIndex][Property]
+Global $g_a_BondsCache[1][1][1]           ; 3D array [AgentIndex][BondIndex][Property]
 Global $g_a_VisEffectsCache[1][1][1]      ; 3D array [AgentIndex][VisEffectIndex][Property]
 ```
 
@@ -339,7 +339,7 @@ Func UAI_UseSkills($a_f_X, $a_f_Y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
             ↓
 ┌─────────────────────────────────────┐
 │ 8. Cast skill                       │
-│    ├─ UAI_CanCast($l_i_i)          │
+│    ├─ UAI_CanCast($i)          │
 │    │   └─ Check recharge,           │
 │    │      adrenaline, resources     │
 │    │                                │
@@ -349,7 +349,7 @@ Func UAI_UseSkills($a_f_X, $a_f_Y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 │    ├─ $g_b_CanUseSkill = Call(CanUse_XXX)
 │    │   └─ Check skill conditions    │
 │    │                                │
-│    └─ UAI_UseSkillEX($l_i_i, $g_i_BestTarget)
+│    └─ UAI_UseSkillEX($i, $g_i_BestTarget)
 │        └─ Cast the skill            │
 │        └─ Apply form change if any  │
 └─────────────────────────────────────┘
@@ -564,7 +564,7 @@ Local $l_i_Adrenaline = UAI_GetDynamicSkillInfo(1, $GC_UAI_DYNAMIC_SKILL_Adrenal
 
 ### 4.4 Effects Cache (UtilityAI_EffectsCache.au3)
 
-Caches **Effects**, **Buffs**, and **Visible Effects** for all cached agents.
+Caches **Effects**, **Bonds**, and **Visible Effects** for all cached agents.
 
 #### Update Function
 
@@ -572,7 +572,7 @@ Caches **Effects**, **Buffs**, and **Visible Effects** for all cached agents.
 Func UAI_UpdateEffectsCache()
 ```
 
-This updates all three caches (effects, buffs, visible effects) at once.
+This updates all three caches (effects, bonds, visible effects) at once.
 
 #### Effect Properties
 
@@ -586,20 +586,20 @@ Global Enum $GC_UAI_EFFECT_SkillID, _
     $GC_UAI_EFFECT_COUNT
 ```
 
-#### Buff Properties
+#### Bond Properties
 
 ```autoit
-Global Enum $GC_UAI_BUFF_SkillID, _
-    $GC_UAI_BUFF_Unknown, _
-    $GC_UAI_BUFF_BuffID, _
-    $GC_UAI_BUFF_TargetAgentID, _
-    $GC_UAI_BUFF_COUNT
+Global Enum $GC_UAI_BOND_SkillID, _
+    $GC_UAI_BOND_Unknown, _
+    $GC_UAI_BOND_BondID, _
+    $GC_UAI_BOND_TargetAgentID, _
+    $GC_UAI_BOND_COUNT
 ```
 
 #### Visible Effect Properties
 
 ```autoit
-Global Enum $GC_UAI_VISEFFECT_Unknown, _
+Global Enum $GC_UAI_VISEFFECT_EffectType, _
     $GC_UAI_VISEFFECT_EffectID, _
     $GC_UAI_VISEFFECT_HasEnded, _
     $GC_UAI_VISEFFECT_COUNT
@@ -621,20 +621,20 @@ UAI_GetAgentEffectCount($a_i_AgentID)
 UAI_GetPlayerEffectCount()
 ```
 
-#### Buff Functions
+#### Bond Functions
 
 ```autoit
-; Check if agent has a specific buff (by SkillID)
-UAI_AgentHasBuff($a_i_AgentID, $a_i_SkillID)
-UAI_PlayerHasBuff($a_i_SkillID)
+; Check if agent upkeeps a specific bond (by SkillID)
+UAI_AgentUpkeepsBond($a_i_AgentID, $a_i_SkillID)
+UAI_PlayerUpkeepsBond($a_i_SkillID)
 
-; Get buff info
-UAI_GetAgentBuffInfo($a_i_AgentID, $a_i_SkillID, $a_i_Property)
-UAI_GetPlayerBuffInfo($a_i_SkillID, $a_i_Property)
+; Get bond info
+UAI_GetAgentBondInfo($a_i_AgentID, $a_i_SkillID, $a_i_Property)
+UAI_GetPlayerBondInfo($a_i_SkillID, $a_i_Property)
 
-; Get buff count
-UAI_GetAgentBuffCount($a_i_AgentID)
-UAI_GetPlayerBuffCount()
+; Get bond count
+UAI_GetAgentBondCount($a_i_AgentID)
+UAI_GetPlayerBondCount()
 ```
 
 #### Visible Effect Functions
@@ -681,7 +681,7 @@ The `UAI_UpdateCache()` function is a **convenience wrapper** that updates all d
 Func UAI_UpdateCache($a_f_AggroRange)
     UAI_UpdateAgentCache($a_f_AggroRange + 100)  ; Agent data (with margin)
     UAI_CacheAgentEffects()                       ; Effects cache
-    UAI_CacheAgentBuffs()                         ; Buffs cache
+    UAI_CacheAgentBonds()                         ; Bonds cache
     UAI_CacheAgentVisibleEffects()                ; Visible effects cache
     UAI_UpdateDynamicSkillbarCache()              ; Skill recharge/adrenaline
 EndFunc
@@ -691,7 +691,7 @@ EndFunc
 
 ```autoit
 Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange, $a_f_MaxDistanceToXY)
-    For $l_i_i = 1 To 8
+    For $i = 1 To 8
         UAI_UpdateCache($a_f_AggroRange)  ; Update all caches
         If UAI_CountAgents(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy") = 0 Then ExitLoop
         ; ... process skills ...
@@ -709,7 +709,7 @@ UAI_UpdateCache($a_f_AggroRange)  ; Updates all dynamic caches at once
 UAI_UpdateAgentCache()           ; Update all agent data
 UAI_UpdateDynamicSkillbarCache() ; Update dynamic skill data
 UAI_CacheAgentEffects()          ; Update effects
-UAI_CacheAgentBuffs()            ; Update buffs
+UAI_CacheAgentBonds()            ; Update bonds
 UAI_CacheAgentVisibleEffects()   ; Update visible effects
 
 ; On map load or form change:
@@ -964,8 +964,8 @@ EndFunc
 
 ```autoit
 Func CanUse_ComplexSkill()
-    ; Check player has required buff
-    If Not UAI_PlayerHasEffect($GC_I_SKILL_ID_RequiredBuff) Then
+    ; Check player has required effect
+    If Not UAI_PlayerHasEffect($GC_I_SKILL_ID_RequiredEffect) Then
         Return False
     EndIf
 
@@ -1175,13 +1175,13 @@ UAI_AgentHasEffect($a_i_AgentID, $a_i_SkillID)
 UAI_GetAgentEffectInfo($a_i_AgentID, $a_i_SkillID, $a_i_Property)
 UAI_GetAgentEffectCount($a_i_AgentID)
 
-; Player buffs
-UAI_PlayerHasBuff($a_i_SkillID)
-UAI_GetPlayerBuffCount()
+; Player bonds
+UAI_PlayerUpkeepsBond($a_i_SkillID)
+UAI_GetPlayerBondCount()
 
-; Agent buffs
-UAI_AgentHasBuff($a_i_AgentID, $a_i_SkillID)
-UAI_GetAgentBuffCount($a_i_AgentID)
+; Agent bonds
+UAI_AgentUpkeepsBond($a_i_AgentID, $a_i_SkillID)
+UAI_GetAgentBondCount($a_i_AgentID)
 ```
 
 ---
@@ -1229,8 +1229,8 @@ Func BestTarget_Aegis($a_f_AggroRange)
     Local $l_i_BestPriority = -9999
 
     ; Iterate through cached agents
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$i][$GC_UAI_AGENT_ID]
 
         ; Apply filters
         If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -1246,11 +1246,11 @@ Func BestTarget_Aegis($a_f_AggroRange)
         Local $l_i_Priority = 0
 
         ; Lower HP = higher priority
-        Local $l_f_HPPercent = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_HP]
+        Local $l_f_HPPercent = $g_a2D_AgentCache[$i][$GC_UAI_AGENT_HP]
         $l_i_Priority += (1 - $l_f_HPPercent) * 100
 
         ; Bonus if ally is being attacked
-        If $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_IsAttacking] Then
+        If $g_a2D_AgentCache[$i][$GC_UAI_AGENT_IsAttacking] Then
             $l_i_Priority += 50
         EndIf
 
@@ -1386,8 +1386,8 @@ Func BestTarget_Discord($a_f_AggroRange)
     Local $l_i_BestTarget = 0
     Local $l_i_MaxConditions = 0
 
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$i][$GC_UAI_AGENT_ID]
         If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
 
         Local $l_f_Distance = _GetDistanceToAgent($l_i_AgentID)
@@ -1484,16 +1484,16 @@ EndFunc
 ```autoit
 ; BAD: Loop on all possible agents
 Func BestTarget_Skill($a_f_AggroRange)
-    For $l_i_i = 1 To GetMaxAgents()
-        Local $l_i_AgentID = Agent_GetAgentByArrayIndex($l_i_i)
+    For $i = 1 To GetMaxAgents()
+        Local $l_i_AgentID = Agent_GetAgentByArrayIndex($i)
         ; ...
     Next
 EndFunc
 
 ; GOOD: Loop only through cached agents
 Func BestTarget_Skill($a_f_AggroRange)
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$i][$GC_UAI_AGENT_ID]
         ; ...
     Next
 EndFunc
@@ -1564,8 +1564,8 @@ Func BestTarget_Skill($a_f_AggroRange)
     Local $l_i_BestTarget = 0
     Local $l_i_BestPriority = -9999
 
-    For $l_i_i = 1 To $g_i_AgentCacheCount
-        Local $l_i_AgentID = $g_a2D_AgentCache[$l_i_i][$GC_UAI_AGENT_ID]
+    For $i = 1 To $g_i_AgentCacheCount
+        Local $l_i_AgentID = $g_a2D_AgentCache[$i][$GC_UAI_AGENT_ID]
         ; ...
     Next
 EndFunc
@@ -1621,7 +1621,7 @@ The **SmartCast** system is a flexible and powerful framework for automating Gui
    - `UAI_UpdateAgentCache()` - Agent data
    - `UAI_CacheSkillBar()` - Static skill data
    - `UAI_UpdateDynamicSkillbarCache()` - Dynamic skill data
-   - `UAI_UpdateEffectsCache()` - Effects, Buffs, Visible Effects
+   - `UAI_UpdateEffectsCache()` - Effects, Bonds, Visible Effects
 3. **Resource management**: Sophisticated system that accounts for all modifiers
 4. **Extensibility**: Easy to add/modify behaviors for each skill
 5. **Separation of concerns**: BestTarget (WHO), CanUse (WHEN), CanCast (CAN-WE)
@@ -1634,7 +1634,7 @@ The **SmartCast** system is a flexible and powerful framework for automating Gui
 | Static Skill | `UAI_CacheSkillBar()` | `UAI_GetStaticSkillInfo()` |
 | Dynamic Skill | `UAI_UpdateDynamicSkillbarCache()` | `UAI_GetDynamicSkillInfo()` |
 | Effects | `UAI_UpdateEffectsCache()` | `UAI_PlayerHasEffect()`, `UAI_AgentHasEffect()` |
-| Buffs | (via Effects) | `UAI_PlayerHasBuff()`, `UAI_AgentHasBuff()` |
+| Bonds | (via Effects) | `UAI_PlayerUpkeepsBond()`, `UAI_AgentUpkeepsBond()` |
 | Visible Effects | (via Effects) | `UAI_PlayerHasVisibleEffect()`, `UAI_AgentHasVisibleEffect()` |
 
 ### Going Further:

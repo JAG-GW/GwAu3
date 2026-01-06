@@ -994,7 +994,7 @@ Func VisibleEffect_Count($a_i_AgentID = -2)
 
     If Agent_GetAgentInfo($l_p_AgentPtr, "Type") <> 0xDB Then Return 0
 
-    Local $l_p_TList = $l_p_AgentPtr + 0x170
+    Local $l_p_TList = $l_p_AgentPtr + 0x174
     Local $l_a_Iterator = Utils_TList_CreateIterator($l_p_TList)
 
     Local $l_i_Count = 0
@@ -1018,7 +1018,7 @@ Func VisibleEffect_GetAll($a_i_AgentID = -2)
 
     If Agent_GetAgentInfo($l_p_AgentPtr, "Type") <> 0xDB Then Return $l_a_Effects
 
-    Local $l_p_TList = $l_p_AgentPtr + 0x170
+    Local $l_p_TList = $l_p_AgentPtr + 0x174
     Local $l_a_Iterator = Utils_TList_CreateIterator($l_p_TList)
 
     Local $l_i_Count = 0
@@ -1050,7 +1050,7 @@ Func VisibleEffect_FindByID($a_i_AgentID = -2, $a_i_EffectID = 0)
 
     If Agent_GetAgentInfo($l_p_AgentPtr, "Type") <> 0xDB Then Return $l_a_Result
 
-    Local $l_p_TList = $l_p_AgentPtr + 0x170
+    Local $l_p_TList = $l_p_AgentPtr + 0x174
     Local $l_a_Iterator = Utils_TList_CreateIterator($l_p_TList)
 
     Local $l_p_Current = Utils_TList_Iterator_Current($l_a_Iterator)
