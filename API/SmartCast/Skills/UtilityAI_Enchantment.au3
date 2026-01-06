@@ -3055,7 +3055,7 @@ EndFunc
 ; Skill ID: 1955 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_LUXON
 Func CanUse_AuraOfHolyMightLuxon()
 	If Anti_Enchantment() Then Return False
-	If UAI_AgentHasBuff(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
+	If UAI_AgentHasEffect(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
 	Return True
 EndFunc
 
@@ -3216,7 +3216,7 @@ EndFunc
 ; Skill ID: 2098 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_KURZICK
 Func CanUse_AuraOfHolyMightKurzick()
 	If Anti_Enchantment() Then Return False
-	If UAI_AgentHasBuff(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
+	If UAI_AgentHasEffect(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
 	Return True
 EndFunc
 
