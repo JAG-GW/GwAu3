@@ -599,7 +599,7 @@ Global Enum $GC_UAI_BUFF_SkillID, _
 #### Visible Effect Properties
 
 ```autoit
-Global Enum $GC_UAI_VISEFFECT_Unknown, _
+Global Enum $GC_UAI_VISEFFECT_EffectType, _
     $GC_UAI_VISEFFECT_EffectID, _
     $GC_UAI_VISEFFECT_HasEnded, _
     $GC_UAI_VISEFFECT_COUNT

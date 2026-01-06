@@ -19,7 +19,7 @@ Global Enum $GC_UAI_BUFF_SkillID, _
 	$GC_UAI_BUFF_COUNT
 
 ; ========== Visible Effect Structure Properties ==========
-Global Enum $GC_UAI_VISEFFECT_Unknown, _
+Global Enum $GC_UAI_VISEFFECT_EffectType, _
 	$GC_UAI_VISEFFECT_EffectID, _
 	$GC_UAI_VISEFFECT_HasEnded, _
 	$GC_UAI_VISEFFECT_COUNT
@@ -173,14 +173,14 @@ Func UAI_CacheAgentVisibleEffects()
 		; Only living agents have visible effects
 		If $g_amx2_AgentCache[$l_i_i][$GC_UAI_AGENT_IsLivingType] = False Then ContinueLoop
 
-		Local $l_p_TList = $l_p_AgentPtr + 0x170
+		Local $l_p_TList = $l_p_AgentPtr + 0x174
 		Local $l_av_Iterator = Utils_TList_CreateIterator($l_p_TList)
 
 		Local $l_i_Count = 0
 		Local $l_p_Current = Utils_TList_Iterator_Current($l_av_Iterator)
 
 		While $l_p_Current <> 0 And $l_i_Count < 31
-			$g_amx3_VisEffectsCache[$l_i_i][$l_i_Count][$GC_UAI_VISEFFECT_Unknown] = Memory_Read($l_p_Current, "dword")
+			$g_amx3_VisEffectsCache[$l_i_i][$l_i_Count][$GC_UAI_VISEFFECT_EffectType] = Memory_Read($l_p_Current, "dword")
 			$g_amx3_VisEffectsCache[$l_i_i][$l_i_Count][$GC_UAI_VISEFFECT_EffectID] = Memory_Read($l_p_Current + 0x4, "dword")
 			$g_amx3_VisEffectsCache[$l_i_i][$l_i_Count][$GC_UAI_VISEFFECT_HasEnded] = Memory_Read($l_p_Current + 0x8, "dword")
 
