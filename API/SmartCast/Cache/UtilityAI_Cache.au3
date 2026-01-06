@@ -6,20 +6,20 @@ Func Cache_SkillBar()
 
 	UAI_CacheSkillBar()
 
-	For $l_i_i = 1 To 8
-		$g_as_BestTargetCache[$l_i_i] = UAI_GetBestTargetFunc($l_i_i)
+	For $i = 1 To 8
+		$g_as_BestTargetCache[$i] = UAI_GetBestTargetFunc($i)
 	Next
 
-	For $l_i_i = 1 To 8
-		$g_as_CanUseCache[$l_i_i] = UAI_GetCanUseFunc($l_i_i)
+	For $i = 1 To 8
+		$g_as_CanUseCache[$i] = UAI_GetCanUseFunc($i)
 	Next
 
-	For $l_i_i = 1 To 8
-		Local $l_i_SkillID = UAI_GetStaticSkillInfo($l_i_i, $GC_UAI_STATIC_SKILL_SkillID)
+	For $i = 1 To 8
+		Local $l_i_SkillID = UAI_GetStaticSkillInfo($i, $GC_UAI_STATIC_SKILL_SkillID)
 ;~ 		Out("Skill Name:          " & $GC_AMX2_SKILL_DATA[$l_i_SkillID][1])
 ;~ 		Out("    - SkillID:           " & $l_i_SkillID)
-;~ 		Out("    - BestTarget:    " & $g_as_BestTargetCache[$l_i_i])
-;~ 		Out("    - CanUse:         " & $g_as_CanUseCache[$l_i_i] & @CRLF)
+;~ 		Out("    - BestTarget:    " & $g_as_BestTargetCache[$i])
+;~ 		Out("    - CanUse:         " & $g_as_CanUseCache[$i] & @CRLF)
 	Next
 
 	If $g_b_CacheWeaponSet Then UAI_DeterminateWeaponSets()
@@ -52,7 +52,7 @@ EndFunc
 Func UAI_UpdateCache($a_f_AggroRange)
 	UAI_UpdateAgentCache($a_f_AggroRange + 100)
 	UAI_CacheAgentEffects()
-	UAI_CacheAgentBuffs()
+	UAI_CacheAgentBonds()
 	UAI_CacheAgentVisibleEffects()
 	UAI_UpdateDynamicSkillbarCache()
 EndFunc

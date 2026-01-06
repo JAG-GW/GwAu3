@@ -4,16 +4,16 @@
 
 ; Get skill slot by skill ID
 Func Skill_GetSlotByID($a_i_SkillID, $a_i_HeroNumber = 0)
-	For $l_i_i = 1 To 8
-		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($l_i_i, "SkillID", $a_i_HeroNumber)
-		If $l_i_SlotSkillID = $a_i_SkillID Then Return $l_i_i
+	For $i = 1 To 8
+		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($i, "SkillID", $a_i_HeroNumber)
+		If $l_i_SlotSkillID = $a_i_SkillID Then Return $i
 	Next
 	Return 0
 EndFunc
 
 Func Skill_CheckSlotByID($a_i_SkillID, $a_i_HeroNumber = 0)
-	For $l_i_i = 1 To 8
-		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($l_i_i, "SkillID", $a_i_HeroNumber)
+	For $i = 1 To 8
+		Local $l_i_SlotSkillID = Skill_GetSkillbarInfo($i, "SkillID", $a_i_HeroNumber)
 		If $l_i_SlotSkillID = $a_i_SkillID Then Return True
 	Next
 	Return False
@@ -52,17 +52,17 @@ Func Party_GetMembersArray()
 
 	; Add heroes
 	Local $l_i_Index = 2
-	For $l_i_i = 1 To $l_i_HeroCount
+	For $i = 1 To $l_i_HeroCount
 		If $l_i_Index <= $l_i_PartySize Then
-			$l_ai_ReturnArray[$l_i_Index] = Party_GetMyPartyHeroInfo($l_i_i, "AgentID")
+			$l_ai_ReturnArray[$l_i_Index] = Party_GetMyPartyHeroInfo($i, "AgentID")
 			$l_i_Index += 1
 		EndIf
 	Next
 
 	; Add henchmen/other party members
-	For $l_i_i = 1 To Party_GetMyPartyInfo("HenchmanCount")
+	For $i = 1 To Party_GetMyPartyInfo("HenchmanCount")
 		If $l_i_Index <= $l_i_PartySize Then
-			$l_ai_ReturnArray[$l_i_Index] = Party_GetMyPartyHenchmanInfo($l_i_i, "AgentID")
+			$l_ai_ReturnArray[$l_i_Index] = Party_GetMyPartyHenchmanInfo($i, "AgentID")
 			$l_i_Index += 1
 		EndIf
 	Next
@@ -76,9 +76,9 @@ Func Party_GetAverageHealth()
 	Local $l_i_AliveCount = 0
 	Local $l_ai_PartyArray = Party_GetMembersArray()
 
-	For $l_i_i = 1 To $l_ai_PartyArray[0]
-		If Not UAI_GetAgentInfoByID($l_ai_PartyArray[$l_i_i], $GC_UAI_AGENT_IsDead) Then
-			$l_f_TotalHP += UAI_GetAgentInfoByID($l_ai_PartyArray[$l_i_i], $GC_UAI_AGENT_HP)
+	For $i = 1 To $l_ai_PartyArray[0]
+		If Not UAI_GetAgentInfoByID($l_ai_PartyArray[$i], $GC_UAI_AGENT_IsDead) Then
+			$l_f_TotalHP += UAI_GetAgentInfoByID($l_ai_PartyArray[$i], $GC_UAI_AGENT_HP)
 			$l_i_AliveCount += 1
 		EndIf
 	Next
@@ -92,8 +92,8 @@ Func Party_IsWiped()
 	If Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Then Return False
 
 	Local $l_i_DeadHeroes = 0
-	For $l_i_i = 1 To Party_GetHeroCount()
-		If UAI_GetAgentInfoByID(Party_GetHeroID($l_i_i), $GC_UAI_AGENT_IsDead) Then
+	For $i = 1 To Party_GetHeroCount()
+		If UAI_GetAgentInfoByID(Party_GetHeroID($i), $GC_UAI_AGENT_IsDead) Then
 			$l_i_DeadHeroes += 1
 		EndIf
 	Next

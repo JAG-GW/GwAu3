@@ -163,11 +163,11 @@ Func BestTarget_EnergySurge($a_f_AggroRange)
 	Local $l_i_BestCount = 0
 	Local $l_i_BestCasterCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Check range
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Must be living enemy
@@ -3961,11 +3961,11 @@ Func BestTarget_SpiritualPain($a_f_AggroRange)
 	Local $l_i_BestAgent = 0
 	Local $l_i_BestSummonCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Check range
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Must be living enemy

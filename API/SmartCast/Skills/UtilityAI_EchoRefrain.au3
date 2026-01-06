@@ -34,8 +34,8 @@ Func BestTarget_BlazingFinale($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_i_BestEnemyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -44,7 +44,7 @@ Func BestTarget_BlazingFinale($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Blazing Finale
@@ -81,8 +81,8 @@ Func BestTarget_BurningRefrain($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 999999
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -91,14 +91,14 @@ Func BestTarget_BurningRefrain($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Burning Refrain
 		If UAI_AgentHasEffect($l_i_AgentID, $GC_I_SKILL_ID_BURNING_REFRAIN) Then ContinueLoop
 
 		; Get current HP - lower HP means more likely to trigger (enemy has more HP)
-		Local $l_f_CurrentHP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_CurrentHP)
+		Local $l_f_CurrentHP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_CurrentHP)
 
 		If $l_f_CurrentHP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_CurrentHP
@@ -125,8 +125,8 @@ Func BestTarget_FinaleOfRestoration($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -135,14 +135,14 @@ Func BestTarget_FinaleOfRestoration($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Finale of Restoration
 		If UAI_AgentHasEffect($l_i_AgentID, $GC_I_SKILL_ID_FINALE_OF_RESTORATION) Then ContinueLoop
 
 		; Get HP percentage - lower is better (needs healing)
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
@@ -169,8 +169,8 @@ Func BestTarget_MendingRefrain($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -179,14 +179,14 @@ Func BestTarget_MendingRefrain($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Mending Refrain
 		If UAI_AgentHasEffect($l_i_AgentID, $GC_I_SKILL_ID_MENDING_REFRAIN) Then ContinueLoop
 
 		; Get HP percentage - lower is better
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
@@ -210,8 +210,8 @@ Func BestTarget_PurifyingFinale($a_f_AggroRange)
 	; Echo. (10...30...35 seconds.) Target ally loses one condition whenever a chant or shout ends on that ally. Cannot target spirits.
 
 	; Best target: ally with conditions
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -220,14 +220,14 @@ Func BestTarget_PurifyingFinale($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Purifying Finale
 		If UAI_AgentHasEffect($l_i_AgentID, $GC_I_SKILL_ID_PURIFYING_FINALE) Then ContinueLoop
 
 		; Must have a condition
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsConditioned) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsConditioned) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -251,8 +251,8 @@ Func BestTarget_BladeturnRefrain($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_i_BestEnemyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -261,7 +261,7 @@ Func BestTarget_BladeturnRefrain($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Bladeturn Refrain
@@ -328,8 +328,8 @@ Func BestTarget_EnergizingFinale($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestEnergy = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -338,14 +338,14 @@ Func BestTarget_EnergizingFinale($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Energizing Finale
 		If UAI_AgentHasEffect($l_i_AgentID, $GC_I_SKILL_ID_ENERGIZING_FINALE) Then ContinueLoop
 
 		; Get energy percentage - lower is better
-		Local $l_f_Energy = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_EnergyPercent)
+		Local $l_f_Energy = UAI_GetAgentInfo($i, $GC_UAI_AGENT_EnergyPercent)
 
 		If $l_f_Energy < $l_f_LowestEnergy Then
 			$l_f_LowestEnergy = $l_f_Energy
@@ -373,8 +373,8 @@ Func BestTarget_HastyRefrain($a_f_AggroRange)
 	Local $l_f_FarthestDist = 0
 	Local $l_i_FallbackAlly = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
 		; Must be living ally
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
@@ -383,7 +383,7 @@ Func BestTarget_HastyRefrain($a_f_AggroRange)
 		If UAI_Filter_IsSpirit($l_i_AgentID) Then ContinueLoop
 
 		; Check distance from player
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 
 		; Skip if already has Hasty Refrain
@@ -475,9 +475,9 @@ Func BestTarget_HeroicRefrain($a_f_AggroRange)
 
 	Local $l_ai_PartyArray = Party_GetMembersArray()
 
-	For $l_i_i = 1 To $l_ai_PartyArray[0]
-		If UAI_AgentHasEffect($l_ai_PartyArray[$l_i_i], $GC_I_SKILL_ID_HEROIC_REFRAIN) Then ContinueLoop
-		Return $l_ai_PartyArray[$l_i_i]
+	For $i = 1 To $l_ai_PartyArray[0]
+		If UAI_AgentHasEffect($l_ai_PartyArray[$i], $GC_I_SKILL_ID_HEROIC_REFRAIN) Then ContinueLoop
+		Return $l_ai_PartyArray[$i]
 	Next
 
 	Return 0

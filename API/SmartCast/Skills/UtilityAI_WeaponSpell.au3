@@ -51,17 +51,17 @@ Func BestTarget_ResilientWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
 		; Must be hexed or conditioned
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsHexed) And Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsConditioned) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsHexed) And Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsConditioned) Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
@@ -87,13 +87,13 @@ Func BestTarget_SplinterWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_i_BestEnemyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount > $l_i_BestEnemyCount Then
@@ -122,17 +122,17 @@ Func BestTarget_WeaponOfWarding($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount = 0 Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
@@ -158,13 +158,13 @@ Func BestTarget_WailingWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_i_BestEnemyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount > $l_i_BestEnemyCount Then
@@ -193,15 +193,15 @@ Func BestTarget_NightmareWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
@@ -227,17 +227,17 @@ Func BestTarget_VengefulWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount = 0 Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
@@ -263,10 +263,10 @@ Func BestTarget_WeaponOfShadow($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_i_BestEnemyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
@@ -297,14 +297,14 @@ Func BestTarget_SpiritLightWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
@@ -327,14 +327,14 @@ Func BestTarget_BrutalWeapon($a_f_AggroRange)
 	; Weapon Spell. (10...34...40 seconds.) Attacks deal +5...13...15 damage. No effect while target ally is enchanted.
 
 	; Best target: attacking ally who is not enchanted
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
-		If UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsEnchanted) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsEnchanted) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -355,13 +355,13 @@ Func BestTarget_GuidedWeapon($a_f_AggroRange)
 	; Weapon Spell. (4...9...10 seconds.) Attacks are unblockable.
 
 	; Best target: attacking ally
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -385,14 +385,14 @@ Func BestTarget_VitalWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
@@ -415,13 +415,13 @@ Func BestTarget_WeaponOfQuickening($a_f_AggroRange)
 	; Elite Weapon Spell. (5...21...25 seconds.) Spells and binding rituals recharge 33% faster.
 
 	; Best target: caster ally (benefits from spell recharge)
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsCasting) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsCasting) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -442,13 +442,13 @@ Func BestTarget_WeaponOfFury($a_f_AggroRange)
 	; Elite Weapon Spell. (5...17...20 seconds.) 5...41...50% more adrenaline gain and +1 Energy whenever target ally hits with an attack.
 
 	; Best target: attacking ally
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -472,17 +472,17 @@ Func BestTarget_XinraesWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount = 0 Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
@@ -508,13 +508,13 @@ Func BestTarget_WarmongersWeapon($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_i_BestCasterCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Local $l_i_CasterCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemyCaster")
 		If $l_i_CasterCount > $l_i_BestCasterCount Then
@@ -540,13 +540,13 @@ Func BestTarget_WeaponOfRemedy($a_f_AggroRange)
 	; Elite Weapon Spell. (8 seconds.) The next time target ally takes damage or life steal from a foe, this ally steals 15...63...75 Health from that foe and loses 1 condition.
 
 	; Best target: conditioned ally with adjacent enemies (condition removal + heal)
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsConditioned) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsConditioned) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount = 0 Then ContinueLoop
@@ -570,13 +570,13 @@ Func BestTarget_WeaponOfMastery($a_f_AggroRange)
 	; green; font-weight: bold;">15...51...60
 
 	; Best target: attacking ally (weapon damage bonus)
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -612,13 +612,13 @@ Func BestTarget_SunderingWeapon($a_f_AggroRange)
 	; Weapon Spell. (4...9...10 seconds.) Target ally's next 3 attacks inflict Cracked Armor condition (5...17...20 seconds) and have 10% armor penetration.
 
 	; Best target: attacking ally
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -642,15 +642,15 @@ Func BestTarget_WeaponOfRenewal($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestEnergy = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
-		Local $l_f_Energy = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_CurrentEnergy)
+		Local $l_f_Energy = UAI_GetAgentInfo($i, $GC_UAI_AGENT_CurrentEnergy)
 		If $l_f_Energy < $l_f_LowestEnergy Then
 			$l_f_LowestEnergy = $l_f_Energy
 			$l_i_BestAlly = $l_i_AgentID
@@ -675,14 +675,14 @@ Func BestTarget_GhostlyWeapon($a_f_AggroRange)
 	; Best target: attacking ally (not self)
 	Local $l_i_PlayerID = UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If $l_i_AgentID = $l_i_PlayerID Then ContinueLoop
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -705,14 +705,14 @@ Func BestTarget_GreatDwarfWeapon($a_f_AggroRange)
 	; Best target: attacking ally (not self)
 	Local $l_i_PlayerID = UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If $l_i_AgentID = $l_i_PlayerID Then ContinueLoop
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Return $l_i_AgentID
 	Next
@@ -736,13 +736,13 @@ Func BestTarget_SplinterWeaponPvP($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_i_BestEnemyCount = 0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
-		If Not UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
+		If Not UAI_GetAgentInfo($i, $GC_UAI_AGENT_IsAttacking) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount > $l_i_BestEnemyCount Then
@@ -771,17 +771,17 @@ Func BestTarget_WeaponOfWardingPvP($a_f_AggroRange)
 	Local $l_i_BestAlly = 0
 	Local $l_f_LowestHP = 1.0
 
-	For $l_i_i = 1 To $g_i_AgentCacheCount
-		Local $l_i_AgentID = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_ID)
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 		If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-		Local $l_f_Distance = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_Distance)
+		Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)
 		If $l_f_Distance > $a_f_AggroRange Then ContinueLoop
 		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsWeaponSpelled) Then ContinueLoop
 
 		Local $l_i_EnemyCount = UAI_CountAgents($l_i_AgentID, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 		If $l_i_EnemyCount = 0 Then ContinueLoop
 
-		Local $l_f_HP = UAI_GetAgentInfo($l_i_i, $GC_UAI_AGENT_HP)
+		Local $l_f_HP = UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP)
 		If $l_f_HP < $l_f_LowestHP Then
 			$l_f_LowestHP = $l_f_HP
 			$l_i_BestAlly = $l_i_AgentID
