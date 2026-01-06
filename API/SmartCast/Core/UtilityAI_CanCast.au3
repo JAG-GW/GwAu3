@@ -33,6 +33,7 @@ Func UAI_CanCast($a_i_SkillSlot)
 		Return True
 	EndIf
 
+	;~ COOLDOWN
 	If Not UAI_GetDynamicSkillInfo($a_i_SkillSlot, $GC_UAI_DYNAMIC_SKILL_IsRecharged) Then Return False
 
 	;~ HEALTH COST (Sacrifice spells + Masochism effect on ALL spells)
