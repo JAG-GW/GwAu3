@@ -72,31 +72,31 @@ Func UAI_Filter_ExcludeMe($a_i_AgentID)
 EndFunc
 
 Func UAI_Filter_IsDiseased($a_i_AgentID)
-	Return UAI_AgentHasVisibleEffect($a_i_AgentID, 26) ;Disease
+	Return UAI_AgentHasVisibleEffect($a_i_AgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_DISEASED) ;Disease
 EndFunc
 
 Func UAI_Filter_IsDazed($a_i_AgentID)
-	Return UAI_AgentHasVisibleEffect($a_i_AgentID, 28) ;Dazed
+	Return UAI_AgentHasVisibleEffect($a_i_AgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_DAZED) ;Dazed
 EndFunc
 
 Func UAI_Filter_IsWeakness($a_i_AgentID)
-	Return UAI_AgentHasVisibleEffect($a_i_AgentID, 29) ;Weakness / Cracked Armor
+	Return UAI_AgentHasVisibleEffect($a_i_AgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_WEAKNESS) ;Weakness / Cracked Armor
 EndFunc
 
 Func UAI_Filter_IsPoisoned($a_i_AgentID)
-	Return UAI_AgentHasVisibleEffect($a_i_AgentID, 27) ;Poison
+	Return UAI_AgentHasVisibleEffect($a_i_AgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_POISONED) ;Poison
 EndFunc
 
 Func UAI_Filter_IsBlind($a_i_AgentID)
-	Return UAI_AgentHasVisibleEffect($a_i_AgentID, 24) ;Blind
+	Return UAI_AgentHasVisibleEffect($a_i_AgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_BLINDED) ;Blind
 EndFunc
 
 Func UAI_Filter_IsBurning($a_i_AgentID)
-	Return UAI_AgentHasVisibleEffect($a_i_AgentID, 25) ;Burning
+	Return UAI_AgentHasVisibleEffect($a_i_AgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_BURNING) ;Burning
 EndFunc
 
 Func UAI_Filter_IsBleeding($a_i_AgentID)
-	Return UAI_AgentHasVisibleEffect($a_i_AgentID, 23) ;Bleeding
+	Return UAI_AgentHasVisibleEffect($a_i_AgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_BLEEDING) ;Bleeding
 EndFunc
 
 Func UAI_Filter_IsEnchanted($a_i_AgentID)
