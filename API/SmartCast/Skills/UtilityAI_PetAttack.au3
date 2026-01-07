@@ -14,7 +14,7 @@ Func Anti_PetAttack()
 	If $l_f_PetHP <= 0 Then Return True
 
 	; Check if pet is blinded
-	If UAI_AgentHasVisibleEffect($l_i_PetAgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_BLINDED) Or UAI_Filter_IsBlind($l_i_PetAgentID) Then Return True ; 24 = Blind
+	If UAI_AgentHasVisibleEffect($l_i_PetAgentID, $GC_I_EFFECT_TYPE_STATUS, $GC_I_EFFECT_ID_BLINDED) Then Return True
 
 	Return False
 EndFunc
