@@ -585,7 +585,6 @@ EndFunc
 
 Func CanUse_TheyreOnFire()
 	If Anti_Shout() Then Return False
-	If UAI_PlayerHasEffect($GC_I_SKILL_ID_THEYRE_ON_FIRE) Then Return False
 	Return True
 EndFunc
 
