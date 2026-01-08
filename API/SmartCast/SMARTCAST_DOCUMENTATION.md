@@ -1156,6 +1156,7 @@ Skill_CheckSlotByID($a_i_SkillID)         ; Check if a skill is in the bar
 ```autoit
 Party_GetSize()                           ; Party size
 Party_GetHeroCount()                      ; Number of heroes
+Party_GetHeroAgentID($a_i_HeroNumber)     ; Agent ID of hero
 Party_GetHeroID($a_i_HeroNumber)          ; ID of specific hero
 Party_GetMembersArray()                   ; Array of all members
 Party_GetAverageHealth()                  ; Party HP average

@@ -25,18 +25,24 @@ EndFunc
 
 ; Get the current party size
 Func Party_GetSize()
-	Return Party_GetMyPartyInfo("Size")
+	Return Party_GetPartyContextInfo("TotalPartySize")
 EndFunc
 
 ; Get the number of heroes in party
 Func Party_GetHeroCount()
-	Return Party_GetMyPartyInfo("HeroCount")
+	Return Party_GetPartyContextInfo("HeroCount")
 EndFunc
 
-; Get hero ID by hero number (0 = player)
-Func Party_GetHeroID($a_i_HeroNumber)
+; Get hero agent ID by hero number (0 = player)
+Func Party_GetHeroAgentID($a_i_HeroNumber)
 	If $a_i_HeroNumber = 0 Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 	Return Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID")
+EndFunc
+
+; Get hero hero ID by hero number (0 = player)
+Func Party_GetHeroID($a_i_HeroNumber)
+	If $a_i_HeroNumber = 0 Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return Party_GetMyPartyHeroInfo($a_i_HeroNumber, "HeroID")
 EndFunc
 
 ; Get all party members as array
@@ -60,7 +66,7 @@ Func Party_GetMembersArray()
 	Next
 
 	; Add henchmen/other party members
-	For $i = 1 To Party_GetMyPartyInfo("HenchmanCount")
+	For $i = 1 To Party_GetPartyContextInfo("HenchmenCount")
 		If $l_i_Index <= $l_i_PartySize Then
 			$l_ai_ReturnArray[$l_i_Index] = Party_GetMyPartyHenchmanInfo($i, "AgentID")
 			$l_i_Index += 1
