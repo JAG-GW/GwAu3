@@ -832,7 +832,9 @@ Func CanUse_FinishHim()
 EndFunc
 
 Func BestTarget_FinishHim($a_f_AggroRange)
-	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsBelow50HP")
+    Local $l_i_TargetID = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsBelow50HP|UAI_Filter_NotIsDeepWounded")
+    If $l_i_TargetID = 0 Then Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsBelow50HP")
+    Return $l_i_TargetID
 EndFunc
 
 Func CanUse_DodgeThis()
