@@ -12,6 +12,7 @@ Global Const $GC_I_AGENT_STRUCT_SIZE = 0x1C0
 
 ; Allegiance
 Global Const $GC_I_ALLEGIANCE_ALLY = 0x1 ; Ally/non-attackable
+Global Const $GC_I_ALLEGIANCE_ANIMAL = 0x2 ; Animal
 Global Const $GC_I_ALLEGIANCE_ENEMY = 0x3 ; Enemy
 Global Const $GC_I_ALLEGIANCE_SPIRIT = 0x4 ; Spirit or Pet
 Global Const $GC_I_ALLEGIANCE_MINION = 0x5 ; Minion
