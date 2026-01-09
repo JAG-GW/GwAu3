@@ -834,11 +834,7 @@ Func CanUse_FinishHim()
 EndFunc
 
 Func BestTarget_FinishHim($a_f_AggroRange)
-	; Description
-	; "FH" redirects here. For the outpost, see Fishermen's Haven.
-	; Concise description
-	; green; font-weight: bold;">44...80
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsBelow50HP")
 EndFunc
 
 Func CanUse_DodgeThis()
