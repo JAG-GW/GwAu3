@@ -115,6 +115,10 @@ Func UAI_Filter_IsDeepWounded($a_i_AgentID)
 	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsDeepWounded)
 EndFunc
 
+Func UAI_Filter_NotIsDeepWounded($a_i_AgentID)
+	Return Not UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsDeepWounded)
+EndFunc
+
 Func UAI_Filter_IsDegenHexed($a_i_AgentID)
 	Return UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsDegenHexed)
 EndFunc

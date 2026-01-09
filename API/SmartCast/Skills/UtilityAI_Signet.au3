@@ -2,8 +2,7 @@
 
 ;If there is the effect return true
 Func Anti_Signet()
-	If UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE) Then Return True
-	Return False
+	Return UAI_PlayerHasEffect($GC_I_SKILL_ID_IGNORANCE)
 EndFunc
 
 Func CanUse_SignetOfCapture()

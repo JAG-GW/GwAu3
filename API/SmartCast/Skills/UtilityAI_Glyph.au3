@@ -1,11 +1,6 @@
 #include-once
 
 Func Anti_Glyph()
-	Local $l_i_Count = UAI_GetPlayerEffectCount()
-	For $i = 0 To $l_i_Count - 1
-		Local $l_i_SkillID = $g_amx3_EffectsCache[$g_i_PlayerCacheIndex][$i][$GC_UAI_EFFECT_SkillID]
-		If Skill_IsGlyphType($l_i_SkillID) Then Return True
-	Next
 	Return False
 EndFunc
 
