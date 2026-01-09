@@ -434,13 +434,13 @@ Func UAI_GetPlayerVisibleEffectCount()
 EndFunc
 
 Func UAI_GetFeederEnchOnTop()
-	Local $l_i_MyID = Agent_GetMyID()
+	Local $l_i_MyID = UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
     If $l_i_MyID = 0 Then Return SetError(1, 0, False)
 
     Local $l_i_EffectCount = UAI_GetPlayerEffectCount()
     If $l_i_EffectCount = 0 Then Return False
 
-	Local $l_i_Index = UAI_GetIndexByID($l_i_MyID)
+	Local $l_i_Index = UAI_GetPlayerIndex()
 
     Local $l_i_Timestamp = 0
     Local $l_i_SkillID = 0
@@ -465,13 +465,13 @@ Func UAI_GetFeederEnchOnTop()
 EndFunc
 
 Func UAI_PlayerHasEffectType($a_s_EffectType = "")
-	Local $l_i_MyID = Agent_GetMyID()
+	Local $l_i_MyID = UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
     If $l_i_MyID = 0 Then Return SetError(1, 0, False)
 
     Local $l_i_EffectCount = UAI_GetPlayerEffectCount()
     If $l_i_EffectCount = 0 Then Return False
 
-	Local $l_i_Index = UAI_GetIndexByID($l_i_MyID)
+	Local $l_i_Index = UAI_GetPlayerIndex()
 
 	Local $l_i_EffectType = ""
 	Switch $a_s_EffectType

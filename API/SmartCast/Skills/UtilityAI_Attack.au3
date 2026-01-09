@@ -2,11 +2,16 @@
 
 Func Anti_Attack()
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_BLIND) Then Return True
+
+	;~ Generic hex checks
+	If Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsHexed) Then Return False
+
+	;~ Specific hex checks
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Spirit_Shackles) Then Return True
 
+	;~ Check for hexes that punish attacking
 	Local $l_i_CommingDamage = 0
 
-	; Check for hexes that punish attacking
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Ineptitude) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_Ineptitude, "Scale")
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Clumsiness) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_Clumsiness, "Scale")
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Wandering_Eye) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_Wandering_Eye, "Scale")
@@ -15,10 +20,7 @@ Func Anti_Attack()
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Spoil_Victor) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_Spoil_Victor, "Scale")
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Empathy) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_Empathy, "Scale")
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Empathy_PvP) Then $l_i_CommingDamage += Effect_GetEffectArg($GC_I_SKILL_ID_Empathy_PvP, "Scale")
-
-	If $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
-
-	Return False
+	Return $l_i_CommingDamage > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50)
 EndFunc
 
 ; Skill ID: 320 - $GC_I_SKILL_ID_HAMSTRING

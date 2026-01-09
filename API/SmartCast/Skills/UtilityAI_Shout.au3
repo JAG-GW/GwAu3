@@ -1,8 +1,6 @@
 #include-once
 
 Func Anti_Shout()
-	;Cacophony did damage when cast a shout
-	;If scale damage make more damage than our HP + 50 then true (don't cast)
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_CACOPHONY) Then
 		If Effect_GetEffectArg($GC_I_SKILL_ID_CACOPHONY, "Scale") > (UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP) + 50) Then Return True
 	EndIf
