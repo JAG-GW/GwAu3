@@ -31,7 +31,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     Local $lMapLoadingOld = Map_GetInstanceInfo("Type")
     Local $lMyX = Agent_GetAgentInfo(-2, "X")
     Local $lMyY = Agent_GetAgentInfo(-2, "Y")
-	Local $lLayer = 0
+	Local $lLayer = Agent_GetAgentInfo(-2, "Plane")
 
 	; Map was not full loaded
 	If $lMyX = 0 Or $lMyY = 0 Or $lMyOldMap = 0 Or $lMapLoadingOld = $GC_I_MAP_TYPE_LOADING Then
@@ -49,7 +49,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then
         If Not Pathfinder_Initialize() Then
             ; Fallback to direct movement if DLL fails
-            Map_Move($aDestX, $aDestY, $lLayer)
+            Map_MoveLayer($aDestX, $aDestY, $lLayer)
             Return False
         EndIf
     EndIf
@@ -70,7 +70,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         $lCurrentObstacles = $aObstacles
     EndIf
 
-    Local $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $aDestX, $aDestY, $lCurrentObstacles)
+    Local $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $lLayer, $aDestX, $aDestY, $lCurrentObstacles)
     If Not IsArray($lPath) Or UBound($lPath) = 0 Then
         Map_MoveLayer($aDestX, $aDestY, $lLayer)
 ;~         Return
@@ -142,7 +142,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
         ; Recalculate path at every interval (always from current position)
         If TimerDiff($g_hPathfinder_LastPathUpdateTime) > $g_iPathfinder_PathUpdateInterval Or $lNeedPathUpdate Then
-            $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $aDestX, $aDestY, $lCurrentObstacles)
+            $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $lLayer, $aDestX, $aDestY, $lCurrentObstacles)
             If IsArray($lPath) And UBound($lPath) > 0 Then
                 $g_aPathfinder_CurrentPath = $lPath
                 $g_iPathfinder_CurrentPathIndex = 0
@@ -212,51 +212,35 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 EndFunc
 
 ; Internal: Get path from current position to destination
-Func _Pathfinder_GetPath($aStartX, $aStartY, $aDestX, $aDestY, $aObstacles)
+Func _Pathfinder_GetPath($aStartX, $aStartY, $aStartLayer, $aDestX, $aDestY, $aObstacles)
     Local $lMapID = Map_GetMapID()
     Local $lObstacleCount = 0
     If IsArray($aObstacles) Then $lObstacleCount = UBound($aObstacles)
 
-    _Pathfinder_Log("GetPath: Map=" & $lMapID & " Start=(" & Round($aStartX, 1) & ", " & Round($aStartY, 1) & ") Dest=(" & Round($aDestX, 1) & ", " & Round($aDestY, 1) & ") Obstacles=" & $lObstacleCount)
+    _Pathfinder_Log("GetPath: Map=" & $lMapID & " Start=(" & Round($aStartX, 1) & ", " & Round($aStartY, 1) & ") Layer=" & $aStartLayer & " Dest=(" & Round($aDestX, 1) & ", " & Round($aDestY, 1) & ") Obstacles=" & $lObstacleCount)
 
-    If IsArray($aObstacles) And UBound($aObstacles) > 0 Then
-        ; Get raw path with minimal simplification from DLL
-        Local $lPath = Pathfinder_FindPathGWWithObstacle($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, $aObstacles, 100)
-        Local $lError = @error
-        Local $lExtended = @extended
+    ; Get raw path with minimal simplification from DLL
+    Local $lPath = Pathfinder_FindPath($lMapID, $aStartX, $aStartY, $aStartLayer, $aDestX, $aDestY, $aObstacles, 100)
+    Local $lError = @error
+    Local $lExtended = @extended
 
-        If $lError Then
-            _Pathfinder_Log("ERROR: FindPathGWWithObstacle failed - @error=" & $lError & " @extended=" & $lExtended)
-            Return 0
-        EndIf
-
-        If Not IsArray($lPath) Then
-            _Pathfinder_Log("ERROR: FindPathGWWithObstacle returned non-array")
-            Return 0
-        EndIf
-
-		$lPath = _Pathfinder_SmartSimplify($lPath, $aObstacles, $g_iPathfinder_SimplifyRange)
-
-        _Pathfinder_Log("SUCCESS: Path found with " & UBound($lPath) & " points")
-        Return $lPath
-    Else
-        Local $lPath = Pathfinder_FindPathGW($lMapID, $aStartX, $aStartY, $aDestX, $aDestY, 500)
-        Local $lError = @error
-        Local $lExtended = @extended
-
-        If $lError Then
-            _Pathfinder_Log("ERROR: FindPathGW failed - @error=" & $lError & " @extended=" & $lExtended)
-            Return 0
-        EndIf
-
-        If Not IsArray($lPath) Then
-            _Pathfinder_Log("ERROR: FindPathGW returned non-array")
-            Return 0
-        EndIf
-
-        _Pathfinder_Log("SUCCESS: Path found with " & UBound($lPath) & " points")
-        Return $lPath
+    If $lError Then
+        _Pathfinder_Log("ERROR: FindPathGWWithObstacle failed - @error=" & $lError & " @extended=" & $lExtended)
+        Return 0
     EndIf
+
+    If Not IsArray($lPath) Then
+        _Pathfinder_Log("ERROR: FindPathGWWithObstacle returned non-array")
+        Return 0
+    EndIf
+
+    ; Apply smart simplification if obstacles are provided
+    If IsArray($aObstacles) And UBound($aObstacles) > 0 Then
+        $lPath = _Pathfinder_SmartSimplify($lPath, $aObstacles, $g_iPathfinder_SimplifyRange)
+    EndIf
+
+    _Pathfinder_Log("SUCCESS: Path found with " & UBound($lPath) & " points")
+    Return $lPath
 EndFunc
 
 ; Smart path simplification that preserves waypoints near obstacles and layer changes

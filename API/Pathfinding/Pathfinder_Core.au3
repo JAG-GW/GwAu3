@@ -37,70 +37,14 @@ Func Pathfinder_Shutdown()
     EndIf
 EndFunc
 
-Func Pathfinder_FindPathGWRaw($mapID, $startX, $startY, $destX, $destY, $simplifyRange = 1250)
-    Local $result = DllCall($g_hPathfinderDLL, "ptr:cdecl", "FindPath", _
-        "int", $mapID, _
-        "float", $startX, _
-        "float", $startY, _
-        "float", $destX, _
-        "float", $destY, _
-        "float", $simplifyRange)
-
-    If @error Then
-        Return SetError(1, 0, 0)
-    EndIf
-
-    Return $result[0]
-EndFunc
-
-Func Pathfinder_FindPathGW($mapID, $startX, $startY, $destX, $destY, $simplifyRange = 1250)
-    Local $l_p_Result = Pathfinder_FindPathGWRaw($mapID, $startX, $startY, $destX, $destY, $simplifyRange)
-
-    If $l_p_Result = 0 Then
-        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR: DllCall returned null pointer" & @CRLF)
-        Return SetError(1, 0, 0)
-    EndIf
-
-    Local $l_t_Result = DllStructCreate($tagPathResult, $l_p_Result)
-    Local $l_i_ErrorCode = DllStructGetData($l_t_Result, "error_code")
-
-    If $l_i_ErrorCode <> 0 Then
-        Local $l_s_ErrorMsg = DllStructGetData($l_t_Result, "error_message")
-        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR code=" & $l_i_ErrorCode & " msg=" & $l_s_ErrorMsg & @CRLF)
-        Pathfinder_FreePathResult($l_p_Result)
-        Return SetError(2, $l_i_ErrorCode, 0)
-    EndIf
-
-    Local $l_i_PointCount = DllStructGetData($l_t_Result, "point_count")
-    Local $l_p_Points = DllStructGetData($l_t_Result, "points")
-
-    If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] OK: point_count=" & $l_i_PointCount & @CRLF)
-
-    Local $a_Path[$l_i_PointCount][3]  ; x, y, layer
-    For $i = 0 To $l_i_PointCount - 1
-        Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 12))  ; 12 bytes: float x (4) + float y (4) + int layer (4)
-        $a_Path[$i][0] = DllStructGetData($l_t_Point, "x")
-        $a_Path[$i][1] = DllStructGetData($l_t_Point, "y")
-        $a_Path[$i][2] = DllStructGetData($l_t_Point, "layer")
-    Next
-
-    ; Debug: show first and last points
-    If $g_bPathfinder_Debug And $l_i_PointCount > 0 Then
-        Out("[Pathfinder DLL] First: (" & Round($a_Path[0][0], 2) & ", " & Round($a_Path[0][1], 2) & ") Last: (" & Round($a_Path[$l_i_PointCount-1][0], 2) & ", " & Round($a_Path[$l_i_PointCount-1][1], 2) & ")" & @CRLF)
-    EndIf
-
-    Pathfinder_FreePathResult($l_p_Result)
-
-    Return $a_Path
-EndFunc
-
 Func Pathfinder_FreePathResult($pResult)
     DllCall($g_hPathfinderDLL, "none:cdecl", "FreePathResult", "ptr", $pResult)
 EndFunc
 
 ; Find a path with obstacle avoidance (Raw version - returns pointer)
 ; $aObstacles = 2D array [[x, y, radius], [x, y, radius], ...]
-Func Pathfinder_FindPathGWWithObstacleRaw($mapID, $startX, $startY, $destX, $destY, $aObstacles, $simplifyRange = 1250)
+; $startLayer = layer of the starting point (-1 = auto-detect)
+Func Pathfinder_FindPathRaw($mapID, $startX, $startY, $startLayer, $destX, $destY, $aObstacles, $simplifyRange = 1250)
     Local $obstacleCount = 0
     Local $pObstacles = 0
 
@@ -128,6 +72,7 @@ Func Pathfinder_FindPathGWWithObstacleRaw($mapID, $startX, $startY, $destX, $des
         "int", $mapID, _
         "float", $startX, _
         "float", $startY, _
+        "int", $startLayer, _
         "float", $destX, _
         "float", $destY, _
         "ptr", $pObstacles, _
@@ -143,8 +88,9 @@ EndFunc
 
 ; Find a path with obstacle avoidance (returns 2D array of coordinates)
 ; $aObstacles = 2D array [[x, y, radius], [x, y, radius], ...]
-Func Pathfinder_FindPathGWWithObstacle($mapID, $startX, $startY, $destX, $destY, $aObstacles, $simplifyRange = 1250)
-    Local $l_p_Result = Pathfinder_FindPathGWWithObstacleRaw($mapID, $startX, $startY, $destX, $destY, $aObstacles, $simplifyRange)
+; $startLayer = layer of the starting point (-1 = auto-detect)
+Func Pathfinder_FindPath($mapID, $startX, $startY, $startLayer, $destX, $destY, $aObstacles, $simplifyRange = 1250)
+    Local $l_p_Result = Pathfinder_FindPathRaw($mapID, $startX, $startY, $startLayer, $destX, $destY, $aObstacles, $simplifyRange)
 
     If $l_p_Result = 0 Then
         If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR: DllCall returned null pointer" & @CRLF)
