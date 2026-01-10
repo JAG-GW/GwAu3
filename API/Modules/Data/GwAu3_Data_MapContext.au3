@@ -1974,7 +1974,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_KAINENG_DOCKS
 					Local $l_ai_Coords[2] = [11643, 19336]
 				Case $GC_I_MAP_ID_WAIJUN_BAZAAR
-					Local $l_ai_Coords[2] = [11264, 15447]
+					Local $l_ai_Coords[2] = [11502, 15283]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SAOSHANG_TRAIL
