@@ -581,7 +581,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_CURSED_LANDS
 					Local $l_ai_Coords[2] = [20332, 5324]
 				Case $GC_I_MAP_ID_TEMPLE_OF_THE_AGES
-					Local $l_ai_Coords[2] = [-5144, 16324]
+					Local $l_ai_Coords[2] = [-5198, 16251]
 			EndSwitch
 
 		Case $GC_I_MAP_ID_SANCTUM_CAY_OUTPOST
@@ -1267,7 +1267,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_TEMPLE_OF_THE_AGES
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_THE_BLACK_CURTAIN
-					Local $l_ai_Coords[2] = [-5242, 16001]
+					Local $l_ai_Coords[2] = [-5243, 15961]
 				Case $GC_I_MAP_ID_THE_FISSURE_OF_WOE
 					Local $l_ai_Coords[2] = [-2759, 18616]
 				Case $GC_I_MAP_ID_THE_UNDERWORLD_EXPLORABLE
