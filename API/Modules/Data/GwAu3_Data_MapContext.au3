@@ -3522,7 +3522,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_SHENZUN_TUNNELS]
 		Case $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST
-			Local $l_a_Connected[] = [$GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE]
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_MAISHANG_HILLS]
 		Case $GC_I_MAP_ID_RAISU_PALACE_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE]
 		Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
