@@ -267,7 +267,7 @@ EndFunc ;==>UseItem
 
 ;~ Description: Picks up an item.
 Func Item_PickUpItem($a_v_AgentID)
-    Return Core_SendPacket(0xC, $GC_I_HEADER_ITEM_INTERACT, Agent_ConvertID($a_v_AgentID), 0)
+	If Agent_GetAgentInfo($a_v_AgentID, "Owner") = 0 Or Agent_GetAgentInfo($a_v_AgentID, "Owner") = Agent_GetMyID() Then Return Core_SendPacket(0xC, $GC_I_HEADER_ITEM_INTERACT, Agent_ConvertID($a_v_AgentID), 0)
 EndFunc ;==>PickUpItem
 
 ;~ Description: Drops an item.

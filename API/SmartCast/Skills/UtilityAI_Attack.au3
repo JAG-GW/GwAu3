@@ -672,7 +672,7 @@ Func BestTarget_DistractingShot($a_f_AggroRange)
 	; Bow Attack. If Distracting Shot hits, it interrupts target foe's action but deals only 1...13...16 damage. If the interrupted action was a skill, that skill is disabled for an additional 20 seconds.
 	; Concise description
 	; Bow Attack. Interrupts an action. Interruption effect: interrupted skill is disabled for +20 seconds. Hits for only 1...13...16 damage.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 400 - $GC_I_SKILL_ID_PRECISION_SHOT
@@ -813,7 +813,7 @@ Func BestTarget_SavageShot($a_f_AggroRange)
 	; Bow Attack. If Savage Shot hits, your target's action is interrupted. If that action was a spell, you strike for +13...25...28 damage.
 	; Concise description
 	; Bow Attack. Interrupts an action. Interruption effect: deals +13...25...28 damage if action was a spell.
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 428 - $GC_I_SKILL_ID_INCENDIARY_ARROWS
@@ -2810,7 +2810,7 @@ Func CanUse_SlothHuntersShot()
 EndFunc
 
 Func BestTarget_SlothHuntersShot($a_f_AggroRange)
-	Return 0
+	Return UAI_GetNearestAgent(-2, 1320, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2070 - $GC_I_SKILL_ID_AURA_SLICER
@@ -2980,7 +2980,7 @@ Func BestTarget_Volley($a_f_AggroRange)
 	; Bow Attack. All your Preparations are removed. Shoot arrows at target foe and up to 3 foes adjacent to your target. These arrows strike for +1...8...10 damage if they hit.
 	; Concise description
 	; Bow Attack. Deals +1...8...10 damage. Hits up to 3 foes adjacent to your target. All your preparations are removed.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2147 - $GC_I_SKILL_ID_CRIPPLING_VICTORY

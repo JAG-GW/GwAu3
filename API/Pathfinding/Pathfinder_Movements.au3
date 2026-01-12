@@ -90,7 +90,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     ; Main movement loop
     Do
         ; Check for map change
-        If Map_GetMapID() <> $lMyOldMap Or Map_GetInstanceInfo("Type") <> $lMapLoadingOld Then
+        If (Map_GetMapID() <> $lMyOldMap And Not Game_GetGameInfo("IsCinematic")) Or Map_GetInstanceInfo("Type") <> $lMapLoadingOld Then
             Pathfinder_Shutdown()
             Return True
         EndIf
@@ -200,8 +200,14 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
             EndIf
 		EndIf
 
+		Sleep(32)
 
-        Sleep(64)
+		If IsDeclared("g_b_PickUpFunc") Then Extend_PickUpLoot($aAggroRange * 1.5)
+
+		If Game_GetGameInfo("IsCinematic") Then
+			Sleep(3000)
+			Cinematic_SkipCinematic()
+		EndIf
 
     Until Agent_GetDistanceToXY($aDestX, $aDestY) < 250
 

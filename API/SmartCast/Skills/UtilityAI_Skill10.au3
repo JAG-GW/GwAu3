@@ -175,7 +175,22 @@ EndFunc
 
 ; Skill ID: 436 - $GC_I_SKILL_ID_COMFORT_ANIMAL
 Func CanUse_ComfortAnimal()
-	Return True
+    Local $l_i_PetSize = World_GetWorldInfo("PetInfoArraySize")
+    Local $lMyPet = 0
+
+    ; PetNumber starts at 1, not 0
+    For $i = 1 To $l_i_PetSize
+        If Party_GetPetInfo($i, "OwnerAgentID") = Agent_GetMyID() Then
+            $lMyPet = Party_GetPetInfo($i, "AgentID")
+            ExitLoop
+        EndIf
+    Next
+
+    If $lMyPet = 0 Then Return False
+
+    If Agent_GetAgentInfo($lMyPet, "HPPercent") < 0.5 Then Return True
+
+    Return False
 EndFunc
 
 Func BestTarget_ComfortAnimal($a_f_AggroRange)

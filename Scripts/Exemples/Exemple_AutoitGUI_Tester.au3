@@ -133,11 +133,13 @@ While Not $BotRunning
 WEnd
 
 While $BotRunning
-    Sleep(500)
     Out("Ready")
 
+	Cache_SkillBar()
+	UAI_Fight(Agent_GetAgentInfo(-2, "X"), Agent_GetAgentInfo(-2, "Y"), 1320, 3500, $g_i_FinisherMode)
+
     Out("Done")
-    Sleep(5000)
+    Sleep(500)
 WEnd
 
 Func Out($TEXT)

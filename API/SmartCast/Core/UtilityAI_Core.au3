@@ -21,7 +21,7 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 	For $i = 1 To 6
 		Local $l_i_Slot = $i
 
-		if $l_i_Slot = 6 Then 
+		if $l_i_Slot = 6 Then
 			$l_i_Slot = $ls_i_LowPrioSkill
 			$ls_i_LowPrioSkill += 1
 			If $ls_i_LowPrioSkill > 8 Then $ls_i_LowPrioSkill = 6
@@ -94,7 +94,9 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 	;If it's melee attack wait until target is in nearby range
 	Local $l_i_Skilltype = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillType)
 	Local $l_i_Special = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Special)
-	If $l_i_Skilltype = $GC_I_SKILL_TYPE_ATTACK Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL2 Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL Or $l_i_Special = $GC_I_SKILL_SPECIAL_FLAG_TOUCH Then
+	Local $l_i_WeaponReq = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_WeaponReq)
+	If ($l_i_Skilltype = $GC_I_SKILL_TYPE_ATTACK And Not $l_i_WeaponReq = $GC_I_SKILL_REQUIRE_BOW And Not $GC_I_SKILL_REQUIRE_SPEAR) _
+		Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL2 Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL Or $l_i_Special = $GC_I_SKILL_SPECIAL_FLAG_TOUCH Then
 		Local $l_h_WaitStart = TimerInit()
 		Do
 			If TimerDiff($l_h_WaitStart) > 5000 Then ExitLoop
