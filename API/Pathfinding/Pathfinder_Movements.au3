@@ -25,7 +25,7 @@ Global $g_iPathfinder_StuckDistance = 50            ; If moved less than this, c
 ; $aFightRangeOut = Range out for fighting
 ; $aFinisherMode = Finisher mode for UAI_Fight
 ; Returns: True if destination reached, False if interrupted
-Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $aFightRangeOut = 3500, $aFinisherMode = 0)
+Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $aFightRangeOut = 3500, $aFinisherMode = 0, $aCallFunc = "")
 	If Agent_GetAgentInfo(-2, "IsDead") Then Return
     Local $lMyOldMap = Map_GetMapID()
     Local $lMapLoadingOld = Map_GetInstanceInfo("Type")
@@ -202,11 +202,19 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
 		Sleep(32)
 
-		If IsDeclared("g_b_PickUpFunc") Then Extend_PickUpLoot($aAggroRange * 1.5)
+		If $aCallFunc <> "" Then Call($aCallFunc)
 
 		If Game_GetGameInfo("IsCinematic") Then
-			Sleep(3000)
-			Cinematic_SkipCinematic()
+			Do
+				Sleep(3000)
+				Cinematic_SkipCinematic()
+			Until Not Game_GetGameInfo("IsCinematic")
+			Sleep(250)
+			If Other_GetPing() = 0 Then
+				Do
+					Sleep(64)
+				Until Other_GetPing() <> 0
+			EndIf
 		EndIf
 
     Until Agent_GetDistanceToXY($aDestX, $aDestY) < 125
