@@ -34,10 +34,10 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 	Local $lLayer = Agent_GetAgentInfo(-2, "Plane")
 
 	; Map was not full loaded
-	If $lMyX = 0 Or $lMyY = 0 Or $lMyOldMap = 0 Or $lMapLoadingOld = $GC_I_MAP_TYPE_LOADING Then
+	If $lMyX = 0 Or $lMyY = 0 Or $lMyOldMap = 0 Or $lMapLoadingOld = $GC_I_MAP_TYPE_LOADING Or Other_GetPing() = 0 Then
 		Do
 			Sleep(16)
-		Until Map_GetMapID() <> 0 And (Agent_GetAgentInfo(-2, "X") <> 0 Or Agent_GetAgentInfo(-2, "Y") <> 0)
+		Until Map_GetMapID() <> 0 And (Agent_GetAgentInfo(-2, "X") <> 0 Or Agent_GetAgentInfo(-2, "Y") <> 0) And Other_GetPing() <> 0
 
 		$lMyX = Agent_GetAgentInfo(-2, "X")
 		$lMyY = Agent_GetAgentInfo(-2, "Y")
@@ -209,7 +209,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 			Cinematic_SkipCinematic()
 		EndIf
 
-    Until Agent_GetDistanceToXY($aDestX, $aDestY) < 250
+    Until Agent_GetDistanceToXY($aDestX, $aDestY) < 125
 
     ; Shutdown DLL and free memory
     Pathfinder_Shutdown()
@@ -480,10 +480,12 @@ Func _Pathfinder_ShouldWaitForParty($fMaxDistance = 1800, $fResumeDistance = 140
 
     ; Get the "Flag All" position (if set, heroes following flag are excluded)
     Local $aFlagAll = World_GetWorldInfo("FlagAll")
-	Local $fX = $aFlagAll[0]
-	Local $fY = $aFlagAll[1]
-	; Check if values are finite and not zero (meaning flag is actually placed)
-	If _IsFinite($fX) And _IsFinite($fY) Then Return False
+	If IsArray($aFlagAll) Then
+		Local $fX = $aFlagAll[0]
+		Local $fY = $aFlagAll[1]
+		; Check if values are finite and not zero (meaning flag is actually placed)
+		If _IsFinite($fX) And _IsFinite($fY) Then Return True
+	EndIf
 
     ; Get party size (players + heroes + henchmen)
     Local $iPartySize = Party_GetPartyContextInfo("TotalPartySize")
@@ -521,12 +523,12 @@ Func _Pathfinder_PartyWithinRange($fResumeDistance = 1400)
 
     ; Get the "Flag All" position
     Local $aFlagAll = World_GetWorldInfo("FlagAll")
-If IsArray($aFlagAll) Then
-	Local $fX = $aFlagAll[0]
-	Local $fY = $aFlagAll[1]
-	; Check if values are finite and not zero (meaning flag is actually placed)
-	If _IsFinite($fX) And _IsFinite($fY) Then Return True
-EndIf
+	If IsArray($aFlagAll) Then
+		Local $fX = $aFlagAll[0]
+		Local $fY = $aFlagAll[1]
+		; Check if values are finite and not zero (meaning flag is actually placed)
+		If _IsFinite($fX) And _IsFinite($fY) Then Return True
+	EndIf
 
     ; Get party size and count nearby members
     Local $iPartySize = Party_GetPartyContextInfo("TotalPartySize")
