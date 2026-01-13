@@ -175,18 +175,22 @@ EndFunc
 
 ; Skill ID: 436 - $GC_I_SKILL_ID_COMFORT_ANIMAL
 Func CanUse_ComfortAnimal()
-	; Check if player has a pet
-	Local $l_i_PetAgentID = Party_GetPetInfo(1, "AgentID")
-	If $l_i_PetAgentID = 0 Then Return False
+    Local $l_i_PetSize = World_GetWorldInfo("PetInfoArraySize")
+    Local $lMyPet = 0
 
-	; Check if pet belongs to player
-	Local $l_i_OwnerID = Party_GetPetInfo(1, "OwnerAgentID")
-	If $l_i_OwnerID <> Agent_GetAgentInfo(-2, "ID") Then Return False
+    ; PetNumber starts at 1, not 0
+    For $i = 1 To $l_i_PetSize
+        If Party_GetPetInfo($i, "OwnerAgentID") = Agent_GetMyID() Then
+            $lMyPet = Party_GetPetInfo($i, "AgentID")
+            ExitLoop
+        EndIf
+    Next
 
-	; Check pet's health
-	Local $l_f_PetHP = Agent_GetAgentInfo($l_i_PetAgentID, "HP")
+    If $lMyPet = 0 Then Return False
 
-	Return $l_f_PetHP <= 0.5
+    If Agent_GetAgentInfo($lMyPet, "HPPercent") < 0.5 Then Return True
+
+    Return False
 EndFunc
 
 Func BestTarget_ComfortAnimal($a_f_AggroRange)
