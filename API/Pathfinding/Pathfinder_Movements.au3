@@ -72,8 +72,10 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
     Local $lPath = _Pathfinder_GetPath($lMyX, $lMyY, $lLayer, $aDestX, $aDestY, $lCurrentObstacles)
     If Not IsArray($lPath) Or UBound($lPath) = 0 Then
+        ; Path calculation failed - use empty path and rely on direct movement
+        Local $lEmptyPath[0][3]
+        $lPath = $lEmptyPath
         Map_MoveLayer($aDestX, $aDestY, $lLayer)
-;~         Return
     EndIf
 
     ; Initialize path tracking
@@ -265,8 +267,12 @@ EndFunc
 ; $aObstacles = 2D array of obstacles [[x, y, radius], ...]
 ; $aSimplifyRange = distance threshold for simplification
 Func _Pathfinder_SmartSimplify($aPath, $aObstacles, $aSimplifyRange)
+    ; Validate input
+    If Not IsArray($aPath) Then Return $aPath
     Local $lPointCount = UBound($aPath)
     If $lPointCount <= 2 Then Return $aPath
+    ; Validate 2D array with at least 3 columns
+    If UBound($aPath, 0) <> 2 Or UBound($aPath, 2) < 3 Then Return $aPath
 
     ; Mark which points are critical (near obstacles or layer changes)
     Local $lCritical[$lPointCount]

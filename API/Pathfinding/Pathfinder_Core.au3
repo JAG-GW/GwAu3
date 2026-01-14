@@ -38,6 +38,8 @@ Func Pathfinder_Shutdown()
 EndFunc
 
 Func Pathfinder_FreePathResult($pResult)
+    If $pResult = 0 Or $pResult = Null Then Return
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then Return
     DllCall($g_hPathfinderDLL, "none:cdecl", "FreePathResult", "ptr", $pResult)
 EndFunc
 
@@ -45,26 +47,38 @@ EndFunc
 ; $aObstacles = 2D array [[x, y, radius], [x, y, radius], ...]
 ; $startLayer = layer of the starting point (-1 = auto-detect)
 Func Pathfinder_FindPathRaw($mapID, $startX, $startY, $startLayer, $destX, $destY, $aObstacles, $simplifyRange = 1250)
+    ; Verify DLL is loaded
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then
+        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR: DLL not loaded" & @CRLF)
+        Return SetError(1, 0, 0)
+    EndIf
+
     Local $obstacleCount = 0
     Local $pObstacles = 0
 
-    ; Check if obstacles are provided
+    ; Check if obstacles are provided and have valid format (2D array with 3 columns)
     If IsArray($aObstacles) And UBound($aObstacles) > 0 Then
-        $obstacleCount = UBound($aObstacles)
+        ; Validate array format: must be 2D with at least 3 columns
+        If UBound($aObstacles, 0) = 2 And UBound($aObstacles, 2) >= 3 Then
+            $obstacleCount = UBound($aObstacles)
 
-        ; Create a contiguous array of ObstacleZone structures in memory
-        ; Each ObstacleZone is 12 bytes (3 floats: x, y, radius)
-        Local $obstacleStructSize = 12
-        Local $obstacleBuffer = DllStructCreate("byte[" & ($obstacleCount * $obstacleStructSize) & "]")
-        $pObstacles = DllStructGetPtr($obstacleBuffer)
+            ; Create a contiguous array of ObstacleZone structures in memory
+            ; Each ObstacleZone is 12 bytes (3 floats: x, y, radius)
+            Local $obstacleStructSize = 12
+            Local $obstacleBuffer = DllStructCreate("byte[" & ($obstacleCount * $obstacleStructSize) & "]")
+            $pObstacles = DllStructGetPtr($obstacleBuffer)
 
-        ; Fill the obstacle buffer
-        For $i = 0 To $obstacleCount - 1
-            Local $obstacle = DllStructCreate($tagObstacleZone, $pObstacles + $i * $obstacleStructSize)
-            DllStructSetData($obstacle, "x", $aObstacles[$i][0])
-            DllStructSetData($obstacle, "y", $aObstacles[$i][1])
-            DllStructSetData($obstacle, "radius", $aObstacles[$i][2])
-        Next
+            ; Fill the obstacle buffer
+            For $i = 0 To $obstacleCount - 1
+                Local $obstacle = DllStructCreate($tagObstacleZone, $pObstacles + $i * $obstacleStructSize)
+                DllStructSetData($obstacle, "x", $aObstacles[$i][0])
+                DllStructSetData($obstacle, "y", $aObstacles[$i][1])
+                DllStructSetData($obstacle, "radius", $aObstacles[$i][2])
+            Next
+        Else
+            ; Invalid format - ignore obstacles to prevent crash
+            If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] WARNING: Invalid obstacle array format, ignoring obstacles" & @CRLF)
+        EndIf
     EndIf
 
     ; Call FindPathWithObstacles
@@ -112,6 +126,19 @@ Func Pathfinder_FindPath($mapID, $startX, $startY, $startLayer, $destX, $destY, 
 
     If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] OK: point_count=" & $l_i_PointCount & @CRLF)
 
+    ; Validate point count and pointer
+    If $l_i_PointCount <= 0 Or $l_p_Points = 0 Or $l_p_Points = Null Then
+        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] ERROR: Invalid point data" & @CRLF)
+        Pathfinder_FreePathResult($l_p_Result)
+        Return SetError(3, 0, 0)
+    EndIf
+
+    ; Limit point count to prevent memory issues (max 10000 points)
+    If $l_i_PointCount > 10000 Then
+        If $g_bPathfinder_Debug Then Out("[Pathfinder DLL] WARNING: Point count too high, limiting to 10000" & @CRLF)
+        $l_i_PointCount = 10000
+    EndIf
+
     Local $a_Path[$l_i_PointCount][3]  ; x, y, layer
     For $i = 0 To $l_i_PointCount - 1
         Local $l_t_Point = DllStructCreate($tagPathPoint, $l_p_Points + ($i * 12))  ; 12 bytes: float x (4) + float y (4) + int layer (4)
@@ -126,12 +153,15 @@ Func Pathfinder_FindPath($mapID, $startX, $startY, $startLayer, $destX, $destY, 
 EndFunc
 
 Func Pathfinder_IsMapAvailable($mapID)
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then Return False
     Local $result = DllCall($g_hPathfinderDLL, "int:cdecl", "IsMapAvailable", "int", $mapID)
     If @error Then Return False
     Return $result[0] = 1
 EndFunc
 
 Func Pathfinder_GetAvailableMaps()
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then Return SetError(1, 0, 0)
+
     Local $count = 0
     Local $result = DllCall($g_hPathfinderDLL, "ptr:cdecl", "GetAvailableMaps", "int*", $count)
     If @error Or $result[0] = 0 Then
@@ -140,6 +170,12 @@ Func Pathfinder_GetAvailableMaps()
 
     Local $pMapList = $result[0]
     $count = $result[1]
+
+    ; Validate count
+    If $count <= 0 Or $count > 10000 Then
+        DllCall($g_hPathfinderDLL, "none:cdecl", "FreeMapList", "ptr", $pMapList)
+        Return SetError(2, 0, 0)
+    EndIf
 
     Local $mapIds[$count]
     For $i = 0 To $count - 1
@@ -152,6 +188,8 @@ Func Pathfinder_GetAvailableMaps()
 EndFunc
 
 Func Pathfinder_GetMapStats($mapID)
+    If $g_hPathfinderDLL = 0 Or $g_hPathfinderDLL = -1 Then Return SetError(1, 0, 0)
+
     Local $result = DllCall($g_hPathfinderDLL, "ptr:cdecl", "GetMapStats", "int", $mapID)
     If @error Or $result[0] = 0 Then
         Return SetError(1, 0, 0)
