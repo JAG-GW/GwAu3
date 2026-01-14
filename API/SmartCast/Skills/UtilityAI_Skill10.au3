@@ -45,6 +45,8 @@ EndFunc
 
 ; Skill ID: 156 - $GC_I_SKILL_ID_VAMPIRIC_TOUCH
 Func CanUse_VampiricTouch()
+	; Only use if there's an enemy in touch range
+	If UAI_CountAgents(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy") < 1 Then Return False
 	Return True
 EndFunc
 
@@ -53,7 +55,7 @@ Func BestTarget_VampiricTouch($a_f_AggroRange)
 	; Skill. Touch target foe to steal up to 29...65...74 Health.
 	; Concise description
 	; Touch Skill. Steals 29...65...74 Health.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 158 - $GC_I_SKILL_ID_TOUCH_OF_AGONY
@@ -203,6 +205,8 @@ EndFunc
 
 ; Skill ID: 446 - $GC_I_SKILL_ID_TROLL_UNGUENT
 Func CanUse_TrollUnguent()
+	; Only use if HP is below 80%
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.8 Then Return False
 	Return True
 EndFunc
 

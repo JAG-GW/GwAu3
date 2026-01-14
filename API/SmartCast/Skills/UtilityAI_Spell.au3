@@ -139,7 +139,8 @@ Func BestTarget_ShatterDelusions($a_f_AggroRange)
 	; Spell. Remove one Mesmer hex from target foe. If a hex was removed, that foe and all adjacent foes takes 15...63...75 damage.
 	; Concise description
 	; Spell. Removes a Mesmer hex from target foe. Removal effect: 15...63...75 damage to target and all adjacent foes.
-	Return 0
+	; Target enemies with hex for damage, prefer grouped enemies
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHexed")
 EndFunc
 
 ; Skill ID: 39 - $GC_I_SKILL_ID_ENERGY_SURGE
@@ -193,6 +194,8 @@ EndFunc
 ; Skill ID: 40 - $GC_I_SKILL_ID_ETHER_FEAST
 Func CanUse_EtherFeast()
 	If Anti_Spell() Then Return False
+	; Only use if HP is below 70%
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_HP) > 0.7 Then Return False
 	Return True
 EndFunc
 
@@ -201,7 +204,9 @@ Func BestTarget_EtherFeast($a_f_AggroRange)
 	; Spell. Target foe loses 3 Energy. You are healed 20...56...65 for each point of Energy lost.
 	; Concise description
 	; Spell. Causes 3 Energy loss. You gain 20...56...65 Health for each point of Energy lost.
-	Return 0
+	Local $l_i_Target = UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 42 - $GC_I_SKILL_ID_ENERGY_BURN
@@ -553,7 +558,7 @@ Func BestTarget_DeathlySwarm($a_f_AggroRange)
 	; Spell. Deathly Swarm flies out slowly and strikes for 30...78...90 cold damage on up to three targets in the area.
 	; Concise description
 	; Spell. Deathly Swarm flies out slowly and deals 30...78...90 cold damage. Hits two additional foes in the area.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, $a_f_AggroRange, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 106 - $GC_I_SKILL_ID_ROTTING_FLESH
@@ -773,7 +778,7 @@ Func BestTarget_VampiricGaze($a_f_AggroRange)
 	; Spell. Steal up to 18...52...60 Health from target foe.
 	; Concise description
 	; Spell. Steals 18...52...60 Health.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 159 - $GC_I_SKILL_ID_WEAKEN_ARMOR
@@ -1035,7 +1040,7 @@ Func BestTarget_Flare($a_f_AggroRange)
 	; Spell. Send out a flare that strikes target foe for 20...56...65 fire damage if it hits. If you are Overcast, Flare hits adjacent foes as well.
 	; Concise description
 	; Spell. Projectile: deals 20...56...65 fire damage. If Overcast, strikes adjacent.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 195 - $GC_I_SKILL_ID_LAVA_FONT
@@ -1135,7 +1140,10 @@ Func BestTarget_BlindingFlash($a_f_AggroRange)
 	; Spell. Target foe is Blinded for 3...7...8 seconds.
 	; Concise description
 	; Spell. Inflicts Blindness condition (3...7...8 seconds).
-	Return 0
+	; Blinded affects attacks, so prefer attacking enemies
+	Local $l_i_Target = UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsAttacking")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 223 - $GC_I_SKILL_ID_CHAIN_LIGHTNING
@@ -1215,7 +1223,10 @@ Func BestTarget_LightningJavelin($a_f_AggroRange)
 	; Spell. Send out a Lightning Javelin that strikes for 15...43...50 lightning damage if it hits. Lightning Javelin interrupts attacking foes. This spell has 25% armor penetration and strikes all foes between you and your target.
 	; Concise description
 	; Spell. Projectile: Deals 15...43...50 lightning damage. Interrupts if your target is attacking. 25% armor penetration. Strikes all foes between you and your target.
-	Return 0
+	; Prefer attacking enemies for interrupt effect
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsAttacking")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 237 - $GC_I_SKILL_ID_WATER_TRIDENT
@@ -1249,6 +1260,8 @@ EndFunc
 ; Skill ID: 247 - $GC_I_SKILL_ID_SYMBOL_OF_WRATH
 Func CanUse_SymbolOfWrath()
 	If Anti_Spell() Then Return False
+	; Only use if there are adjacent enemies
+	If UAI_CountAgents(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy") < 1 Then Return False
 	Return True
 EndFunc
 
@@ -1271,7 +1284,12 @@ Func BestTarget_Banish($a_f_AggroRange)
 	; Spell. Target foe takes 20...49...56 holy damage. This spell does double damage to summoned creatures.
 	; Concise description
 	; Spell. Deals 20...49...56 holy damage. Deals double damage to summoned creatures.
-	Return 0
+	; Prefer summoned creatures (minions, spirits) for double damage
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMinion")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsSpirit")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 275 - $GC_I_SKILL_ID_MEND_CONDITION
@@ -1361,6 +1379,7 @@ EndFunc
 ; Skill ID: 281 - $GC_I_SKILL_ID_ORISON_OF_HEALING
 Func CanUse_OrisonOfHealing()
 	If Anti_Spell() Then Return False
+	; Only use if HP is below 70%
 	Return True
 EndFunc
 

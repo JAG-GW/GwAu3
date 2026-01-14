@@ -98,6 +98,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 		; Need to return to outpost
         If Party_GetPartyContextInfo("IsDefeated") Then
             Pathfinder_Shutdown()
+			Map_ReturnToOutpost()
             Return False
         EndIf
 
@@ -128,7 +129,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
                 $lNeedPathUpdate = True
                 If $lStuckCount >= 3 Then
                     Local $lRandomAngle = Random(0, 6.28)
-                    Map_Move($lMyX + Cos($lRandomAngle) * 200, $lMyY + Sin($lRandomAngle) * 200, 0)
+                    Map_MoveLayer($lMyX + Cos($lRandomAngle) * 200, $lMyY + Sin($lRandomAngle) * 200, $lLayer)
                     Sleep(500)
                     $lStuckCount = 0
                 EndIf
@@ -205,15 +206,17 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 		If $aCallFunc <> "" Then Call($aCallFunc)
 
 		If Game_GetGameInfo("IsCinematic") Then
+			Local $lWaitTimer = TimerInit()
 			Do
-				Sleep(3000)
+				Sleep(250)
 				Cinematic_SkipCinematic()
-			Until Not Game_GetGameInfo("IsCinematic")
+			Until Not Game_GetGameInfo("IsCinematic") Or TimerDiff($lWaitTimer) > 120000
 			Sleep(250)
+			Local $lWaitPing = TimerInit()
 			If Other_GetPing() = 0 Then
 				Do
 					Sleep(64)
-				Until Other_GetPing() <> 0
+				Until Other_GetPing() <> 0 Or TimerDiff($lWaitPing) > 30000
 			EndIf
 		EndIf
 

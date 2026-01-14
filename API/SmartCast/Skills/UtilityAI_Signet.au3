@@ -49,7 +49,10 @@ Func BestTarget_BaneSignet($a_f_AggroRange)
 	; Signet. Target foe takes 26...50...56 holy damage. If target foe was attacking, that foe is knocked down.
 	; Concise description
 	; Signet. Deals 26...50...56 holy damage. Causes knock-down if target foe is attacking.
-	Return 0
+	; Prefer attacking enemies for knockdown effect
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsAttacking")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 Func CanUse_BarbedSignet()
@@ -811,7 +814,7 @@ Func BestTarget_ResurrectionSignet($a_f_AggroRange)
 	; Signet. Resurrect target party member. That party member is returned to life with 100% Health and 25% Energy. This signet only recharges when you gain a morale boost.
 	; Concise description
 	; Signet. Resurrects target party member (100% Health, 25% Energy). This signet only recharges when you gain a morale boost.
-	Return 0
+	Return UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsDeadAlly")
 EndFunc
 
 Func CanUse_SignetOfReturn()

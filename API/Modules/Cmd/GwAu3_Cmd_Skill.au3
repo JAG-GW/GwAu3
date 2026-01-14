@@ -24,7 +24,6 @@ Func Skill_UseSkill($a_i_SkillSlot, $a_v_TargetID = -2, $a_b_CallTarget = False)
     $g_i_LastSkillUsed = $a_i_SkillSlot + 1
     $g_i_LastSkillTarget = Agent_ConvertID($a_v_TargetID)
 
-    Log_Debug("Used skill slot: " & ($a_i_SkillSlot + 1) & " on target: " & Agent_ConvertID($a_v_TargetID), "SkillMod", $g_h_EditText)
     Return True
 EndFunc
 
@@ -54,7 +53,6 @@ Func Skill_UseHeroSkill($a_i_HeroIndex, $a_i_SkillSlot, $a_v_TargetID = 0)
 
     Core_Enqueue($g_p_UseHeroSkill, 16)
 
-    Log_Debug("Hero " & $a_i_HeroIndex & " used skill " & ($a_i_SkillSlot + 1) & " on target: " & $a_v_TargetID, "SkillMod", $g_h_EditText)
     Return True
 EndFunc
 
@@ -82,7 +80,6 @@ Func Skill_CancelHeroSkill($a_i_HeroIndex, $a_i_SkillSlot)
 
     Core_Enqueue($g_p_CancelHeroSkill, 12)
 
-    Log_Debug("Hero " & $a_i_HeroIndex & " canceled skill " & ($a_i_SkillSlot + 1), "SkillMod", $g_h_EditText)
     Return True
 EndFunc
 
