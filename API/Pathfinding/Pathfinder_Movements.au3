@@ -130,8 +130,8 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
                 $lNeedPathUpdate = True
                 If $lStuckCount >= 3 Then
                     Local $lRandomAngle = Random(0, 6.28)
-                    Map_MoveLayer($lMyX + Cos($lRandomAngle) * 200, $lMyY + Sin($lRandomAngle) * 200, $lLayer)
-                    Sleep(500)
+                    Map_MoveLayer($lMyX + Cos($lRandomAngle) * 500, $lMyY + Sin($lRandomAngle) * 500, $lLayer)
+                    Sleep(750)
                     $lStuckCount = 0
                 EndIf
             Else
@@ -188,7 +188,6 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
 			; Wait heroes if they are too far
 			If _Pathfinder_ShouldWaitForParty(2000, 1400) Then
-				Out("Waiting for party to catch up")
 				Local $lWaitTimer = TimerInit()
 				Do
 					Agent_CancelAction()
@@ -764,8 +763,6 @@ Func _Pathfinder_WaitForResurrection()
     Local $iDeadAllyID = _Pathfinder_GetNearestDeadPartyMember()
     If $iDeadAllyID = 0 Then Return
 
-    Out("Waiting for dead ally to be resurrected")
-
     ; Move towards dead ally (within earshot range so heroes can res)
     Local $fDeadX = Agent_GetAgentInfo($iDeadAllyID, "X")
     Local $fDeadY = Agent_GetAgentInfo($iDeadAllyID, "Y")
@@ -786,7 +783,6 @@ Func _Pathfinder_WaitForResurrection()
         ; Check if enemies appeared
         Local $iEnemyCount = GetAgents(-2, 1200, $GC_I_AGENT_TYPE_LIVING, 0, "_Pathfinder_FilterIsEnemy")
         If $iEnemyCount > 0 Then
-            Out("Enemies appeared, stopping res wait")
             Return
         EndIf
 
@@ -794,14 +790,11 @@ Func _Pathfinder_WaitForResurrection()
         If Not Agent_GetAgentInfo($iDeadAllyID, "IsDead") Then
             $iDeadAllyID = _Pathfinder_GetNearestDeadPartyMember()
             If $iDeadAllyID = 0 Then
-                Out("All allies resurrected")
                 Return
             EndIf
         EndIf
 
     Until _Pathfinder_CountAvailableResurrections() = 0 Or _Pathfinder_CountDeadPartyMembers() = 0 Or TimerDiff($lRezTimer) > 30000
-
-    Out("Res wait ended")
 EndFunc
 
 ; =============================================================================

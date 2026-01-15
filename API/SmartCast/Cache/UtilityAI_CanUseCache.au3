@@ -139,8 +139,6 @@ Func UAI_GetCanUseFunc($a_i_SkillSlot)
 			Return "CanUse_DrainEnchantment"
 		Case $GC_I_SKILL_ID_SHATTER_ENCHANTMENT
 			Return "CanUse_ShatterEnchantment"
-		Case $GC_I_SKILL_ID_DISAPPEAR
-			Return "CanUse_Disappear"
 		Case $GC_I_SKILL_ID_UNNATURAL_SIGNET_ALPHA_VERSION
 			Return "CanUse_UnnaturalSignetAlphaVersion"
 		Case $GC_I_SKILL_ID_ELEMENTAL_RESISTANCE
