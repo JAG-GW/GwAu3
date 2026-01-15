@@ -100,7 +100,6 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 		; Need to return to outpost
         If Party_GetPartyContextInfo("IsDefeated") Then
             Pathfinder_Shutdown()
-			Map_ReturnToOutpost()
             Return False
         EndIf
 
