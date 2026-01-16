@@ -233,7 +233,7 @@ Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_HeroNumber = 0)
         If $a_ai2_AttributesArray[$i][1] < $GC_I_ATTRIBUTE_MIN_VALUE Then $a_ai2_AttributesArray[$i][1] = $GC_I_ATTRIBUTE_MIN_VALUE
     Next
 
-	Local $l_i_TotalAttributePoints = Attribute_GetPartyAttributePointInfo(0, "TotalPoints")
+	Local $l_i_TotalAttributePoints = Attribute_GetPartyAttributePointInfo($a_i_HeroNumber, "TotalPoints")
     If $l_i_TotalAttributePoints < $GC_I_ATTRIBUTE_MAX_ATTR_POINTS Then Attribute_CalculateAttributeSpread($a_ai2_AttributesArray, $l_i_TotalAttributePoints)
 
     Local $l_i_AttrID = $GC_I_ATTRIBUTE_NONE, $l_i_TargetAttrLevel = $GC_I_ATTRIBUTE_MIN_VALUE
