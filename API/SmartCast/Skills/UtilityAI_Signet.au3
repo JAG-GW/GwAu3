@@ -442,7 +442,7 @@ Func BestTarget_SignetOfClumsiness($a_f_AggroRange)
 	; Signet. If target foe is attacking, that foe and all adjacent foes are interrupted and take 15...51...60 damage. Any foes using attack skills are knocked down.
 	; Concise description
 	; Signet. Interrupts an attack for target foe and all adjacent foes. Interruption effect: deals 15...51...60 damage; knocks down foes using attack skills.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsAttacking")
 EndFunc
 
 Func CanUse_SignetOfClumsinessPvp()

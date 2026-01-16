@@ -183,7 +183,7 @@ Func BestTarget_Clumsiness($a_f_AggroRange)
 	; Hex Spell. (4 seconds.) Also hexes adjacent foes. Interrupts next attack. Interruption effect: deals 10...76...92 damage.
 	; Concise description
 	; Spell. (4 seconds.) Also hexes adjacent foes. Interrupts next attack. Interruption effect: deals 10...76...92 damage.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 44 - $GC_I_SKILL_ID_PHANTOM_PAIN
@@ -239,7 +239,7 @@ Func BestTarget_Ineptitude($a_f_AggroRange)
 	; Elite Hex Spell. (4 seconds.) Also hexes foes adjacent to target. Deals 30...114...135 damage. Inflicts Blindness condition (10 seconds). No effect unless hexed foe attacks.
 	; Concise description
 	; Hex Spell. (4 seconds.) Also hexes foes adjacent to target. Deals 30...114...135 damage. Inflicts Blindness condition (10 seconds). No effect unless hexed foe attacks.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 48 - $GC_I_SKILL_ID_SPIRIT_OF_FAILURE
@@ -2323,7 +2323,7 @@ Func BestTarget_WanderingEye($a_f_AggroRange)
 	; Hex Spell. (4 seconds.) Interrupts target foe's next attack. Interruption effect: 30...94...110 damage to nearby foes.
 	; Concise description
 	; Spell. (4 seconds.) Interrupts target foe's next attack. Interruption effect: 30...94...110 damage to nearby foes.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2058 - $GC_I_SKILL_ID_PUTRID_BILE

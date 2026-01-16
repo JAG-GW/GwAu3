@@ -69,7 +69,7 @@ Func BestTarget_InspiredEnchantment($a_f_AggroRange)
 	; Spell. Removes an enchantment from target foe and gain 3...13...15 Energy. For 20 seconds, Inspired Enchantment is replaced with the enchantment removed from target foe.
 	; Concise description
 	; Spell. Removes an enchantment from target foe. Removal effects: you gain 3...13...15 Energy; this spell is replaced with that enchantment (20 seconds).
-	Return 0
+	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsEnchanted")
 EndFunc
 
 ; Skill ID: 22 - $GC_I_SKILL_ID_INSPIRED_HEX
@@ -282,6 +282,7 @@ EndFunc
 ; Skill ID: 68 - $GC_I_SKILL_ID_DRAIN_ENCHANTMENT
 Func CanUse_DrainEnchantment()
 	If Anti_Spell() Then Return False
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 20 Then Return False
 	Return True
 EndFunc
 
@@ -290,7 +291,7 @@ Func BestTarget_DrainEnchantment($a_f_AggroRange)
 	; Spell. Remove an enchantment from target foe. If an enchantment is removed, you gain 8...15...17 Energy and 40...104...120 Health.
 	; Concise description
 	; Spell. Removes an enchantment from target foe. Removal effect: you gain 8...15...17 Energy and 40...104...120 Health.
-	Return 0
+	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsEnchanted")
 EndFunc
 
 ; Skill ID: 69 - $GC_I_SKILL_ID_SHATTER_ENCHANTMENT
@@ -301,24 +302,10 @@ EndFunc
 
 Func BestTarget_ShatterEnchantment($a_f_AggroRange)
 	; Description
-	; "SE" redirects here. For the Eye of the North dungeon, see Slavers' Exile.
+	; Spell. Remove an enchantment from target foe. If an enchantment is removed, that foe takes 14...83...100 damage.
 	; Concise description
-	; deals
+	; Spell. Removes an enchantment from target foe. Removal effect: deals 14...83...100 damage.
 	Return 0
-EndFunc
-
-; Skill ID: 70 - $GC_I_SKILL_ID_DISAPPEAR
-Func CanUse_Disappear()
-	If Anti_Spell() Then Return False
-	Return True
-EndFunc
-
-Func BestTarget_Disappear($a_f_AggroRange)
-	; Description
-	; Mesmer
-	; Concise description
-	; Trivia">edit
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 EndFunc
 
 ; Skill ID: 77 - $GC_I_SKILL_ID_CHAOS_STORM
@@ -352,20 +339,32 @@ EndFunc
 ; Skill ID: 79 - $GC_I_SKILL_ID_ENERGY_DRAIN
 Func CanUse_EnergyDrain()
 	If Anti_Spell() Then Return False
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 20 Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_EnergyDrain($a_f_AggroRange)
 	; Description
-	; This article is about the skill. For the environment effect, see Energy Drain (effect).
+	; Elite Spell. Target foe loses 2...8...9 Energy. You gain 3 Energy for each point of Energy lost.
 	; Concise description
-	; green; font-weight: bold;">2...8...9
-	Return 0
+	; Elite Spell. Causes 2...8...9 Energy loss. You gain 3 Energy for each point of Energy lost.
+
+	; Priority 1: Monks
+	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMonk")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Priority 2: Casters
+	$l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Fallback: Best single target
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 80 - $GC_I_SKILL_ID_ENERGY_TAP
 Func CanUse_EnergyTap()
 	If Anti_Spell() Then Return False
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 20 Then Return False
 	Return True
 EndFunc
 
@@ -374,7 +373,17 @@ Func BestTarget_EnergyTap($a_f_AggroRange)
 	; Spell. Target foe loses 4...6...7 Energy. You gain 2 Energy for each point of Energy lost.
 	; Concise description
 	; Spell. Causes 4...6...7 Energy loss. You gain 2 Energy for each point of Energy lost.
-	Return 0
+
+	; Priority 1: Monks
+	Local $l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMonk")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Priority 2: Casters
+	$l_i_Target = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+
+	; Fallback: Best single target
+	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 81 - $GC_I_SKILL_ID_ARCANE_THIEVERY
@@ -694,7 +703,7 @@ Func BestTarget_StripEnchantment($a_f_AggroRange)
 	; Spell. Remove 0...2...2 enchantment[s] from target foe. If an enchantment is removed, you steal 5...53...65 Health.
 	; Concise description
 	; Spell. Removes 0...2...2 enchantment[s] from target foe. Removal effect: you steal 5...53...65 Health.
-	Return 0
+	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsEnchanted")
 EndFunc
 
 ; Skill ID: 144 - $GC_I_SKILL_ID_CHILBLAINS
@@ -3080,7 +3089,7 @@ Func BestTarget_RevealedEnchantment($a_f_AggroRange)
 	; Spell. Remove an enchantment from target foe and gain 3...13...15 Energy. For 20 seconds, Revealed Enchantment is replaced with the enchantment removed from target foe.
 	; Concise description
 	; Spell. Removes an enchantment from target foe. Removal effects: you gain 3...13...15 Energy; this spell is replaced with that enchantment (20 seconds).
-	Return 0
+	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsEnchanted")
 EndFunc
 
 ; Skill ID: 1049 - $GC_I_SKILL_ID_REVEALED_HEX

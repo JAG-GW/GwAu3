@@ -183,7 +183,7 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
             Return Memory_Read($l_p_AgentPtr + 0xEC, "float")
         Case "AttackSpeedModifier"
             Return Memory_Read($l_p_AgentPtr + 0xF0, "float")
-        Case "PlayerNumber"
+        Case "PlayerNumber", "ModelID" ; Player Number is usually for Player and ModelID for npc
             Return Memory_Read($l_p_AgentPtr + 0xF4, "short")
         Case "AgentModelType"
             Return Memory_Read($l_p_AgentPtr + 0xF6, "short")
@@ -364,7 +364,7 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
         Case "h0180"
             Return Memory_Read($l_p_AgentPtr + 0x180, "dword")
 
-        Case "LoginNumber"
+        Case "LoginNumber" ; Connection number in the session
             Return Memory_Read($l_p_AgentPtr + 0x184, "dword")
 		Case "IsPlayer"
 			Return Memory_Read($l_p_AgentPtr + 0x184, "dword") <> 0
