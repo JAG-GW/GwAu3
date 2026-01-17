@@ -21,7 +21,7 @@ Func Quest_GetQuestInfo($a_i_QuestID, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr + 0x4, "long")
         Case "IsCompleted"
             Switch Memory_Read($l_p_Ptr + 0x4, "long")
-                Case 2, 3, 19, 32, 34, 35, 79
+                Case 2, 3, 19, 32, 33, 34, 35, 79
                     Return True
                 Case Else
                     Return False

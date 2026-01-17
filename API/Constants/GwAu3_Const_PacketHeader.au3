@@ -20,7 +20,7 @@ Global Const $GC_I_HEADER_SEND_CHAT = 0x0064        		; Send chat command.
 
 ; Quest and Hero operations
 Global Const $GC_I_HEADER_QUEST_ABANDON = 0x0011         	; Abandon the selected quest.
-;~ Global Const $GC_I_HEADER_QUEST_REQUEST_INFOS = 0x0011   ; Request information for a quest.
+Global Const $GC_I_HEADER_QUEST_REQUEST_INFOS = 0x0012   ; Request information for a quest.
 Global Const $GC_I_HEADER_QUEST_SET_ACTIVE = 0x0014      	; Set a quest as active.
 Global Const $GC_I_HEADER_HERO_BEHAVIOR = 0x0015         	; Define hero behavior settings.
 Global Const $GC_I_HEADER_HERO_LOCK_TARGET = 0x0016      	; Lock onto a specific target.
