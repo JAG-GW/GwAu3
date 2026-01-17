@@ -1229,7 +1229,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_MOROSTAV_TRAIL
 					Local $l_ai_Coords[2] = [23970, 7278]
 				Case $GC_I_MAP_ID_THE_ETERNAL_GROVE_EXPLORABLE
-					Local $l_ai_Coords[2] = [18444, 1988]
+					Local $l_ai_Coords[2] = [18600, 1983]
 			EndSwitch
 		Case $GC_I_MAP_ID_SERENITY_TEMPLE
 			Local $l_ai_Coords[2] = [-6202, 22292]
@@ -1500,7 +1500,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 				Case $GC_I_MAP_ID_CAVALON
 					Local $l_ai_Coords[2] = [3271, 11710]
 				Case $GC_I_MAP_ID_JADE_FLATS_LUXON
-					Local $l_ai_Coords[2] = [-5723, -10329]
+					Local $l_ai_Coords[2] = [-5970, -10442]
 				Case $GC_I_MAP_ID_MAISHANG_HILLS
 					Local $l_ai_Coords[2] = [16468, 11073]
 			EndSwitch
@@ -3522,7 +3522,7 @@ Func Map_GetConnectedMaps($a_i_MapID)
 		Case $GC_I_MAP_ID_SUNJIANG_DISTRICT_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_SHENZUN_TUNNELS]
 		Case $GC_I_MAP_ID_GYALA_HATCHERY_OUTPOST
-			Local $l_a_Connected[] = [$GC_I_MAP_ID_GYALA_HATCHERY_EXPLORABLE]
+			Local $l_a_Connected[] = [$GC_I_MAP_ID_MAISHANG_HILLS]
 		Case $GC_I_MAP_ID_RAISU_PALACE_OUTPOST
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_RAISU_PALACE_EXPLORABLE]
 		Case $GC_I_MAP_ID_IMPERIAL_SANCTUM_OUTPOST
