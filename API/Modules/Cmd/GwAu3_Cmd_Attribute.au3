@@ -29,7 +29,7 @@ Func Attribute_IncreaseAttribute($a_i_AttributeID, $a_i_Amount = 1, $a_i_HeroNum
     $g_i_LastAttributeModified = $a_i_AttributeID
     $g_i_LastAttributeValue = $a_i_Amount
 
-    Local $l_s_AttrName = ($a_i_AttributeID < 45) ? $g_as_AttributeNames[$a_i_AttributeID] : "Unknown"
+    Local $l_s_AttrName = ($a_i_AttributeID < 45) ? $GC_AS_ATTRIBUTE_NAMES[$a_i_AttributeID] : "Unknown"
     Return True
 EndFunc
 
@@ -62,7 +62,7 @@ Func Attribute_DecreaseAttribute($a_i_AttributeID, $a_i_Amount = 1, $a_i_HeroNum
     $g_i_LastAttributeModified = $a_i_AttributeID
     $g_i_LastAttributeValue = -$a_i_Amount
 
-    Local $l_s_AttrName = ($a_i_AttributeID < 45) ? $g_as_AttributeNames[$a_i_AttributeID] : "Unknown"
+    Local $l_s_AttrName = ($a_i_AttributeID < 45) ? $GC_AS_ATTRIBUTE_NAMES[$a_i_AttributeID] : "Unknown"
     Return True
 EndFunc
 
@@ -138,28 +138,17 @@ Func Attribute_LoadSkillTemplate($a_s_Template, $a_i_HeroNumber = 0)
     $l_i_AttributesBits = Utils_Bin64ToDec(StringLeft($a_s_Template, 4)) + 4
     $a_s_Template = StringTrimLeft($a_s_Template, 4)
 
-    ; Initialize attributes array
-    Local $l_i_PrimaryAttribute = Attribute_GetProfPrimaryAttribute($l_i_ProfPrimary)
-    $l_ai2_Attributes[0][0] = $l_i_PrimaryAttribute  ; Store primary attribute ID
-    $l_ai2_Attributes[0][1] = 0                      ; Will be set later
+	; Initialize attributes array
+	$l_ai2_Attributes[0][0] = $l_i_ProfPrimary ; Store primary profession
+	$l_ai2_Attributes[0][1] = $l_i_ProfSecondary ; Store secondary profession
+	ReDim $l_ai2_Attributes[$l_i_AttributesCount + 1][2]
 
-    ; Parse attribute data
-    Local $l_i_AttributeIndex = 1
-    For $l_i_Idx = 1 To $l_i_AttributesCount
-        Local $l_i_AttrID = Utils_Bin64ToDec(StringLeft($a_s_Template, $l_i_AttributesBits))
-        $a_s_Template = StringTrimLeft($a_s_Template, $l_i_AttributesBits)
-        Local $l_i_AttrLevel = Utils_Bin64ToDec(StringLeft($a_s_Template, 4))
-        $a_s_Template = StringTrimLeft($a_s_Template, 4)
-
-        If $l_i_AttrID = $l_i_PrimaryAttribute Then
-            $l_ai2_Attributes[0][1] = $l_i_AttrLevel
-        Else
-            ReDim $l_ai2_Attributes[$l_i_AttributeIndex + 1][2]
-            $l_ai2_Attributes[$l_i_AttributeIndex][0] = $l_i_AttrID
-            $l_ai2_Attributes[$l_i_AttributeIndex][1] = $l_i_AttrLevel
-            $l_i_AttributeIndex += 1
-        EndIf
-    Next
+	For $i = 1 To $l_i_AttributesCount
+		$l_ai2_Attributes[$i][0] = Utils_Bin64ToDec(StringLeft($a_s_Template, $l_i_AttributesBits))
+		$a_s_Template = StringTrimLeft($a_s_Template, $l_i_AttributesBits)
+		$l_ai2_Attributes[$i][1] = Utils_Bin64ToDec(StringLeft($a_s_Template, 4))
+		$a_s_Template = StringTrimLeft($a_s_Template, 4)
+	Next
 
     ; Parse skills
     $l_i_SkillsBits = Utils_Bin64ToDec(StringLeft($a_s_Template, 4)) + 8
@@ -173,7 +162,7 @@ Func Attribute_LoadSkillTemplate($a_s_Template, $a_i_HeroNumber = 0)
     $l_i_OpTail = Utils_Bin64ToDec($a_s_Template)
 
     ; Load attributes (includes secondary profession change if needed)
-    If Not Attribute_LoadAttributes($l_ai2_Attributes, $l_i_ProfSecondary, $a_i_HeroNumber) Then
+    If Not Attribute_LoadAttributes($l_ai2_Attributes, $a_i_HeroNumber) Then
         Log_Error("Failed to load attributes", "LoadTemplate", $g_h_EditText)
         Return False
     EndIf
@@ -184,7 +173,7 @@ Func Attribute_LoadSkillTemplate($a_s_Template, $a_i_HeroNumber = 0)
     Return True
 EndFunc
 
-Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_SecondaryProfession, $a_i_HeroNumber = 0)
+Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_HeroNumber = 0)
     Local $l_i_HeroID
     If $a_i_HeroNumber <> 0 Then
         $l_i_HeroID = Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID")
@@ -195,157 +184,107 @@ Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_SecondaryProfession, 
     Else
         $l_i_HeroID = World_GetWorldInfo("MyID")
     EndIf
+  
+	Local $l_i_ProfPrimary = $a_ai2_AttributesArray[0][0] ; Store primary attribute ID
+	Local $l_i_ProfSecondary = $a_ai2_AttributesArray[0][1] ; Store secondary attribute ID
 
-    Local $l_i_PrimaryAttribute = $a_ai2_AttributesArray[0][0]
-    Local $l_i_Deadlock = 0
-    Local $l_i_Level = 0
-    Local $l_i_TestTimer = 0
-    Local $l_i_MaxRetries = 10
-    Local $l_i_Timeout = 5000
+    Local $l_i_AttrCount = UBound($a_ai2_AttributesArray) - 1
+    Local $l_i_AttrLevel = $GC_I_ATTRIBUTE_MIN_VALUE
 
+    Local $l_h_Timeout = 0, $l_i_TimeoutThreshold = 5000
+    Local $l_i_RetryCount = 0, $l_i_MaxRetries = 10
+	
     ; Change secondary profession if needed
-    If $a_i_SecondaryProfession <> 0 And _
-       Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") <> $a_i_SecondaryProfession And _
-       Party_GetPartyProfessionInfo($l_i_HeroID, "Primary") <> $a_i_SecondaryProfession Then
-
-        Log_Info("Changing secondary profession to: " & $a_i_SecondaryProfession, "LoadAttributes", $g_h_EditText)
-
-        Local $l_i_RetryCount = 0
+    If $l_i_ProfSecondary <> $GC_I_PROFESSION_NONE _ 
+    And Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") <> $l_i_ProfSecondary _
+    And Party_GetPartyProfessionInfo($l_i_HeroID, "Primary") <> $l_i_ProfSecondary Then
+        Log_Info("Changing secondary profession to: " & $l_i_ProfSecondary, "LoadAttributes", $g_h_EditText)
         Do
-            $l_i_Deadlock = TimerInit()
-            Attribute_ChangeSecondProfession($a_i_SecondaryProfession, $a_i_HeroNumber)
+            $l_h_Timeout = TimerInit()
+            Attribute_ChangeSecondProfession($l_i_ProfSecondary, $a_i_HeroNumber)
 
             Do
                 Sleep(32)
-            Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $a_i_SecondaryProfession Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
+            Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $l_i_ProfSecondary Or TimerDiff($l_h_Timeout) > $l_i_TimeoutThreshold
 
             $l_i_RetryCount += 1
-        Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $a_i_SecondaryProfession Or $l_i_RetryCount >= $l_i_MaxRetries
+        Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $l_i_ProfSecondary Or $l_i_RetryCount >= $l_i_MaxRetries
 
-        If Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") <> $a_i_SecondaryProfession Then
+        If Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") <> $l_i_ProfSecondary Then
             Log_Error("Failed to change secondary profession after " & $l_i_MaxRetries & " attempts", "LoadAttributes", $g_h_EditText)
             Return False
         EndIf
     EndIf
 
+	; Check pre-existing Attributes
+	Local $l_b_CorrectAttrLevels = True
+	For $i = 1 To $l_i_AttrCount
+		If Attribute_GetPartyAttributeInfo($a_ai2_AttributesArray[$i][0], $a_i_HeroNumber, "BaseLevel") <> $a_ai2_AttributesArray[$i][1] Then
+			$l_b_CorrectAttrLevels = False
+			ExitLoop
+		EndIf
+	Next
+
+	If $l_b_CorrectAttrLevels Then Return True
+	
     ; Validate and clamp attribute levels
-    For $l_i_Idx = 0 To UBound($a_ai2_AttributesArray) - 1
-        If $a_ai2_AttributesArray[$l_i_Idx][1] > 12 Then $a_ai2_AttributesArray[$l_i_Idx][1] = 12
-        If $a_ai2_AttributesArray[$l_i_Idx][1] < 0 Then $a_ai2_AttributesArray[$l_i_Idx][1] = 0
+    For $i = 1 To $l_i_AttrCount
+        If $a_ai2_AttributesArray[$i][1] > $GC_I_ATTRIBUTE_MAX_VALUE Then $a_ai2_AttributesArray[$i][1] = $GC_I_ATTRIBUTE_MAX_VALUE
+        If $a_ai2_AttributesArray[$i][1] < $GC_I_ATTRIBUTE_MIN_VALUE Then $a_ai2_AttributesArray[$i][1] = $GC_I_ATTRIBUTE_MIN_VALUE
     Next
 
-    While Attribute_GetPartyAttributeInfo($l_i_PrimaryAttribute, $a_i_HeroNumber, "BaseLevel") > $a_ai2_AttributesArray[0][1]
-        $l_i_Level = Attribute_GetPartyAttributeInfo($l_i_PrimaryAttribute, $a_i_HeroNumber, "BaseLevel")
-        $l_i_Deadlock = TimerInit()
+	Local $l_i_TotalAttributePoints = Attribute_GetPartyAttributePointInfo($a_i_HeroNumber, "TotalPoints")
+    If $l_i_TotalAttributePoints < $GC_I_ATTRIBUTE_MAX_ATTR_POINTS Then Attribute_CalculateAttributeSpread($a_ai2_AttributesArray, $l_i_TotalAttributePoints)
 
-        If Not Attribute_DecreaseAttribute($l_i_PrimaryAttribute, 1, $a_i_HeroNumber) Then
-            Log_Error("Failed to decrease primary attribute", "LoadAttributes", $g_h_EditText)
-            Return False
-        EndIf
+    Local $l_i_AttrID = $GC_I_ATTRIBUTE_NONE, $l_i_TargetAttrLevel = $GC_I_ATTRIBUTE_MIN_VALUE
 
-        Do
-            Sleep(32)
-        Until Attribute_GetPartyAttributeInfo($l_i_PrimaryAttribute, $a_i_HeroNumber, "BaseLevel") < $l_i_Level Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
+    ; Decrease
+    For $i = 0 To UBound($GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION, $UBOUND_ROWS) - 1
+		If $GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION[$i][0] <> $l_i_ProfPrimary _
+		And $GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION[$i][0] <> $l_i_ProfSecondary Then ContinueLoop
 
-        If TimerDiff($l_i_Deadlock) > $l_i_Timeout Then
-            Log_Warning("Timeout decreasing primary attribute", "LoadAttributes", $g_h_EditText)
-            ExitLoop
-        EndIf
-    WEnd
+		For $j = 1 To UBound($GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION, $UBOUND_COLUMNS) - 1 
+			Local $l_i_AttrID = $GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION[$i][$j]
+			If $l_i_AttrID = "" Then ExitLoop
 
-    ; Phase 2: Decrease secondary attributes to target levels
-    Log_Debug("Phase 2: Adjusting secondary attributes", "LoadAttributes", $g_h_EditText)
-
-    For $l_i_Idx = 1 To UBound($a_ai2_AttributesArray) - 1
-        Local $l_i_AttrID = $a_ai2_AttributesArray[$l_i_Idx][0]
-        Local $l_i_TargetLevel = $a_ai2_AttributesArray[$l_i_Idx][1]
-
-        While Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") > $l_i_TargetLevel
-            $l_i_Level = Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel")
-            $l_i_Deadlock = TimerInit()
-
-            If Not Attribute_DecreaseAttribute($l_i_AttrID, 1, $a_i_HeroNumber) Then
-                Log_Warning("Failed to decrease attribute " & $l_i_AttrID, "LoadAttributes", $g_h_EditText)
-                ExitLoop
-            EndIf
-
-            Do
-                Sleep(32)
-            Until Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") < $l_i_Level Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
-
-            If TimerDiff($l_i_Deadlock) > $l_i_Timeout Then
-                Log_Warning("Timeout decreasing attribute " & $l_i_AttrID, "LoadAttributes", $g_h_EditText)
-                ExitLoop
-            EndIf
-        WEnd
-    Next
-
-    For $l_i_Idx = 0 To 44
-        If Attribute_GetPartyAttributeInfo($l_i_Idx, $a_i_HeroNumber, "BaseLevel") > 0 Then
-            ; Skip primary attribute
-            If $l_i_Idx = $l_i_PrimaryAttribute Then ContinueLoop
-
-            ; Skip attributes that are in our target list
-            Local $l_b_SkipAttribute = False
-            For $l_i_JIdx = 1 To UBound($a_ai2_AttributesArray) - 1
-                If $l_i_Idx = $a_ai2_AttributesArray[$l_i_JIdx][0] Then
-                    $l_b_SkipAttribute = True
+            $l_i_TargetAttrLevel = $GC_I_ATTRIBUTE_MIN_VALUE
+            For $k = 1 To $l_i_AttrCount
+                If $l_i_AttrID = $a_ai2_AttributesArray[$k][0] Then
+                    $l_i_TargetAttrLevel = $a_ai2_AttributesArray[$k][1]
                     ExitLoop
                 EndIf
             Next
-            If $l_b_SkipAttribute Then ContinueLoop
 
-            ; Reset this attribute to 0
-            While Attribute_GetPartyAttributeInfo($l_i_Idx, $a_i_HeroNumber, "BaseLevel") > 0
-                $l_i_Level = Attribute_GetPartyAttributeInfo($l_i_Idx, $a_i_HeroNumber, "BaseLevel")
-                $l_i_Deadlock = TimerInit()
+            While Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") > $l_i_TargetAttrLevel
+                $l_i_AttrLevel = Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel")
+                $l_h_Timeout = TimerInit()
 
-                If Not Attribute_DecreaseAttribute($l_i_Idx, 1, $a_i_HeroNumber) Then
-                    Log_Warning("Failed to reset attribute " & $l_i_Idx, "LoadAttributes", $g_h_EditText)
+                If Not Attribute_DecreaseAttribute($l_i_AttrID, 1, $a_i_HeroNumber) Then
+                    Log_Warning("Failed to reset attribute " & $l_i_AttrID, "LoadAttributes", $g_h_EditText)
                     ExitLoop
                 EndIf
 
                 Do
                     Sleep(32)
-                Until Attribute_GetPartyAttributeInfo($l_i_Idx, $a_i_HeroNumber, "BaseLevel") < $l_i_Level Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
+                Until Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") < $l_i_AttrLevel Or TimerDiff($l_h_Timeout) > $l_i_TimeoutThreshold
 
-                If TimerDiff($l_i_Deadlock) > $l_i_Timeout Then
-                    Log_Warning("Timeout resetting attribute " & $l_i_Idx, "LoadAttributes", $g_h_EditText)
+                If TimerDiff($l_h_Timeout) > $l_i_TimeoutThreshold Then
+                    Log_Warning("Timeout resetting attribute " & $l_i_AttrID, "LoadAttributes", $g_h_EditText)
                     ExitLoop
                 EndIf
             WEnd
-        EndIf
-    Next
 
-    $l_i_TestTimer = 0
-    While Attribute_GetPartyAttributeInfo($l_i_PrimaryAttribute, $a_i_HeroNumber, "BaseLevel") < $a_ai2_AttributesArray[0][1]
-        $l_i_Level = Attribute_GetPartyAttributeInfo($l_i_PrimaryAttribute, $a_i_HeroNumber, "BaseLevel")
-        $l_i_Deadlock = TimerInit()
+		Next
+	Next
 
-        If Not Attribute_IncreaseAttribute($l_i_PrimaryAttribute, 1, $a_i_HeroNumber) Then
-            Log_Error("Failed to increase primary attribute", "LoadAttributes", $g_h_EditText)
-            ExitLoop
-        EndIf
+    ; Increase
+    For $i = 1 To $l_i_AttrCount
+        $l_i_AttrID = $a_ai2_AttributesArray[$i][0]
+        $l_i_TargetAttrLevel = $a_ai2_AttributesArray[$i][1]
 
-        Do
-            Sleep(32)
-            $l_i_TestTimer += 1
-        Until Attribute_GetPartyAttributeInfo($l_i_PrimaryAttribute, $a_i_HeroNumber, "BaseLevel") > $l_i_Level Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
-
-        If TimerDiff($l_i_Deadlock) > $l_i_Timeout Or $l_i_TestTimer > 225 Then
-            Log_Warning("Timeout or max attempts reached for primary attribute", "LoadAttributes", $g_h_EditText)
-            ExitLoop
-        EndIf
-    WEnd
-
-    For $l_i_Idx = 1 To UBound($a_ai2_AttributesArray) - 1
-        Local $l_i_AttrID = $a_ai2_AttributesArray[$l_i_Idx][0]
-        Local $l_i_TargetLevel = $a_ai2_AttributesArray[$l_i_Idx][1]
-
-        $l_i_TestTimer = 0
-        While Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") < $l_i_TargetLevel
-            $l_i_Level = Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel")
-            $l_i_Deadlock = TimerInit()
+        While Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") < $l_i_TargetAttrLevel
+            $l_i_AttrLevel = Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel")
+            $l_h_Timeout = TimerInit()
 
             If Not Attribute_IncreaseAttribute($l_i_AttrID, 1, $a_i_HeroNumber) Then
                 Log_Warning("Failed to increase attribute " & $l_i_AttrID, "LoadAttributes", $g_h_EditText)
@@ -354,17 +293,65 @@ Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_SecondaryProfession, 
 
             Do
                 Sleep(32)
-                $l_i_TestTimer += 1
-            Until Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") > $l_i_Level Or TimerDiff($l_i_Deadlock) > $l_i_Timeout
+            Until Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "BaseLevel") > $l_i_AttrLevel Or TimerDiff($l_h_Timeout) > $l_i_TimeoutThreshold
 
-            If TimerDiff($l_i_Deadlock) > $l_i_Timeout Or $l_i_TestTimer > 225 Then
-                Log_Warning("Timeout or max attempts reached for attribute " & $l_i_AttrID, "LoadAttributes", $g_h_EditText)
+            If TimerDiff($l_h_Timeout) > $l_i_TimeoutThreshold Then
+                Log_Warning("Timeout increasing attribute " & $l_i_AttrID, "LoadAttributes", $g_h_EditText)
                 ExitLoop
             EndIf
         WEnd
     Next
 
     Return True
+EndFunc
+
+Func Attribute_CalculateAttributeSpread(ByRef $a_ai2_AttributeArray, $a_i_AttributePoints)
+    Local Const $LC_AI2_ATTRIBUTE_COSTS[12] = [1, 2, 3, 4, 5, 6, 7, 9, 11, 13, 16, 20]
+
+    Local $l_i_AttributeCount = UBound($a_ai2_AttributeArray, $UBOUND_ROWS) - 1
+    If $l_i_AttributeCount <= 0 Or $a_i_AttributePoints <= 0 Then Return $a_i_AttributePoints
+
+    Local $l_ai2_TargetLevels[$l_i_AttributeCount + 1]
+    Local $l_i_MaxTargetLevel = $GC_I_ATTRIBUTE_MIN_VALUE
+
+    For $i = 1 To $l_i_AttributeCount
+        Local $l_i_TargetAttributeLevel = $a_ai2_AttributeArray[$i][1]
+        $l_ai2_TargetLevels[$i] = $l_i_TargetAttributeLevel
+
+        $a_ai2_AttributeArray[$i][1] = $GC_I_ATTRIBUTE_MIN_VALUE
+
+        If $l_i_TargetAttributeLevel > $l_i_MaxTargetLevel Then $l_i_MaxTargetLevel = $l_i_TargetAttributeLevel
+    Next
+
+    If $l_i_MaxTargetLevel <= 0 Then Return $a_i_AttributePoints
+
+    While $a_i_AttributePoints > 0
+        Local $l_b_CanIncrease = False
+
+        For $attributeLevel = $l_i_MaxTargetLevel To 1 Step -1
+            For $j = 1 To $l_i_AttributeCount
+                Local $l_i_TargetAttributeLevel = $l_ai2_TargetLevels[$j]
+                If $l_i_TargetAttributeLevel < $attributeLevel Then ContinueLoop
+
+                Local $l_i_CurrentAttributeLevel = $a_ai2_AttributeArray[$j][1]
+                If $l_i_CurrentAttributeLevel >= $l_i_TargetAttributeLevel _
+                Or $l_i_CurrentAttributeLevel >= $GC_I_ATTRIBUTE_MAX_VALUE Then ContinueLoop
+
+                Local $l_i_AttributeCost = $LC_AI2_ATTRIBUTE_COSTS[$l_i_CurrentAttributeLevel]
+                If $a_i_AttributePoints < $l_i_AttributeCost Then ContinueLoop
+
+                $a_ai2_AttributeArray[$j][1] = $l_i_CurrentAttributeLevel + 1
+                $a_i_AttributePoints -= $l_i_AttributeCost
+                $l_b_CanIncrease = True
+
+                If $a_i_AttributePoints = 0 Then ExitLoop 2
+            Next
+        Next
+
+        If Not $l_b_CanIncrease Then ExitLoop
+    WEnd
+
+    Return $a_i_AttributePoints
 EndFunc
 
 ;~ Description: Change your secondary profession.

@@ -471,7 +471,7 @@ Func BestTarget_HeroicRefrain($a_f_AggroRange)
 	; Elite Echo. For 3...13...15 seconds, target non-spirit ally gains +1...3...3 to all attributes. This echo is reapplied every time a chant or shout ends on that ally. PvE Skill
 	; Concise description
 	; Elite Echo. (3...13...15 seconds.) Target ally gains +1...3...3 to all attributes. Renewal: every time a chant or shout ends on this ally. Cannot target spirits. PvE Skill
-	If Attribute_GetPartyAttributeInfo($GC_I_ATTR_LEADERSHIP, 0, "CurrentLevel") < 20 Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	If Attribute_GetPartyAttributeInfo($GC_I_ATTRIBUTE_LEADERSHIP, 0, "CurrentLevel") < 20 Then Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
 
 	Local $l_ai_PartyArray = Party_GetMembersArray()
 

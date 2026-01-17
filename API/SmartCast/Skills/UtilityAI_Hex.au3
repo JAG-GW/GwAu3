@@ -80,7 +80,10 @@ Func BestTarget_Empathy($a_f_AggroRange)
 	; Hex Spell. (5...13...15 seconds.) Target foe's attacks deal 1...12...15 less damage, and that foe takes 10...46...55 damage with each attack.
 	; Concise description
 	; Spell. (5...13...15 seconds.) Target foe's attacks deal 1...12...15 less damage, and that foe takes 10...46...55 damage with each attack.
-	Return 0
+	; Target attacking enemies for maximum effect
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsAttacking")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 28 - $GC_I_SKILL_ID_BACKFIRE
@@ -94,7 +97,13 @@ Func BestTarget_Backfire($a_f_AggroRange)
 	; Hex Spell. (10 seconds.) Target foe takes 35...119...140 damage whenever it casts a spell.
 	; Concise description
 	; Spell. (10 seconds.) Target foe takes 35...119...140 damage whenever it casts a spell.
-	Return 0
+	; Target casting enemies for maximum effect
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCasting")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	; Target casters (elementalists, monks, mesmers, necromancers)
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 30 - $GC_I_SKILL_ID_DIVERSION
@@ -122,7 +131,7 @@ Func BestTarget_ConjurePhantasm($a_f_AggroRange)
 	; Hex Spell. (2...13...16 seconds.) Causes -5 Health degeneration.
 	; Concise description
 	; Spell. (2...13...16 seconds.) Causes -5 Health degeneration.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 35 - $GC_I_SKILL_ID_IGNORANCE
@@ -174,7 +183,7 @@ Func BestTarget_Clumsiness($a_f_AggroRange)
 	; Hex Spell. (4 seconds.) Also hexes adjacent foes. Interrupts next attack. Interruption effect: deals 10...76...92 damage.
 	; Concise description
 	; Spell. (4 seconds.) Also hexes adjacent foes. Interrupts next attack. Interruption effect: deals 10...76...92 damage.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 44 - $GC_I_SKILL_ID_PHANTOM_PAIN
@@ -230,7 +239,7 @@ Func BestTarget_Ineptitude($a_f_AggroRange)
 	; Elite Hex Spell. (4 seconds.) Also hexes foes adjacent to target. Deals 30...114...135 damage. Inflicts Blindness condition (10 seconds). No effect unless hexed foe attacks.
 	; Concise description
 	; Hex Spell. (4 seconds.) Also hexes foes adjacent to target. Deals 30...114...135 damage. Inflicts Blindness condition (10 seconds). No effect unless hexed foe attacks.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 48 - $GC_I_SKILL_ID_SPIRIT_OF_FAILURE
@@ -384,7 +393,10 @@ Func BestTarget_ImaginedBurden($a_f_AggroRange)
 	; Hex Spell. (8...18...20 seconds.) Target foe moves 50% slower.
 	; Concise description
 	; Spell. (8...18...20 seconds.) Target foe moves 50% slower.
-	Return 0
+	; Target moving enemies for snare effect
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsMoving")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 99 - $GC_I_SKILL_ID_PARASITIC_BOND
@@ -412,7 +424,7 @@ Func BestTarget_SoulBarbs($a_f_AggroRange)
 	; Hex Spell. (30 seconds.) Deals 15...27...30 damage when an enchantment or hex is cast on target foe.
 	; Concise description
 	; Spell. (30 seconds.) Deals 15...27...30 damage when an enchantment or hex is cast on target foe.
-	Return 0
+	Return UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 101 - $GC_I_SKILL_ID_BARBS
@@ -464,7 +476,7 @@ Func BestTarget_LifeSiphon($a_f_AggroRange)
 	; Hex Spell. (12...22...24 seconds.) Target foe has -1...3...3 Health degeneration. You have +1...3...3 Health regeneration.
 	; Concise description
 	; Spell. (12...22...24 seconds.) Target foe has -1...3...3 Health degeneration. You have +1...3...3 Health regeneration.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 121 - $GC_I_SKILL_ID_SPITEFUL_SPIRIT
@@ -600,7 +612,10 @@ Func BestTarget_Faintheartedness($a_f_AggroRange)
 	; Hex Spell. (3...13...16 seconds.) Target foe attacks 50% slower and has -0...2...3 Health degeneration.
 	; Concise description
 	; Spell. (3...13...16 seconds.) Target foe attacks 50% slower and has -0...2...3 Health degeneration.
-	Return 0
+	; Target attacking enemies for maximum effect
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsAttacking")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 136 - $GC_I_SKILL_ID_SHADOW_OF_FEAR
@@ -2308,7 +2323,7 @@ Func BestTarget_WanderingEye($a_f_AggroRange)
 	; Hex Spell. (4 seconds.) Interrupts target foe's next attack. Interruption effect: 30...94...110 damage to nearby foes.
 	; Concise description
 	; Spell. (4 seconds.) Interrupts target foe's next attack. Interruption effect: 30...94...110 damage to nearby foes.
-	Return 0
+	Return UAI_GetBestAOETarget(-2, 1320, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 2058 - $GC_I_SKILL_ID_PUTRID_BILE

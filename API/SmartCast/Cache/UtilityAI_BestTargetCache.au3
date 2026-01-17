@@ -138,8 +138,6 @@ Func UAI_GetBestTargetFunc($a_i_SkillSlot)
 			Return "BestTarget_DrainEnchantment"
 		Case $GC_I_SKILL_ID_SHATTER_ENCHANTMENT
 			Return "BestTarget_ShatterEnchantment"
-		Case $GC_I_SKILL_ID_DISAPPEAR
-			Return "BestTarget_Disappear"
 		Case $GC_I_SKILL_ID_UNNATURAL_SIGNET_ALPHA_VERSION
 			Return "BestTarget_UnnaturalSignetAlphaVersion"
 		Case $GC_I_SKILL_ID_ELEMENTAL_RESISTANCE

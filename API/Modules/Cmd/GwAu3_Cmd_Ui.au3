@@ -6,6 +6,24 @@ Func Ui_Dialog($a_i_DialogID)
     Core_Enqueue($g_p_Dialog, 8)
 EndFunc   ;==>Ui_Dialog
 
+;~ Description: Sends dialog ID for Accept Quest.
+Func Ui_AcceptQuest($a_i_QuestID)
+    DllStructSetData($g_d_Dialog, 2, '0x008' & Hex($a_i_QuestID, 3) & '01')
+    Core_Enqueue($g_p_Dialog, 8)
+EndFunc   ;==>Ui_AcceptQuest
+
+;~ Description: Sends dialog ID for Quest Update.
+Func Ui_UpdateQuest($a_i_QuestID)
+    DllStructSetData($g_d_Dialog, 2, '0x008' & Hex($a_i_QuestID, 3) & '04')
+    Core_Enqueue($g_p_Dialog, 8)
+EndFunc   ;==>Ui_UpdateQuest
+
+;~ Description: Sends dialog ID for Quest Reward.
+Func Ui_RewardQuest($a_i_QuestID)
+    DllStructSetData($g_d_Dialog, 2, '0x008' & Hex($a_i_QuestID, 3) & '07')
+    Core_Enqueue($g_p_Dialog, 8)
+EndFunc   ;==>Ui_RewardQuest
+
 ;~ Description: Open targeted chest using dialog options. (0x1 = Use Key, 0x2 = Use Lockpick, 0x80 = Cancel)
 Func Ui_OpenChest($a_b_UseLockpick = True)
     If $a_b_UseLockpick Then

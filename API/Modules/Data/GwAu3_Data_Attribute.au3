@@ -2,7 +2,7 @@
 
 Func Attribute_GetAttributeName($a_i_AttributeID)
     If $a_i_AttributeID >= 0 And $a_i_AttributeID < 45 Then
-        Return $g_as_AttributeNames[$a_i_AttributeID]
+        Return $GC_AS_ATTRIBUTE_NAMES[$a_i_AttributeID]
     EndIf
     Return "Unknown"
 EndFunc
@@ -44,6 +44,7 @@ Func Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0, $a_s
     Else
         $l_i_AgentID = World_GetWorldInfo("MyID")
     EndIf
+
     Local $l_av_Buffer
     Local $l_ai_Offset[5]
     $l_ai_Offset[0] = 0
@@ -55,7 +56,7 @@ Func Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0, $a_s
         $l_ai_Offset[4] = 0x43C * $l_i_Idx
         $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
 
-        If $l_av_Buffer[1] == $l_i_AgentID Then
+        If $l_av_Buffer[1] = $l_i_AgentID Then
             Local $l_i_BaseAttrOffset = 0x43C * $l_i_Idx + 0x14 * $a_i_AttributeID + 0x4
 
             Switch $a_s_Info
@@ -108,6 +109,47 @@ Func Attribute_GetPartyAttributeInfo($a_i_AttributeID, $a_i_HeroNumber = 0, $a_s
     Next
     Return 0
 EndFunc
+
+Func Attribute_GetPartyAttributePointInfo($a_i_HeroNumber = 0, $a_s_Info = "")
+    Local $l_i_AgentID
+    If $a_i_HeroNumber <> 0 Then
+        $l_i_AgentID = Party_GetMyPartyHeroInfo($a_i_HeroNumber, "AgentID")
+    Else
+        $l_i_AgentID = World_GetWorldInfo("MyID")
+    EndIf
+
+    Local $l_av_Buffer
+    Local $l_ai_Offset[5]
+    $l_ai_Offset[0] = 0
+    $l_ai_Offset[1] = 0x18
+    $l_ai_Offset[2] = 0x2C
+    $l_ai_Offset[3] = 0xAC
+
+    For $l_i_Idx = 0 To World_GetWorldInfo("PartyAttributeArraySize")
+        $l_ai_Offset[4] = 0x43C * $l_i_Idx
+        $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+
+        If $l_av_Buffer[1] = $l_i_AgentID Then
+            Local $l_i_AttrCount = 45
+            Local $l_i_BaseAttrPointOffset = 0x43C * $l_i_Idx + 0x14 * $l_i_AttrCount + 0xB0
+
+            Switch $a_s_Info
+                Case "UnusedPoints"
+                    $l_ai_Offset[4] = $l_i_BaseAttrPointOffset
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    Return $l_av_Buffer[1]
+                Case "TotalPoints"
+                    $l_ai_Offset[4] = $l_i_BaseAttrPointOffset + 0x4
+                    $l_av_Buffer = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset)
+                    Return $l_av_Buffer[1]
+                Case Else
+                    Return 0
+            EndSwitch
+        EndIf
+    Next
+    Return 0
+EndFunc
+
 
 Func Attribute_GetProfPrimaryAttribute($a_i_Profession)
     Switch $a_i_Profession

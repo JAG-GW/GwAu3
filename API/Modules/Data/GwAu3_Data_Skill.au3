@@ -1296,7 +1296,7 @@ Func Skill_IsAttributeMysticism($a_i_SkillID)
 EndFunc
 
 Func Skill_IsAttributeNone($a_i_SkillID)
-	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_ATTR_ID_NONE)
+	Return Skill_IsSkillAttribute($a_i_SkillID, $GC_I_ATTRIBUTE_NONE)
 EndFunc
 #EndRegion Attribute
 

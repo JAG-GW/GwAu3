@@ -72,8 +72,10 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 		EndIf
 
 ;~ 	MOVE IF TOO FARHEST
-		If $a_f_x <> 0 Or $a_f_y <> 0 Then
-			If Agent_GetDistanceToXY($a_f_x, $a_f_y) > $a_f_MaxDistanceToXY Then ExitLoop
+		If $a_f_MaxDistanceToXY <> 0 Then
+			If $a_f_x <> 0 Or $a_f_y <> 0 Then
+				If Agent_GetDistanceToXY($a_f_x, $a_f_y) > $a_f_MaxDistanceToXY Then ExitLoop
+			EndIf
 		EndIf
 	Next
 	Return True
