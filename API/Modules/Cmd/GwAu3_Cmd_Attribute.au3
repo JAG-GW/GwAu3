@@ -185,8 +185,8 @@ Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_HeroNumber = 0)
         $l_i_HeroID = World_GetWorldInfo("MyID")
     EndIf
   
-	Local $l_i_ProfPrimary = $a_ai2_AttributesArray[0][0] ; Store primary attribute ID
-	Local $l_i_ProfSecondary = $a_ai2_AttributesArray[0][1] ; Store secondary attribute ID
+	Local $l_i_ProfPrimary = $a_ai2_AttributesArray[0][0] ; Store primary profession ID
+	Local $l_i_ProfSecondary = $a_ai2_AttributesArray[0][1] ; Store secondary profession ID
 
     Local $l_i_AttrCount = UBound($a_ai2_AttributesArray) - 1
     Local $l_i_AttrLevel = $GC_I_ATTRIBUTE_MIN_VALUE
@@ -245,7 +245,7 @@ Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_HeroNumber = 0)
 
 		For $j = 1 To UBound($GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION, $UBOUND_COLUMNS) - 1 
 			Local $l_i_AttrID = $GC_AI2_ALL_ATTRIBUTES_BY_PROFESSION[$i][$j]
-			If $l_i_AttrID = "" Then ExitLoop
+			If $l_i_AttrID == "" Then ExitLoop
 
             $l_i_TargetAttrLevel = $GC_I_ATTRIBUTE_MIN_VALUE
             For $k = 1 To $l_i_AttrCount
