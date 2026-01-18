@@ -733,6 +733,11 @@ Global Const $GC_AI_CONSET[4] = [ 3, _
 ]
 #EndRegion Consumable Crafted Items
 
+#Region Flames of Balthazar
+Global Const $GC_I_MODELID_FLAME_OF_BALTHAZAR = 2514
+Global Const $GC_I_MODELID_GOLDEN_FLAME_OF_BALTHAZAR = 22188
+#EndRegion Flames of Balthazar
+
 #Region Alcohol
 Global Const $GC_I_MODELID_HUNTERS_ALE = 910
 Global Const $GC_I_MODELID_FLASK_OF_FIREWATER = 2513
@@ -1496,7 +1501,6 @@ Global Const $GC_AI_KEYS[27] = [ 26, _
     $GC_I_MODELID_LOCKPICK, _
     $GC_I_MODELID_ZAISHEN_KEY _
 ]
-
 #EndRegion Keys
 
 #Region Hero Armor Upgrades
@@ -1515,7 +1519,7 @@ Global Const $GC_AI_ALL_HERO_ARMOR_UPGRADES[7] = [ 6, _
     $GC_I_MODELID_DELDRIMOR_ARMOR_REMNANT, _
     $GC_I_MODELID_CLOTH_OF_THE_BROTHERHOOD _
 ]
-#EndRegion Hero_Armor_Upgrades
+#EndRegion Hero Armor Upgrades
 
 #Region Endgame Rewards
 Global Const $GC_I_MODELID_AMULET_OF_THE_MISTS = 6069
