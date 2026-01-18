@@ -4085,7 +4085,7 @@ Func Map_GetPathToUnlockCity($a_i_CityID)
 	$l_a_Result[1] = $l_a_Empty
 
 	; Si déjà débloqué, retourner directement
-	If Map_IsMapUnlocked($a_i_CityID) And Map_IsValidOutpost($a_i_CityID) Then
+	If Map_IsMapUnlocked($a_i_CityID) And Map_IsOutpost($a_i_CityID) Then
 		$l_a_Result[0] = $a_i_CityID
 		Return $l_a_Result
 	EndIf
