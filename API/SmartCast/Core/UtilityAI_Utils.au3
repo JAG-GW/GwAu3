@@ -116,7 +116,6 @@ Func Party_GetAvailableRezz()
 	Local $l_i_HeroRezzSkills = 0
 	Local $l_i_HeroCount = Party_GetHeroCount()
 	For $aHeroNumber = 1 To $l_i_HeroCount
-		$aHeroPtr = GetHeroPtr($aHeroNumber)
 		For $aSkillSlot = 1 To 8
 			$aSkill = Skill_GetSlotByID($aSkillSlot, $aHeroNumber)
 			If Skill_HasSpecialFlag($aSkill, $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION) Then
