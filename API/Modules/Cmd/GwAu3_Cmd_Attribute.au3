@@ -195,25 +195,27 @@ Func Attribute_LoadAttributes($a_ai2_AttributesArray, $a_i_HeroNumber = 0)
     Local $l_i_RetryCount = 0, $l_i_MaxRetries = 10
 	
     ; Change secondary profession if needed
-    If $l_i_ProfSecondary <> $GC_I_PROFESSION_NONE _ 
-    And Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") <> $l_i_ProfSecondary _
-    And Party_GetPartyProfessionInfo($l_i_HeroID, "Primary") <> $l_i_ProfSecondary Then
-        Log_Info("Changing secondary profession to: " & $l_i_ProfSecondary, "LoadAttributes", $g_h_EditText)
-        Do
-            $l_h_Timeout = TimerInit()
-            Attribute_ChangeSecondProfession($l_i_ProfSecondary, $a_i_HeroNumber)
-
-            Do
-                Sleep(32)
-            Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $l_i_ProfSecondary Or TimerDiff($l_h_Timeout) > $l_i_TimeoutThreshold
-
-            $l_i_RetryCount += 1
-        Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $l_i_ProfSecondary Or $l_i_RetryCount >= $l_i_MaxRetries
-
+    If $l_i_ProfSecondary <> $GC_I_PROFESSION_NONE Then 
         If Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") <> $l_i_ProfSecondary Then
-            Log_Error("Failed to change secondary profession after " & $l_i_MaxRetries & " attempts", "LoadAttributes", $g_h_EditText)
-            Return False
+            Log_Info("Changing secondary profession to: " & $l_i_ProfSecondary, "LoadAttributes", $g_h_EditText)
+            Do
+                $l_h_Timeout = TimerInit()
+                Attribute_ChangeSecondProfession($l_i_ProfSecondary, $a_i_HeroNumber)
+
+                Do
+                    Sleep(32)
+                Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $l_i_ProfSecondary Or TimerDiff($l_h_Timeout) > $l_i_TimeoutThreshold
+
+                $l_i_RetryCount += 1
+            Until Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") = $l_i_ProfSecondary Or $l_i_RetryCount >= $l_i_MaxRetries
+
+            If Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary") <> $l_i_ProfSecondary Then
+                Log_Error("Failed to change secondary profession after " & $l_i_MaxRetries & " attempts", "LoadAttributes", $g_h_EditText)
+                Return False
+            EndIf
         EndIf
+    Else
+        $l_i_ProfSecondary = Party_GetPartyProfessionInfo($l_i_HeroID, "Secondary")
     EndIf
 
 	; Check pre-existing Attributes
