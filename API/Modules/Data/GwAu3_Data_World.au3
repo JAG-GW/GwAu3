@@ -254,4 +254,120 @@ Func World_GetSkillDuplicateCount($a_i_SkillID)
 
     Return 0
 EndFunc
+
+; ============================================================================
+; Mission State Constants
+; ============================================================================
+Global Const $c_MissionState_None = 0
+Global Const $c_MissionState_Primary = 1      ; Mission completed (basic)
+Global Const $c_MissionState_Expert = 2       ; Expert (Prophecies: bonus, Factions/NF: completed)
+Global Const $c_MissionState_Master = 4       ; Master (Factions/NF: bonus)
+
+; ============================================================================
+; World_MissionGetState - Get mission completion state for a given map
+; Parameters:
+;   $a_i_MapID    - The map ID to check
+;   $a_b_HardMode - True for Hard Mode, False for Normal Mode (default)
+; Returns:
+;   Bitfield with mission state flags:
+;   - $c_MissionState_Primary (1) = Basic completion
+;   - $c_MissionState_Expert  (2) = Expert completion
+;   - $c_MissionState_Master  (4) = Master completion
+;   Returns 0 if not a mission map or not completed
+; ============================================================================
+Func World_MissionGetState($a_i_MapID, $a_b_HardMode = False)
+    ; Check if this is a valid mission map
+    Local $l_i_RegionType = Map_GetAreaInfo($a_i_MapID, "RegionType")
+    If $l_i_RegionType = 0 Then Return 0
+
+    ; Only missions, cooperative missions, and dungeons have completion state
+    Switch $l_i_RegionType
+        Case $GC_I_MAP_REGIONTYPE_CooperativeMission, $GC_I_MAP_REGIONTYPE_MissionOutpost, $GC_I_MAP_REGIONTYPE_Dungeon
+            ; Valid mission type
+        Case Else
+            Return 0
+    EndSwitch
+
+    ; Get completion arrays from WorldContext
+    Local $l_p_WorldContext = World_GetWorldContextPtr()
+    If $l_p_WorldContext = 0 Then Return 0
+
+    Local $l_p_CompletedArray, $l_p_BonusArray
+    Local $l_i_CompletedSize, $l_i_BonusSize
+
+    If $a_b_HardMode Then
+        $l_p_CompletedArray = Memory_Read($l_p_WorldContext + 0x5EC, "ptr")
+        $l_i_CompletedSize = Memory_Read($l_p_WorldContext + 0x5EC + 0x8, "long")
+        $l_p_BonusArray = Memory_Read($l_p_WorldContext + 0x5FC, "ptr")
+        $l_i_BonusSize = Memory_Read($l_p_WorldContext + 0x5FC + 0x8, "long")
+    Else
+        $l_p_CompletedArray = Memory_Read($l_p_WorldContext + 0x5CC, "ptr")
+        $l_i_CompletedSize = Memory_Read($l_p_WorldContext + 0x5CC + 0x8, "long")
+        $l_p_BonusArray = Memory_Read($l_p_WorldContext + 0x5DC, "ptr")
+        $l_i_BonusSize = Memory_Read($l_p_WorldContext + 0x5DC + 0x8, "long")
+    EndIf
+
+    ; Read completion status using bitfield
+    Local $l_b_Complete = Utils_Array_BoolAt($l_p_CompletedArray, $l_i_CompletedSize, $a_i_MapID)
+    Local $l_b_Bonus = Utils_Array_BoolAt($l_p_BonusArray, $l_i_BonusSize, $a_i_MapID)
+
+    ; Determine state based on campaign
+    Local $l_i_Campaign = Map_GetAreaInfo($a_i_MapID, "Campaign")
+
+    Local $l_b_Primary = $l_b_Complete
+    Local $l_b_Expert = $l_b_Bonus
+    Local $l_b_Master = False
+
+    ; Factions and Nightfall have different completion logic:
+    ; - Master = bonus
+    ; - Expert = completed
+    ; - Primary = any
+    Switch $l_i_Campaign
+        Case $GC_I_MAP_CAMPAIGN_FACTIONS, $GC_I_MAP_CAMPAIGN_NIGHTFALL
+            $l_b_Master = $l_b_Bonus
+            $l_b_Expert = $l_b_Complete
+            $l_b_Primary = $l_b_Master Or $l_b_Expert
+    EndSwitch
+
+    ; Build state bitfield
+    Local $l_i_State = 0
+    If $l_b_Primary Then $l_i_State = BitOR($l_i_State, $c_MissionState_Primary)
+    If $l_b_Expert Then $l_i_State = BitOR($l_i_State, $c_MissionState_Expert)
+    If $l_b_Master Then $l_i_State = BitOR($l_i_State, $c_MissionState_Master)
+
+    Return $l_i_State
+EndFunc
+
+; ============================================================================
+; World_MissionIsCompleted - Check if a mission is completed
+; Parameters:
+;   $a_i_MapID    - The map ID to check
+;   $a_b_HardMode - True for Hard Mode, False for Normal Mode (default)
+; Returns: True if mission has any completion, False otherwise
+; ============================================================================
+Func World_MissionIsCompleted($a_i_MapID, $a_b_HardMode = False)
+    Return BitAND(World_MissionGetState($a_i_MapID, $a_b_HardMode), $c_MissionState_Primary) <> 0
+EndFunc
+
+; ============================================================================
+; World_MissionHasExpert - Check if a mission has expert completion
+; Parameters:
+;   $a_i_MapID    - The map ID to check
+;   $a_b_HardMode - True for Hard Mode, False for Normal Mode (default)
+; Returns: True if expert completed, False otherwise
+; ============================================================================
+Func World_MissionHasExpert($a_i_MapID, $a_b_HardMode = False)
+    Return BitAND(World_MissionGetState($a_i_MapID, $a_b_HardMode), $c_MissionState_Expert) <> 0
+EndFunc
+
+; ============================================================================
+; World_MissionHasMaster - Check if a mission has master completion
+; Parameters:
+;   $a_i_MapID    - The map ID to check
+;   $a_b_HardMode - True for Hard Mode, False for Normal Mode (default)
+; Returns: True if master completed, False otherwise
+; ============================================================================
+Func World_MissionHasMaster($a_i_MapID, $a_b_HardMode = False)
+    Return BitAND(World_MissionGetState($a_i_MapID, $a_b_HardMode), $c_MissionState_Master) <> 0
+EndFunc
 #EndRegion World Context

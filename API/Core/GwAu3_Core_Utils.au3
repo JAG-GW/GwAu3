@@ -288,3 +288,20 @@ Func Utils_Array_ToAutoItArray($a_p_Array, $a_s_Type = "ptr", $a_i_ElementSize =
 
     Return $l_a_Result
 EndFunc
+
+; ============================================================================
+; Internal helper - Read a boolean from a bitfield array
+; ============================================================================
+Func Utils_Array_BoolAt($a_p_Array, $a_i_ArraySize, $a_i_Index)
+    If $a_p_Array = 0 Then Return False
+
+    Local $l_i_RealIndex = Floor($a_i_Index / 32)
+    If $l_i_RealIndex >= $a_i_ArraySize Then Return False
+
+    Local $l_i_Shift = Mod($a_i_Index, 32)
+    Local $l_i_Flag = BitShift(1, -$l_i_Shift)  ; 1 << shift
+
+    Local $l_i_Value = Memory_Read($a_p_Array + ($l_i_RealIndex * 4), "dword")
+
+    Return BitAND($l_i_Value, $l_i_Flag) <> 0
+EndFunc
