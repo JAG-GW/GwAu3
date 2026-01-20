@@ -384,10 +384,10 @@ Func Map_IsOutpost($a_i_MapID)
 	If BitAND($l_i_Flags, 0x80000000) = 0x80000000 Then Return False
 
 	; Check RegionType - must be one of the valid outpost types
-	; 5 = Mission Outpost, 6 = Cooperative Mission, 7 = Competitive Mission
+	; 1 = Arena, 5 = Mission Outpost, 6 = Cooperative Mission, 7 = Competitive Mission
 	; 8 = Elite Mission, 9 = Challenge, 10 = Outpost, 13 = City
 	Switch $l_i_RegionType
-		Case 5, 6, 7, 8, 9, 10, 13, 19
+		Case 1, 5, 6, 7, 8, 9, 10, 13, 19
 			Return True
 		Case Else
 			Return False
