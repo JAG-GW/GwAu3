@@ -49,16 +49,16 @@ Func Trade_GetPlayerTradeItemsInfo($a_i_TradeSlot = 0, $a_s_Info = "")
     Local $l_i_ItemCount = Trade_GetTradeInfo("PlayerItemCount")
     If $l_i_ItemCount = 0 Or $a_i_TradeSlot >= $l_i_ItemCount Then Return 0
 
-    Local $l_p_ItemPtr = $l_p_ItemsPtr + ($a_i_TradeSlot * 8)
-    Local $l_i_ItemID = Memory_Read($l_p_ItemPtr, "long")
+    Local $l_p_ItemPtr = $l_p_ItemsPtr + ($a_i_TradeSlot * 0x8)
 
     Switch $a_s_Info
         Case "ItemID"
-            Return $l_i_ItemID
+            Return Memory_Read($l_p_ItemPtr, "long")
         Case "Quantity"
             Return Memory_Read($l_p_ItemPtr + 4, "long")
         Case "ModelID"
-            Return Item_GetItemInfoByPtr($l_p_ItemPtr, "ModelID")
+            Local $l_i_ItemID = Memory_Read($l_p_ItemPtr, "long")
+            Return Item_GetItemInfoByItemID($l_i_ItemID, "ModelID")
     EndSwitch
 
     Return 0
@@ -71,16 +71,16 @@ Func Trade_GetPartnerTradeItemsInfo($a_i_TradeSlot = 0, $a_s_Info = "")
     Local $l_i_ItemCount = Trade_GetTradeInfo("PartnerItemCount")
     If $l_i_ItemCount = 0 Or $a_i_TradeSlot >= $l_i_ItemCount Then Return 0
 
-    Local $l_p_ItemPtr = $l_p_ItemsPtr + ($a_i_TradeSlot * 8)
-    Local $l_i_ItemID = Memory_Read($l_p_ItemPtr, "long")
+    Local $l_p_ItemPtr = $l_p_ItemsPtr + ($a_i_TradeSlot * 0x8)
 
     Switch $a_s_Info
         Case "ItemID"
-            Return $l_i_ItemID
+            Return Memory_Read($l_p_ItemPtr, "long")
         Case "Quantity"
             Return Memory_Read($l_p_ItemPtr + 4, "long")
         Case "ModelID"
-            Return Item_GetItemInfoByPtr($l_p_ItemPtr, "ModelID")
+            Local $l_i_ItemID = Memory_Read($l_p_ItemPtr, "long")
+            Return Item_GetItemInfoByItemID($l_i_ItemID, "ModelID")
     EndSwitch
 
     Return 0
