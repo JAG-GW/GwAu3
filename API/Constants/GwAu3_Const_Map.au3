@@ -1785,11 +1785,11 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[27, "Griffons Mouth", 1, "Prophecies", 0, "Kryta", 3, "Northern Shiverpeaks", 2, "Explorable Zone"], _
 		[28, "The Great Northern Wall", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 5, "Mission Outpost"], _
 		[29, "Fort Ranik", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 5, "Mission Outpost"], _
-		[30, "Ruinsof Surmia", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 5, "Mission Outpost"], _
+		[30, "Ruins of Surmia", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 5, "Mission Outpost"], _
 		[31, "Xaquang Skyway", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
 		[32, "Nolani Academy", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 5, "Mission Outpost"], _
 		[33, "Old Ascalon", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 2, "Explorable Zone"], _
-		[34, "The Fissureof Woe", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 2, "Explorable Zone"], _
+		[34, "The Fissure of Woe", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 2, "Explorable Zone"], _
 		[35, "Ember Light Camp", 1, "Prophecies", 0, "Kryta", 6, "Fissure Of Woe", 10, "Outpost"], _
 		[36, "Grendich Courthouse", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 10, "Outpost"], _
 		[37, "Glint Challenge", 4, "Eye Of The North", 0, "Kryta", 5, "Crystal Desert", 9, "Challenge"], _
@@ -1804,11 +1804,11 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[46, "The Falls", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
 		[47, "Dry Top", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
 		[48, "Tangle Root", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
-		[49, "Hengeof Denravi", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 13, "City"], _
+		[49, "Henge of Denravi", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 13, "City"], _
 		[50, "Test Map", 0, "Core", 3, "Battle Isles", 2, "Ascalon", 2, "Explorable Zone"], _
 		[51, "Senjis Corner", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 10, "Outpost"], _
 		[52, "Burning Isle", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 4, "Guild Hall"], _
-		[53, "Tearsofthe Fallen", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
+		[53, "Tears of the Fallen", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[54, "Scoundrels Rise", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[55, "Lions Arch", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 13, "City"], _
 		[56, "Cursed Lands", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
@@ -1826,7 +1826,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[68, "Frozen Isle", 0, "Core", 3, "Battle Isles", 3, "Northern Shiverpeaks", 2, "Explorable Zone"], _
 		[69, "Nomads Isle", 0, "Core", 3, "Battle Isles", 5, "Crystal Desert", 2, "Explorable Zone"], _
 		[70, "Druids Isle", 0, "Core", 3, "Battle Isles", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
-		[71, "Isleofthe Dead", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 2, "Explorable Zone"], _
+		[71, "Isle of the Dead", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 2, "Explorable Zone"], _
 		[72, "The Underworld", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 2, "Explorable Zone"], _
 		[73, "Riverside Province", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 5, "Mission Outpost"], _
 		[74, "Tournament6", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
@@ -1837,7 +1837,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[79, "Unholy Temples", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 		[80, "Burial Mounds", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 		[81, "Ascalon City", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 13, "City"], _
-		[82, "Tombofthe Primeval Kings", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 10, "Outpost"], _
+		[82, "Tomb of the Primeval Kings", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 10, "Outpost"], _
 		[83, "The Vault", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 		[84, "The Underworld", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 12, "Heroes Ascent"], _
 		[85, "Ascalon Arena", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 1, "Arena"], _
@@ -1871,13 +1871,13 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[113, "Prophets Path", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 2, "Explorable Zone"], _
 		[114, "Salt Flats", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 2, "Explorable Zone"], _
 		[115, "Skyward Reach", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 2, "Explorable Zone"], _
-		[116, "Dunesof Despair", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 5, "Mission Outpost"], _
+		[116, "Dunes of Despair", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 5, "Mission Outpost"], _
 		[117, "Thirsty River", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 5, "Mission Outpost"], _
 		[118, "Elona Reach", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 5, "Mission Outpost"], _
 		[119, "Augury Rock", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 5, "Mission Outpost"], _
 		[120, "The Dragons Lair", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 5, "Mission Outpost"], _
 		[121, "Perdition Rock", 1, "Prophecies", 0, "Kryta", 6, "Fissure Of Woe", 2, "Explorable Zone"], _
-		[122, "Ringof Fire", 1, "Prophecies", 0, "Kryta", 6, "Fissure Of Woe", 5, "Mission Outpost"], _
+		[122, "Ring of Fire", 1, "Prophecies", 0, "Kryta", 6, "Fissure Of Woe", 5, "Mission Outpost"], _
 		[123, "Abaddons Mouth", 1, "Prophecies", 0, "Kryta", 6, "Fissure Of Woe", 5, "Mission Outpost"], _
 		[124, "Hells Precipice", 1, "Prophecies", 0, "Kryta", 6, "Fissure Of Woe", 5, "Mission Outpost"], _
 		[125, "Titans Tears", 1, "Prophecies", 0, "Kryta", 6, "Fissure Of Woe", 5, "Mission Outpost"], _
@@ -1893,7 +1893,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[135, "Frontier Gate", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 10, "Outpost"], _
 		[136, "Beetletun", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 10, "Outpost"], _
 		[137, "Fishermens Haven", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 10, "Outpost"], _
-		[138, "Templeofthe Ages", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 10, "Outpost"], _
+		[138, "Temple of the Ages", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 10, "Outpost"], _
 		[139, "Ventaris Refuge", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 10, "Outpost"], _
 		[140, "Druids Overlook", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 10, "Outpost"], _
 		[141, "Maguuma Stade", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 10, "Outpost"], _
@@ -1930,11 +1930,11 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[172, "Hunters Isle", 0, "Core", 3, "Battle Isles", 0, "Kryta", 3, "Guild Battle Area"], _
 		[173, "Wizards Isle", 0, "Core", 3, "Battle Isles", 0, "Kryta", 3, "Guild Battle Area"], _
 		[174, "Nomads Isle", 0, "Core", 3, "Battle Isles", 5, "Crystal Desert", 3, "Guild Battle Area"], _
-		[175, "Isleofthe Dead", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 3, "Guild Battle Area"], _
+		[175, "Isle of the Dead", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 3, "Guild Battle Area"], _
 		[176, "Frozen Isle", 0, "Core", 3, "Battle Isles", 3, "Northern Shiverpeaks", 4, "Guild Hall"], _
 		[177, "Nomads Isle", 0, "Core", 3, "Battle Isles", 5, "Crystal Desert", 4, "Guild Hall"], _
 		[178, "Druids Isle", 0, "Core", 3, "Battle Isles", 1, "Maguuma Jungle", 4, "Guild Hall"], _
-		[179, "Isleofthe Dead", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 4, "Guild Hall"], _
+		[179, "Isle of the Dead", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 4, "Guild Hall"], _
 		[180, "Fort Koga", 0, "Core", 3, "Battle Isles", 1, "Maguuma Jungle", 1, "Arena"], _
 		[181, "Shiverpeak Arena", 1, "Prophecies", 0, "Kryta", 3, "Northern Shiverpeaks", 1, "Arena"], _
 		[182, "Amnoon Arena", 0, "Core", 3, "Battle Isles", 5, "Crystal Desert", 1, "Arena"], _
@@ -2003,7 +2003,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[245, "Minister Chos Estate", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
 		[246, "Zen Daijun", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
 		[247, "Boreas Seabed", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 2, "Explorable Zone"], _
-		[248, "Great Templeof Balthazar", 0, "Core", 3, "Battle Isles", 21, "Battle Islands", 13, "City"], _
+		[248, "Great Temple of Balthazar", 0, "Core", 3, "Battle Isles", 21, "Battle Islands", 13, "City"], _
 		[249, "Tsumei Village", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 10, "Outpost"], _
 		[250, "Seitung Harbor", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 10, "Outpost"], _
 		[251, "Ran Musu Gardens", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 10, "Outpost"], _
@@ -2030,12 +2030,12 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[272, "Altrumm Ruins", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 9, "Challenge"], _
 		[273, "Zos Shivros Channel", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 9, "Challenge"], _
 		[274, "Dragons Throat", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 9, "Challenge"], _
-		[275, "Isleof Weeping Stone", 0, "Core", 3, "Battle Isles", 9, "Echovald Forest", 4, "Guild Hall"], _
-		[276, "Isleof Jade", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 4, "Guild Hall"], _
+		[275, "Isle of Weeping Stone", 0, "Core", 3, "Battle Isles", 9, "Echovald Forest", 4, "Guild Hall"], _
+		[276, "Isle of Jade", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 4, "Guild Hall"], _
 		[277, "Harvest Temple", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 10, "Outpost"], _
 		[278, "Breaker Hollow", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 10, "Outpost"], _
 		[279, "Leviathan Pits", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 10, "Outpost"], _
-		[280, "Isleofthe Nameless", 0, "Core", 3, "Battle Isles", 21, "Battle Islands", 2, "Explorable Zone"], _
+		[280, "Isle of the Nameless", 0, "Core", 3, "Battle Isles", 21, "Battle Islands", 2, "Explorable Zone"], _
 		[281, "Zaishen Challenge", 0, "Core", 3, "Battle Isles", 21, "Battle Islands", 11, "Zaishen Battle"], _
 		[282, "Zaishen Elite", 0, "Core", 3, "Battle Isles", 21, "Battle Islands", 11, "Zaishen Battle"], _
 		[283, "Maatu Keep", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 10, "Outpost"], _
@@ -2110,22 +2110,22 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[352, "Brawlers Pit", 0, "Core", 3, "Battle Isles", 8, "Kaineng City", 1, "Arena"], _
 		[353, "Petrified Arena", 0, "Core", 3, "Battle Isles", 9, "Echovald Forest", 1, "Arena"], _
 		[354, "Seabed Arena", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 1, "Arena"], _
-		[355, "Isleof Weeping Stone", 0, "Core", 3, "Battle Isles", 9, "Echovald Forest", 3, "Guild Battle Area"], _
-		[356, "Isleof Jade", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 3, "Guild Battle Area"], _
+		[355, "Isle of Weeping Stone", 0, "Core", 3, "Battle Isles", 9, "Echovald Forest", 3, "Guild Battle Area"], _
+		[356, "Isle of Jade", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 3, "Guild Battle Area"], _
 		[357, "Imperial Isle", 0, "Core", 3, "Battle Isles", 8, "Kaineng City", 3, "Guild Battle Area"], _
-		[358, "Isleof Meditation", 0, "Core", 3, "Battle Isles", 0, "Kryta", 3, "Guild Battle Area"], _
+		[358, "Isle of Meditation", 0, "Core", 3, "Battle Isles", 0, "Kryta", 3, "Guild Battle Area"], _
 		[359, "Imperial Isle", 0, "Core", 3, "Battle Isles", 8, "Kaineng City", 4, "Guild Hall"], _
-		[360, "Isleof Meditation", 0, "Core", 3, "Battle Isles", 0, "Kryta", 4, "Guild Hall"], _
-		[361, "Isleof Weeping Stone", 0, "Core", 3, "Battle Isles", 9, "Echovald Forest", 2, "Explorable Zone"], _
-		[362, "Isleof Jade", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 2, "Explorable Zone"], _
+		[360, "Isle of Meditation", 0, "Core", 3, "Battle Isles", 0, "Kryta", 4, "Guild Hall"], _
+		[361, "Isle of Weeping Stone", 0, "Core", 3, "Battle Isles", 9, "Echovald Forest", 2, "Explorable Zone"], _
+		[362, "Isle of Jade", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 2, "Explorable Zone"], _
 		[363, "Imperial Isle", 0, "Core", 3, "Battle Isles", 8, "Kaineng City", 2, "Explorable Zone"], _
-		[364, "Isleof Meditation", 0, "Core", 3, "Battle Isles", 0, "Kryta", 2, "Explorable Zone"], _
+		[364, "Isle of Meditation", 0, "Core", 3, "Battle Isles", 0, "Kryta", 2, "Explorable Zone"], _
 		[365, "Random Arenas Test", 0, "Core", 3, "Battle Isles", 21, "Battle Islands", 1, "Arena"], _
 		[366, "Shing Jea Arena", 0, "Core", 3, "Battle Isles", 11, "Shing Jea Island", 1, "Arena"], _
 		[367, "All Skills", 0, "Core", 3, "Battle Isles", 6, "Fissure Of Woe", 2, "Explorable Zone"], _
 		[368, "Dragon Arena", 0, "Core", 3, "Battle Isles", 8, "Kaineng City", 1, "Arena"], _
 		[369, "Jahai Bluffs", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
-		[370, "Kamadan Jewelof Istan", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
+		[370, "Kamadan Jewel of Istan", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
 		[371, "Marga Coast", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
 		[372, "Fahranur", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[373, "Sunward Marches", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
@@ -2139,7 +2139,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[381, "Yohlon Haven", 3, "Nightfall", 4, "Elona", 12, "Kourna", 10, "Outpost"], _
 		[382, "Gandarathe Moon Fortress", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
 		[383, "Vortex", 3, "Nightfall", 5, "Realm Of Torment", 27, "Dev Region", 21, "Dev Region"], _
-		[384, "The Floodplainof Mahnkelon", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
+		[384, "The Floodplain of Mahnkelon", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
 		[385, "Lions Archduring Sunspearsin Kryta", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[386, "Turais Procession", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
 		[387, "Sunspear Sanctuary", 3, "Nightfall", 4, "Elona", 12, "Kourna", 13, "City"], _
@@ -2148,9 +2148,9 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[390, "Jade Flats Kurzick", 2, "Factions", 2, "Cantha", 9, "Echovald Forest", 10, "Outpost"], _
 		[391, "Jade Flats Luxon", 2, "Factions", 2, "Cantha", 10, "Jade Sea", 10, "Outpost"], _
 		[392, "Yatendi Canyons", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
-		[393, "Chantryof Secrets", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 10, "Outpost"], _
-		[394, "Gardenof Seborhin", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
-		[395, "Holdingsof Chokhin", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
+		[393, "Chantry of Secrets", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 10, "Outpost"], _
+		[394, "Garden of Seborhin", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
+		[395, "Holdings of Chokhin", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[396, "Mihanu Township", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 10, "Outpost"], _
 		[397, "Vehjin Mines", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[398, "Basalt Grotto", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 10, "Outpost"], _
@@ -2159,7 +2159,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[401, "Sebelkeh Basilica", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[402, "Resplendent Makuun", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[403, "Honur Hill", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 10, "Outpost"], _
-		[404, "Wildernessof Bahdza", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
+		[404, "Wilderness of Bahdza", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[405, "Sun Docks", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
 		[406, "Vehtendi Valley", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[407, "Yahnur Market", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 10, "Outpost"], _
@@ -2168,13 +2168,13 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[410, "Here Be Dragons", 0, "Core", 3, "Battle Isles", 7, "Pre Searing Ascalon", 2, "Explorable Zone"], _
 		[411, "Here Be Dragons", 0, "Core", 3, "Battle Isles", 7, "Pre Searing Ascalon", 2, "Explorable Zone"], _
 		[412, "Here Be Dragons", 0, "Core", 3, "Battle Isles", 7, "Pre Searing Ascalon", 2, "Explorable Zone"], _
-		[413, "The Hidden Cityof Ahdashim", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
+		[413, "The Hidden City of Ahdashim", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[414, "The Kodash Bazaar", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 13, "City"], _
 		[415, "Lions Gate", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[416, "Monastery Overlook", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 14, "Mission Area"], _
 		[417, "Bejunkan Pier", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 14, "Mission Area"], _
 		[418, "Lions Gate", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 14, "Mission Area"], _
-		[419, "The Mirrorof Lyss", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
+		[419, "The Mirror of Lyss", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[420, "Securethe Refuge", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
 		[421, "Venta Cemetery", 3, "Nightfall", 4, "Elona", 12, "Kourna", 5, "Mission Outpost"], _
 		[422, "Bad Tide Rising Kamadan", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
@@ -2185,28 +2185,28 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[427, "Moddok Crevice", 3, "Nightfall", 4, "Elona", 12, "Kourna", 5, "Mission Outpost"], _
 		[428, "Tihark Orchard", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 5, "Mission Outpost"], _
 		[429, "Consulate", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
-		[430, "Plainsof Jarin", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
+		[430, "Plains of Jarin", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[431, "Sunspear Great Hall", 3, "Nightfall", 4, "Elona", 15, "Istan", 10, "Outpost"], _
-		[432, "Cliffsof Dohjok", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
+		[432, "Cliffs of Dohjok", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[433, "Dzagonur Bastion", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 5, "Mission Outpost"], _
 		[434, "Dasha Vestibule", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 5, "Mission Outpost"], _
-		[435, "Grand Courtof Sebelkeh", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 5, "Mission Outpost"], _
+		[435, "Grand Court of Sebelkeh", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 5, "Mission Outpost"], _
 		[436, "Command Post", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
 		[437, "Jokos Domain", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
 		[438, "Bone Palace", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 10, "Outpost"], _
 		[439, "The Ruptured Heart", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
-		[440, "The Mouthof Torment", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 10, "Outpost"], _
+		[440, "The Mouth of Torment", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 10, "Outpost"], _
 		[441, "The Shattered Ravines", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
-		[442, "Lairofthe Forgotten", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 10, "Outpost"], _
+		[442, "Lair of the Forgotten", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 10, "Outpost"], _
 		[443, "Poisoned Outcrops", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
 		[444, "The Sulfurous Wastes", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
-		[445, "The Ebony Citadelof Mallyx", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 8, "Elite Mission"], _
+		[445, "The Ebony Citadel of Mallyx", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 8, "Elite Mission"], _
 		[446, "The Alkali Pan", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
-		[447, "ALandof Heroes", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
+		[447, "ALand of Heroes", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[448, "Crystal Overlook", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
-		[449, "Kamadan Jewelof Istan", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
-		[450, "Gateof Torment", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 13, "City"], _
-		[451, "Gateof Anguish", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 8, "Elite Mission"], _
+		[449, "Kamadan Jewel of Istan", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
+		[450, "Gate of Torment", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 13, "City"], _
+		[451, "Gate of Anguish", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 8, "Elite Mission"], _
 		[452, "Securethe Refuge", 3, "Nightfall", 4, "Elona", 12, "Kourna", 14, "Mission Area"], _
 		[453, "Evacuation", 3, "Nightfall", 4, "Elona", 12, "Kourna", 14, "Mission Area"], _
 		[454, "Test Map", 0, "Core", 3, "Battle Isles", 2, "Ascalon", 5, "Mission Outpost"], _
@@ -2217,25 +2217,25 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[459, "Rilohn Refuge", 3, "Nightfall", 4, "Elona", 12, "Kourna", 14, "Mission Area"], _
 		[460, "Pogahn Passage", 3, "Nightfall", 4, "Elona", 12, "Kourna", 14, "Mission Area"], _
 		[461, "The Underworld", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 2, "Explorable Zone"], _
-		[462, "Heartof Abaddon", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
+		[462, "Heart of Abaddon", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
 		[463, "The Underworld", 0, "Core", 3, "Battle Isles", 4, "Heroes Ascent", 2, "Explorable Zone"], _
 		[464, "Nightfallen Coast", 3, "Nightfall", 4, "Elona", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
 		[465, "Nightfallen Jahai", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
-		[466, "Depthsof Madness", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
+		[466, "Depths of Madness", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
 		[467, "Rollerbeetle Racing", 0, "Core", 3, "Battle Isles", 10, "Jade Sea", 1, "Arena"], _
-		[468, "Domainof Fear", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
-		[469, "Gateof Fear", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 10, "Outpost"], _
-		[470, "Domainof Pain", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
+		[468, "Domain of Fear", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
+		[469, "Gate of Fear", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 10, "Outpost"], _
+		[470, "Domain of Pain", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
 		[471, "Bloodstone Fen", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
-		[472, "Domainof Secrets", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
-		[473, "Gateof Secrets", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 10, "Outpost"], _
-		[474, "Domainof Anguish", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 8, "Elite Mission"], _
+		[472, "Domain of Secrets", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
+		[473, "Gate of Secrets", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 10, "Outpost"], _
+		[474, "Domain of Anguish", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 8, "Elite Mission"], _
 		[475, "Ooze Pit", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[476, "Jennurs Horde", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 5, "Mission Outpost"], _
 		[477, "Nundu Bay", 3, "Nightfall", 4, "Elona", 12, "Kourna", 5, "Mission Outpost"], _
-		[478, "Gateof Desolation", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 5, "Mission Outpost"], _
+		[478, "Gate of Desolation", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 5, "Mission Outpost"], _
 		[479, "Champions Dawn", 3, "Nightfall", 4, "Elona", 15, "Istan", 10, "Outpost"], _
-		[480, "Ruinsof Morah", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 5, "Mission Outpost"], _
+		[480, "Ruins of Morah", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 5, "Mission Outpost"], _
 		[481, "Fahranur The First City", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[482, "Bjora Marches", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
 		[483, "Zehlon Reach", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
@@ -2245,12 +2245,12 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[487, "Beknur Harbor", 3, "Nightfall", 4, "Elona", 15, "Istan", 10, "Outpost"], _
 		[488, "Mehtani Keys", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[489, "Kodlonu Hamlet", 3, "Nightfall", 4, "Elona", 15, "Istan", 10, "Outpost"], _
-		[490, "Islandof Shehkah", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
+		[490, "Island of Shehkah", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[491, "Jokanur Diggings", 3, "Nightfall", 4, "Elona", 15, "Istan", 5, "Mission Outpost"], _
 		[492, "Blacktide Den", 3, "Nightfall", 4, "Elona", 15, "Istan", 5, "Mission Outpost"], _
 		[493, "Consulate Docks", 3, "Nightfall", 4, "Elona", 12, "Kourna", 5, "Mission Outpost"], _
-		[494, "Gateof Pain", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 5, "Mission Outpost"], _
-		[495, "Gateof Madness", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 5, "Mission Outpost"], _
+		[494, "Gate of Pain", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 5, "Mission Outpost"], _
+		[495, "Gate of Madness", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 5, "Mission Outpost"], _
 		[496, "Abaddons Gate", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 5, "Mission Outpost"], _
 		[497, "Sunspear Arena", 3, "Nightfall", 4, "Elona", 15, "Istan", 1, "Arena"], _
 		[498, "Unknown", 3, "Nightfall", 4, "Elona", 12, "Kourna", 21, "Dev Region"], _
@@ -2258,7 +2258,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[500, "Bokka Amphitheatre", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[501, "Riven Earth", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 2, "Explorable Zone"], _
 		[502, "The Astralarium", 3, "Nightfall", 4, "Elona", 15, "Istan", 10, "Outpost"], _
-		[503, "Throneof Secrets", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
+		[503, "Throne of Secrets", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
 		[504, "Churranu Island Arena", 0, "Core", 3, "Battle Isles", 12, "Kourna", 1, "Arena"], _
 		[505, "Shing Jea Monastery", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
 		[506, "Haiju Lagoon", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
@@ -2269,38 +2269,38 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[511, "Tsumei Village", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
 		[512, "Minister Chos Estate", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
 		[513, "Drakkar Lake", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
-		[514, "Islandof Shehkah", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
+		[514, "Island of Shehkah", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
 		[515, "Jokanur Diggings", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
 		[516, "Blacktide Den", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
 		[517, "Consulate Docks", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
 		[518, "Tihark Orchard", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 14, "Mission Area"], _
 		[519, "Dzagonur Bastion", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 14, "Mission Area"], _
-		[520, "Hidden Cityof Ahdashim", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 14, "Mission Area"], _
-		[521, "Grand Courtof Sebelkeh", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 14, "Mission Area"], _
+		[520, "Hidden City of Ahdashim", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 14, "Mission Area"], _
+		[521, "Grand Court of Sebelkeh", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 14, "Mission Area"], _
 		[522, "Jennurs Horde", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 14, "Mission Area"], _
 		[523, "Nundu Bay", 3, "Nightfall", 4, "Elona", 12, "Kourna", 14, "Mission Area"], _
-		[524, "Gatesof Desolation", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 14, "Mission Area"], _
-		[525, "Ruinsof Morah", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 14, "Mission Area"], _
-		[526, "Domainof Pain", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 14, "Mission Area"], _
-		[527, "Gateof Madness", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 14, "Mission Area"], _
+		[524, "Gates of Desolation", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 14, "Mission Area"], _
+		[525, "Ruins of Morah", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 14, "Mission Area"], _
+		[526, "Domain of Pain", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 14, "Mission Area"], _
+		[527, "Gate of Madness", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 14, "Mission Area"], _
 		[528, "Abaddons Gate", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 14, "Mission Area"], _
 		[529, "Uncharted Isle", 0, "Core", 3, "Battle Isles", 15, "Istan", 4, "Guild Hall"], _
-		[530, "Isleof Wurms", 0, "Core", 3, "Battle Isles", 0, "Kryta", 4, "Guild Hall"], _
+		[530, "Isle of Wurms", 0, "Core", 3, "Battle Isles", 0, "Kryta", 4, "Guild Hall"], _
 		[531, "Uncharted Isle", 0, "Core", 3, "Battle Isles", 15, "Istan", 2, "Explorable Zone"], _
-		[532, "Isleof Wurms", 0, "Core", 3, "Battle Isles", 0, "Kryta", 2, "Explorable Zone"], _
+		[532, "Isle of Wurms", 0, "Core", 3, "Battle Isles", 0, "Kryta", 2, "Explorable Zone"], _
 		[533, "Uncharted Isle", 0, "Core", 3, "Battle Isles", 15, "Istan", 3, "Guild Battle Area"], _
-		[534, "Isleof Wurms", 0, "Core", 3, "Battle Isles", 0, "Kryta", 3, "Guild Battle Area"], _
+		[534, "Isle of Wurms", 0, "Core", 3, "Battle Isles", 0, "Kryta", 3, "Guild Battle Area"], _
 		[535, "Ahmtur Arena", 0, "Core", 3, "Battle Isles", 13, "Vabbi", 1, "Arena"], _
 		[536, "Sunspear Arena", 0, "Core", 3, "Battle Isles", 15, "Istan", 1, "Arena"], _
 		[537, "Corrupted Isle", 0, "Core", 3, "Battle Isles", 16, "Domain Of Anguish", 4, "Guild Hall"], _
-		[538, "Isleof Solitude", 0, "Core", 3, "Battle Isles", 12, "Kourna", 4, "Guild Hall"], _
+		[538, "Isle of Solitude", 0, "Core", 3, "Battle Isles", 12, "Kourna", 4, "Guild Hall"], _
 		[539, "Corrupted Isle", 0, "Core", 3, "Battle Isles", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
-		[540, "Isleof Solitude", 0, "Core", 3, "Battle Isles", 12, "Kourna", 2, "Explorable Zone"], _
+		[540, "Isle of Solitude", 0, "Core", 3, "Battle Isles", 12, "Kourna", 2, "Explorable Zone"], _
 		[541, "Corrupted Isle", 0, "Core", 3, "Battle Isles", 16, "Domain Of Anguish", 3, "Guild Battle Area"], _
-		[542, "Isleof Solitude", 0, "Core", 3, "Battle Isles", 12, "Kourna", 3, "Guild Battle Area"], _
+		[542, "Isle of Solitude", 0, "Core", 3, "Battle Isles", 12, "Kourna", 3, "Guild Battle Area"], _
 		[543, "Sun Docks", 3, "Nightfall", 4, "Elona", 15, "Istan", 2, "Explorable Zone"], _
 		[544, "Chahbek Village", 3, "Nightfall", 4, "Elona", 15, "Istan", 5, "Mission Outpost"], _
-		[545, "Remainsof Sahlahja", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 9, "Challenge"], _
+		[545, "Remains of Sahlahja", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 9, "Challenge"], _
 		[546, "Jaga Moraine", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
 		[547, "Bombardment", 0, "Core", 3, "Battle Isles", 13, "Vabbi", 16, "Hero Battle Area"], _
 		[548, "Norrhart Domains", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
@@ -2314,19 +2314,19 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[556, "Chahbek Village", 3, "Nightfall", 4, "Elona", 15, "Istan", 14, "Mission Area"], _
 		[557, "Throne Of Secrets", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 10, "Outpost"], _
 		[558, "Sparkfly Swamp", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 2, "Explorable Zone"], _
-		[559, "Gateofthe Nightfallen Lands", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 10, "Outpost"], _
-		[560, "Cathedralof Flames", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[559, "Gate of the Nightfallen Lands", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 10, "Outpost"], _
+		[560, "Cathedral of Flames", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[561, "The Troubled Keeper", 3, "Nightfall", 5, "Realm Of Torment", 16, "Domain Of Anguish", 2, "Explorable Zone"], _
-		[562, "Fortressof Jahai", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
+		[562, "Fortress of Jahai", 3, "Nightfall", 4, "Elona", 12, "Kourna", 2, "Explorable Zone"], _
 		[563, "Halls of Chokhin", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
-		[564, "Citadelof Dzagon", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
+		[564, "Citadel of Dzagon", 3, "Nightfall", 4, "Elona", 13, "Vabbi", 2, "Explorable Zone"], _
 		[565, "Dynastic Tombs", 3, "Nightfall", 4, "Elona", 14, "The Desolation", 2, "Explorable Zone"], _
 		[566, "Verdant Cascades", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 2, "Explorable Zone"], _
-		[567, "Cathedralof Flames Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[568, "Cathedralof Flames Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[567, "Cathedral of Flames Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[568, "Cathedral of Flames Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[569, "Magus Stones", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 2, "Explorable Zone"], _
-		[570, "Catacombsof Kathandrax Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[571, "Catacombsof Kathandrax Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[570, "Catacombs of Kathandrax Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[571, "Catacombs of Kathandrax Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[572, "Alcazia Tangle", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 2, "Explorable Zone"], _
 		[573, "Rragars Menagerie Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[574, "Rragars Menagerie Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
@@ -2336,9 +2336,9 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[578, "Oolas Lab Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[579, "Oolas Lab Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[580, "Oolas Lab Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[581, "Shardsof Oor Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[582, "Shardsof Oor Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[583, "Shardsof Oor Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[581, "Shards of Oor Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[582, "Shards of Oor Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[583, "Shards of Oor Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[584, "Arachnis Haunt Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[585, "Arachnis Haunt Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[586, "Burning Embers", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
@@ -2362,9 +2362,9 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[604, "Vloxen Excavations Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[605, "Vloxen Excavations Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[606, "Vloxen Excavations Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[607, "Heartofthe Shiverpeaks Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[608, "Heartofthe Shiverpeaks Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[609, "Heartofthe Shiverpeaks Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[607, "Heart of the Shiverpeaks Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[608, "Heart of the Shiverpeaks Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[609, "Heart of the Shiverpeaks Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[610, "The Journeyto Nornheim", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[611, "The Journeyto Nornheim", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[612, "Bloodstone Caves Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
@@ -2383,8 +2383,8 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[625, "Battledepths", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
 		[626, "Battledepths Level2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
 		[627, "Battledepths Level3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
-		[628, "Sepulchreof Dragrimmar Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[629, "Sepulchreof Dragrimmar Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[628, "Sepulchre of Dragrimmar Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[629, "Sepulchre of Dragrimmar Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[630, "Frostmaws Burrows Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[631, "Frostmaws Burrows Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[632, "Frostmaws Burrows Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
@@ -2397,7 +2397,7 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[639, "Umbral Grotto", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 10, "Outpost"], _
 		[640, "Rata Sum", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 13, "City"], _
 		[641, "Tarnished Haven", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 10, "Outpost"], _
-		[642, "Eyeofthe North", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
+		[642, "Eye of the North", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
 		[643, "Sifhalla", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
 		[644, "Gunnars Hold", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 13, "City"], _
 		[645, "Olafstead", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
@@ -2410,9 +2410,9 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[652, "Central Transfer Chamber", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 10, "Outpost"], _
 		[653, "Curseofthe Nornbear", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
 		[654, "Blood Washes Blood", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
-		[655, "AGate Too Far Lvl1", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 18, "Dungeon"], _
-		[656, "AGate Too Far Lvl2", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 18, "Dungeon"], _
-		[657, "AGate Too Far Lvl3", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 18, "Dungeon"], _
+		[655, "A Gate Too Far Lvl1", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 18, "Dungeon"], _
+		[656, "A Gate Too Far Lvl2", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 18, "Dungeon"], _
+		[657, "A Gate Too Far Lvl3", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 18, "Dungeon"], _
 		[658, "The Elusive Golemancer Lvl1", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 18, "Dungeon"], _
 		[659, "The Elusive Golemancer Lvl2", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 18, "Dungeon"], _
 		[660, "The Elusive Golemancer Lvl3", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 18, "Dungeon"], _
@@ -2421,19 +2421,19 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[663, "Findingthe Bloodstone Lvl3", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 18, "Dungeon"], _
 		[664, "Genius Operated Living Enchanted Manifestation", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 2, "Explorable Zone"], _
 		[665, "Againstthe Charr", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 2, "Explorable Zone"], _
-		[666, "Warbandof Brothers Lvl1", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 18, "Dungeon"], _
-		[667, "Warbandof Brothers Lvl2", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 18, "Dungeon"], _
-		[668, "Warbandof Brothers Lvl3", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 18, "Dungeon"], _
-		[669, "Assaultthe Stronghold", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 2, "Explorable Zone"], _
+		[666, "Warband of Brothers Lvl1", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 18, "Dungeon"], _
+		[667, "Warband of Brothers Lvl2", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 18, "Dungeon"], _
+		[668, "Warband of Brothers Lvl3", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 18, "Dungeon"], _
+		[669, "Assault the Stronghold", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 2, "Explorable Zone"], _
 		[670, "Destructions Depths Lvl1", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[671, "Destructions Depths Lvl2", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[672, "Destructions Depths Lvl3", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
-		[673, "ATimefor Heroes", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
+		[673, "A Timefor Heroes", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
 		[674, "Warband Training", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 2, "Explorable Zone"], _
 		[675, "Boreal Station", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
-		[676, "Catacombsof Kathandrax", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
+		[676, "Catacombs of Kathandrax", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 18, "Dungeon"], _
 		[677, "hall of Primordus", 4, "Eye Of The North", 0, "Kryta", 18, "Depths Of Tyria", 2, "Explorable Zone"], _
-		[678, "Attackofthe Nornbear", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
+		[678, "Attack of the Nornbear", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 2, "Explorable Zone"], _
 		[679, "Cinematic Cave Norn Cursed", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 14, "Mission Area"], _
 		[680, "Cinematic Steppe Interrogation", 4, "Eye Of The North", 0, "Kryta", 20, "Charr Homelands", 14, "Mission Area"], _
 		[681, "Cinematic Interior Research", 4, "Eye Of The North", 0, "Kryta", 17, "Tarnished Coast", 14, "Mission Area"], _
@@ -2569,14 +2569,14 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[811, "Ascalon City Wintersday", 1, "Prophecies", 0, "Kryta", 2, "Ascalon", 13, "City"], _
 		[812, "Droknars Forge Halloween", 1, "Prophecies", 0, "Kryta", 3, "Northern Shiverpeaks", 13, "City"], _
 		[813, "Droknars Forge Wintersday", 1, "Prophecies", 0, "Kryta", 3, "Northern Shiverpeaks", 13, "City"], _
-		[814, "Tombofthe Primeval Kings Halloween", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 10, "Outpost"], _
+		[814, "Tomb of the Primeval Kings Halloween", 1, "Prophecies", 0, "Kryta", 5, "Crystal Desert", 10, "Outpost"], _
 		[815, "Shing Jea Monastery Dragon Festival", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 13, "City"], _
 		[816, "Shing Jea Monastery Canthan New Year", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 13, "City"], _
 		[817, "Kaineng Center", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 13, "City"], _
-		[818, "Kamadan Jewelof Istan Halloween", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
-		[819, "Kamadan Jewelof Istan Wintersday", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
-		[820, "Kamadan Jewelof Istan Canthan New Year", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
-		[821, "Eyeofthe North Wintersday", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
+		[818, "Kamadan Jewel of Istan Halloween", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
+		[819, "Kamadan Jewel of Istan Wintersday", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
+		[820, "Kamadan Jewel of Istan Canthan New Year", 3, "Nightfall", 4, "Elona", 15, "Istan", 13, "City"], _
+		[821, "Eye of the North Wintersday", 4, "Eye Of The North", 0, "Kryta", 19, "Far Shiverpeaks", 10, "Outpost"], _
 		[822, "Unknown", 0, "Core", 3, "Battle Isles", 1, "Maguuma Jungle", 13, "City"], _
 		[823, "Unknown", 0, "Core", 3, "Battle Isles", 0, "Kryta", 1, "Arena"], _
 		[824, "Unknown", 0, "Core", 3, "Battle Isles", 5, "Crystal Desert", 1, "Arena"], _
@@ -2597,13 +2597,13 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[839, "Divinity Coast", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[840, "Lions Arch Keep", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[841, "DAlessio Seaboard", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
-		[842, "The Battlefor Lions Arch", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
+		[842, "The Battle for Lions Arch", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[843, "Riverside Province", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[844, "Warin Kryta Lions Arch", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[845, "The Mausoleum", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
 		[846, "Rise Map", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
-		[847, "Shadowsinthe Jungle", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
-		[848, "AVengeanceof Blades", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
+		[847, "Shadowsin the Jungle", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
+		[848, "A Vengeance of Blades", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[849, "Auspicious Beginnings", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[850, "Unknown", 1, "Prophecies", 0, "Kryta", 0, "Kryta", 2, "Explorable Zone"], _
 		[851, "Unknown", 1, "Prophecies", 0, "Kryta", 1, "Maguuma Jungle", 2, "Explorable Zone"], _
@@ -2616,10 +2616,10 @@ Global $g_a2D_MapArray[876][10] = [ _
 		[858, "Unknown", 0, "Core", 0, "Kryta", 26, "SWAT", 2, "Explorable Zone"], _
 		[859, "Unknown", 0, "Core", 0, "Kryta", 26, "SWAT", 2, "Explorable Zone"], _
 		[860, "What Waitsin Shadow Dragons Throat", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
-		[861, "AChance Encounter Kaineng Center", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
+		[861, "A Chance Encounter Kaineng Center", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
 		[862, "Trackingthe Corruption Marketplace", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
 		[863, "Cantha Courier Bukdek Byway", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
-		[864, "ATreatysa Treaty Tsumei Village", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
+		[864, "A Treatysa Treaty Tsumei Village", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
 		[865, "Deadly Cargo Seitung Harbor", 2, "Factions", 2, "Cantha", 11, "Shing Jea Island", 2, "Explorable Zone"], _
 		[866, "The Rescue Attempt Tahnnakai Temple", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _
 		[867, "Violenceinthe Streets Wajjun Bazaar", 2, "Factions", 2, "Cantha", 8, "Kaineng City", 2, "Explorable Zone"], _

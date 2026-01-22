@@ -1388,7 +1388,7 @@ EndFunc
 ; Skill ID: 281 - $GC_I_SKILL_ID_ORISON_OF_HEALING
 Func CanUse_OrisonOfHealing()
 	If Anti_Spell() Then Return False
-	; Only use if HP is below 70%
+	If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) > 0.8 Then Return False
 	Return True
 EndFunc
 
@@ -1397,7 +1397,7 @@ Func BestTarget_OrisonOfHealing($a_f_AggroRange)
 	; Spell. Heal target ally for 20...60...70 Health.
 	; Concise description
 	; Spell. Heals for 20...60...70.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly")
 EndFunc
 
 ; Skill ID: 282 - $GC_I_SKILL_ID_WORD_OF_HEALING
@@ -1417,10 +1417,23 @@ EndFunc
 ; Skill ID: 283 - $GC_I_SKILL_ID_DWAYNAS_KISS
 Func CanUse_DwaynasKiss()
 	If Anti_Spell() Then Return False
+	If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) > 0.8 Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_DwaynasKiss($a_f_AggroRange)
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe|UAI_Filter_IsEnchanted|UAI_Filter_IsHexed")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.8 And $l_i_Target <> 0 Then Return $l_i_Target
+
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe|UAI_Filter_IsHexed")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.8 And $l_i_Target <> 0 Then Return $l_i_Target
+
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe|UAI_Filter_IsEnchanted")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.8 And $l_i_Target <> 0 Then Return $l_i_Target
+
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.5 And $l_i_Target <> 0 Then Return $l_i_Target
+
 	Return 0
 EndFunc
 

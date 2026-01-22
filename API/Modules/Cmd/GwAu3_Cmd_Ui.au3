@@ -217,3 +217,8 @@ Func Ui_PurgeHook_($a_i_Time = 10000)
     Sleep($a_i_Time)
     Ui_ToggleRendering_()
 EndFunc ;==PurgeHook_
+
+Func Ui_ActiveQuest($a_i_QuestID)
+    DllStructSetData($g_d_ActiveQuest, 2, $a_i_QuestID)
+    Core_Enqueue($g_p_ActiveQuest, 8)
+EndFunc
