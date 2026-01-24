@@ -182,7 +182,7 @@ Func CanUse_ComfortAnimal()
 
     ; PetNumber starts at 1, not 0
     For $i = 1 To $l_i_PetSize
-        If Party_GetPetInfo($i, "OwnerAgentID") = Agent_GetMyID() Then
+        If Party_GetPetInfo($i, "OwnerAgentID") = UAI_GetPlayerInfo($GC_UAI_AGENT_ID) Then
             $lMyPet = Party_GetPetInfo($i, "AgentID")
             ExitLoop
         EndIf

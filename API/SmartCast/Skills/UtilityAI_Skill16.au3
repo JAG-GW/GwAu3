@@ -266,7 +266,20 @@ EndFunc
 ; Skill ID: 1721 - $GC_I_SKILL_ID_RAMPAGE_AS_ONE
 Func CanUse_RampageAsOne()
 	; Requires pet to be alive
-	If Not UAI_IsPetAlive() Then Return False
+	Local $l_i_PetSize = World_GetWorldInfo("PetInfoArraySize")
+    Local $lMyPet = 0
+
+    ; PetNumber starts at 1, not 0
+    For $i = 1 To $l_i_PetSize
+        If Party_GetPetInfo($i, "OwnerAgentID") = UAI_GetPlayerInfo($GC_UAI_AGENT_ID) Then
+            $lMyPet = Party_GetPetInfo($i, "AgentID")
+            ExitLoop
+        EndIf
+    Next
+
+    If $lMyPet = 0 Then Return False
+
+    If Agent_GetAgentInfo($lMyPet, "HPPercent") = 0 Then Return False
 	Return True
 EndFunc
 
@@ -439,7 +452,20 @@ EndFunc
 ; Skill ID: 2108 - $GC_I_SKILL_ID_NEVER_RAMPAGE_ALONE
 Func CanUse_NeverRampageAlone()
 	; Requires pet to be alive
-	If Not UAI_IsPetAlive() Then Return False
+	Local $l_i_PetSize = World_GetWorldInfo("PetInfoArraySize")
+    Local $lMyPet = 0
+
+    ; PetNumber starts at 1, not 0
+    For $i = 1 To $l_i_PetSize
+        If Party_GetPetInfo($i, "OwnerAgentID") = UAI_GetPlayerInfo($GC_UAI_AGENT_ID) Then
+            $lMyPet = Party_GetPetInfo($i, "AgentID")
+            ExitLoop
+        EndIf
+    Next
+
+    If $lMyPet = 0 Then Return False
+
+    If Agent_GetAgentInfo($lMyPet, "HPPercent") = 0 Then Return False
 	Return True
 EndFunc
 
