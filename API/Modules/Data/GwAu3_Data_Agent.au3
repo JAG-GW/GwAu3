@@ -407,9 +407,10 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
     Return 0
 EndFunc
 
-Func Agent_GetAgentEquimentInfo($a_i_AgentID = -2, $a_s_Info = "")
-	Local $l_p_AgentPtr = Agent_GetAgentInfo($a_i_AgentID, "Equipment")
+Func Agent_GetAgentEquipmentInfo($a_i_AgentID = -2, $a_s_Info = "")
+	Local $l_p_AgentPtr = Memory_Read(Agent_GetAgentInfo($a_i_AgentID, "Equipment"))
     If $l_p_AgentPtr = 0 Or $a_s_Info = "" Then Return 0
+
     Switch $a_s_Info
         Case "vtable"
             Return Memory_Read($l_p_AgentPtr, "dword")

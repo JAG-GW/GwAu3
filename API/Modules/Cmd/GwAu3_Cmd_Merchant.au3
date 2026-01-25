@@ -14,24 +14,26 @@ Func Merchant_GetMerchantItemsSize()
     Return $l_av_Return[1]
 EndFunc   ;==>GetMerchantItemsSize
 
-Func Merchant_GetMerchantItemPtr($a_i_ModelID = 0, $a_b_ByModelID = True, $a_i_ItemSlot = 0, $a_b_ByItemSlot = False)
-    If $a_b_ByModelID = $a_b_ByItemSlot Then Return 0
-
-	Local $l_ai_Offsets[5] = [0, 0x18, 0x40, 0xB8]
+; Fetches ItemPtr of specified item, ModelID (Mode = 0) / ItemSlot (Mode = 1)
+Func Merchant_GetMerchantItemPtr($a_i_Val, $a_i_Mode = 0)
 	Local $l_p_MerchantBase = Merchant_GetMerchantItemsBase()
 	Local $l_i_ItemID = 0, $l_p_ItemPtr = 0
 
 	For $i = 0 To Merchant_GetMerchantItemsSize() -1
 		$l_i_ItemID = Memory_Read($l_p_MerchantBase + 0x4 * $i)
-		If $l_i_ItemID Then
-			$l_ai_Offsets[4] = 0x4 * $l_i_ItemID
-			$l_p_ItemPtr = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offsets)[1]
-            If $a_b_ByModelID Then
-			    If Memory_Read($l_p_ItemPtr + 0x2C) = $a_i_ModelID Then Return $l_p_ItemPtr
-            ElseIf $a_b_ByItemSlot Then
-                If $i + 1 = $a_i_ItemSlot Then Return $l_p_ItemPtr
-            EndIf
-		EndIf
+		If $l_i_ItemID = 0 Then ContinueLoop
+
+        $l_p_ItemPtr = Item_GetItemPtr($l_i_ItemID)
+        If $l_p_ItemPtr = 0 Then ContinueLoop
+
+        Switch $a_i_Mode
+            Case 0
+                If Memory_Read($l_p_ItemPtr + 0x2C) = $a_i_Val Then Return $l_p_ItemPtr
+            Case 1
+                If $i + 1 = $a_i_Val Then Return $l_p_ItemPtr
+            Case Else
+                Return 0
+        EndSwitch
 	Next
 EndFunc   ;==>GetMerchantItemPtrByModelId
 
@@ -45,7 +47,7 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
 
         For $i = 1 To $l_i_ItemArraySize
             $l_p_Item = Item_GetItemPtr($i)
-            If Not $l_p_Item Then ContinueLoop
+            If $l_p_Item = 0 Then ContinueLoop
 
             If Memory_Read($l_p_Item + 0x2C, 'dword') <> $a_i_ModelID Then ContinueLoop
             If Memory_Read($l_p_Item + 0xC, 'ptr') <> 0 Or Memory_Read($l_p_Item + 0x4, 'dword') <> 0 Then ContinueLoop
@@ -93,7 +95,7 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
             Local $l_i_CostID = Memory_Read($g_i_TraderCostID)
             Local $l_f_CostValue = Memory_Read($g_f_TraderCostValue)
 
-            If Not $l_i_CostID Or Not $l_f_CostValue Then Return False
+            If $l_i_CostID = 0 Or $l_f_CostValue = 0 Then Return False
             If $l_f_CostValue > Item_GetInventoryInfo("GoldCharacter") Then Return False
 
             ; Execute trader buy
@@ -109,7 +111,7 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
     Else
         ; Standard merchant buy - search by ModelID
         Local $l_p_MerchantItemBase = Merchant_GetMerchantItemsBase()
-        If Not $l_p_MerchantItemBase Then Return False
+        If $l_p_MerchantItemBase = 0 Then Return False
 
         Local $l_i_MerchantItemCount = Merchant_GetMerchantItemsSize()
         Local $l_p_Item, $l_i_ItemID, $l_i_ItemModelID, $l_i_ItemValue
@@ -119,7 +121,7 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
         For $i = 0 To $l_i_MerchantItemCount - 1
             $l_i_ItemID = Memory_Read($l_p_MerchantItemBase + 4 * $i)
             $l_p_Item = Item_GetItemPtr($l_i_ItemID)
-            If Not $l_p_Item Then ContinueLoop
+            If $l_p_Item = 0 Then ContinueLoop
 
             $l_i_ItemModelID = Memory_Read($l_p_Item + 0x2C)
             If $l_i_ItemModelID = $a_i_ModelID Then
@@ -173,9 +175,9 @@ Func Merchant_SellItem($a_p_Item, $a_i_Quantity = 0, $a_b_Trader = False)
         Local $l_i_SoldCount = 0, $l_i_SellingThreshold = 0
         Local $l_b_IsRareMaterial = Item_GetItemIsRareMaterial($l_p_Item)
         Local $l_i_ItemModelID = Memory_Read($l_p_Item + 0x2C, "dword")
-		Local $l_b_IsRuneOrInsignia = Item_IsRuneOrInsignia($l_i_ItemModelID)
+		Local $l_i_UpgradeType = Item_IsRuneOrInsignia($l_i_ItemModelID)
 
-        If Not $l_b_IsRareMaterial And $l_b_IsRuneOrInsignia = 0 Then
+        If Not $l_b_IsRareMaterial And $l_i_UpgradeType = 0 Then
             $l_i_SellingThreshold = 10
             $a_i_Quantity = Int($a_i_Quantity / 10)
         EndIf
@@ -353,7 +355,7 @@ Func Merchant_CraftItem($a_i_CraftedItemModelID, $a_i_Price, $a_ai2_ReqMaterials
     EndIf
 
     Local $l_i_MerchantItemID = Memory_Read(Merchant_GetMerchantItemPtr($a_i_CraftedItemModelID))
-    If Not $l_i_MerchantItemID Then Return False
+    If $l_i_MerchantItemID = 0 Then Return False
 
     DllStructSetData($s_d_CraftItemStruct, 2, $a_i_Quantity)
     DllStructSetData($s_d_CraftItemStruct, 3, $l_i_MerchantItemID)

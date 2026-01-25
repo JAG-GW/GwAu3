@@ -169,17 +169,5 @@ Func Map_WaitMapIsLoaded($a_i_Timeout = 30000)
 
     Sleep(250)
 
-    $l_h_Timeout = TimerInit()
-    If Game_GetGameInfo("IsCinematic") Then
-        Cinematic_SkipCinematic()
-        Do
-            Sleep(50)
-            $l_b_TimedOut = (TimerDiff($l_h_Timeout) >= $a_i_Timeout)
-        Until Map_MapIsLoaded() Or $l_b_TimedOut
-        If $l_b_TimedOut Then Return False
-    EndIf
-
-    Sleep(250)
-
     Return True
 EndFunc

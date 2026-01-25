@@ -2304,9 +2304,6 @@ EndFunc
 
 Func Assembler_CreateSalvageCommand()
     _('CommandSalvage:')
-    _('push eax')
-    _('push ecx')
-    _('push ebx')
     _('mov ebx,SalvageGlobal')
     _('mov ecx,dword[eax+4]')
     _('mov dword[ebx],ecx')
@@ -2321,9 +2318,6 @@ Func Assembler_CreateSalvageCommand()
     _('push ebx')
     _('call Salvage')
     _('add esp,C')
-    _('pop ebx')
-    _('pop ecx')
-    _('pop eax')
     _('ljmp CommandReturn')
 EndFunc
 
@@ -2406,7 +2400,7 @@ Func Assembler_CreateTradeCommands()
 EndFunc
 
 Func Assembler_CreateUICommands()
-	_('CommandMoveMap:')
+	_('CommandUIMsg:')
 	_('push 0')
 	_('mov edx,eax')
 	_('add edx,8')
