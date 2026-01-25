@@ -517,6 +517,10 @@ Func UAI_Filter_IsRanged($a_i_AgentID)
 	Return UAI_IsRanged($a_i_AgentID)
 EndFunc
 
+Func UAI_Filter_IsNotCaster($a_i_AgentID)
+	Return Not UAI_IsCaster($a_i_AgentID)
+EndFunc
+
 ; Negative filters (for pet attacks and other conditional skills)
 Func UAI_Filter_IsNotPoisoned($a_i_AgentID)
 	Return Not UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_IsPoisoned)

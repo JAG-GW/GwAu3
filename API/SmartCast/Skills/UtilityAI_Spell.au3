@@ -46,7 +46,7 @@ Func CanUse_PowerBlock()
 	If Anti_Spell() Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_GUILT) Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_DIVERSION) Then Return False
-	If Not UAI_GetAgentInfoByID($BestTarget, $GC_UAI_AGENT_IsCasting) Then Return False
+	If Not UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_IsCasting) Then Return False
 	Return True
 EndFunc
 
@@ -117,7 +117,16 @@ EndFunc
 ; Skill ID: 25 - $GC_I_SKILL_ID_POWER_DRAIN
 Func CanUse_PowerDrain()
 	If Anti_Spell() Then Return False
-	Return True
+	If UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy) > 20 Then Return False
+
+	Local $lSkillID = UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_Skill)
+	Local $lRuptable = [$GC_I_SKILL_TYPE_HEX, $GC_I_SKILL_TYPE_SPELL, $GC_I_SKILL_TYPE_ENCHANTMENT, $GC_I_SKILL_TYPE_WELL, $GC_I_SKILL_TYPE_WARD, $GC_I_SKILL_TYPE_ITEM_SPELL, $GC_I_SKILL_TYPE_WEAPON_SPELL, $GC_I_SKILL_TYPE_CHANT]
+
+	For $i = 0 To UBound($lRuptable) - 1
+		If Skill_GetSkillInfo($lSkillID, "SkillType") = $i Then Return True
+	Next
+
+	Return False
 EndFunc
 
 Func BestTarget_PowerDrain($a_f_AggroRange)
@@ -125,7 +134,7 @@ Func BestTarget_PowerDrain($a_f_AggroRange)
 	; Spell. If target foe is casting a spell or chant, that skill is interrupted and you gain 1...25...31 Energy.
 	; Concise description
 	; Spell. Interrupts a spell or chant. Interruption effect: you gain 1...25...31 Energy.
-	Return 0
+	Return UAI_GetAgentHighest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster|UAI_Filter_IsCasting")
 EndFunc
 
 ; Skill ID: 27 - $GC_I_SKILL_ID_SHATTER_DELUSIONS
@@ -1263,7 +1272,7 @@ Func BestTarget_Smite($a_f_AggroRange)
 	; Spell. This attack  deals 10...46...55 Holy  damage. If attacking, your target takes an additional 10...30...35 Holy  damage.
 	; Concise description
 	; Spell. Deals 10...46...55 holy damage. Deals 10...30...35 more holy damage if target is attacking.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsAttacking")
 EndFunc
 
 ; Skill ID: 247 - $GC_I_SKILL_ID_SYMBOL_OF_WRATH
@@ -1388,7 +1397,7 @@ EndFunc
 ; Skill ID: 281 - $GC_I_SKILL_ID_ORISON_OF_HEALING
 Func CanUse_OrisonOfHealing()
 	If Anti_Spell() Then Return False
-	; Only use if HP is below 70%
+	If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) > 0.8 Then Return False
 	Return True
 EndFunc
 
@@ -1397,7 +1406,7 @@ Func BestTarget_OrisonOfHealing($a_f_AggroRange)
 	; Spell. Heal target ally for 20...60...70 Health.
 	; Concise description
 	; Spell. Heals for 20...60...70.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly")
 EndFunc
 
 ; Skill ID: 282 - $GC_I_SKILL_ID_WORD_OF_HEALING
@@ -1417,10 +1426,23 @@ EndFunc
 ; Skill ID: 283 - $GC_I_SKILL_ID_DWAYNAS_KISS
 Func CanUse_DwaynasKiss()
 	If Anti_Spell() Then Return False
+	If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) > 0.8 Then Return False
 	Return True
 EndFunc
 
 Func BestTarget_DwaynasKiss($a_f_AggroRange)
+	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe|UAI_Filter_IsEnchanted|UAI_Filter_IsHexed")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.8 And $l_i_Target <> 0 Then Return $l_i_Target
+
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe|UAI_Filter_IsHexed")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.8 And $l_i_Target <> 0 Then Return $l_i_Target
+
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe|UAI_Filter_IsEnchanted")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.8 And $l_i_Target <> 0 Then Return $l_i_Target
+
+	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_ExcludeMe")
+	If UAI_GetAgentInfoByID($l_i_Target, $GC_UAI_AGENT_HP) < 0.5 And $l_i_Target <> 0 Then Return $l_i_Target
+
 	Return 0
 EndFunc
 
@@ -1497,6 +1519,7 @@ EndFunc
 ; Skill ID: 302 - $GC_I_SKILL_ID_SMITE_HEX
 Func CanUse_SmiteHex()
 	If Anti_Spell() Then Return False
+	If UAI_CountAgents($g_i_BestTarget, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy") < 1 Then Return False
 	Return True
 EndFunc
 
@@ -1505,7 +1528,7 @@ Func BestTarget_SmiteHex($a_f_AggroRange)
 	; Spell. Remove a hex from target ally. If a hex is removed, foes in the area suffer 10...70...85 holy damage.
 	; Concise description
 	; Spell. Removes a hex from target ally. Removal effect: deals 10...70...85 holy damage to foes in the area of target ally.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly|UAI_Filter_IsHexed")
 EndFunc
 
 ; Skill ID: 303 - $GC_I_SKILL_ID_CONVERT_HEXES

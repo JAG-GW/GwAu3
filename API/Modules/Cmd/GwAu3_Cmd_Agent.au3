@@ -46,7 +46,7 @@ Func Agent_TargetNearestEnemy($a_f_MaxDistance = 1300)
 
         ; Check if agent is an enemy (simplified check)
         Local $l_i_Allegiance = Agent_GetAgentInfo($i, "Allegiance")
-        If $l_i_Allegiance <> 3 Then ContinueLoop ; 3 = enemy
+        If $l_i_Allegiance <> $GC_I_ALLEGIANCE_ENEMY Then ContinueLoop
 
         ; Calculate distance
         Local $l_f_Distance = Agent_GetDistance($i, $l_i_MyID)
@@ -85,7 +85,7 @@ Func Agent_TargetNearestAlly($a_f_MaxDistance = 1300, $a_b_ExcludeSelf = True)
 
         ; Check if agent is an ally (simplified check)
         Local $l_i_Allegiance = Agent_GetAgentInfo($l_i_Index, "Allegiance")
-        If $l_i_Allegiance <> 1 Then ContinueLoop ; 1 = ally
+        If $l_i_Allegiance <> $GC_I_ALLEGIANCE_ALLY Then ContinueLoop
 
         ; Calculate distance
         Local $l_f_Distance = Agent_GetDistance($l_i_Index, $l_i_MyID)
@@ -100,6 +100,45 @@ Func Agent_TargetNearestAlly($a_f_MaxDistance = 1300, $a_b_ExcludeSelf = True)
         Log_Debug("Targeted nearest ally: " & $l_i_NearestID & " at distance: " & $l_f_NearestDistance, "AgentMod", $g_h_EditText)
     Else
         Log_Debug("No ally found within range: " & $a_f_MaxDistance, "AgentMod", $g_h_EditText)
+    EndIf
+
+    Return $l_i_NearestID
+EndFunc
+
+Func Agent_TargetNearestAnimal($a_f_MaxDistance = 1300, $a_b_ExcludeSelf = True)
+    Local $l_i_NearestID = 0
+    Local $l_f_NearestDistance = $a_f_MaxDistance
+    Local $l_i_MyID = Agent_GetMyID()
+    Local $l_i_MaxAgents = Agent_GetMaxAgents()
+
+    For $l_i_Index = 1 To $l_i_MaxAgents
+        ; Skip self if requested
+        If $a_b_ExcludeSelf And $l_i_Index = $l_i_MyID Then ContinueLoop
+
+        ; Check if agent exists
+        Local $l_p_Pointer = Agent_GetAgentPtr($l_i_Index)
+        If $l_p_Pointer = 0 Then ContinueLoop
+
+        ; Check if agent is alive
+        If Agent_GetAgentInfo($l_p_Pointer, "IsDead") Then ContinueLoop
+
+        ; Check if agent is an ally (simplified check)
+        Local $l_i_Allegiance = Agent_GetAgentInfo($l_i_Index, "Allegiance")
+        If $l_i_Allegiance <> $GC_I_ALLEGIANCE_ANIMAL Then ContinueLoop
+
+        ; Calculate distance
+        Local $l_f_Distance = Agent_GetDistance($l_i_Index, $l_i_MyID)
+        If $l_f_Distance < $l_f_NearestDistance Then
+            $l_f_NearestDistance = $l_f_Distance
+            $l_i_NearestID = $l_i_Index
+        EndIf
+    Next
+
+    If $l_i_NearestID > 0 Then
+        Agent_ChangeTarget($l_i_NearestID)
+        Log_Debug("Targeted nearest animal: " & $l_i_NearestID & " at distance: " & $l_f_NearestDistance, "AgentMod", $g_h_EditText)
+    Else
+        Log_Debug("No animal found within range: " & $a_f_MaxDistance, "AgentMod", $g_h_EditText)
     EndIf
 
     Return $l_i_NearestID

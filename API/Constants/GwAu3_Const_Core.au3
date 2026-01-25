@@ -158,6 +158,8 @@ Global $g_d_LockHeroTarget = DllStructCreate('ptr;dword;dword')
 Global $g_p_LockHeroTarget = DllStructGetPtr($g_d_LockHeroTarget)
 Global $g_d_ToggleHeroSkillState = DllStructCreate('ptr;dword;dword')
 Global $g_p_ToggleHeroSkillState = DllStructGetPtr($g_d_ToggleHeroSkillState)
+Global $g_d_ActiveQuest = DllStructCreate('ptr;dword')
+Global $g_p_ActiveQuest = DllStructGetPtr($g_d_ActiveQuest)
 
 ;UIMsg
 Global $g_d_MoveMap = DllStructCreate('ptr;dword;dword;dword;dword;dword')

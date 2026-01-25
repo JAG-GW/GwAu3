@@ -89,7 +89,7 @@ EndFunc   ;==>TravelTo
 ;~ Description: Travel to a map in a random district (different from current)
 ;~ $a_i_MapID = Target map ID
 ;~ $a_i_MaxRegions = Number of regions to use (7=EU only, 8=EU+Int, 11=All excluding America)
-Func Map_RndTravel($a_i_MapID)
+Func Map_RndTravel($a_i_MapID, $a_WaitToLoad = True)
     ; Region/Language order: eu-en, eu-fr, eu-ge, eu-it, eu-sp, eu-po, eu-ru, us-en, int, asia-ko, asia-ch
 	Local $a_i_MaxRegions = 11
     Local $a_i_Region[11]   = [2, 2, 2, 2, 2, 2, 2, -2, 1, 3, 4]
@@ -115,7 +115,7 @@ Func Map_RndTravel($a_i_MapID)
 
     Map_InitMapIsLoaded()
     Map_MoveMap($a_i_MapID, $a_i_Region[$l_i_Random], 0, $a_i_Language[$l_i_Random])
-    Return Map_WaitMapIsLoaded()
+	If $a_WaitToLoad Then Return Map_WaitMapIsLoaded()
 EndFunc   ;==>Map_RndTravel
 
 Func Map_WaitMapLoading($a_i_MapID = -1, $a_i_InstanceType = -1, $a_i_Timeout = 30000)

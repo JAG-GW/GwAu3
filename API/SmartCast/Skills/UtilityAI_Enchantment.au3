@@ -1080,6 +1080,7 @@ EndFunc
 ; Skill ID: 288 - $GC_I_SKILL_ID_HEALING_BREEZE
 Func CanUse_HealingBreeze()
 	If Anti_Enchantment() Then Return False
+	If UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_HP) > 0.8 Then Return False
 	Return True
 EndFunc
 
@@ -1088,7 +1089,7 @@ Func BestTarget_HealingBreeze($a_f_AggroRange)
 	; Enchantment Spell. For 15 seconds, target ally gains +4...8...9 Health regeneration.
 	; Concise description
 	; Enchantment Spell. (15 seconds.) +4...8...9 Health regeneration.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingAlly")
 EndFunc
 
 ; Skill ID: 289 - $GC_I_SKILL_ID_VITAL_BLESSING
@@ -3051,7 +3052,7 @@ EndFunc
 ; Skill ID: 1955 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_LUXON
 Func CanUse_AuraOfHolyMightLuxon()
 	If Anti_Enchantment() Then Return False
-	If UAI_AgentHasEffect(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
+	If UAI_AgentHasEffect(UAI_GetPlayerInfo($GC_UAI_AGENT_ID), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
 	Return True
 EndFunc
 
@@ -3212,7 +3213,7 @@ EndFunc
 ; Skill ID: 2098 - $GC_I_SKILL_ID_AURA_OF_HOLY_MIGHT_KURZICK
 Func CanUse_AuraOfHolyMightKurzick()
 	If Anti_Enchantment() Then Return False
-	If UAI_AgentHasEffect(Agent_GetMyID(), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
+	If UAI_AgentHasEffect(UAI_GetPlayerInfo($GC_UAI_AGENT_ID), $GC_I_SKILL_ID_PIOUS_RENEWAL) Then Return False
 	Return True
 EndFunc
 

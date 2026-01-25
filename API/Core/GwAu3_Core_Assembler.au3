@@ -2508,6 +2508,12 @@ Func Assembler_CreateUICommands()
 	_('call ToggleHeroSkillState')
 	_('add esp,8')
 	_('ljmp CommandReturn')
+
+	_('CommandActiveQuest:')
+	_('push dword[eax+4]')
+	_('call ActiveQuest')
+	_('add esp,4')
+	_('ljmp CommandReturn')
 EndFunc
 
 Func Assembler_CreatePartyCommands()

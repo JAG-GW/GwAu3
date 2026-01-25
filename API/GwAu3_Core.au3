@@ -112,6 +112,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Scanner_AddPattern('PlayerAdd', "P:\Code\Gw\Ui\Game\Party\PtInvite.cpp", "m_invitePlayerId", 'Ptr')
 	Scanner_AddPattern('PlayerKick', "P:\Code\Gw\Ui\Game\Party\PtUtil.cpp", "playerId == MissionCliGetPlayerId()", 'Ptr')
 	Scanner_AddPattern('PartyInvitations', '8B7D0C8BF083C4048B4704', 0x1, 'Ptr')
+	Scanner_AddPattern('ActiveQuest', '8B45083B46040F842D010000', 0x1, 'Ptr')
 	; Hook patterns
 	Scanner_AddPattern('Engine', '568B3085F67478EB038D4900D9460C', -0x22, 'Hook')
 	Scanner_AddPattern('Render', 'F6C401741C68', -0x68, 'Hook')
@@ -292,6 +293,8 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	$l_p_Temp = Scanner_GetScanResult('PartyInvitations', $g_ap_ScanResults, 'Ptr')
 	Memory_SetValue('RejectInvitation', Ptr(Scanner_GetCallTargetAddress($l_p_Temp + 0x34)))
 	Memory_SetValue('AcceptInvitation', Ptr(Scanner_GetCallTargetAddress($l_p_Temp + 0x4D)))
+	$l_p_Temp = Scanner_GetScanResult('ActiveQuest', $g_ap_ScanResults, 'Ptr')
+	Memory_SetValue('ActiveQuest', Ptr(Scanner_GetCallTargetAddress($l_p_Temp + 0xF)))
 
 	;Ui log
 	Log_Debug("UIMessage: " & Memory_GetValue('UIMessage'), "Initialize", $g_h_EditText)
@@ -317,6 +320,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Debug("KickInvitedPlayer: " & Memory_GetValue('KickInvitedPlayer'), "Initialize", $g_h_EditText)
 	Log_Debug("RejectInvitation: " & Memory_GetValue('RejectInvitation'), "Initialize", $g_h_EditText)
 	Log_Debug("AcceptInvitation: " & Memory_GetValue('AcceptInvitation'), "Initialize", $g_h_EditText)
+	Log_Debug("ActiveQuest: " & Memory_GetValue('ActiveQuest'), "Initialize", $g_h_EditText)
 
     ;Hook
     $l_p_Temp = Scanner_GetScanResult('Engine', $g_ap_ScanResults, 'Hook')
@@ -418,6 +422,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	DllStructSetData($g_d_DropHeroBundle, 1, Memory_GetValue('CommandDropHeroBundle'))
 	DllStructSetData($g_d_LockHeroTarget, 1, Memory_GetValue('CommandLockHeroTarget'))
 	DllStructSetData($g_d_ToggleHeroSkillState, 1, Memory_GetValue('CommandToggleHeroSkillState'))
+	DllStructSetData($g_d_ActiveQuest, 1, Memory_GetValue('CommandActiveQuest'))
 
 	;UIMsg
 	DllStructSetData($g_d_MoveMap, 1, Memory_GetValue('CommandUIMsg'))

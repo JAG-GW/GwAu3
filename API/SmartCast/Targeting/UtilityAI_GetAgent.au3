@@ -638,6 +638,59 @@ Func UAI_GetBestOffensiveWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)
 	Return $l_av_Result
 EndFunc
 
+; Get best position to hit multiple physical attackers (melee/ranged, not casters)
+; Returns array [X, Y, Count]
+Func UAI_GetBestPhysicalEnemyPosition($a_f_ClusterRange = $GC_I_RANGE_NEARBY)
+	Local $l_av_Result[3] = [0, 0, 0] ; [X, Y, Count]
+
+	; Collect all living physical enemies positions
+	Local $l_af_EnemiesX[$g_i_AgentCacheCount + 1]
+	Local $l_af_EnemiesY[$g_i_AgentCacheCount + 1]
+	Local $l_i_EnemyCount = 0
+
+	For $i = 1 To $g_i_AgentCacheCount
+		Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
+
+		If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
+		If UAI_IsCaster($l_i_AgentID) Then ContinueLoop ; Skip casters
+
+		$l_af_EnemiesX[$l_i_EnemyCount] = UAI_GetAgentInfo($i, $GC_UAI_AGENT_X)
+		$l_af_EnemiesY[$l_i_EnemyCount] = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Y)
+		$l_i_EnemyCount += 1
+	Next
+
+	If $l_i_EnemyCount = 0 Then Return $l_av_Result
+
+	; Calculate centroid of physical enemies
+	Local $l_f_CentroidX = 0, $l_f_CentroidY = 0
+	For $i = 0 To $l_i_EnemyCount - 1
+		$l_f_CentroidX += $l_af_EnemiesX[$i]
+		$l_f_CentroidY += $l_af_EnemiesY[$i]
+	Next
+	$l_f_CentroidX /= $l_i_EnemyCount
+	$l_f_CentroidY /= $l_i_EnemyCount
+
+	; Count how many physical enemies would be in cluster range from centroid
+	Local $l_i_CoveredCount = 0
+	Local $l_f_RangeSquared = $a_f_ClusterRange * $a_f_ClusterRange
+
+	For $i = 0 To $l_i_EnemyCount - 1
+		Local $l_f_DX = $l_af_EnemiesX[$i] - $l_f_CentroidX
+		Local $l_f_DY = $l_af_EnemiesY[$i] - $l_f_CentroidY
+		Local $l_f_DistSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
+
+		If $l_f_DistSquared <= $l_f_RangeSquared Then
+			$l_i_CoveredCount += 1
+		EndIf
+	Next
+
+	$l_av_Result[0] = $l_f_CentroidX
+	$l_av_Result[1] = $l_f_CentroidY
+	$l_av_Result[2] = $l_i_CoveredCount
+
+	Return $l_av_Result
+EndFunc
+
 ; Move to best offensive ward position and return True when ready to cast
 ; Returns True if player is in position (can cast ward), False if no enemies
 Func UAI_MoveToOffensiveWardPosition($a_f_WardRange = $GC_I_RANGE_AREA)

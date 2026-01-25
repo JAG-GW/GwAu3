@@ -173,8 +173,220 @@ Func UAI_CanCast($a_i_SkillSlot)
 EndFunc
 
 Func UAI_CanDrop($a_i_SkillSlot)
-	Switch UAI_GetStaticSkillInfo($l_i_Slot, $GC_UAI_STATIC_SKILL_SkillID)
-		Case
+	Switch UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillID)
+		Case $GC_I_SKILL_ID_ANGUISHED_WAS_LINGWAH
+			; Drop if all Ritualist hexes in skillbar are recharging
+			Local $l_b_HasRitualistHex = False
+			For $i = 1 To 8
+				If $i = $a_i_SkillSlot Then ContinueLoop ; Skip the item spell itself
+				Local $l_i_SkillType = UAI_GetStaticSkillInfo($i, $GC_UAI_STATIC_SKILL_SkillType)
+				Local $l_i_Profession = UAI_GetStaticSkillInfo($i, $GC_UAI_STATIC_SKILL_Profession)
+				If $l_i_SkillType = $GC_I_SKILL_TYPE_HEX And $l_i_Profession = $GC_I_PROFESSION_RITUALIST Then
+					$l_b_HasRitualistHex = True
+					If UAI_GetDynamicSkillInfo($i, $GC_UAI_DYNAMIC_SKILL_IsRecharged) Then Return False
+				EndIf
+			Next
+			Return $l_b_HasRitualistHex
+		Case $GC_I_SKILL_ID_BLIND_WAS_MINGSON
+			; Drop if physical attackers (melee/ranged, not casters) in nearby range
+			If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsNotCaster") >= 2 Then Return True
+
+			; Otherwise, check if physical attackers in larger range - move to them
+			Local $l_av_BestPos = UAI_GetBestPhysicalEnemyPosition($GC_I_RANGE_NEARBY)
+			If $l_av_BestPos[2] <= 1 Then Return False ; No physical enemies
+
+			; Move to physical enemy cluster
+			Local $l_f_TargetX = $l_av_BestPos[0]
+			Local $l_f_TargetY = $l_av_BestPos[1]
+			Local $l_i_Timeout = 0
+
+			Do
+				Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+				Sleep(32)
+				$l_i_Timeout += 32
+
+				If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsNotCaster") >= 2 Then Return True
+
+				Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+				Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+				Local $l_f_DiffX = $l_f_TargetX - $l_f_CurX
+				Local $l_f_DiffY = $l_f_TargetY - $l_f_CurY
+				Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
+
+				If $l_f_DistToTarget < 80 Then Return True
+
+			Until $l_i_Timeout >= 3000
+			Return UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsNotCaster") >= 1
+		Case $GC_I_SKILL_ID_CRUEL_WAS_DAOSHEN
+			; Drop: lightning damage to all nearby foes
+			If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+
+			Local $l_av_BestPos = UAI_GetBestOffensiveWardPosition($GC_I_RANGE_NEARBY)
+			If $l_av_BestPos[2] <= 1 Then Return False
+
+			Local $l_f_TargetX = $l_av_BestPos[0]
+			Local $l_f_TargetY = $l_av_BestPos[1]
+			Local $l_i_Timeout = 0
+
+			Do
+				Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+				Sleep(32)
+				$l_i_Timeout += 32
+				If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+				Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+				Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+				Local $l_f_DistToTarget = Sqrt(($l_f_TargetX - $l_f_CurX)^2 + ($l_f_TargetY - $l_f_CurY)^2)
+				If $l_f_DistToTarget < 80 Then Return True
+			Until $l_i_Timeout >= 3000
+
+			Return UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 1
+
+		Case $GC_I_SKILL_ID_DESTRUCTIVE_WAS_GLAIVE
+			; Drop: lightning damage to all foes in AREA (larger range than nearby)
+			If UAI_CountAgents(-2, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+
+			Local $l_av_BestPos = UAI_GetBestOffensiveWardPosition($GC_I_RANGE_AREA)
+			If $l_av_BestPos[2] <= 1 Then Return False
+
+			Local $l_f_TargetX = $l_av_BestPos[0]
+			Local $l_f_TargetY = $l_av_BestPos[1]
+			Local $l_i_Timeout = 0
+
+			Do
+				Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+				Sleep(32)
+				$l_i_Timeout += 32
+				If UAI_CountAgents(-2, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+				Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+				Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+				Local $l_f_DistToTarget = Sqrt(($l_f_TargetX - $l_f_CurX)^2 + ($l_f_TargetY - $l_f_CurY)^2)
+				If $l_f_DistToTarget < 80 Then Return True
+			Until $l_i_Timeout >= 3000
+
+			Return UAI_CountAgents(-2, $GC_I_RANGE_AREA, "UAI_Filter_IsLivingEnemy") >= 1
+
+		Case $GC_I_SKILL_ID_GRASPING_WAS_KUURONG
+			; Drop: damage + knockdown to all nearby foes
+			If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+
+			Local $l_av_BestPos = UAI_GetBestOffensiveWardPosition($GC_I_RANGE_NEARBY)
+			If $l_av_BestPos[2] <= 1 Then Return False
+
+			Local $l_f_TargetX = $l_av_BestPos[0]
+			Local $l_f_TargetY = $l_av_BestPos[1]
+			Local $l_i_Timeout = 0
+
+			Do
+				Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+				Sleep(32)
+				$l_i_Timeout += 32
+				If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+				Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+				Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+				Local $l_f_DistToTarget = Sqrt(($l_f_TargetX - $l_f_CurX)^2 + ($l_f_TargetY - $l_f_CurY)^2)
+				If $l_f_DistToTarget < 80 Then Return True
+			Until $l_i_Timeout >= 3000
+
+			Return UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 1
+		Case $GC_I_SKILL_ID_DEFIANT_WAS_XINRAE
+			; Drop: damage + knockdown to all nearby foes
+			If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+
+			Local $l_av_BestPos = UAI_GetBestOffensiveWardPosition($GC_I_RANGE_NEARBY)
+			If $l_av_BestPos[2] <= 1 Then Return False
+
+			Local $l_f_TargetX = $l_av_BestPos[0]
+			Local $l_f_TargetY = $l_av_BestPos[1]
+			Local $l_i_Timeout = 0
+
+			Do
+				Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+				Sleep(32)
+				$l_i_Timeout += 32
+				If UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 2 Then Return True
+				Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+				Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+				Local $l_f_DistToTarget = Sqrt(($l_f_TargetX - $l_f_CurX)^2 + ($l_f_TargetY - $l_f_CurY)^2)
+				If $l_f_DistToTarget < 80 Then Return True
+			Until $l_i_Timeout >= 3000
+
+			Return UAI_CountAgents(-2, $GC_I_RANGE_NEARBY, "UAI_Filter_IsLivingEnemy") >= 1
+		Case $GC_I_SKILL_ID_ENERGETIC_WAS_LEE_SA
+			; Drop to gain energy when running low
+			Local $l_i_CurrentEnergy = UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy)
+			Local $l_i_MaxEnergy = UAI_GetPlayerInfo($GC_UAI_AGENT_MaxEnergy)
+
+			; Drop if energy is below 25% or below 10 energy
+			If $l_i_CurrentEnergy < ($l_i_MaxEnergy * 0.25) Or $l_i_CurrentEnergy < 15 Then Return True
+			Return False
+		Case $GC_I_SKILL_ID_GENEROUS_WAS_TSUNGRAI
+			; Drop to heal when health is low
+			Local $l_i_CurrentHP = UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP)
+			Local $l_i_MaxHP = UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP)
+
+			; Drop if health is below 50%
+			If $l_i_CurrentHP < ($l_i_MaxHP * 0.50) Then Return True
+			Return False
+		Case $GC_I_SKILL_ID_LIVELY_WAS_NAOMEI
+			; Drop to resurrect dead party members in area
+			If UAI_CountAgents(-2, $GC_I_RANGE_AREA, "UAI_Filter_IsDeadAlly") >= 1 Then Return True
+
+			; Otherwise, check if dead allies in larger range - move to them
+			Local $l_i_DeadAlly = UAI_GetNearestAgent(-2, 1200, "UAI_Filter_IsDeadAlly")
+			If $l_i_DeadAlly = 0 Then Return False ; No dead allies
+
+			; Move toward dead ally
+			Local $l_f_TargetX = UAI_GetAgentInfoByID($l_i_DeadAlly, $GC_UAI_AGENT_X)
+			Local $l_f_TargetY = UAI_GetAgentInfoByID($l_i_DeadAlly, $GC_UAI_AGENT_Y)
+			Local $l_i_Timeout = 0
+
+			Do
+				Map_Move($l_f_TargetX, $l_f_TargetY, 0)
+				Sleep(32)
+				$l_i_Timeout += 32
+
+				If UAI_CountAgents(-2, $GC_I_RANGE_AREA, "UAI_Filter_IsDeadAlly") >= 1 Then Return True
+
+				Local $l_f_CurX = Agent_GetAgentInfo(-2, "X")
+				Local $l_f_CurY = Agent_GetAgentInfo(-2, "Y")
+				Local $l_f_DiffX = $l_f_TargetX - $l_f_CurX
+				Local $l_f_DiffY = $l_f_TargetY - $l_f_CurY
+				Local $l_f_DistToTarget = Sqrt($l_f_DiffX * $l_f_DiffX + $l_f_DiffY * $l_f_DiffY)
+
+				If $l_f_DistToTarget < 80 Then Return True
+
+			Until $l_i_Timeout >= 3000
+
+			Return UAI_CountAgents(-2, $GC_I_RANGE_AREA, "UAI_Filter_IsDeadAlly") >= 1
+		Case $GC_I_SKILL_ID_PROTECTIVE_WAS_KAOLAI
+			; Drop to heal all party members when multiple allies need healing
+			Local $l_i_InjuredAllies = 0
+
+			For $i = 1 To $g_i_AgentCacheCount
+				Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
+				If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
+				If UAI_GetAgentInfo($i, $GC_UAI_AGENT_HPPercent) < 0.75 Then
+					$l_i_InjuredAllies += 1
+				EndIf
+			Next
+
+			; Also check if player is below 70%
+			Local $l_i_CurrentHP = UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentHP)
+			Local $l_i_MaxHP = UAI_GetPlayerInfo($GC_UAI_AGENT_MaxHP)
+			Local $l_b_PlayerLow = ($l_i_CurrentHP < ($l_i_MaxHP * 0.70))
+
+			; Drop if 2+ allies below 70% OR player is below 70%
+			If $l_i_InjuredAllies >= 2 Or $l_b_PlayerLow Then Return True
+			Return False
+		Case $GC_I_SKILL_ID_PURE_WAS_LI_MING
+			; Drop to remove conditions from allies in earshot
+			Return UAI_CountAgents(-2, $GC_I_RANGE_EARSHOT, "UAI_Filter_IsLivingAlly|UAI_Filter_IsConditioned") >= 2
+		Case $GC_I_SKILL_ID_RESILIENT_WAS_XIKO
+			; Drop to remove conditions from self
+			Return UAI_GetPlayerInfo($GC_UAI_AGENT_IsConditioned)
+		Case $GC_I_SKILL_ID_VOCAL_WAS_SOGOLON, $GC_I_SKILL_ID_ATTUNED_WAS_SONGKAI, $GC_I_SKILL_ID_VENGEFUL_WAS_KHANHEI, _
+				$GC_I_SKILL_ID_TRANQUIL_WAS_TANASEN, $GC_I_SKILL_ID_MIGHTY_WAS_VORIZUN
+			Return False
 	EndSwitch
 	Return False
 EndFunc

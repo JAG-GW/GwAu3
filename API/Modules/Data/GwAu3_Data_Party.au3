@@ -264,7 +264,7 @@ EndFunc
 #EndRegion  Party Profession Related
 
 #Region Pet Related
-Func Party_GetPetInfo($a_i_PetNumber = 0, $a_s_Info = "")
+Func Party_GetPetInfo($a_i_PetNumber = 1, $a_s_Info = "")
     Local $l_p_PetPtr = World_GetWorldInfo("PetInfoArray")
     Local $l_i_PetSize = World_GetWorldInfo("PetInfoArraySize")
     $a_i_PetNumber = $a_i_PetNumber - 1

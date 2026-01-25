@@ -3578,6 +3578,8 @@ Func Map_GetConnectedMaps($a_i_MapID)
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_CHAHBEK_VILLAGE_OUTPOST, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN]
 		Case $GC_I_MAP_ID_CHAMPIONS_DAWN
 			Local $l_a_Connected[] = [$GC_I_MAP_ID_CLIFFS_OF_DOHJOK, $GC_I_MAP_ID_PLAINS_OF_JARIN]
+        Case $GC_I_MAP_ID_FAHRANUR_THE_FIRST_CITY
+            Local $l_a_Connected[] = [$GC_I_MAP_ID_JOKANUR_DIGGINGS_OUTPOST, $GC_I_MAP_ID_BLACKTIDE_DEN_OUTPOST]
 
 			; === Nightfall - Kourna ===
 		Case $GC_I_MAP_ID_SUNSPEAR_SANCTUARY
