@@ -423,8 +423,11 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	DllStructSetData($g_d_LockHeroTarget, 1, Memory_GetValue('CommandLockHeroTarget'))
 	DllStructSetData($g_d_ToggleHeroSkillState, 1, Memory_GetValue('CommandToggleHeroSkillState'))
 	DllStructSetData($g_d_ActiveQuest, 1, Memory_GetValue('CommandActiveQuest'))
-	;Ui-Msg
-	DllStructSetData($g_d_MoveMap, 1, Memory_GetValue('CommandMoveMap'))
+
+	;UIMsg
+	DllStructSetData($g_d_MoveMap, 1, Memory_GetValue('CommandUIMsg'))
+	DllStructSetData($g_d_EquipItem, 1, Memory_GetValue('CommandUIMsg'))
+
 	;Party
 	DllStructSetData($g_d_AddPlayer, 1, Memory_GetValue('CommandAddPlayer'))
 	DllStructSetData($g_d_KickPlayer, 1, Memory_GetValue('CommandKickPlayer'))
