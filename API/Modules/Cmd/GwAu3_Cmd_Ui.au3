@@ -167,6 +167,14 @@ Func Ui_MoveMap($a_i_MapID, $a_i_Region, $a_i_Language, $a_i_District)
     Core_Enqueue($g_p_MoveMap, 24)
 EndFunc   ;==>Ui_MoveMap
 
+;~ Description: Equips an item to an agent.
+Func Ui_EquipItem($a_v_Item, $a_v_Agent = Agent_GetAgentPtr())
+    DllStructSetData($g_d_EquipItem, 2, 0x100001A2)
+    DllStructSetData($g_d_EquipItem, 3, Item_ItemID($a_v_Item))
+    DllStructSetData($g_d_EquipItem, 4, Agent_ConvertID($a_v_Agent))
+    Core_Enqueue($g_p_EquipItem, 16)
+EndFunc   ;==>UIMsg_EquipItem
+
 ;~ Description: Enable graphics rendering.
 Func Ui_EnableRendering()
     If Ui_GetRenderEnabled() Then Return 1
