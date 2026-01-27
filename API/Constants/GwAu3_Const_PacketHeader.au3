@@ -45,6 +45,7 @@ Global Const $GC_I_HEADER_INTERACT_PLAYER = 0x0033       	; Interact with anothe
 Global Const $GC_I_HEADER_FACTION_DEPOSIT = 0x0035       	; Deposit resources into a faction bank.
 Global Const $GC_I_HEADER_INTERACT_LIVING = 0x0039       	; Interact with a living entity.
 Global Const $GC_I_HEADER_DIALOG_SEND = 0x003B           	; Send dialog choices.
+Global Const $GC_I_HEADER_SKILL_EQUIP = 0x003C           	; Equip Skill from NPC Dialog.
 Global Const $GC_I_HEADER_PLAYER_MOVE_COORD = 0x003E     	; Move player to specific coordinates (not in use).
 Global Const $GC_I_HEADER_ITEM_INTERACT = 0x003F         	; Interact with an item.
 Global Const $GC_I_HEADER_PLAYER_ROTATE = 0x0040         	; Rotate the player (not in use).
