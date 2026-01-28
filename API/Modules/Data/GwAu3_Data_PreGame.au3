@@ -17,5 +17,5 @@ Func PreGame_LoginCharacterArray()
 EndFunc
 
 Func PreGame_CharName($a_i_Index) ;from 0 to max character
-	Return Memory_Read(PreGame_LoginCharacterArray() + 0x4C + (0x74 * $a_i_Index), 'WCHAR[20]')
+	Return Memory_Read(PreGame_LoginCharacterArray() + 0x50 + (0x78 * $a_i_Index), 'WCHAR[20]')
 EndFunc
