@@ -384,7 +384,7 @@ Func Party_GetHeroInfo($a_i_HeroNumber = 1, $a_s_Info = "")
 
     Local $l_i_ReadHeroID, $l_p_HeroPtr
     For $l_i_Idx = 0 To $l_i_Size - 1
-        $l_p_HeroPtr = $l_p_Ptr + (0x78 * $l_i_Idx)
+        $l_p_HeroPtr = $l_p_Ptr + (0x9C * $l_i_Idx)
         $l_i_ReadHeroID = Memory_Read($l_p_HeroPtr + 0x4, "dword")
         If $l_p_HeroPtr <> 0 And $l_i_ReadHeroID = $l_i_HeroID Then ExitLoop
     Next
@@ -405,10 +405,6 @@ Func Party_GetHeroInfo($a_i_HeroNumber = 1, $a_s_Info = "")
             Return Memory_Read($l_p_HeroPtr + 0x14, "dword")
         Case "ModelFileID"
             Return Memory_Read($l_p_HeroPtr + 0x18, "dword")
-        Case "Name"
-;~             Local $l_p_Name = Memory_Read($l_p_HeroPtr + 0x50, "ptr")
-;~             Return Memory_Read($l_p_Name, "char[20]")
-            Return Memory_Read($l_p_HeroPtr + 0x50, "wchar[24]")
     EndSwitch
 
     Return 0
