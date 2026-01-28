@@ -128,5 +128,5 @@ EndFunc
 ; Select skill slot to replace by a skill quest
 ; e.g. Disarm Trap for Venta Cimetery
 Func Skill_SkillForQuest($a_i_SkillSlot)
-	Core_SendPacket(0x8, 0x3B, $a_i_SkillSlot - 1)
+	Core_SendPacket(0x8, $GC_I_HEADER_SKILL_EQUIP, $a_i_SkillSlot - 1)
 EndFunc
