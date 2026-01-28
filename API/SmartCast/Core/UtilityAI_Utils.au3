@@ -22,6 +22,27 @@ EndFunc
 #EndRegion === Skill Functions ===
 
 #Region === Party Functions ===
+Func UAI_CountEnemyInPartyAggroRange($a_f_AggroRange = 1320)
+    Local $l_i_Enemy = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
+    If $l_i_Enemy <> 0 Then Return $l_i_Enemy
+
+    Local $l_i_HeroCount = Party_GetMyPartyInfo("ArrayHeroPartyMemberSize")
+
+    For $i = 1 To $l_i_HeroCount
+        Local $l_f_FlagX = Party_GetHeroFlagInfo($i, "FlagX")
+        Local $l_f_FlagY = Party_GetHeroFlagInfo($i, "FlagY")
+
+        If $l_f_FlagX <> 0 Or $l_f_FlagY <> 0 Then ContinueLoop
+
+        Local $l_i_HeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+        If $l_i_HeroAgentID = 0 Then ContinueLoop
+
+        $l_i_Enemy = UAI_CountAgents($l_i_HeroAgentID, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
+        If $l_i_Enemy <> 0 Then Return $l_i_Enemy
+    Next
+
+    Return 0
+EndFunc
 
 ; Get the current party size
 Func Party_GetSize()

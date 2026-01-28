@@ -31,6 +31,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
     Local $lMyX = Agent_GetAgentInfo(-2, "X")
     Local $lMyY = Agent_GetAgentInfo(-2, "Y")
 	Local $lLayer = Agent_GetAgentInfo(-2, "Plane")
+	Local $lNeedPathUpdate = False
 
 	; Map was not full loaded
 	If $lMyX = 0 Or $lMyY = 0 Or $lMyOldMap = 0 Or $lMapLoadingOld = $GC_I_MAP_TYPE_LOADING Then
@@ -106,13 +107,15 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
         EndIf
 
 		; wait until rez
-		If Agent_GetAgentInfo(-2, "IsDead") Then ContinueLoop
+		If Agent_GetAgentInfo(-2, "IsDead") Then
+			$lNeedPathUpdate = True
+			ContinueLoop
+		EndIf
 
         $lMyX = Agent_GetAgentInfo(-2, "X")
         $lMyY = Agent_GetAgentInfo(-2, "Y")
 
         ; Update obstacles (dynamic mode only)
-        Local $lNeedPathUpdate = False
         If $lIsDynamicObstacles And TimerDiff($lLastObstacleUpdate) > $g_iPathfinder_ObstacleUpdateInterval Then
             Local $lNewObstacles = Call($aObstacles)
             $lLastObstacleUpdate = TimerInit()
@@ -129,12 +132,12 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
             Local $lMovedDistance = _Pathfinder_Distance($lMyX, $lMyY, $lLastStuckCheckX, $lLastStuckCheckY)
             If $lMovedDistance < $g_iPathfinder_StuckDistance Then
                 $lStuckCount += 1
-                $lNeedPathUpdate = True
                 If $lStuckCount >= 3 Then
                     Local $lRandomAngle = Random(0, 6.28)
                     Map_MoveLayer($lMyX + Cos($lRandomAngle) * 500, $lMyY + Sin($lRandomAngle) * 500, $lLayer)
                     Sleep(750)
                     $lStuckCount = 0
+					$lNeedPathUpdate = True
                 EndIf
             Else
                 $lStuckCount = 0
@@ -157,6 +160,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
                 $g_iPathfinder_CurrentPathIndex = 0
             EndIf
             $g_hPathfinder_LastPathUpdateTime = TimerInit()
+			$lNeedPathUpdate = False
         EndIf
 
         ; Move to current waypoint
@@ -207,7 +211,7 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
 
 		If $aCallFunc <> "" Then Call($aCallFunc)
 
-		If Game_GetGameInfo("IsCinematic") Then Other_WaitPingStabilized(1000)
+		If Game_GetGameInfo("IsCinematic") Then Other_WaitPingStabilized(2000)
 
     Until Agent_GetDistanceToXY($aDestX, $aDestY) < 125
 
