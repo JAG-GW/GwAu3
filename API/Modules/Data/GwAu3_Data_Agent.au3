@@ -874,19 +874,19 @@ EndFunc
 
 #Region Related Player Info
 Func Agent_GetPlayerInfo($a_i_AgentID = 0, $a_s_Info = "")
-    Local $l_p_Pointer = World_GetWorldInfo("PlayerArray")
-    Local $l_i_Size = World_GetWorldInfo("PlayerArraySize")
-    Local $l_p_AgentPtr = 0
+    Local $l_p_PlayerArray = World_GetWorldInfo("PlayerArray")
+    Local $l_i_PlayerArraySize = World_GetWorldInfo("PlayerArraySize")
+    Local $l_FoundAgent = False
 
-    For $i = 1 To $l_i_Size - 1
-        Local $l_p_AgentEffects = $l_p_Pointer + ($i * 0x50)
-        If Memory_Read($l_p_AgentEffects, "dword") = Agent_ConvertID($a_i_AgentID) Then
-            $l_p_AgentPtr = $l_p_AgentEffects
+    For $i = 1 To $l_i_PlayerArraySize - 1
+        Local $l_p_AgentPtr = $l_p_PlayerArray + ($i * 0x50)
+        If Memory_Read($l_p_AgentPtr, "dword") = Agent_ConvertID($a_i_AgentID) Then
+            $l_b_FoundAgent = True
             ExitLoop
         EndIf
     Next
 
-    If $l_p_AgentPtr = 0 Then Return 0
+    If Not $l_b_FoundAgent Then Return 0
 
     Switch $a_s_Info
         Case "AgentID"
@@ -906,8 +906,16 @@ Func Agent_GetPlayerInfo($a_i_AgentID = 0, $a_s_Info = "")
             Return Memory_Read($l_p_AgentPtr + 0x2C, "dword")
         Case "ActiveTitle"
             Return Memory_Read($l_p_AgentPtr + 0x30, "dword")
+
         Case "ActiveChallenge"
             Return Memory_Read($l_p_AgentPtr + 0x34, "dword")
+        Case "ActiveMelandrusAccord"
+            Return BitAND(Memory_Read($l_p_AgentPtr + 0x34, "dword"), 0x1) <> 0
+        Case "ActiveDhuumsCovenant"
+            Return BitAND(Memory_Read($l_p_AgentPtr + 0x34, "dword"), 0x2) <> 0
+        Case "ActiveReforgedMode"
+            Return BitAND(Memory_Read($l_p_AgentPtr + 0x34, "dword"), 0x4) <> 0
+
         Case "PlayerNumber"
             Return Memory_Read($l_p_AgentPtr + 0x38, "dword")
         Case "PartySize"
