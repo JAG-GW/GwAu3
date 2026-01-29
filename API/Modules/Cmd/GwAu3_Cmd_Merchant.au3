@@ -212,7 +212,7 @@ Func Merchant_SellItem($a_v_Item, $a_i_Quantity = 0, $a_b_Trader = False)
             ; Check if item still exists (stack might be depleted)
             Local $l_i_CurrentQuantity = Memory_Read($l_p_Item + 0x4C, 'short')
 
-            If $l_b_IsRareMaterial Then
+            If $l_b_IsCommonMaterial Then
                 If $l_i_CurrentQuantity = $l_i_SellingThreshold Then ExitLoop
             Else
                 If $l_i_CurrentQuantity < 10 Then ExitLoop
