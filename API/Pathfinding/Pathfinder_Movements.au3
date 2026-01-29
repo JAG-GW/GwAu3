@@ -492,7 +492,7 @@ Func _Pathfinder_ShouldWaitForParty($fMaxDistance = 1800, $fResumeDistance = 140
 		Local $fX = $aFlagAll[0]
 		Local $fY = $aFlagAll[1]
 		; Check if values are finite and not zero (meaning flag is actually placed)
-		If _IsFinite($fX) And _IsFinite($fY) Then Return True
+		If _IsFinite($fX) And _IsFinite($fY) Then Return False
 	EndIf
 
     ; Get party size (players + heroes + henchmen)
