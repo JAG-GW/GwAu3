@@ -159,7 +159,7 @@ EndFunc   ;==>Ui_EnterChallenge
 
 ;~ Description: Initiates map travel.
 Func Ui_MoveMap($a_i_MapID, $a_i_Region, $a_i_Language, $a_i_District)
-    DllStructSetData($g_d_MoveMap, 2, 0x1000017F)
+    DllStructSetData($g_d_MoveMap, 2, $GC_I_UIMSG_TRAVEL)
     DllStructSetData($g_d_MoveMap, 3, $a_i_MapID)
     DllStructSetData($g_d_MoveMap, 4, $a_i_Region)
     DllStructSetData($g_d_MoveMap, 5, $a_i_Language)
@@ -169,7 +169,7 @@ EndFunc   ;==>Ui_MoveMap
 
 ;~ Description: Equips an item to an agent.
 Func Ui_EquipItem($a_v_Item, $a_v_Agent = Agent_GetAgentPtr())
-    DllStructSetData($g_d_EquipItem, 2, 0x100001A2)
+    DllStructSetData($g_d_EquipItem, 2, $GC_I_UIMSG_EQUIP_ITEM)
     DllStructSetData($g_d_EquipItem, 3, Item_ItemID($a_v_Item))
     DllStructSetData($g_d_EquipItem, 4, Agent_ConvertID($a_v_Agent))
     Core_Enqueue($g_p_EquipItem, 16)
