@@ -38,21 +38,22 @@ Func Merchant_GetMerchantItemPtr($a_i_Val, $a_i_Mode = 0)
 EndFunc   ;==>GetMerchantItemPtrByModelId
 
 ;~ Description: Internal use for buy an item, provide $a_s_ModString for runes and $a_i_ExtraID for dye
+;~ Limited functionality when buying an item that was previously sold in the same map instance
 Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s_ModString = "", $a_i_ExtraID = -1)
 	If $a_b_Trader Then
-        ; Search for item with matching ModelID not belonging to a player
-        Local $l_i_ItemArraySize = Item_GetMaxItems()
+        ; Search for item with matching ModelID not in the players inventory
+        Local $l_i_ItemArray = Item_GetItemArray()
         Local $l_p_Item, $l_i_ItemID, $l_i_ItemModelID
         Local $l_b_FoundItem = False
 
-        For $i = 1 To $l_i_ItemArraySize
-            $l_p_Item = Item_GetItemPtr($i)
-            If $l_p_Item = 0 Then ContinueLoop
+        For $i = 1 To $l_i_ItemArray[0]
+            $l_p_Item = $l_i_ItemArray[$i]
 
             If Memory_Read($l_p_Item + 0x2C, 'dword') <> $a_i_ModelID Then ContinueLoop
-            If Memory_Read($l_p_Item + 0xC, 'ptr') <> 0 Or Memory_Read($l_p_Item + 0x4, 'dword') <> 0 Then ContinueLoop
+            If Memory_Read($l_p_Item + 0xC, 'ptr') <> 0 Then ContinueLoop ; BagPtr (item in player inventory)
+            If Memory_Read($l_p_Item + 0x4, 'dword') <> 0 Then ContinueLoop ; AgentID (item on the ground)
 
-            If $a_s_ModString = "" And $a_i_ExtraID = -1 Then
+            If $a_s_ModString == "" And $a_i_ExtraID = -1 Then
                 $l_b_FoundItem = True
                 ExitLoop
             ElseIf $a_s_ModString <> "" And $a_i_ExtraID = -1 Then
@@ -60,7 +61,7 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
                     $l_b_FoundItem = True
                     ExitLoop
                 EndIf
-            ElseIf $a_s_ModString = "" And $a_i_ExtraID <> -1 Then
+            ElseIf $a_s_ModString == "" And $a_i_ExtraID <> -1 Then
                 If Memory_Read($l_p_Item + 0x22, 'short') = $a_i_ExtraID Then
                     $l_b_FoundItem = True
                     ExitLoop
@@ -76,7 +77,6 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
 
             ; Request quote
             $l_i_ItemID = Item_ItemID($l_p_Item)
-
             DllStructSetData($g_d_RequestQuote, 2, $l_i_ItemID)
             Core_Enqueue($g_p_RequestQuote, 8)
 
@@ -119,23 +119,23 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
 
         ; Search for ModelID in merchant's items
         For $i = 0 To $l_i_MerchantItemCount - 1
-            $l_i_ItemID = Memory_Read($l_p_MerchantItemBase + 4 * $i)
+            $l_i_ItemID = Memory_Read($l_p_MerchantItemBase + 0x4 * $i)
             $l_p_Item = Item_GetItemPtr($l_i_ItemID)
             If $l_p_Item = 0 Then ContinueLoop
 
             $l_i_ItemModelID = Memory_Read($l_p_Item + 0x2C)
-            If $l_i_ItemModelID = $a_i_ModelID Then
-                If $a_i_ExtraID = -1 Then
+            If $l_i_ItemModelID <> $a_i_ModelID Then ContinueLoop
+
+            If $a_i_ExtraID = -1 Then
+                $l_i_ItemValue = Memory_Read($l_p_Item + 0x24, 'short')
+                $l_b_FoundItem = True
+                ExitLoop
+            Else
+                Local $l_i_ItemExtraID = Memory_Read($l_p_Item + 0x22, 'short')
+                If $l_i_ItemExtraID = $a_i_ExtraID Then
                     $l_i_ItemValue = Memory_Read($l_p_Item + 0x24, 'short')
                     $l_b_FoundItem = True
                     ExitLoop
-                Else
-                    Local $l_i_ItemExtraID = Memory_Read($l_p_Item + 0x22, 'short')
-                    If $l_i_ItemExtraID = $a_i_ExtraID Then
-                        $l_i_ItemValue = Memory_Read($l_p_Item + 0x24, 'short')
-                        $l_b_FoundItem = True
-                        ExitLoop
-                    EndIf
                 EndIf
             EndIf
         Next
@@ -157,9 +157,10 @@ Func Merchant_BuyItem($a_i_ModelID, $a_i_Quantity = 1, $a_b_Trader = False, $a_s
     EndIf
 EndFunc ;==>Merchant_BuyItem
 
-Func Merchant_SellItem($a_p_Item, $a_i_Quantity = 0, $a_b_Trader = False)
-    Local $l_p_Item = Item_GetItemPtr($a_p_Item)
-    Local $l_i_ItemID = Item_ItemID($a_p_Item)
+;~ Description: Internal use for selling an item, provide
+Func Merchant_SellItem($a_v_Item, $a_i_Quantity = 0, $a_b_Trader = False)
+    Local $l_p_Item = Item_GetItemPtr($a_v_Item)
+    Local $l_i_ItemID = Item_ItemID($a_v_Item)
     Local $l_i_ItemQuantity = Memory_Read($l_p_Item + 0x4C, 'short')
 
     If $l_i_ItemQuantity < 0 Then Return False
@@ -173,11 +174,10 @@ Func Merchant_SellItem($a_p_Item, $a_i_Quantity = 0, $a_b_Trader = False)
     If $a_b_Trader Then
         ; Trader sell process - one by one
         Local $l_i_SoldCount = 0, $l_i_SellingThreshold = 0
-        Local $l_b_IsRareMaterial = Item_GetItemIsRareMaterial($l_p_Item)
+        Local $l_b_IsCommonMaterial = Item_GetItemIsCommonMaterial($l_p_Item)
         Local $l_i_ItemModelID = Memory_Read($l_p_Item + 0x2C, "dword")
-		Local $l_i_UpgradeType = Item_IsRuneOrInsignia($l_i_ItemModelID)
 
-        If Not $l_b_IsRareMaterial And $l_i_UpgradeType = 0 Then
+        If $l_b_IsCommonMaterial Then
             $l_i_SellingThreshold = 10
             $a_i_Quantity = Int($a_i_Quantity / 10)
         EndIf

@@ -659,13 +659,15 @@ Func Item_GetMaxItems()
 EndFunc   ;==>GetMaxItems
 
 Func Item_GetItemArray()
+    Local $l_ap_ItemArray[] = [0]
     Local $l_i_MaxItems = Item_GetMaxItems()
-    If $l_i_MaxItems <= 0 Then Return
+
+    If $l_i_MaxItems <= 0 Then Return $l_ap_ItemArray
+    ReDim $l_ap_ItemArray[$l_i_MaxItems + 1]
 
     Local $l_ai_Offset[4] = [0, 0x18, 0x40, 0xB8]
     Local $l_ai_ItemStructAddress = Memory_ReadPtr($g_p_BasePointer, $l_ai_Offset, "dword")
 
-    Local $l_ap_ItemArray[$l_i_MaxItems + 1]
     Local $l_p_Ptr, $l_i_Count = 0
     Local $l_p_ItemBasePtr = $l_ai_ItemStructAddress[1]
     Local $l_d_ItemPtrBuffer = DllStructCreate("ptr[" & $l_i_MaxItems & "]")
