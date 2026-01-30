@@ -210,13 +210,11 @@ Func Merchant_SellItem($a_v_Item, $a_i_Quantity = 0, $a_b_Trader = False)
             $l_i_SoldCount += 1
 
             ; Check if item still exists (stack might be depleted)
-            Local $l_i_CurrentQuantity = Memory_Read($l_p_Item + 0x4C, 'short')
+            Local $l_b_ItemInInventory = (Memory_Read($l_p_Item + 0xC, 'short') <> 0)
+            If Not $l_b_ItemInInventory Then ExitLoop
 
-            If $l_b_IsCommonMaterial Then
-                If $l_i_CurrentQuantity < 10 Then ExitLoop
-            Else
-                If $l_i_CurrentQuantity = $l_i_SellingThreshold Then ExitLoop
-            EndIf
+            Local $l_i_CurrentQuantity = Memory_Read($l_p_Item + 0x4C, 'short')
+            If $l_i_CurrentQuantity <= $l_i_SellingThreshold Then ExitLoop
         Next
 
         Log_Debug("Sold to trader: Item " & $l_i_ItemID & " x" & $l_i_SoldCount & " (requested: " & $a_i_Quantity & ")", "TradeMod", $g_h_EditText)
