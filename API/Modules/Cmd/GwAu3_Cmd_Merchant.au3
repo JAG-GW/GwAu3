@@ -173,7 +173,7 @@ Func Merchant_SellItem($a_v_Item, $a_i_Quantity = 0, $a_b_Trader = False)
 
     If $a_b_Trader Then
         ; Trader sell process - one by one
-        Local $l_i_SoldCount = 0, $l_i_SellingThreshold = 0
+        Local $l_i_SoldCount = 0, $l_i_SellingThreshold = 1
         Local $l_b_IsCommonMaterial = Item_GetItemIsCommonMaterial($l_p_Item)
         Local $l_i_ItemModelID = Memory_Read($l_p_Item + 0x2C, "dword")
 
@@ -214,7 +214,7 @@ Func Merchant_SellItem($a_v_Item, $a_i_Quantity = 0, $a_b_Trader = False)
             If Not $l_b_ItemInInventory Then ExitLoop
 
             Local $l_i_CurrentQuantity = Memory_Read($l_p_Item + 0x4C, 'short')
-            If $l_i_CurrentQuantity <= $l_i_SellingThreshold Then ExitLoop
+            If $l_i_CurrentQuantity < $l_i_SellingThreshold Then ExitLoop
         Next
 
         Log_Debug("Sold to trader: Item " & $l_i_ItemID & " x" & $l_i_SoldCount & " (requested: " & $a_i_Quantity & ")", "TradeMod", $g_h_EditText)
