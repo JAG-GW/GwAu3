@@ -876,7 +876,7 @@ EndFunc
 Func Agent_GetPlayerInfo($a_i_AgentID = 0, $a_s_Info = "")
     Local $l_p_PlayerArray = World_GetWorldInfo("PlayerArray")
     Local $l_i_PlayerArraySize = World_GetWorldInfo("PlayerArraySize")
-    Local $l_FoundAgent = False
+    Local $l_b_FoundAgent = False
 
     For $i = 1 To $l_i_PlayerArraySize - 1
         Local $l_p_AgentPtr = $l_p_PlayerArray + ($i * 0x50)
