@@ -2233,11 +2233,11 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_FORUM_HIGHLANDS
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_GARDEN_OF_SEBORHIN
-					Local $l_ai_Coords[2] = [-4552, 15863]
+					Local $l_ai_Coords[2] = [-4686, 16325]
 				Case $GC_I_MAP_ID_JENNURS_HORDE_OUTPOST
 					Local $l_ai_Coords[2] = [-23269, 17149]
 				Case $GC_I_MAP_ID_NIGHTFALLEN_GARDEN
-					Local $l_ai_Coords[2] = [-4552, 15863]
+					Local $l_ai_Coords[2] = [-4686, 16325]
 				Case $GC_I_MAP_ID_THE_KODASH_BAZAAR
 					Local $l_ai_Coords[2] = [22886, 16725]
 				Case $GC_I_MAP_ID_TIHARK_ORCHARD_OUTPOST
