@@ -2020,7 +2020,7 @@ Func BestTarget_VialOfPurifiedWater($a_f_AggroRange)
 	; Hex Spell. The purified waters of the vial affect one target (10 seconds). Harbingers become vulnerable to damage from all sources.
 	; Concise description
 	; Spell. The purified waters of the vial affect one target (10 seconds). Harbingers become vulnerable to damage from all sources.
-	Return 0
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHarbingers")
 EndFunc
 
 ; Skill ID: 1433 - $GC_I_SKILL_ID_CORSAIRS_NET
