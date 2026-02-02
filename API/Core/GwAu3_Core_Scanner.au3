@@ -682,7 +682,6 @@ Func Scanner_ScanForGwAu3()
     Local $l_ai_MBI[7]
     Local $l_d_MBIBuffer = DllStructCreate("dword;dword;dword;dword;dword;dword;dword")
     Local $l_i_Search, $l_s_TmpMemData, $l_i_Idx
-    Local Const $LC_I_PARTIAL_END = 0x01F00000
 
     While True
         Local $l_av_Ret = DllCall($g_h_Kernel32, "int", "VirtualQueryEx", _

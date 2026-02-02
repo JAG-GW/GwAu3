@@ -66,7 +66,7 @@ Global $g_p_DecreaseAttribute = DllStructGetPtr($g_d_DecreaseAttribute)
 Global $g_i_LastAttributeModified = -1
 Global $g_i_LastAttributeValue = -1
 
-;Trade
+;Trader
 Global $g_p_BuyItemBase      ; Pointer to buy item base
 Global $g_i_TraderQuoteID    ; Current trader quote ID
 Global $g_i_TraderCostID     ; Trader cost ID
@@ -90,6 +90,8 @@ Global $g_i_LastTransactionType = -1
 Global $g_i_LastItemID = 0
 Global $g_i_LastQuantity = 0
 Global $g_i_LastPrice = 0
+Global $g_p_CraftItem
+Global $g_p_CollectorExchange
 
 ;Agent
 Global $g_p_AgentBase      ; Pointer to agent array

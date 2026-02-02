@@ -348,13 +348,13 @@ Func Merchant_CraftItem($a_i_CraftedItemModelID, $a_i_Price, $a_ai2_ReqMaterials
     If $s_i_LastMaterialItemIDCount <> $l_i_MaterialIdx Then
         $s_d_CraftItemStruct = DllStructCreate('ptr;dword;dword;dword;dword;dword[' & $l_i_MaterialIdx & ']')
         $s_p_CraftItemStructPtr = DllStructGetPtr($s_d_CraftItemStruct)
-        DllStructSetData($s_d_CraftItemStruct, 1, Memory_GetValue('CommandCraftItem'))
         $s_i_LastMaterialItemIDCount = $l_i_MaterialIdx
     EndIf
 
     Local $l_i_MerchantItemID = Memory_Read(Merchant_GetMerchantItemPtr($a_i_CraftedItemModelID))
     If $l_i_MerchantItemID = 0 Then Return False
 
+    DllStructSetData($s_d_CraftItemStruct, 1, $g_p_CraftItem)
     DllStructSetData($s_d_CraftItemStruct, 2, $a_i_Quantity)
     DllStructSetData($s_d_CraftItemStruct, 3, $l_i_MerchantItemID)
     DllStructSetData($s_d_CraftItemStruct, 4, $a_i_Price * $a_i_Quantity)
@@ -457,13 +457,13 @@ Func Merchant_CollectorExchange($a_i_ItemRecvModelID, $a_i_ExchangeReq, $a_i_Ite
     If $s_i_LastUsedItemIDCount <> $l_i_ExchangeIdx Then
         $s_d_CollectorExchangeStruct = DllStructCreate("ptr;dword;dword;dword[" & $l_i_ExchangeIdx & "];dword[" & $l_i_ExchangeIdx & "]")
         $s_p_CollectorExchangeStructPtr = DllStructGetPtr($s_d_CollectorExchangeStruct)
-        DllStructSetData($s_d_CollectorExchangeStruct, 1, Memory_GetValue('CommandCollectorExchange'))
         $s_i_LastUsedItemIDCount = $l_i_ExchangeIdx
     EndIf
 
     Local $l_i_ItemRecvItemID = Memory_Read(Merchant_GetMerchantItemPtr($a_i_ItemRecvModelID))
     If $l_i_ItemRecvItemID = 0 Then Return SetError(4, 0, False)
 
+    DllStructSetData($s_d_CollectorExchangeStruct, 1, $g_p_CollectorExchange)
     DllStructSetData($s_d_CollectorExchangeStruct, 2, $l_i_ItemRecvItemID)
     DllStructSetData($s_d_CollectorExchangeStruct, 3, $l_i_ExchangeIdx)
 

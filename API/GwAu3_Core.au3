@@ -367,7 +367,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     $g_p_QueueBase = Memory_GetValue('QueueBase')
     $g_b_DisableRendering = Memory_GetValue('DisableRendering')
 	$g_p_MapIsLoaded = Memory_GetValue('MapIsLoaded')
-	$g_p_TradePartner = Memory_GetValue('TradePartner')
+	$g_p_TradePartner = Memory_GetValue('TradePartner')	
 	If IsDeclared("g_b_InitializeResult") Then Extend_InitializeResult()
 
     ; Setup command structures
@@ -387,7 +387,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	;Attribute
 	DllStructSetData($g_d_IncreaseAttribute, 1, Memory_GetValue('CommandIncreaseAttribute'))
     DllStructSetData($g_d_DecreaseAttribute, 1, Memory_GetValue('CommandDecreaseAttribute'))
-	;Trade
+	;Trader
 	DllStructSetData($g_d_SellItem, 1, Memory_GetValue('CommandSellItem'))
     DllStructSetData($g_d_BuyItem, 1, Memory_GetValue('CommandBuyItem'))
     DllStructSetData($g_d_RequestQuote, 1, Memory_GetValue('CommandRequestQuote'))
@@ -395,6 +395,8 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     DllStructSetData($g_d_TraderBuy, 1, Memory_GetValue('CommandTraderBuy'))
     DllStructSetData($g_d_TraderSell, 1, Memory_GetValue('CommandTraderSell'))
     DllStructSetData($g_d_Salvage, 1, Memory_GetValue('CommandSalvage'))
+	$g_p_CraftItem = Memory_GetValue('CommandCraftItem')
+	$g_p_CollectorExchange = Memory_GetValue('CommandCollectorExchange')
 	;Agent
 	DllStructSetData($g_d_ChangeTarget, 1, Memory_GetValue('CommandChangeTarget'))
     DllStructSetData($g_d_MakeAgentArray, 1, Memory_GetValue('CommandMakeAgentArray'))
@@ -423,11 +425,9 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	DllStructSetData($g_d_LockHeroTarget, 1, Memory_GetValue('CommandLockHeroTarget'))
 	DllStructSetData($g_d_ToggleHeroSkillState, 1, Memory_GetValue('CommandToggleHeroSkillState'))
 	DllStructSetData($g_d_ActiveQuest, 1, Memory_GetValue('CommandActiveQuest'))
-
 	;UIMsg
 	DllStructSetData($g_d_MoveMap, 1, Memory_GetValue('CommandUIMsg'))
 	DllStructSetData($g_d_EquipItem, 1, Memory_GetValue('CommandUIMsg'))
-
 	;Party
 	DllStructSetData($g_d_AddPlayer, 1, Memory_GetValue('CommandAddPlayer'))
 	DllStructSetData($g_d_KickPlayer, 1, Memory_GetValue('CommandKickPlayer'))
