@@ -634,7 +634,7 @@ Func Agent_GetAgentsAsObstacles($a_f_Range = 2500, $a_f_Radius = 150, $a_s_Filte
     Local $l_f_RefY = Agent_GetAgentInfo($a_i_RefAgentID, "Y")
     Local $l_f_RangeSquared = $a_f_Range * $a_f_Range
 
-    Local $l_a_AgentArray = Agent_GetAgentArray(0xDB) ; 0xDB = Living type
+    Local $l_a_AgentArray = Agent_GetAgentArray() ; 0xDB = Living type
     If Not IsArray($l_a_AgentArray) Or $l_a_AgentArray[0] = 0 Then
         Local $l_a_Empty[0][3]
         Return $l_a_Empty
@@ -648,11 +648,8 @@ Func Agent_GetAgentsAsObstacles($a_f_Range = 2500, $a_f_Radius = 150, $a_s_Filte
         Local $l_p_AgentPtr = $l_a_AgentArray[$i]
         If $l_p_AgentPtr = 0 Then ContinueLoop
 
-        ; Get agent ID for filter
-        Local $l_i_AgentID = Agent_GetAgentInfo($l_p_AgentPtr, "ID")
-
         ; Apply filter(s)
-        If $a_s_Filter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_Filter) Then ContinueLoop
+        If $a_s_Filter <> "" And Not _ApplyFilters($l_p_AgentPtr, $a_s_Filter) Then ContinueLoop
 
         ; Get position
         Local $l_f_X = Agent_GetAgentInfo($l_p_AgentPtr, "X")
