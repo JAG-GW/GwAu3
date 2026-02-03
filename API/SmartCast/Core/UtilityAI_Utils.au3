@@ -44,6 +44,63 @@ Func UAI_CountEnemyInPartyAggroRange($a_f_AggroRange = 1320)
     Return 0
 EndFunc
 
+; Get the nearest enemy that is in aggro range of any party member (player or unflagged hero)
+; Returns the AgentID of the enemy, or 0 if none found
+; This is useful for moving the player toward enemies that heroes have aggro'd
+Func UAI_GetNearestEnemyInPartyRange($a_f_AggroRange = 1320)
+    ; First check if there's an enemy in player's range
+    Local $l_i_Enemy = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
+    If $l_i_Enemy <> 0 Then Return $l_i_Enemy
+
+    ; Check each hero's aggro range
+    Local $l_i_HeroCount = Party_GetMyPartyInfo("ArrayHeroPartyMemberSize")
+    Local $l_i_BestEnemy = 0
+    Local $l_f_BestDistance = 999999
+
+    For $i = 1 To $l_i_HeroCount
+        ; Skip flagged heroes
+        Local $l_f_FlagX = Party_GetHeroFlagInfo($i, "FlagX")
+        Local $l_f_FlagY = Party_GetHeroFlagInfo($i, "FlagY")
+        If $l_f_FlagX <> 0 Or $l_f_FlagY <> 0 Then ContinueLoop
+
+        Local $l_i_HeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+        If $l_i_HeroAgentID = 0 Then ContinueLoop
+
+        ; Get hero position
+        Local $l_f_HeroX = UAI_GetAgentInfoByID($l_i_HeroAgentID, $GC_UAI_AGENT_X)
+        Local $l_f_HeroY = UAI_GetAgentInfoByID($l_i_HeroAgentID, $GC_UAI_AGENT_Y)
+
+        ; Find nearest enemy to this hero
+        Local $l_f_RangeSquared = $a_f_AggroRange * $a_f_AggroRange
+
+        For $j = 1 To $g_i_AgentCacheCount
+            Local $l_i_AgentID = UAI_GetAgentInfo($j, $GC_UAI_AGENT_ID)
+
+            If Not UAI_Filter_IsLivingEnemy($l_i_AgentID) Then ContinueLoop
+
+            ; Calculate distance from hero to this enemy
+            Local $l_f_EnemyX = UAI_GetAgentInfo($j, $GC_UAI_AGENT_X)
+            Local $l_f_EnemyY = UAI_GetAgentInfo($j, $GC_UAI_AGENT_Y)
+            Local $l_f_DX = $l_f_EnemyX - $l_f_HeroX
+            Local $l_f_DY = $l_f_EnemyY - $l_f_HeroY
+            Local $l_f_DistToHeroSquared = $l_f_DX * $l_f_DX + $l_f_DY * $l_f_DY
+
+            ; Skip if not in hero's aggro range
+            If $l_f_DistToHeroSquared > $l_f_RangeSquared Then ContinueLoop
+
+            ; Calculate distance from player to this enemy (to find the closest one to us)
+            Local $l_f_DistToPlayer = UAI_GetAgentInfo($j, $GC_UAI_AGENT_Distance)
+
+            If $l_f_DistToPlayer < $l_f_BestDistance Then
+                $l_f_BestDistance = $l_f_DistToPlayer
+                $l_i_BestEnemy = $l_i_AgentID
+            EndIf
+        Next
+    Next
+
+    Return $l_i_BestEnemy
+EndFunc
+
 ; Get the current party size
 Func Party_GetSize()
 	Return Party_GetPartyContextInfo("TotalPartySize")
