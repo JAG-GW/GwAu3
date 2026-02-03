@@ -1173,3 +1173,58 @@ Func GetAgents($aAgentID = -2, $aRange = 1320, $aType = 0, $aReturnMode = 0, $aC
             Return $lClosestDistance
     EndSwitch
 EndFunc
+
+; Version of GetAgents that uses X, Y coordinates as reference point instead of an agent
+Func GetAgentsFromXY($aX, $aY, $aRange = 1320, $aType = 0, $aReturnMode = 0, $aCustomFilter = "")
+	Local $lCount = 0
+	Local $lClosestAgent = 0
+	Local $lClosestDistance = 999999
+	Local $lFarthestAgent = 0
+	Local $lFarthestDistance = 0
+
+	Local $lAgentArray
+	If $aType > 0 Then
+		$lAgentArray = Agent_GetAgentArray($aType)
+	Else
+		$lAgentArray = Agent_GetAgentArray()
+	EndIf
+
+	If Not IsArray($lAgentArray) Or $lAgentArray[0] = 0 Then
+		Return 0
+	EndIf
+
+	For $i = 1 To $lAgentArray[0]
+		Local $lAgentPtr = $lAgentArray[$i]
+
+		Local $lAgentX = Agent_GetAgentInfo($lAgentPtr, "X")
+		Local $lAgentY = Agent_GetAgentInfo($lAgentPtr, "Y")
+		Local $lDistance = Sqrt(($lAgentX - $aX) ^ 2 + ($lAgentY - $aY) ^ 2)
+
+		If $lDistance > $aRange Then ContinueLoop
+
+		If $aCustomFilter <> "" And Not _ApplyFilters($lAgentPtr, $aCustomFilter) Then ContinueLoop
+
+		$lCount += 1
+
+		If $lDistance < $lClosestDistance Then
+			$lClosestDistance = $lDistance
+			$lClosestAgent = $lAgentPtr
+		EndIf
+
+		If $lDistance > $lFarthestDistance Then
+			$lFarthestDistance = $lDistance
+			$lFarthestAgent = $lAgentPtr
+		EndIf
+	Next
+
+	Switch $aReturnMode
+		Case 0 ; Number of agents
+			Return $lCount
+		Case 1 ; Closest Agent
+			Return $lClosestAgent
+		Case 2 ; Farthest Agent
+			Return $lFarthestAgent
+		Case 3 ; Closest Distance
+			Return $lClosestDistance
+	EndSwitch
+EndFunc

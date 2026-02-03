@@ -62,7 +62,7 @@ Func BestTarget_PowerAttack($a_f_AggroRange)
 	; Melee Attack. If this attack hits, you strike for +10...34...40 damage.
 	; Concise description
 	; Melee Attack. Deals +10...34...40 damage.
-	Return 0
+	Return UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 323 - $GC_I_SKILL_ID_DESPERATION_BLOW

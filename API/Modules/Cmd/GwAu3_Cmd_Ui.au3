@@ -18,6 +18,12 @@ Func Ui_UpdateQuest($a_i_QuestID)
     Core_Enqueue($g_p_Dialog, 8)
 EndFunc   ;==>Ui_UpdateQuest
 
+;~ Description: Sends dialog ID about a Quest.
+Func Ui_AboutQuest($a_i_QuestID)
+    DllStructSetData($g_d_Dialog, 2, '0x008' & Hex($a_i_QuestID, 3) & '03')
+    Core_Enqueue($g_p_Dialog, 8)
+EndFunc   ;==>Ui_UpdateQuest
+
 ;~ Description: Sends dialog ID for Quest Reward.
 Func Ui_RewardQuest($a_i_QuestID)
     DllStructSetData($g_d_Dialog, 2, '0x008' & Hex($a_i_QuestID, 3) & '07')

@@ -531,8 +531,8 @@ Func UAI_Filter_IsNotDeepWounded($a_i_AgentID)
 EndFunc
 
 Func UAI_Filter_IsHarbingers($a_i_AgentID)
-	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber) = 5459 Then Return True
-	If UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber) = 5458 Then Return True
+	Local $l_i_PlayerNumber = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+	If $l_i_PlayerNumber = 5458 Or $l_i_PlayerNumber = 5459 Or $l_i_PlayerNumber = 5460 Then Return True
 	Return False
 EndFunc
 #EndRegion

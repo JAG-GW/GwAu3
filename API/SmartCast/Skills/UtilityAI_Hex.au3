@@ -97,13 +97,7 @@ Func BestTarget_Backfire($a_f_AggroRange)
 	; Hex Spell. (10 seconds.) Target foe takes 35...119...140 damage whenever it casts a spell.
 	; Concise description
 	; Spell. (10 seconds.) Target foe takes 35...119...140 damage whenever it casts a spell.
-	; Target casting enemies for maximum effect
-	Local $l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCasting")
-	If $l_i_Target <> 0 Then Return $l_i_Target
-	; Target casters (elementalists, monks, mesmers, necromancers)
-	$l_i_Target = UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
-	If $l_i_Target <> 0 Then Return $l_i_Target
-	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
+	Return UAI_GetAgentLowest(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsCaster")
 EndFunc
 
 ; Skill ID: 30 - $GC_I_SKILL_ID_DIVERSION

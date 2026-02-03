@@ -1790,7 +1790,7 @@ Func Map_GetExitPortalsCoords($a_i_FromMapID, $a_i_ToMapID)
 		Case $GC_I_MAP_ID_TSUMEI_VILLAGE
 			Switch $a_i_ToMapID
 				Case $GC_I_MAP_ID_PANJIANG_PENINSULA
-					Local $l_ai_Coords[2] = [-11694, -16968]
+					Local $l_ai_Coords[2] = [-11568, -17109]
 				Case $GC_I_MAP_ID_SUNQUA_VALE
 					Local $l_ai_Coords[2] = [-4645, -12829]
 			EndSwitch
