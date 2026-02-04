@@ -1081,16 +1081,24 @@ EndFunc
 #EndRegion
 
 ; Helper function to apply multiple filters separated by |
-Func _ApplyFilters($aAgentPtr, $aFilters)
-	If $aFilters = "" Then Return True
+Func _ApplyFilters($a_p_Agent, $a_s_Filters)
+	If $a_s_Filters = "" Then Return True
 
-	Local $lFilterArray = StringSplit($aFilters, "|", 2) ; 2 = no count in [0]
+	Local $l_as_Filters = StringSplit($a_s_Filters, "|", 2) ; 2 = no count in [0]
 
-	For $i = 0 To UBound($lFilterArray) - 1
-		Local $lFilterName = StringStripWS($lFilterArray[$i], 3) ; Remove leading/trailing spaces
-		If $lFilterName <> "" Then
-			Local $lResult = Call($lFilterName, $aAgentPtr)
-			If Not $lResult Then Return False
+	For $i = 0 To UBound($l_as_Filters) - 1
+		Local $l_s_FilterName = StringStripWS($l_as_Filters[$i], 3) ; Remove leading/trailing spaces
+		If $l_s_FilterName <> "" Then
+            Local $l_b_InvertFilter = False
+            If StringLeft($l_s_FilterName, 1) == "-" Then 
+                $l_b_InvertFilter = True
+                $l_s_FilterName = StringTrimLeft($l_s_FilterName, 1)
+            EndIf
+
+			Local $l_b_Result = Call($l_s_FilterName, $a_p_Agent)
+
+            If $l_b_InvertFilter Then $l_b_Result = Not $l_b_Result
+            If Not $l_b_Result Then Return False
 		EndIf
 	Next
 

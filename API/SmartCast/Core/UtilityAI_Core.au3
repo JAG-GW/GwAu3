@@ -1,15 +1,23 @@
 #include-once
 
-Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500, $a_i_FightMode = $g_i_FinisherMode, $a_b_UseSwitchSet = False)
+Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500, $a_i_FightMode = $g_i_FinisherMode, $a_b_UseSwitchSet = False, $a_i_PlayerNumber = -1)
 	$g_i_BestTarget = 0
+	$g_i_ForceTarget = 0
 	$g_i_FightMode = $a_i_FightMode
 	$a_b_UseSwitchSet = $g_b_CacheWeaponSet
 
 	Local $l_i_MyOldMap = Map_GetMapID(), $l_i_MapLoadingOld = Map_GetInstanceInfo("Type")
 
+	If $a_i_PlayerNumber <> -1 Then
+		UAI_UpdateCache($a_f_AggroRange)
+		$g_i_ForceTarget = UAI_FindAgentByPlayerNumber($a_i_PlayerNumber, -2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
+		If $g_i_ForceTarget = 0 Then Return True
+	EndIf
+
 	If $g_b_CacheWeaponSet Then UAI_DeterminateWeaponSets()
 
 	Do
+		If $g_i_ForceTarget <> 0 And UAI_GetAgentInfoByID($g_i_ForceTarget, $GC_UAI_AGENT_IsDead) Then ExitLoop
 		UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange, $a_f_MaxDistanceToXY)
 		Sleep(128)
 	Until UAI_CountEnemyInPartyAggroRange($a_f_AggroRange) = 0 Or Agent_GetAgentInfo(-2, "IsDead") Or Party_IsWiped() Or Map_GetMapID() <> $l_i_MyOldMap Or Map_GetInstanceInfo("Type") <> $l_i_MapLoadingOld
@@ -60,7 +68,11 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 
 ;~ 	AUTO ATTACK
 		If UAI_CanAutoAttack() Then
-			Agent_Attack(UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy"), False)
+			If $g_i_ForceTarget <> 0 Then 
+				Agent_Attack($g_i_ForceTarget)
+			Else
+				Agent_Attack(UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy"), False)
+			EndIf
 		Else
 			If UAI_GetPlayerInfo($GC_UAI_AGENT_IsAttacking) Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
 		EndIf
@@ -74,6 +86,9 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 ;~ 	USESKILL
 		If UAI_CanCast($l_i_Slot) Then
 			$g_i_BestTarget = Call($g_as_BestTargetCache[$l_i_Slot], $a_f_AggroRange)
+			If $g_i_ForceTarget <> 0 And UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_Allegiance) = $GC_I_ALLEGIANCE_ENEMY Then
+				$g_i_BestTarget = $g_i_ForceTarget
+			EndIf
 			If $g_i_BestTarget = 0 Then ContinueLoop
 
 			$g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_Slot])
@@ -122,7 +137,7 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 				ExitLoop
 			EndIf
 			Sleep(32)
-		Until Agent_GetDistance($a_i_AgentID) <= 240 Or Agent_GetAgentInfo(-2, "IsDead") Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not UAI_CanCast($a_i_SkillSlot)
+		Until Agent_GetDistance($a_i_AgentID) <= 240 Or Agent_GetAgentInfo(-2, "IsDead") Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not UAI_CanCast($a_i_SkillSlot) Or Agent_GetAgentInfo(-2, "IsKnocked")
 	EndIf
 
 	Local $l_h_CastStart = TimerInit()
@@ -133,7 +148,7 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 			ExitLoop
 		EndIf
 		Sleep(32)
-	Until Agent_GetAgentInfo(-2, "IsDead") Or Agent_GetDistance($a_i_AgentID) > 1320 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or (Not Agent_GetAgentInfo(-2, "IsCasting") And Not Agent_GetAgentInfo(-2, "Skill") And Not Skill_GetSkillbarInfo($a_i_SkillSlot, "Casting"))
+	Until Agent_GetAgentInfo(-2, "IsDead") Or Agent_GetDistance($a_i_AgentID) > 1320 Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or (Not Agent_GetAgentInfo(-2, "IsCasting") And Not Agent_GetAgentInfo(-2, "Skill") And Not Skill_GetSkillbarInfo($a_i_SkillSlot, "Casting") Or Agent_GetAgentInfo(-2, "IsKnocked"))
 EndFunc   ;==>UAI_UseSkillEX
 
 ;Priority skills, check at each loop if can cast
@@ -185,6 +200,9 @@ EndFunc
 Func UAI_CastPrioritySkill($a_i_Slot, $a_f_AggroRange = 1320)
 	If UAI_CanCast($a_i_Slot) Then
 		$g_i_BestTarget = Call($g_as_BestTargetCache[$a_i_Slot], $a_f_AggroRange)
+		If $g_i_ForceTarget <> 0 And UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_Allegiance) = $GC_I_ALLEGIANCE_ENEMY Then
+			$g_i_BestTarget = $g_i_ForceTarget
+		EndIf
 		If $g_i_BestTarget = 0 Then Return
 
 		$g_b_CanUseSkill = Call($g_as_CanUseCache[$a_i_Slot])
@@ -214,6 +232,9 @@ Func UAI_DropBundle($a_f_AggroRange = 1320)
 		; Check if skill is recharged (can drop bundle)
 		If UAI_CanCast($l_i_Slot) Then
 			$g_i_BestTarget = Call($g_as_BestTargetCache[$l_i_Slot], $a_f_AggroRange)
+			If $g_i_ForceTarget <> 0 And UAI_GetAgentInfoByID($g_i_BestTarget, $GC_UAI_AGENT_Allegiance) = $GC_I_ALLEGIANCE_ENEMY Then
+				$g_i_BestTarget = $g_i_ForceTarget
+			EndIf
 			If $g_i_BestTarget = 0 Then ContinueLoop
 
 			$g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_Slot])

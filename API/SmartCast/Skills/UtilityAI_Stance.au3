@@ -1269,6 +1269,7 @@ EndFunc
 
 ; Skill ID: 2334 - $GC_I_SKILL_ID_BRAWLING_BLOCK
 Func CanUse_BrawlingBlock()
+	If UAI_Filter_IsDazed(UAI_GetPlayerInfo($GC_UAI_AGENT_ID)) Then Return False
 	If Anti_Stance() Then Return False
 	Return True
 EndFunc
