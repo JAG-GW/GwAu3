@@ -1000,7 +1000,7 @@ EndFunc
 Func BestTarget_JununduFeast($a_f_AggroRange)
 	; Skill. (30 seconds.) Junundu Feast is replaced with Choking Breath, Blinding Breath, or Burning Breath. Must exploit an adjacent fresh corpse.
 	; Self-target skill that exploits adjacent corpse
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return UAI_GetNearestAgent(-2, $GC_I_RANGE_ADJACENT, "UAI_Filter_IsDeadEnemy")
 EndFunc
 
 ; Skill ID: 1439 - $GC_I_SKILL_ID_JUNUNDU_STRIKE
@@ -1495,7 +1495,7 @@ Func BestTarget_UnknownJununduAbility($a_f_AggroRange)
 	; Elite Skill. You have not taught your junundu to perform this skill.
 	; Concise description
 	; Elite Skill. You have not taught your junundu to perform this skill.
-	Return UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	Return 0
 EndFunc
 
 ; Skill ID: 1880 - $GC_I_SKILL_ID_TORMENT_SLASH_SMOTHERING_TENDRILS

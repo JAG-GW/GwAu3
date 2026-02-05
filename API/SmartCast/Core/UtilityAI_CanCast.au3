@@ -2,7 +2,6 @@
 
 ;Check if auto attack can be made
 Func UAI_CanAutoAttack()
-	If UAI_PlayerHasEffect($GC_I_SKILL_ID_BLIND) Then Return False
 	If UAI_PlayerHasEffect($GC_I_SKILL_ID_Spirit_Shackles) Then Return False
 
 	Local $l_i_CommingDamage = 0
