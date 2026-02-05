@@ -86,36 +86,46 @@ Func Map_TravelTo($a_i_MapID, $a_i_Language = Map_GetCharacterInfo("Language"), 
     If $a_WaitToLoad Then Return Map_WaitMapIsLoaded()
 EndFunc   ;==>TravelTo
 
-;~ Description: Travel to a map in a random district (different from current)
-;~ $a_i_MapID = Target map ID
-;~ $a_i_MaxRegions = Number of regions to use (7=EU only, 8=EU+Int, 11=All excluding America)
-Func Map_RndTravel($a_i_MapID, $a_WaitToLoad = True)
-    ; Region/Language order: eu-en, eu-fr, eu-ge, eu-it, eu-sp, eu-po, eu-ru, us-en, int, asia-ko, asia-ch
-	Local $a_i_MaxRegions = 11
-    Local $a_i_Region[11]   = [2, 2, 2, 2, 2, 2, 2, -2, 1, 3, 4]
-    Local $a_i_Language[11] = [0, 2, 3, 4, 5, 9, 10, 0, 0, 0, 0]
+;~ Description: Travel to a map in a random district
+;~ Modes: 0 = All, 1 = EU-only, 2 = US-only, 3 = Asia-only
+Func Map_RndTravel($a_i_MapID, $a_WaitToLoad = True, $a_b_SwitchDistrict = True, $a_i_Mode = 0)
+    Local Const $LC_AI_REGIONS[] = [2, 2, 2, 2, 2, 2, 2, 0, -2, 1, 3, 4]
+    Local Const $LC_AI_LANGUAGES[] = [0, 2, 3, 4, 5, 9, 10, 0, 0, 0, 0, 0]
 
-    ; Clamp to valid range
-    If $a_i_MaxRegions < 1 Then $a_i_MaxRegions = 1
-    If $a_i_MaxRegions > 11 Then $a_i_MaxRegions = 11
+    Local $l_i_DistrictMin = 0, $l_i_DistrictMax = 11
+    Switch $a_i_Mode
+        Case 1 ; EU-only
+            $l_i_DistrictMax = 6
+        Case 2 ; US-only
+            $l_i_DistrictMin = 7
+            $l_i_DistrictMax = 8
+        Case 3 ; Asia-only
+            $l_i_DistrictMin = 9
+    EndSwitch
 
-    ; Get current region/language
+    Local $l_i_ValidDistricts = $l_i_DistrictMax - $l_i_DistrictMin + 1
+
+    Local $l_i_CurrentMap = Map_GetCharacterInfo("MapID")
     Local $l_i_CurrentRegion = Map_GetCharacterInfo("Region")
     Local $l_i_CurrentLanguage = Map_GetCharacterInfo("Language")
 
-    ; Find a different district
-    Local $l_i_Random
-    Local $l_i_Attempts = 0
-    Do
-        $l_i_Random = Random(0, $a_i_MaxRegions - 1, 1)
-        $l_i_Attempts += 1
-        ; Safety: prevent infinite loop if only 1 district available
-        If $l_i_Attempts > 50 Then ExitLoop
-    Until $a_i_Region[$l_i_Random] <> $l_i_CurrentRegion Or $a_i_Language[$l_i_Random] <> $l_i_CurrentLanguage
+    If $l_i_CurrentMap <> $a_i_MapID Or Map_GetInstanceInfo("IsExplorable") Then
+        Local $l_i_Idx = Random($l_i_DistrictMin, $l_i_DistrictMax, 1)
+    Else
+        If $a_b_SwitchDistrict Then
+            If $l_i_ValidDistricts = 1 Then Return True
+            Local $l_i_Idx = Random($l_i_DistrictMin, $l_i_DistrictMax, 1)
+            If $LC_AI_REGIONS[$l_i_Idx] = $l_i_CurrentRegion And $LC_AI_LANGUAGES[$l_i_Idx] = $l_i_CurrentLanguage Then
+                $l_i_Idx = Mod(($l_i_Idx - $l_i_DistrictMin) + 1, $l_i_ValidDistricts) + $l_i_DistrictMin
+            EndIf
+        Else
+            Return True
+        EndIf
+    EndIf
 
     Map_InitMapIsLoaded()
-    Map_MoveMap($a_i_MapID, $a_i_Region[$l_i_Random], 0, $a_i_Language[$l_i_Random])
-	If $a_WaitToLoad Then Return Map_WaitMapIsLoaded()
+    Map_MoveMap($a_i_MapID, $LC_AI_REGIONS[$l_i_Idx], 0, $LC_AI_LANGUAGES[$l_i_Idx])
+    If $a_WaitToLoad Then Return Map_WaitMapIsLoaded()
 EndFunc   ;==>Map_RndTravel
 
 Func Map_WaitMapLoading($a_i_MapID = -1, $a_i_InstanceType = -1, $a_i_Timeout = 30000)

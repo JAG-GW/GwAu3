@@ -50,11 +50,12 @@ Func Utils_UnsignedCompare($a_i_A, $a_i_B)
     Return ($a_i_A > $a_i_B And $a_i_A - $a_i_B < 0x80000000) Or ($a_i_B > $a_i_A And $a_i_B - $a_i_A > 0x80000000) ? 1 : -1
 EndFunc
 
-Func Utils_MakeInt32($value)
-    If BitAND($value, 0x80000000) Then
-        Return BitOR($value, 0xFFFFFFFF00000000)
+Func Utils_MakeInt32($a_i_Value)
+    Local $l_i_Val = BitAND($a_i_Value, 0xFFFFFFFF)
+    If BitAND($l_i_Val, 0x80000000) Then
+        Return BitOR($l_i_Val, 0xFFFFFFFF00000000)
     Else
-        Return BitAND($value, 0xFFFFFFFF)
+        Return $l_i_Val
     EndIf
 EndFunc
 

@@ -204,7 +204,7 @@ Func Map_GetCharacterInfo($a_s_Info = "")
         Case "Language"
             Return Memory_Read($l_p_Ptr + 0x224, "long")
         Case "Region"
-            Return Memory_Read($g_p_Region)
+            Return Utils_MakeInt32(Memory_Read($g_p_Region))
         Case "ObserveMapID"
             Return Memory_Read($l_p_Ptr + 0x228, "long")
         Case "CurrentMapID"
