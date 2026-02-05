@@ -119,6 +119,8 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Scanner_AddPattern('LoadFinished', '2BD9C1E303', 0xA0, 'Hook')
 	Scanner_AddPattern('Trader', '8D4DFC51576A5550', -0x3C, 'Hook')
 	Scanner_AddPattern('TradePartner', '6A008D45F8C745F801000000', -0xC, 'Hook')
+	; EncString Decoding
+	Scanner_AddPattern('ValidateAsyncDecodeStr', "P:\Code\Engine\Text\TextApi.cpp", "codedString", 'Func')
 	If IsDeclared("g_b_AddPattern") Then Extend_AddPattern()
 
     $g_ap_ScanResults = Scanner_ScanAllPatterns()
@@ -322,6 +324,13 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	Log_Debug("AcceptInvitation: " & Memory_GetValue('AcceptInvitation'), "Initialize", $g_h_EditText)
 	Log_Debug("ActiveQuest: " & Memory_GetValue('ActiveQuest'), "Initialize", $g_h_EditText)
 
+	;EncString Decoding
+	$l_p_Temp = Scanner_GetScanResult('ValidateAsyncDecodeStr', $g_ap_ScanResults, 'Func')
+	$l_p_Temp = Scanner_ToFunctionStart($l_p_Temp)
+	Memory_SetValue('ValidateAsyncDecodeStr', Ptr($l_p_Temp))
+	;EncString log
+	Log_Debug("ValidateAsyncDecodeStr: " & Memory_GetValue('ValidateAsyncDecodeStr'), "Initialize", $g_h_EditText)
+
     ;Hook
     $l_p_Temp = Scanner_GetScanResult('Engine', $g_ap_ScanResults, 'Hook')
     Memory_SetValue('MainStart', Ptr($l_p_Temp))
@@ -434,6 +443,11 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
 	DllStructSetData($g_d_KickInvitedPlayer, 1, Memory_GetValue('CommandKickInvitedPlayer'))
 	DllStructSetData($g_d_RejectInvitation, 1, Memory_GetValue('CommandRejectInvitation'))
 	DllStructSetData($g_d_AcceptInvitation, 1, Memory_GetValue('CommandAcceptInvitation'))
+	;EncString
+	DllStructSetData($g_d_DecodeEncString, 1, Memory_GetValue('CommandDecodeEncString'))
+	$g_p_DecodeInputPtr = Memory_GetValue('DecodeInputPtr')
+	$g_p_DecodeOutputPtr = Memory_GetValue('DecodeOutputPtr')
+	$g_p_DecodeReady = Memory_GetValue('DecodeReady')
 
     If $a_b_ChangeTitle Then WinSetTitle($g_h_GWWindow, '', 'Guild Wars - ' & Player_GetCharname())
 

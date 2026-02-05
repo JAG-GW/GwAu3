@@ -184,4 +184,11 @@ Global $g_p_AcceptInvitation = DllStructGetPtr($g_d_AcceptInvitation)
 ;Bot related
 Global $g_bAutoStart = False  ; Flag for auto-start
 Global $g_s_MainCharName  = ""
+
+;EncString Decoding
+Global $g_p_DecodeInputPtr      ; Pointer to encoded string input buffer in GW memory
+Global $g_p_DecodeOutputPtr     ; Pointer to decoded string output buffer in GW memory
+Global $g_p_DecodeReady         ; Pointer to ready flag in GW memory
+Global $g_d_DecodeEncString = DllStructCreate('ptr;wchar[128]')  ; Command struct: ptr to command + encoded string
+Global $g_p_DecodeEncString = DllStructGetPtr($g_d_DecodeEncString)
 #EndRegion Global Variables

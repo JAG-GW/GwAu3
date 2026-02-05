@@ -398,8 +398,102 @@ Func Agent_GetAgentInfo($a_i_AgentID = -2, $a_s_Info = "")
         Case "OffhandItemId"
             Return Memory_Read($l_p_AgentPtr + 0x1C0, "short")
 
-		Case "Name"
-			Return 0 ;in progress
+        Case "Name"
+            ; Get agent type and relevant info
+            Local $l_i_Type = Memory_Read($l_p_AgentPtr + 0x9C, "long")
+            Local $l_i_AgentID = Memory_Read($l_p_AgentPtr + 0x2C, "long")
+
+            Local $l_p_NamePtr = 0
+
+            ; Living type (players and NPCs)
+            If BitAND($l_i_Type, 0xDB) <> 0 Then
+                Local $l_i_LoginNumber = Memory_Read($l_p_AgentPtr + 0x184, "dword")
+
+                If $l_i_LoginNumber <> 0 Then
+                    ; Player - get name from PlayerArray[login_number]
+                    Local $l_p_PlayerArray = World_GetWorldInfo("PlayerArray")
+                    If $l_p_PlayerArray <> 0 Then
+                        ; Player struct size = 0x4C, name at offset 0x28 (decoded name pointer)
+                        Local $l_p_PlayerEntry = $l_p_PlayerArray + ($l_i_LoginNumber * 0x4C)
+                        $l_p_NamePtr = Memory_Read($l_p_PlayerEntry + 0x28, "ptr")
+                        If $l_p_NamePtr <> 0 Then
+                            Return Memory_Read($l_p_NamePtr, "wchar[20]")
+                        EndIf
+                    EndIf
+                Else
+                    ; NPC - first try AgentInfoArray, then fallback to NPCArray
+                    Local $l_p_AgentInfoArray = World_GetWorldInfo("AgentInfoArray")
+                    Local $l_i_AgentInfoSize = World_GetWorldInfo("AgentInfoArraySize")
+
+                    If $l_p_AgentInfoArray <> 0 And $l_i_AgentID < $l_i_AgentInfoSize Then
+                        ; AgentInfo struct size = 0x38, name_enc at offset 0x34
+                        Local $l_p_AgentInfoEntry = $l_p_AgentInfoArray + ($l_i_AgentID * 0x38)
+                        $l_p_NamePtr = Memory_Read($l_p_AgentInfoEntry + 0x34, "ptr")
+                    EndIf
+
+                    ; Fallback to NPCArray if AgentInfo has no name
+                    If $l_p_NamePtr = 0 Then
+                        Local $l_i_PlayerNumber = Memory_Read($l_p_AgentPtr + 0xF4, "short")
+                        Local $l_p_NPCArray = World_GetWorldInfo("NPCArray")
+                        Local $l_i_NPCSize = World_GetWorldInfo("NPCArraySize")
+
+                        If $l_p_NPCArray <> 0 And $l_i_PlayerNumber < $l_i_NPCSize Then
+                            ; NPC struct size = 0x30, name_enc at offset 0x20
+                            Local $l_p_NPCEntry = $l_p_NPCArray + ($l_i_PlayerNumber * 0x30)
+                            $l_p_NamePtr = Memory_Read($l_p_NPCEntry + 0x20, "ptr")
+                        EndIf
+                    EndIf
+                EndIf
+
+            ; Gadget type
+            ElseIf BitAND($l_i_Type, 0x200) <> 0 Then
+                ; Get AgentContext -> agent_summary_info[agent_id].extra_info_sub->gadget_name_enc
+                Local $l_p_AgentContext = Game_GetGameInfo("AgentContext")
+                If $l_p_AgentContext <> 0 Then
+                    ; agent_summary_info array is at offset 0x98 in AgentContext, struct size = 0xC
+                    Local $l_p_SummaryArray = Memory_Read($l_p_AgentContext + 0x98, "ptr")
+                    Local $l_i_SummarySize = Memory_Read($l_p_AgentContext + 0x98 + 0x8, "long")
+
+                    If $l_p_SummaryArray <> 0 And $l_i_AgentID < $l_i_SummarySize Then
+                        ; AgentSummaryInfo struct size = 0xC, extra_info_sub at offset 0x8
+                        Local $l_p_SummaryEntry = $l_p_SummaryArray + ($l_i_AgentID * 0xC)
+                        Local $l_p_ExtraInfoSub = Memory_Read($l_p_SummaryEntry + 0x8, "ptr")
+
+                        If $l_p_ExtraInfoSub <> 0 Then
+                            ; gadget_name_enc at offset 0x10 in AgentSummaryInfoSub
+                            $l_p_NamePtr = Memory_Read($l_p_ExtraInfoSub + 0x10, "ptr")
+
+                            ; Fallback to GadgetContext if no name in summary
+                            If $l_p_NamePtr = 0 Then
+                                Local $l_i_GadgetID = Memory_Read($l_p_ExtraInfoSub + 0x8, "dword")
+                                Local $l_p_GadgetContext = Game_GetGameInfo("GadgetContext")
+
+                                If $l_p_GadgetContext <> 0 Then
+                                    ; GadgetInfo array at offset 0x0, struct size = 0x10, name_enc at offset 0xC
+                                    Local $l_p_GadgetArray = Memory_Read($l_p_GadgetContext, "ptr")
+                                    Local $l_i_GadgetSize = Memory_Read($l_p_GadgetContext + 0x8, "long")
+
+                                    If $l_p_GadgetArray <> 0 And $l_i_GadgetID < $l_i_GadgetSize Then
+                                        Local $l_p_GadgetEntry = $l_p_GadgetArray + ($l_i_GadgetID * 0x10)
+                                        $l_p_NamePtr = Memory_Read($l_p_GadgetEntry + 0xC, "ptr")
+                                    EndIf
+                                EndIf
+                            EndIf
+                        EndIf
+                    EndIf
+                EndIf
+
+            ; Item type
+            ElseIf BitAND($l_i_Type, 0x400) <> 0 Then
+                ; Get item_id from agent at offset 0xC8, then get name from Item module
+                Local $l_i_ItemID = Memory_Read($l_p_AgentPtr + 0xC8, "dword")
+                If $l_i_ItemID <> 0 Then
+                    Return Item_GetItemInfoByItemID($l_i_ItemID, "Name")
+                EndIf
+            EndIf
+
+            If $l_p_NamePtr = 0 Then Return ""
+            Return Utils_DecodeEncStringAsync($l_p_NamePtr)
 		Case Else
 			Return 0
 	EndSwitch
@@ -862,6 +956,14 @@ Func Agent_GetNpcInfo($a_i_ModelFileID = 0, $a_s_Info = "")
 		Case "IsPet"
 			Local $flags = Memory_Read($l_p_AgentPtr + 0x10, "dword")
             Return BitAND($flags, 0xD) <> 0
+		Case "Level"
+            Return Memory_Read($l_p_AgentPtr + 0x1C, "dword")
+		Case "NameEnc"
+			Local $l_p_NamePtr = Memory_Read($l_p_AgentPtr + 0x20, "ptr")
+            Return Utils_DecodeEncString($l_p_NamePtr)
+		Case "Name"
+			Local $l_p_NamePtr = Memory_Read($l_p_AgentPtr + 0x20, "ptr")
+            Return Utils_DecodeEncStringAsync($l_p_NamePtr)
         Case Else
             Return 0
     EndSwitch
@@ -1090,7 +1192,7 @@ Func _ApplyFilters($a_p_Agent, $a_s_Filters)
 		Local $l_s_FilterName = StringStripWS($l_as_Filters[$i], 3) ; Remove leading/trailing spaces
 		If $l_s_FilterName <> "" Then
             Local $l_b_InvertFilter = False
-            If StringLeft($l_s_FilterName, 1) == "-" Then 
+            If StringLeft($l_s_FilterName, 1) == "-" Then
                 $l_b_InvertFilter = True
                 $l_s_FilterName = StringTrimLeft($l_s_FilterName, 1)
             EndIf

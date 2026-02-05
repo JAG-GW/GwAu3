@@ -306,3 +306,67 @@ Func Utils_Array_BoolAt($a_p_Array, $a_i_ArraySize, $a_i_Index)
 
     Return BitAND($l_i_Value, $l_i_Flag) <> 0
 EndFunc
+
+#Region EncString Decoding
+; Decodes a Guild Wars Encoded String to extract the string ID
+; EncStrings use variable-length encoding with continuation bits
+Func Utils_DecodeEncString($a_p_Ptr)
+    If $a_p_Ptr = 0 Then Return 0
+
+    Local $l_i_Val = 0
+    Local $l_i_Offset = 0
+    Local $l_i_MaxIter = 10  ; Safety limit
+
+    For $i = 1 To $l_i_MaxIter
+        Local $l_i_Char = Memory_Read($a_p_Ptr + $l_i_Offset, "word")
+
+        ; Check if this is a valid encoded word (>= 0x100)
+        If $l_i_Char < $ENCSTR_WORD_VALUE_BASE Then ExitLoop
+
+        $l_i_Val *= $ENCSTR_WORD_VALUE_RANGE
+        $l_i_Val += BitAND($l_i_Char, BitNOT($ENCSTR_WORD_BIT_MORE)) - $ENCSTR_WORD_VALUE_BASE
+        $l_i_Offset += 2
+
+        ; If continuation bit is not set, we're done
+        If BitAND($l_i_Char, $ENCSTR_WORD_BIT_MORE) = 0 Then ExitLoop
+    Next
+
+    Return $l_i_Val
+EndFunc
+
+; Decodes an encoded string to readable text using GW's internal decoder
+; This calls ValidateAsyncDecodeStr via injected ASM code
+; @param $a_p_Ptr - Pointer to the encoded string in GW memory
+; @param $a_i_Timeout - Maximum time to wait for decode (ms), default 1000
+; @return Decoded string or empty string on failure
+Func Utils_DecodeEncStringAsync($a_p_Ptr, $a_i_Timeout = 1000)
+    If $a_p_Ptr = 0 Then Return ""
+
+    ; Read the encoded string from GW memory (max 128 wchars)
+    Local $l_s_EncStr = Memory_Read($a_p_Ptr, "wchar[128]")
+    If $l_s_EncStr = "" Then Return ""
+
+    ; Write encoded string to command struct
+    DllStructSetData($g_d_DecodeEncString, 2, $l_s_EncStr)
+
+    ; Reset ready flag before sending command
+    Memory_Write($g_p_DecodeReady, 0, "dword")
+
+    ; Enqueue the decode command
+    Core_Enqueue($g_p_DecodeEncString, DllStructGetSize($g_d_DecodeEncString))
+
+    ; Wait for decode to complete
+    Local $l_i_StartTime = TimerInit()
+    While TimerDiff($l_i_StartTime) < $a_i_Timeout
+        If Memory_Read($g_p_DecodeReady, "dword") = 1 Then
+            ; Read the decoded string
+            Local $l_s_Decoded = Memory_Read($g_p_DecodeOutputPtr, "wchar[1024]")
+            Return $l_s_Decoded
+        EndIf
+        Sleep(16)
+    WEnd
+
+    ; Timeout
+    Return ""
+EndFunc
+#EndRegion EncString Decoding

@@ -1,5 +1,10 @@
 #include-once
 
+; Constants for EncString decoding
+Global Const $ENCSTR_WORD_VALUE_BASE = 0x0100
+Global Const $ENCSTR_WORD_BIT_MORE = 0x8000
+Global Const $ENCSTR_WORD_VALUE_RANGE = 0x7F00  ; 32512
+
 Global Const $GC_AS_BASE64_BINARY_GW[64] = [ _
         "000000", "100000", "010000", "110000", "001000", "101000", "011000", "111000", _ ; A-H
         "000100", "100100", "010100", "110100", "001100", "101100", "011100", "111100", _ ; I-P

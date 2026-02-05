@@ -1006,6 +1006,8 @@ EndFunc
 ; Skill ID: 779 - $GC_I_SKILL_ID_BLACK_LOTUS_STRIKE
 Func CanUse_BlackLotusStrike()
 	If Anti_Attack() Then Return False
+	Local $l_i_CurrentTarget = Agent_GetCurrentTarget()
+	If $l_i_CurrentTarget <> 0 Then Return Not UAI_Filter_IsLastStrikeLeadOrOffHand($l_i_CurrentTarget)
 	Return True
 EndFunc
 
@@ -1014,7 +1016,9 @@ Func BestTarget_BlackLotusStrike($a_f_AggroRange)
 	; Lead Attack. If it hits, Black Lotus Strike strikes for +10...27...31 damage. If target foe is suffering from a Hex, you gain 5...11...13 Energy.
 	; Concise description
 	; Lead Attack. Deals +10...27...31 damage. You gain 5...11...13 Energy if target foe is hexed.
-	Return 0
+	Local $l_i_Target = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHexed")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 780 - $GC_I_SKILL_ID_FOX_FANGS
@@ -1506,6 +1510,8 @@ EndFunc
 ; Skill ID: 1024 - $GC_I_SKILL_ID_BLACK_MANTIS_THRUST
 Func CanUse_BlackMantisThrust()
 	If Anti_Attack() Then Return False
+	Local $l_i_CurrentTarget = Agent_GetCurrentTarget()
+	If $l_i_CurrentTarget <> 0 Then Return Not UAI_Filter_IsLastStrikeLeadOrOffHand($l_i_CurrentTarget)
 	Return True
 EndFunc
 
@@ -1514,7 +1520,9 @@ Func BestTarget_BlackMantisThrust($a_f_AggroRange)
 	; Lead Attack. If this attack hits, you strike for +8...18...20 damage. If target foe is suffering from a Hex, that foe is Crippled for 3...13...15 seconds.
 	; Concise description
 	; Lead Attack. Deals +8...18...20 damage. Inflicts Crippled condition (3...13...15 seconds) if target foe is hexed.
-	Return 0
+	Local $l_i_Target = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsHexed")
+	If $l_i_Target <> 0 Then Return $l_i_Target
+	Return UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
 EndFunc
 
 ; Skill ID: 1025 - $GC_I_SKILL_ID_DISRUPTING_STAB

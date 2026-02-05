@@ -30,10 +30,18 @@ Func Title_GetTitleInfo($a_i_Title = 0, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr + 0x1C, "dword")
         Case "MaxTitleTierIndex", "MaxTitleTier"
             Return Memory_Read($l_p_Ptr + 0x20, "dword")
-        Case "TitleNamePtr1"
-            Return Memory_Read($l_p_Ptr + 0x24, "ptr")
-        Case "TitleNamePtr2"
-            Return Memory_Read($l_p_Ptr + 0x28, "ptr")
+		Case "PointsDescriptionEnc"
+			Local $l_p_NamePtr = Memory_Read($l_p_Ptr + 0x24, "ptr")
+            Return Utils_DecodeEncString($l_p_NamePtr)
+		Case "PointsDescription" ; Points description (points/missions/elite skills...)
+			Local $l_p_NamePtr = Memory_Read($l_p_Ptr + 0x24, "ptr")
+            Return Utils_DecodeEncStringAsync($l_p_NamePtr)
+		Case "TitleDescriptionEnc"
+			Local $l_p_NamePtr = Memory_Read($l_p_Ptr + 0x28, "ptr")
+            Return Utils_DecodeEncString($l_p_NamePtr)
+		Case "TitleDescription"
+			Local $l_p_NamePtr = Memory_Read($l_p_Ptr + 0x28, "ptr")
+            Return Utils_DecodeEncStringAsync($l_p_NamePtr)
     EndSwitch
 
     Return 0

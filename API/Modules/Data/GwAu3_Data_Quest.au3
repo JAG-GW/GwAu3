@@ -48,13 +48,25 @@ Func Quest_GetQuestInfo($a_i_QuestID, $a_s_Info = "")
 
         Case "Location"
             Local $l_p_LocationPtr = Memory_Read($l_p_Ptr + 0x8, "ptr")
-            Return Memory_Read($l_p_LocationPtr, "wchar[256]")
+            Return Utils_DecodeEncString($l_p_LocationPtr)
+        Case "LocationStr"
+            Local $l_p_LocationPtr = Memory_Read($l_p_Ptr + 0x8, "ptr")
+            Return Utils_DecodeEncStringAsync($l_p_LocationPtr)
+
+        Case "NameEnc"
+            Local $l_p_NamePtr = Memory_Read($l_p_Ptr + 0xC, "ptr")
+            Return Utils_DecodeEncString($l_p_NamePtr)
         Case "Name"
             Local $l_p_NamePtr = Memory_Read($l_p_Ptr + 0xC, "ptr")
-            Return Memory_Read($l_p_NamePtr, "wchar[256]")
-        Case "NPC"
+            Return Utils_DecodeEncStringAsync($l_p_NamePtr)
+
+        Case "NPCNameEnc"
             Local $l_p_NPCPtr = Memory_Read($l_p_Ptr + 0x10, "ptr")
-            Return Memory_Read($l_p_NPCPtr, "wchar[256]")
+            Return Utils_DecodeEncString($l_p_NPCPtr)
+        Case "NPCName"
+            Local $l_p_NPCPtr = Memory_Read($l_p_Ptr + 0x10, "ptr")
+            Return Utils_DecodeEncStringAsync($l_p_NPCPtr)
+
         Case "MapFrom"
             Return Memory_Read($l_p_Ptr + 0x14, "dword")
         Case "MarkerX"
@@ -65,14 +77,57 @@ Func Quest_GetQuestInfo($a_i_QuestID, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr + 0x20, "dword")
         Case "MapTo"
             Return Memory_Read($l_p_Ptr + 0x28, "dword")
+
+        Case "DescriptionEnc"
+            Local $l_p_DescriptionPtr = Memory_Read($l_p_Ptr + 0x2C, "ptr")
+            Return Utils_DecodeEncString($l_p_DescriptionPtr)
         Case "Description"
             Local $l_p_DescriptionPtr = Memory_Read($l_p_Ptr + 0x2C, "ptr")
-            Return Memory_Read($l_p_DescriptionPtr, "wchar[256]")
+            Return Utils_DecodeEncStringAsync($l_p_DescriptionPtr)
+
+        Case "ObjectivesEnc"
+            Local $l_p_ObjectivesPtr = Memory_Read($l_p_Ptr + 0x30, "ptr")
+            Return Utils_DecodeEncString($l_p_ObjectivesPtr)
         Case "Objectives"
             Local $l_p_ObjectivesPtr = Memory_Read($l_p_Ptr + 0x30, "ptr")
-            Return Memory_Read($l_p_ObjectivesPtr, "wchar[256]")
+            Return Utils_DecodeEncStringAsync($l_p_ObjectivesPtr)
     EndSwitch
 
     Return 0
 EndFunc
 #EndRegion Quest Related
+
+#Region Mission Objectives
+; Returns the number of mission objectives
+Func Mission_GetObjectiveCount()
+    Return World_GetWorldInfo("MissionObjectiveArraySize")
+EndFunc
+
+; Returns info about a mission objective by index
+; @param $a_i_Index - 0-based index in the objective array
+; @param $a_s_Info - Info to retrieve: "ObjectiveID", "Type", "TextEnc", "Text"
+Func Mission_GetObjectiveInfo($a_i_Index, $a_s_Info = "")
+    Local $l_p_Array = World_GetWorldInfo("MissionObjectiveArray")
+    Local $l_i_Size = World_GetWorldInfo("MissionObjectiveArraySize")
+
+    If $l_p_Array = 0 Or $a_i_Index >= $l_i_Size Or $a_s_Info = "" Then Return 0
+
+    ; MissionObjective struct size = 0xC
+    Local $l_p_Entry = $l_p_Array + ($a_i_Index * 0xC)
+
+    Switch $a_s_Info
+        Case "ObjectiveID"
+            Return Memory_Read($l_p_Entry, "dword")
+        Case "State"
+            Return Memory_Read($l_p_Entry + 0x8, "dword")
+        Case "TextEnc"
+            Local $l_p_TextPtr = Memory_Read($l_p_Entry + 0x4, "ptr")
+            Return Utils_DecodeEncString($l_p_TextPtr)
+        Case "Text"
+            Local $l_p_TextPtr = Memory_Read($l_p_Entry + 0x4, "ptr")
+            Return Utils_DecodeEncStringAsync($l_p_TextPtr)
+        Case Else
+            Return 0
+    EndSwitch
+EndFunc
+#EndRegion Mission Objectives
