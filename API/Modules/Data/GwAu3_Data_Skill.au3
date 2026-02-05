@@ -108,14 +108,6 @@ Func Skill_GetSkillInfo($a_v_SkillID, $a_s_Info = "")
         Case "h0056" ;Variant Weapons Animation Template ?
             Return Memory_Read($l_p_Ptr + 0x56, "word")
         Case "SkillArguments"
-;~ 				Case 0 ; No scale/duration
-;~ 				Case 1 ; Only one Duration
-;~ 				Case 2 ; Only one scale
-;~ 				Case 3 ; Only one Bonus Scale
-;~ 				Case 4 ; Scale and Bonus Scale
-;~ 				Case 5 ; Duration, Scale and BonusScale
-;~ 				Case 6 ; Scale and BonusScale (but both are used for duration)
-;~ 				Case 7 ; Duration, Scale and BonusScale ? Special case ?
             Return Memory_Read($l_p_Ptr + 0x58, "dword")
         Case "Scale0"
             Return Memory_Read($l_p_Ptr + 0x5C, "dword")
@@ -147,15 +139,72 @@ Func Skill_GetSkillInfo($a_v_SkillID, $a_s_Info = "")
             Return Memory_Read($l_p_Ptr + 0x90, "dword")
 		Case "IconFileIDHD"
             Return Memory_Read($l_p_Ptr + 0x94, "dword")
-        Case "Name"
+
+        ; String IDs (uint32) - use these for raw IDs
+        Case "SkillNameID", "NameID"
             Return Memory_Read($l_p_Ptr + 0x98, "dword")
-        Case "Concise"
+        Case "ConciseID"
             Return Memory_Read($l_p_Ptr + 0x9C, "dword")
-        Case "Description"
+        Case "DescriptionID"
             Return Memory_Read($l_p_Ptr + 0xA0, "dword")
+
+        Case "SkillName"
+            Local $l_i_StringID = Memory_Read($l_p_Ptr + 0x98, "dword")
+            Return Utils_DecodeStringID($l_i_StringID)
+        Case "Concise"
+            Local $l_i_StringID = Memory_Read($l_p_Ptr + 0x9C, "dword")
+            Return Utils_DecodeStringID($l_i_StringID)
+        Case "Description"
+            Local $l_i_StringID = Memory_Read($l_p_Ptr + 0xA0, "dword")
+            Return Utils_DecodeStringID($l_i_StringID)
+
+        Case "CompleteConcise"
+            Local $l_i_StringID = Memory_Read($l_p_Ptr + 0x9C, "dword")
+            Local $l_s_Text = Utils_SkillDecodeStringID($l_i_StringID)
+            Return _Skill_ReplaceScalePlaceholders($l_p_Ptr, $l_s_Text)
+
+        Case "CompleteDescription"
+            Local $l_i_StringID = Memory_Read($l_p_Ptr + 0xA0, "dword")
+            Local $l_s_Text = Utils_SkillDecodeStringID($l_i_StringID)
+            Return _Skill_ReplaceScalePlaceholders($l_p_Ptr, $l_s_Text)
     EndSwitch
 
     Return 0
+EndFunc
+
+; Helper function to convert scale values - detects if fixed-point or direct value
+Func _Skill_ConvertScaleValue($a_i_RawValue)
+    If $a_i_RawValue > 65536 Then
+        Return Floor($a_i_RawValue / 65536)
+    EndIf
+    Return $a_i_RawValue
+EndFunc
+
+; Helper function to replace scale placeholders in skill descriptions
+Func _Skill_ReplaceScalePlaceholders($a_p_SkillPtr, $a_s_Text)
+    If $a_s_Text = "" Then Return ""
+
+    ; Read scale values from skill struct
+    Local $l_i_Scale0 = _Skill_ConvertScaleValue(Memory_Read($a_p_SkillPtr + 0x5C, "dword"))
+    Local $l_i_Scale15 = _Skill_ConvertScaleValue(Memory_Read($a_p_SkillPtr + 0x60, "dword"))
+    Local $l_i_BonusScale0 = _Skill_ConvertScaleValue(Memory_Read($a_p_SkillPtr + 0x64, "dword"))
+    Local $l_i_BonusScale15 = _Skill_ConvertScaleValue(Memory_Read($a_p_SkillPtr + 0x68, "dword"))
+    Local $l_i_Duration0 = Memory_Read($a_p_SkillPtr + 0x44, "dword")
+    Local $l_i_Duration15 = Memory_Read($a_p_SkillPtr + 0x48, "dword")
+
+    ; Build replacement strings (format: min...max or just value if equal)
+    Local $l_s_Scale = ($l_i_Scale0 = $l_i_Scale15) ? String($l_i_Scale0) : ($l_i_Scale0 & "..." & $l_i_Scale15)
+    Local $l_s_BonusScale = ($l_i_BonusScale0 = $l_i_BonusScale15) ? String($l_i_BonusScale0) : ($l_i_BonusScale0 & "..." & $l_i_BonusScale15)
+    Local $l_s_Duration = ($l_i_Duration0 = $l_i_Duration15) ? String($l_i_Duration0) : ($l_i_Duration0 & "..." & $l_i_Duration15)
+
+    ; Replace placeholder strings with actual values
+    ; The decoder outputs these as decimal strings "991", "992", "993"
+    Local $l_s_Result = $a_s_Text
+    $l_s_Result = StringReplace($l_s_Result, "991", $l_s_Scale)
+    $l_s_Result = StringReplace($l_s_Result, "992", $l_s_BonusScale)
+    $l_s_Result = StringReplace($l_s_Result, "993", $l_s_Duration)
+
+    Return $l_s_Result
 EndFunc
 
 #Region Skillbar Related
@@ -1436,15 +1485,15 @@ Func Skill_GetSkillArg($a_i_SkillID, $a_s_Argument = "", $a_i_HeroNumber = 0)
 
 			Return Round($l_i_Duration0 + (($l_i_Duration15 - $l_i_Duration0) / 15) * $l_i_AttrLevel)
 		Case "Scale"
-			Local $l_i_Scale0 = Skill_GetSkillInfo($a_i_SkillID, "Scale0") / 65536
-			Local $l_i_Scale15 = Skill_GetSkillInfo($a_i_SkillID, "Scale15") / 65536
+			Local $l_i_Scale0 = _Skill_ConvertScaleValue(Skill_GetSkillInfo($a_i_SkillID, "Scale0"))
+			Local $l_i_Scale15 = _Skill_ConvertScaleValue(Skill_GetSkillInfo($a_i_SkillID, "Scale15"))
 			Local $l_i_AttrID = Skill_GetSkillInfo($a_i_SkillID, "Attribute")
 			Local $l_i_AttrLevel = Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "CurrentLevel")
 
 			Return Floor($l_i_Scale0 + (($l_i_Scale15 - $l_i_Scale0) / 15) * $l_i_AttrLevel)
 		Case "BonusScale"
-			Local $l_i_BonusScale0 = Skill_GetSkillInfo($a_i_SkillID, "BonusScale0") / 65536
-			Local $l_i_BonusScale15 = Skill_GetSkillInfo($a_i_SkillID, "BonusScale15") / 65536
+			Local $l_i_BonusScale0 = _Skill_ConvertScaleValue(Skill_GetSkillInfo($a_i_SkillID, "BonusScale0"))
+			Local $l_i_BonusScale15 = _Skill_ConvertScaleValue(Skill_GetSkillInfo($a_i_SkillID, "BonusScale15"))
 			Local $l_i_AttrID = Skill_GetSkillInfo($a_i_SkillID, "Attribute")
 			Local $l_i_AttrLevel = Attribute_GetPartyAttributeInfo($l_i_AttrID, $a_i_HeroNumber, "CurrentLevel")
 
