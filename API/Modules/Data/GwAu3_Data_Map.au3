@@ -7,6 +7,11 @@ Func Map_GetInstanceUpTime()
     Return $l_av_Timer[1]
 EndFunc   ;==>GetInstanceUpTime
 
+;~ Returns the internal time the player has been in the current instance, in seconds.
+Func Map_GetTimeOnMap()
+    Return Memory_Read($g_p_TimeOnMap, 'float')
+EndFunc
+
 Func Map_GetRegion()
     Return Memory_Read($g_p_Region)
 EndFunc
