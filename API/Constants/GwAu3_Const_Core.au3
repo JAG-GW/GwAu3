@@ -34,6 +34,8 @@ Global $g_p_AreaInfo
 Global $g_p_StatusCode
 Global $g_p_MapIsLoaded
 Global $g_p_TradePartner
+Global $g_p_SceneContext
+Global $g_p_TimeOnMap
 
 ;Skill
 Global $g_p_SkillBase
