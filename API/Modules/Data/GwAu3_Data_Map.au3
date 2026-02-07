@@ -244,7 +244,7 @@ EndFunc
 Func Map_GetNormalizedMapID()
     Local $l_i_MapID = Map_GetMapID()
 
-    If $l_i_MapID < 808 And $l_i_MapID > 821 Then Return $l_i_MapID
+    If $l_i_MapID < 808 Or $l_i_MapID > 821 Then Return $l_i_MapID
 
     Switch $l_i_MapID
         Case $GC_I_MAP_ID_LIONS_ARCH_HALLOWEEN, $GC_I_MAP_ID_LIONS_ARCH_WINTERSDAY, $GC_I_MAP_ID_LIONS_ARCH_CANTHAN_NEW_YEAR
