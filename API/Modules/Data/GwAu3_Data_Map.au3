@@ -235,6 +235,46 @@ Func Map_GetMapID()
     Return Map_GetCharacterInfo("MapID")
 EndFunc   ;==>GetMapID
 
+;~ Description: Returns True if current MapID is wanted MapID, including event MapIDs
+Func Map_IsMap($a_i_MapID)
+    Return Map_GetNormalizedMapID() = $a_i_MapID
+EndFunc
+
+;~ Description: Returns MapID or normalized MapID in case of an event MapID
+Func Map_GetNormalizedMapID()
+    Local $l_i_MapID = Map_GetMapID()
+
+    If $l_i_MapID < 808 And $l_i_MapID > 821 Then Return $l_i_MapID
+
+    Switch $l_i_MapID
+        Case $GC_I_MAP_ID_LIONS_ARCH_HALLOWEEN, $GC_I_MAP_ID_LIONS_ARCH_WINTERSDAY, $GC_I_MAP_ID_LIONS_ARCH_CANTHAN_NEW_YEAR
+            Return $GC_I_MAP_ID_LIONS_ARCH
+
+        Case $GC_I_MAP_ID_DROKNARS_FORGE_HALLOWEEN, $GC_I_MAP_ID_DROKNARS_FORGE_WINTERSDAY
+            Return  $GC_I_MAP_ID_DROKNARS_FORGE
+
+        Case $GC_I_MAP_ID_TOMB_OF_THE_PRIMEVAL_KINGS_HALLOWEEN
+            Return $GC_I_MAP_ID_TOMB_OF_THE_PRIMEVAL_KINGS
+
+        Case $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_HALLOWEEN, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_WINTERSDAY, $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN_CANTHAN_NEW_YEAR
+            Return $GC_I_MAP_ID_KAMADAN_JEWEL_OF_ISTAN
+
+        Case $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST_WINTERSDAY
+            Return $GC_I_MAP_ID_EYE_OF_THE_NORTH_OUTPOST
+
+        Case $GC_I_MAP_ID_ASCALON_CITY_WINTERSDAY
+            Return $GC_I_MAP_ID_ASCALON_CITY
+
+        Case $GC_I_MAP_ID_SHING_JEA_MONASTERY_CANTHAN_NEW_YEAR, $GC_I_MAP_ID_SHING_JEA_MONASTERY_DRAGON_FESTIVAL
+            Return $GC_I_MAP_ID_SHING_JEA_MONASTERY
+
+        Case $GC_I_MAP_ID_KAINENG_CENTER_CANTHAN_NEW_YEAR
+            Return $GC_I_MAP_ID_KAINENG_CENTER
+    EndSwitch
+
+    Return SetError(1, 0, 0)
+EndFunc
+
 #Region Area Related
 Func Map_GetAreaPtr($aMapID = 0)
     Local $lAreaInfoAddress = $g_p_AreaInfo + (0x7C * $aMapID)
