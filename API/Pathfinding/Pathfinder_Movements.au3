@@ -12,8 +12,9 @@ Global $g_iPathfinder_PathUpdateInterval = 1000      ; Interval before recalcula
 Global $g_iPathfinder_WaypointReachedDistance = 250 ; Distance to consider waypoint reached
 Global $g_iPathfinder_SimplifyRange = 1250           ; Path simplification range
 Global $g_iPathfinder_ObstacleUpdateInterval = 1000  ; Interval for dynamic obstacle updates (ms)
-Global $g_iPathfinder_StuckCheckInterval = 1000     ; Interval to check if stuck (ms)
-Global $g_iPathfinder_StuckDistance = 50            ; If moved less than this, consider stuck
+Global $g_iPathfinder_StuckCheckInterval = 500      ; Interval to check if stuck (ms)
+Global $g_iPathfinder_StuckDistance = 100           ; If moved less than this, consider stuck
+Global $g_iPathfinder_UnstuckDirectionIndex = 0     ; Current direction index for unstuck (0-7, cycles through 16 directions)
 
 ; Move to a destination using pathfinding with obstacle avoidance
 ; $aDestX, $aDestY = Destination coordinates
@@ -132,10 +133,13 @@ Func Pathfinder_MoveTo($aDestX, $aDestY, $aObstacles = 0, $aAggroRange = 1320, $
             Local $lMovedDistance = _Pathfinder_Distance($lMyX, $lMyY, $lLastStuckCheckX, $lLastStuckCheckY)
             If $lMovedDistance < $g_iPathfinder_StuckDistance Then
                 $lStuckCount += 1
-                If $lStuckCount >= 3 Then
-                    Local $lRandomAngle = Random(0, 6.28)
-                    Map_MoveLayer($lMyX + Cos($lRandomAngle) * 500, $lMyY + Sin($lRandomAngle) * 500, $lLayer)
+                If $lStuckCount >= 2 Then
+                    ; Directions in opposite pairs: N, S, E, W, NE, SW, NW, SE
+                    Local $lUnstuckAngles[8] = [1.5707963, 4.7123890, 0.0, 3.1415927, 0.7853982, 3.9269908, 2.3561945, 5.4977871]
+                    Local $lAngle = $lUnstuckAngles[$g_iPathfinder_UnstuckDirectionIndex]
+                    Map_MoveLayer($lMyX + Cos($lAngle) * 500, $lMyY + Sin($lAngle) * 500, $lLayer)
                     Sleep(750)
+                    $g_iPathfinder_UnstuckDirectionIndex = Mod($g_iPathfinder_UnstuckDirectionIndex + 1, 8)
                     $lStuckCount = 0
 					$lNeedPathUpdate = True
                 EndIf
