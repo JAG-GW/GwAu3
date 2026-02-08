@@ -116,12 +116,13 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 	If $a_i_AgentID <> Agent_GetMyID() Then Agent_ChangeTarget($a_i_AgentID)
 	If $g_b_CacheWeaponSet Then UAI_GetBestWeaponSetBySkillSlot($a_i_SkillSlot)
 
-	Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)
-	Sleep(128)
 	If $a_i_AgentID <> Agent_GetMyID() And $a_i_AgentID <> $g_i_LastCalledTarget Then
 		If $g_b_CallTarget Then Agent_CallTarget($a_i_AgentID)
 		$g_i_LastCalledTarget = $a_i_AgentID
 	EndIf
+	
+	Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)
+	Sleep(128)
 
 	;If it's melee attack wait until target is in nearby range
 	Local $l_i_Skilltype = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillType)
@@ -130,6 +131,7 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 	If ($l_i_Skilltype = $GC_I_SKILL_TYPE_ATTACK And Not $l_i_WeaponReq = $GC_I_SKILL_REQUIRE_BOW And Not $GC_I_SKILL_REQUIRE_SPEAR) _
 		Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL2 Or $l_i_Skilltype = $GC_I_SKILL_TYPE_SKILL Or $l_i_Special = $GC_I_SKILL_SPECIAL_FLAG_TOUCH Then
 		Local $l_h_WaitStart = TimerInit()
+		Sleep(128)
 		Do
 			If TimerDiff($l_h_WaitStart) > 5000 Then ExitLoop
 			If $l_i_Special <> $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION And Agent_GetAgentInfo($g_i_BestTarget, "IsDead") Then
@@ -137,6 +139,7 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 				ExitLoop
 			EndIf
 			Sleep(32)
+			UAI_UpdateCache(100)
 		Until Agent_GetDistance($a_i_AgentID) <= 240 Or Agent_GetAgentInfo(-2, "IsDead") Or Map_GetInstanceInfo("Type") <> $GC_I_MAP_TYPE_EXPLORABLE Or Not UAI_CanCast($a_i_SkillSlot) Or Agent_GetAgentInfo(-2, "IsKnocked")
 	EndIf
 
