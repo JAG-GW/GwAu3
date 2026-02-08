@@ -125,32 +125,37 @@ EndFunc
 
 ; Get all party members as array
 Func Party_GetMembersArray()
-	Local $l_i_PartySize = Party_GetSize()
-	If $l_i_PartySize < 1 Then $l_i_PartySize = 1
 	Local $l_i_HeroCount = Party_GetHeroCount()
-	Local $l_ai_ReturnArray[$l_i_PartySize + 1]
-	$l_ai_ReturnArray[0] = $l_i_PartySize
+	Local $l_i_HenchCount = Party_GetPartyContextInfo("HenchmenCount")
+	Local $l_ai_ReturnArray[2 + $l_i_HeroCount + $l_i_HenchCount]
+	Local $l_i_Count = 0
 
-	; Add player (index 0)
-	$l_ai_ReturnArray[1] = UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	; Add player first (prefer live ID over cache).
+	Local $l_i_PlayerID = Agent_GetMyID()
+	If $l_i_PlayerID <= 0 Then $l_i_PlayerID = UAI_GetPlayerInfo($GC_UAI_AGENT_ID)
+	If $l_i_PlayerID > 0 Then
+		$l_i_Count += 1
+		$l_ai_ReturnArray[$l_i_Count] = $l_i_PlayerID
+	EndIf
 
-	; Add heroes
-	Local $l_i_Index = 2
+	; Add heroes (AgentID, not HeroID).
 	For $i = 1 To $l_i_HeroCount
-		If $l_i_Index <= $l_i_PartySize Then
-			$l_ai_ReturnArray[$l_i_Index] = Party_GetMyPartyHeroInfo($i, "AgentID")
-			$l_i_Index += 1
-		EndIf
+		Local $l_i_HeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+		If $l_i_HeroAgentID <= 0 Then ContinueLoop
+		$l_i_Count += 1
+		$l_ai_ReturnArray[$l_i_Count] = $l_i_HeroAgentID
 	Next
 
-	; Add henchmen/other party members
-	For $i = 1 To Party_GetPartyContextInfo("HenchmenCount")
-		If $l_i_Index <= $l_i_PartySize Then
-			$l_ai_ReturnArray[$l_i_Index] = Party_GetMyPartyHenchmanInfo($i, "AgentID")
-			$l_i_Index += 1
-		EndIf
+	; Add henchmen/other party members.
+	For $i = 1 To $l_i_HenchCount
+		Local $l_i_HenchAgentID = Party_GetMyPartyHenchmanInfo($i, "AgentID")
+		If $l_i_HenchAgentID <= 0 Then ContinueLoop
+		$l_i_Count += 1
+		$l_ai_ReturnArray[$l_i_Count] = $l_i_HenchAgentID
 	Next
 
+	; Keep legacy contract: index 0 = number of valid entries.
+	$l_ai_ReturnArray[0] = $l_i_Count
 	Return $l_ai_ReturnArray
 EndFunc
 
@@ -161,28 +166,49 @@ Func Party_GetAverageHealth()
 	Local $l_ai_PartyArray = Party_GetMembersArray()
 
 	For $i = 1 To $l_ai_PartyArray[0]
-		If Not UAI_GetAgentInfoByID($l_ai_PartyArray[$i], $GC_UAI_AGENT_IsDead) Then
-			$l_f_TotalHP += UAI_GetAgentInfoByID($l_ai_PartyArray[$i], $GC_UAI_AGENT_HP)
-			$l_i_AliveCount += 1
-		EndIf
+		Local $l_i_AgentID = $l_ai_PartyArray[$i]
+		If $l_i_AgentID <= 0 Then ContinueLoop
+
+		; Skip entries not present in current UAI cache snapshot.
+		If UAI_GetIndexByID($l_i_AgentID) = 0 Then ContinueLoop
+		If UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_IsDead) Then ContinueLoop
+
+		Local $l_f_HP = UAI_GetAgentInfoByID($l_i_AgentID, $GC_UAI_AGENT_HP)
+		If $l_f_HP < 0 Then $l_f_HP = 0
+		If $l_f_HP > 1 Then $l_f_HP = 1
+		$l_f_TotalHP += $l_f_HP
+		$l_i_AliveCount += 1
 	Next
 
-	If $l_i_AliveCount = 0 Then Return 0
+	; Unknown cache state: keep return value compatible (0) but signal invalid data.
+	If $l_i_AliveCount = 0 Then Return SetError(1, 0, 0)
 	Return Round($l_f_TotalHP / $l_i_AliveCount, 3)
 EndFunc
 
 ; Check if party is wiped
 Func Party_IsWiped()
-	If Not UAI_GetPlayerInfo($GC_UAI_AGENT_IsDead) Then Return False
+	; Player death is a hard prerequisite for wipe logic.
+	If Not Agent_GetAgentInfo(-2, "IsDead") Then Return False
 
 	Local $l_i_DeadHeroes = 0
 	For $i = 1 To Party_GetHeroCount()
-		If UAI_GetAgentInfoByID(Party_GetHeroID($i), $GC_UAI_AGENT_IsDead) Then
+		Local $l_i_HeroAgentID = Party_GetMyPartyHeroInfo($i, "AgentID")
+		If $l_i_HeroAgentID <= 0 Then ContinueLoop
+		If Agent_GetAgentInfo($l_i_HeroAgentID, "IsDead") Then
 			$l_i_DeadHeroes += 1
 		EndIf
 	Next
 
-	If Party_GetAvailableRezz() = 0 Or $l_i_DeadHeroes >= UBound(Party_GetMembersArray()) - 2 Or Party_GetAverageHealth() < 0.15 Then
+	Local $l_i_AvailableRezz = Party_GetAvailableRezz()
+	Local $l_ai_PartyArray = Party_GetMembersArray()
+	Local $l_i_DeadThreshold = $l_ai_PartyArray[0] - 1 ; all non-player party members
+	If $l_i_DeadThreshold < 0 Then $l_i_DeadThreshold = 0
+
+	Local $l_f_AvgHP = Party_GetAverageHealth()
+	Local $l_b_HasAvgHP = (@error = 0)
+	Local $l_b_LowAvgHP = ($l_b_HasAvgHP And $l_f_AvgHP < 0.15)
+
+	If $l_i_AvailableRezz = 0 Or $l_i_DeadHeroes >= $l_i_DeadThreshold Or $l_b_LowAvgHP Then
 		Return True
 	EndIf
 
@@ -194,9 +220,14 @@ Func Party_GetAvailableRezz()
 	Local $l_i_HeroRezzSkills = 0
 	Local $l_i_HeroCount = Party_GetHeroCount()
 	For $aHeroNumber = 1 To $l_i_HeroCount
+		Local $l_i_HeroAgentID = Party_GetMyPartyHeroInfo($aHeroNumber, "AgentID")
+		If $l_i_HeroAgentID <= 0 Then ContinueLoop
+		If Agent_GetAgentInfo($l_i_HeroAgentID, "IsDead") Then ContinueLoop
+
 		For $aSkillSlot = 1 To 8
-			$aSkill = Skill_GetSlotByID($aSkillSlot, $aHeroNumber)
-			If Skill_HasSpecialFlag($aSkill, $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION) Then
+			Local $l_i_SkillID = Skill_GetSkillbarInfo($aSkillSlot, "SkillID", $aHeroNumber)
+			If $l_i_SkillID = 0 Then ContinueLoop
+			If Skill_HasSpecialFlag($l_i_SkillID, $GC_I_SKILL_SPECIAL_FLAG_RESURRECTION) Then
 				$l_i_HeroRezzSkills += 1
 			EndIf
 		Next
