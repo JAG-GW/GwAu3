@@ -29,6 +29,8 @@ Global $g_i_QueueCounter
 Global $g_i_QueueSize
 Global $g_p_QueueBase
 Global $g_p_PreGame
+Global $g_p_Login
+Global $g_p_InGame
 Global $g_p_FrameArray
 Global $g_p_AreaInfo
 Global $g_p_StatusCode
