@@ -140,8 +140,6 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     $g_p_FrameArray = Memory_Read(Scanner_GetScanResult('FrameArray', $g_ap_ScanResults, 'Ptr') - 0x13)
 	$g_p_SceneContext = Memory_Read(Scanner_GetScanResult('SceneContext', $g_ap_ScanResults, 'Ptr') + 0x1B)
 	$g_p_TimeOnMap = $g_p_SceneContext + 0xC
-	Out(Ptr($g_p_SceneContext))
-	Out(Ptr($g_p_TimeOnMap))
 
 	Memory_SetValue('BasePointer', Ptr($g_p_BasePointer))
 	Memory_SetValue('PacketLocation', Ptr($g_p_PacketLocation))
