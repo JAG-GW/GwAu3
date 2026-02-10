@@ -9,3 +9,4 @@
 
 #include "GwAu3_Core_ArrayStructure.au3"
 #include "GwAu3_Core_Structure.au3"
+#include "GwAu3_Core.au3"

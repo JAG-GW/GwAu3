@@ -121,7 +121,6 @@
 #include <SQLite.dll.au3>
 #include <String.au3>
 #include <Timers.au3>
-;~ #include <UDFGlobalID.au3>
 #include <Visa.au3>
 #include <WinAPI.au3>
 #include <WinAPICom.au3>
@@ -152,6 +151,7 @@
 #include <WinNet.au3>
 #include <Word.au3>
 
-#include "GwAu3_Core.au3"
-;~ #include "Pathfinding/Pathfinder.au3"
-;~ #include "SmartCast/_SmartCast.au3"
+#include "Constants/_Constants.au3"
+#include "Core/_Core.au3"
+#include "Modules/_Modules.au3"
+#include "Plugins/_Plugins.au3"

@@ -1,9 +1,5 @@
 #include-once
 
-#include "Constants/_Constants.au3"
-#include "Core/_Core.au3"
-#include "Modules/_Modules.au3"
-
 If @AutoItX64 Then
     MsgBox(16, "Error!", "Please run all bots in 32-bit (x86) mode.")
     Exit
@@ -392,7 +388,7 @@ Func Core_Initialize($a_s_GW, $a_b_ChangeTitle = True)
     $g_p_QueueBase = Memory_GetValue('QueueBase')
     $g_b_DisableRendering = Memory_GetValue('DisableRendering')
 	$g_p_MapIsLoaded = Memory_GetValue('MapIsLoaded')
-	$g_p_TradePartner = Memory_GetValue('TradePartner')	
+	$g_p_TradePartner = Memory_GetValue('TradePartner')
 	If IsDeclared("g_b_InitializeResult") Then Extend_InitializeResult()
 
     ; Setup command structures
