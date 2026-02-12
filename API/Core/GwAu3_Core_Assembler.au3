@@ -672,12 +672,22 @@ Func _($a_s_ASM)
 		Case StringRegExp($a_s_ASM, 'mov dword[[][a-z,A-Z]{4,}[]],esi')
 			$g_i_ASMSize += 6
 			$g_s_ASMCode &= '8935[' & StringMid($a_s_ASM, 11, StringLen($a_s_ASM) - 15) & ']'
+		Case StringRegExp($a_s_ASM, 'mov dword[[][a-z,A-Z]{4,}[]],ebx')
+			$g_i_ASMSize += 6
+			$g_s_ASMCode &= '891D[' & StringMid($a_s_ASM, 11, StringLen($a_s_ASM) - 15) & ']'
+		Case StringRegExp($a_s_ASM, 'mov dword[[][a-z,A-Z]{4,}[]],edi')
+			$g_i_ASMSize += 6
+			$g_s_ASMCode &= '893D[' & StringMid($a_s_ASM, 11, StringLen($a_s_ASM) - 15) & ']'
 		Case StringRegExp($a_s_ASM, 'mov eax,dword[[]ecx[*]4[+][a-z,A-Z]{4,}[]]')
 			$g_i_ASMSize += 7
 			$g_s_ASMCode &= '8B048D[' & StringMid($a_s_ASM, 21, StringLen($a_s_ASM) - 21) & ']'
 		Case StringRegExp($a_s_ASM, 'mov ecx,dword[[]ecx[*]4[+][a-z,A-Z]{4,}[]]')
 			$g_i_ASMSize += 7
 			$g_s_ASMCode &= '8B0C8D[' & StringMid($a_s_ASM, 21, StringLen($a_s_ASM) - 21) & ']'
+		Case StringRegExp($a_s_ASM, 'mov word\[[a-z,A-Z]{4,}\],[-[:xdigit:]]{1,4}\z')
+			$l_v_Buffer = StringInStr($a_s_ASM, ',')
+			$g_i_ASMSize += 9
+			$g_s_ASMCode &= '66C705[' & StringMid($a_s_ASM, 10, $l_v_Buffer - 11) & ']' & StringLeft(Assembler_ASMNumber(StringMid($a_s_ASM, $l_v_Buffer + 1)), 4)
 		Case StringRegExp($a_s_ASM, 'mov dword\[[a-z,A-Z]{4,}\],[-[:xdigit:]]{1,8}\z')
 			$l_v_Buffer = StringInStr($a_s_ASM, ',')
 			$g_i_ASMSize += 10
@@ -713,6 +723,36 @@ Func _($a_s_ASM)
 			Else
 				$g_i_ASMSize += 6
 				$g_s_ASMCode &= '8B90' & Utils_SwapEndian(Hex($l_i_Offset, 8))
+			EndIf
+		Case StringRegExp($a_s_ASM, 'mov eax,dword\[ecx\+[0-9A-Fa-f]+\]')
+			Local $l_i_Offset = StringRegExpReplace($a_s_ASM, 'mov eax,dword\[ecx\+([0-9A-Fa-f]+)\]', '$1')
+			$l_i_Offset = Dec($l_i_Offset)
+			If $l_i_Offset <= 0x7F Then
+				$g_i_ASMSize += 3
+				$g_s_ASMCode &= '8B41' & Hex($l_i_Offset, 2)
+			Else
+				$g_i_ASMSize += 6
+				$g_s_ASMCode &= '8B81' & Utils_SwapEndian(Hex($l_i_Offset, 8))
+			EndIf
+		Case StringRegExp($a_s_ASM, 'mov edx,dword\[ecx\+[0-9A-Fa-f]+\]')
+			Local $l_i_Offset = StringRegExpReplace($a_s_ASM, 'mov edx,dword\[ecx\+([0-9A-Fa-f]+)\]', '$1')
+			$l_i_Offset = Dec($l_i_Offset)
+			If $l_i_Offset <= 0x7F Then
+				$g_i_ASMSize += 3
+				$g_s_ASMCode &= '8B51' & Hex($l_i_Offset, 2)
+			Else
+				$g_i_ASMSize += 6
+				$g_s_ASMCode &= '8B91' & Utils_SwapEndian(Hex($l_i_Offset, 8))
+			EndIf
+		Case StringRegExp($a_s_ASM, 'mov ecx,dword\[ecx\+[0-9A-Fa-f]+\]')
+			Local $l_i_Offset = StringRegExpReplace($a_s_ASM, 'mov ecx,dword\[ecx\+([0-9A-Fa-f]+)\]', '$1')
+			$l_i_Offset = Dec($l_i_Offset)
+			If $l_i_Offset <= 0x7F Then
+				$g_i_ASMSize += 3
+				$g_s_ASMCode &= '8B49' & Hex($l_i_Offset, 2)
+			Else
+				$g_i_ASMSize += 6
+				$g_s_ASMCode &= '8B89' & Utils_SwapEndian(Hex($l_i_Offset, 8))
 			EndIf
 		Case StringRegExp($a_s_ASM, 'mov esi,dword\[ebp\+[0-9A-Fa-f]+\]')
 			Local $l_i_Offset = StringRegExpReplace($a_s_ASM, 'mov esi,dword\[ebp\+([0-9A-Fa-f]+)\]', '$1')
@@ -1430,6 +1470,8 @@ Func _($a_s_ASM)
 					$l_s_OpCode = '8BF0'
 				Case 'mov edx,dword[ecx]'
 					$l_s_OpCode = '8B11'
+				Case 'mov eax,dword[ecx]'
+					$l_s_OpCode = '8B01'
 				Case 'mov dword[eax],edx'
 					$l_s_OpCode = '8910'
 				Case 'mov dword[eax],F'
@@ -2594,7 +2636,7 @@ Func Assembler_CreateEncStringCommands()
 	; Reset ready flag
 	_('mov dword[DecodeReady],0')
 	; Clear output buffer first word (to detect no result)
-	_('mov word[DecodeOutputPtr],0 -> 66 C7 05 [DecodeOutputPtr] 00 00')
+	_('mov word[DecodeOutputPtr],0')
 	; Copy encoded string from command to input buffer
 	_('push esi')
 	_('push edi')

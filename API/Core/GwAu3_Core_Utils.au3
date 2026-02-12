@@ -496,4 +496,39 @@ Func Utils_DecodeEncStringAsync($a_p_Ptr, $a_i_Timeout = 1000)
     ; Timeout
     Return ""
 EndFunc
+
+; Decodes an encoded string from an AutoIt string (already read from GW memory)
+; Use this when you have the raw encoded wchar data as a string, not a GW memory pointer
+; Safe to call from GUIRegisterMsg callbacks (uses kernel32 Sleep to avoid message pumping)
+; @param $a_s_EncStr - The encoded string (raw wchars already copied from GW)
+; @param $a_i_Timeout - Maximum time to wait for decode (ms), default 1000
+; @return Decoded string or empty string on failure
+Func Utils_DecodeEncStringDirect($a_s_EncStr, $a_i_Timeout = 1000)
+    If $a_s_EncStr = "" Then Return ""
+
+    ; Write encoded string directly to command struct
+    DllStructSetData($g_d_DecodeEncString, 2, $a_s_EncStr)
+
+    ; Reset ready flag before sending command
+    Memory_Write($g_p_DecodeReady, 0, "dword")
+
+    ; Enqueue the decode command
+    Core_Enqueue($g_p_DecodeEncString, DllStructGetSize($g_d_DecodeEncString))
+
+    ; Wait for decode to complete
+    ; Use kernel32 Sleep directly instead of AutoIt Sleep to avoid pumping
+    ; the Windows message queue (which would cause re-entrance in GUIRegisterMsg callbacks
+    ; and lose queued PostMessage events like dialog buttons)
+    Local $l_i_StartTime = TimerInit()
+    While TimerDiff($l_i_StartTime) < $a_i_Timeout
+        If Memory_Read($g_p_DecodeReady, "dword") = 1 Then
+            Local $l_s_Decoded = Memory_Read($g_p_DecodeOutputPtr, "wchar[1024]")
+            Return $l_s_Decoded
+        EndIf
+        DllCall("kernel32.dll", "none", "Sleep", "dword", 10)
+    WEnd
+
+    ; Timeout
+    Return ""
+EndFunc
 #EndRegion EncString Decoding
