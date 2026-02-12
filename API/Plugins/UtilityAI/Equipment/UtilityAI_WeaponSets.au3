@@ -352,7 +352,7 @@ Func UAI_GetBestWeaponSetBySkillSlot($a_i_SkillSlot)
 			Return
 
 		;--- Pet Attack: Use offensive set ===
-		Case $GC_I_SKILL_TYPE_PET_ATTACK
+		Case $GC_I_SKILL_TYPE_PETATTACK
 			If $g_ai_Best_Offensive_Set[1] > 0 Then
 				$l_i_BestSet = $g_ai_Best_Offensive_Set[1]
 			EndIf

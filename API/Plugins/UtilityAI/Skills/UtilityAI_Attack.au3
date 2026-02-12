@@ -3208,7 +3208,7 @@ Func BestTarget_BrawlingJab2($a_f_AggroRange)
 	Local $l_i_TargetID = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|-UAI_Filter_IsBoss")
 	If $l_i_TargetID <> 0 Then Return $l_i_TargetID
 	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
-EndFunc 
+EndFunc
 
 ; Skill ID: 2337 - $GC_I_SKILL_ID_BRAWLING_STRAIGHT_RIGHT
 Func CanUse_BrawlingStraightRight()
@@ -3223,10 +3223,9 @@ Func BestTarget_BrawlingStraightRight($a_f_AggroRange)
 	; Concise description
 	; Melee Attack. Deals 25 damage; interrupts an action.
 	Local $l_i_TargetID = UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy|-UAI_Filter_IsBoss")
-	AddOns_Out("Target: " & $l_i_TargetID)
 	If $l_i_TargetID <> 0 Then Return $l_i_TargetID
 	Return UAI_GetBestSingleTarget(-2, $a_f_AggroRange, $GC_UAI_AGENT_HP, "UAI_Filter_IsLivingEnemy")
-EndFunc 
+EndFunc
 
 
 ; Skill ID: 2338 - $GC_I_SKILL_ID_BRAWLING_HOOK1

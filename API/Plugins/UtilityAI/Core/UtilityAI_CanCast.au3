@@ -77,6 +77,8 @@ Func UAI_CanCast($a_i_SkillSlot)
 		Local $l_i_EnergyCost = $l_i_BaseEnergyCost
 		Local $l_i_CurrentEnergy = UAI_GetPlayerInfo($GC_UAI_AGENT_CurrentEnergy)
 		Local $l_i_SkillType = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_SkillType)
+		Local $l_i_Combo = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Combo)
+		Local $l_i_WeaponReq = UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_WeaponReq)
 
 		; Check effects that INCREASE energy cost
 		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Quickening_Zephyr) Then
@@ -111,7 +113,10 @@ Func UAI_CanCast($a_i_SkillSlot)
 		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Energizing_Wind) Then
 			$l_i_EnergyCost = $l_i_EnergyCost - 15 ; -15 energy
 		EndIf
-		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Divine_Spirit) And UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Attribute) = $GC_I_ATTRIBUTE_MONK Then
+		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Divine_Spirit) And (UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Attribute) = $GC_I_ATTRIBUTE_HEALING_PRAYERS Or _
+			UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Attribute) = $GC_I_ATTRIBUTE_SMITING_PRAYERS Or _
+			UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Attribute) = $GC_I_ATTRIBUTE_PROTECTION_PRAYERS Or _
+			UAI_GetStaticSkillInfo($a_i_SkillSlot, $GC_UAI_STATIC_SKILL_Attribute) = $GC_I_ATTRIBUTE_DIVINE_FAVOR) Then
 			$l_i_EnergyCost = $l_i_EnergyCost - 5 ; Monk spells -5 energy
 		EndIf
 		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Cultists_Fervor) Then
@@ -151,11 +156,11 @@ Func UAI_CanCast($a_i_SkillSlot)
 			$l_i_EnergyCost = $l_i_EnergyCost - 15 ; Binding rituals -15 energy
 		EndIf
 		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Way_of_the_Empty_Palm) Then
-			If $l_i_SkillType = $GC_I_SKILL_TYPE_OFF_HAND_ATTACK Or $l_i_SkillType = $GC_I_SKILL_TYPE_DUAL_ATTACK Then
+			If $l_i_Combo = $GC_I_SKILL_COMBO_OFF_HAND_ATTACK Or $l_i_Combo = $GC_I_SKILL_COMBO_DUAL_ATTACK Then
 				$l_i_EnergyCost = 0 ; Off-hand and dual attacks cost 0
 			EndIf
 		EndIf
-		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Expert_Focus) And $l_i_SkillType = $GC_I_SKILL_TYPE_BOW_ATTACK Then
+		If UAI_PlayerHasEffect($GC_I_SKILL_ID_Expert_Focus) And $l_i_WeaponReq = $GC_I_WEAPON_TYPE_BOW Then
 			$l_i_EnergyCost = $l_i_EnergyCost - 2 ; Bow attacks -2 energy
 		EndIf
 
@@ -364,7 +369,7 @@ Func UAI_CanDrop($a_i_SkillSlot)
 			For $i = 1 To $g_i_AgentCacheCount
 				Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 				If Not UAI_Filter_IsLivingAlly($l_i_AgentID) Then ContinueLoop
-				If UAI_GetAgentInfo($i, $GC_UAI_AGENT_HPPercent) < 0.75 Then
+				If UAI_GetAgentInfo($i, $GC_UAI_AGENT_HP) < 0.75 Then
 					$l_i_InjuredAllies += 1
 				EndIf
 			Next
