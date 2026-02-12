@@ -8,16 +8,30 @@ EndFunc
 #EndRegion
 
 #Region Find Agent
-Func UAI_FindAgentByPlayerNumber($a_i_PlayerNumber, $a_i_AgentID = -2, $a_i_Range = 5000, $a_s_Filter = "")
+Func UAI_FindAgentByPlayerNumber($a_v_PlayerNumber, $a_i_AgentID = -2, $a_i_Range = 5000, $a_s_Filter = "")
     Local $l_i_RefID = UAI_ConvertAgentID($a_i_AgentID)
-    Local $l_f_RefX = UAI_GetPlayerX()
-    Local $l_f_RefY = UAI_GetPlayerY()
+    Local $l_b_IsArray = IsArray($a_v_PlayerNumber)
 
     For $i = 1 To $g_i_AgentCacheCount
         Local $l_i_AgentID = UAI_GetAgentInfo($i, $GC_UAI_AGENT_ID)
 
         If $l_i_AgentID = $l_i_RefID Then ContinueLoop
-        If UAI_GetAgentInfo($i, $GC_UAI_AGENT_PlayerNumber) <> $a_i_PlayerNumber Then ContinueLoop
+
+        Local $l_i_PlayerNum = UAI_GetAgentInfo($i, $GC_UAI_AGENT_PlayerNumber)
+
+        If $l_b_IsArray Then
+            Local $l_b_Match = False
+            For $j = 0 To UBound($a_v_PlayerNumber) - 1
+                If $l_i_PlayerNum = $a_v_PlayerNumber[$j] Then
+                    $l_b_Match = True
+                    ExitLoop
+                EndIf
+            Next
+            If Not $l_b_Match Then ContinueLoop
+        Else
+            If $l_i_PlayerNum <> $a_v_PlayerNumber Then ContinueLoop
+        EndIf
+
         If $a_s_Filter <> "" And Not _ApplyFilters($l_i_AgentID, $a_s_Filter) Then ContinueLoop
 
         Local $l_f_Distance = UAI_GetAgentInfo($i, $GC_UAI_AGENT_Distance)

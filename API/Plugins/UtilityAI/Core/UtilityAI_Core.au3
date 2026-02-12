@@ -1,23 +1,62 @@
 #include-once
 
-Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500, $a_i_FightMode = $g_i_FinisherMode, $a_b_UseSwitchSet = False, $a_i_PlayerNumber = -1)
+;~ UAI_Fight($x, $y)                                    			; Normal fight
+;~ UAI_Fight($x, $y, 1320, 3500, $mode, False, 1234)    			; Kill priority 1234
+;~ UAI_Fight($x, $y, 1320, 3500, $mode, False, -1234)   			; Avoid 1234
+;~ UAI_Fight($x, $y, 1320, 3500, $mode, False, [1234, -5678])  		; Priority 1234 + Avoid 5678
+;~ UAI_Fight($x, $y, 1320, 3500, $mode, False, [1234, -5678], True) ; Same + KillOnly
+Func UAI_Fight($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY = 3500, $a_i_FightMode = $g_i_FinisherMode, $a_b_UseSwitchSet = False, $a_v_PlayerNumber = 0, $a_b_KillOnly = False)
 	$g_i_BestTarget = 0
 	$g_i_ForceTarget = 0
 	$g_i_FightMode = $a_i_FightMode
 	$a_b_UseSwitchSet = $g_b_CacheWeaponSet
+	$g_v_AvoidPlayerNumbers = -1
 
 	Local $l_i_MyOldMap = Map_GetMapID(), $l_i_MapLoadingOld = Map_GetInstanceInfo("Type")
+	Local $l_v_PriorityTargets = 0
 
-	If $a_i_PlayerNumber <> -1 Then
+	If IsArray($a_v_PlayerNumber) Then
+		Local $l_a_Prio[UBound($a_v_PlayerNumber)]
+		Local $l_a_Avoid[UBound($a_v_PlayerNumber)]
+		Local $l_i_PC = 0, $l_i_AC = 0
+		For $j = 0 To UBound($a_v_PlayerNumber) - 1
+			If $a_v_PlayerNumber[$j] > 0 Then
+				$l_a_Prio[$l_i_PC] = $a_v_PlayerNumber[$j]
+				$l_i_PC += 1
+			ElseIf $a_v_PlayerNumber[$j] < 0 Then
+				$l_a_Avoid[$l_i_AC] = Abs($a_v_PlayerNumber[$j])
+				$l_i_AC += 1
+			EndIf
+		Next
+		If $l_i_PC > 0 Then
+			ReDim $l_a_Prio[$l_i_PC]
+			$l_v_PriorityTargets = $l_a_Prio
+		EndIf
+		If $l_i_AC > 0 Then
+			ReDim $l_a_Avoid[$l_i_AC]
+			$g_v_AvoidPlayerNumbers = $l_a_Avoid
+		EndIf
+	ElseIf $a_v_PlayerNumber > 0 Then
+		$l_v_PriorityTargets = $a_v_PlayerNumber
+	ElseIf $a_v_PlayerNumber < 0 Then
+		$g_v_AvoidPlayerNumbers = Abs($a_v_PlayerNumber)
+	EndIf
+
+	Local $l_b_HasPriority = IsArray($l_v_PriorityTargets) Or $l_v_PriorityTargets <> 0
+
+	If $l_b_HasPriority Then
 		UAI_UpdateCache($a_f_AggroRange)
-		$g_i_ForceTarget = UAI_FindAgentByPlayerNumber($a_i_PlayerNumber, -2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
-		If $g_i_ForceTarget = 0 Then Return True
+		$g_i_ForceTarget = UAI_FindAgentByPlayerNumber($l_v_PriorityTargets, -2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
+		If $g_i_ForceTarget = 0 And $a_b_KillOnly Then Return True
 	EndIf
 
 	If $g_b_CacheWeaponSet Then UAI_DeterminateWeaponSets()
 
 	Do
-		If $g_i_ForceTarget <> 0 And UAI_GetAgentInfoByID($g_i_ForceTarget, $GC_UAI_AGENT_IsDead) Then ExitLoop
+		If $g_i_ForceTarget <> 0 And UAI_GetAgentInfoByID($g_i_ForceTarget, $GC_UAI_AGENT_IsDead) Then
+			$g_i_ForceTarget = UAI_FindAgentByPlayerNumber($l_v_PriorityTargets, -2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
+			If $g_i_ForceTarget = 0 And $a_b_KillOnly Then ExitLoop
+		EndIf
 		UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange, $a_f_MaxDistanceToXY)
 		Sleep(128)
 	Until UAI_CountEnemyInPartyAggroRange($a_f_AggroRange) = 0 Or Agent_GetAgentInfo(-2, "IsDead") Or Party_IsWiped() Or Map_GetMapID() <> $l_i_MyOldMap Or Map_GetInstanceInfo("Type") <> $l_i_MapLoadingOld
@@ -53,7 +92,7 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 
 ;~ 	MOVE TOWARD HERO AGGRO TARGET
 		; If no enemy in player's range but heroes have aggro, move toward the enemy
-		Local $l_i_PlayerRangeEnemy = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy")
+		Local $l_i_PlayerRangeEnemy = UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsNotAvoided")
 		If $l_i_PlayerRangeEnemy = 0 Then
 			Local $l_i_PartyRangeEnemy = UAI_GetNearestEnemyInPartyRange($a_f_AggroRange)
 			If $l_i_PartyRangeEnemy <> 0 Then
@@ -68,10 +107,10 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 
 ;~ 	AUTO ATTACK
 		If UAI_CanAutoAttack() Then
-			If $g_i_ForceTarget <> 0 Then 
+			If $g_i_ForceTarget <> 0 Then
 				Agent_Attack($g_i_ForceTarget)
 			Else
-				Agent_Attack(UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy"), False)
+				Agent_Attack(UAI_GetNearestAgent(-2, $a_f_AggroRange, "UAI_Filter_IsLivingEnemy|UAI_Filter_IsNotAvoided"), False)
 			EndIf
 		Else
 			If UAI_GetPlayerInfo($GC_UAI_AGENT_IsAttacking) Then Core_ControlAction($GC_I_CONTROL_ACTION_CANCEL_ACTION)
@@ -90,6 +129,7 @@ Func UAI_UseSkills($a_f_x, $a_f_y, $a_f_AggroRange = 1320, $a_f_MaxDistanceToXY 
 				$g_i_BestTarget = $g_i_ForceTarget
 			EndIf
 			If $g_i_BestTarget = 0 Then ContinueLoop
+			If Not UAI_Filter_IsNotAvoided($g_i_BestTarget) Then ContinueLoop
 
 			$g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_Slot])
 
@@ -120,7 +160,7 @@ Func UAI_UseSkillEX($a_i_SkillSlot, $a_i_AgentID = -2)
 		If $g_b_CallTarget Then Agent_CallTarget($a_i_AgentID)
 		$g_i_LastCalledTarget = $a_i_AgentID
 	EndIf
-	
+
 	Skill_UseSkill($a_i_SkillSlot, $a_i_AgentID)
 	Sleep(128)
 
@@ -207,6 +247,7 @@ Func UAI_CastPrioritySkill($a_i_Slot, $a_f_AggroRange = 1320)
 			$g_i_BestTarget = $g_i_ForceTarget
 		EndIf
 		If $g_i_BestTarget = 0 Then Return
+		If Not UAI_Filter_IsNotAvoided($g_i_BestTarget) Then Return
 
 		$g_b_CanUseSkill = Call($g_as_CanUseCache[$a_i_Slot])
 
@@ -239,6 +280,7 @@ Func UAI_DropBundle($a_f_AggroRange = 1320)
 				$g_i_BestTarget = $g_i_ForceTarget
 			EndIf
 			If $g_i_BestTarget = 0 Then ContinueLoop
+			If Not UAI_Filter_IsNotAvoided($g_i_BestTarget) Then ContinueLoop
 
 			$g_b_CanUseSkill = Call($g_as_CanUseCache[$l_i_Slot])
 

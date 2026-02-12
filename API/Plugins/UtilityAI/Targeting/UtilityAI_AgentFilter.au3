@@ -535,4 +535,20 @@ Func UAI_Filter_IsHarbingers($a_i_AgentID)
 	If $l_i_PlayerNumber = 5458 Or $l_i_PlayerNumber = 5459 Or $l_i_PlayerNumber = 5460 Then Return True
 	Return False
 EndFunc
+
+Func UAI_Filter_IsNotAvoided($a_i_AgentID)
+	If $g_v_AvoidPlayerNumbers = -1 Then Return True
+
+	Local $l_i_PlayerNum = UAI_GetAgentInfoByID($a_i_AgentID, $GC_UAI_AGENT_PlayerNumber)
+
+	If IsArray($g_v_AvoidPlayerNumbers) Then
+		For $j = 0 To UBound($g_v_AvoidPlayerNumbers) - 1
+			If $l_i_PlayerNum = $g_v_AvoidPlayerNumbers[$j] Then Return False
+		Next
+	Else
+		If $l_i_PlayerNum = $g_v_AvoidPlayerNumbers Then Return False
+	EndIf
+
+	Return True
+EndFunc
 #EndRegion
