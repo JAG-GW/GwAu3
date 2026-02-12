@@ -3897,10 +3897,12 @@ EndFunc   ;==>Map_FindMapPath
 ; Map_FindNearestUnlockedOutpost - Finds the nearest unlocked outpost to a destination
 ; Uses BFS from destination backwards to find closest unlocked outpost
 ; @param $a_i_DestMapID: Destination map ID
-; @param $a_i_FromMapID: Starting map ID (to exclude from search)
+; @param $a_f_XInMap: Destination map X position
+; @param $a_f_YInMap: Destination map Y position
 ; @return: MapID of nearest unlocked outpost, or 0 if none found
 ; Modified by Pierrmouth
 ; =============================================================================
+#CS new version
 Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap = 0)
     ; Check if destination itself is an unlocked valid outpost
     If Map_IsMapUnlocked($a_i_DestMapID) And Map_IsOutpost($a_i_DestMapID) Then
@@ -3984,8 +3986,8 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap
 
     Return $l_i_Neighbor
 EndFunc
+#CE
 
-#CS old version
 Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_i_FromMapID = 0)
 	; Check if destination itself is an unlocked valid outpost
 	If Map_IsMapUnlocked($a_i_DestMapID) And Map_IsOutpost($a_i_DestMapID) Then
@@ -4047,7 +4049,6 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_i_FromMapID = 0)
 
 	Return $l_i_BestOutpost
 EndFunc   ;==>Map_FindNearestUnlockedOutpost
-#CE
 
 ; =============================================================================
 ; Map_GetPathWithPortalCoords - Finds path and returns map IDs with portal coordinates
