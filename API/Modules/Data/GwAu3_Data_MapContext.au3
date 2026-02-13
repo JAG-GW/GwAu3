@@ -3945,10 +3945,14 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap
         EndIf
     Next
 
-    Local $l_f_DistanceToWalk = 999999999
+    If Ubound($l_a_Path) = 0 Then
+        Return SetError(1, 0, 0) ; No Outpost available near your destination
+    EndIf
+
+    Local $l_f_DistanceToWalk = 1 / 0
     Local $l_a_NearestOutposts = _ArrayFindAll($l_a_Path, $l_i_MinDistance, 0, 0, 0, 0, 1)
     If Ubound($l_a_NearestOutposts) = 1 Then
-        $l_i_Neighbor = $l_a_NearestOutposts[0]
+        $l_i_Neighbor = $l_a_Path[$l_a_NearestOutposts[0]][0]
     Else
         For $l_i_IndexNearestOutpost in $l_a_NearestOutposts
             $l_a_PathFromOutpost = Map_FindMapPath($l_a_Path[$l_i_IndexNearestOutpost][0], $a_i_DestMapID)
