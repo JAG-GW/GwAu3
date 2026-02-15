@@ -3897,13 +3897,13 @@ EndFunc   ;==>Map_FindMapPath
 ; Map_FindNearestUnlockedOutpost - Finds the nearest unlocked outpost to a destination
 ; Uses BFS from destination backwards to find closest unlocked outpost
 ; @param $a_i_DestMapID: Destination map ID
+; @param $a_i_FromMapID: Map ID to exclude from results (e.g. current map)
 ; @param $a_f_XInMap: Destination map X position
 ; @param $a_f_YInMap: Destination map Y position
 ; @return: MapID of nearest unlocked outpost, or 0 if none found
 ; Modified by Pierrmouth
 ; =============================================================================
-#CS new version
-Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap = 0)
+Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_i_FromMapID = 0, $a_f_XInMap = 0, $a_f_YInMap = 0)
     ; Check if destination itself is an unlocked valid outpost
     If Map_IsMapUnlocked($a_i_DestMapID) And Map_IsOutpost($a_i_DestMapID) Then
         Return $a_i_DestMapID
@@ -3914,16 +3914,19 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap
     Local $l_i_Neighbor = 0
     Local $l_b_ShortestFound = False
     Local $l_i_Distance = 1
+    Local $l_i_PrevSize = 0
 
     Do
-        For $i = 0 To Ubound($l_a_Path, 1) - 1
+        $l_i_PrevSize = UBound($l_a_Path, 1)
+        For $i = 0 To $l_i_PrevSize - 1
             Local $l_a_ConnectedMaps = Map_GetConnectedMaps($l_a_Path[$i][0])
 
             If Not IsArray($l_a_ConnectedMaps) Then ContinueLoop
 
             For $l_i_ConnectedMap in $l_a_ConnectedMaps
                 If _ArrayBinarySearch($l_a_MapIds, $l_i_ConnectedMap) <> -1 Then ContinueLoop
-                Local $l_b_UnlockedOupost = (Map_IsOutpost($l_i_ConnectedMap) And Map_IsMapUnlocked($l_i_ConnectedMap))
+                Local $l_b_UnlockedOupost = ($l_i_ConnectedMap <> $a_i_FromMapID And Map_IsOutpost($l_i_ConnectedMap) And Map_IsMapUnlocked($l_i_ConnectedMap))
+                If $l_b_UnlockedOupost Then $l_b_ShortestFound = True
                 Local $l_a_ConnectedMap[3] = [$l_i_ConnectedMap, $l_i_Distance, $l_b_UnlockedOupost]
                 _ArrayAdd($l_a_Path, _ArrayToString($l_a_ConnectedMap, "|"))
                 _ArrayAdd($l_a_MapIds, $l_i_ConnectedMap)
@@ -3931,7 +3934,7 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap
             Next
         Next
         $l_i_Distance += 1
-    Until $l_i_Distance > 5
+    Until $l_b_ShortestFound Or UBound($l_a_Path, 1) = $l_i_PrevSize
 
     Local $l_i_MinDistance = 999
     For $i = Ubound($l_a_Path, 1) - 1 To 1 Step - 1
@@ -3945,7 +3948,7 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap
         EndIf
     Next
 
-    If Ubound($l_a_Path) = 0 Then
+    If Not $l_b_ShortestFound Then
         Return SetError(1, 0, 0) ; No Outpost available near your destination
     EndIf
 
@@ -3975,6 +3978,8 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap
                 $l_a_Portal1 = Map_GetExitPortalsCoords($l_a_PathFromOutpost[1], $l_a_PathFromOutpost[0])
             EndIf
 
+            If Not IsArray($l_a_Portal1) Then ContinueLoop
+
             If Not Map_IsOutpost($a_i_DestMapID) And $a_f_XInMap <> 0 And $a_f_YInMap <> 0 Then
                 $l_f_DistanceToWalkFromOutpost += Sqrt( _
                     ($a_f_XInMap - $l_a_Portal1[0])^2 + ($a_f_YInMap - $l_a_Portal1[1])^2 _
@@ -3990,140 +3995,17 @@ Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_f_XInMap = 0, $a_f_YInMap
 
     Return $l_i_Neighbor
 EndFunc
-#CE
-
-Func Map_FindNearestUnlockedOutpost($a_i_DestMapID, $a_i_FromMapID = 0)
-	; Check if destination itself is an unlocked valid outpost
-	If Map_IsMapUnlocked($a_i_DestMapID) And Map_IsOutpost($a_i_DestMapID) Then
-		Return $a_i_DestMapID
-	EndIf
-
-	; BFS from destination to find nearest unlocked outpost
-	Local $l_a_Queue[1] = [$a_i_DestMapID]
-	Local $l_a_Visited[1000]
-	Local $l_a_Distance[1000]
-	For $i = 0 To 999
-		$l_a_Visited[$i] = False
-		$l_a_Distance[$i] = 999999
-	Next
-	$l_a_Visited[$a_i_DestMapID] = True
-	$l_a_Distance[$a_i_DestMapID] = 0
-
-	Local $l_i_QueueStart = 0
-	Local $l_i_QueueEnd = 1
-	Local $l_i_BestOutpost = 0
-	Local $l_i_BestDistance = 999999
-
-	While $l_i_QueueStart < $l_i_QueueEnd
-		Local $l_i_Current = $l_a_Queue[$l_i_QueueStart]
-		$l_i_QueueStart += 1
-
-		Local $l_i_CurrentDist = $l_a_Distance[$l_i_Current]
-
-		; If we already found a closer outpost, skip maps that are further
-		If $l_i_CurrentDist >= $l_i_BestDistance Then ContinueLoop
-
-		; Check if current map is an unlocked valid outpost (and not our starting point)
-		If $l_i_Current <> $a_i_FromMapID And Map_IsMapUnlocked($l_i_Current) And Map_IsOutpost($l_i_Current) Then
-			If $l_i_CurrentDist < $l_i_BestDistance Then
-				$l_i_BestDistance = $l_i_CurrentDist
-				$l_i_BestOutpost = $l_i_Current
-			EndIf
-			ContinueLoop ; Don't explore further from this outpost
-		EndIf
-
-		; Get connected maps
-		Local $l_a_Connected = Map_GetConnectedMaps($l_i_Current)
-		If Not IsArray($l_a_Connected) Then ContinueLoop
-
-		For $i = 0 To UBound($l_a_Connected) - 1
-			Local $l_i_Neighbor = $l_a_Connected[$i]
-
-			If $l_i_Neighbor < 0 Or $l_i_Neighbor >= 1000 Then ContinueLoop
-			If $l_a_Visited[$l_i_Neighbor] Then ContinueLoop
-
-			$l_a_Visited[$l_i_Neighbor] = True
-			$l_a_Distance[$l_i_Neighbor] = $l_i_CurrentDist + 1
-
-			ReDim $l_a_Queue[$l_i_QueueEnd + 1]
-			$l_a_Queue[$l_i_QueueEnd] = $l_i_Neighbor
-			$l_i_QueueEnd += 1
-		Next
-	WEnd
-
-	Return $l_i_BestOutpost
-EndFunc   ;==>Map_FindNearestUnlockedOutpost
 
 ; =============================================================================
 ; Map_GetPathWithPortalCoords - Finds path and returns map IDs with portal coordinates
 ; @param $a_i_FromMapID: Starting map ID
 ; @param $a_i_ToMapID: Destination map ID
-; @param $a_b_TravelToNearest: If True, find nearest unlocked outpost to destination
-;                              and travel there first (shorter path)
 ; @return: 2D Array where each row is [MapID, MapName, PortalX, PortalY, TravelHere]
 ;          PortalX/Y are coordinates to reach the NEXT map (0 for last map)
 ;          TravelHere = 1 if you should Map_TravelTo this map, 0 otherwise
 ;          Returns empty array if no path found
 ; =============================================================================
-Func Map_GetPathWithPortalCoords($a_i_FromMapID, $a_i_ToMapID, $a_b_TravelToNearest = False)
-	Local $l_i_TravelMapID = 0
-
-	; If TravelToNearest is enabled, find the nearest unlocked outpost
-	If $a_b_TravelToNearest Then
-		$l_i_TravelMapID = Map_FindNearestUnlockedOutpost($a_i_ToMapID, $a_i_FromMapID)
-
-		; If we found an unlocked outpost, use it as the starting point for walking
-		If $l_i_TravelMapID > 0 And $l_i_TravelMapID <> $a_i_FromMapID Then
-			; Get path from travel point to destination
-			Local $l_a_WalkPath = Map_FindMapPath($l_i_TravelMapID, $a_i_ToMapID)
-
-			If UBound($l_a_WalkPath) = 0 Then
-				; Fallback to full path if walk path fails
-				$l_i_TravelMapID = 0
-			Else
-				; Build result with travel marker
-				Local $l_i_PathLen = UBound($l_a_WalkPath)
-				Local $l_a_Result[$l_i_PathLen][5] ; [MapID, MapName, PortalX, PortalY, TravelHere]
-
-				For $i = 0 To $l_i_PathLen - 1
-					Local $l_i_MapID = $l_a_WalkPath[$i]
-					$l_a_Result[$i][0] = $l_i_MapID
-
-					; Get map name
-					Local $l_i_ArrayIndex = $l_i_MapID - 1
-					If $l_i_ArrayIndex >= 0 And $l_i_ArrayIndex < UBound($g_a2D_MapArray) Then
-						$l_a_Result[$i][1] = $g_a2D_MapArray[$l_i_ArrayIndex][1]
-					Else
-						$l_a_Result[$i][1] = "Unknown"
-					EndIf
-
-					; Get portal coords to next map
-					If $i < $l_i_PathLen - 1 Then
-						Local $l_i_NextMapID = $l_a_WalkPath[$i + 1]
-						Local $l_a_Coords = Map_GetExitPortalsCoords($l_i_MapID, $l_i_NextMapID)
-
-						If IsArray($l_a_Coords) Then
-							$l_a_Result[$i][2] = $l_a_Coords[0]
-							$l_a_Result[$i][3] = $l_a_Coords[1]
-						Else
-							$l_a_Result[$i][2] = 0
-							$l_a_Result[$i][3] = 0
-						EndIf
-					Else
-						$l_a_Result[$i][2] = 0
-						$l_a_Result[$i][3] = 0
-					EndIf
-
-					; Mark first map as travel destination
-					$l_a_Result[$i][4] = ($i = 0) ? 1 : 0
-				Next
-
-				Return $l_a_Result
-			EndIf
-		EndIf
-	EndIf
-
-	; Standard path finding (no travel optimization)
+Func Map_GetPathWithPortalCoords($a_i_FromMapID, $a_i_ToMapID)
 	Local $l_a_Path = Map_FindMapPath($a_i_FromMapID, $a_i_ToMapID)
 
 	If UBound($l_a_Path) = 0 Then
@@ -4177,7 +4059,7 @@ EndFunc   ;==>Map_GetPathWithPortalCoords
 ; @return: Array [OutpostID, PathWithCoords] where PathWithCoords is from Map_GetPathWithPortalCoords
 ;          OutpostID = 0 if no path found, or = CityID if already unlocked
 ; =============================================================================
-Func Map_GetPathToUnlockCity($a_i_CityID)
+Func Map_GetPathToUnlockCity($a_i_CityID, $a_f_XInMap = 0, $a_f_YInMap = 0)
 	Local $l_a_Result[2]
 	$l_a_Result[0] = 0
 	Local $l_a_Empty[0][5]
@@ -4190,12 +4072,12 @@ Func Map_GetPathToUnlockCity($a_i_CityID)
 	EndIf
 
 	; Trouver l'outpost débloqué le plus proche de cityID
-	Local $l_i_NearestOutpost = Map_FindNearestUnlockedOutpost($a_i_CityID, 0)
+	Local $l_i_NearestOutpost = Map_FindNearestUnlockedOutpost($a_i_CityID, 0, $a_f_XInMap, $a_f_YInMap)
 
 	If $l_i_NearestOutpost = 0 Then Return $l_a_Result
 
 	; Obtenir le chemin avec coordonnées
-	Local $l_a_Path = Map_GetPathWithPortalCoords($l_i_NearestOutpost, $a_i_CityID, False)
+	Local $l_a_Path = Map_GetPathWithPortalCoords($l_i_NearestOutpost, $a_i_CityID)
 
 	If UBound($l_a_Path) = 0 Then Return $l_a_Result
 
@@ -4204,40 +4086,4 @@ Func Map_GetPathToUnlockCity($a_i_CityID)
 
 	Return $l_a_Result
 EndFunc   ;==>Map_GetPathToUnlockCity
-
-; =============================================================================
-; Map_PrintPath - Helper function to print the path with coordinates (for debugging)
-; @param $a_i_FromMapID: Starting map ID
-; @param $a_i_ToMapID: Destination map ID
-; @param $a_b_TravelToNearest: If True, use travel optimization
-; =============================================================================
-Func Map_PrintPath($a_i_FromMapID, $a_i_ToMapID, $a_b_TravelToNearest = False)
-	Local $l_a_Path = Map_GetPathWithPortalCoords($a_i_FromMapID, $a_i_ToMapID, $a_b_TravelToNearest)
-
-	If UBound($l_a_Path) = 0 Then
-		Out("No path found from map " & $a_i_FromMapID & " to " & $a_i_ToMapID)
-		Return
-	EndIf
-
-	Out("=== Path from " & $l_a_Path[0][1] & " to " & $l_a_Path[UBound($l_a_Path) - 1][1] & " ===")
-	If $a_b_TravelToNearest And $l_a_Path[0][4] = 1 Then
-		Out("(Using Map Travel to nearest unlocked outpost)")
-	EndIf
-	Out("Total maps to traverse: " & UBound($l_a_Path))
-
-	For $i = 0 To UBound($l_a_Path) - 1
-		Local $l_s_Prefix = ($i + 1) & ". "
-		Local $l_s_Travel = ""
-
-		If $l_a_Path[$i][4] = 1 Then
-			$l_s_Travel = "[TRAVEL HERE] "
-		EndIf
-
-		If $i < UBound($l_a_Path) - 1 Then
-			Out($l_s_Prefix & $l_s_Travel & $l_a_Path[$i][1] & " (ID:" & $l_a_Path[$i][0] & ") -> Portal at [" & $l_a_Path[$i][2] & ", " & $l_a_Path[$i][3] & "]")
-		Else
-			Out($l_s_Prefix & $l_a_Path[$i][1] & " (ID:" & $l_a_Path[$i][0] & ") [DESTINATION]")
-		EndIf
-	Next
-EndFunc   ;==>Map_PrintPath
 #EndRegion Inter-Map Pathfinding

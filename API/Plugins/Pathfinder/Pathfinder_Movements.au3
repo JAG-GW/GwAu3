@@ -678,17 +678,17 @@ Func _Pathfinder_CountAvailableResurrections()
     Local $iMyID = Agent_GetMyID()
 
     ; Check player's skillbar
-;~     If Not Agent_GetAgentInfo(-2, "IsDead") Then
-;~         For $iSlot = 1 To 8
-;~             Local $iSkillID = Skill_GetSkillbarInfo($iSlot, "SkillID", 0)
-;~             If $iSkillID = 0 Then ContinueLoop
-;~             If Skill_IsAnyResurrection($iSkillID) Or Skill_IsResurrectionSpecial($iSkillID) Then
-;~                 If Skill_GetSkillbarInfo($iSlot, "IsRecharged", 0) Then
-;~                     $iCount += 1
-;~                 EndIf
-;~             EndIf
-;~         Next
-;~     EndIf
+    If Not Agent_GetAgentInfo(-2, "IsDead") Then
+        For $iSlot = 1 To 8
+            Local $iSkillID = Skill_GetSkillbarInfo($iSlot, "SkillID", 0)
+            If $iSkillID = 0 Then ContinueLoop
+            If Skill_IsAnyResurrection($iSkillID) Or Skill_IsResurrectionSpecial($iSkillID) Then
+                If Skill_GetSkillbarInfo($iSlot, "IsRecharged", 0) Then
+                    $iCount += 1
+                EndIf
+            EndIf
+        Next
+    EndIf
 
     ; Check heroes' skillbars
     Local $iHeroCount = Party_GetPartyContextInfo("HeroCount")
@@ -765,16 +765,31 @@ Func _Pathfinder_WaitForResurrection()
     Local $fDeadY = Agent_GetAgentInfo($iDeadAllyID, "Y")
     Local $fDist = Agent_GetDistanceToXY($fDeadX, $fDeadY)
 
-    ; If we're too far, move closer
-    If $fDist > 1000 Then
-        Map_Move($fDeadX, $fDeadY, 0)
-    Else
-        Agent_CancelAction()
-    EndIf
-
-    ; Wait for resurrection
+    ; Wait for resurrection (kill Frozen Soil spirit if needed)
     Local $lRezTimer = TimerInit()
     Do
+		; If Frozen Soil is active, find and kill the spirit
+		If Agent_GetAgentEffectInfo(-2, 471, "HasEffect") Then ;Frozen Soil effect = 471, player number = 2882
+			Local $iFrozenSoilSpirit = GetAgents(-2, 5000, $GC_I_AGENT_TYPE_LIVING, 1, "_Pathfinder_FilterIsFrozenSoilSpirit")
+			If $iFrozenSoilSpirit <> 0 Then
+				Agent_ChangeTarget($iFrozenSoilSpirit)
+				Agent_Attack($iFrozenSoilSpirit)
+			EndIf
+		Else
+			; No Frozen Soil - move towards dead ally so heroes can res
+			If $fDist > 1000 Then Map_Move($fDeadX, $fDeadY, 0)
+
+			; If player has a res skill ready, use it on dead ally
+			For $iSlot = 1 To 8
+				Local $iSkillID = Skill_GetSkillbarInfo($iSlot, "SkillID", 0)
+				If $iSkillID = 0 Then ContinueLoop
+				If Not (Skill_IsAnyResurrection($iSkillID) Or Skill_IsResurrectionSpecial($iSkillID)) Then ContinueLoop
+				If Not Skill_GetSkillbarInfo($iSlot, "IsRecharged", 0) Then ContinueLoop
+				Skill_UseSkill($iSlot, $iDeadAllyID)
+				ExitLoop
+			Next
+		EndIf
+
         Sleep(250)
 
         ; Check if enemies appeared
@@ -801,5 +816,15 @@ Func _Pathfinder_FilterIsEnemy($aAgentPtr)
     If Agent_GetAgentInfo($aAgentPtr, "Allegiance") <> $GC_I_ALLEGIANCE_ENEMY Then Return False
     If Agent_GetAgentInfo($aAgentPtr, "HP") <= 0 Then Return False
     If Agent_GetAgentInfo($aAgentPtr, "IsDead") Then Return False
+    Return True
+EndFunc
+
+; =============================================================================
+; Filter: Is Frozen Soil spirit (PlayerNumber 2882) and alive
+; =============================================================================
+Func _Pathfinder_FilterIsFrozenSoilSpirit($aAgentPtr)
+    If Agent_GetAgentInfo($aAgentPtr, "PlayerNumber") <> 2882 Then Return False
+    If Agent_GetAgentInfo($aAgentPtr, "IsDead") Then Return False
+    If Agent_GetAgentInfo($aAgentPtr, "HP") <= 0 Then Return False
     Return True
 EndFunc

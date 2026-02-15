@@ -4,7 +4,7 @@
 Func Quest_GetQuestInfo($a_i_QuestID, $a_s_Info = "")
     Local $l_p_Ptr = 0
     Local $l_i_Size = World_GetWorldInfo("QuestLogSize")
-    If $l_i_Size = 0 Or $a_s_Info = "" Then Return 0
+    If $l_i_Size = 0 Or $a_s_Info = "" Then Return -1
 
     For $l_i_Idx = 0 To $l_i_Size
         Local $l_ai_OffsetQuestLog[5] = [0, 0x18, 0x2C, 0x52C, 0x34 * $l_i_Idx]
